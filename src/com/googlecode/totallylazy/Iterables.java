@@ -27,7 +27,7 @@ public class Iterables {
         };
     }
 
-    public static <T,S> Iterable<S> flatMap(final java.lang.Iterable<T> iterable, final Callable1<T, Iterable<S>> callable) {
+    public static <T,S> Iterable<S> flatMap(final java.lang.Iterable<T> iterable, final Callable1<T, java.lang.Iterable<S>> callable) {
         return new Iterable<S>() {
             public java.util.Iterator<S> iterator() {
                 return Iterators.flatMap(iterable.iterator(), callable);
@@ -58,5 +58,13 @@ public class Iterables {
                 return Iterators.tail(iterable.iterator());
             }
         };
+    }
+
+    public static <T, S> S foldLeft(Iterable<T> iterable, S seed, Callable2<S,T,S> callable) {
+        return Iterators.foldLeft(iterable.iterator(), seed, callable);
+    }
+
+    public static <T> T reduceLeft(Iterable<T> iterable, Callable2<T,T,T> callable) {
+        return Iterators.reduceLeft(iterable.iterator(), callable);
     }
 }

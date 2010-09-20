@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import org.junit.Test;
 
 import java.lang.*;
+import java.lang.Iterable;
 
 import static com.googlecode.totallylazy.Callables.*;
 import static com.googlecode.totallylazy.Iterables.list;
@@ -13,6 +14,18 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class IterableTest {
+    @Test
+    public void supportsReduceLeft() throws Exception {
+        int sum = list(1, 2, 3).reduceLeft(add());
+        assertThat(sum, is(6));
+    }
+
+    @Test
+    public void supportsFoldLeft() throws Exception {
+        int sum = list(1, 2, 3).foldLeft(0, add());
+        assertThat(sum, is(6));
+    }
+
     @Test
     public void supportsTail() throws Exception {
         assertThat(list(1, 2, 3).tail(), hasItems(2, 3));

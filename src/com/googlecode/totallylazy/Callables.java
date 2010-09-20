@@ -43,4 +43,11 @@ public class Callables {
         };
     }
 
+    public static Callable2<Integer, Integer, Integer> add() {
+        return new Callable2<Integer, Integer, Integer>() {
+            public Integer call(Integer a, Integer b){
+                return a + b;
+            }
+        };
+    }
 }
