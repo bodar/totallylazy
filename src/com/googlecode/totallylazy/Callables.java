@@ -34,4 +34,13 @@ public class Callables {
             }
         };
     }
+
+    public static Callable1<Integer, Integer> increment() {
+        return new Callable1<Integer, Integer>(){
+            public Integer call(final Integer integer) throws Exception {
+                return integer + 1;
+            }
+        };
+    }
+
 }
