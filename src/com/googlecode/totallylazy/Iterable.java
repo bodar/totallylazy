@@ -45,7 +45,7 @@ public abstract class Iterable<T> implements java.lang.Iterable<T> {
         };
     }
 
-    public <T,S> Iterable<T> flatMap(Callable1<T, Iterable<S>> callable) {
+    public <S> Iterable<S> flatMap(Callable1<T, Iterable<S>> callable) {
         return flatMap(this, callable);
     }
 
