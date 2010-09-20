@@ -1,19 +1,18 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.Is;
+import com.googlecode.totallylazy.predicates.ModRemainderIs;
+
 public class Predicates {
     public static <T> Predicate<T> is(final T t) {
-        return new Predicate<T>() {
-            public boolean matches(T other) {
-                return other.equals(t);
-            }
-        };
+        return new Is<T>(t);
     }
 
     public static Predicate<Integer> even() {
-        return new Predicate<Integer>() {
-            public boolean matches(Integer other) {
-                return other % 2 == 0;
-            }
-        };
+        return new ModRemainderIs(2, 0);
     }
+    public static Predicate<Integer> odd() {
+        return new ModRemainderIs(2, 1);
+    }
+
 }

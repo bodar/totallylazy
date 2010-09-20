@@ -11,7 +11,7 @@ public class Iterables {
         };
     }
 
-    public static <T, S> Iterable<S> map(final Iterable<T> iterable, final Callable1<T,S> callable) {
+    public static <T, S> Iterable<S> map(final java.lang.Iterable<T> iterable, final Callable1<T,S> callable) {
         return new Iterable<S>() {
             public java.util.Iterator<S> iterator() {
                 return Iterators.map(iterable.iterator(), callable);
@@ -19,7 +19,7 @@ public class Iterables {
         };
     }
 
-    public static <T> Iterable<T> filter(final Iterable<T> iterable, final Predicate<T> predicate) {
+    public static <T> Iterable<T> filter(final java.lang.Iterable<T> iterable, final Predicate<T> predicate) {
         return new Iterable<T>() {
             public Iterator<T> iterator() {
                 return Iterators.filter(iterable.iterator(), predicate);
@@ -27,7 +27,7 @@ public class Iterables {
         };
     }
 
-    public static <T,S> Iterable<S> flatMap(final Iterable<T> iterable, final Callable1<T, Iterable<S>> callable) {
+    public static <T,S> Iterable<S> flatMap(final java.lang.Iterable<T> iterable, final Callable1<T, Iterable<S>> callable) {
         return new Iterable<S>() {
             public java.util.Iterator<S> iterator() {
                 return Iterators.flatMap(iterable.iterator(), callable);
@@ -44,4 +44,19 @@ public class Iterables {
     }
 
 
+    public static <T> void foreach(final java.lang.Iterable<T> iterable, final Runnable1<T> runnable) {
+        Iterators.foreach(iterable.iterator(), runnable);
+    }
+
+    public static <T> T head(final java.lang.Iterable<T> iterable) {
+        return Iterators.head(iterable.iterator());
+    }
+
+    public static <T> Iterable<T> tail(final java.lang.Iterable<T> iterable) {
+        return new Iterable<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.tail(iterable.iterator());
+            }
+        };
+    }
 }

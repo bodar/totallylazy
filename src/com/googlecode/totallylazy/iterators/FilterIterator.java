@@ -1,4 +1,7 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.iterators;
+
+import com.googlecode.totallylazy.Iterator;
+import com.googlecode.totallylazy.Predicate;
 
 import java.util.NoSuchElementException;
 
