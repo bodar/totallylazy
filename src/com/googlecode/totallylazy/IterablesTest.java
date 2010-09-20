@@ -16,7 +16,7 @@ public class IterablesTest {
     }
 
     @Test
-    public void canCombineIterateWithFilter() throws Exception {
+    public void canCombineIterateWithOtherOperations() throws Exception {
         Iterable<Integer> evenNumbers = iterate(increment(), 1).filter(even());
         assertThat(evenNumbers, hasItems(2, 4, 6));
     }

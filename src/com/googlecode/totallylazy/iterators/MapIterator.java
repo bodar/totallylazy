@@ -1,4 +1,7 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.iterators;
+
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Iterator;
 
 public class MapIterator<T,S> extends Iterator<S> {
     private final java.util.Iterator<T> iterator;

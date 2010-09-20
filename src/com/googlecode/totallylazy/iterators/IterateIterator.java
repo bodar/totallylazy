@@ -1,8 +1,8 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.iterators;
 
-import java.util.*;
+import com.googlecode.totallylazy.*;
 
-class IterateIterator<T> extends Iterator<T> {
+public class IterateIterator<T> extends com.googlecode.totallylazy.Iterator<T> {
     private final Callable1<T, T> callable;
     private T t;
 

@@ -27,7 +27,7 @@ public class Callables {
         };
     }
 
-    public static <T> Callable1<Callable<T>, T> call(Class<T> aClass) {
+    public static <T> Callable1<Callable<T>, T> invokeCall(Class<T> aClass) {
         return new Callable1<Callable<T>, T>() {
             public T call(Callable<T> callable) throws Exception {
                 return callable.call();
