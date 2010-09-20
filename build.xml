@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="totallylazy" default="build">
+
+    <property name="build.number" value="dev.build"/>
+    <property name="build" value="${basedir}/build"/>
+    <property name="artifacts" value="${build}/artifacts"/>
+    <property name="reports" value="${artifacts}/reports"/>
+    <property name="src" value="${basedir}/src"/>
+    <property name="test" value="${basedir}/test"/>
+    <property name="release.version" value="${build.number}"/>
+    <property name="release.name" value="${ant.project.name}-${release.version}"/>
+    <property name="release.jar" value="${release.name}.jar"/>
+    <property name="release.pom" value="${release.name}.pom"/>
+    <property name="release.jar.path" value="${artifacts}/${release.jar}"/>
+    <property name="test.jar.path" value="${artifacts}/${release.name}.test.jar"/>
+
+    <import file="${build}/macros.xml"/>
+
+    <path id="all.dependancies">
+        <fileset id="release.dependancies" dir="lib" includes="**/*.jar"/>
+    </path>
+
+    <path id="all.jars">
+        <path refid="all.dependancies"/>
+        <path path="${release.jar.path}"/>
+        <path path="${test.jar.path}"/>
+    </path>
+
+    <target name="clean" description="cleanup all">
+        <delete dir="${artifacts}"/>
+    </target>
+
+    <target name="compile">
+        <compile.and.jar src="${src}" jar="${release.jar.path}" classpathref="all.dependancies"
+                         version="${release.version}"/>
+        <compile.and.jar src="${test}" jar="${test.jar.path}" classpathref="all.jars" version="${release.version}"/>
+    </target>
+
+    <target name="test">
+        <test jar="${test.jar.path}" classpathref="all.jars" reports="${reports}"/>
+    </target>
+
+    <target name="package">
+        <mkdir dir="${artifacts}"/>
+
+        <zip destfile="${artifacts}/${release.name}.src.zip" basedir="src"/>
+
+        <propertyfile file="${artifacts}/release.properties">
+            <entry key="release.version" value="${release.version}"/>
+            <entry key="project.name" value="${ant.project.name}"/>
+            <entry key="release.name" value="${release.name}"/>
+            <entry key="release.files" value="${release.jar},${release.pom}"/>
+            <entry key="${release.jar}.description" value="build:${build.number}"/>
+            <entry key="${release.jar}.labels" value="Featured"/>
+            <entry key="${release.pom}.description" value="Maven POM file build:${build.number}"/>
+            <entry key="${release.pom}.labels" value="Featured"/>
+        </propertyfile>
+
+        <copy file="${build}/pom.xml" tofile="${artifacts}/${release.pom}">
+            <filterset>
+                <filter token="VERSION" value="${build.number}"/>
+            </filterset>
+        </copy>
+    </target>
+
+    <target name="build" depends="clean, compile, test, package" description="build all"/>
+
+</project>
