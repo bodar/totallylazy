@@ -15,7 +15,7 @@ public class Iterators {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> Iterator<S> flatMap(java.util.Iterator<T> iterator, Callable1<T, Iterable<S>> callable) {
+    public static <T, S> Iterator<S> flatMap(java.util.Iterator<T> iterator, Callable1<T, java.lang.Iterable<S>> callable) {
         return new FlatMapIterator<T, S>(iterator, callable);
     }
 
@@ -41,6 +41,22 @@ public class Iterators {
             return new DelegatingIterator<T>(iterator);
         }
         throw new NoSuchElementException();
+    }
+
+    public static <T, S> S foldLeft(java.util.Iterator<T> iterator, S seed, Callable2<S, T, S> callable) {
+        S accumilator = seed;
+        while (iterator.hasNext()) {
+            try {
+                accumilator = callable.call(accumilator, iterator.next());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return accumilator;
+    }
+
+    public static <T> T reduceLeft(java.util.Iterator<T> iterator, Callable2<T, T, T> callable) {
+        return foldLeft(iterator, iterator.next(), callable);
     }
 
 }
