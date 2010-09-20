@@ -33,7 +33,7 @@ public class IterableTest {
     @Test
     public void mapIsLazy() throws Exception {
         Iterable<Integer> result = list(returns(1), callThrows(new Exception(), Integer.class)).
-                map(call(Integer.class));
+                map(invokeCall(Integer.class));
         assertThat(result, hasItem(1));
     }
 
@@ -46,7 +46,7 @@ public class IterableTest {
        @Test
     public void filterIsLazy() throws Exception {
         Iterable<Integer> result = list(returns(1), returns(2), callThrows(new Exception(), Integer.class)).
-                map(call(Integer.class)).
+                map(invokeCall(Integer.class)).
                 filter(even());
         assertThat(result, hasItem(2));
     }
@@ -58,10 +58,6 @@ public class IterableTest {
                 return list(value, value * 3);
             }
         });
-<<<<<<< local
-        assertThat(result, hasItems(1,2,4));
-=======
         assertThat(result, hasItems(1,2,3,6,9));
->>>>>>> other
     }
 }
