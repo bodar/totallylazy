@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.lang.*;
 
 import static com.googlecode.totallylazy.Callables.*;
-import static com.googlecode.totallylazy.Iterable.list;
+import static com.googlecode.totallylazy.Iterables.list;
 import static com.googlecode.totallylazy.Predicates.even;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -53,11 +53,11 @@ public class IterableTest {
 
     @Test
     public void supportsFlatMap() throws Exception {
-        Iterable<Integer> result = list(1,2).flatMap(new Callable1<Integer, Iterable<Integer>>() {
+        Iterable<Integer> result = list(1,2,3).flatMap(new Callable1<Integer, Iterable<Integer>>() {
             public Iterable<Integer> call(Integer value) throws Exception {
-                return list(value, value * 2);
+                return list(value, value * 3);
             }
         });
-        assertThat(result, hasItems(2,4));
+        assertThat(result, hasItems(1,2,3,6,9));
     }
 }
