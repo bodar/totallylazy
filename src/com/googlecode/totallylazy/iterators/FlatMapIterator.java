@@ -2,15 +2,16 @@ package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.*;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 
-public class FlatMapIterator<T, S> extends Iterator<S> {
-    private final java.util.Iterator<T> iterator;
-    private final Callable1<T, java.lang.Iterable<S>> callable;
-    private java.util.Iterator<S> currentIterator = null;
+public class FlatMapIterator<T, S> extends LazyIterator<S> {
+    private final Iterator<T> iterator;
+    private final Callable1<T, Iterable<S>> callable;
+    private Iterator<S> currentIterator = null;
 
-    public FlatMapIterator(java.util.Iterator<T> iterator, Callable1<T, java.lang.Iterable<S>> callable) {
+    public FlatMapIterator(Iterator<T> iterator, Callable1<T, Iterable<S>> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }

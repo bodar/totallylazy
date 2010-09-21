@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 public class Callables {
@@ -11,9 +12,9 @@ public class Callables {
         };
     }
 
-    public static <T> Callable1<java.lang.Iterable<T>, java.util.Iterator<T>> asIterator() {
-        return new Callable1<java.lang.Iterable<T>, java.util.Iterator<T>>() {
-            public java.util.Iterator<T> call(java.lang.Iterable<T> iterable) throws Exception {
+    public static <T> Callable1<Iterable<T>, Iterator<T>> asIterator() {
+        return new Callable1<Iterable<T>, Iterator<T>>() {
+            public Iterator<T> call(Iterable<T> iterable) throws Exception {
                 return iterable.iterator();
             }
         };

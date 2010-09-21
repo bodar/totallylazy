@@ -1,13 +1,15 @@
 package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Iterator;
+import com.googlecode.totallylazy.LazyIterator;
 
-public class MapIterator<T,S> extends Iterator<S> {
-    private final java.util.Iterator<T> iterator;
+import java.util.Iterator;
+
+public class MapIterator<T,S> extends LazyIterator<S> {
+    private final Iterator<T> iterator;
     private final Callable1<T, S> callable;
 
-    public MapIterator(java.util.Iterator<T> iterator, Callable1<T, S> callable) {
+    public MapIterator(Iterator<T> iterator, Callable1<T, S> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }
