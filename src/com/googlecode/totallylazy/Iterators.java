@@ -7,30 +7,30 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class Iterators {
-    public static <T> void foreach(java.util.Iterator<T> iterator, Runnable1<T> runnable) {
+    public static <T> void foreach(final java.util.Iterator<T> iterator, final Runnable1<T> runnable) {
         while (iterator.hasNext()) {
             runnable.run(iterator.next());
         }
     }
 
-    public static <T, S> Iterator<S> map(java.util.Iterator<T> iterator, Callable1<T, S> callable) {
+    public static <T, S> Iterator<S> map(final java.util.Iterator<T> iterator, final Callable1<T, S> callable) {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> Iterator<S> flatMap(java.util.Iterator<T> iterator, Callable1<T, java.lang.Iterable<S>> callable) {
+    public static <T, S> Iterator<S> flatMap(final java.util.Iterator<T> iterator, final Callable1<T, java.lang.Iterable<S>> callable) {
         return new FlatMapIterator<T, S>(iterator, callable);
     }
 
-    public static <T> Iterator<T> filter(java.util.Iterator<T> iterator, Predicate<T> predicate) {
+    public static <T> Iterator<T> filter(final java.util.Iterator<T> iterator, final Predicate<T> predicate) {
         return new FilterIterator<T>(iterator, predicate);
     }
 
 
-    public static <T> Iterator<T> iterate(final Callable1<T, T> callable, T t) {
+    public static <T> Iterator<T> iterate(final Callable1<T, T> callable, final T t) {
         return new IterateIterator<T>(callable, t);
     }
 
-    public static <T> T head(java.util.Iterator<T> iterator) {
+    public static <T> T head(final java.util.Iterator<T> iterator) {
         if (iterator.hasNext()) {
             return iterator.next();
         }
@@ -45,7 +45,7 @@ public class Iterators {
         throw new NoSuchElementException();
     }
 
-    public static <T, S> S foldLeft(java.util.Iterator<T> iterator, S seed, Callable2<S, T, S> callable) {
+    public static <T, S> S foldLeft(final java.util.Iterator<T> iterator, final S seed, final Callable2<S, T, S> callable) {
         S accumilator = seed;
         while (iterator.hasNext()) {
             try {
@@ -57,19 +57,19 @@ public class Iterators {
         return accumilator;
     }
 
-    public static <T> T reduceLeft(java.util.Iterator<T> iterator, Callable2<T, T, T> callable) {
+    public static <T> T reduceLeft(final java.util.Iterator<T> iterator, final Callable2<T, T, T> callable) {
         return foldLeft(iterator, iterator.next(), callable);
     }
 
-    public static String toString(java.util.Iterator iterator) {
+    public static String toString(final java.util.Iterator iterator) {
         return toString(iterator, ",");
     }
 
-    public static String toString(java.util.Iterator iterator, String separator) {
+    public static String toString(final java.util.Iterator iterator, final String separator) {
         return toString(iterator, "", separator, "");
     }
 
-    public static String toString(java.util.Iterator iterator, String start, String separator, String end) {
+    public static String toString(final java.util.Iterator iterator, final String start, final String separator, final String end) {
         StringBuilder builder = new StringBuilder();
         builder.append(start);
         if (iterator.hasNext()) builder.append(iterator.next());
@@ -81,7 +81,7 @@ public class Iterators {
         return builder.toString();
     }
 
-    public static <T> Set<T> union(java.lang.Iterable<java.util.Iterator<T>> iterators) {
+    public static <T> Set<T> union(final java.lang.Iterable<java.util.Iterator<T>> iterators) {
         Set<T> result = new HashSet<T>();
         for (java.util.Iterator<T> iterator : iterators) {
             while (iterator.hasNext()){

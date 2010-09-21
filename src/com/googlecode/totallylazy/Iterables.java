@@ -5,6 +5,14 @@ import java.util.Set;
 import static java.util.Arrays.asList;
 
 public class Iterables {
+    public static <T> Iterable<T> iterable(final java.lang.Iterable<T> iterable){
+        return new Iterable<T>() {
+            public java.util.Iterator<T> iterator() {
+                return iterable.iterator();
+            }
+        };
+    }
+
     public static <T> Iterable<T> list(final T ... items){
         return new Iterable<T>() {
             public java.util.Iterator<T> iterator() {
@@ -62,11 +70,11 @@ public class Iterables {
         };
     }
 
-    public static <T, S> S foldLeft(Iterable<T> iterable, S seed, Callable2<S,T,S> callable) {
+    public static <T, S> S foldLeft(final java.lang.Iterable<T> iterable, S seed, Callable2<S,T,S> callable) {
         return Iterators.foldLeft(iterable.iterator(), seed, callable);
     }
 
-    public static <T> T reduceLeft(Iterable<T> iterable, Callable2<T,T,T> callable) {
+    public static <T> T reduceLeft(final java.lang.Iterable<T> iterable, Callable2<T,T,T> callable) {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
 
