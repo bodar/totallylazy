@@ -32,4 +32,16 @@ public abstract class Iterable<T> implements java.lang.Iterable<T> {
     public T reduceLeft(Callable2<T, T, T> callable) {
         return Iterables.reduceLeft(this, callable);
     }
+
+    public String toString() {
+        return Iterables.toString(this);
+    }
+
+    public String toString(String separator) {
+        return Iterables.toString(this, separator);
+    }
+
+    public String toString(String start, String separator, String end) {
+        return Iterables.toString(this, start, separator, end);
+    }
 }
