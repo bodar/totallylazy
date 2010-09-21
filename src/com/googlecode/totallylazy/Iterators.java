@@ -59,4 +59,23 @@ public class Iterators {
         return foldLeft(iterator, iterator.next(), callable);
     }
 
+    public static String toString(java.util.Iterator iterator) {
+        return toString(iterator, "");
+    }
+
+    public static String toString(java.util.Iterator iterator, String separator) {
+        return toString(iterator, "", separator, "");
+    }
+
+    public static String toString(java.util.Iterator iterator, String start, String separator, String end) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(start);
+        if (iterator.hasNext()) builder.append(iterator.next());
+        while (iterator.hasNext()) {
+            builder.append(separator);
+            builder.append(iterator.next());
+        }
+        builder.append(end);
+        return builder.toString();
+    }
 }

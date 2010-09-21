@@ -67,4 +67,14 @@ public class Iterables {
     public static <T> T reduceLeft(Iterable<T> iterable, Callable2<T,T,T> callable) {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
+
+    public static String toString(final java.lang.Iterable iterable) {
+        return Iterators.toString(iterable.iterator());
+    }
+    public static String toString(final java.lang.Iterable iterable, String separator) {
+        return Iterators.toString(iterable.iterator(), separator);
+    }
+    public static String toString(final java.lang.Iterable iterable, String start, String separator, String end) {
+        return Iterators.toString(iterable.iterator(), start, separator, end);
+    }
 }
