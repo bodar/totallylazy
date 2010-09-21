@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import java.util.List;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
@@ -92,4 +93,11 @@ public class Iterables {
         return Iterators.union(map(iterables, Callables.<T>asIterator()));
     }
 
+    public static boolean isEmpty(final java.lang.Iterable iterable) {
+        return !iterable.iterator().hasNext();
+    }
+
+    public static <T> List<T> toList(final java.lang.Iterable<T> iterable) {
+        return Iterators.toList(iterable.iterator());
+    }
 }

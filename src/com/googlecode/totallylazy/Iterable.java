@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -50,5 +51,13 @@ public abstract class Iterable<T> implements java.lang.Iterable<T> {
 
     public Set<T> union(final java.lang.Iterable<T> other) {
         return Iterables.union(Iterables.list(this, other));
+    }
+
+    public boolean isEmpty() {
+        return Iterables.isEmpty(this);
+    }
+
+    public List<T> toList() {
+        return Iterables.toList(this);
     }
 }

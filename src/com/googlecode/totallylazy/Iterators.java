@@ -2,7 +2,9 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -87,6 +89,14 @@ public class Iterators {
             while (iterator.hasNext()){
                 result.add(iterator.next());
             }
+        }
+        return result;
+    }
+
+    public static <T> List<T> toList(final java.util.Iterator<T> iterator) {
+        final List<T> result = new ArrayList<T>();
+        while(iterator.hasNext()) {
+            result.add(iterator.next());
         }
         return result;
     }
