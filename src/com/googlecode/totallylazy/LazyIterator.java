@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy;
 
-public abstract class Iterator<T> implements java.util.Iterator<T>{
+import java.util.Iterator;
+
+public abstract class LazyIterator<T> implements Iterator<T> {
     public void remove() {
         throw new UnsupportedOperationException();
     }
-
-    
 }

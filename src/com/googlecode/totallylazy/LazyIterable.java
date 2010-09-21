@@ -1,23 +1,26 @@
 package com.googlecode.totallylazy;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Set;
 
 
-public abstract class Iterable<T> implements java.lang.Iterable<T> {
+public abstract class LazyIterable<T> implements Iterable<T> {
     public void foreach(Runnable1<T> runnable) {
         Iterables.foreach(this, runnable);
     }
 
-    public <S> Iterable<S> map(final Callable1<T, S> callable) {
+    public <S> LazyIterable<S> map(final Callable1<T, S> callable) {
         return Iterables.map(this, callable);
     }
 
-    public Iterable<T> filter(final Predicate<T> predicate) {
+    public LazyIterable<T> filter(final Predicate<T> predicate) {
         return Iterables.filter(this, predicate);
     }
 
-    public <S> Iterable<S> flatMap(final Callable1<T, java.lang.Iterable<S>> callable) {
+    public <S> LazyIterable<S> flatMap(final Callable1<T, Iterable<S>> callable) {
         return Iterables.flatMap(this, callable);
     }
 
@@ -25,7 +28,7 @@ public abstract class Iterable<T> implements java.lang.Iterable<T> {
         return Iterables.head(this);
     }
 
-    public Iterable<T> tail() {
+    public LazyIterable<T> tail() {
         return Iterables.tail(this);
     }
 
@@ -49,7 +52,7 @@ public abstract class Iterable<T> implements java.lang.Iterable<T> {
         return Iterables.toString(this, start, separator, end);
     }
 
-    public Set<T> union(final java.lang.Iterable<T> other) {
+    public Set<T> union(final Iterable<T> other) {
         return Iterables.union(Iterables.list(this, other));
     }
 
@@ -59,5 +62,10 @@ public abstract class Iterable<T> implements java.lang.Iterable<T> {
 
     public List<T> toList() {
         return Iterables.toList(this);
+    }
+
+    public T[] toArray(Class<T> aClass) {
+        T[] array = (T[]) Array.newInstance(aClass, 0);
+        return toList().toArray(array);
     }
 }

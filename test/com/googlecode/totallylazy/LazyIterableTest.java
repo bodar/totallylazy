@@ -15,7 +15,14 @@ import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
-public class IterableTest {
+public class LazyIterableTest {
+    @Test
+    public void canConvertToArray() throws Exception {
+        final Integer[] array = list(1, 2).toArray(Integer.class);
+         assertThat(array[0], is(1));
+         assertThat(array[1], is(2));
+    }
+
     @Test
     public void canConvertToList() throws Exception {
         final List<Integer> aList = list(1, 2).toList();
