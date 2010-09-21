@@ -16,8 +16,8 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
 public class IterableTest {
     @Test
     public void supportsToString() throws Exception {
-        assertThat(list(1, 2, 3).toString(), is("123"));
-        assertThat(list(1, 2, 3).toString(", "), is("1, 2, 3"));
+        assertThat(list(1, 2, 3).toString(), is("1,2,3"));
+        assertThat(list(1, 2, 3).toString(":"), is("1:2:3"));
         assertThat(list(1, 2, 3).toString("(", ", ", ")"), is("(1, 2, 3)"));
     }
 
