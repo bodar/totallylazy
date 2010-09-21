@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.*;
-import com.googlecode.totallylazy.Iterable;
 
 import java.util.NoSuchElementException;
 

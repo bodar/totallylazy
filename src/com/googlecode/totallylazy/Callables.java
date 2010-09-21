@@ -11,6 +11,15 @@ public class Callables {
         };
     }
 
+    public static <T> Callable1<java.lang.Iterable<T>, java.util.Iterator<T>> asIterator() {
+        return new Callable1<java.lang.Iterable<T>, java.util.Iterator<T>>() {
+            public java.util.Iterator<T> call(java.lang.Iterable<T> iterable) throws Exception {
+                return iterable.iterator();
+            }
+        };
+    }
+
+
     public static <T> Callable<T> returns(final T t) {
         return new Callable<T>() {
             public T call() throws Exception {
