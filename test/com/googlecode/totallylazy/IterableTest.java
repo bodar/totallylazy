@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.lang.*;
 import java.lang.Iterable;
+import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.*;
 import static com.googlecode.totallylazy.Iterables.list;
@@ -14,6 +15,13 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class IterableTest {
+    @Test
+    public void supportsUnion() throws Exception {
+        Set<Integer> union = list(1, 2, 3).union(list(5,4,3));
+        assertThat(union.size(), is(5));
+        assertThat(union, hasItems(1,2,3,4,5));
+    }
+
     @Test
     public void supportsToString() throws Exception {
         assertThat(list(1, 2, 3).toString(), is("1,2,3"));

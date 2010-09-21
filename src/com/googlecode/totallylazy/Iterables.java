@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import java.util.Set;
+
 import static java.util.Arrays.asList;
 
 public class Iterables {
@@ -77,4 +79,9 @@ public class Iterables {
     public static String toString(final java.lang.Iterable iterable, String start, String separator, String end) {
         return Iterators.toString(iterable.iterator(), start, separator, end);
     }
+
+    public static <T> Set<T> union(final java.lang.Iterable<java.lang.Iterable<T>> iterables) {
+        return Iterators.union(map(iterables, Callables.<T>asIterator()));
+    }
+
 }

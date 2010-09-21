@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy;
 
+import java.util.Set;
+
+
 public abstract class Iterable<T> implements java.lang.Iterable<T> {
     public void foreach(Runnable1<T> runnable) {
         Iterables.foreach(this, runnable);
@@ -43,5 +46,9 @@ public abstract class Iterable<T> implements java.lang.Iterable<T> {
 
     public String toString(String start, String separator, String end) {
         return Iterables.toString(this, start, separator, end);
+    }
+
+    public Set<T> union(java.lang.Iterable<T> other) {
+        return Iterables.union(Iterables.list(this, other));
     }
 }

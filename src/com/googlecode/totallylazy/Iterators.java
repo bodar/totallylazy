@@ -2,7 +2,9 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.*;
 
+import java.util.HashSet;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 public class Iterators {
     public static <T> void foreach(java.util.Iterator<T> iterator, Runnable1<T> runnable) {
@@ -77,5 +79,15 @@ public class Iterators {
         }
         builder.append(end);
         return builder.toString();
+    }
+
+    public static <T> Set<T> union(java.lang.Iterable<java.util.Iterator<T>> iterators) {
+        Set<T> result = new HashSet<T>();
+        for (java.util.Iterator<T> iterator : iterators) {
+            while (iterator.hasNext()){
+                result.add(iterator.next());
+            }
+        }
+        return result;
     }
 }
