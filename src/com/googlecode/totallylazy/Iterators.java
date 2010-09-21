@@ -60,7 +60,7 @@ public class Iterators {
     }
 
     public static String toString(java.util.Iterator iterator) {
-        return toString(iterator, "");
+        return toString(iterator, ",");
     }
 
     public static String toString(java.util.Iterator iterator, String separator) {
