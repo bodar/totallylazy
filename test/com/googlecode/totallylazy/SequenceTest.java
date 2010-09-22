@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.lang.*;
@@ -13,7 +14,9 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Predicates.even;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
@@ -89,6 +92,26 @@ public class SequenceTest {
     @Test
     public void supportsHead() throws Exception {
         assertThat(sequence(1, 2).head(), is(1));
+    }
+
+    @Test
+    public void supportsHeadOr() throws Exception {
+        assertThat(Sequences.<Integer>sequence().headOr(2), is(2));
+        assertThat(Sequences.<Integer>sequence().headOr(returns(2)), is(2));
+        assertThat(Sequences.<Integer>sequence().headOr(aNull(Integer.class)), is(nullValue(Integer.class)));
+        assertThat(sequence(1,2).headOr(3), is(1));
+    }
+
+
+    @Test
+    public void headOrSupportsExceptions() {
+        final Exception expected = new Exception("");
+        try {
+            assertThat(Sequences.<Integer>sequence().headOr(callThrows(expected, Integer.class)), is(nullValue(Integer.class)));
+            fail();
+        } catch (LazyException e) {
+            assertThat((Exception) e.getCause(), CoreMatchers.sameInstance(expected));
+        }
     }
 
     @Test
