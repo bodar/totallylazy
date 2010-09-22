@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.*;
 
-public class IterateIterator<T> extends LazyIterator<T> {
+public class IterateIterator<T> extends ReadOnlyIterator<T> {
     private final Callable1<T, T> callable;
     private T t;
 

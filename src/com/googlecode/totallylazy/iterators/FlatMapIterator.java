@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 
-public class FlatMapIterator<T, S> extends LazyIterator<S> {
+public class FlatMapIterator<T, S> extends ReadOnlyIterator<S> {
     private final Iterator<T> iterator;
     private final Callable1<T, Iterable<S>> callable;
     private Iterator<S> currentIterator = null;

@@ -1,10 +1,8 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.LazyIterator;
-
 import java.util.NoSuchElementException;
 
-public class RangerIterator extends LazyIterator<Integer> {
+public class RangerIterator extends ReadOnlyIterator<Integer> {
     private int next;
     private final int end;
     private final int step;

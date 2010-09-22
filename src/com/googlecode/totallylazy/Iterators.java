@@ -11,20 +11,20 @@ public class Iterators {
         }
     }
 
-    public static <T, S> LazyIterator<S> map(final Iterator<T> iterator, final Callable1<T, S> callable) {
+    public static <T, S> ReadOnlyIterator<S> map(final Iterator<T> iterator, final Callable1<? super T, S> callable) {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> LazyIterator<S> flatMap(final Iterator<T> iterator, final Callable1<T, Iterable<S>> callable) {
+    public static <T, S> ReadOnlyIterator<S> flatMap(final Iterator<T> iterator, final Callable1<T, Iterable<S>> callable) {
         return new FlatMapIterator<T, S>(iterator, callable);
     }
 
-    public static <T> LazyIterator<T> filter(final Iterator<T> iterator, final Predicate<T> predicate) {
+    public static <T> ReadOnlyIterator<T> filter(final Iterator<T> iterator, final Predicate<T> predicate) {
         return new FilterIterator<T>(iterator, predicate);
     }
 
 
-    public static <T> LazyIterator<T> iterate(final Callable1<T, T> callable, final T t) {
+    public static <T> ReadOnlyIterator<T> iterate(final Callable1<T, T> callable, final T t) {
         return new IterateIterator<T>(callable, t);
     }
 
@@ -35,7 +35,7 @@ public class Iterators {
         throw new NoSuchElementException();
     }
 
-    public static <T> LazyIterator<T> tail(final Iterator<T> iterator) {
+    public static <T> ReadOnlyIterator<T> tail(final Iterator<T> iterator) {
         if (iterator.hasNext()) {
             iterator.next();
             return new DelegatingIterator<T>(iterator);

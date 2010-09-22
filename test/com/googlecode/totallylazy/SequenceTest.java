@@ -8,73 +8,73 @@ import java.util.List;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.*;
-import static com.googlecode.totallylazy.Iterables.list;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Predicates.even;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
-public class LazyIterableTest {
+public class SequenceTest {
     @Test
     public void canConvertToArray() throws Exception {
-        final Integer[] array = list(1, 2).toArray(Integer.class);
+        final Integer[] array = sequence(1, 2).toArray(Integer.class);
          assertThat(array[0], is(1));
          assertThat(array[1], is(2));
     }
 
     @Test
     public void canConvertToList() throws Exception {
-        final List<Integer> aList = list(1, 2).toList();
+        final List<Integer> aList = sequence(1, 2).toList();
          assertThat(aList, hasItems(1,2));
     }
 
     @Test
     public void supportsIsEmpty() throws Exception {
-        assertThat(list().isEmpty(), is(true));
-        assertThat(list(1).isEmpty(), is(false));
+        assertThat(sequence().isEmpty(), is(true));
+        assertThat(sequence(1).isEmpty(), is(false));
     }
 
     @Test
     public void supportsUnion() throws Exception {
-        Set<Integer> union = list(1, 2, 3).union(list(5,4,3));
+        Set<Integer> union = sequence(1, 2, 3).union(sequence(5,4,3));
         assertThat(union.size(), is(5));
         assertThat(union, hasItems(1,2,3,4,5));
     }
 
     @Test
     public void supportsToString() throws Exception {
-        assertThat(list(1, 2, 3).toString(), is("1,2,3"));
-        assertThat(list(1, 2, 3).toString(":"), is("1:2:3"));
-        assertThat(list(1, 2, 3).toString("(", ", ", ")"), is("(1, 2, 3)"));
+        assertThat(sequence(1, 2, 3).toString(), is("1,2,3"));
+        assertThat(sequence(1, 2, 3).toString(":"), is("1:2:3"));
+        assertThat(sequence(1, 2, 3).toString("(", ", ", ")"), is("(1, 2, 3)"));
     }
 
     @Test
     public void supportsReduceLeft() throws Exception {
-        int sum = list(1, 2, 3).reduceLeft(add());
+        int sum = sequence(1, 2, 3).reduceLeft(add());
         assertThat(sum, is(6));
     }
 
     @Test
     public void supportsFoldLeft() throws Exception {
-        int sum = list(1, 2, 3).foldLeft(0, add());
+        int sum = sequence(1, 2, 3).foldLeft(0, add());
         assertThat(sum, is(6));
     }
 
     @Test
     public void supportsTail() throws Exception {
-        assertThat(list(1, 2, 3).tail(), hasItems(2, 3));
+        assertThat(sequence(1, 2, 3).tail(), hasItems(2, 3));
     }
 
     @Test
     public void supportsHead() throws Exception {
-        assertThat(list(1, 2).head(), is(1));
+        assertThat(sequence(1, 2).head(), is(1));
     }
 
     @Test
     public void supportsForEach() throws Exception {
         final int[] sum = {0};
-        list(1, 2).foreach(new Runnable1<Integer>() {
+        sequence(1, 2).foreach(new Runnable1<Integer>() {
             public void run(Integer value) {
                 sum[0] += value;
             }
@@ -84,36 +84,36 @@ public class LazyIterableTest {
 
     @Test
     public void supportsMap() throws Exception {
-        Iterable<String> strings = list(1, 2).map(asString(Integer.class));
+        Iterable<String> strings = sequence(1, 2).map(asString());
         assertThat(strings, hasItems("1", "2"));
     }
 
     @Test
     public void mapIsLazy() throws Exception {
-        Iterable<Integer> result = list(returns(1), callThrows(new Exception(), Integer.class)).
-                map(invokeCall(Integer.class));
+        Iterable<Integer> result = sequence(returns(1), callThrows(new Exception(), Integer.class)).
+                map(invoke(Integer.class));
         assertThat(result, hasItem(1));
     }
 
     @Test
     public void supportsFilter() throws Exception {
-        Iterable<Integer> result = list(1, 2, 3, 4).filter(even());
+        Iterable<Integer> result = sequence(1, 2, 3, 4).filter(even());
         assertThat(result, hasItems(2, 4));
     }
 
     @Test
     public void filterIsLazy() throws Exception {
-        Iterable<Integer> result = list(returns(1), returns(2), callThrows(new Exception(), Integer.class)).
-                map(invokeCall(Integer.class)).
+        Iterable<Integer> result = sequence(returns(1), returns(2), callThrows(new Exception(), Integer.class)).
+                map(invoke(Integer.class)).
                 filter(even());
         assertThat(result, hasItem(2));
     }
 
     @Test
     public void supportsFlatMap() throws Exception {
-        Iterable<Integer> result = list(1, 2, 3).flatMap(new Callable1<Integer, Iterable<Integer>>() {
+        Iterable<Integer> result = sequence(1, 2, 3).flatMap(new Callable1<Integer, Iterable<Integer>>() {
             public Iterable<Integer> call(Integer value) throws Exception {
-                return list(value, value * 3);
+                return sequence(value, value * 3);
             }
         });
         assertThat(result, hasItems(1, 2, 3, 6, 9));
