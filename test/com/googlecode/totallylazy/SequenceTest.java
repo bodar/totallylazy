@@ -11,11 +11,19 @@ import static com.googlecode.totallylazy.Callables.*;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Predicates.even;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
+    @Test
+    public void supportsRemove() throws Exception {
+        final Sequence<Integer> numbers = sequence(1, 2, 3).remove(2);
+         assertThat(numbers, hasItems(1,3));
+         assertThat(numbers, not(hasItem(2)));
+    }
+
     @Test
     public void canConvertToArray() throws Exception {
         final Integer[] array = sequence(1, 2).toArray(Integer.class);

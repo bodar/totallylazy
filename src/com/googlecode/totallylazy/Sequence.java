@@ -65,4 +65,8 @@ public abstract class Sequence<T> implements Iterable<T> {
     public T[] toArray(Class<T> aClass) {
         return toList().toArray((T[]) Array.newInstance(aClass, 0));
     }
+
+    public Sequence<T> remove(T t) {
+        return Sequences.remove(this, t);
+    }
 }

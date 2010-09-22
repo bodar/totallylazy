@@ -4,6 +4,8 @@ import com.googlecode.totallylazy.iterators.*;
 
 import java.util.*;
 
+import static com.googlecode.totallylazy.Predicates.not;
+
 public class Iterators {
     public static <T> void foreach(final Iterator<T> iterator, final Runnable1<T> runnable) {
         while (iterator.hasNext()) {
@@ -11,20 +13,20 @@ public class Iterators {
         }
     }
 
-    public static <T, S> ReadOnlyIterator<S> map(final Iterator<T> iterator, final Callable1<? super T, S> callable) {
+    public static <T, S> Iterator<S> map(final Iterator<T> iterator, final Callable1<? super T, S> callable) {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> ReadOnlyIterator<S> flatMap(final Iterator<T> iterator, final Callable1<T, Iterable<S>> callable) {
+    public static <T, S> Iterator<S> flatMap(final Iterator<T> iterator, final Callable1<T, Iterable<S>> callable) {
         return new FlatMapIterator<T, S>(iterator, callable);
     }
 
-    public static <T> ReadOnlyIterator<T> filter(final Iterator<T> iterator, final Predicate<T> predicate) {
+    public static <T> Iterator<T> filter(final Iterator<T> iterator, final Predicate<T> predicate) {
         return new FilterIterator<T>(iterator, predicate);
     }
 
 
-    public static <T> ReadOnlyIterator<T> iterate(final Callable1<T, T> callable, final T t) {
+    public static <T> Iterator<T> iterate(final Callable1<T, T> callable, final T t) {
         return new IterateIterator<T>(callable, t);
     }
 
@@ -35,7 +37,7 @@ public class Iterators {
         throw new NoSuchElementException();
     }
 
-    public static <T> ReadOnlyIterator<T> tail(final Iterator<T> iterator) {
+    public static <T> Iterator<T> tail(final Iterator<T> iterator) {
         if (iterator.hasNext()) {
             iterator.next();
             return new DelegatingIterator<T>(iterator);
@@ -107,5 +109,9 @@ public class Iterators {
 
     public static Iterator<Integer> range(final int start, final int end, final int step) {
         return new RangerIterator(start, end, step);
+    }
+
+    public static <T> Iterator<T> remove(Iterator<T> iterator, T t) {
+        return filter(iterator, not(t));
     }
 }
