@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+
+import static com.googlecode.totallylazy.Callables.call;
 
 public class IterateIterator<T> extends ReadOnlyIterator<T> {
     private final Callable1<T, T> callable;
@@ -16,13 +18,9 @@ public class IterateIterator<T> extends ReadOnlyIterator<T> {
     }
 
     public T next() {
-        try {
-            T result = t;
-            t = callable.call(t);
-            return result;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        T result = t;
+        t = call(callable, t);
+        return result;
     }
 
 }

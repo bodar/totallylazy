@@ -4,11 +4,13 @@ import com.googlecode.totallylazy.Callable1;
 
 import java.util.Iterator;
 
-public class MapIterator<T,S> extends ReadOnlyIterator<S> {
-    private final Iterator<T> iterator;
-    private final Callable1<? super T, S> callable;
+import static com.googlecode.totallylazy.Callables.call;
 
-    public MapIterator(Iterator<T> iterator, Callable1<? super T, S> callable) {
+public class MapIterator<T, S> extends ReadOnlyIterator<S> {
+    private final Iterator<T> iterator;
+    private final Callable1<T, S> callable;
+
+    public MapIterator(Iterator<T> iterator, Callable1<T, S> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }
@@ -18,10 +20,6 @@ public class MapIterator<T,S> extends ReadOnlyIterator<S> {
     }
 
     public S next() {
-        try {
-            return callable.call(iterator.next());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return call(callable, iterator.next());
     }
 }

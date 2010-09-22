@@ -1,9 +1,11 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import static com.googlecode.totallylazy.Callables.call;
 
 
 public class FlatMapIterator<T, S> extends ReadOnlyIterator<S> {
@@ -19,11 +21,7 @@ public class FlatMapIterator<T, S> extends ReadOnlyIterator<S> {
     public boolean hasNext() {
         if (currentIterator == null) {
             if (iterator.hasNext()) {
-                try {
-                    currentIterator = callable.call(iterator.next()).iterator();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                currentIterator = call(callable, iterator.next()).iterator();
                 return hasNext();
             }
             return false;

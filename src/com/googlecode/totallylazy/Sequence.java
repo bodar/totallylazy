@@ -11,7 +11,7 @@ public abstract class Sequence<T> implements Iterable<T> {
         Sequences.foreach(this, runnable);
     }
 
-    public <S> Sequence<S> map(final Callable1<? super T, S> callable) {
+    public <S> Sequence<S> map(final Callable1<T, S> callable) {
         return Sequences.map(this, callable);
     }
 
