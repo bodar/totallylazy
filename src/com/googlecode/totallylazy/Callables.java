@@ -4,9 +4,9 @@ import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 public class Callables {
-    public static <T> Callable1<T, String> asString(Class<T> aClass) {
-        return new Callable1<T, String>() {
-            public String call(T value){
+    public static <Object> Callable1<Object, String> asString() {
+        return new Callable1<Object, String>() {
+            public String call(Object value){
                 return value.toString();
             }
         };
@@ -37,7 +37,7 @@ public class Callables {
         };
     }
 
-    public static <T> Callable1<Callable<T>, T> invokeCall(Class<T> aClass) {
+    public static <T> Callable1<Callable<T>, T> invoke(Class<T> aClass) {
         return new Callable1<Callable<T>, T>() {
             public T call(Callable<T> callable) throws Exception {
                 return callable.call();

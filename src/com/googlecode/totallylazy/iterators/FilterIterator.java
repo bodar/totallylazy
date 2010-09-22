@@ -1,12 +1,11 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.LazyIterator;
 import com.googlecode.totallylazy.Predicate;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class FilterIterator<T> extends LazyIterator<T> {
+public class FilterIterator<T> extends ReadOnlyIterator<T> {
     private final Iterator<T> iterator;
     private final Predicate<T> predicate;
     private T matched = null;

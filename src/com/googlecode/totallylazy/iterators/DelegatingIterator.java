@@ -1,10 +1,8 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.LazyIterator;
-
 import java.util.Iterator;
 
-public class DelegatingIterator<T> extends LazyIterator<T> {
+public class DelegatingIterator<T> extends ReadOnlyIterator<T> {
     private final Iterator<T> iterator;
 
     public DelegatingIterator(Iterator<T> iterator) {
