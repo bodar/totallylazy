@@ -29,6 +29,14 @@ public class Callables {
         };
     }
 
+    public static <T> Callable<T> aNull(Class<T> aClass) {
+        return new Callable<T>() {
+            public T call() throws Exception {
+                return null;
+            }
+        };
+    }
+
     public static <T> Callable<T> callThrows(final Exception e, Class<T> aClass) {
         return new Callable<T>() {
             public T call() throws Exception {

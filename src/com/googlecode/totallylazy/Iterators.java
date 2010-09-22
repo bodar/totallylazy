@@ -1,8 +1,19 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.*;
+import com.googlecode.totallylazy.iterators.DelegatingIterator;
+import com.googlecode.totallylazy.iterators.FilterIterator;
+import com.googlecode.totallylazy.iterators.FlatMapIterator;
+import com.googlecode.totallylazy.iterators.IterateIterator;
+import com.googlecode.totallylazy.iterators.MapIterator;
+import com.googlecode.totallylazy.iterators.RangerIterator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Predicates.not;
 
@@ -35,6 +46,18 @@ public class Iterators {
             return iterator.next();
         }
         throw new NoSuchElementException();
+    }
+
+    public static <T> T headOr(Iterator<T> iterator, Callable<T> callable) {
+        try {
+            return iterator.hasNext() ? iterator.next() : callable.call();
+        } catch (Exception e) {
+            throw new LazyException(e);
+        }
+    }
+
+    public static <T> T headOr(Iterator<T> iterator, T defaultValue) {
+        return iterator.hasNext() ? iterator.next() : defaultValue;
     }
 
     public static <T> Iterator<T> tail(final Iterator<T> iterator) {
@@ -84,7 +107,7 @@ public class Iterators {
     public static <T> Set<T> union(final Iterable<Iterator<T>> iterators) {
         Set<T> result = new HashSet<T>();
         for (Iterator<T> iterator : iterators) {
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 result.add(iterator.next());
             }
         }
@@ -93,7 +116,7 @@ public class Iterators {
 
     public static <T> List<T> toList(final Iterator<T> iterator) {
         final List<T> result = new ArrayList<T>();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             result.add(iterator.next());
         }
         return result;

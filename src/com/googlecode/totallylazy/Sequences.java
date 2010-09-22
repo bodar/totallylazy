@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import static java.util.Arrays.asList;
 
@@ -89,6 +90,14 @@ public class Sequences {
         return Iterators.head(iterable.iterator());
     }
 
+    public static <T> T headOr(Sequence<T> sequence, Callable<T> callable) {
+        return Iterators.headOr(sequence.iterator(), callable);
+    }
+
+    public static <T> T headOr(Sequence<T> sequence, T defaultValue) {
+        return Iterators.headOr(sequence.iterator(), defaultValue);
+    }
+
     public static <T> Sequence<T> tail(final Iterable<T> iterable) {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
@@ -104,13 +113,13 @@ public class Sequences {
     public static <T> T reduceLeft(final Iterable<T> iterable, Callable2<T,T,T> callable) {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
-
     public static String toString(final Iterable iterable) {
         return Iterators.toString(iterable.iterator());
     }
     public static String toString(final Iterable iterable, String separator) {
         return Iterators.toString(iterable.iterator(), separator);
     }
+
     public static String toString(final Iterable iterable, String start, String separator, String end) {
         return Iterators.toString(iterable.iterator(), start, separator, end);
     }
@@ -136,6 +145,6 @@ public class Sequences {
     }
 
     public static int size(Sequence sequence) {
-           return sequence.toList().size();     
+           return sequence.toList().size();
     }
 }

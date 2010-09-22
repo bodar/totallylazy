@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 
 public abstract class Sequence<T> implements Iterable<T> {
@@ -24,6 +25,14 @@ public abstract class Sequence<T> implements Iterable<T> {
 
     public T head() {
         return Sequences.head(this);
+    }
+
+    public T headOr(T defaultValue) {
+        return Sequences.headOr(this, defaultValue);
+    }
+
+    public T headOr(Callable<T> callable) {
+        return Sequences.headOr(this, callable);
     }
 
     public Sequence<T> tail() {
