@@ -134,4 +134,8 @@ public class Sequences {
             }
         };
     }
+
+    public static int size(Sequence sequence) {
+           return sequence.toList().size();     
+    }
 }

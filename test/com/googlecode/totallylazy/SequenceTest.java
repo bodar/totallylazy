@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.*;
+import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Predicates.even;
 import static org.hamcrest.CoreMatchers.is;
@@ -17,6 +18,17 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
+    @Test
+    public void supportsSize() throws Exception {
+         assertThat(sequence(1, 2, 3).size(), is(3));
+    }
+
+    @Test
+    public void canFilterNull() throws Exception {
+        final Sequence<Integer> numbers = sequence(1, null, 3).filter(notNull(Integer.class));
+         assertThat(numbers, hasItems(1,3));
+    }
+
     @Test
     public void supportsRemove() throws Exception {
         final Sequence<Integer> numbers = sequence(1, 2, 3).remove(2);
