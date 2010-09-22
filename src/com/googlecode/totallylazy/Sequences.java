@@ -35,7 +35,7 @@ public class Sequences {
 
     public static <T> Sequence<T> filter(final Iterable<T> iterable, final Predicate<T> predicate) {
         return new Sequence<T>() {
-            public ReadOnlyIterator<T> iterator() {
+            public Iterator<T> iterator() {
                 return Iterators.filter(iterable.iterator(), predicate);
             }
         };
@@ -91,7 +91,7 @@ public class Sequences {
 
     public static <T> Sequence<T> tail(final Iterable<T> iterable) {
         return new Sequence<T>() {
-            public ReadOnlyIterator<T> iterator() {
+            public Iterator<T> iterator() {
                 return Iterators.tail(iterable.iterator());
             }
         };
@@ -125,5 +125,13 @@ public class Sequences {
 
     public static <T> List<T> toList(final Iterable<T> iterable) {
         return Iterators.toList(iterable.iterator());
+    }
+
+    public static <T> Sequence<T> remove(final Sequence<T> sequence, final T t) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.remove(sequence.iterator(), t);
+            }
+        };
     }
 }
