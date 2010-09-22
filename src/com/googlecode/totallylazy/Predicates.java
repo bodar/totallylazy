@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.predicates.Is;
 import com.googlecode.totallylazy.predicates.ModRemainderIs;
 import com.googlecode.totallylazy.predicates.Not;
+import com.googlecode.totallylazy.predicates.NotNullPredicate;
 
 public class Predicates {
     public static <T> Predicate<T> is(final T t) {
@@ -16,8 +17,12 @@ public class Predicates {
     public static Predicate<Integer> even() {
         return new ModRemainderIs(2, 0);
     }
+
     public static Predicate<Integer> odd() {
         return new ModRemainderIs(2, 1);
     }
 
+    public static <T> Predicate<T> notNull(Class<T> aClass) {
+        return new NotNullPredicate<T>();
+    }
 }

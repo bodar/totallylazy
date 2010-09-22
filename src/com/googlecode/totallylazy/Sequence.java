@@ -69,4 +69,8 @@ public abstract class Sequence<T> implements Iterable<T> {
     public Sequence<T> remove(T t) {
         return Sequences.remove(this, t);
     }
+
+    public int size() {
+        return Sequences.size(this);
+    }
 }
