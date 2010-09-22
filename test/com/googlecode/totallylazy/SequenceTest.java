@@ -127,7 +127,7 @@ public class SequenceTest {
 
     @Test
     public void supportsMap() throws Exception {
-        Iterable<String> strings = sequence(1, 2).map(asString());
+        Iterable<String> strings = sequence(1, 2).map(asString(Integer.class));
         assertThat(strings, hasItems("1", "2"));
     }
 

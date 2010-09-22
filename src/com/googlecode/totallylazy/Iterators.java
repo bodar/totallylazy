@@ -15,6 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Predicates.not;
 
 public class Iterators {
@@ -24,7 +25,7 @@ public class Iterators {
         }
     }
 
-    public static <T, S> Iterator<S> map(final Iterator<T> iterator, final Callable1<? super T, S> callable) {
+    public static <T, S> Iterator<S> map(final Iterator<T> iterator, final Callable1<T, S> callable) {
         return new MapIterator<T, S>(iterator, callable);
     }
 
@@ -49,11 +50,7 @@ public class Iterators {
     }
 
     public static <T> T headOr(Iterator<T> iterator, Callable<T> callable) {
-        try {
-            return iterator.hasNext() ? iterator.next() : callable.call();
-        } catch (Exception e) {
-            throw new LazyException(e);
-        }
+        return iterator.hasNext() ? iterator.next() : call(callable);
     }
 
     public static <T> T headOr(Iterator<T> iterator, T defaultValue) {
@@ -71,11 +68,7 @@ public class Iterators {
     public static <T, S> S foldLeft(final Iterator<T> iterator, final S seed, final Callable2<S, T, S> callable) {
         S accumilator = seed;
         while (iterator.hasNext()) {
-            try {
-                accumilator = callable.call(accumilator, iterator.next());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            accumilator = call(callable, accumilator, iterator.next());
         }
         return accumilator;
     }

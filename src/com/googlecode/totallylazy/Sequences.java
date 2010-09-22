@@ -26,7 +26,7 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<? super T,S> callable) {
+    public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<T,S> callable) {
         return new Sequence<S>() {
             public Iterator<S> iterator() {
                 return Iterators.map(iterable.iterator(), callable);

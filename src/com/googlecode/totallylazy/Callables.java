@@ -4,9 +4,39 @@ import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 public class Callables {
-    public static <Object> Callable1<Object, String> asString() {
-        return new Callable1<Object, String>() {
-            public String call(Object value){
+    public static <T> T call(Callable<T> callable){
+        try {
+            return callable.call();
+        } catch (LazyException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new LazyException(e);
+        }
+    }
+
+    public static <T,S> S call(Callable1<T, S> callable, T t){
+        try {
+            return callable.call(t);
+        } catch (LazyException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new LazyException(e);
+        }
+    }
+
+    public static <T,S, R> R call(Callable2<T, S, R> callable, T t, S s){
+        try {
+            return callable.call(t, s);
+        } catch (LazyException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new LazyException(e);
+        }
+    }
+
+    public static <T> Callable1<T, String> asString(Class<T> aClass) {
+        return new Callable1<T, String>() {
+            public String call(T value){
                 return value.toString();
             }
         };
