@@ -13,6 +13,7 @@ import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Predicates.even;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
@@ -110,7 +111,7 @@ public class SequenceTest {
             assertThat(Sequences.<Integer>sequence().headOr(callThrows(expected, Integer.class)), is(nullValue(Integer.class)));
             fail();
         } catch (LazyException e) {
-            assertThat((Exception) e.getCause(), CoreMatchers.sameInstance(expected));
+            assertThat((Exception) e.getCause(), sameInstance(expected));
         }
     }
 
