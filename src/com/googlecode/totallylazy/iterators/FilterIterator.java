@@ -30,14 +30,15 @@ public class FilterIterator<T> extends ReadOnlyIterator<T> {
     }
 
     public T next() {
-        if (matched != null) {
-            T result = matched;
-            matched = null;
-            return result;
+        if (hasNext()) {
+            return popMatched();
         }
-        if (!hasNext()) {
-            throw new NoSuchElementException();
-        }
-        return next();
+        throw new NoSuchElementException();
+    }
+
+    private T popMatched() {
+        T result = matched;
+        matched = null;
+        return result;
     }
 }
