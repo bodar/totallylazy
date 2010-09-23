@@ -6,6 +6,8 @@ import com.googlecode.totallylazy.iterators.FlatMapIterator;
 import com.googlecode.totallylazy.iterators.IterateIterator;
 import com.googlecode.totallylazy.iterators.MapIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
+import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
+import com.googlecode.totallylazy.iterators.TakeIterator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -130,4 +132,9 @@ public class Iterators {
     public static <T> Iterator<T> remove(Iterator<T> iterator, T t) {
         return filter(iterator, not(t));
     }
+
+    public static <T> Iterator<T> take(Iterator<T> iterator, int count) {
+        return new TakeIterator<T>(iterator, count);
+    }
+
 }

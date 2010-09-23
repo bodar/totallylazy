@@ -136,15 +136,23 @@ public class Sequences {
         return Iterators.toList(iterable.iterator());
     }
 
-    public static <T> Sequence<T> remove(final Sequence<T> sequence, final T t) {
+    public static <T> Sequence<T> remove(final Iterable<T> iterable, final T t) {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
-                return Iterators.remove(sequence.iterator(), t);
+                return Iterators.remove(iterable.iterator(), t);
             }
         };
     }
 
-    public static int size(Sequence sequence) {
-           return sequence.toList().size();
+    public static <T> int size(final Iterable<T> iterable) {
+           return sequence(iterable).toList().size();
+    }
+
+    public static <T> Sequence<T> take(final Iterable<T> iterable, final int count) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.take(iterable.iterator(), count);
+            }
+        };
     }
 }
