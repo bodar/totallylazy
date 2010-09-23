@@ -1,13 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.DelegatingIterator;
-import com.googlecode.totallylazy.iterators.FilterIterator;
-import com.googlecode.totallylazy.iterators.FlatMapIterator;
-import com.googlecode.totallylazy.iterators.IterateIterator;
-import com.googlecode.totallylazy.iterators.MapIterator;
-import com.googlecode.totallylazy.iterators.RangerIterator;
-import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
-import com.googlecode.totallylazy.iterators.TakeIterator;
+import com.googlecode.totallylazy.iterators.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +11,9 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.call;
+import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.whileTrue;
 
 public class Iterators {
     public static <T> void foreach(final Iterator<T> iterator, final Runnable1<T> runnable) {
@@ -129,12 +124,23 @@ public class Iterators {
         return new RangerIterator(start, end, step);
     }
 
-    public static <T> Iterator<T> remove(Iterator<T> iterator, T t) {
+    public static <T> Iterator<T> remove(final Iterator<T> iterator, final T t) {
         return filter(iterator, not(t));
     }
 
-    public static <T> Iterator<T> take(Iterator<T> iterator, int count) {
-        return new TakeIterator<T>(iterator, count);
+    public static <T> Iterator<T> take(final Iterator<T> iterator, final int count) {
+        return takeWhile(iterator, Predicates.<T>countTo(count));
     }
 
+    public static <T> Iterator<T> takeWhile(final Iterator<T> iterator, final Predicate<T> predicate) {
+        return new TakeWhileIterator<T>(iterator, predicate);
+    }
+
+    public static <T> Iterator<T> drop(final Iterator<T> iterator, final int count) {
+        return dropWhile(iterator, Predicates.<T>countTo(count));
+    }
+
+    public static <T> Iterator<T> dropWhile(final Iterator<T> iterator, final Predicate<T> predicate) {
+        return filter(iterator, not(whileTrue(predicate)));
+    }
 }

@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -152,6 +150,30 @@ public class Sequences {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return Iterators.take(iterable.iterator(), count);
+            }
+        };
+    }
+
+    public static <T> Sequence<T> takeWhile(final Iterable<T> iterable, final Predicate<T> predicate) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.takeWhile(iterable.iterator(), predicate);
+            }
+        };
+    }
+
+    public static <T> Sequence<T> drop(final Iterable<T> iterable, final int count) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.drop(iterable.iterator(), count);
+            }
+        };
+    }
+
+    public static <T> Sequence<T> dropWhile(final Iterable<T> iterable, final Predicate<T> predicate) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.dropWhile(iterable.iterator(), predicate);
             }
         };
     }

@@ -86,4 +86,16 @@ public abstract class Sequence<T> implements Iterable<T> {
     public Sequence<T> take(int count) {
         return Sequences.take(this, count);
     }
+
+    public Sequence<T> takeWhile(Predicate<T> predicate) {
+        return Sequences.takeWhile(this, predicate);
+    }
+
+    public Sequence<T> drop(int count) {
+        return Sequences.drop(this, count);
+    }
+
+    public Sequence<T> dropWhile(Predicate<T> predicate) {
+        return Sequences.dropWhile(this, predicate);
+    }
 }
