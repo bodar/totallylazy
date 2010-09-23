@@ -36,8 +36,7 @@ public class LazyExceptionTest {
 
     private void checkException(LazyException lazyException, Class<? extends Exception> unwrap, Exception expected) {
         try {
-            lazyException.unwrap(unwrap);
-            fail();
+            throw lazyException.unwrap(unwrap);
         } catch (Exception e) {
             assertThat(e, sameInstance(expected));
         }
