@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 public class Callables {
-    public static <T> T call(Callable<T> callable){
+    public static <T> T call(Callable<T> callable) {
         try {
             return callable.call();
         } catch (LazyException e) {
@@ -14,7 +14,7 @@ public class Callables {
         }
     }
 
-    public static <T,S> S call(Callable1<T, S> callable, T t){
+    public static <T, S> S call(Callable1<T, S> callable, T t) {
         try {
             return callable.call(t);
         } catch (LazyException e) {
@@ -24,7 +24,7 @@ public class Callables {
         }
     }
 
-    public static <T,S, R> R call(Callable2<T, S, R> callable, T t, S s){
+    public static <T, S, R> R call(Callable2<T, S, R> callable, T t, S s) {
         try {
             return callable.call(t, s);
         } catch (LazyException e) {
@@ -36,7 +36,7 @@ public class Callables {
 
     public static <T> Callable1<T, String> asString(Class<T> aClass) {
         return new Callable1<T, String>() {
-            public String call(T value){
+            public String call(T value) {
                 return value.toString();
             }
         };
@@ -84,7 +84,7 @@ public class Callables {
     }
 
     public static Callable1<Integer, Integer> increment() {
-        return new Callable1<Integer, Integer>(){
+        return new Callable1<Integer, Integer>() {
             public Integer call(final Integer integer) throws Exception {
                 return integer + 1;
             }
@@ -93,7 +93,7 @@ public class Callables {
 
     public static Callable2<Integer, Integer, Integer> add() {
         return new Callable2<Integer, Integer, Integer>() {
-            public Integer call(Integer a, Integer b){
+            public Integer call(Integer a, Integer b) {
                 return a + b;
             }
         };
