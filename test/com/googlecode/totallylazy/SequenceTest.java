@@ -25,6 +25,7 @@ public class SequenceTest {
     @Test
     public void supportsSize() throws Exception {
          assertThat(sequence(1, 2, 3).size(), is(3));
+         assertThat(sequence(1, 2).size(), is(2));
     }
 
     @Test
@@ -162,4 +163,14 @@ public class SequenceTest {
         });
         assertThat(result, hasItems(1, 2, 3, 6, 9));
     }
+
+    @Test
+    public void supportsTake() throws Exception {
+        final Sequence<Integer> sequence = sequence(1, 2, 3).take(2);
+        assertThat(sequence, hasItems(1,2));
+        assertThat(sequence.size(), is(2));
+        assertThat(sequence(1).take(2).size(), is(1));
+        assertThat(sequence().take(2).size(), is(0));
+    }
+
 }

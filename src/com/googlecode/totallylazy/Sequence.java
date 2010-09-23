@@ -82,4 +82,8 @@ public abstract class Sequence<T> implements Iterable<T> {
     public int size() {
         return Sequences.size(this);
     }
+
+    public Sequence<T> take(int count) {
+        return Sequences.take(this, count);
+    }
 }
