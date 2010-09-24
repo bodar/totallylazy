@@ -17,7 +17,7 @@ public class SequencesTest {
     @Test
     public void supportsCharacters() throws Exception {
         assertThat(characters("text"), hasItems('t', 'e', 'x'));
-        assertThat(characters("text").drop(2).toString(), is("xt"));
+        assertThat(characters("text").drop(2).toString(""), is("xt"));
     }
 
     @Test
