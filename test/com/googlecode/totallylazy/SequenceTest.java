@@ -1,24 +1,22 @@
 package com.googlecode.totallylazy;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
-import java.lang.*;
-import java.lang.Iterable;
 import java.util.List;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Callables.*;
+import static com.googlecode.totallylazy.Callables.add;
+import static com.googlecode.totallylazy.Callables.asString;
+import static com.googlecode.totallylazy.Callables.callThrows;
+import static com.googlecode.totallylazy.Callables.invoke;
+import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Predicates.odd;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Predicates.even;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
@@ -99,8 +97,8 @@ public class SequenceTest {
 
     @Test
     public void supportsHeadOrOption() throws Exception {
-        assertThat(sequence(1).headOption(), is((Option<Integer>)Option.<Integer>some(1)));
-        assertThat(Sequences.<Integer>sequence().headOption(), is((Option<Integer>)Option.<Integer>none()));
+        assertThat(sequence(1).headOption(), is((Option<Integer>) Option.<Integer>some(1)));
+        assertThat(Sequences.<Integer>sequence().headOption(), is((Option<Integer>) Option.<Integer>none()));
     }
 
 
@@ -163,7 +161,7 @@ public class SequenceTest {
 
     @Test
     public void supportsTakeWhile() throws Exception {
-        final Sequence<Integer> sequence = sequence(1, 3, 5, 6, 8).takeWhile(odd());
+        final Sequence<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).takeWhile(odd());
         assertThat(sequence, hasItems(1, 3, 5));
         assertThat(sequence.size(), is(3));
         assertThat(sequence(1).takeWhile(odd()).size(), is(1));
