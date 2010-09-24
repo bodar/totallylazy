@@ -10,6 +10,8 @@ import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.invoke;
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Predicates.odd;
@@ -22,9 +24,21 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
     @Test
-    public void supportsSize() throws Exception {
-        assertThat(sequence(1, 2, 3).size(), is(3));
-        assertThat(sequence(1, 2).size(), is(2));
+    public void supportsFind() throws Exception {
+        assertThat(sequence(1, 3, 5).find(even()), is((Option<Integer>)none(Integer.class)));
+        assertThat(sequence(1, 2, 3).find(even()), is((Option<Integer>)some(2)));
+    }
+
+    @Test
+    public void supportsExists() throws Exception {
+        assertThat(sequence(1, 3, 5).exists(even()), is(false));
+        assertThat(sequence(1, 2, 3).exists(even()), is(true));
+    }
+
+    @Test
+    public void supportsForAll() throws Exception {
+        assertThat(sequence(1, 3, 5).forAll(odd()), is(true));
+        assertThat(sequence(1, 2, 3).forAll(odd()), is(false));
     }
 
     @Test
@@ -32,6 +46,7 @@ public class SequenceTest {
         final Sequence<Integer> numbers = sequence(1, null, 3).filter(notNull(Integer.class));
         assertThat(numbers, hasItems(1, 3));
     }
+
 
     @Test
     public void supportsRemove() throws Exception {

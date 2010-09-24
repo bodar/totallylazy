@@ -20,6 +20,10 @@ public abstract class Option<T> implements Iterable<T> {
         return new None<T>();
     }
 
+    public static <T> None<T> none(Class<T> aClass) {
+        return new None<T>();
+    }
+
     public abstract T get();
 
     public abstract boolean isEmpty();
