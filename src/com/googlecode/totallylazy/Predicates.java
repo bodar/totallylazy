@@ -1,8 +1,17 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.*;
+import org.hamcrest.Matcher;
 
 public class Predicates {
+    public static <T> Predicate<T> m(final Matcher<T> matcher) {
+        return new Predicate<T>() {
+            public boolean matches(T other) {
+                return matcher.matches(other);
+            }
+        };
+    }
+
     public static <T> Predicate<T> is(final T t) {
         return new Is<T>(t);
     }

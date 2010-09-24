@@ -5,21 +5,14 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Callables.add;
-import static com.googlecode.totallylazy.Callables.asString;
-import static com.googlecode.totallylazy.Callables.callThrows;
-import static com.googlecode.totallylazy.Callables.invoke;
-import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callables.*;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Predicates.even;
-import static com.googlecode.totallylazy.Predicates.notNull;
-import static com.googlecode.totallylazy.Predicates.odd;
+import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
@@ -44,7 +37,7 @@ public class SequenceTest {
                 case 2:
                     return some("converted"); // the conversion worked so don't do any more
             }
-            throw new AssertionError("should never have got here");
+            throw new AssertionError("should never get here");
         }
     };
 
