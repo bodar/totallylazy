@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.call;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
@@ -46,12 +48,8 @@ public class Iterators {
         throw new NoSuchElementException();
     }
 
-    public static <T> T headOr(Iterator<T> iterator, Callable<T> callable) {
-        return iterator.hasNext() ? iterator.next() : call(callable);
-    }
-
-    public static <T> T headOr(Iterator<T> iterator, T defaultValue) {
-        return iterator.hasNext() ? iterator.next() : defaultValue;
+    public static <T> Option<T> headOption(Iterator<T> iterator) {
+        return iterator.hasNext() ? some(iterator.next()) : Option.<T>none();
     }
 
     public static <T> Iterator<T> tail(final Iterator<T> iterator) {

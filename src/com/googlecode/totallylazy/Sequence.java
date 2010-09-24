@@ -27,12 +27,8 @@ public abstract class Sequence<T> implements Iterable<T> {
         return Sequences.head(this);
     }
 
-    public T headOr(T defaultValue) {
-        return Sequences.headOr(this, defaultValue);
-    }
-
-    public T headOr(Callable<T> callable) {
-        return Sequences.headOr(this, callable);
+    public Option<T> headOption() {
+        return Sequences.headOption(this);
     }
 
     public Sequence<T> tail() {

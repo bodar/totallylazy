@@ -67,12 +67,16 @@ public class Callables {
         };
     }
 
-    public static <T> Callable<T> callThrows(final Exception e, Class<T> aClass) {
+    public static <T> Callable<T> callThrows(final Exception e) {
         return new Callable<T>() {
             public T call() throws Exception {
                 throw e;
             }
         };
+    }
+
+    public static <T> Callable<T> callThrows(final Exception e, Class<T> aClass) {
+        return callThrows(e);
     }
 
     public static <T> Callable1<Callable<T>, T> invoke(Class<T> aClass) {

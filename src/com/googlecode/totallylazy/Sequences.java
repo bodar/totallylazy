@@ -88,12 +88,8 @@ public class Sequences {
         return Iterators.head(iterable.iterator());
     }
 
-    public static <T> T headOr(Sequence<T> sequence, Callable<T> callable) {
-        return Iterators.headOr(sequence.iterator(), callable);
-    }
-
-    public static <T> T headOr(Sequence<T> sequence, T defaultValue) {
-        return Iterators.headOr(sequence.iterator(), defaultValue);
+    public static <T> Option<T> headOption(final Iterable<T> iterable) {
+        return Iterators.headOption(iterable.iterator());
     }
 
     public static <T> Sequence<T> tail(final Iterable<T> iterable) {
