@@ -1,11 +1,10 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.iterators.ArrayIterator;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
-
-import static java.util.Arrays.asList;
 
 public class Sequences {
     public static <T> Sequence<T> sequence(final Iterable<T> iterable){
@@ -19,9 +18,13 @@ public class Sequences {
     public static <T> Sequence<T> sequence(final T ... items){
         return new Sequence<T>() {
             public Iterator<T> iterator() {
-                return asList(items).iterator();
+                return new ArrayIterator<T>(items);
             }
         };
+    }
+
+    public static Sequence<Character> characters(final String value){
+        return new CharacterSequence(value);
     }
 
     public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<T,S> callable) {
@@ -173,4 +176,5 @@ public class Sequences {
             }
         };
     }
+
 }

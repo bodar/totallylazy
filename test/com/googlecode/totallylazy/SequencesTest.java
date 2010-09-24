@@ -4,14 +4,22 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.add;
 import static com.googlecode.totallylazy.Callables.increment;
+import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.range;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.odd;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequencesTest {
+    @Test
+    public void supportsCharacters() throws Exception {
+        assertThat(characters("text"), hasItems('t', 'e', 'x'));
+        assertThat(characters("text").drop(2).toString(), is("xt"));
+    }
+
     @Test
     public void supportsRange() throws Exception {
         assertThat(range(5), hasItems(0, 1, 2, 3, 4));
