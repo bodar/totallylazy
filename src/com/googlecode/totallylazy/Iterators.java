@@ -141,4 +141,35 @@ public class Iterators {
     public static <T> Iterator<T> dropWhile(final Iterator<T> iterator, final Predicate<T> predicate) {
         return filter(iterator, not(whileTrue(predicate)));
     }
+
+    public static <T> boolean forAll(Iterator<T> iterator, Predicate<T> predicate) {
+        while(iterator.hasNext()){
+            boolean result = predicate.matches(iterator.next());
+            if(!result){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static <T> boolean exists(Iterator<T> iterator, Predicate<T> predicate) {
+        while(iterator.hasNext()){
+            boolean result = predicate.matches(iterator.next());
+            if(result){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static <T> Option<T> find(Iterator<T> iterator, Predicate<T> predicate) {
+        while(iterator.hasNext()){
+            T item = iterator.next();
+            boolean result = predicate.matches(item);
+            if(result){
+                return some(item);
+            }
+        }
+        return none();
+    }
 }

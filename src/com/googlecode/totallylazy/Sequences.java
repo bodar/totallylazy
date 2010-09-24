@@ -25,9 +25,13 @@ public class Sequences {
     }
 
     public static Sequence<Character> characters(final String value){
+        return characters(value.toCharArray());
+    }
+    
+    public static Sequence<Character> characters(final char[] value){
         return new Sequence<Character>() {
             public Iterator<Character> iterator() {
-                return new CharacterIterator(value.toCharArray());
+                return new CharacterIterator(value);
             }
         };
     }
@@ -182,4 +186,15 @@ public class Sequences {
         };
     }
 
+    public static <T> boolean forAll(Iterable<T> iterable, Predicate<T> predicate) {
+        return Iterators.forAll(iterable.iterator(), predicate);
+    }
+
+    public static <T> boolean exists(Iterable<T> iterable, Predicate<T> predicate) {
+        return Iterators.exists(iterable.iterator(), predicate);
+    }
+
+    public static <T> Option<T> find(Iterable<T> iterable, Predicate<T> predicate) {
+        return Iterators.find(iterable.iterator(), predicate);
+    }
 }

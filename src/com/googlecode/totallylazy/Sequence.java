@@ -94,4 +94,16 @@ public abstract class Sequence<T> implements Iterable<T> {
     public Sequence<T> dropWhile(Predicate<T> predicate) {
         return Sequences.dropWhile(this, predicate);
     }
+
+    public boolean forAll(final Predicate<T> predicate) {
+        return Sequences.forAll(this, predicate);
+    }
+
+    public boolean exists(final Predicate<T> predicate) {
+        return Sequences.exists(this, predicate);
+    }
+
+    public Option<T> find(final Predicate<T> predicate) {
+        return Sequences.find(this, predicate);
+    }
 }
