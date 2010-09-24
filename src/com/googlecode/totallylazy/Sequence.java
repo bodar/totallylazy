@@ -106,4 +106,12 @@ public abstract class Sequence<T> implements Iterable<T> {
     public Option<T> find(final Predicate<T> predicate) {
         return Sequences.find(this, predicate);
     }
+
+    public <S> Option<S> tryPick(Callable1<T, Option<S>> callable) {
+        return Sequences.tryPick(this, callable);
+    }
+
+    public <S> S pick(Callable1<T, Option<S>> callable) {
+        return Sequences.pick(this, callable);
+    }
 }

@@ -186,15 +186,23 @@ public class Sequences {
         };
     }
 
-    public static <T> boolean forAll(Iterable<T> iterable, Predicate<T> predicate) {
+    public static <T> boolean forAll(final Iterable<T> iterable, final Predicate<T> predicate) {
         return Iterators.forAll(iterable.iterator(), predicate);
     }
 
-    public static <T> boolean exists(Iterable<T> iterable, Predicate<T> predicate) {
+    public static <T> boolean exists(final Iterable<T> iterable, final Predicate<T> predicate) {
         return Iterators.exists(iterable.iterator(), predicate);
     }
 
-    public static <T> Option<T> find(Iterable<T> iterable, Predicate<T> predicate) {
+    public static <T> Option<T> find(final Iterable<T> iterable, final Predicate<T> predicate) {
         return Iterators.find(iterable.iterator(), predicate);
+    }
+
+    public static <T,S> Option<S> tryPick(final Iterable<T> iterable, final Callable1<T, Option<S>> callable) {
+        return Iterators.tryPick(iterable.iterator(), callable);
+    }
+
+    public static <T,S> S pick(final Iterable<T> iterable, final Callable1<T, Option<S>> callable) {
+        return Iterators.pick(iterable.iterator(), callable);
     }
 }
