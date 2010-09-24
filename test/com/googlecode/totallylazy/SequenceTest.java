@@ -98,24 +98,11 @@ public class SequenceTest {
     }
 
     @Test
-    public void supportsHeadOr() throws Exception {
-        assertThat(Sequences.<Integer>sequence().headOr(2), is(2));
-        assertThat(Sequences.<Integer>sequence().headOr(returns(2)), is(2));
-        assertThat(Sequences.<Integer>sequence().headOr(aNull(Integer.class)), is(nullValue(Integer.class)));
-        assertThat(sequence(1, 2).headOr(3), is(1));
+    public void supportsHeadOrOption() throws Exception {
+        assertThat(sequence(1).headOption(), is((Option<Integer>)Option.<Integer>some(1)));
+        assertThat(Sequences.<Integer>sequence().headOption(), is((Option<Integer>)Option.<Integer>none()));
     }
 
-
-    @Test
-    public void headOrSupportsExceptions() {
-        final Exception expected = new Exception("");
-        try {
-            assertThat(Sequences.<Integer>sequence().headOr(callThrows(expected, Integer.class)), is(nullValue(Integer.class)));
-            fail();
-        } catch (LazyException e) {
-            assertThat((Exception) e.getCause(), sameInstance(expected));
-        }
-    }
 
     @Test
     public void supportsForEach() throws Exception {
