@@ -172,4 +172,20 @@ public class Iterators {
         }
         return none();
     }
+
+    public static <T,S> Option<S> tryPick(final Iterator<T> iterator, final Callable1<T, Option<S>> callable) {
+        while(iterator.hasNext()){
+            T item = iterator.next();
+            Option<S> result = call(callable, item);
+            if(!result.isEmpty()){
+                return result;
+            }
+        }
+        return none();
+    }
+
+    public static <T,S> S pick(final Iterator<T> iterator, final Callable1<T, Option<S>> callable) {
+        return tryPick(iterator, callable).get();
+    }
+
 }

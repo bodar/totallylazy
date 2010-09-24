@@ -19,14 +19,40 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
     @Test
+    public void supportsTryPick() throws Exception {
+        Option<String> converted = sequence(1,2,3).tryPick(someVeryExpensiveOperation);
+        assertThat(converted, is((Option<String>)some("converted")));
+    }
+
+    @Test
+    public void supportsPick() throws Exception {
+        String converted = sequence(1,2,3).pick(someVeryExpensiveOperation);
+        assertThat(converted, is("converted"));
+    }
+
+    Callable1<Integer, Option<String>> someVeryExpensiveOperation = new Callable1<Integer, Option<String>>() {
+        public Option<String> call(Integer integer) throws Exception {
+            switch (integer) {
+                case 1:
+                    return none(); // the conversion didn't work
+                case 2:
+                    return some("converted"); // the conversion worked so don't do any more
+            }
+            throw new AssertionError("should never have got here");
+        }
+    };
+
+
+    @Test
     public void supportsFind() throws Exception {
-        assertThat(sequence(1, 3, 5).find(even()), is((Option<Integer>)none(Integer.class)));
-        assertThat(sequence(1, 2, 3).find(even()), is((Option<Integer>)some(2)));
+        assertThat(sequence(1, 3, 5).find(even()), is((Option<Integer>) none(Integer.class)));
+        assertThat(sequence(1, 2, 3).find(even()), is((Option<Integer>) some(2)));
     }
 
     @Test
