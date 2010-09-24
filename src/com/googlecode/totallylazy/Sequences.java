@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.ArrayIterator;
+import com.googlecode.totallylazy.iterators.CharacterIterator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +25,11 @@ public class Sequences {
     }
 
     public static Sequence<Character> characters(final String value){
-        return new CharacterSequence(value);
+        return new Sequence<Character>() {
+            public Iterator<Character> iterator() {
+                return new CharacterIterator(value.toCharArray());
+            }
+        };
     }
 
     public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<T,S> callable) {
