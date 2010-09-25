@@ -8,14 +8,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Iterators {
     public static <T> void foreach(final Iterator<T> iterator, final Runnable1<T> runnable) {
@@ -186,6 +185,18 @@ public class Iterators {
 
     public static <T,S> S pick(final Iterator<T> iterator, final Callable1<T, Option<S>> callable) {
         return tryPick(iterator, callable).get();
+    }
+
+    public static <T> Iterator<T> add(Iterator<T> iterator, T t) {
+        return join(iterator, sequence(t).iterator());
+    }
+
+    public static <T> Iterator<T> join(Iterator<T>... iterators) {
+        return new JoinIterator<T>(sequence(iterators).iterator());
+    }
+
+    public static <T> Iterator<T> join(Iterable<Iterator<T>> iterators) {
+        return new JoinIterator<T>(sequence(iterators).iterator());
     }
 
 }
