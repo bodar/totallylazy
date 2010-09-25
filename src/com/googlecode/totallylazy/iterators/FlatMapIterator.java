@@ -10,10 +10,10 @@ import static com.googlecode.totallylazy.Callables.call;
 
 public class FlatMapIterator<T, S> extends ReadOnlyIterator<S> {
     private final Iterator<T> iterator;
-    private final Callable1<T, Iterable<S>> callable;
+    private final Callable1<? super T, Iterable<S>> callable;
     private Iterator<S> currentIterator = null;
 
-    public FlatMapIterator(Iterator<T> iterator, Callable1<T, Iterable<S>> callable) {
+    public FlatMapIterator(Iterator<T> iterator, Callable1<? super T, Iterable<S>> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }

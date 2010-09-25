@@ -7,6 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static com.googlecode.totallylazy.Callables.add;
+import static com.googlecode.totallylazy.Pair.pair;
+
 public class Sequences {
     public static <T> Sequence<T> sequence(final Iterable<T> iterable){
         return new Sequence<T>() {
@@ -27,7 +30,19 @@ public class Sequences {
     public static Sequence<Character> characters(final String value){
         return characters(value.toCharArray());
     }
-    
+
+    public static Sequence<Integer> fibonacci(){
+        return iterate(addAndShift(), sequence(0,1)).map(Callables.<Integer>first());
+    }
+
+    private static Callable1<Sequence<Integer>, Sequence<Integer>> addAndShift() {
+        return new Callable1<Sequence<Integer>, Sequence<Integer>>() {
+            public Sequence<Integer> call(Sequence<Integer> pairs) throws Exception {
+                return sequence(pairs.second(), pairs.reduceLeft(add()));
+            }
+        };
+    }
+
     public static Sequence<Character> characters(final char[] value){
         return new Sequence<Character>() {
             public Iterator<Character> iterator() {
@@ -36,7 +51,7 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<T,S> callable) {
+    public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<? super T,S> callable) {
         return new Sequence<S>() {
             public Iterator<S> iterator() {
                 return Iterators.map(iterable.iterator(), callable);
@@ -52,7 +67,7 @@ public class Sequences {
         };
     }
 
-    public static <T,S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<T, Iterable<S>> callable) {
+    public static <T,S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, Iterable<S>> callable) {
         return new Sequence<S>() {
             public Iterator<S> iterator() {
                 return Iterators.flatMap(iterable.iterator(), callable);
@@ -60,7 +75,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> iterate(final Callable1<T, T> callable, final T t) {
+    public static <T> Sequence<T> iterate(final Callable1<? super T, T> callable, final T t) {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return Iterators.iterate(callable, t);
