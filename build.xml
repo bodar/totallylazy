@@ -45,12 +45,15 @@
 
         <zip destfile="${artifacts}/${release.name}.src.zip" basedir="src"/>
 
+        <exec command='hg log -l 1' output="${artifacts}/hg.properties"/>
+        <property file="${artifacts}/hg.properties" prefix="hg"/>
+
         <propertyfile file="${artifacts}/release.properties">
             <entry key="release.version" value="${release.version}"/>
             <entry key="project.name" value="${ant.project.name}"/>
             <entry key="release.name" value="${release.name}"/>
             <entry key="release.files" value="${release.jar},${release.pom}"/>
-            <entry key="${release.jar}.description" value="build:${build.number}"/>
+            <entry key="${release.jar}.description" value="${hg.summary} build:${build.number} "/>
             <entry key="${release.jar}.labels" value="Featured"/>
             <entry key="${release.pom}.description" value="Maven POM file build:${build.number}"/>
             <entry key="${release.pom}.labels" value="Featured"/>
