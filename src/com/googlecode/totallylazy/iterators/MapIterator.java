@@ -8,9 +8,9 @@ import static com.googlecode.totallylazy.Callables.call;
 
 public class MapIterator<T, S> extends ReadOnlyIterator<S> {
     private final Iterator<T> iterator;
-    private final Callable1<T, S> callable;
+    private final Callable1<? super T, S> callable;
 
-    public MapIterator(Iterator<T> iterator, Callable1<T, S> callable) {
+    public MapIterator(Iterator<T> iterator, Callable1<? super T, S> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }

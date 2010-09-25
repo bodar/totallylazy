@@ -3,15 +3,14 @@ package com.googlecode.totallylazy;
 import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 
-public abstract class Sequence<T> implements Iterable<T> {
+public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     public void foreach(Runnable1<T> runnable) {
         Sequences.foreach(this, runnable);
     }
 
-    public <S> Sequence<S> map(final Callable1<T, S> callable) {
+    public <S> Sequence<S> map(final Callable1<? super T, S> callable) {
         return Sequences.map(this, callable);
     }
 
@@ -19,8 +18,16 @@ public abstract class Sequence<T> implements Iterable<T> {
         return Sequences.filter(this, predicate);
     }
 
-    public <S> Sequence<S> flatMap(final Callable1<T, Iterable<S>> callable) {
+    public <S> Sequence<S> flatMap(final Callable1<? super T, Iterable<S>> callable) {
         return Sequences.flatMap(this, callable);
+    }
+
+    public T first() {
+        return head();
+    }
+
+    public T second() {
+        return tail().head();
     }
 
     public T head() {
@@ -68,7 +75,11 @@ public abstract class Sequence<T> implements Iterable<T> {
     }
 
     public T[] toArray(Class<T> aClass) {
-        return toList().toArray((T[]) Array.newInstance(aClass, 0));
+        return toArray((T[]) Array.newInstance(aClass, 0));
+    }
+
+    public T[] toArray(T[] array) {
+        return toList().toArray(array);
     }
 
     public Sequence<T> remove(T t) {

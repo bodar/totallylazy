@@ -24,11 +24,11 @@ public class Iterators {
         }
     }
 
-    public static <T, S> Iterator<S> map(final Iterator<T> iterator, final Callable1<T, S> callable) {
+    public static <T, S> Iterator<S> map(final Iterator<T> iterator, final Callable1<? super T, S> callable) {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> Iterator<S> flatMap(final Iterator<T> iterator, final Callable1<T, Iterable<S>> callable) {
+    public static <T, S> Iterator<S> flatMap(final Iterator<T> iterator, final Callable1<? super T, Iterable<S>> callable) {
         return new FlatMapIterator<T, S>(iterator, callable);
     }
 
@@ -37,7 +37,7 @@ public class Iterators {
     }
 
 
-    public static <T> Iterator<T> iterate(final Callable1<T, T> callable, final T t) {
+    public static <T> Iterator<T> iterate(final Callable1<? super T, T> callable, final T t) {
         return new IterateIterator<T>(callable, t);
     }
 

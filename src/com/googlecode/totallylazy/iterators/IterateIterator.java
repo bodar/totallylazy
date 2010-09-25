@@ -5,10 +5,10 @@ import com.googlecode.totallylazy.Callable1;
 import static com.googlecode.totallylazy.Callables.call;
 
 public class IterateIterator<T> extends ReadOnlyIterator<T> {
-    private final Callable1<T, T> callable;
+    private final Callable1<? super T, T> callable;
     private T t;
 
-    public IterateIterator(Callable1<T, T> callable, T t) {
+    public IterateIterator(Callable1<? super T, T> callable, T t) {
         this.callable = callable;
         this.t = t;
     }

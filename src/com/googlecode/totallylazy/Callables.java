@@ -14,7 +14,7 @@ public class Callables {
         }
     }
 
-    public static <T, S> S call(Callable1<T, S> callable, T t) {
+    public static <T, S> S call(Callable1<? super T, S> callable, T t) {
         try {
             return callable.call(t);
         } catch (LazyException e) {
@@ -32,6 +32,22 @@ public class Callables {
         } catch (Exception e) {
             throw new LazyException(e);
         }
+    }
+
+    public static <T> Callable1<First<T>, T> first() {
+        return new Callable1<First<T>, T>() {
+            public T call(First<T> first) throws Exception {
+                return first.first();
+            }
+        };
+    }
+
+    public static <T> Callable1<Iterable<T>, T> head() {
+        return new Callable1<Iterable<T>, T>() {
+            public T call(Iterable<T> sequence) throws Exception {
+                return Sequences.head(sequence);
+            }
+        };
     }
 
     public static <T> Callable1<T, String> asString(Class<T> aClass) {
