@@ -18,6 +18,19 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
     @Test
+    public void supportsJoin() throws Exception {
+        Sequence<Integer> numbers = sequence(1,2,3).join(sequence(4,5,6));
+        assertThat(numbers, hasItems(1,2,3,4,5,6));
+    }
+
+    @Test
+    public void supportsAdd() throws Exception {
+        Sequence<Integer> numbers = sequence(1,2,3).add(4);
+        assertThat(numbers, hasItems(1,2,3,4));
+    }
+
+
+    @Test
     public void supportsTryPick() throws Exception {
         Option<String> converted = sequence(1,2,3).tryPick(someVeryExpensiveOperation);
         assertThat(converted, is((Option<String>)some("converted")));

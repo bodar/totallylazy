@@ -7,11 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Callables.add;
-import static com.googlecode.totallylazy.Pair.pair;
-
 public class Sequences {
-    public static <T> Sequence<T> sequence(final Iterable<T> iterable){
+    public static <T> Sequence<T> sequence(final Iterable<T> iterable) {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return iterable.iterator();
@@ -19,7 +16,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> sequence(final T ... items){
+    public static <T> Sequence<T> sequence(final T... items) {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return new ArrayIterator<T>(items);
@@ -27,23 +24,23 @@ public class Sequences {
         };
     }
 
-    public static Sequence<Character> characters(final String value){
+    public static Sequence<Character> characters(final String value) {
         return characters(value.toCharArray());
     }
 
-    public static Sequence<Integer> fibonacci(){
-        return iterate(addAndShift(), sequence(0,1)).map(Callables.<Integer>first());
+    public static Sequence<Integer> fibonacci() {
+        return iterate(addAndShift(), sequence(0, 1)).map(Callables.<Integer>first());
     }
 
     private static Callable1<Sequence<Integer>, Sequence<Integer>> addAndShift() {
         return new Callable1<Sequence<Integer>, Sequence<Integer>>() {
             public Sequence<Integer> call(Sequence<Integer> pairs) throws Exception {
-                return sequence(pairs.second(), pairs.reduceLeft(add()));
+                return sequence(pairs.second(), pairs.first() + pairs.second());
             }
         };
     }
 
-    public static Sequence<Character> characters(final char[] value){
+    public static Sequence<Character> characters(final char[] value) {
         return new Sequence<Character>() {
             public Iterator<Character> iterator() {
                 return new CharacterIterator(value);
@@ -51,7 +48,7 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<? super T,S> callable) {
+    public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
         return new Sequence<S>() {
             public Iterator<S> iterator() {
                 return Iterators.map(iterable.iterator(), callable);
@@ -67,7 +64,7 @@ public class Sequences {
         };
     }
 
-    public static <T,S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, Iterable<S>> callable) {
+    public static <T, S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, Iterable<S>> callable) {
         return new Sequence<S>() {
             public Iterator<S> iterator() {
                 return Iterators.flatMap(iterable.iterator(), callable);
@@ -111,6 +108,14 @@ public class Sequences {
         Iterators.foreach(iterable.iterator(), runnable);
     }
 
+    public static <T> T first(final Iterable<T> iterable) {
+        return head(iterable);
+    }
+
+    public static <T> T second(final Iterable<T> iterable) {
+        return tail(iterable).head();
+    }
+
     public static <T> T head(final Iterable<T> iterable) {
         return Iterators.head(iterable.iterator());
     }
@@ -127,16 +132,18 @@ public class Sequences {
         };
     }
 
-    public static <T, S> S foldLeft(final Iterable<T> iterable, S seed, Callable2<S,T,S> callable) {
+    public static <T, S> S foldLeft(final Iterable<T> iterable, S seed, Callable2<S, T, S> callable) {
         return Iterators.foldLeft(iterable.iterator(), seed, callable);
     }
 
-    public static <T> T reduceLeft(final Iterable<T> iterable, Callable2<T,T,T> callable) {
+    public static <T> T reduceLeft(final Iterable<T> iterable, Callable2<T, T, T> callable) {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
+
     public static String toString(final Iterable iterable) {
         return Iterators.toString(iterable.iterator());
     }
+
     public static String toString(final Iterable iterable, String separator) {
         return Iterators.toString(iterable.iterator(), separator);
     }
@@ -166,7 +173,7 @@ public class Sequences {
     }
 
     public static <T> int size(final Iterable<T> iterable) {
-           return sequence(iterable).toList().size();
+        return sequence(iterable).toList().size();
     }
 
     public static <T> Sequence<T> take(final Iterable<T> iterable, final int count) {
@@ -213,11 +220,27 @@ public class Sequences {
         return Iterators.find(iterable.iterator(), predicate);
     }
 
-    public static <T,S> Option<S> tryPick(final Iterable<T> iterable, final Callable1<T, Option<S>> callable) {
+    public static <T, S> Option<S> tryPick(final Iterable<T> iterable, final Callable1<T, Option<S>> callable) {
         return Iterators.tryPick(iterable.iterator(), callable);
     }
 
-    public static <T,S> S pick(final Iterable<T> iterable, final Callable1<T, Option<S>> callable) {
+    public static <T, S> S pick(final Iterable<T> iterable, final Callable1<T, Option<S>> callable) {
         return Iterators.pick(iterable.iterator(), callable);
+    }
+
+    public static <T> Sequence<T> add(final Iterable<T> iterable, final T t) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.add(iterable.iterator(), t);
+            }
+        };
+    }
+
+    public static <T> Sequence<T> join(final Iterable<T>... iterables) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.join(sequence(iterables).map(Callables.<T>asIterator()));
+            }
+        };
     }
 }

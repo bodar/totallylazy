@@ -32,11 +32,15 @@ public class Predicates {
     }
 
     public static Predicate<Integer> even() {
-        return new ModRemainderIs(2, 0);
+        return remainderIs(2, 0);
     }
 
     public static Predicate<Integer> odd() {
-        return new ModRemainderIs(2, 1);
+        return remainderIs(2, 1);
+    }
+
+    public static Predicate<Integer> remainderIs(int divisor, int remainder) {
+        return new RemainderIs(divisor, remainder);
     }
 
     public static <T> Predicate<T> notNull(Class<T> aClass) {

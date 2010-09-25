@@ -23,11 +23,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public T first() {
-        return head();
+        return Sequences.first(this);
     }
 
     public T second() {
-        return tail().head();
+        return Sequences.second(this);
     }
 
     public T head() {
@@ -124,5 +124,13 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     public <S> S pick(Callable1<T, Option<S>> callable) {
         return Sequences.pick(this, callable);
+    }
+
+    public Sequence<T> add(T t) {
+        return Sequences.add(this, t);
+    }
+
+    public Sequence<T> join(final Iterable<T> iterable) {
+        return Sequences.join(this, iterable);
     }
 }
