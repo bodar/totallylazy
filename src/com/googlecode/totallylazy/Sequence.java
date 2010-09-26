@@ -110,6 +110,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.forAll(this, predicate);
     }
 
+    public boolean contains(final T t) {
+        return Sequences.contains(this, t);
+    }
+
     public boolean exists(final Predicate<T> predicate) {
         return Sequences.exists(this, predicate);
     }

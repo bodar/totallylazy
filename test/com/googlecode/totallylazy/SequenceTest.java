@@ -62,6 +62,12 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsContains() throws Exception {
+        assertThat(sequence(1, 3, 5).contains(2), is(false));
+        assertThat(sequence(1, 2, 3).contains(2), is(true));
+    }
+
+    @Test
     public void supportsExists() throws Exception {
         assertThat(sequence(1, 3, 5).exists(even()), is(false));
         assertThat(sequence(1, 2, 3).exists(even()), is(true));
