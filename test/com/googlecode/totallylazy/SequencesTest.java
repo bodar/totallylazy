@@ -7,11 +7,19 @@ import static com.googlecode.totallylazy.Callables.increment;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.odd;
 import static com.googlecode.totallylazy.Sequences.*;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequencesTest {
+    @Test
+    public void supportsPrimes() throws Exception {
+        Sequence<Integer> primes = primes();
+        assertThat(primes, hasItems(2,3,5,7,11,13,17,19,23,29));
+    }
+
     @Test
     public void supportsFibonacci() throws Exception {
         assertThat(fibonacci(), hasItems(0, 1, 1, 2, 3, 5));

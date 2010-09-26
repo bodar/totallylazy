@@ -12,6 +12,7 @@ import java.util.Set;
 import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -149,6 +150,10 @@ public class Iterators {
             }
         }
         return true;
+    }
+
+    public static <T> boolean contains(Iterator<T> iterator, T t) {
+        return exists(iterator, is(t));
     }
 
     public static <T> boolean exists(Iterator<T> iterator, Predicate<T> predicate) {

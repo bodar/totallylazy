@@ -7,6 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static com.googlecode.totallylazy.Callables.increment;
+import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.prime;
+import static com.googlecode.totallylazy.Predicates.remainderIs;
+
 public class Sequences {
     public static <T> Sequence<T> sequence(final Iterable<T> iterable) {
         return new Sequence<T>() {
@@ -26,6 +32,18 @@ public class Sequences {
 
     public static Sequence<Character> characters(final String value) {
         return characters(value.toCharArray());
+    }
+
+    public static Sequence<Integer> primes() {
+        return sequence(2).join(iterate(increment(), 3).filter(prime()));
+    }
+
+    private static Callable1<Pair<Integer, Sequence<Integer>>, Pair<Integer, Sequence<Integer>>> incrementFirst() {
+        return new Callable1<Pair<Integer, Sequence<Integer>>, Pair<Integer, Sequence<Integer>>>() {
+            public Pair<Integer, Sequence<Integer>> call(Pair<Integer, Sequence<Integer>> pair) throws Exception {
+                return pair(pair.first() + 1, pair.second());
+            }
+        };
     }
 
     public static Sequence<Integer> fibonacci() {
@@ -210,6 +228,10 @@ public class Sequences {
 
     public static <T> boolean forAll(final Iterable<T> iterable, final Predicate<T> predicate) {
         return Iterators.forAll(iterable.iterator(), predicate);
+    }
+
+    public static <T> boolean contains(final Iterable<T> iterable, final T t) {
+        return Iterators.contains(iterable.iterator(), t);
     }
 
     public static <T> boolean exists(final Iterable<T> iterable, final Predicate<T> predicate) {
