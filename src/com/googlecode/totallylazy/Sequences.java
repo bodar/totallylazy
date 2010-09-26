@@ -265,4 +265,8 @@ public class Sequences {
             }
         };
     }
+
+    public static <T> Sequence<T> memorise(Iterable<T> iterable) {
+        return new MemoriseSequence<T>(iterable);
+    }
 }
