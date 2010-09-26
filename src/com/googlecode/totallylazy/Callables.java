@@ -50,7 +50,7 @@ public class Callables {
         };
     }
 
-    public static <T> Callable1<T, String> asString(Class<T> aClass) {
+    public static <T> Callable1<T, String> asString() {
         return new Callable1<T, String>() {
             public String call(T value) {
                 return value.toString();
@@ -104,9 +104,13 @@ public class Callables {
     }
 
     public static Callable1<Integer, Integer> increment() {
+        return add(1);
+    }
+
+    public static Callable1<Integer, Integer> add(final int amount) {
         return new Callable1<Integer, Integer>() {
             public Integer call(final Integer integer) throws Exception {
-                return integer + 1;
+                return integer + amount;
             }
         };
     }

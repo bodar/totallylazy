@@ -35,15 +35,7 @@ public class Sequences {
     }
 
     public static Sequence<Integer> primes() {
-        return sequence(2).join(iterate(increment(), 3).filter(prime()));
-    }
-
-    private static Callable1<Pair<Integer, Sequence<Integer>>, Pair<Integer, Sequence<Integer>>> incrementFirst() {
-        return new Callable1<Pair<Integer, Sequence<Integer>>, Pair<Integer, Sequence<Integer>>>() {
-            public Pair<Integer, Sequence<Integer>> call(Pair<Integer, Sequence<Integer>> pair) throws Exception {
-                return pair(pair.first() + 1, pair.second());
-            }
-        };
+        return sequence(2).join(iterate(Callables.add(2), 3).filter(prime()));
     }
 
     public static Sequence<Integer> fibonacci() {
@@ -262,6 +254,14 @@ public class Sequences {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return Iterators.join(sequence(iterables).map(Callables.<T>asIterator()));
+            }
+        };
+    }
+
+    public static <T> Sequence<T> cons(final T t, final Iterable<T> iterable) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.cons(t, iterable.iterator());
             }
         };
     }

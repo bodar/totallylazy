@@ -65,7 +65,6 @@ public class Predicates {
         };
     }
 
-
     public static Predicate<Integer> remainderIs(int divisor, int remainder) {
         return new RemainderIs(divisor, remainder);
     }

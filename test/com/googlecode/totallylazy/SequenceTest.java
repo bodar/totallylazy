@@ -1,14 +1,17 @@
 package com.googlecode.totallylazy;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.*;
+import static com.googlecode.totallylazy.HasExactlyMatcher.hasExactly;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNot.not;
@@ -18,27 +21,33 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
     @Test
+    public void supportsCons() throws Exception {
+        assertThat(sequence(1, 2, 3).cons(4), hasExactly(4, 1, 2, 3));
+        assertThat(cons(4, sequence(1, 2, 3)), hasExactly(4, 1, 2, 3));
+    }
+
+    @Test
     public void supportsJoin() throws Exception {
-        Sequence<Integer> numbers = sequence(1,2,3).join(sequence(4,5,6));
-        assertThat(numbers, hasItems(1,2,3,4,5,6));
+        Sequence<Integer> numbers = sequence(1, 2, 3).join(sequence(4, 5, 6));
+        assertThat(numbers, hasExactly(1, 2, 3, 4, 5, 6));
     }
 
     @Test
     public void supportsAdd() throws Exception {
-        Sequence<Integer> numbers = sequence(1,2,3).add(4);
-        assertThat(numbers, hasItems(1,2,3,4));
+        Sequence<Integer> numbers = sequence(1, 2, 3).add(4);
+        assertThat(numbers, hasExactly(1, 2, 3, 4));
     }
 
 
     @Test
     public void supportsTryPick() throws Exception {
-        Option<String> converted = sequence(1,2,3).tryPick(someVeryExpensiveOperation);
-        assertThat(converted, is((Option<String>)some("converted")));
+        Option<String> converted = sequence(1, 2, 3).tryPick(someVeryExpensiveOperation);
+        assertThat(converted, is((Option<String>) some("converted")));
     }
 
     @Test
     public void supportsPick() throws Exception {
-        String converted = sequence(1,2,3).pick(someVeryExpensiveOperation);
+        String converted = sequence(1, 2, 3).pick(someVeryExpensiveOperation);
         assertThat(converted, is("converted"));
     }
 
@@ -82,15 +91,14 @@ public class SequenceTest {
     @Test
     public void canFilterNull() throws Exception {
         final Sequence<Integer> numbers = sequence(1, null, 3).filter(notNull(Integer.class));
-        assertThat(numbers, hasItems(1, 3));
+        assertThat(numbers, hasExactly(1, 3));
     }
 
 
     @Test
     public void supportsRemove() throws Exception {
         final Sequence<Integer> numbers = sequence(1, 2, 3).remove(2);
-        assertThat(numbers, hasItems(1, 3));
-        assertThat(numbers, not(hasItem(2)));
+        assertThat(numbers, hasExactly(1, 3));
     }
 
     @Test
@@ -103,7 +111,7 @@ public class SequenceTest {
     @Test
     public void canConvertToList() throws Exception {
         final List<Integer> aList = sequence(1, 2).toList();
-        assertThat(aList, hasItems(1, 2));
+        assertThat(aList, hasExactly(1, 2));
     }
 
     @Test
@@ -116,7 +124,7 @@ public class SequenceTest {
     public void supportsUnion() throws Exception {
         Set<Integer> union = sequence(1, 2, 3).union(sequence(5, 4, 3));
         assertThat(union.size(), is(5));
-        assertThat(union, hasItems(1, 2, 3, 4, 5));
+        assertThat(union, hasExactly(1, 2, 3, 4, 5));
     }
 
     @Test
@@ -140,7 +148,7 @@ public class SequenceTest {
 
     @Test
     public void supportsTail() throws Exception {
-        assertThat(sequence(1, 2, 3).tail(), hasItems(2, 3));
+        assertThat(sequence(1, 2, 3).tail(), hasExactly(2, 3));
     }
 
     @Test
@@ -168,8 +176,8 @@ public class SequenceTest {
 
     @Test
     public void supportsMap() throws Exception {
-        Iterable<String> strings = sequence(1, 2).map(asString(Integer.class));
-        assertThat(strings, hasItems("1", "2"));
+        Iterable<String> strings = sequence(1, 2).map(asString());
+        assertThat(strings, hasExactly("1", "2"));
     }
 
     @Test
@@ -182,7 +190,7 @@ public class SequenceTest {
     @Test
     public void supportsFilter() throws Exception {
         Iterable<Integer> result = sequence(1, 2, 3, 4).filter(even());
-        assertThat(result, hasItems(2, 4));
+        assertThat(result, hasExactly(2, 4));
     }
 
     @Test
@@ -200,14 +208,13 @@ public class SequenceTest {
                 return sequence(value, value * 3);
             }
         });
-        assertThat(result, hasItems(1, 2, 3, 6, 9));
+        assertThat(result, hasExactly(1, 3, 2, 6, 3, 9));
     }
 
     @Test
     public void supportsTake() throws Exception {
         final Sequence<Integer> sequence = sequence(1, 2, 3).take(2);
-        assertThat(sequence, hasItems(1, 2));
-        assertThat(sequence.size(), is(2));
+        assertThat(sequence, hasExactly(1, 2));
         assertThat(sequence(1).take(2).size(), is(1));
         assertThat(sequence().take(2).size(), is(0));
     }
@@ -215,8 +222,7 @@ public class SequenceTest {
     @Test
     public void supportsTakeWhile() throws Exception {
         final Sequence<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).takeWhile(odd());
-        assertThat(sequence, hasItems(1, 3, 5));
-        assertThat(sequence.size(), is(3));
+        assertThat(sequence, hasExactly(1, 3, 5));
         assertThat(sequence(1).takeWhile(odd()).size(), is(1));
         assertThat(Sequences.<Integer>sequence().takeWhile(odd()).size(), is(0));
     }
@@ -224,8 +230,7 @@ public class SequenceTest {
     @Test
     public void supportsDrop() throws Exception {
         final Sequence<Integer> sequence = sequence(1, 2, 3).drop(2);
-        assertThat(sequence, hasItems(3));
-        assertThat(sequence.size(), is(1));
+        assertThat(sequence, hasExactly(3));
         assertThat(sequence(1).drop(2).size(), is(0));
         assertThat(sequence().drop(1).size(), is(0));
     }
@@ -233,10 +238,8 @@ public class SequenceTest {
     @Test
     public void supportsDropWhile() throws Exception {
         final Sequence<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).dropWhile(odd());
-        assertThat(sequence, hasItems(6, 8, 1, 3));
-        assertThat(sequence.size(), is(4));
+        assertThat(sequence, hasExactly(6, 8, 1, 3));
         assertThat(sequence(1).dropWhile(odd()).size(), is(0));
         assertThat(Sequences.<Integer>sequence().dropWhile(odd()).size(), is(0));
     }
-
 }
