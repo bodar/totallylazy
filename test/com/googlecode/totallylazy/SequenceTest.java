@@ -1,23 +1,20 @@
 package com.googlecode.totallylazy;
 
-import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.*;
-import static com.googlecode.totallylazy.HasExactlyMatcher.hasExactly;
+import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.hasItem;
-import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
     @Test
@@ -184,7 +181,7 @@ public class SequenceTest {
     public void mapIsLazy() throws Exception {
         Iterable<Integer> result = sequence(returns(1), callThrows(new Exception(), Integer.class)).
                 map(invoke(Integer.class));
-        assertThat(result, hasItem(1));
+        assertThat(result, startsWith(1));
     }
 
     @Test
@@ -198,7 +195,7 @@ public class SequenceTest {
         Iterable<Integer> result = sequence(returns(1), returns(2), callThrows(new Exception(), Integer.class)).
                 map(invoke(Integer.class)).
                 filter(even());
-        assertThat(result, hasItem(2));
+        assertThat(result, startsWith(2));
     }
 
     @Test
