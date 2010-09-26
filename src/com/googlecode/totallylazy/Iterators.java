@@ -192,16 +192,19 @@ public class Iterators {
         return tryPick(iterator, callable).get();
     }
 
-    public static <T> Iterator<T> add(Iterator<T> iterator, T t) {
+    public static <T> Iterator<T> add(final Iterator<T> iterator, final T t) {
         return join(iterator, sequence(t).iterator());
     }
 
-    public static <T> Iterator<T> join(Iterator<T>... iterators) {
+    public static <T> Iterator<T> join(final Iterator<T>... iterators) {
         return new JoinIterator<T>(sequence(iterators).iterator());
     }
 
-    public static <T> Iterator<T> join(Iterable<Iterator<T>> iterators) {
+    public static <T> Iterator<T> join(final Iterable<Iterator<T>> iterators) {
         return new JoinIterator<T>(sequence(iterators).iterator());
     }
 
+    public static <T> Iterator<T> cons(final T t, final Iterator<T> iterator) {
+        return join(sequence(t).iterator(), iterator);
+    }
 }
