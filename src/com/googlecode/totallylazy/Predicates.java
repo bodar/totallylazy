@@ -44,7 +44,7 @@ public class Predicates {
     public static Predicate<Integer> prime() {
         return new Predicate<Integer>() {
             public boolean matches(Integer candidate) {
-                return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(remainderIsNonZero(candidate));
+                return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(not(remainderIsZero(candidate)));
             }
         };
     }
@@ -57,10 +57,10 @@ public class Predicates {
         };
     }
 
-    public static Predicate<Integer> remainderIsNonZero(final Integer candidate) {
+    public static Predicate<Integer> remainderIsZero(final Integer divisor) {
         return new Predicate<Integer>() {
             public boolean matches(Integer prime) {
-                return candidate % prime != 0;
+                return divisor % prime == 0;
             }
         };
     }

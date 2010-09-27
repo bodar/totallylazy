@@ -9,9 +9,7 @@ import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.increment;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.prime;
-import static com.googlecode.totallylazy.Predicates.remainderIs;
+import static com.googlecode.totallylazy.Predicates.*;
 
 public class Sequences {
     public static <T> Sequence<T> sequence(final Iterable<T> iterable) {
@@ -32,6 +30,10 @@ public class Sequences {
 
     public static Sequence<Character> characters(final String value) {
         return characters(value.toCharArray());
+    }
+
+    public static Sequence<Integer> primeFactorsOf(int value) {
+        return primes().takeWhile(primeSquaredLessThan(value)).filter(remainderIsZero(value));
     }
 
     public static Sequence<Integer> primes() {
@@ -160,6 +162,10 @@ public class Sequences {
 
     public static String toString(final Iterable iterable, String start, String separator, String end) {
         return Iterators.toString(iterable.iterator(), start, separator, end);
+    }
+
+    public static String toString(final Iterable iterable, String start, String separator, String end, int limit) {
+        return Iterators.toString(iterable.iterator(), start, separator, end, limit);
     }
 
     public static <T> Set<T> union(final Iterable<Iterable<T>> iterables) {
