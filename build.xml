@@ -11,6 +11,7 @@
     <property name="release.name" value="${ant.project.name}-${release.version}"/>
     <property name="release.jar" value="${release.name}.jar"/>
     <property name="release.pom" value="${release.name}.pom"/>
+    <property name="release.src" value="${release.name}-sources.jar"/>
     <property name="release.jar.path" value="${artifacts}/${release.jar}"/>
     <property name="test.jar.path" value="${artifacts}/${release.name}.test.jar"/>
 
@@ -43,7 +44,7 @@
     <target name="package">
         <mkdir dir="${artifacts}"/>
 
-        <zip destfile="${artifacts}/${release.name}.src.zip" basedir="src"/>
+        <zip destfile="${artifacts}/${release.src}" basedir="src"/>
 
         <exec command='hg log -l 1' output="${artifacts}/hg.properties"/>
         <property file="${artifacts}/hg.properties" prefix="hg"/>
@@ -52,11 +53,13 @@
             <entry key="release.version" value="${release.version}"/>
             <entry key="project.name" value="${ant.project.name}"/>
             <entry key="release.name" value="${release.name}"/>
-            <entry key="release.files" value="${release.jar},${release.pom}"/>
+            <entry key="release.files" value="${release.jar},${release.pom},${release.src}"/>
             <entry key="${release.jar}.description" value="${hg.summary} build:${build.number} "/>
             <entry key="${release.jar}.labels" value="Featured"/>
             <entry key="${release.pom}.description" value="Maven POM file build:${build.number}"/>
-            <entry key="${release.pom}.labels" value="Featured"/>
+            <entry key="${release.pom}.labels" value="POM"/>
+            <entry key="${release.src}.description" value="Source file build:${build.number}"/>
+            <entry key="${release.src}.labels" value="Source"/>
         </propertyfile>
 
         <copy file="${build}/pom.xml" tofile="${artifacts}/${release.pom}">
