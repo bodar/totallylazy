@@ -81,13 +81,21 @@ public class Iterators {
     }
 
     public static String toString(final Iterator iterator, final String start, final String separator, final String end) {
+        return toString(iterator,start, separator, end, 100);
+    }
+
+    public static String toString(final Iterator iterator, final String start, final String separator, final String end, final int limit) {
+        int count = 0;
         StringBuilder builder = new StringBuilder();
         builder.append(start);
         if (iterator.hasNext()) builder.append(iterator.next());
-        while (iterator.hasNext()) {
+        count++;
+        while (iterator.hasNext() && count < limit) {
+            count++;
             builder.append(separator);
             builder.append(iterator.next());
         }
+        if(count == limit) builder.append("...");
         builder.append(end);
         return builder.toString();
     }
