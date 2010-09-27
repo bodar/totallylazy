@@ -3,7 +3,10 @@ package com.googlecode.totallylazy;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
+import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Callables.asString;
+import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Option.none;
@@ -16,6 +19,13 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 public class OptionTest {
+    @Test
+    public void canMap() throws Exception {
+        assertThat(option(1).map(asString()), is(option("1")));
+        assertThat(some(2).map(asString()), is((Option)some("2")));
+        assertThat(none().map(asString()), is((Option)none()));
+    }
+
     @Test
     public void areIterable() throws Exception {
         assertThat(size(some(1)), is(1));

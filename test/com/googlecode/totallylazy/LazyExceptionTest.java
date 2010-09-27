@@ -19,14 +19,6 @@ public class LazyExceptionTest {
     }
 
     @Test
-    public void shouldUnwrapAlwaysThrowRuntimeCause() throws Exception {
-        final RuntimeException runtimeException = new IllegalArgumentException();
-        final LazyException lazyException = new LazyException(runtimeException);
-
-        checkException(lazyException, ParseException.class, runtimeException);
-    }
-
-    @Test
     public void shouldUnwrapThrowOriginalExceptionWhenNotSpecifiedCheckedExceptionIsTheCause() throws Exception {
         final FileNotFoundException differentChecked = new FileNotFoundException();
         final LazyException lazyException = new LazyException(differentChecked);

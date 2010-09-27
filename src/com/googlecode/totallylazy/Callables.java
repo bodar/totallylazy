@@ -9,6 +9,8 @@ public class Callables {
             return callable.call();
         } catch (LazyException e) {
             throw e;
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new LazyException(e);
         }
@@ -19,6 +21,8 @@ public class Callables {
             return callable.call(t);
         } catch (LazyException e) {
             throw e;
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new LazyException(e);
         }
@@ -28,6 +32,8 @@ public class Callables {
         try {
             return callable.call(t, s);
         } catch (LazyException e) {
+            throw e;
+        } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
             throw new LazyException(e);
@@ -95,12 +101,16 @@ public class Callables {
         return callThrows(e);
     }
 
-    public static <T> Callable1<Callable<T>, T> invoke(Class<T> aClass) {
+    public static <T> Callable1<Callable<T>, T> call() {
         return new Callable1<Callable<T>, T>() {
             public T call(Callable<T> callable) throws Exception {
                 return callable.call();
             }
         };
+    }
+
+    public static <T> Callable1<Callable<T>, T> call(Class<T> aClass) {
+        return call();
     }
 
     public static Callable1<Integer, Integer> increment() {

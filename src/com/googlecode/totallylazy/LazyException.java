@@ -14,9 +14,6 @@ public class LazyException extends RuntimeException {
         if(theCause.getClass().equals(exception)){
             return (E) theCause;
         }
-        if(theCause instanceof RuntimeException){
-            throw (RuntimeException) theCause;
-        }
         throw e;
     }
 }

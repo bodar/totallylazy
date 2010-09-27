@@ -16,6 +16,7 @@ import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
     @Test
@@ -25,9 +26,10 @@ public class SequenceTest {
             public Integer call() throws Exception {
                 return count[0]++;
             }
-        }).map(invoke(Integer.class)).memorise();
+        }).map(call(Integer.class)).memorise();
         assertThat(number.head(), is(0));
         assertThat(number.head(), is(0));
+        assertThat(count[0], is(1));
     }
 
     @Test
@@ -134,7 +136,7 @@ public class SequenceTest {
     public void supportsUnion() throws Exception {
         Set<Integer> union = sequence(1, 2, 3).union(sequence(5, 4, 3));
         assertThat(union.size(), is(5));
-        assertThat(union, hasExactly(1, 2, 3, 4, 5));
+        assertThat(union, hasItems(1, 2, 3, 4, 5));
     }
 
     @Test
@@ -194,7 +196,7 @@ public class SequenceTest {
     @Test
     public void mapIsLazy() throws Exception {
         Iterable<Integer> result = sequence(returns(1), callThrows(new Exception(), Integer.class)).
-                map(invoke(Integer.class));
+                map(call(Integer.class));
         assertThat(result, startsWith(1));
     }
 
@@ -207,7 +209,7 @@ public class SequenceTest {
     @Test
     public void filterIsLazy() throws Exception {
         Iterable<Integer> result = sequence(returns(1), returns(2), callThrows(new Exception(), Integer.class)).
-                map(invoke(Integer.class)).
+                map(call(Integer.class)).
                 filter(even());
         assertThat(result, startsWith(2));
     }

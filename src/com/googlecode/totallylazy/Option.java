@@ -40,4 +40,7 @@ public abstract class Option<T> implements Iterable<T> {
         return isEmpty() ? null : get();
     }
 
+    public <S> Option<S> map(Callable1<? super T, S> callable) {
+        return isEmpty() ? Option.<S>none() : some(Callables.call(callable, get()));
+    }
 }
