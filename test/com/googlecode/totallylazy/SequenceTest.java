@@ -265,4 +265,9 @@ public class SequenceTest {
         assertThat(sequence.zip(sequence(2, 4, 6)),     hasExactly(pair(1,2), pair(3,4), pair(5,6)));
         assertThat(sequence.zip(sequence(2, 4)),        hasExactly(pair(1,2), pair(3,4)));
     }
+
+    @Test
+    public void supportsZipWithIndex() {
+        assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(),  hasExactly(pair(0, "Dan"), pair(1,"Matt"), pair(2,"Bob")));
+    }
 }

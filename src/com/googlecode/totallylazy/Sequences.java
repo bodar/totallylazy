@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static com.googlecode.totallylazy.Callables.increment;
 import static com.googlecode.totallylazy.Predicates.*;
 
 public class Sequences {
@@ -271,15 +272,19 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> memorise(Iterable<T> iterable) {
+    public static <T> Sequence<T> memorise(final Iterable<T> iterable) {
         return new MemoriseSequence<T>(iterable);
     }
 
-    public static <T1, T2> Sequence<Pair<T1, T2>> zip(final Sequence<T1> left, final Sequence<T2> right) {
+    public static <T1, T2> Sequence<Pair<T1, T2>> zip(final Iterable<T1> left, final Iterable<T2> right) {
         return new Sequence<Pair<T1, T2>>() {
             public Iterator<Pair<T1, T2>> iterator() {
                 return new ZipIterator<T1,T2>(left.iterator(), right.iterator());
             }
         };
+    }
+
+    public static <T> Sequence<Pair<Integer, T>> zipWithIndex(final Iterable<T> iterable) {
+        return zip(iterate(increment(), 0), iterable);
     }
 }

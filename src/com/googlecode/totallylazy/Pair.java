@@ -31,7 +31,7 @@ public class Pair<F, S> implements Iterable, First<F>, Second<S> {
 
     @Override
     public String toString() {
-        return sequence(first, second).toString("(", ",", ")");
+        return sequence(first, second).toString("[", ",", "]");
     }
 
     @Override
