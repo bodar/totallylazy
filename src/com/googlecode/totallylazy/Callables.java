@@ -48,6 +48,14 @@ public class Callables {
         };
     }
 
+    public static <T> Callable1<Second<T>, T> second() {
+        return new Callable1<Second<T>, T>() {
+            public T call(Second<T> second) throws Exception {
+                return second.second();
+            }
+        };
+    }
+
     public static <T> Callable1<Iterable<T>, T> head() {
         return new Callable1<Iterable<T>, T>() {
             public T call(Iterable<T> sequence) throws Exception {
