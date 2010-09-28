@@ -3,20 +3,20 @@ package com.googlecode.totallylazy.iterators;
 import java.util.NoSuchElementException;
 
 public class CharacterIterator extends ReadOnlyIterator<Character> {
-    private final char[] array;
     private int index = 0;
+    private final CharSequence charSequence;
 
-    public CharacterIterator(char[] array) {
-        this.array = array;
+    public CharacterIterator(CharSequence charSequence) {
+        this.charSequence = charSequence;
     }
 
     public boolean hasNext() {
-        return index < array.length;
+        return index < charSequence.length();
     }
 
     public Character next() {
         if (hasNext()) {
-            return array[index++];
+            return charSequence.charAt(index++);
         }
         throw new NoSuchElementException();
     }

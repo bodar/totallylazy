@@ -38,6 +38,7 @@ public class SequencesTest {
     @Test
     public void supportsCharacters() throws Exception {
         assertThat(characters("text"), hasExactly('t', 'e', 'x', 't'));
+        assertThat(characters("text".toCharArray()), hasExactly('t', 'e', 'x', 't'));
         assertThat(characters("text").drop(2).toString(""), is("xt"));
     }
 
