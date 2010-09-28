@@ -2,13 +2,12 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
+import com.googlecode.totallylazy.iterators.ZipIterator;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Callables.increment;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.*;
 
 public class Sequences {
@@ -274,5 +273,13 @@ public class Sequences {
 
     public static <T> Sequence<T> memorise(Iterable<T> iterable) {
         return new MemoriseSequence<T>(iterable);
+    }
+
+    public static <T1, T2> Sequence<Pair<T1, T2>> zip(final Sequence<T1> left, final Sequence<T2> right) {
+        return new Sequence<Pair<T1, T2>>() {
+            public Iterator<Pair<T1, T2>> iterator() {
+                return new ZipIterator<T1,T2>(left.iterator(), right.iterator());
+            }
+        };
     }
 }
