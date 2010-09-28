@@ -24,10 +24,15 @@ public class MemoriseIterator<T> extends ReadOnlyIterator<T> {
             return getCachedAnswer(currentPosition);
         }
 
-        T t = iterator.next();
-        memory.add(t);
-        return t;
+        synchronized(memory){
+            if(haveCachedAnswer(currentPosition)){
+                return getCachedAnswer(currentPosition);
+            }
 
+            T t = iterator.next();
+            memory.add(t);
+            return t;
+        }
     }
 
     private boolean haveCachedAnswer(int position) {

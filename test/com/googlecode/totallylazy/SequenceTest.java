@@ -2,9 +2,10 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
+import java.util.concurrent.*;
 
 import static com.googlecode.totallylazy.Callables.*;
 import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
@@ -15,11 +16,43 @@ import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Pair.pair;
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
+    @Test
+    public void memoriseIsThreadSafe() throws Exception {
+        final int[] count = {0};
+        final Sequence<Integer> number = sequence(new Callable<Integer>() {
+            public Integer call() throws Exception {
+                int current = count[0]++;
+                Thread.sleep(10);
+                return current;
+            }
+        }).map(call(Integer.class)).memorise();
+
+        ExecutorService service = Executors.newFixedThreadPool(2);
+
+        List<Callable<Integer>> collection = asList(callHead(number), callHead(number));
+        List<Future<Integer>> result = service.invokeAll(collection);
+        service.shutdown();
+        service.awaitTermination(50, TimeUnit.MILLISECONDS);
+
+        assertThat(count[0], is(1));
+        assertThat(result.get(0).get(), is(0));
+        assertThat(result.get(1).get(), is(0));
+    }
+
+    private Callable<Integer> callHead(final Sequence<Integer> number) {
+        return new Callable<Integer>() {
+            public Integer call() throws Exception {
+                return number.head();
+            }
+        };
+    }
+
     @Test
     public void supportsMemorise() throws Exception {
         final int[] count = {0};
