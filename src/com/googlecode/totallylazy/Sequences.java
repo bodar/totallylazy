@@ -31,6 +31,14 @@ public class Sequences {
         };
     }
 
+    public static <T> Sequence<T> sequence(final Iterator<T> iterator) {
+        return memorise(new Iterable<T>() {
+            public Iterator<T> iterator() {
+                return iterator;
+            }
+        });
+    }
+
     public static Sequence<Integer> primeFactorsOf(int value) {
         return primes().takeWhile(primeSquaredLessThan(value)).filter(remainderIsZero(value));
     }
