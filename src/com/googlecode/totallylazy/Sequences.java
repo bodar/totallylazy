@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.increment;
-import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.Predicates.prime;
+import static com.googlecode.totallylazy.Predicates.primeSquaredLessThan;
+import static com.googlecode.totallylazy.Predicates.remainderIsZero;
+import static java.nio.CharBuffer.wrap;
 
 public class Sequences {
     public static <T> Sequence<T> sequence(final Iterable<T> iterable) {
@@ -26,10 +29,6 @@ public class Sequences {
                 return new ArrayIterator<T>(items);
             }
         };
-    }
-
-    public static Sequence<Character> characters(final String value) {
-        return characters(value.toCharArray());
     }
 
     public static Sequence<Integer> primeFactorsOf(int value) {
@@ -52,12 +51,16 @@ public class Sequences {
         };
     }
 
-    public static Sequence<Character> characters(final char[] value) {
+    public static Sequence<Character> characters(final CharSequence value) {
         return new Sequence<Character>() {
             public Iterator<Character> iterator() {
                 return new CharacterIterator(value);
             }
         };
+    }
+
+    public static Sequence<Character> characters(final char[] value) {
+        return characters(wrap(value));
     }
 
     public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
