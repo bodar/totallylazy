@@ -149,4 +149,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     public Sequence<T> memorise() {
         return Sequences.memorise(this);
     }
+
+    public <T2> Sequence<Pair<T, T2>> zip(Sequence<T2> sequence) {
+        return Sequences.zip(this, sequence);
+    }
 }

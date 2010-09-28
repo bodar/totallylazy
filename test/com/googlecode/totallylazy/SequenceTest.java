@@ -14,6 +14,7 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Pair.pair;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
@@ -254,5 +255,14 @@ public class SequenceTest {
         assertThat(sequence, hasExactly(6, 8, 1, 3));
         assertThat(sequence(1).dropWhile(odd()).size(), is(0));
         assertThat(Sequences.<Integer>sequence().dropWhile(odd()).size(), is(0));
+    }
+
+    @Test
+    public void supportsZip() {
+        final Sequence<Integer> sequence = sequence(1, 3, 5);
+
+        assertThat(sequence.zip(sequence(2, 4, 6, 8)),  hasExactly(pair(1,2), pair(3,4), pair(5,6)));
+        assertThat(sequence.zip(sequence(2, 4, 6)),     hasExactly(pair(1,2), pair(3,4), pair(5,6)));
+        assertThat(sequence.zip(sequence(2, 4)),        hasExactly(pair(1,2), pair(3,4)));
     }
 }
