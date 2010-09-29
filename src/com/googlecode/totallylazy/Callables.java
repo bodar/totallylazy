@@ -89,6 +89,18 @@ public class Callables {
         };
     }
 
+    public static <T> Callable1<T, T> returnArgument() {
+        return new Callable1<T, T>() {
+            public T call(T value) {
+                return value;
+            }
+        };
+    }
+
+    public static <T> Callable1<T, T> returnArgument(Class<T> aClass) {
+        return returnArgument();
+    }
+
     public static <T> Callable<T> aNull(Class<T> aClass) {
         return new Callable<T>() {
             public T call() throws Exception {
