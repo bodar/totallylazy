@@ -23,50 +23,6 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
     @Test
-    public void memoriseIsThreadSafe() throws Exception {
-        final int[] count = {0};
-        final Sequence<Integer> number = sequence(new Callable<Integer>() {
-            public Integer call() throws Exception {
-                int current = count[0]++;
-                Thread.sleep(10);
-                return current;
-            }
-        }).map(call(Integer.class)).memorise();
-
-        ExecutorService service = Executors.newFixedThreadPool(2);
-
-        List<Callable<Integer>> collection = asList(callHead(number), callHead(number));
-        List<Future<Integer>> result = service.invokeAll(collection);
-        service.shutdown();
-        service.awaitTermination(50, TimeUnit.MILLISECONDS);
-
-        assertThat(count[0], is(1));
-        assertThat(result.get(0).get(), is(0));
-        assertThat(result.get(1).get(), is(0));
-    }
-
-    private Callable<Integer> callHead(final Sequence<Integer> number) {
-        return new Callable<Integer>() {
-            public Integer call() throws Exception {
-                return number.head();
-            }
-        };
-    }
-
-    @Test
-    public void supportsMemorise() throws Exception {
-        final int[] count = {0};
-        Sequence<Integer> number = sequence(new Callable<Integer>() {
-            public Integer call() throws Exception {
-                return count[0]++;
-            }
-        }).map(call(Integer.class)).memorise();
-        assertThat(number.head(), is(0));
-        assertThat(number.head(), is(0));
-        assertThat(count[0], is(1));
-    }
-
-    @Test
     public void supportsCons() throws Exception {
         assertThat(sequence(1, 2, 3).cons(4), hasExactly(4, 1, 2, 3));
         assertThat(cons(4, sequence(1, 2, 3)), hasExactly(4, 1, 2, 3));
