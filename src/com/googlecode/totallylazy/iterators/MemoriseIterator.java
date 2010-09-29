@@ -14,18 +14,15 @@ public class MemoriseIterator<T> extends ReadOnlyIterator<T> {
     }
 
     public boolean hasNext() {
-        return haveCachedAnswer(position) || iterator.hasNext();
-
+        synchronized (memory) {
+            return haveCachedAnswer(position) || iterator.hasNext();
+        }
     }
 
     public T next() {
-        int currentPosition = position++;
-        if(haveCachedAnswer(currentPosition)){
-            return getCachedAnswer(currentPosition);
-        }
-
-        synchronized(memory){
-            if(haveCachedAnswer(currentPosition)){
+        synchronized (memory) {
+            int currentPosition = position++;
+            if (haveCachedAnswer(currentPosition)) {
                 return getCachedAnswer(currentPosition);
             }
 
