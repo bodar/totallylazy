@@ -65,11 +65,11 @@ public class SequenceTest {
         }
     };
 
-
     @Test
     public void supportsFind() throws Exception {
         assertThat(sequence(1, 3, 5).find(even()), is((Option<Integer>) none(Integer.class)));
         assertThat(sequence(1, 2, 3).find(even()), is((Option<Integer>) some(2)));
+        assertThat(sequence(none(Integer.class), some(2), some(3)).find(Predicates.<Integer>some()).get(), is((Option<Integer>) some(2)));
     }
 
     @Test

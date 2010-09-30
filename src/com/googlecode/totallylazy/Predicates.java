@@ -6,13 +6,14 @@ import org.hamcrest.Matcher;
 import static com.googlecode.totallylazy.Sequences.primes;
 
 public class Predicates {
-    public static <T> Predicate<T> m(final Matcher<T> matcher) {
+    public static <T> Predicate<T> predicate(final Matcher<T> matcher) {
         return new Predicate<T>() {
             public boolean matches(T other) {
                 return matcher.matches(other);
             }
         };
     }
+
 
     public static <T> Predicate<T> is(final T t) {
         return new Is<T>(t);
@@ -71,5 +72,13 @@ public class Predicates {
 
     public static <T> Predicate<T> notNull(Class<T> aClass) {
         return new NotNullPredicate<T>();
+    }
+
+    public static <T> Predicate<Option<T>> some() {
+        return new Predicate<Option<T>>() {
+            public boolean matches(Option<T> other) {
+                return !other.isEmpty();
+            }
+        };
     }
 }
