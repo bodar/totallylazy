@@ -32,6 +32,14 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> sequence(final Iterator<T> iterator) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return iterator;
+            }
+        };
+    }
+
+    public static <T> Sequence<T> memorise(final Iterator<T> iterator) {
         return new MemoriseSequence<T>(iterator);
     }
 
@@ -286,7 +294,7 @@ public class Sequences {
     public static <T1, T2> Sequence<Pair<T1, T2>> zip(final Iterable<T1> left, final Iterable<T2> right) {
         return new Sequence<Pair<T1, T2>>() {
             public Iterator<Pair<T1, T2>> iterator() {
-                return new ZipIterator<T1,T2>(left.iterator(), right.iterator());
+                return new ZipIterator<T1, T2>(left.iterator(), right.iterator());
             }
         };
     }
