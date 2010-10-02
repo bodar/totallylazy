@@ -1,13 +1,13 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.NoneIterator;
+import com.googlecode.totallylazy.iterators.EmptyIterator;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class None<T> extends Option<T>{
     public Iterator<T> iterator() {
-        return new NoneIterator<T>();
+        return new EmptyIterator<T>();
     }
 
     @Override

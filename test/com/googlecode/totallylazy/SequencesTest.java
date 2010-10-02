@@ -14,13 +14,6 @@ import static org.junit.Assert.assertThat;
 
 public class SequencesTest {
     @Test
-    public void canTurnAnIteratorIntoAReUsableSequence() throws Exception {
-        Sequence<Integer> reusable = sequence(asList(1, 2).iterator());
-        assertThat(reusable, hasExactly(1, 2));
-        assertThat(reusable, hasExactly(1, 2));
-    }
-
-    @Test
     public void toStringingAnInfiniteListWillTruncateByDefault() throws Exception {
         Sequence<Integer> primes = primes();
         assertThat(primes.toString(), is(primes.take(100).toString()));

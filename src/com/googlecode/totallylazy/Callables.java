@@ -80,6 +80,15 @@ public class Callables {
         };
     }
 
+    public static <T> Callable1<Iterator<T>, Iterable<T>> asIterable() {
+        return new Callable1<Iterator<T>, Iterable<T>>() {
+            public Iterable<T> call(final Iterator<T> iterator) throws Exception {
+                return Sequences.sequence(iterator);
+            }
+        };
+    }
+
+
 
     public static <T> Callable<T> returns(final T t) {
         return new Callable<T>() {

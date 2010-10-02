@@ -8,13 +8,23 @@ import java.util.concurrent.*;
 
 import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callables.increment;
+import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class MemoriseTest {
+    @Test
+    public void canTurnAnIteratorIntoAReUsableSequence() throws Exception {
+        Sequence<Integer> reusable = memorise(asList(1, 2).iterator());
+        assertThat(reusable, hasExactly(1, 2));
+        assertThat(reusable, hasExactly(1, 2));
+    }
+
+
     @Test
     public void memoriseIsThreadSafe() throws Exception {
         final int[] count = {0};
