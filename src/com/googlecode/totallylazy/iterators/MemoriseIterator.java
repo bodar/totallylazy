@@ -1,9 +1,15 @@
 package com.googlecode.totallylazy.iterators;
 
+import com.googlecode.totallylazy.Option;
+
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.locks.ReadWriteLock;
 
-public class MemoriseIterator<T> extends ReadOnlyIterator<T> {
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
+
+public class MemoriseIterator<T> extends StatefulIterator<T> {
     private final Iterator<T> iterator;
     private final List<T> memory;
     private int position = 0;
@@ -13,22 +19,20 @@ public class MemoriseIterator<T> extends ReadOnlyIterator<T> {
         this.memory = memory;
     }
 
-    public boolean hasNext() {
-        synchronized (memory) {
-            return haveCachedAnswer(position) || iterator.hasNext();
-        }
-    }
-
-    public T next() {
+    public Option<T> getNext() {
         synchronized (memory) {
             int currentPosition = position++;
             if (haveCachedAnswer(currentPosition)) {
-                return getCachedAnswer(currentPosition);
+                return some(getCachedAnswer(currentPosition));
             }
 
-            T t = iterator.next();
-            memory.add(t);
-            return t;
+            if (iterator.hasNext()) {
+                T t = iterator.next();
+                memory.add(t);
+                return some(t);
+            }
+
+            return none();
         }
     }
 

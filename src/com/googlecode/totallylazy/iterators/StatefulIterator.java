@@ -1,12 +1,13 @@
 package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Peekable;
 
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Option.none;
 
-public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> {
+public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements Peekable<T> {
     private Option<T> state = none();
     private boolean finished = false;
 
@@ -31,6 +32,13 @@ public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> {
     public final T next() {
         if (hasNext()) {
             return pop(state);
+        }
+        throw new NoSuchElementException();
+    }
+
+    public final T peek() {
+        if (hasNext()) {
+            return state.get();
         }
         throw new NoSuchElementException();
     }
