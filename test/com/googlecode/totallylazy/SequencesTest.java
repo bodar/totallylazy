@@ -8,7 +8,6 @@ import static com.googlecode.totallylazy.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.odd;
 import static com.googlecode.totallylazy.Sequences.*;
-import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -22,13 +21,13 @@ public class SequencesTest {
     @Test
     public void supportsPrimeFactors() throws Exception {
         Sequence<Integer> primeFactors = primeFactorsOf(13195);
-        assertThat(primeFactors, hasExactly(5,7,13,29));
+        assertThat(primeFactors, hasExactly(5, 7, 13, 29));
     }
 
     @Test
     public void supportsPrimes() throws Exception {
         Sequence<Integer> primes = primes();
-        assertThat(primes, startsWith(2,3,5,7,11,13,17,19,23,29));
+        assertThat(primes, startsWith(2, 3, 5, 7, 11, 13, 17, 19, 23, 29));
     }
 
     @Test

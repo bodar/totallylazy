@@ -2,10 +2,8 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.*;
 
 import static com.googlecode.totallylazy.Callables.*;
 import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
@@ -16,7 +14,6 @@ import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Pair.pair;
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
@@ -169,7 +166,7 @@ public class SequenceTest {
     @Test
     public void supportsForEach() throws Exception {
         final int[] sum = {0};
-        sequence(1, 2).foreach(new Runnable1<Integer>() {
+        sequence(1, 2).forEach(new Runnable1<Integer>() {
             public void run(Integer value) {
                 sum[0] += value;
             }

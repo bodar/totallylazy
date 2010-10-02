@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.util.List;
@@ -73,8 +72,8 @@ public class MemoriseTest {
     public void memorisingForEach() throws InterruptedException {
         final int[] count = new int[]{0};
         Sequence<String> sequence = iterate(increment(), 0).take(1).map(recordNumberOfCalls(count)).memorise();
-        sequence.foreach(doNothing());
-        sequence.foreach(doNothing());
+        sequence.forEach(doNothing());
+        sequence.forEach(doNothing());
 
         assertThat(count[0], is(1));
     }

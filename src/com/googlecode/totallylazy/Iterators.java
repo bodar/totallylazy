@@ -19,7 +19,7 @@ import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Iterators {
-    public static <T> void foreach(final Iterator<T> iterator, final Runnable1<T> runnable) {
+    public static <T> void forEach(final Iterator<T> iterator, final Runnable1<T> runnable) {
         while (iterator.hasNext()) {
             runnable.run(iterator.next());
         }

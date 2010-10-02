@@ -6,8 +6,8 @@ import java.util.Set;
 
 
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
-    public void foreach(Runnable1<T> runnable) {
-        Sequences.foreach(this, runnable);
+    public void forEach(Runnable1<T> runnable) {
+        Sequences.forEach(this, runnable);
     }
 
     public <S> Sequence<S> map(final Callable1<? super T, S> callable) {

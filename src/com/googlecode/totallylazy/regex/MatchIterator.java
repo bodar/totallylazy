@@ -1,42 +1,28 @@
 package com.googlecode.totallylazy.regex;
 
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
+import com.googlecode.totallylazy.iterators.StatefulIterator;
 
 import java.util.NoSuchElementException;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 
-public class MatchIterator extends ReadOnlyIterator<MatchResult> {
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
+
+public class MatchIterator extends StatefulIterator<MatchResult> {
     private final Matcher matcher;
-    private MatchResult currentMatch = null;
 
     public MatchIterator(Matcher matcher) {
         this.matcher = matcher;
         matcher.reset();
     }
 
-    public boolean hasNext() {
-        if (currentMatch == null) {
+    public Option<MatchResult> getNext() {
             if (matcher.find()) {
-                currentMatch = matcher.toMatchResult();
-                return true;
+                return some(matcher.toMatchResult());
             }
-            return false;
-        }
-        return true;
-    }
-
-    public MatchResult next() {
-        if (currentMatch != null) {
-            final MatchResult result = currentMatch;
-            currentMatch = null;
-            return result;
-        }
-
-        if (hasNext()) {
-            return next();
-        }
-
-        throw new NoSuchElementException();
+        return none();
     }
 }

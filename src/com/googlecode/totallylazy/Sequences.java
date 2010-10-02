@@ -131,8 +131,8 @@ public class Sequences {
         };
     }
 
-    public static <T> void foreach(final Iterable<T> iterable, final Runnable1<T> runnable) {
-        Iterators.foreach(iterable.iterator(), runnable);
+    public static <T> void forEach(final Iterable<T> iterable, final Runnable1<T> runnable) {
+        Iterators.forEach(iterable.iterator(), runnable);
     }
 
     public static <T> T first(final Iterable<T> iterable) {
