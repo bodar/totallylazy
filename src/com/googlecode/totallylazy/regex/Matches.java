@@ -43,7 +43,7 @@ public class Matches extends Sequence<MatchResult> {
         return builder.toString();
     }
 
-    public static String filterNull(String value) {
+    private static String filterNull(String value) {
         return value == null ? "" : value;
     }
 }
