@@ -1,9 +1,20 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.callables.LazyCallable;
+
 import java.util.Iterator;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 public class Callables {
+    public static <T> Callable1<Future<T>, T> realise(){
+        return new Callable1<Future<T>, T>() {
+            public T call(Future<T> future) throws Exception {
+                return future.get();
+            }
+        };
+    }
+
     public static <T> T call(Callable<T> callable) {
         try {
             return callable.call();
@@ -161,4 +172,5 @@ public class Callables {
             }
         };
     }
+
 }

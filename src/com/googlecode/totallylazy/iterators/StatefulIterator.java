@@ -24,7 +24,6 @@ public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements
                 finished = true;
                 return false;
             }
-            return true;
         }
         return true;
     }
