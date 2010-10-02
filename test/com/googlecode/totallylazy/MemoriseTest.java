@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.callables.SleepyCallable;
 import org.junit.Test;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.callables.SleepyCallable.sleepy;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -26,25 +30,23 @@ public class MemoriseTest {
 
     @Test
     public void memoriseIsThreadSafe() throws Exception {
-        final int[] count = {0};
-        final Sequence<Integer> number = sequence(new Callable<Integer>() {
-            public Integer call() throws Exception {
-                int current = count[0]++;
-                Thread.sleep(10);
-                return current;
-            }
-        }).map(call(Integer.class)).memorise();
+        CountingCallable counting = counting();
+        final Sequence<Integer> number = sequence(sleepy(counting, 10)).map(call(Integer.class)).memorise();
 
-        ExecutorService service = Executors.newFixedThreadPool(2);
+        Sequence<Integer> result = callConcurrently(50, callHead(number), callHead(number));
 
-        List<Callable<Integer>> collection = asList(callHead(number), callHead(number));
-        List<Future<Integer>> result = service.invokeAll(collection);
+        assertThat(counting.getCount(), is(1));
+        assertThat(result.first(), is(0));
+        assertThat(result.second(), is(0));
+    }
+
+    public static <T> Sequence<T> callConcurrently(int timeout, Callable<T>... callables) throws InterruptedException {
+        ExecutorService service = Executors.newFixedThreadPool(callables.length);
+        List<Callable<T>> collection = asList(callables);
+        Sequence<Future<T>> result = sequence(service.invokeAll(collection));
         service.shutdown();
-        service.awaitTermination(50, TimeUnit.MILLISECONDS);
-
-        assertThat(count[0], is(1));
-        assertThat(result.get(0).get(), is(0));
-        assertThat(result.get(1).get(), is(0));
+        service.awaitTermination(timeout, TimeUnit.MILLISECONDS);
+        return result.map(Callables.<T>realise());
     }
 
     private Callable<Integer> callHead(final Sequence<Integer> number) {
@@ -57,15 +59,11 @@ public class MemoriseTest {
 
     @Test
     public void supportsMemorise() throws Exception {
-        final int[] count = {0};
-        Sequence<Integer> number = sequence(new Callable<Integer>() {
-            public Integer call() throws Exception {
-                return count[0]++;
-            }
-        }).map(call(Integer.class)).memorise();
+        CountingCallable counting = counting();
+        Sequence<Integer> number = sequence(counting).map(call(Integer.class)).memorise();
         assertThat(number.head(), is(0));
         assertThat(number.head(), is(0));
-        assertThat(count[0], is(1));
+        assertThat(counting.getCount(), is(1));
     }
     
     @Test
@@ -103,4 +101,5 @@ public class MemoriseTest {
             }
         };
     }
+
 }
