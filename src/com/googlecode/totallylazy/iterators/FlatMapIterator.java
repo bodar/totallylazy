@@ -1,44 +1,41 @@
 package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Option;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callables.call;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 
 
-public class FlatMapIterator<T, S> extends ReadOnlyIterator<S> {
+public class FlatMapIterator<T, S> extends StatefulIterator<S> {
     private final Iterator<T> iterator;
     private final Callable1<? super T, Iterable<S>> callable;
-    private Iterator<S> currentIterator = null;
+    private Iterator<S> currentIterator = new EmptyIterator<S>();
 
     public FlatMapIterator(Iterator<T> iterator, Callable1<? super T, Iterable<S>> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }
 
-    public boolean hasNext() {
-        if (currentIterator == null) {
-            if (iterator.hasNext()) {
-                currentIterator = call(callable, iterator.next()).iterator();
-                return hasNext();
-            }
-            return false;
+    public Option<S> getNext() {
+        Iterator<S> iterator = getCurrentIterator();
+        if (iterator.hasNext()) {
+            return some(iterator.next());
         }
-
-        if (currentIterator.hasNext()) {
-            return true;
-        }
-
-        currentIterator = null;
-        return hasNext();
+        return none();
     }
 
-    public S next() {
-        if (hasNext()) {
-            return currentIterator.next();
+    public Iterator<S> getCurrentIterator() {
+        if(!currentIterator.hasNext()){
+            if(!iterator.hasNext()){
+                return new EmptyIterator<S>();
+            }
+            currentIterator = call(callable, iterator.next()).iterator();
         }
-        throw new NoSuchElementException();
+
+        return currentIterator;
     }
 }

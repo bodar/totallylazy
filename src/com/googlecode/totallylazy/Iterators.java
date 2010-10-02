@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.call;
+import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.is;
@@ -205,11 +206,11 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> join(final Iterator<T>... iterators) {
-        return new JoinIterator<T>(sequence(iterators).iterator());
+        return new FlatMapIterator<Iterator<T>,T>(sequence(iterators).iterator(), Callables.<T>asIterable());
     }
 
     public static <T> Iterator<T> join(final Iterable<Iterator<T>> iterators) {
-        return new JoinIterator<T>(sequence(iterators).iterator());
+        return new FlatMapIterator<Iterator<T>, T>(sequence(iterators).iterator(), Callables.<T>asIterable());
     }
 
     public static <T> Iterator<T> cons(final T t, final Iterator<T> iterator) {
