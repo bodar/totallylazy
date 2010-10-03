@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
@@ -11,6 +12,16 @@ import static com.googlecode.totallylazy.proxy.CallableProxyTest.User.user;
 import static org.junit.Assert.assertThat;
 
 public class CallableProxyTest {
+    @Test
+    public void canSortByProxy() throws Exception {
+        User matt = user("Matt", "Savage");
+        User dan = user("Dan", "Bodart");
+        User bob = user("Bob", "Marshal");
+        Sequence<User> unsorted = sequence(matt, dan, bob);
+        Sequence<User> sorted = unsorted.sortBy(CallableProxy.<User, String>method(on(User.class).firstName()));
+        assertThat(sorted, hasExactly(bob, dan, matt));
+    }
+
     @Test
     public void canMapAMethod() throws Exception {
         Sequence<User> users = sequence(user("Dan", "Bodart"), user("Matt", "Savage"));

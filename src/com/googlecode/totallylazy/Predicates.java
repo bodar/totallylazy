@@ -15,6 +15,10 @@ public class Predicates {
     }
 
 
+    public static <T> Predicate<T> instanceOf(final Class t) {
+        return new InstanceOf<T>(t);
+    }
+
     public static <T> Predicate<T> is(final T t) {
         return new Is<T>(t);
     }

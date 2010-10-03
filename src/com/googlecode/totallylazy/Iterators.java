@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.iterators.*;
 
 import java.util.*;
 
+import static com.googlecode.totallylazy.Callables.cast;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -25,7 +26,7 @@ public class Iterators {
         return new FlatMapIterator<T, S>(iterator, callable);
     }
 
-    public static <T> Iterator<T> filter(final Iterator<T> iterator, final Predicate<T> predicate) {
+    public static <T> Iterator<T> filter(final Iterator<T> iterator, final Predicate<? super T> predicate) {
         return new FilterIterator<T>(iterator, predicate);
     }
 
@@ -208,4 +209,9 @@ public class Iterators {
     public static <T> Iterator<T> cons(final T t, final Iterator<T> iterator) {
         return join(sequence(t).iterator(), iterator);
     }
+
+    public static <T, S> Iterator<S> safeCast(Iterator<T> iterator, Class<S> aClass) {
+        return map(filter(iterator, instanceOf(aClass)), cast(aClass));
+    }
+
 }

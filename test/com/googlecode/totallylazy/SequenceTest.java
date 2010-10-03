@@ -14,11 +14,43 @@ import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Sequences.sort;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
+    @Test
+    public void supportsSafeCast() throws Exception {
+        Cat freaky = new Cat(), fatty = new Cat();
+        Dog buster = new Dog();
+        Sequence<Animal> animals = sequence(freaky, fatty, buster);
+        Sequence<Cat> cats = animals.safeCast(Cat.class);
+        Sequence<Dog> dogs = animals.safeCast(Dog.class);
+        assertThat(cats, hasExactly(freaky,fatty));
+        assertThat(dogs, hasExactly(buster));
+    }
+
+    public static interface Animal{}
+    public static class Cat implements Animal{}
+    public static class Dog implements Animal{}
+
+    @Test
+    public void supportsSort() throws Exception {
+        assertThat(sort(sequence(5,6,1,3,4,2)), hasExactly(1,2,3,4,5,6));
+        assertThat(sort(sequence("Matt", "Dan","Bob")), hasExactly("Bob", "Dan", "Matt"));
+    }
+
+    @Test
+    public void supportsSortBy() throws Exception {
+        int[] small = {1};
+        int[] medium = {1,2,3};
+        int[] large = {1,2,3,4,5,6};
+        Sequence<int[]> unsorted = sequence(large, small, medium);
+        assertThat(unsorted.sortBy(Callables.<int[]>length()), hasExactly(small, medium, large));
+        assertThat(unsorted.sortBy(negate(Callables.<int[]>length())), hasExactly(large, medium, small));
+    }
+
     @Test
     public void supportsCons() throws Exception {
         assertThat(sequence(1, 2, 3).cons(4), hasExactly(4, 1, 2, 3));
