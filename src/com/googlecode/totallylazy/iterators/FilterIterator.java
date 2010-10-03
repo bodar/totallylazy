@@ -10,9 +10,9 @@ import static com.googlecode.totallylazy.Option.some;
 
 public class FilterIterator<T> extends StatefulIterator<T> {
     private final Iterator<T> iterator;
-    private final Predicate<T> predicate;
+    private final Predicate<? super T> predicate;
 
-    public FilterIterator(Iterator<T> iterator, Predicate<T> predicate) {
+    public FilterIterator(Iterator<T> iterator, Predicate<? super T> predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

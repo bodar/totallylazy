@@ -157,4 +157,12 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     public Sequence<Pair<Integer, T>> zipWithIndex() {
         return Sequences.zipWithIndex(this);
     }
+
+    public Sequence<T> sortBy(Callable1<T, ? extends Comparable> callable) {
+        return Sequences.sortBy(this, callable);
+    }
+
+    public <S> Sequence<S> safeCast(Class<S> aClass) {
+        return Sequences.safeCast(this, aClass);
+    }
 }

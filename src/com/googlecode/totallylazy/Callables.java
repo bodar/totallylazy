@@ -1,16 +1,49 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.LazyCallable;
-
+import java.lang.reflect.Array;
+import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.*;
-
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static java.util.Arrays.asList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 public class Callables {
-    public static <T> Callable1<Future<T>, T> realise(){
+    public static <T, S> Callable1<T, S> cast(Class<S> aClass) {
+        return new Callable1<T, S>() {
+            public S call(T t) throws Exception {
+                return (S) t;
+            }
+        };
+    }
+
+    public static <T> Comparator<T> asComparator(final Callable1<T, ? extends Comparable> callable) {
+        return new Comparator<T>() {
+            public int compare(T first, T second) {
+                return Callers.call(callable, first).compareTo(Callers.call(callable, second));
+            }
+        };
+    }
+
+    public static <T> Callable1<T, Integer> negate(final Callable1<T, Integer> callable) {
+        return new Callable1<T, Integer>() {
+            public Integer call(final T t) throws Exception {
+                return callable.call(t) * -1;
+            }
+        };
+    }
+
+    public static <T> Callable1<T, Integer> length() {
+        return new Callable1<T, Integer>() {
+            public Integer call(Object object) throws Exception {
+                Class aClass = object.getClass();
+                if (aClass.isArray()) {
+                    return Array.getLength(object);
+                }
+                throw new UnsupportedOperationException("Dont support methods or fields yet");
+            }
+        };
+    }
+
+    public static <T> Callable1<Future<T>, T> realise() {
         return new Callable1<Future<T>, T>() {
             public T call(Future<T> future) throws Exception {
                 return future.get();
@@ -65,7 +98,6 @@ public class Callables {
             }
         };
     }
-
 
 
     public static <T> Callable<T> returns(final T t) {

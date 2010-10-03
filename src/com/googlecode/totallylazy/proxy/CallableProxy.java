@@ -40,4 +40,8 @@ public class CallableProxy {
     public static <T, S> Callable1<T,S> method(S value){
         return invocations.pop();
     }
+
+    public static <T, S> Callable1<T,S> method(S value, Class<S> aClass){
+        return method(value);
+    }
 }

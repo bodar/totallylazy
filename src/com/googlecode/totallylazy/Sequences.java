@@ -4,15 +4,15 @@ import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
 import com.googlecode.totallylazy.iterators.ZipIterator;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import static com.googlecode.totallylazy.Callables.asComparator;
 import static com.googlecode.totallylazy.Callables.increment;
 import static com.googlecode.totallylazy.Predicates.prime;
 import static com.googlecode.totallylazy.Predicates.primeSquaredLessThan;
 import static com.googlecode.totallylazy.Predicates.remainderIsZero;
 import static java.nio.CharBuffer.wrap;
+import static java.util.Arrays.asList;
 
 public class Sequences {
     public static <T> Sequence<T> sequence(final Iterable<T> iterable) {
@@ -301,5 +301,25 @@ public class Sequences {
 
     public static <T> Sequence<Pair<Integer, T>> zipWithIndex(final Iterable<T> iterable) {
         return zip(iterate(increment(), 0), iterable);
+    }
+
+    public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<T,? extends Comparable> callable) {
+        List<T> result = sequence(iterable).toList();
+        Collections.sort(result, asComparator(callable));
+        return sequence(result);
+    }
+
+    public static <T extends Comparable<? super T>> Sequence<T> sort(final Iterable<T> iterable) {
+        List<T> result = sequence(iterable).toList();
+        Collections.sort(result);
+        return sequence(result);
+    }
+
+    public static <T,S> Sequence<S> safeCast(final Iterable<T> iterable, final Class<S> aClass) {
+        return new Sequence<S>() {
+            public Iterator<S> iterator() {
+                return Iterators.safeCast(iterable.iterator(), aClass);
+            }
+        };
     }
 }
