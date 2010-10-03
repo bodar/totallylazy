@@ -1,14 +1,13 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
-import com.googlecode.totallylazy.callables.SleepyCallable;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.concurrent.*;
 
 import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callables.increment;
+import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.memorise;
@@ -33,20 +32,11 @@ public class MemoriseTest {
         CountingCallable counting = counting();
         final Sequence<Integer> number = sequence(sleepy(counting, 10)).map(call(Integer.class)).memorise();
 
-        Sequence<Integer> result = callConcurrently(50, callHead(number), callHead(number));
+        Sequence<Integer> result = callConcurrently(callHead(number), callHead(number));
 
-        assertThat(counting.getCount(), is(1));
+        assertThat(counting.count(), is(1));
         assertThat(result.first(), is(0));
         assertThat(result.second(), is(0));
-    }
-
-    public static <T> Sequence<T> callConcurrently(int timeout, Callable<T>... callables) throws InterruptedException {
-        ExecutorService service = Executors.newFixedThreadPool(callables.length);
-        List<Callable<T>> collection = asList(callables);
-        Sequence<Future<T>> result = sequence(service.invokeAll(collection));
-        service.shutdown();
-        service.awaitTermination(timeout, TimeUnit.MILLISECONDS);
-        return result.map(Callables.<T>realise());
     }
 
     private Callable<Integer> callHead(final Sequence<Integer> number) {
@@ -60,46 +50,36 @@ public class MemoriseTest {
     @Test
     public void supportsMemorise() throws Exception {
         CountingCallable counting = counting();
-        Sequence<Integer> number = sequence(counting).map(call(Integer.class)).memorise();
-        assertThat(number.head(), is(0));
-        assertThat(number.head(), is(0));
-        assertThat(counting.getCount(), is(1));
+        Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
+        assertThat(sequence.head(), is(0));
+        assertThat(sequence.head(), is(0));
+        assertThat(counting.count(), is(1));
     }
     
     @Test
     public void memorisingForEach() throws InterruptedException {
-        final int[] count = new int[]{0};
-        Sequence<String> sequence = iterate(increment(), 0).take(1).map(recordNumberOfCalls(count)).memorise();
-        sequence.forEach(doNothing());
-        sequence.forEach(doNothing());
+        CountingCallable counting = counting();
+        Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
+        sequence.forEach(this.<Integer>doNothing());
+        sequence.forEach(this.<Integer>doNothing());
 
-        assertThat(count[0], is(1));
+        assertThat(counting.count(), is(1));
     }
 
     @Test
     public void memorisingSize() throws InterruptedException {
-        final int[] count = new int[]{0};
-        Sequence<String> sequence = iterate(increment(), 0).take(1).map(recordNumberOfCalls(count)).memorise();
+        CountingCallable counting = counting();
+        Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
         sequence.size();
         sequence.size();
 
-        assertThat(count[0], is(1));
+        assertThat(counting.count(), is(1));
     }
 
-    private Runnable1<String> doNothing() {
-        return new Runnable1<String>() {
-            public void run(String aVoid) {
+    private <T> Runnable1<T> doNothing() {
+        return new Runnable1<T>() {
+            public void run(T ignore) {
             }
         };
     }
-
-    private Callable1<Integer, String> recordNumberOfCalls(final int[] count) {
-        return new Callable1<Integer, String>() {
-            public String call(Integer index) throws Exception {
-                count[0]++;
-                return "frangipan";
-            }
-        };
-    }
-
 }

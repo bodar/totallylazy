@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callables.returnArgument;
+import static com.googlecode.totallylazy.Callers.call;
 
 public class Matches extends Sequence<MatchResult> {
     private final Pattern pattern;

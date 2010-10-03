@@ -12,7 +12,7 @@ public class CountingCallable implements Callable<Integer> {
         return count++;
     }
 
-    public int getCount() {
+    public int count() {
         return count;
     }
 

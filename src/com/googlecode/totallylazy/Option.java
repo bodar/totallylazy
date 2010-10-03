@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callables.call;
+import static com.googlecode.totallylazy.Callers.call;
 
 public abstract class Option<T> implements Iterable<T> {
     public static <T> Option<T> option(T t) {
@@ -41,6 +41,6 @@ public abstract class Option<T> implements Iterable<T> {
     }
 
     public <S> Option<S> map(Callable1<? super T, S> callable) {
-        return isEmpty() ? Option.<S>none() : some(Callables.call(callable, get()));
+        return isEmpty() ? Option.<S>none() : some(Callers.call(callable, get()));
     }
 }
