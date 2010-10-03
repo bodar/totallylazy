@@ -3,8 +3,11 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.callables.LazyCallable;
 
 import java.util.Iterator;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
+import java.util.List;
+import java.util.concurrent.*;
+
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static java.util.Arrays.asList;
 
 public class Callables {
     public static <T> Callable1<Future<T>, T> realise(){
@@ -13,42 +16,6 @@ public class Callables {
                 return future.get();
             }
         };
-    }
-
-    public static <T> T call(Callable<T> callable) {
-        try {
-            return callable.call();
-        } catch (LazyException e) {
-            throw e;
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new LazyException(e);
-        }
-    }
-
-    public static <T, S> S call(Callable1<? super T, S> callable, T t) {
-        try {
-            return callable.call(t);
-        } catch (LazyException e) {
-            throw e;
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new LazyException(e);
-        }
-    }
-
-    public static <T, S, R> R call(Callable2<T, S, R> callable, T t, S s) {
-        try {
-            return callable.call(t, s);
-        } catch (LazyException e) {
-            throw e;
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new LazyException(e);
-        }
     }
 
     public static <T> Callable1<First<T>, T> first() {

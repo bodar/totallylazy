@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Option;
 
 import java.util.Iterator;
 
-import static com.googlecode.totallylazy.Callables.call;
+import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 

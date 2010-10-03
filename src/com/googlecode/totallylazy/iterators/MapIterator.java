@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 
 import java.util.Iterator;
 
-import static com.googlecode.totallylazy.Callables.call;
+import static com.googlecode.totallylazy.Callers.call;
 
 public class MapIterator<T, S> extends ReadOnlyIterator<S> {
     private final Iterator<T> iterator;
