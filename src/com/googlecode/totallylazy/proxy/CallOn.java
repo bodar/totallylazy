@@ -11,8 +11,8 @@ import static com.googlecode.totallylazy.proxy.Generics.getGenericSuperclassType
 import static com.googlecode.totallylazy.proxy.Proxy.createProxy;
 
 public abstract class CallOn<T, S> implements Callable1<T,S>, InvocationHandler {
-    protected T call;
     private Invocation invocation;
+    protected final T call;
 
     protected CallOn() {
         Class<T> aClass = getGenericSuperclassType(this.getClass(), 0);
