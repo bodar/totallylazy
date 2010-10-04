@@ -32,16 +32,10 @@ public class Invocation implements Callable1 {
 
     @Override
     public String toString() {
-        return method.getName() + sequence(arguments).toString("(", ",", ")");  
+        return method.getName() + sequence(arguments).toString("(", ",", ")");
     }
 
-    public Object call(Object instance) {
-        try {
-            return method.invoke(instance, arguments);
-        } catch (IllegalAccessException e) {
-            throw new UnsupportedOperationException(e);
-        } catch (InvocationTargetException e) {
-            throw new UnsupportedOperationException(e);
-        }
+    public Object call(Object instance) throws InvocationTargetException, IllegalAccessException {
+        return method.invoke(instance, arguments);
     }
 }
