@@ -15,6 +15,14 @@ public class Callables {
         };
     }
 
+    public static Callable1<Object, Class> toClass() {
+        return new Callable1<Object, Class>() {
+            public Class call(Object o) throws Exception {
+                return o.getClass();
+            }
+        };
+    }
+
     public static <T> Comparator<T> asComparator(final Callable1<T, ? extends Comparable> callable) {
         return new Comparator<T>() {
             public int compare(T first, T second) {
