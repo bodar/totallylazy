@@ -1,24 +1,33 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.proxy.CallableProxy.on;
-import static com.googlecode.totallylazy.proxy.CallableProxy.method;
-import static com.googlecode.totallylazy.proxy.CallableProxyTest.User.user;
+import static com.googlecode.totallylazy.proxy.Call.on;
+import static com.googlecode.totallylazy.proxy.Call.method;
+import static com.googlecode.totallylazy.proxy.CallTest.User.user;
 import static org.junit.Assert.assertThat;
 
-public class CallableProxyTest {
+public class CallTest {
     @Test
     public void canSortByProxy() throws Exception {
         User matt = user("Matt", "Savage");
         User dan = user("Dan", "Bodart");
         User bob = user("Bob", "Marshal");
         Sequence<User> unsorted = sequence(matt, dan, bob);
-        Sequence<User> sorted = unsorted.sortBy(CallableProxy.<User, String>method(on(User.class).firstName()));
+        Sequence<User> sorted = unsorted.sortBy(Call.<User, String>method(on(User.class).firstName()));
+        assertThat(sorted, hasExactly(bob, dan, matt));
+    }
+
+    @Test
+    public void canAlternateInitaliseMechanism() throws Exception {
+        User matt = user("Matt", "Savage");
+        User dan = user("Dan", "Bodart");
+        User bob = user("Bob", "Marshal");
+        Sequence<User> unsorted = sequence(matt, dan, bob);
+        Sequence<User> sorted = unsorted.sortBy(new Call<User, String>(){{method.firstName();}});
         assertThat(sorted, hasExactly(bob, dan, matt));
     }
 
