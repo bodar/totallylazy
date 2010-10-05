@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.iterators.CharacterIterator;
 import com.googlecode.totallylazy.iterators.ZipIterator;
 
 import java.util.*;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.increment;

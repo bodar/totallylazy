@@ -8,6 +8,7 @@ import static com.googlecode.totallylazy.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.odd;
 import static com.googlecode.totallylazy.Sequences.*;
+import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
