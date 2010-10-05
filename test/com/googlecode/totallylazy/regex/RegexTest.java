@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.regex;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.IterableMatcher;
+import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import java.util.regex.MatchResult;
@@ -18,5 +20,11 @@ public class RegexTest {
             }
         });
         assertThat(result, is("Tel:321"));
+    }
+
+    @Test
+    public void supportsSplitingText() throws Exception {
+        Sequence<String> result = regex("\\s").split("The quick brown fox jumps over the lazy dog");
+        assertThat(result, IterableMatcher.hasExactly("The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"));
     }
 }
