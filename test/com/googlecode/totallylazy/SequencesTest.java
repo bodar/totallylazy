@@ -14,20 +14,17 @@ import static org.junit.Assert.assertThat;
 public class SequencesTest {
     @Test
     public void toStringingAnInfiniteListWillTruncateByDefault() throws Exception {
-        Sequence<Integer> primes = primes();
-        assertThat(primes.toString(), is(primes.take(100).toString()));
+        assertThat(primes().toString(), is(primes().take(100).toString()));
     }
 
     @Test
     public void supportsPrimeFactors() throws Exception {
-        Sequence<Integer> primeFactors = primeFactorsOf(13195);
-        assertThat(primeFactors, hasExactly(5, 7, 13, 29));
+        assertThat(primeFactorsOf(13195), hasExactly(5, 7, 13, 29));
     }
 
     @Test
     public void supportsPrimes() throws Exception {
-        Sequence<Integer> primes = primes();
-        assertThat(primes, startsWith(2, 3, 5, 7, 11, 13, 17, 19, 23, 29));
+        assertThat(primes(), startsWith(2, 3, 5, 7, 11, 13, 17, 19, 23, 29));
     }
 
     @Test
@@ -51,8 +48,7 @@ public class SequencesTest {
 
     @Test
     public void supportsIterate() throws Exception {
-        Sequence<Integer> numbers = iterate(increment(), 1);
-        assertThat(numbers, startsWith(1, 2, 3, 4, 5));
+        assertThat(iterate(increment(), 1), startsWith(1, 2, 3, 4, 5));
     }
 
     @Test
