@@ -20,6 +20,7 @@ public class LazyCallable<T> implements Callable<T> {
     }
 
     public T call() throws Exception {
+
         synchronized (state) {
             if (state.isEmpty()) {
                 state = some(callable.call());
