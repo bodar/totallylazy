@@ -6,13 +6,13 @@ import com.googlecode.totallylazy.iterators.ZipIterator;
 
 import java.util.*;
 
-import static com.googlecode.totallylazy.Callables.asComparator;
+import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.increment;
+import static com.googlecode.totallylazy.Callables.reduceAndShift;
 import static com.googlecode.totallylazy.Predicates.prime;
 import static com.googlecode.totallylazy.Predicates.primeSquaredLessThan;
 import static com.googlecode.totallylazy.Predicates.remainderIsZero;
 import static java.nio.CharBuffer.wrap;
-import static java.util.Arrays.asList;
 
 public class Sequences {
     public static <T> Sequence<T> sequence(final Iterable<T> iterable) {
@@ -52,15 +52,7 @@ public class Sequences {
     }
 
     public static Sequence<Integer> fibonacci() {
-        return iterate(addAndShift(), sequence(0, 1)).map(Callables.<Integer>first());
-    }
-
-    private static Callable1<Sequence<Integer>, Sequence<Integer>> addAndShift() {
-        return new Callable1<Sequence<Integer>, Sequence<Integer>>() {
-            public Sequence<Integer> call(Sequence<Integer> pairs) throws Exception {
-                return sequence(pairs.second(), pairs.first() + pairs.second());
-            }
-        };
+        return iterate(reduceAndShift(Callables.add()), sequence(0, 1)).map(Callables.<Integer>first());
     }
 
     public static Sequence<Character> characters(final CharSequence value) {
@@ -304,8 +296,12 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<T,? extends Comparable> callable) {
+        return sortBy(iterable, ascending(callable));
+    }
+
+    public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Comparator<T> comparator) {
         List<T> result = sequence(iterable).toList();
-        Collections.sort(result, asComparator(callable));
+        Collections.sort(result, comparator);
         return sequence(result);
     }
 

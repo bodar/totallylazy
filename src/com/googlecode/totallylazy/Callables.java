@@ -7,6 +7,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 public class Callables {
+    public static <T> Callable1<Sequence<T>, Sequence<T>> reduceAndShift(final Callable2<T, T, T> action) {
+        return new Callable1<Sequence<T>, Sequence<T>>() {
+            public Sequence<T> call(Sequence<T> values) throws Exception {
+                return values.tail().add(values.reduceLeft(action));
+            }
+        };
+    }
+
     public static <T, S> Callable1<T, S> cast(Class<S> aClass) {
         return new Callable1<T, S>() {
             public S call(T t) throws Exception {
@@ -23,7 +31,7 @@ public class Callables {
         };
     }
 
-    public static <T> Comparator<T> asComparator(final Callable1<T, ? extends Comparable> callable) {
+    public static <T> Comparator<T> ascending(final Callable1<T, ? extends Comparable> callable) {
         return new Comparator<T>() {
             public int compare(T first, T second) {
                 return Callers.call(callable, first).compareTo(Callers.call(callable, second));
@@ -31,10 +39,10 @@ public class Callables {
         };
     }
 
-    public static <T> Callable1<T, Integer> negate(final Callable1<T, Integer> callable) {
-        return new Callable1<T, Integer>() {
-            public Integer call(final T t) throws Exception {
-                return callable.call(t) * -1;
+    public static <T> Comparator<T> descending(final Callable1<T, ? extends Comparable> callable) {
+        return new Comparator<T>() {
+            public int compare(T first, T second) {
+                return ascending(callable).compare(first, second) * -1;
             }
         };
     }

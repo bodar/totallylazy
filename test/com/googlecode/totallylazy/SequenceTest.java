@@ -48,7 +48,8 @@ public class SequenceTest {
         int[] large = {1,2,3,4,5,6};
         Sequence<int[]> unsorted = sequence(large, small, medium);
         assertThat(unsorted.sortBy(Callables.<int[]>length()), hasExactly(small, medium, large));
-        assertThat(unsorted.sortBy(negate(Callables.<int[]>length())), hasExactly(large, medium, small));
+        assertThat(unsorted.sortBy(ascending(Callables.<int[]>length())), hasExactly(small, medium, large));
+        assertThat(unsorted.sortBy(descending(Callables.<int[]>length())), hasExactly(large, medium, small));
     }
 
     @Test

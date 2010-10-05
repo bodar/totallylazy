@@ -62,10 +62,10 @@ public class Predicates {
         };
     }
 
-    public static Predicate<Integer> remainderIsZero(final Integer divisor) {
+    public static Predicate<Integer> remainderIsZero(final Integer dividend) {
         return new Predicate<Integer>() {
-            public boolean matches(Integer prime) {
-                return divisor % prime == 0;
+            public boolean matches(Integer divisor) {
+                return dividend % divisor == 0;
             }
         };
     }

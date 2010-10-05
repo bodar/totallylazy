@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import java.lang.reflect.Array;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -160,6 +161,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     public Sequence<T> sortBy(Callable1<T, ? extends Comparable> callable) {
         return Sequences.sortBy(this, callable);
+    }
+
+    public Sequence<T> sortBy(final Comparator<T> comparator) {
+        return Sequences.sortBy(this, comparator);
     }
 
     public <S> Sequence<S> safeCast(Class<S> aClass) {
