@@ -180,6 +180,15 @@ public class Callables {
         };
     }
 
+    public static Callable1<Integer, Integer> multipleBy(final int amount) {
+        return new Callable1<Integer, Integer>() {
+            public Integer call(Integer integer) throws Exception {
+                return integer * amount;
+            }
+        };
+    }
+
+
     public static Callable2<Integer, Integer, Integer> add() {
         return new Callable2<Integer, Integer, Integer>() {
             public Integer call(Integer a, Integer b) {

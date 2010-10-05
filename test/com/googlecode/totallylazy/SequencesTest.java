@@ -7,8 +7,13 @@ import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.odd;
-import static com.googlecode.totallylazy.Sequences.*;
-import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.Sequences.characters;
+import static com.googlecode.totallylazy.Sequences.fibonacci;
+import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Sequences.powersOf;
+import static com.googlecode.totallylazy.Sequences.primeFactorsOf;
+import static com.googlecode.totallylazy.Sequences.primes;
+import static com.googlecode.totallylazy.Sequences.range;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -31,6 +36,12 @@ public class SequencesTest {
     @Test
     public void supportsFibonacci() throws Exception {
         assertThat(fibonacci(), startsWith(0, 1, 1, 2, 3, 5));
+    }
+
+    @Test
+    public void supportsPowersOf() throws Exception {
+        assertThat(powersOf(2), startsWith(1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048));
+        assertThat(powersOf(3), startsWith(1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683, 59049));
     }
 
     @Test

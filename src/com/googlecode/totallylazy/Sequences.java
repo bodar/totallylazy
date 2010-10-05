@@ -5,10 +5,10 @@ import com.googlecode.totallylazy.iterators.CharacterIterator;
 import com.googlecode.totallylazy.iterators.ZipIterator;
 
 import java.util.*;
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.increment;
+import static com.googlecode.totallylazy.Callables.multipleBy;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
 import static com.googlecode.totallylazy.Predicates.prime;
 import static com.googlecode.totallylazy.Predicates.primeSquaredLessThan;
@@ -54,6 +54,10 @@ public class Sequences {
 
     public static Sequence<Integer> fibonacci() {
         return iterate(reduceAndShift(Callables.add()), sequence(0, 1)).map(Callables.<Integer>first());
+    }
+
+    public static Sequence<Integer> powersOf(int amount) {
+        return iterate(multipleBy(amount), 1);
     }
 
     public static Sequence<Character> characters(final CharSequence value) {
