@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.iterators.*;
 
 import java.util.*;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.cast;
 import static com.googlecode.totallylazy.Callers.call;
@@ -29,7 +30,6 @@ public class Iterators {
     public static <T> Iterator<T> filter(final Iterator<T> iterator, final Predicate<? super T> predicate) {
         return new FilterIterator<T>(iterator, predicate);
     }
-
 
     public static <T> Iterator<T> iterate(final Callable1<? super T, T> callable, final T t) {
         return new IterateIterator<T>(callable, t);

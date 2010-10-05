@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.util.regex.MatchResult;
 
+import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.regex.Regex.regex;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -23,8 +24,8 @@ public class RegexTest {
     }
 
     @Test
-    public void supportsSplitingText() throws Exception {
+    public void supportsSplittingText() throws Exception {
         Sequence<String> result = regex("\\s").split("The quick brown fox jumps over the lazy dog");
-        assertThat(result, IterableMatcher.hasExactly("The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"));
+        assertThat(result, hasExactly("The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"));
     }
 }
