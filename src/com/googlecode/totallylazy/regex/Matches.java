@@ -14,9 +14,9 @@ import static com.googlecode.totallylazy.Callers.call;
 
 public class Matches extends Sequence<MatchResult> {
     private final Pattern pattern;
-    private final String text;
+    private final CharSequence text;
 
-    public Matches(Pattern pattern, String text) {
+    public Matches(Pattern pattern, CharSequence text) {
         this.pattern = pattern;
         this.text = text;
     }
@@ -25,25 +25,25 @@ public class Matches extends Sequence<MatchResult> {
         return new MatchIterator(pattern.matcher(text));
     }
 
-    public String replace(Callable1<MatchResult, String> matched) {
-        return replace(returnArgument(String.class), matched);
+    public String replace(Callable1<MatchResult, CharSequence> matched) {
+        return replace(returnArgument(CharSequence.class), matched);
     }
 
-    public String replace(Callable1<String, String> notMatched, Callable1<MatchResult, String> matched) {
+    public String replace(Callable1<CharSequence, CharSequence> notMatched, Callable1<MatchResult, CharSequence> matched) {
         StringBuilder builder = new StringBuilder();
         int position = 0;
         for (MatchResult matchResult : this) {
-            String before = text.substring(position, matchResult.start());
-            if (before.length() > 0) builder.append(filterNull(call(notMatched, (before))));
+            CharSequence before = text.subSequence(position, matchResult.start());
+            if (before.length() > 0) builder.append(filterNull(call(notMatched, before)));
             builder.append(filterNull(call(matched, (matchResult))));
             position = matchResult.end();
         }
-        String after = text.substring(position);
+        CharSequence after = text.subSequence(position, text.length());
         if (after.length() > 0) builder.append(filterNull(call(notMatched, after)));
         return builder.toString();
     }
 
-    private static String filterNull(String value) {
+    private static CharSequence filterNull(CharSequence value) {
         return value == null ? "" : value;
     }
 }
