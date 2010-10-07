@@ -1,8 +1,5 @@
 package com.googlecode.totallylazy.proxy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ThreadLocalInvocation extends ThreadLocal<Invocation>{
     @Override
     public Invocation get() {

@@ -4,8 +4,6 @@ import com.googlecode.totallylazy.Callable1;
 import net.sf.cglib.proxy.InvocationHandler;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
 import static com.googlecode.totallylazy.proxy.Generics.getGenericSuperclassType;
 import static com.googlecode.totallylazy.proxy.Proxy.createProxy;

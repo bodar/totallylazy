@@ -3,8 +3,8 @@ package com.googlecode.totallylazy;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.increment;
-import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.IterableMatcher.startsWith;
+import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.odd;
 import static com.googlecode.totallylazy.Sequences.characters;
@@ -14,8 +14,8 @@ import static com.googlecode.totallylazy.Sequences.powersOf;
 import static com.googlecode.totallylazy.Sequences.primeFactorsOf;
 import static com.googlecode.totallylazy.Sequences.primes;
 import static com.googlecode.totallylazy.Sequences.range;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 public class SequencesTest {
     @Test

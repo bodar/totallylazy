@@ -1,10 +1,8 @@
 package com.googlecode.totallylazy.regex;
 
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 
-import java.util.NoSuchElementException;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 

@@ -6,8 +6,7 @@ import java.io.FileNotFoundException;
 import java.text.ParseException;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LazyExceptionTest {
     @Test

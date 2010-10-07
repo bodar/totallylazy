@@ -1,17 +1,15 @@
 package com.googlecode.totallylazy.regex;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.IterableMatcher;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import java.util.regex.MatchResult;
 
-import static com.googlecode.totallylazy.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.regex.Regex.regex;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 public class RegexTest {
     @Test
     public void supportsReplacingText() throws Exception {

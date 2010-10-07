@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Callable1;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;

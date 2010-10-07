@@ -1,6 +1,12 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.*;
+import com.googlecode.totallylazy.predicates.CountTo;
+import com.googlecode.totallylazy.predicates.InstanceOf;
+import com.googlecode.totallylazy.predicates.Is;
+import com.googlecode.totallylazy.predicates.Not;
+import com.googlecode.totallylazy.predicates.NotNullPredicate;
+import com.googlecode.totallylazy.predicates.RemainderIs;
+import com.googlecode.totallylazy.predicates.WhileTrue;
 import org.hamcrest.Matcher;
 
 import static com.googlecode.totallylazy.Sequences.primes;

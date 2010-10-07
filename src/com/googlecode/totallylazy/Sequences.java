@@ -4,7 +4,11 @@ import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
 import com.googlecode.totallylazy.iterators.ZipIterator;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.increment;

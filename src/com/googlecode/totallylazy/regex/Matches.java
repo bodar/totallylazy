@@ -3,8 +3,6 @@ package com.googlecode.totallylazy.regex;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 
-import java.lang.String;
-import java.lang.StringBuilder;
 import java.util.Iterator;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;

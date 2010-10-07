@@ -1,15 +1,28 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.*;
+import com.googlecode.totallylazy.iterators.DelegatingIterator;
+import com.googlecode.totallylazy.iterators.FilterIterator;
+import com.googlecode.totallylazy.iterators.FlatMapIterator;
+import com.googlecode.totallylazy.iterators.IterateIterator;
+import com.googlecode.totallylazy.iterators.MapIterator;
+import com.googlecode.totallylazy.iterators.RangerIterator;
+import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 
-import java.util.*;
-import java.util.concurrent.Callable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.cast;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Iterators {

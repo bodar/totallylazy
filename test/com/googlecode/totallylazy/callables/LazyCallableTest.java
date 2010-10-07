@@ -9,9 +9,8 @@ import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 import static com.googlecode.totallylazy.callables.SleepyCallable.sleepy;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 public class LazyCallableTest {
     @Test
     public void isThreadSafe() throws Exception {

@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.regex;
 
 import com.googlecode.totallylazy.Sequence;
 
-import java.lang.String;import java.util.regex.Pattern;
+import java.util.regex.Pattern;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 

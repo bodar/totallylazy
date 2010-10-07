@@ -5,8 +5,6 @@ import com.googlecode.totallylazy.iterators.MemoriseIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static java.util.Collections.synchronizedList;
 

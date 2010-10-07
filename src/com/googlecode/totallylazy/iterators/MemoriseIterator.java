@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.Option;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.locks.ReadWriteLock;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
