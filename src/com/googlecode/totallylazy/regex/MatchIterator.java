@@ -14,7 +14,7 @@ public class MatchIterator extends StatefulIterator<MatchResult> {
 
     public MatchIterator(Matcher matcher) {
         this.matcher = matcher;
-        matcher.reset();
+        this.matcher.reset();
     }
 
     public Option<MatchResult> getNext() {

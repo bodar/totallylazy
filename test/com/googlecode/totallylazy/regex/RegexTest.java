@@ -13,7 +13,7 @@ import static org.hamcrest.core.Is.is;
 public class RegexTest {
     @Test
     public void supportsReplacingText() throws Exception {
-        String result = regex("\\d+").matches("Tel:123").replace(new Callable1<MatchResult, String>() {
+        String result = regex("\\d+").matches("Tel:123").replace(new Callable1<MatchResult, CharSequence>() {
             public String call(MatchResult s) throws Exception {
                 return "321";
             }

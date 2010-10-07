@@ -25,7 +25,7 @@ public class Regex {
         return new Regex(pattern);
     }
 
-    public Matches matches(String sequence){
+    public Matches matches(CharSequence sequence){
         return new Matches(pattern, sequence);
     }
 
