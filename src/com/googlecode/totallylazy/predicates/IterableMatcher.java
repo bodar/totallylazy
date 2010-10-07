@@ -9,35 +9,35 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
-    private final Sequence<T> expected;
+public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<? super T>> {
+    private final Sequence<? super T> expected;
     private boolean shouldBeSameSize;
 
-    private IterableMatcher(Sequence<T> expected, boolean shouldBeSameSize) {
+    private IterableMatcher(Sequence<? super T> expected, boolean shouldBeSameSize) {
         this.expected = expected;
         this.shouldBeSameSize = shouldBeSameSize;
     }
 
-    public static <T> Matcher<Iterable<T>> hasExactly(T... items) {
+    public static <T> Matcher<Iterable<? super T>> hasExactly(T... items) {
         return hasExactly(sequence(items));
     }
 
-    public static <T> Matcher<Iterable<T>> hasExactly(Sequence<T> expected) {
+    public static <T> Matcher<Iterable<? super T>> hasExactly(Sequence<T> expected) {
         return new IterableMatcher<T>(expected, true);
     }
 
-    public static <T> Matcher<Iterable<T>> startsWith(T... items) {
+    public static <T> Matcher<Iterable<? super T>> startsWith(T... items) {
         return startsWith(sequence(items));
     }
 
-    public static <T> Matcher<Iterable<T>> startsWith(Sequence<T> expected) {
+    public static <T> Matcher<Iterable<? super T>> startsWith(Sequence<T> expected) {
         return new IterableMatcher<T>(expected, false);
     }
 
     @Override
-    public boolean matchesSafely(Iterable<T> actual) {
-        Iterator<T> e = this.expected.iterator();
-        Iterator<T> a = actual.iterator();
+    public boolean matchesSafely(Iterable<? super T> actual) {
+        Iterator<? super T> e = this.expected.iterator();
+        Iterator<? super T> a = actual.iterator();
         while(e.hasNext()){
             if(!a.hasNext()){
                 return false;
