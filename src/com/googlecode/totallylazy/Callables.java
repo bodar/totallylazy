@@ -173,11 +173,7 @@ public class Callables {
     }
 
     public static Callable1<Integer, Integer> add(final int amount) {
-        return new Callable1<Integer, Integer>() {
-            public Integer call(final Integer integer) throws Exception {
-                return integer + amount;
-            }
-        };
+        return Callers.call(curry(add()), amount);
     }
 
     public static Callable1<Integer, Integer> multipleBy(final int amount) {
@@ -188,7 +184,6 @@ public class Callables {
         };
     }
 
-
     public static Callable2<Integer, Integer, Integer> add() {
         return new Callable2<Integer, Integer, Integer>() {
             public Integer call(Integer a, Integer b) {
@@ -197,4 +192,15 @@ public class Callables {
         };
     }
 
+    public static <T,R,S> Callable1<T, Callable1<R, S>> curry(final Callable2<T, R, S> callable) {
+        return new Callable1<T, Callable1<R, S>>() {
+            public Callable1<R, S> call(final T t) throws Exception {
+                return new Callable1<R, S>() {
+                    public S call(R r) throws Exception {
+                        return callable.call(t, r);
+                    }
+                };
+            }
+        };
+    }
 }
