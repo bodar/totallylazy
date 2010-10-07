@@ -17,7 +17,7 @@ public class SleepyCallable<T> implements Callable<T> {
         return t;
     }
 
-    public static <T> SleepyCallable<T> sleepy(Callable<T> callable, int millis) {
+    public static <T> Callable<T> sleepy(Callable<T> callable, int millis) {
         return new SleepyCallable<T>(callable, millis);
     }
 }
