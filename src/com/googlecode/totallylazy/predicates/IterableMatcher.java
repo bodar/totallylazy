@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.Sequence;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.junit.internal.matchers.TypeSafeMatcher;
+import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Iterator;
 
