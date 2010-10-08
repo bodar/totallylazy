@@ -176,11 +176,11 @@ public class Callables {
         return Callers.call(curry(add()), amount);
     }
 
-    public static Callable1<Integer, Integer> multipleBy(final int amount) {
-        return Callers.call(curry(multiple()), amount);
+    public static Callable1<Integer, Integer> multiplyBy(final int amount) {
+        return Callers.call(curry(multiply()), amount);
     }
 
-    public static Callable2<Integer, Integer, Integer> multiple() {
+    public static Callable2<Integer, Integer, Integer> multiply() {
         return new Callable2<Integer, Integer, Integer> () {
             public Integer call(Integer a, Integer b) throws Exception {
                 return a * b;
