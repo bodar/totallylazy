@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.iterators.IterateIterator;
 import com.googlecode.totallylazy.iterators.MapIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
+import com.googlecode.totallylazy.predicates.OnlyOnce;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,10 +20,7 @@ import static com.googlecode.totallylazy.Callables.cast;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Predicates.instanceOf;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.whileTrue;
+import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Iterators {
@@ -138,7 +136,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> remove(final Iterator<T> iterator, final T t) {
-        return filter(iterator, not(t));
+        return filter(iterator, not(onlyOnce(is(t))));
     }
 
     public static <T> Iterator<T> take(final Iterator<T> iterator, final int count) {
