@@ -1,12 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.CountTo;
-import com.googlecode.totallylazy.predicates.InstanceOf;
-import com.googlecode.totallylazy.predicates.Is;
-import com.googlecode.totallylazy.predicates.Not;
-import com.googlecode.totallylazy.predicates.NotNullPredicate;
-import com.googlecode.totallylazy.predicates.RemainderIs;
-import com.googlecode.totallylazy.predicates.WhileTrue;
+import com.googlecode.totallylazy.predicates.*;
 import org.hamcrest.Matcher;
 
 import static com.googlecode.totallylazy.Sequences.primes;
@@ -20,6 +14,9 @@ public class Predicates {
         };
     }
 
+    public static <T> Predicate<? super T> onlyOnce(final Predicate<? super T> predicate) {
+        return new OnlyOnce<T>(predicate);
+    }
 
     public static <T> Predicate<T> instanceOf(final Class t) {
         return new InstanceOf<T>(t);

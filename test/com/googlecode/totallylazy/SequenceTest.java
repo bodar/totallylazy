@@ -35,25 +35,27 @@ public class SequenceTest {
         Sequence<Animal> animals = sequence(freaky, fatty, buster);
         Sequence<Cat> cats = animals.safeCast(Cat.class);
         Sequence<Dog> dogs = animals.safeCast(Dog.class);
-        assertThat(cats, hasExactly(freaky,fatty));
+        assertThat(cats, hasExactly(freaky, fatty));
         assertThat(dogs, hasExactly(buster));
     }
 
-    public static interface Animal{}
-    public static class Cat implements Animal{}
-    public static class Dog implements Animal{}
+    public static interface Animal {}
+
+    public static class Cat implements Animal {}
+
+    public static class Dog implements Animal {}
 
     @Test
     public void supportsSort() throws Exception {
-        assertThat(sort(sequence(5,6,1,3,4,2)), hasExactly(1,2,3,4,5,6));
-        assertThat(sort(sequence("Matt", "Dan","Bob")), hasExactly("Bob", "Dan", "Matt"));
+        assertThat(sort(sequence(5, 6, 1, 3, 4, 2)), hasExactly(1, 2, 3, 4, 5, 6));
+        assertThat(sort(sequence("Matt", "Dan", "Bob")), hasExactly("Bob", "Dan", "Matt"));
     }
 
     @Test
     public void supportsSortBy() throws Exception {
         int[] small = {1};
-        int[] medium = {1,2,3};
-        int[] large = {1,2,3,4,5,6};
+        int[] medium = {1, 2, 3};
+        int[] large = {1, 2, 3, 4, 5, 6};
         Sequence<int[]> unsorted = sequence(large, small, medium);
         assertThat(unsorted.sortBy(Callables.<int[]>length()), hasExactly(small, medium, large));
         assertThat(unsorted.sortBy(ascending(Callables.<int[]>length())), hasExactly(small, medium, large));
@@ -134,11 +136,10 @@ public class SequenceTest {
         assertThat(numbers, hasExactly(1, 3));
     }
 
-
     @Test
     public void supportsRemove() throws Exception {
-        final Sequence<Integer> numbers = sequence(1, 2, 3).remove(2);
-        assertThat(numbers, hasExactly(1, 3));
+        final Sequence<Integer> numbers = sequence(1, 2, 3, 2).remove(2);
+        assertThat(numbers, hasExactly(1, 3, 2));
     }
 
     @Test
@@ -288,13 +289,13 @@ public class SequenceTest {
     public void supportsZip() {
         final Sequence<Integer> sequence = sequence(1, 3, 5);
 
-        assertThat(sequence.zip(sequence(2, 4, 6, 8)),  hasExactly(pair(1,2), pair(3,4), pair(5,6)));
-        assertThat(sequence.zip(sequence(2, 4, 6)),     hasExactly(pair(1,2), pair(3,4), pair(5,6)));
-        assertThat(sequence.zip(sequence(2, 4)),        hasExactly(pair(1,2), pair(3,4)));
+        assertThat(sequence.zip(sequence(2, 4, 6, 8)), hasExactly(pair(1, 2), pair(3, 4), pair(5, 6)));
+        assertThat(sequence.zip(sequence(2, 4, 6)), hasExactly(pair(1, 2), pair(3, 4), pair(5, 6)));
+        assertThat(sequence.zip(sequence(2, 4)), hasExactly(pair(1, 2), pair(3, 4)));
     }
 
     @Test
     public void supportsZipWithIndex() {
-        assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(),  hasExactly(pair(0, "Dan"), pair(1,"Matt"), pair(2,"Bob")));
+        assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(), hasExactly(pair(0, "Dan"), pair(1, "Matt"), pair(2, "Bob")));
     }
 }
