@@ -78,7 +78,11 @@ public class Predicates {
     }
 
     public static <T> Predicate<T> notNull(Class<T> aClass) {
-        return new NotNullPredicate<T>();
+        return not(aNull(aClass));
+    }
+
+    public static <T> Predicate<T> aNull(Class<T> aClass) {
+        return new Null<T>();
     }
 
     public static <T> Predicate<Option<T>> some() {

@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.increment;
-import static com.googlecode.totallylazy.Callables.multiplyBy;
+import static com.googlecode.totallylazy.Callables.multiply;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
 import static com.googlecode.totallylazy.Predicates.prime;
 import static com.googlecode.totallylazy.Predicates.primeSquaredLessThan;
@@ -61,7 +61,7 @@ public class Sequences {
     }
 
     public static Sequence<Integer> powersOf(int amount) {
-        return iterate(multiplyBy(amount), 1);
+        return iterate(multiply(amount), 1);
     }
 
     public static Sequence<Character> characters(final CharSequence value) {
