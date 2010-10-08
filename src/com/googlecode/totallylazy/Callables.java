@@ -177,9 +177,13 @@ public class Callables {
     }
 
     public static Callable1<Integer, Integer> multipleBy(final int amount) {
-        return new Callable1<Integer, Integer>() {
-            public Integer call(Integer integer) throws Exception {
-                return integer * amount;
+        return Callers.call(curry(multiple()), amount);
+    }
+
+    public static Callable2<Integer, Integer, Integer> multiple() {
+        return new Callable2<Integer, Integer, Integer> () {
+            public Integer call(Integer a, Integer b) throws Exception {
+                return a * b;
             }
         };
     }
@@ -200,6 +204,14 @@ public class Callables {
                         return callable.call(t, r);
                     }
                 };
+            }
+        };
+    }
+
+    public static <T, R, S> Callable2<T, R, S> unCurry(final Callable1<T, Callable1<R,S>> callable) {
+        return new Callable2<T, R, S>() {
+            public S call(T t, R r) throws Exception {
+                return callable.call(t).call(r);
             }
         };
     }
