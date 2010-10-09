@@ -46,7 +46,7 @@ public class SequencesTest {
         assertThat(reporter.time(), Matchers.is(lessThan(200.0)));
 
         timeCallable.call();
-        assertThat(reporter.time(), Matchers.is(lessThan(1.0)));
+        assertThat(reporter.time(), Matchers.is(lessThan(10.0)));
     }
 
 

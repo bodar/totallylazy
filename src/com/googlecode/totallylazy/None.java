@@ -25,18 +25,7 @@ public class None<T> extends Option<T>{
     }
 
     @Override
-    public boolean equals(Object o) {
-        return this == o || !(o == null || getClass() != o.getClass());
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
-    }
-
-    @Override
     public String toString() {
-        return "None()";
+        return "none()";
     }
-
 }
