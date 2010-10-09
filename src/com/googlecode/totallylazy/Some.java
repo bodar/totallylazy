@@ -44,6 +44,6 @@ public class Some<T> extends Option<T> {
 
     @Override
     public String toString() {
-        return "Some(" + t + ")";
+        return "some(" + t + ")";
     }
 }
