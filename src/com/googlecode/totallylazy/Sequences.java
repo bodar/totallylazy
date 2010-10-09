@@ -45,15 +45,20 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> memorise(final Iterator<T> iterator) {
-        return new MemoriseSequence<T>(iterator);
+        return new MemorisedSequence<T>(new Iterable<T>() {
+            public Iterator<T> iterator() {
+                return iterator;
+            }
+        });
     }
 
     public static Sequence<Integer> primeFactorsOf(int value) {
         return primes().takeWhile(primeSquaredLessThan(value)).filter(remainderIsZero(value));
     }
 
-    public static Sequence<Integer> primes() {
-        return sequence(2).join(iterate(Callables.add(2), 3).filter(prime()));
+    private static final MemorisedSequence<Integer> primes = sequence(2).join(iterate(Callables.add(2), 3).filter(prime())).memorise();
+    public static MemorisedSequence<Integer> primes() {
+        return primes;
     }
 
     public static Sequence<Integer> fibonacci() {
@@ -288,8 +293,8 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> memorise(final Iterable<T> iterable) {
-        return new MemoriseSequence<T>(iterable);
+    public static <T> MemorisedSequence<T> memorise(final Iterable<T> iterable) {
+        return new MemorisedSequence<T>(iterable);
     }
 
     public static <T1, T2> Sequence<Pair<T1, T2>> zip(final Iterable<T1> left, final Iterable<T2> right) {
@@ -326,5 +331,9 @@ public class Sequences {
                 return Iterators.safeCast(iterable.iterator(), aClass);
             }
         };
+    }
+
+    public static <T> Sequence<T> realise(final Iterable<T> iterable) {
+        return sequence(Iterators.toList(iterable.iterator()));
     }
 }

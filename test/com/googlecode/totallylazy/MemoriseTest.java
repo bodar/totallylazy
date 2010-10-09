@@ -17,12 +17,24 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 public class MemoriseTest {
     @Test
+    public void canForget() throws Exception {
+        CountingCallable counting = counting();
+        MemorisedSequence<Integer> memory = sequence(counting).map(call(Integer.class)).memorise();
+        assertThat(memory.head(), is(0));
+        assertThat(counting.count(), is(1));
+        
+        memory.forget();
+        assertThat(memory.head(), is(1));
+        assertThat(memory.head(), is(1));
+        assertThat(counting.count(), is(2));
+    }
+
+    @Test
     public void canTurnAnIteratorIntoAReUsableSequence() throws Exception {
         Sequence<Integer> reusable = memorise(asList(1, 2).iterator());
         assertThat(reusable, hasExactly(1, 2));
         assertThat(reusable, hasExactly(1, 2));
     }
-
 
     @Test
     public void memoriseIsThreadSafe() throws Exception {
