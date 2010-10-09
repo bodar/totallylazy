@@ -147,7 +147,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.cons(t, this);
     }
 
-    public Sequence<T> memorise() {
+    public MemorisedSequence<T> memorise() {
         return Sequences.memorise(this);
     }
 
@@ -169,5 +169,9 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     public <S> Sequence<S> safeCast(Class<S> aClass) {
         return Sequences.safeCast(this, aClass);
+    }
+
+    public Sequence<T> realise() {
+        return Sequences.realise(this);
     }
 }

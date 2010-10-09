@@ -1,20 +1,21 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.callables.TimeCallable;
+import com.googlecode.totallylazy.callables.TimeReporter;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
+import java.util.concurrent.Callable;
+
 import static com.googlecode.totallylazy.Callables.increment;
-import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.odd;
-import static com.googlecode.totallylazy.Sequences.characters;
-import static com.googlecode.totallylazy.Sequences.fibonacci;
-import static com.googlecode.totallylazy.Sequences.iterate;
-import static com.googlecode.totallylazy.Sequences.powersOf;
-import static com.googlecode.totallylazy.Sequences.primeFactorsOf;
-import static com.googlecode.totallylazy.Sequences.primes;
-import static com.googlecode.totallylazy.Sequences.range;
+import static com.googlecode.totallylazy.Sequences.*;
+import static com.googlecode.totallylazy.callables.TimeCallable.time;
+import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
@@ -32,6 +33,22 @@ public class SequencesTest {
     public void supportsPrimes() throws Exception {
         assertThat(primes(), startsWith(2, 3, 5, 7, 11, 13, 17, 19, 23, 29));
     }
+
+    @Test
+    public void primesIsPrettyFastAndIsMemorised() throws Exception {
+        TimeReporter reporter = new TimeReporter();
+        TimeCallable<Sequence<Integer>> timeCallable = time(new Callable<Sequence<Integer>>() {
+            public Sequence<Integer> call() throws Exception {
+                return primes().take(1000).realise();
+            }
+        }, reporter);
+        timeCallable.call();
+        assertThat(reporter.time(), Matchers.is(lessThan(200.0)));
+
+        timeCallable.call();
+        assertThat(reporter.time(), Matchers.is(lessThan(1.0)));
+    }
+
 
     @Test
     public void supportsFibonacci() throws Exception {

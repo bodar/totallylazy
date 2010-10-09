@@ -8,12 +8,12 @@ import java.util.List;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 
-public class MemoriseIterator<T> extends StatefulIterator<T> {
+public class MemorisedIterator<T> extends StatefulIterator<T> {
     private final Iterator<T> iterator;
     private final List<T> memory;
     private int position = 0;
 
-    public MemoriseIterator(Iterator<T> iterator, List<T> memory) {
+    public MemorisedIterator(Iterator<T> iterator, List<T> memory) {
         this.iterator = iterator;
         this.memory = memory;
     }

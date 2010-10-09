@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.callables.CountingCallable;
 import org.junit.Test;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Option.none;
@@ -28,6 +30,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
+    @Test
+    public void canRealiseASequence() throws Exception {
+        CountingCallable counting = counting();
+        Sequence<Integer> lazy = sequence(counting).map(call(Integer.class));
+        assertThat(counting.count(), is(0));
+        assertThat(lazy, hasExactly(0)); // this will increment count by 1
+        Sequence<Integer> realised = lazy.realise(); // this will increment count by 1
+        assertThat(counting.count(), is(2));
+        assertThat(realised, hasExactly(1));
+        assertThat(realised, hasExactly(1));
+    }
+
     @Test
     public void supportsSafeCast() throws Exception {
         Cat freaky = new Cat(), fatty = new Cat();
