@@ -6,6 +6,10 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class None<T> extends Option<T>{
+    static final None Instance = new None();
+
+    private None() {}
+
     public Iterator<T> iterator() {
         return new EmptyIterator<T>();
     }
