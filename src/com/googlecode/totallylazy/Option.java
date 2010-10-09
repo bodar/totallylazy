@@ -17,11 +17,11 @@ public abstract class Option<T> implements Iterable<T> {
     }
 
     public static <T> None<T> none() {
-        return new None<T>();
+        return None.Instance;
     }
 
     public static <T> None<T> none(Class<T> aClass) {
-        return new None<T>();
+        return None.Instance;
     }
 
     public abstract T get();
