@@ -3,10 +3,10 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.Predicate;
 
 public class WhileTrue<T> implements Predicate<T> {
-    private final Predicate<T> predicate;
+    private final Predicate<? super T> predicate;
     private boolean continueMatching = true;
 
-    public WhileTrue(Predicate<T> predicate) {
+    public WhileTrue(Predicate<? super T> predicate) {
         this.predicate = predicate;
     }
 

@@ -1,9 +1,11 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.*;
 import org.hamcrest.Matcher;
 
 import static com.googlecode.totallylazy.Sequences.primes;
+import static com.googlecode.totallylazy.numbers.Numbers.*;
 
 public class Predicates {
     public static <T> Predicate<T> predicate(final Matcher<T> matcher) {
@@ -29,7 +31,7 @@ public class Predicates {
     public static <T> Predicate<T> not(final T t) {
         return new Not<T>(is(t));
     }
-    public static <T> Predicate<T> not(final Predicate<T> t) {
+    public static <T> Predicate<T> not(final Predicate<? super T> t) {
         return new Not<T>(t);
     }
 
@@ -37,43 +39,43 @@ public class Predicates {
         return new CountTo<T>(count);
     }
 
-    public static <T> Predicate<T> whileTrue(final Predicate<T> t) {
+    public static <T> Predicate<T> whileTrue(final Predicate<? super T> t) {
         return new WhileTrue<T>(t);
     }
 
-    public static Predicate<Integer> even() {
+    public static Predicate<Number> even() {
         return remainderIs(2, 0);
     }
 
-    public static Predicate<Integer> odd() {
+    public static Predicate<Number> odd() {
         return remainderIs(2, 1);
     }
 
-    public static Predicate<Integer> prime() {
-        return new Predicate<Integer>() {
-            public boolean matches(Integer candidate) {
+    public static Predicate<Number> prime() {
+        return new Predicate<Number>() {
+            public boolean matches(Number candidate) {
                 return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(not(remainderIsZero(candidate)));
             }
         };
     }
 
-    public static Predicate<Integer> primeSquaredLessThan(final Integer candidate) {
-        return new Predicate<Integer>() {
-            public boolean matches(Integer prime) {
-                return (prime * prime) <= candidate ;
+    public static Predicate<Number> primeSquaredLessThan(final Number candidate) {
+        return new Predicate<Number>() {
+            public boolean matches(Number prime) {
+                return Numbers.lte(multiply(prime, prime),candidate);
             }
         };
     }
 
-    public static Predicate<Integer> remainderIsZero(final Integer dividend) {
-        return new Predicate<Integer>() {
-            public boolean matches(Integer divisor) {
-                return dividend % divisor == 0;
+    public static Predicate<Number> remainderIsZero(final Number dividend) {
+        return new Predicate<Number>() {
+            public boolean matches(Number divisor) {
+                return Numbers.isZero(remainder(dividend,divisor));
             }
         };
     }
 
-    public static Predicate<Integer> remainderIs(int divisor, int remainder) {
+    public static Predicate<Number> remainderIs(Number divisor, Number remainder) {
         return new RemainderIs(divisor, remainder);
     }
 

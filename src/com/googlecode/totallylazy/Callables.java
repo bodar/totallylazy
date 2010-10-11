@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.numbers.Numbers;
+
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -168,30 +170,30 @@ public class Callables {
         return call();
     }
 
-    public static Callable1<Integer, Integer> increment() {
+    public static Callable1<Number, Number> increment() {
         return add(1);
     }
 
-    public static Callable1<Integer, Integer> add(final int amount) {
+    public static Callable1<Number, Number> add(final Number amount) {
         return Callers.call(curry(add()), amount);
     }
 
-    public static Callable1<Integer, Integer> multiply(final int multiplicand) {
-        return Callers.call(curry(multiply()), multiplicand);
+    public static  <T extends Number>  Callable1<T, Number> multiply(final T multiplicand) {
+        return Callers.call(curry(Callables.<T>multiply()), multiplicand);
     }
 
-    public static Callable2<Integer, Integer, Integer> multiply() {
-        return new Callable2<Integer, Integer, Integer> () {
-            public Integer call(Integer multiplicand, Integer multiplier) throws Exception {
-                return multiplicand * multiplier;
+    public static <T extends Number> Callable2<T, T, Number> multiply() {
+        return new Callable2<T, T, Number> () {
+            public Number call(T multiplicand, T multiplier) throws Exception {
+                return Numbers.multiply(multiplicand,multiplier);
             }
         };
     }
 
-    public static Callable2<Integer, Integer, Integer> add() {
-        return new Callable2<Integer, Integer, Integer>() {
-            public Integer call(Integer a, Integer b) {
-                return a + b;
+    public static <T extends Number> Callable2<T, T, Number> add() {
+        return new Callable2<T, T, Number>() {
+            public Number call(T a, T b) {
+                return Numbers.add(a, b);
             }
         };
     }
