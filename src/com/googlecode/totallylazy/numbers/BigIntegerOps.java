@@ -11,7 +11,8 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
-import java.math.BigInteger;
+import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static java.math.BigInteger.ONE;
 
 final class BigIntegerOps implements Ops {
     public Ops combine(Ops y) {
@@ -27,15 +28,15 @@ final class BigIntegerOps implements Ops {
     }
 
     final public Ops opsWith(FloatOps x) {
-        return Numbers.FLOAT_OPS;
+        return FLOAT_OPS;
     }
 
     final public Ops opsWith(DoubleOps x) {
-        return Numbers.DOUBLE_OPS;
+        return DOUBLE_OPS;
     }
 
     final public Ops opsWith(RatioOps x) {
-        return Numbers.RATIO_OPS;
+        return RATIO_OPS;
     }
 
     final public Ops opsWith(BigIntegerOps x) {
@@ -43,64 +44,58 @@ final class BigIntegerOps implements Ops {
     }
 
     final public Ops opsWith(BigDecimalOps x) {
-        return Numbers.BIGDECIMAL_OPS;
+        return BIGDECIMAL_OPS;
     }
 
     public boolean isZero(Number x) {
-        BigInteger bx = Numbers.toBigInteger(x);
-        return bx.signum() == 0;
+        return toBigInteger(x).signum() == 0;
     }
 
-    public boolean isPos(Number x) {
-        BigInteger bx = Numbers.toBigInteger(x);
-        return bx.signum() > 0;
+    public boolean isPositive(Number x) {
+        return toBigInteger(x).signum() > 0;
     }
 
-    public boolean isNeg(Number x) {
-        BigInteger bx = Numbers.toBigInteger(x);
-        return bx.signum() < 0;
+    public boolean isNegative(Number x) {
+        return toBigInteger(x).signum() < 0;
     }
 
     final public Number add(Number x, Number y) {
-        return Numbers.reduce(Numbers.toBigInteger(x).add(Numbers.toBigInteger(y)));
+        return reduce(toBigInteger(x).add(toBigInteger(y)));
     }
 
     final public Number multiply(Number x, Number y) {
-        return Numbers.reduce(Numbers.toBigInteger(x).multiply(Numbers.toBigInteger(y)));
+        return reduce(toBigInteger(x).multiply(toBigInteger(y)));
     }
 
     public Number divide(Number x, Number y) {
-        return Numbers.divide(Numbers.toBigInteger(x), Numbers.toBigInteger(y));
+        return divide(toBigInteger(x), toBigInteger(y));
     }
 
     public Number quotient(Number x, Number y) {
-        return Numbers.toBigInteger(x).divide(Numbers.toBigInteger(y));
+        return toBigInteger(x).divide(toBigInteger(y));
     }
 
     public Number remainder(Number x, Number y) {
-        return Numbers.toBigInteger(x).remainder(Numbers.toBigInteger(y));
+        return toBigInteger(x).remainder(toBigInteger(y));
     }
 
-    public boolean equiv(Number x, Number y) {
-        return Numbers.toBigInteger(x).equals(Numbers.toBigInteger(y));
+    public boolean equalTo(Number x, Number y) {
+        return toBigInteger(x).equals(toBigInteger(y));
     }
 
-    public boolean lt(Number x, Number y) {
-        return Numbers.toBigInteger(x).compareTo(Numbers.toBigInteger(y)) < 0;
+    public boolean lessThan(Number x, Number y) {
+        return toBigInteger(x).compareTo(toBigInteger(y)) < 0;
     }
 
-    //public Number subtract(Number x, Number y);
     final public Number negate(Number x) {
-        return Numbers.toBigInteger(x).negate();
+        return toBigInteger(x).negate();
     }
 
-    public Number inc(Number x) {
-        BigInteger bx = Numbers.toBigInteger(x);
-        return Numbers.reduce(bx.add(BigInteger.ONE));
+    public Number increment(Number x) {
+        return reduce(toBigInteger(x).add(ONE));
     }
 
-    public Number dec(Number x) {
-        BigInteger bx = Numbers.toBigInteger(x);
-        return Numbers.reduce(bx.subtract(BigInteger.ONE));
+    public Number decrement(Number x) {
+        return reduce(toBigInteger(x).subtract(ONE));
     }
 }

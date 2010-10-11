@@ -31,9 +31,9 @@ interface Ops {
 
     public boolean isZero(Number x);
 
-    public boolean isPos(Number x);
+    public boolean isPositive(Number x);
 
-    public boolean isNeg(Number x);
+    public boolean isNegative(Number x);
 
     public Number add(Number x, Number y);
 
@@ -45,13 +45,13 @@ interface Ops {
 
     public Number remainder(Number x, Number y);
 
-    public boolean equiv(Number x, Number y);
+    public boolean equalTo(Number x, Number y);
 
-    public boolean lt(Number x, Number y);
+    public boolean lessThan(Number x, Number y);
 
     public Number negate(Number x);
 
-    public Number inc(Number x);
+    public Number increment(Number x);
 
-    public Number dec(Number x);
+    public Number decrement(Number x);
 }

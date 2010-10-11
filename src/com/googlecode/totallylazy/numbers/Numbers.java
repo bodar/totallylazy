@@ -20,31 +20,31 @@ public class Numbers {
         return ops(x).isZero(x);
     }
 
-    static public boolean isPos(Number x) {
-        return ops(x).isPos(x);
+    static public boolean isPositive(Number x) {
+        return ops(x).isPositive(x);
     }
 
-    static public boolean isNeg(Number x) {
-        return ops(x).isNeg(x);
+    static public boolean isNegative(Number x) {
+        return ops(x).isNegative(x);
     }
 
-    static public Number minus(Number x) {
+    static public Number negate(Number x) {
         return ops(x).negate(x);
     }
 
-    static public Number inc(Number x) {
-        return ops(x).inc(x);
+    static public Number increment(Number x) {
+        return ops(x).increment(x);
     }
 
-    static public Number dec(Number x) {
-        return ops(x).dec(x);
+    static public Number decrement(Number x) {
+        return ops(x).decrement(x);
     }
 
     static public Number add(Number x, Number y) {
         return ops(x).combine(ops(y)).add(x, y);
     }
 
-    static public Number minus(Number x, Number y) {
+    static public Number subtract(Number x, Number y) {
         Ops yops = ops(y);
         return ops(x).combine(yops).add(x, yops.negate(y));
     }
@@ -94,30 +94,30 @@ public class Numbers {
     }
 
     static public boolean equiv(Number x, Number y) {
-        return ops(x).combine(ops(y)).equiv(x, y);
+        return ops(x).combine(ops(y)).equalTo(x, y);
     }
 
     static public boolean lt(Number x, Number y) {
-        return ops(x).combine(ops(y)).lt(x, y);
+        return ops(x).combine(ops(y)).lessThan(x, y);
     }
 
     static public boolean lte(Number x, Number y) {
-        return !ops(x).combine(ops(y)).lt(y, x);
+        return !ops(x).combine(ops(y)).lessThan(y, x);
     }
 
     static public boolean gt(Number x, Number y) {
-        return ops(x).combine(ops(y)).lt(y, x);
+        return ops(x).combine(ops(y)).lessThan(y, x);
     }
 
     static public boolean gte(Number x, Number y) {
-        return !ops(x).combine(ops(y)).lt(x, y);
+        return !ops(x).combine(ops(y)).lessThan(x, y);
     }
 
     static public int compare(Number x, Number y) {
         Ops ops = ops(x).combine(ops(y));
-        if (ops.lt(x, y))
+        if (ops.lessThan(x, y))
             return -1;
-        else if (ops.lt(y, x))
+        else if (ops.lessThan(y, x))
             return 1;
         return 0;
     }

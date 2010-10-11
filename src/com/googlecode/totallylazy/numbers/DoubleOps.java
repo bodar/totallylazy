@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
+import static com.googlecode.totallylazy.numbers.Numbers.quotient;
+import static com.googlecode.totallylazy.numbers.Numbers.remainder;
+
 /**
  * Copyright (c) Rich Hickey. All rights reserved.
  * The use and distribution terms for this software are covered by the
@@ -49,11 +52,11 @@ final class DoubleOps implements Ops {
         return x.doubleValue() == 0;
     }
 
-    public boolean isPos(Number x) {
+    public boolean isPositive(Number x) {
         return x.doubleValue() > 0;
     }
 
-    public boolean isNeg(Number x) {
+    public boolean isNegative(Number x) {
         return x.doubleValue() < 0;
     }
 
@@ -77,25 +80,23 @@ final class DoubleOps implements Ops {
         return Numbers.remainder(x.doubleValue(), y.doubleValue());
     }
 
-    public boolean equiv(Number x, Number y) {
+    public boolean equalTo(Number x, Number y) {
         return x.doubleValue() == y.doubleValue();
     }
 
-    public boolean lt(Number x, Number y) {
+    public boolean lessThan(Number x, Number y) {
         return x.doubleValue() < y.doubleValue();
     }
-
-    //public Number subtract(Number x, Number y);
 
     final public Number negate(Number x) {
         return -x.doubleValue();
     }
 
-    public Number inc(Number x) {
+    public Number increment(Number x) {
         return x.doubleValue() + 1;
     }
 
-    public Number dec(Number x) {
+    public Number decrement(Number x) {
         return x.doubleValue() - 1;
     }
 }

@@ -12,11 +12,11 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
-import java.math.BigDecimal;
-import java.math.MathContext;
+import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static java.math.BigDecimal.ONE;
+import static java.math.MathContext.UNLIMITED;
 
 final class BigDecimalOps implements Ops {
-    final static MathContext MATH_CONTEXT = MathContext.UNLIMITED;
 
     public Ops combine(Ops y) {
         return y.opsWith(this);
@@ -31,15 +31,15 @@ final class BigDecimalOps implements Ops {
     }
 
     final public Ops opsWith(FloatOps x) {
-        return Numbers.FLOAT_OPS;
+        return FLOAT_OPS;
     }
 
     final public Ops opsWith(DoubleOps x) {
-        return Numbers.DOUBLE_OPS;
+        return DOUBLE_OPS;
     }
 
     final public Ops opsWith(RatioOps x) {
-        return Numbers.RATIO_OPS;
+        return RATIO_OPS;
     }
 
     final public Ops opsWith(BigIntegerOps x) {
@@ -51,84 +51,54 @@ final class BigDecimalOps implements Ops {
     }
 
     public boolean isZero(Number x) {
-        BigDecimal bx = (BigDecimal) x;
-        return bx.signum() == 0;
+        return toBigDecimal(x).signum() == 0;
     }
 
-    public boolean isPos(Number x) {
-        BigDecimal bx = (BigDecimal) x;
-        return bx.signum() > 0;
+    public boolean isPositive(Number x) {
+        return toBigDecimal(x).signum() > 0;
     }
 
-    public boolean isNeg(Number x) {
-        BigDecimal bx = (BigDecimal) x;
-        return bx.signum() < 0;
+    public boolean isNegative(Number x) {
+        return toBigDecimal(x).signum() < 0;
     }
 
     final public Number add(Number x, Number y) {
-        MathContext mc = MATH_CONTEXT;
-        return mc == null
-                ? Numbers.toBigDecimal(x).add(Numbers.toBigDecimal(y))
-                : Numbers.toBigDecimal(x).add(Numbers.toBigDecimal(y), mc);
+        return toBigDecimal(x).add(toBigDecimal(y), UNLIMITED);
     }
 
     final public Number multiply(Number x, Number y) {
-        MathContext mc = MATH_CONTEXT;
-        return mc == null
-                ? Numbers.toBigDecimal(x).multiply(Numbers.toBigDecimal(y))
-                : Numbers.toBigDecimal(x).multiply(Numbers.toBigDecimal(y), mc);
+        return toBigDecimal(x).multiply(toBigDecimal(y), UNLIMITED);
     }
 
     public Number divide(Number x, Number y) {
-        MathContext mc = MATH_CONTEXT;
-        return mc == null
-                ? Numbers.toBigDecimal(x).divide(Numbers.toBigDecimal(y))
-                : Numbers.toBigDecimal(x).divide(Numbers.toBigDecimal(y), mc);
+        return toBigDecimal(x).divide(toBigDecimal(y), UNLIMITED);
     }
 
     public Number quotient(Number x, Number y) {
-        MathContext mc = MATH_CONTEXT;
-        return mc == null
-                ? Numbers.toBigDecimal(x).divideToIntegralValue(Numbers.toBigDecimal(y))
-                : Numbers.toBigDecimal(x).divideToIntegralValue(Numbers.toBigDecimal(y), mc);
+        return toBigDecimal(x).divideToIntegralValue(toBigDecimal(y), UNLIMITED);
     }
 
     public Number remainder(Number x, Number y) {
-        MathContext mc = MATH_CONTEXT;
-        return mc == null
-                ? Numbers.toBigDecimal(x).remainder(Numbers.toBigDecimal(y))
-                : Numbers.toBigDecimal(x).remainder(Numbers.toBigDecimal(y), mc);
+        return toBigDecimal(x).remainder(toBigDecimal(y), UNLIMITED);
     }
 
-    public boolean equiv(Number x, Number y) {
-        return Numbers.toBigDecimal(x).equals(Numbers.toBigDecimal(y));
+    public boolean equalTo(Number x, Number y) {
+        return toBigDecimal(x).equals(toBigDecimal(y));
     }
 
-    public boolean lt(Number x, Number y) {
-        return Numbers.toBigDecimal(x).compareTo(Numbers.toBigDecimal(y)) < 0;
+    public boolean lessThan(Number x, Number y) {
+        return toBigDecimal(x).compareTo(toBigDecimal(y)) < 0;
     }
 
-    //public Number subtract(Number x, Number y);
     final public Number negate(Number x) {
-        MathContext mc = MATH_CONTEXT;
-        return mc == null
-                ? ((BigDecimal) x).negate()
-                : ((BigDecimal) x).negate(mc);
+        return toBigDecimal(x).negate(UNLIMITED);
     }
 
-    public Number inc(Number x) {
-        MathContext mc = (MathContext) MATH_CONTEXT;
-        BigDecimal bx = (BigDecimal) x;
-        return mc == null
-                ? bx.add(BigDecimal.ONE)
-                : bx.add(BigDecimal.ONE, mc);
+    public Number increment(Number x) {
+        return toBigDecimal(x).add(ONE, UNLIMITED);
     }
 
-    public Number dec(Number x) {
-        MathContext mc = (MathContext) MATH_CONTEXT;
-        BigDecimal bx = (BigDecimal) x;
-        return mc == null
-                ? bx.subtract(BigDecimal.ONE)
-                : bx.subtract(BigDecimal.ONE, mc);
+    public Number decrement(Number x) {
+        return toBigDecimal(x).subtract(ONE, UNLIMITED);
     }
 }

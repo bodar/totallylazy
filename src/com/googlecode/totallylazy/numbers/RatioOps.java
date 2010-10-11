@@ -51,12 +51,12 @@ final class RatioOps implements Ops {
         return r.numerator.signum() == 0;
     }
 
-    public boolean isPos(Number x) {
+    public boolean isPositive(Number x) {
         Ratio r = (Ratio) x;
         return r.numerator.signum() > 0;
     }
 
-    public boolean isNeg(Number x) {
+    public boolean isNegative(Number x) {
         Ratio r = (Ratio) x;
         return r.numerator.signum() < 0;
     }
@@ -96,17 +96,17 @@ final class RatioOps implements Ops {
         Ratio ry = Numbers.toRatio(y);
         BigInteger q = rx.numerator.multiply(ry.denominator).divide(
                 rx.denominator.multiply(ry.numerator));
-        return Numbers.minus(x, Numbers.multiply(q, y));
+        return Numbers.subtract(x, Numbers.multiply(q, y));
     }
 
-    public boolean equiv(Number x, Number y) {
+    public boolean equalTo(Number x, Number y) {
         Ratio rx = Numbers.toRatio(x);
         Ratio ry = Numbers.toRatio(y);
         return rx.numerator.equals(ry.numerator)
                 && rx.denominator.equals(ry.denominator);
     }
 
-    public boolean lt(Number x, Number y) {
+    public boolean lessThan(Number x, Number y) {
         Ratio rx = Numbers.toRatio(x);
         Ratio ry = Numbers.toRatio(y);
         return Numbers.lt(rx.numerator.multiply(ry.denominator), ry.numerator.multiply(rx.denominator));
@@ -118,11 +118,11 @@ final class RatioOps implements Ops {
         return new Ratio(r.numerator.negate(), r.denominator);
     }
 
-    public Number inc(Number x) {
+    public Number increment(Number x) {
         return Numbers.add(x, 1);
     }
 
-    public Number dec(Number x) {
+    public Number decrement(Number x) {
         return Numbers.add(x, -1);
     }
 

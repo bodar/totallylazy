@@ -49,11 +49,11 @@ final class FloatOps implements Ops {
         return x.floatValue() == 0;
     }
 
-    public boolean isPos(Number x) {
+    public boolean isPositive(Number x) {
         return x.floatValue() > 0;
     }
 
-    public boolean isNeg(Number x) {
+    public boolean isNegative(Number x) {
         return x.floatValue() < 0;
     }
 
@@ -77,25 +77,23 @@ final class FloatOps implements Ops {
         return Numbers.remainder(x.doubleValue(), y.doubleValue());
     }
 
-    public boolean equiv(Number x, Number y) {
+    public boolean equalTo(Number x, Number y) {
         return x.floatValue() == y.floatValue();
     }
 
-    public boolean lt(Number x, Number y) {
+    public boolean lessThan(Number x, Number y) {
         return x.floatValue() < y.floatValue();
     }
-
-    //public Number subtract(Number x, Number y);
 
     final public Number negate(Number x) {
         return -x.floatValue();
     }
 
-    public Number inc(Number x) {
+    public Number increment(Number x) {
         return x.floatValue() + 1;
     }
 
-    public Number dec(Number x) {
+    public Number decrement(Number x) {
         return x.floatValue() - 1;
     }
 }

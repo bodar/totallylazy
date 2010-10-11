@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.numbers;
 
+import static com.googlecode.totallylazy.numbers.Numbers.toBigInteger;
+
 /**
  * Copyright (c) Rich Hickey. All rights reserved.
  * The use and distribution terms for this software are covered by the
@@ -30,46 +32,46 @@ final class BigIntegerBitOps implements BitOps {
     }
 
     public Number not(Number x) {
-        return Numbers.toBigInteger(x).not();
+        return toBigInteger(x).not();
     }
 
     public Number and(Number x, Number y) {
-        return Numbers.toBigInteger(x).and(Numbers.toBigInteger(y));
+        return toBigInteger(x).and(toBigInteger(y));
     }
 
     public Number or(Number x, Number y) {
-        return Numbers.toBigInteger(x).or(Numbers.toBigInteger(y));
+        return toBigInteger(x).or(toBigInteger(y));
     }
 
     public Number xor(Number x, Number y) {
-        return Numbers.toBigInteger(x).xor(Numbers.toBigInteger(y));
+        return toBigInteger(x).xor(toBigInteger(y));
     }
 
     public Number andNot(Number x, Number y) {
-        return Numbers.toBigInteger(x).andNot(Numbers.toBigInteger(y));
+        return toBigInteger(x).andNot(toBigInteger(y));
     }
 
     public Number clearBit(Number x, int n) {
-        return Numbers.toBigInteger(x).clearBit(n);
+        return toBigInteger(x).clearBit(n);
     }
 
     public Number setBit(Number x, int n) {
-        return Numbers.toBigInteger(x).setBit(n);
+        return toBigInteger(x).setBit(n);
     }
 
     public Number flipBit(Number x, int n) {
-        return Numbers.toBigInteger(x).flipBit(n);
+        return toBigInteger(x).flipBit(n);
     }
 
     public boolean testBit(Number x, int n) {
-        return Numbers.toBigInteger(x).testBit(n);
+        return toBigInteger(x).testBit(n);
     }
 
     public Number shiftLeft(Number x, int n) {
-        return Numbers.toBigInteger(x).shiftLeft(n);
+        return toBigInteger(x).shiftLeft(n);
     }
 
     public Number shiftRight(Number x, int n) {
-        return Numbers.toBigInteger(x).shiftRight(n);
+        return toBigInteger(x).shiftRight(n);
     }
 }
