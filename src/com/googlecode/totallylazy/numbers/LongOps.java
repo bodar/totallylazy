@@ -13,6 +13,12 @@ package com.googlecode.totallylazy.numbers;
 
 import java.math.BigInteger;
 
+import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.numbers.Numbers.BIGDECIMAL_OPS;
+import static java.lang.Long.MAX_VALUE;
+import static java.lang.Long.MIN_VALUE;
+import static java.math.BigInteger.valueOf;
+
 final class LongOps implements Ops {
     public Ops combine(Ops y) {
         return y.opsWith(this);
@@ -27,34 +33,34 @@ final class LongOps implements Ops {
     }
 
     final public Ops opsWith(FloatOps x) {
-        return Numbers.FLOAT_OPS;
+        return FLOAT_OPS;
     }
 
     final public Ops opsWith(DoubleOps x) {
-        return Numbers.DOUBLE_OPS;
+        return DOUBLE_OPS;
     }
 
     final public Ops opsWith(RatioOps x) {
-        return Numbers.RATIO_OPS;
+        return RATIO_OPS;
     }
 
     final public Ops opsWith(BigIntegerOps x) {
-        return Numbers.BIGINTEGER_OPS;
+        return BIGINTEGER_OPS;
     }
 
     final public Ops opsWith(BigDecimalOps x) {
-        return Numbers.BIGDECIMAL_OPS;
+        return BIGDECIMAL_OPS;
     }
 
     public boolean isZero(Number x) {
         return x.longValue() == 0;
     }
 
-    public boolean isPos(Number x) {
+    public boolean isPositive(Number x) {
         return x.longValue() > 0;
     }
 
-    public boolean isNeg(Number x) {
+    public boolean isNegative(Number x) {
         return x.longValue() < 0;
     }
 
@@ -62,7 +68,7 @@ final class LongOps implements Ops {
         long lx = x.longValue(), ly = y.longValue();
         long ret = lx + ly;
         if ((ret ^ lx) < 0 && (ret ^ ly) < 0)
-            return Numbers.BIGINTEGER_OPS.add(x, y);
+            return BIGINTEGER_OPS.add(x, y);
         return ret;
     }
 
@@ -70,7 +76,7 @@ final class LongOps implements Ops {
         long lx = x.longValue(), ly = y.longValue();
         long ret = lx * ly;
         if (ly != 0 && ret / ly != lx)
-            return Numbers.BIGINTEGER_OPS.multiply(x, y);
+            return BIGINTEGER_OPS.multiply(x, y);
         return ret;
     }
 
@@ -98,7 +104,7 @@ final class LongOps implements Ops {
             n = -n;
             d = -d;
         }
-        return new Ratio(BigInteger.valueOf(n), BigInteger.valueOf(d));
+        return new Ratio(valueOf(n), valueOf(d));
     }
 
     public Number quotient(Number x, Number y) {
@@ -109,33 +115,33 @@ final class LongOps implements Ops {
         return x.longValue() % y.longValue();
     }
 
-    public boolean equiv(Number x, Number y) {
+    public boolean equalTo(Number x, Number y) {
         return x.longValue() == y.longValue();
     }
 
-    public boolean lt(Number x, Number y) {
+    public boolean lessThan(Number x, Number y) {
         return x.longValue() < y.longValue();
     }
 
     //public Number subtract(Number x, Number y);
     final public Number negate(Number x) {
         long val = x.longValue();
-        if (val > Long.MIN_VALUE)
+        if (val > MIN_VALUE)
             return -val;
-        return BigInteger.valueOf(val).negate();
+        return valueOf(val).negate();
     }
 
-    public Number inc(Number x) {
+    public Number increment(Number x) {
         long val = x.longValue();
-        if (val < Long.MAX_VALUE)
+        if (val < MAX_VALUE)
             return val + 1;
-        return Numbers.BIGINTEGER_OPS.inc(x);
+        return BIGINTEGER_OPS.increment(x);
     }
 
-    public Number dec(Number x) {
+    public Number decrement(Number x) {
         long val = x.longValue();
-        if (val > Long.MIN_VALUE)
+        if (val > MIN_VALUE)
             return val - 1;
-        return Numbers.BIGINTEGER_OPS.dec(x);
+        return BIGINTEGER_OPS.decrement(x);
     }
 }

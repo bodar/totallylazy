@@ -13,6 +13,13 @@ package com.googlecode.totallylazy.numbers;
 
 import java.math.BigInteger;
 
+import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.numbers.Numbers.BIGDECIMAL_OPS;
+import static com.googlecode.totallylazy.numbers.Numbers.BIGINTEGER_OPS;
+import static java.lang.Integer.MAX_VALUE;
+import static java.lang.Integer.MIN_VALUE;
+import static java.math.BigInteger.valueOf;
+
 final class IntegerOps implements Ops {
     public Ops combine(Ops y) {
         return y.opsWith(this);
@@ -23,51 +30,51 @@ final class IntegerOps implements Ops {
     }
 
     final public Ops opsWith(LongOps x) {
-        return Numbers.LONG_OPS;
+        return LONG_OPS;
     }
 
     final public Ops opsWith(FloatOps x) {
-        return Numbers.FLOAT_OPS;
+        return FLOAT_OPS;
     }
 
     final public Ops opsWith(DoubleOps x) {
-        return Numbers.DOUBLE_OPS;
+        return DOUBLE_OPS;
     }
 
     final public Ops opsWith(RatioOps x) {
-        return Numbers.RATIO_OPS;
+        return RATIO_OPS;
     }
 
     final public Ops opsWith(BigIntegerOps x) {
-        return Numbers.BIGINTEGER_OPS;
+        return BIGINTEGER_OPS;
     }
 
     final public Ops opsWith(BigDecimalOps x) {
-        return Numbers.BIGDECIMAL_OPS;
+        return BIGDECIMAL_OPS;
     }
 
     public boolean isZero(Number x) {
         return x.intValue() == 0;
     }
 
-    public boolean isPos(Number x) {
+    public boolean isPositive(Number x) {
         return x.intValue() > 0;
     }
 
-    public boolean isNeg(Number x) {
+    public boolean isNegative(Number x) {
         return x.intValue() < 0;
     }
 
     final public Number add(Number x, Number y) {
         long ret = x.longValue() + y.longValue();
-        if (ret <= Integer.MAX_VALUE && ret >= Integer.MIN_VALUE)
+        if (ret <= MAX_VALUE && ret >= MIN_VALUE)
             return (int) ret;
         return ret;
     }
 
     final public Number multiply(Number x, Number y) {
         long ret = x.longValue() * y.longValue();
-        if (ret <= Integer.MAX_VALUE && ret >= Integer.MIN_VALUE)
+        if (ret <= MAX_VALUE && ret >= MIN_VALUE)
             return (int) ret;
         return ret;
     }
@@ -96,7 +103,7 @@ final class IntegerOps implements Ops {
             n = -n;
             d = -d;
         }
-        return new Ratio(BigInteger.valueOf(n), BigInteger.valueOf(d));
+        return new Ratio(valueOf(n), valueOf(d));
     }
 
     public Number quotient(Number x, Number y) {
@@ -107,32 +114,31 @@ final class IntegerOps implements Ops {
         return x.intValue() % y.intValue();
     }
 
-    public boolean equiv(Number x, Number y) {
+    public boolean equalTo(Number x, Number y) {
         return x.intValue() == y.intValue();
     }
 
-    public boolean lt(Number x, Number y) {
+    public boolean lessThan(Number x, Number y) {
         return x.intValue() < y.intValue();
     }
 
-    //public Number subtract(Number x, Number y);
     final public Number negate(Number x) {
         int val = x.intValue();
-        if (val > Integer.MIN_VALUE)
+        if (val > MIN_VALUE)
             return -val;
         return -((long) val);
     }
 
-    public Number inc(Number x) {
+    public Number increment(Number x) {
         int val = x.intValue();
-        if (val < Integer.MAX_VALUE)
+        if (val < MAX_VALUE)
             return val + 1;
         return (long) val + 1;
     }
 
-    public Number dec(Number x) {
+    public Number decrement(Number x) {
         int val = x.intValue();
-        if (val > Integer.MIN_VALUE)
+        if (val > MIN_VALUE)
             return val - 1;
         return (long) val - 1;
     }
