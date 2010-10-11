@@ -109,7 +109,7 @@ final class RatioOps implements Ops {
     public boolean lessThan(Number x, Number y) {
         Ratio rx = Numbers.toRatio(x);
         Ratio ry = Numbers.toRatio(y);
-        return Numbers.lt(rx.numerator.multiply(ry.denominator), ry.numerator.multiply(rx.denominator));
+        return Numbers.lessThan(rx.numerator.multiply(ry.denominator), ry.numerator.multiply(rx.denominator));
     }
 
     //public Number subtract(Number x, Number y);

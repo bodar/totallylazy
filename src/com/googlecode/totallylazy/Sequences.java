@@ -62,7 +62,7 @@ public class Sequences {
 //    private static Predicate<? super Pair<Number, Number>> factorIsLessThanCeiling() {
 //        return new Predicate<Pair<Number, Number>>() {
 //            public boolean matches(Pair<Number, Number> pair) {
-//                return Numbers.lte(Numbers.multiply(pair.first(), pair.first()) , pair.second());
+//                return Numbers.lessThanOrEqual(Numbers.multiply(pair.first(), pair.first()) , pair.second());
 //            }
 //        };
 //    }

@@ -109,10 +109,10 @@ public class SequenceTest {
 
     Callable1<Integer, Option<String>> someVeryExpensiveOperation = new Callable1<Integer, Option<String>>() {
         public Option<String> call(Integer number) throws Exception {
-            if(Numbers.equiv(number, 1)) {
+            if(Numbers.equalTo(number, 1)) {
                 return none(); // the conversion didn't work
             }
-            if(Numbers.equiv(number, 2)) {
+            if(Numbers.equalTo(number, 2)) {
                     return some("converted"); // the conversion worked so don't do any more
             }
             throw new AssertionError("should never get here");
