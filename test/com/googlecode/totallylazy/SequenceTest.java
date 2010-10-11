@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.numbers.Numbers;
+import com.googlecode.totallylazy.predicates.NumberMatcher;
 import org.junit.Test;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Sequences.*;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
@@ -22,9 +25,6 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Predicates.odd;
-import static com.googlecode.totallylazy.Sequences.cons;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sequences.sort;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
@@ -108,11 +108,11 @@ public class SequenceTest {
     }
 
     Callable1<Integer, Option<String>> someVeryExpensiveOperation = new Callable1<Integer, Option<String>>() {
-        public Option<String> call(Integer integer) throws Exception {
-            switch (integer) {
-                case 1:
-                    return none(); // the conversion didn't work
-                case 2:
+        public Option<String> call(Integer number) throws Exception {
+            if(Numbers.equiv(number, 1)) {
+                return none(); // the conversion didn't work
+            }
+            if(Numbers.equiv(number, 2)) {
                     return some("converted"); // the conversion worked so don't do any more
             }
             throw new AssertionError("should never get here");
@@ -146,7 +146,7 @@ public class SequenceTest {
 
     @Test
     public void canFilterNull() throws Exception {
-        final Sequence<Integer> numbers = sequence(1, null, 3).filter(notNull(Integer.class));
+        final Sequence<Integer> numbers = sequence(1, null, 3).filter(notNull(Number.class));
         assertThat(numbers, hasExactly(1, 3));
     }
 
@@ -192,14 +192,14 @@ public class SequenceTest {
 
     @Test
     public void supportsReduceLeft() throws Exception {
-        int sum = sequence(1, 2, 3).reduceLeft(add());
-        assertThat(sum, is(6));
+        Number sum = sequence((Number)1, 2, 3).reduceLeft(add());
+        assertThat(sum, NumberMatcher.is(6));
     }
 
     @Test
     public void supportsFoldLeft() throws Exception {
-        int sum = sequence(1, 2, 3).foldLeft(0, add());
-        assertThat(sum, is(6));
+        Number sum = sequence(1, 2, 3).foldLeft(0, add());
+        assertThat(sum, NumberMatcher.is(6));
     }
 
     @Test
@@ -215,7 +215,7 @@ public class SequenceTest {
     @Test
     public void supportsHeadOrOption() throws Exception {
         assertThat(sequence(1).headOption(), is((Option<Integer>) Option.<Integer>some(1)));
-        assertThat(Sequences.<Integer>sequence().headOption(), is((Option<Integer>) Option.<Integer>none()));
+        assertThat(Sequences.<Number>sequence().headOption(), is((Option<Number>) Option.<Number>none()));
     }
 
 
@@ -280,7 +280,7 @@ public class SequenceTest {
         final Sequence<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).takeWhile(odd());
         assertThat(sequence, hasExactly(1, 3, 5));
         assertThat(sequence(1).takeWhile(odd()).size(), is(1));
-        assertThat(Sequences.<Integer>sequence().takeWhile(odd()).size(), is(0));
+        assertThat(Sequences.<Number>sequence().takeWhile(odd()).size(), is(0));
     }
 
     @Test
@@ -296,7 +296,7 @@ public class SequenceTest {
         final Sequence<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).dropWhile(odd());
         assertThat(sequence, hasExactly(6, 8, 1, 3));
         assertThat(sequence(1).dropWhile(odd()).size(), is(0));
-        assertThat(Sequences.<Integer>sequence().dropWhile(odd()).size(), is(0));
+        assertThat(Sequences.<Number>sequence().dropWhile(odd()).size(), is(0));
     }
 
     @Test
@@ -310,6 +310,6 @@ public class SequenceTest {
 
     @Test
     public void supportsZipWithIndex() {
-        assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(), hasExactly(pair(0, "Dan"), pair(1, "Matt"), pair(2, "Bob")));
+        assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(), hasExactly(pair((Number)0, "Dan"), pair((Number)1, "Matt"), pair((Number)2, "Bob")));
     }
 }

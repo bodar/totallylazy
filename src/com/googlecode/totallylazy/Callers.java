@@ -49,7 +49,7 @@ public class Callers {
         }
     }
 
-    public static <T, S, R> R call(Callable2<T, S, R> callable, T t, S s) {
+    public static <T, S, R> R call(Callable2<? super T, ? super S, R> callable, T t, S s) {
         try {
             return callable.call(t, s);
         } catch (LazyException e) {

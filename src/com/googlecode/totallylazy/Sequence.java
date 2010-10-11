@@ -15,7 +15,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.map(this, callable);
     }
 
-    public Sequence<T> filter(final Predicate<T> predicate) {
+    public Sequence<T> filter(final Predicate<? super T> predicate) {
         return Sequences.filter(this, predicate);
     }
 
@@ -43,11 +43,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.tail(this);
     }
 
-    public <S> S foldLeft(final S seed, final Callable2<S, T, S> callable) {
+    public <S> S foldLeft(final S seed, final Callable2<? super S, ? super T, S> callable) {
         return Sequences.foldLeft(this, seed, callable);
     }
 
-    public T reduceLeft(final Callable2<T, T, T> callable) {
+    public T reduceLeft(final Callable2<? super T, ? super T, T> callable) {
         return Sequences.reduceLeft(this, callable);
     }
 
@@ -99,7 +99,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.take(this, count);
     }
 
-    public Sequence<T> takeWhile(Predicate<T> predicate) {
+    public Sequence<T> takeWhile(final Predicate<? super T> predicate) {
         return Sequences.takeWhile(this, predicate);
     }
 
@@ -107,11 +107,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.drop(this, count);
     }
 
-    public Sequence<T> dropWhile(Predicate<T> predicate) {
+    public Sequence<T> dropWhile(final Predicate<? super T> predicate) {
         return Sequences.dropWhile(this, predicate);
     }
 
-    public boolean forAll(final Predicate<T> predicate) {
+    public boolean forAll(final Predicate<? super T> predicate) {
         return Sequences.forAll(this, predicate);
     }
 
@@ -119,11 +119,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.contains(this, t);
     }
 
-    public boolean exists(final Predicate<T> predicate) {
+    public boolean exists(final Predicate<? super T> predicate) {
         return Sequences.exists(this, predicate);
     }
 
-    public Option<T> find(final Predicate<T> predicate) {
+    public Option<T> find(final Predicate<? super T> predicate) {
         return Sequences.find(this, predicate);
     }
 
@@ -155,7 +155,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.zip(this, iterable);
     }
 
-    public Sequence<Pair<Integer, T>> zipWithIndex() {
+    public Sequence<Pair<Number, T>> zipWithIndex() {
         return Sequences.zipWithIndex(this);
     }
 
@@ -163,7 +163,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.sortBy(this, callable);
     }
 
-    public Sequence<T> sortBy(final Comparator<T> comparator) {
+    public Sequence<T> sortBy(final Comparator<? super T> comparator) {
         return Sequences.sortBy(this, comparator);
     }
 

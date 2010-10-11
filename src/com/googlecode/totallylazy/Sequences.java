@@ -4,19 +4,10 @@ import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
 import com.googlecode.totallylazy.iterators.ZipIterator;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static com.googlecode.totallylazy.Callables.ascending;
-import static com.googlecode.totallylazy.Callables.increment;
-import static com.googlecode.totallylazy.Callables.multiply;
-import static com.googlecode.totallylazy.Callables.reduceAndShift;
-import static com.googlecode.totallylazy.Predicates.prime;
-import static com.googlecode.totallylazy.Predicates.primeSquaredLessThan;
-import static com.googlecode.totallylazy.Predicates.remainderIsZero;
+import static com.googlecode.totallylazy.Callables.*;
+import static com.googlecode.totallylazy.Predicates.*;
 import static java.nio.CharBuffer.wrap;
 
 public class Sequences {
@@ -52,20 +43,53 @@ public class Sequences {
         });
     }
 
-    public static Sequence<Integer> primeFactorsOf(int value) {
+    public static Sequence<Number> primeFactorsOf(Number value) {
         return primes().takeWhile(primeSquaredLessThan(value)).filter(remainderIsZero(value));
     }
 
-    private static final MemorisedSequence<Integer> primes = sequence(2).join(iterate(Callables.add(2), 3).filter(prime())).memorise();
-    public static MemorisedSequence<Integer> primes() {
+//    public static Sequence<Number> primeFactorsOf(Number value) {
+//        return iterate(incrementCandidateFactorAndReduceCeiling(), pair((Number)2, value)).filter(factorsOfCeiling()).takeWhile(factorIsLessThanCeiling()).map(Callables.<Number>first());
+//    }
+//
+//    private static Predicate<? super Pair<Number, Number>> factorsOfCeiling() {
+//        return new Predicate<Pair<Number, Number>>() {
+//            public boolean matches(Pair<Number, Number> pair) {
+//                return isZero(remainder(pair.second(), pair.first()));
+//            }
+//        };
+//    }
+//
+//    private static Predicate<? super Pair<Number, Number>> factorIsLessThanCeiling() {
+//        return new Predicate<Pair<Number, Number>>() {
+//            public boolean matches(Pair<Number, Number> pair) {
+//                return Numbers.lte(Numbers.multiply(pair.first(), pair.first()) , pair.second());
+//            }
+//        };
+//    }
+//
+//    private static Callable1<? super Pair<Number, Number>, Pair<Number, Number>> incrementCandidateFactorAndReduceCeiling() {
+//        return new Callable1<Pair<Number, Number>, Pair<Number, Number>>() {
+//            public Pair<Number, Number> call(Pair<Number, Number> pair) throws Exception {
+//                Number ceiling = pair.second();
+//                if(isZero(remainder(pair.second(), pair.first()))){
+//                    ceiling = Numbers.divide(pair.second(), pair.first());
+//                }
+//                return pair(Numbers.add(pair.first(), 1), ceiling);
+//            }
+//        };
+//    }
+
+    private static final MemorisedSequence<Number> primes = Sequences.<Number>sequence(2).join(iterate(Callables.add(2), 3).filter(prime())).memorise();
+
+    public static MemorisedSequence<Number> primes() {
         return primes;
     }
 
-    public static Sequence<Integer> fibonacci() {
-        return iterate(reduceAndShift(Callables.add()), sequence(0, 1)).map(Callables.<Integer>first());
+    public static Sequence<Number> fibonacci() {
+        return iterate(reduceAndShift(Callables.add()), Sequences.<Number>sequence(0, 1)).map(Callables.<Number>first());
     }
 
-    public static Sequence<Integer> powersOf(int amount) {
+    public static Sequence<Number> powersOf(Number amount) {
         return iterate(multiply(amount), 1);
     }
 
@@ -89,7 +113,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> filter(final Iterable<T> iterable, final Predicate<T> predicate) {
+    public static <T> Sequence<T> filter(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return Iterators.filter(iterable.iterator(), predicate);
@@ -165,11 +189,11 @@ public class Sequences {
         };
     }
 
-    public static <T, S> S foldLeft(final Iterable<T> iterable, S seed, Callable2<S, T, S> callable) {
+    public static <T, S> S foldLeft(final Iterable<T> iterable, S seed, Callable2<? super S, ? super T, S> callable) {
         return Iterators.foldLeft(iterable.iterator(), seed, callable);
     }
 
-    public static <T> T reduceLeft(final Iterable<T> iterable, Callable2<T, T, T> callable) {
+    public static <T> T reduceLeft(final Iterable<T> iterable, Callable2<? super T, ? super T, T> callable) {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
 
@@ -221,7 +245,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> takeWhile(final Iterable<T> iterable, final Predicate<T> predicate) {
+    public static <T> Sequence<T> takeWhile(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return Iterators.takeWhile(iterable.iterator(), predicate);
@@ -237,7 +261,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> dropWhile(final Iterable<T> iterable, final Predicate<T> predicate) {
+    public static <T> Sequence<T> dropWhile(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return Iterators.dropWhile(iterable.iterator(), predicate);
@@ -245,7 +269,7 @@ public class Sequences {
         };
     }
 
-    public static <T> boolean forAll(final Iterable<T> iterable, final Predicate<T> predicate) {
+    public static <T> boolean forAll(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return Iterators.forAll(iterable.iterator(), predicate);
     }
 
@@ -253,11 +277,11 @@ public class Sequences {
         return Iterators.contains(iterable.iterator(), t);
     }
 
-    public static <T> boolean exists(final Iterable<T> iterable, final Predicate<T> predicate) {
+    public static <T> boolean exists(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return Iterators.exists(iterable.iterator(), predicate);
     }
 
-    public static <T> Option<T> find(final Iterable<T> iterable, final Predicate<T> predicate) {
+    public static <T> Option<T> find(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return Iterators.find(iterable.iterator(), predicate);
     }
 
@@ -305,15 +329,15 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<Pair<Integer, T>> zipWithIndex(final Iterable<T> iterable) {
+    public static <T> Sequence<Pair<Number, T>> zipWithIndex(final Iterable<T> iterable) {
         return zip(iterate(increment(), 0), iterable);
     }
 
-    public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<T,? extends Comparable> callable) {
+    public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<T, ? extends Comparable> callable) {
         return sortBy(iterable, ascending(callable));
     }
 
-    public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Comparator<T> comparator) {
+    public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Comparator<? super T> comparator) {
         List<T> result = sequence(iterable).toList();
         Collections.sort(result, comparator);
         return sequence(result);
@@ -325,7 +349,7 @@ public class Sequences {
         return sequence(result);
     }
 
-    public static <T,S> Sequence<S> safeCast(final Iterable<T> iterable, final Class<S> aClass) {
+    public static <T, S> Sequence<S> safeCast(final Iterable<T> iterable, final Class<S> aClass) {
         return new Sequence<S>() {
             public Iterator<S> iterator() {
                 return Iterators.safeCast(iterable.iterator(), aClass);

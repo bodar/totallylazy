@@ -65,7 +65,7 @@ public class Iterators {
         throw new NoSuchElementException();
     }
 
-    public static <T, S> S foldLeft(final Iterator<T> iterator, final S seed, final Callable2<S, T, S> callable) {
+    public static <T, S> S foldLeft(final Iterator<T> iterator, final S seed, final Callable2<? super S, ? super T, S> callable) {
         S accumilator = seed;
         while (iterator.hasNext()) {
             accumilator = call(callable, accumilator, iterator.next());
@@ -73,7 +73,7 @@ public class Iterators {
         return accumilator;
     }
 
-    public static <T> T reduceLeft(final Iterator<T> iterator, final Callable2<T, T, T> callable) {
+    public static <T,R> T reduceLeft(final Iterator<T> iterator, final Callable2<? super T, ? super T, T> callable) {
         return foldLeft(iterator, iterator.next(), callable);
     }
 
@@ -143,7 +143,7 @@ public class Iterators {
         return takeWhile(iterator, Predicates.<T>countTo(count));
     }
 
-    public static <T> Iterator<T> takeWhile(final Iterator<T> iterator, final Predicate<T> predicate) {
+    public static <T> Iterator<T> takeWhile(final Iterator<T> iterator, final Predicate<? super T> predicate) {
         return new TakeWhileIterator<T>(iterator, predicate);
     }
 
@@ -151,11 +151,11 @@ public class Iterators {
         return dropWhile(iterator, Predicates.<T>countTo(count));
     }
 
-    public static <T> Iterator<T> dropWhile(final Iterator<T> iterator, final Predicate<T> predicate) {
+    public static <T> Iterator<T> dropWhile(final Iterator<T> iterator, final Predicate<? super T> predicate) {
         return filter(iterator, not(whileTrue(predicate)));
     }
 
-    public static <T> boolean forAll(Iterator<T> iterator, Predicate<T> predicate) {
+    public static <T> boolean forAll(Iterator<T> iterator, Predicate<? super T> predicate) {
         while(iterator.hasNext()){
             boolean result = predicate.matches(iterator.next());
             if(!result){
@@ -169,7 +169,7 @@ public class Iterators {
         return exists(iterator, is(t));
     }
 
-    public static <T> boolean exists(Iterator<T> iterator, Predicate<T> predicate) {
+    public static <T> boolean exists(Iterator<T> iterator, Predicate<? super T> predicate) {
         while(iterator.hasNext()){
             boolean result = predicate.matches(iterator.next());
             if(result){
@@ -179,7 +179,7 @@ public class Iterators {
         return false;
     }
 
-    public static <T> Option<T> find(Iterator<T> iterator, Predicate<T> predicate) {
+    public static <T> Option<T> find(Iterator<T> iterator, Predicate<? super T> predicate) {
         while(iterator.hasNext()){
             T item = iterator.next();
             boolean result = predicate.matches(item);

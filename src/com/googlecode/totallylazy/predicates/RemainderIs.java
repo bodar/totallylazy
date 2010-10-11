@@ -1,17 +1,21 @@
 package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.numbers.Numbers;
 
-public class RemainderIs implements Predicate<Integer> {
-    private final int divisor;
-    private final int remainder;
+import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 
-    public RemainderIs(int divisor, int remainder) {
+public class RemainderIs implements Predicate<Number> {
+    private final Number divisor;
+    private final Number remainder;
+
+    public RemainderIs(Number divisor, Number remainder) {
         this.divisor = divisor;
         this.remainder = remainder;
     }
 
-    public boolean matches(Integer dividend) {
-        return dividend % divisor == remainder;
+    public boolean matches(Number dividend) {
+        return Numbers.equiv(remainder(dividend, divisor), remainder);
     }
+
 }
