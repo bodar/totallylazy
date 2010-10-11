@@ -93,23 +93,23 @@ public class Numbers {
         }
     }
 
-    static public boolean equiv(Number x, Number y) {
+    static public boolean equalTo(Number x, Number y) {
         return ops(x).combine(ops(y)).equalTo(x, y);
     }
 
-    static public boolean lt(Number x, Number y) {
+    static public boolean lessThan(Number x, Number y) {
         return ops(x).combine(ops(y)).lessThan(x, y);
     }
 
-    static public boolean lte(Number x, Number y) {
+    static public boolean lessThanOrEqual(Number x, Number y) {
         return !ops(x).combine(ops(y)).lessThan(y, x);
     }
 
-    static public boolean gt(Number x, Number y) {
+    static public boolean greaterThan(Number x, Number y) {
         return ops(x).combine(ops(y)).lessThan(y, x);
     }
 
-    static public boolean gte(Number x, Number y) {
+    static public boolean greaterThanOrEqual(Number x, Number y) {
         return !ops(x).combine(ops(y)).lessThan(x, y);
     }
 

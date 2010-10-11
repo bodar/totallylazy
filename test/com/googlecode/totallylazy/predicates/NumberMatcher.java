@@ -18,7 +18,7 @@ public class NumberMatcher extends TypeSafeMatcher<Number> {
 
     @Override
     protected boolean matchesSafely(Number number) {
-        return Numbers.equiv(number, other);
+        return Numbers.equalTo(number, other);
     }
 
     public static Matcher<? super Number> is(final Number other) {

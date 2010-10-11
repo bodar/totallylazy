@@ -62,7 +62,7 @@ public class Predicates {
     public static Predicate<Number> primeSquaredLessThan(final Number candidate) {
         return new Predicate<Number>() {
             public boolean matches(Number prime) {
-                return Numbers.lte(multiply(prime, prime),candidate);
+                return Numbers.lessThanOrEqual(multiply(prime, prime),candidate);
             }
         };
     }

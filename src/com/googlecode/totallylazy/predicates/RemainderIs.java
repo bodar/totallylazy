@@ -15,7 +15,7 @@ public class RemainderIs implements Predicate<Number> {
     }
 
     public boolean matches(Number dividend) {
-        return Numbers.equiv(remainder(dividend, divisor), remainder);
+        return Numbers.equalTo(remainder(dividend, divisor), remainder);
     }
 
 }
