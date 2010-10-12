@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.callables;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Runnable1;
 import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
@@ -32,12 +34,24 @@ public class TimeCallable<T> implements Callable<T> {
     }
 
     public static <T> Sequence<T> time(Sequence<T> sequence){
-        return time(sequence, Runnables.<Double>printLine(System.out, FORMAT));
+        return time(sequence, TimeCallable.<T>realise(),Runnables.<Double>printLine(System.out, FORMAT));
     }
 
-    public static <T> Sequence<T> time(Sequence<T> sequence, Runnable1<Double> reporter){
+    public static <T> Callable1<Sequence<T>, Sequence<T>> realise() {
+        return new Callable1<Sequence<T>, Sequence<T>>() {
+            public Sequence<T> call(Sequence<T> sequence) throws Exception {
+                return sequence.realise();
+            }
+        };
+    }
+
+    public static <T, R> R time(Sequence<T> sequence, Callable1<Sequence<T>, R> callable){
+        return time(sequence, callable, Runnables.<Double>printLine(System.out, FORMAT));
+    }
+
+    public static <T, R> R time(Sequence<T> sequence, Callable1<Sequence<T>, R> callable, Runnable1<Double> reporter){
         long start = System.nanoTime();
-        Sequence<T> result = sequence.realise();
+        R result = Callers.call(callable, sequence);
         reporter.run(calculateMilliseconds(start, System.nanoTime()));
         return result;
     }

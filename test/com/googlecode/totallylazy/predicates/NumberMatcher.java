@@ -13,7 +13,7 @@ public class NumberMatcher extends TypeSafeMatcher<Number> {
     }
 
     public void describeTo(Description description) {
-
+        description.appendValue(other);
     }
 
     @Override
