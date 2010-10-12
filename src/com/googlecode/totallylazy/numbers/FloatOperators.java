@@ -1,8 +1,5 @@
 package com.googlecode.totallylazy.numbers;
 
-import static com.googlecode.totallylazy.numbers.Numbers.quotient;
-import static com.googlecode.totallylazy.numbers.Numbers.remainder;
-
 /**
  * Copyright (c) Rich Hickey. All rights reserved.
  * The use and distribution terms for this software are covered by the
@@ -15,61 +12,61 @@ import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 
 /* rich Mar 31, 2008 */
 
-final class DoubleOps implements Ops {
-    public Ops combine(Ops y) {
+final class FloatOperators implements Operators {
+    public Operators combine(Operators y) {
         return y.opsWith(this);
     }
 
-    final public Ops opsWith(IntegerOps x) {
+    final public Operators opsWith(IntegerOperators x) {
         return this;
     }
 
-    final public Ops opsWith(LongOps x) {
+    final public Operators opsWith(LongOperators x) {
         return this;
     }
 
-    final public Ops opsWith(FloatOps x) {
+    final public Operators opsWith(FloatOperators x) {
         return this;
     }
 
-    final public Ops opsWith(DoubleOps x) {
+    final public Operators opsWith(DoubleOperators x) {
+        return Numbers.DOUBLE_OPS;
+    }
+
+    final public Operators opsWith(RatioOperators x) {
         return this;
     }
 
-    final public Ops opsWith(RatioOps x) {
+    final public Operators opsWith(BigIntegerOperators x) {
         return this;
     }
 
-    final public Ops opsWith(BigIntegerOps x) {
-        return this;
-    }
-
-    final public Ops opsWith(BigDecimalOps x) {
+    final public Operators opsWith(BigDecimalOperators x) {
         return this;
     }
 
     public boolean isZero(Number x) {
-        return x.doubleValue() == 0;
+        return x.floatValue() == 0;
     }
 
     public boolean isPositive(Number x) {
-        return x.doubleValue() > 0;
+        return x.floatValue() > 0;
     }
 
     public boolean isNegative(Number x) {
-        return x.doubleValue() < 0;
+        return x.floatValue() < 0;
     }
 
     final public Number add(Number x, Number y) {
-        return x.doubleValue() + y.doubleValue();
+        return x.floatValue() + y.floatValue();
     }
 
     final public Number multiply(Number x, Number y) {
-        return x.doubleValue() * y.doubleValue();
+        return x.floatValue() * y.floatValue();
     }
 
     public Number divide(Number x, Number y) {
-        return x.doubleValue() / y.doubleValue();
+        return x.floatValue() / y.floatValue();
     }
 
     public Number quotient(Number x, Number y) {
@@ -81,22 +78,22 @@ final class DoubleOps implements Ops {
     }
 
     public boolean equalTo(Number x, Number y) {
-        return x.doubleValue() == y.doubleValue();
+        return x.floatValue() == y.floatValue();
     }
 
     public boolean lessThan(Number x, Number y) {
-        return x.doubleValue() < y.doubleValue();
+        return x.floatValue() < y.floatValue();
     }
 
     final public Number negate(Number x) {
-        return -x.doubleValue();
+        return -x.floatValue();
     }
 
     public Number increment(Number x) {
-        return x.doubleValue() + 1;
+        return x.floatValue() + 1;
     }
 
     public Number decrement(Number x) {
-        return x.doubleValue() - 1;
+        return x.floatValue() - 1;
     }
 }

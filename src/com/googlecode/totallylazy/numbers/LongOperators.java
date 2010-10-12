@@ -11,77 +11,76 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
-import java.math.BigInteger;
-
 import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static com.googlecode.totallylazy.numbers.Numbers.BIGDECIMAL_OPS;
-import static com.googlecode.totallylazy.numbers.Numbers.BIGINTEGER_OPS;
-import static java.lang.Integer.MAX_VALUE;
-import static java.lang.Integer.MIN_VALUE;
+import static java.lang.Long.MAX_VALUE;
+import static java.lang.Long.MIN_VALUE;
 import static java.math.BigInteger.valueOf;
 
-final class IntegerOps implements Ops {
-    public Ops combine(Ops y) {
+final class LongOperators implements Operators {
+    public Operators combine(Operators y) {
         return y.opsWith(this);
     }
 
-    final public Ops opsWith(IntegerOps x) {
+    final public Operators opsWith(IntegerOperators x) {
         return this;
     }
 
-    final public Ops opsWith(LongOps x) {
-        return LONG_OPS;
+    final public Operators opsWith(LongOperators x) {
+        return this;
     }
 
-    final public Ops opsWith(FloatOps x) {
+    final public Operators opsWith(FloatOperators x) {
         return FLOAT_OPS;
     }
 
-    final public Ops opsWith(DoubleOps x) {
+    final public Operators opsWith(DoubleOperators x) {
         return DOUBLE_OPS;
     }
 
-    final public Ops opsWith(RatioOps x) {
+    final public Operators opsWith(RatioOperators x) {
         return RATIO_OPS;
     }
 
-    final public Ops opsWith(BigIntegerOps x) {
+    final public Operators opsWith(BigIntegerOperators x) {
         return BIGINTEGER_OPS;
     }
 
-    final public Ops opsWith(BigDecimalOps x) {
+    final public Operators opsWith(BigDecimalOperators x) {
         return BIGDECIMAL_OPS;
     }
 
     public boolean isZero(Number x) {
-        return x.intValue() == 0;
+        return x.longValue() == 0;
     }
 
     public boolean isPositive(Number x) {
-        return x.intValue() > 0;
+        return x.longValue() > 0;
     }
 
     public boolean isNegative(Number x) {
-        return x.intValue() < 0;
+        return x.longValue() < 0;
     }
 
     final public Number add(Number x, Number y) {
-        long ret = x.longValue() + y.longValue();
-        if (ret <= MAX_VALUE && ret >= MIN_VALUE)
-            return (int) ret;
+        long lx = x.longValue(), ly = y.longValue();
+        long ret = lx + ly;
+        if ((ret ^ lx) < 0 && (ret ^ ly) < 0)
+            return BIGINTEGER_OPS.add(x, y);
         return ret;
     }
 
     final public Number multiply(Number x, Number y) {
-        long ret = x.longValue() * y.longValue();
-        if (ret <= MAX_VALUE && ret >= MIN_VALUE)
-            return (int) ret;
+        long lx = x.longValue(), ly = y.longValue();
+        long ret = lx * ly;
+        if (ly != 0 && ret / ly != lx)
+            return BIGINTEGER_OPS.multiply(x, y);
         return ret;
     }
 
-    static int gcd(int u, int v) {
+    static long gcd(long u, long v) {
         while (v != 0) {
-            int r = u % v;
+            long r = u % v;
             u = v;
             v = r;
         }
@@ -89,14 +88,14 @@ final class IntegerOps implements Ops {
     }
 
     public Number divide(Number x, Number y) {
-        int n = x.intValue();
-        int val = y.intValue();
-        int gcd = gcd(n, val);
+        long n = x.longValue();
+        long val = y.longValue();
+        long gcd = gcd(n, val);
         if (gcd == 0)
             return 0;
 
         n = n / gcd;
-        int d = val / gcd;
+        long d = val / gcd;
         if (d == 1)
             return n;
         if (d < 0) {
@@ -107,39 +106,40 @@ final class IntegerOps implements Ops {
     }
 
     public Number quotient(Number x, Number y) {
-        return x.intValue() / y.intValue();
+        return x.longValue() / y.longValue();
     }
 
     public Number remainder(Number x, Number y) {
-        return x.intValue() % y.intValue();
+        return x.longValue() % y.longValue();
     }
 
     public boolean equalTo(Number x, Number y) {
-        return x.intValue() == y.intValue();
+        return x.longValue() == y.longValue();
     }
 
     public boolean lessThan(Number x, Number y) {
-        return x.intValue() < y.intValue();
+        return x.longValue() < y.longValue();
     }
 
+    //public Number subtract(Number x, Number y);
     final public Number negate(Number x) {
-        int val = x.intValue();
+        long val = x.longValue();
         if (val > MIN_VALUE)
             return -val;
-        return -((long) val);
+        return valueOf(val).negate();
     }
 
     public Number increment(Number x) {
-        int val = x.intValue();
+        long val = x.longValue();
         if (val < MAX_VALUE)
             return val + 1;
-        return (long) val + 1;
+        return BIGINTEGER_OPS.increment(x);
     }
 
     public Number decrement(Number x) {
-        int val = x.intValue();
+        long val = x.longValue();
         if (val > MIN_VALUE)
             return val - 1;
-        return (long) val - 1;
+        return BIGINTEGER_OPS.decrement(x);
     }
 }

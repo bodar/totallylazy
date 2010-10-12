@@ -12,14 +12,14 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
-interface BitOps {
-    BitOps combine(BitOps y);
+interface BitOperators {
+    BitOperators combine(BitOperators y);
 
-    BitOps bitOpsWith(IntegerBitOps x);
+    BitOperators bitOpsWith(IntegerBitOperators x);
 
-    BitOps bitOpsWith(LongBitOps x);
+    BitOperators bitOpsWith(LongBitOperators x);
 
-    BitOps bitOpsWith(BigIntegerBitOps x);
+    BitOperators bitOpsWith(BigIntegerBitOperators x);
 
     public Number not(Number x);
 

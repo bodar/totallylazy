@@ -12,92 +12,80 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
-final class IntegerBitOps implements BitOps {
-    public BitOps combine(BitOps y) {
+final class LongBitOperators implements BitOperators {
+    public BitOperators combine(BitOperators y) {
         return y.bitOpsWith(this);
     }
 
-    final public BitOps bitOpsWith(IntegerBitOps x) {
+    final public BitOperators bitOpsWith(IntegerBitOperators x) {
         return this;
     }
 
-    final public BitOps bitOpsWith(LongBitOps x) {
-        return Numbers.LONG_BITOPS;
+    final public BitOperators bitOpsWith(LongBitOperators x) {
+        return this;
     }
 
-    final public BitOps bitOpsWith(BigIntegerBitOps x) {
+    final public BitOperators bitOpsWith(BigIntegerBitOperators x) {
         return Numbers.BIGINTEGER_BITOPS;
     }
 
-
     public Number not(Number x) {
-        return ~x.intValue();
+        return ~x.longValue();
     }
 
     public Number and(Number x, Number y) {
-        return x.intValue() & y.intValue();
+        return x.longValue() & y.longValue();
     }
 
     public Number or(Number x, Number y) {
-        return x.intValue() | y.intValue();
+        return x.longValue() | y.longValue();
     }
 
     public Number xor(Number x, Number y) {
-        return x.intValue() ^ y.intValue();
+        return x.longValue() ^ y.longValue();
     }
 
     public Number andNot(Number x, Number y) {
-        return x.intValue() & ~y.intValue();
+        return x.longValue() & ~y.longValue();
     }
 
     public Number clearBit(Number x, int n) {
-        if (n < 31)
-            return x.intValue() & ~(1 << n);
-        else if (n < 63)
+        if (n < 63)
             return x.longValue() & ~(1L << n);
         else
             return Numbers.toBigInteger(x).clearBit(n);
     }
 
     public Number setBit(Number x, int n) {
-        if (n < 31)
-            return x.intValue() | (1 << n);
-        else if (n < 63)
+        if (n < 63)
             return x.longValue() | (1L << n);
         else
             return Numbers.toBigInteger(x).setBit(n);
     }
 
     public Number flipBit(Number x, int n) {
-        if (n < 31)
-            return x.intValue() ^ (1 << n);
-        else if (n < 63)
+        if (n < 63)
             return x.longValue() ^ (1L << n);
         else
             return Numbers.toBigInteger(x).flipBit(n);
     }
 
     public boolean testBit(Number x, int n) {
-        if (n < 32)
-            return (x.intValue() & (1 << n)) != 0;
-        else if (n < 64)
+        if (n < 64)
             return (x.longValue() & (1L << n)) != 0;
         else
             return Numbers.toBigInteger(x).testBit(n);
     }
 
     public Number shiftLeft(Number x, int n) {
-        if (n < 32) {
-            if (n < 0)
-                return shiftRight(x, -n);
-            return Numbers.reduce(x.longValue() << n);
-        } else
-            return Numbers.reduce(Numbers.toBigInteger(x).shiftLeft(n));
+        if (n < 0)
+            return shiftRight(x, -n);
+        return Numbers.reduce(Numbers.toBigInteger(x).shiftLeft(n));
     }
 
     public Number shiftRight(Number x, int n) {
         if (n < 0)
             return shiftLeft(x, -n);
-        return x.intValue() >> n;
+        return x.longValue() >> n;
     }
 }
