@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.iterators.FlatMapIterator;
 import com.googlecode.totallylazy.iterators.IterateIterator;
 import com.googlecode.totallylazy.iterators.MapIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
+import com.googlecode.totallylazy.iterators.RepeatIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.OnlyOnce;
@@ -16,8 +17,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.cast;
+import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -122,6 +125,14 @@ public class Iterators {
             result.add(iterator.next());
         }
         return result;
+    }
+
+    public static <T> Iterator<T> repeat(Callable<T> callable) {
+        return new RepeatIterator<T>(callable);
+    }
+
+    public static <T> Iterator<T> repeat(T item) {
+        return new RepeatIterator<T>(returns(item));
     }
 
     public static Iterator<Number> range(Number end) {

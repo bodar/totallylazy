@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.iterators.CharacterIterator;
 import com.googlecode.totallylazy.iterators.ZipIterator;
 
 import java.util.*;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.*;
 import static com.googlecode.totallylazy.Predicates.*;
@@ -133,6 +134,22 @@ public class Sequences {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return Iterators.iterate(callable, t);
+            }
+        };
+    }
+
+    public static <T> Sequence<T> repeat(final Callable<T> callable) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.repeat(callable);
+            }
+        };
+    }
+
+    public static <T> Sequence<T> repeat(final T item) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return Iterators.repeat(item);
             }
         };
     }
