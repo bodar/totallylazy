@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.NumberMatcher;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
@@ -26,8 +27,8 @@ public class OptionTest {
 
     @Test
     public void areIterable() throws Exception {
-        assertThat(size(some(1)), is(1));
-        assertThat(size(none()), is(0));
+        assertThat(size(some(1)), NumberMatcher.is(1));
+        assertThat(size(none()), NumberMatcher.is(0));
     }
 
     @Test

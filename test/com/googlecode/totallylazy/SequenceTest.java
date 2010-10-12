@@ -17,6 +17,7 @@ import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Sequences.*;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Option.none;
@@ -30,6 +31,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
+    @Test
+    public void supportsSize() throws Exception {
+        assertThat(range(10000000000L, 10000000100L).size(), NumberMatcher.is(100));
+    }
+
     @Test
     public void canRealiseASequence() throws Exception {
         CountingCallable counting = counting();
@@ -271,32 +277,32 @@ public class SequenceTest {
     public void supportsTake() throws Exception {
         final Sequence<Integer> sequence = sequence(1, 2, 3).take(2);
         assertThat(sequence, hasExactly(1, 2));
-        assertThat(sequence(1).take(2).size(), is(1));
-        assertThat(sequence().take(2).size(), is(0));
+        assertThat(sequence(1).take(2).size(), NumberMatcher.is(1));
+        assertThat(sequence().take(2).size(), NumberMatcher.is(0));
     }
 
     @Test
     public void supportsTakeWhile() throws Exception {
         final Sequence<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).takeWhile(odd());
         assertThat(sequence, hasExactly(1, 3, 5));
-        assertThat(sequence(1).takeWhile(odd()).size(), is(1));
-        assertThat(Sequences.<Number>sequence().takeWhile(odd()).size(), is(0));
+        assertThat(sequence(1).takeWhile(odd()).size(), NumberMatcher.is(1));
+        assertThat(Sequences.<Number>sequence().takeWhile(odd()).size(), NumberMatcher.is(0));
     }
 
     @Test
     public void supportsDrop() throws Exception {
         final Sequence<Integer> sequence = sequence(1, 2, 3).drop(2);
         assertThat(sequence, hasExactly(3));
-        assertThat(sequence(1).drop(2).size(), is(0));
-        assertThat(sequence().drop(1).size(), is(0));
+        assertThat(sequence(1).drop(2).size(), NumberMatcher.is(0));
+        assertThat(sequence().drop(1).size(), NumberMatcher.is(0));
     }
 
     @Test
     public void supportsDropWhile() throws Exception {
         final Sequence<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).dropWhile(odd());
         assertThat(sequence, hasExactly(6, 8, 1, 3));
-        assertThat(sequence(1).dropWhile(odd()).size(), is(0));
-        assertThat(Sequences.<Number>sequence().dropWhile(odd()).size(), is(0));
+        assertThat(sequence(1).dropWhile(odd()).size(), NumberMatcher.is(0));
+        assertThat(Sequences.<Number>sequence().dropWhile(odd()).size(), NumberMatcher.is(0));
     }
 
     @Test

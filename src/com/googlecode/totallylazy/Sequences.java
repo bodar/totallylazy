@@ -137,25 +137,25 @@ public class Sequences {
         };
     }
 
-    public static Sequence<Integer> range(final int end) {
-        return new Sequence<Integer>() {
-            public Iterator<Integer> iterator() {
+    public static Sequence<Number> range(final Number end) {
+        return new Sequence<Number>() {
+            public Iterator<Number> iterator() {
                 return Iterators.range(end);
             }
         };
     }
 
-    public static Sequence<Integer> range(final int start, final int end) {
-        return new Sequence<Integer>() {
-            public Iterator<Integer> iterator() {
+    public static Sequence<Number> range(final Number start, final Number end) {
+        return new Sequence<Number>() {
+            public Iterator<Number> iterator() {
                 return Iterators.range(start, end);
             }
         };
     }
 
-    public static Sequence<Integer> range(final int start, final int end, final int step) {
-        return new Sequence<Integer>() {
-            public Iterator<Integer> iterator() {
+    public static Sequence<Number> range(final Number start, final Number end, final Number step) {
+        return new Sequence<Number>() {
+            public Iterator<Number> iterator() {
                 return Iterators.range(start, end, step);
             }
         };
@@ -233,8 +233,8 @@ public class Sequences {
         };
     }
 
-    public static <T> int size(final Iterable<T> iterable) {
-        return sequence(iterable).toList().size();
+    public static <T> Number size(final Iterable<T> iterable) {
+        return Iterators.size(iterable.iterator());
     }
 
     public static <T> Sequence<T> take(final Iterable<T> iterable, final int count) {

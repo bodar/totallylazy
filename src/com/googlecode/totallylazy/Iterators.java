@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.iterators.IterateIterator;
 import com.googlecode.totallylazy.iterators.MapIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
+import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.OnlyOnce;
 
 import java.util.ArrayList;
@@ -123,15 +124,15 @@ public class Iterators {
         return result;
     }
 
-    public static Iterator<Integer> range(int end) {
+    public static Iterator<Number> range(Number end) {
         return new RangerIterator(end);
     }
 
-    public static Iterator<Integer> range(final int start, final int end) {
+    public static Iterator<Number> range(final Number start, final Number end) {
         return new RangerIterator(start, end);
     }
 
-    public static Iterator<Integer> range(final int start, final int end, final int step) {
+    public static Iterator<Number> range(final Number start, final Number end, final Number step) {
         return new RangerIterator(start, end, step);
     }
 
@@ -225,4 +226,12 @@ public class Iterators {
         return map(filter(iterator, instanceOf(aClass)), cast(aClass));
     }
 
+    public static <T> Number size(Iterator<T> iterator) {
+        Number count = 0;
+        while (iterator.hasNext()) {
+            iterator.next();
+            count = Numbers.increment(count);
+        }
+        return count;
+    }
 }

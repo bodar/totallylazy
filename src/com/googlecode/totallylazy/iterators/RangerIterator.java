@@ -1,36 +1,40 @@
 package com.googlecode.totallylazy.iterators;
 
+import com.googlecode.totallylazy.numbers.Numbers;
+
 import java.util.NoSuchElementException;
 
-public class RangerIterator extends ReadOnlyIterator<Integer> {
-    private int next;
-    private final int end;
-    private final int step;
+import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 
-    public RangerIterator(int end) {
+public class RangerIterator extends ReadOnlyIterator<Number> {
+    private Number next;
+    private final Number end;
+    private final Number step;
+
+    public   RangerIterator(Number end) {
         this(0, end);
     }
 
-    public RangerIterator(int start, int end) {
+    public RangerIterator(Number start, Number end) {
         this(start, end, 1);
     }
 
-    public RangerIterator(int start, int end, int step) {
+    public RangerIterator(Number start, Number end, Number step) {
         this.next = start;
         this.end = end;
         this.step = step;
     }
 
     public boolean hasNext() {
-        return next < end;
+        return lessThan(next,end);
     }
 
-    public Integer next() {
+    public Number next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        int result = next;
-        next += step;
+        Number result = next;
+        next = Numbers.add(next, step);
         return result;
     }
 }
