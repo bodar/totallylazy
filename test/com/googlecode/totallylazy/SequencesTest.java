@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.increment;
+import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.odd;
 import static com.googlecode.totallylazy.Sequences.*;
@@ -19,6 +20,12 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
+    @Test
+    public void supportRepeat() throws Exception {
+        assertThat(repeat(10), startsWith(10, 10, 10, 10, 10));
+        assertThat(repeat(returns(10)), startsWith(10, 10, 10, 10, 10));
+    }
+
     @Test
     public void toStringingAnInfiniteListWillTruncateByDefault() throws Exception {
         assertThat(primes().toString(), is(primes().take(100).toString()));
