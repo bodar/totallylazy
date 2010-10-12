@@ -13,36 +13,36 @@ package com.googlecode.totallylazy.numbers;
 
 import java.math.BigInteger;
 
-final class RatioOps implements Ops {
-    public Ops combine(Ops y) {
+final class RatioOperators implements Operators {
+    public Operators combine(Operators y) {
         return y.opsWith(this);
     }
 
-    final public Ops opsWith(IntegerOps x) {
+    final public Operators opsWith(IntegerOperators x) {
         return this;
     }
 
-    final public Ops opsWith(LongOps x) {
+    final public Operators opsWith(LongOperators x) {
         return this;
     }
 
-    final public Ops opsWith(FloatOps x) {
+    final public Operators opsWith(FloatOperators x) {
         return Numbers.FLOAT_OPS;
     }
 
-    final public Ops opsWith(DoubleOps x) {
+    final public Operators opsWith(DoubleOperators x) {
         return Numbers.DOUBLE_OPS;
     }
 
-    final public Ops opsWith(RatioOps x) {
+    final public Operators opsWith(RatioOperators x) {
         return this;
     }
 
-    final public Ops opsWith(BigIntegerOps x) {
+    final public Operators opsWith(BigIntegerOperators x) {
         return this;
     }
 
-    final public Ops opsWith(BigDecimalOps x) {
+    final public Operators opsWith(BigDecimalOperators x) {
         return this;
     }
 

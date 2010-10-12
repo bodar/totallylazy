@@ -14,20 +14,20 @@ import static com.googlecode.totallylazy.numbers.Numbers.toBigInteger;
 
 /* rich Mar 31, 2008 */
 
-final class BigIntegerBitOps implements BitOps {
-    public BitOps combine(BitOps y) {
+final class BigIntegerBitOperators implements BitOperators {
+    public BitOperators combine(BitOperators y) {
         return y.bitOpsWith(this);
     }
 
-    final public BitOps bitOpsWith(IntegerBitOps x) {
+    final public BitOperators bitOpsWith(IntegerBitOperators x) {
         return this;
     }
 
-    final public BitOps bitOpsWith(LongBitOps x) {
+    final public BitOperators bitOpsWith(LongBitOperators x) {
         return this;
     }
 
-    final public BitOps bitOpsWith(BigIntegerBitOps x) {
+    final public BitOperators bitOpsWith(BigIntegerBitOperators x) {
         return this;
     }
 

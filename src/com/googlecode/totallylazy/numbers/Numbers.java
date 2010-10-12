@@ -17,61 +17,61 @@ import java.math.BigInteger;
 
 public class Numbers {
     static public boolean isZero(Number x) {
-        return ops(x).isZero(x);
+        return with(x).isZero(x);
     }
 
     static public boolean isPositive(Number x) {
-        return ops(x).isPositive(x);
+        return with(x).isPositive(x);
     }
 
     static public boolean isNegative(Number x) {
-        return ops(x).isNegative(x);
+        return with(x).isNegative(x);
     }
 
     static public Number negate(Number x) {
-        return ops(x).negate(x);
+        return with(x).negate(x);
     }
 
     static public Number increment(Number x) {
-        return ops(x).increment(x);
+        return with(x).increment(x);
     }
 
     static public Number decrement(Number x) {
-        return ops(x).decrement(x);
+        return with(x).decrement(x);
     }
 
     static public Number add(Number x, Number y) {
-        return ops(x).combine(ops(y)).add(x, y);
+        return with(x).combine(with(y)).add(x, y);
     }
 
     static public Number subtract(Number x, Number y) {
-        Ops yops = ops(y);
-        return ops(x).combine(yops).add(x, yops.negate(y));
+        Operators yops = with(y);
+        return with(x).combine(yops).add(x, yops.negate(y));
     }
 
     static public Number multiply(Number x, Number y) {
-        return ops(x).combine(ops(y)).multiply(x, y);
+        return with(x).combine(with(y)).multiply(x, y);
     }
 
     static public Number divide(Number x, Number y) {
-        Ops yops = ops(y);
+        Operators yops = with(y);
         if (yops.isZero(y))
             throw new ArithmeticException("Divide by zero");
-        return ops(x).combine(yops).divide(x, y);
+        return with(x).combine(yops).divide(x, y);
     }
 
     static public Number quotient(Number x, Number y) {
-        Ops yops = ops(y);
+        Operators yops = with(y);
         if (yops.isZero(y))
             throw new ArithmeticException("Divide by zero");
-        return reduce(ops(x).combine(yops).quotient(x, y));
+        return reduce(with(x).combine(yops).quotient(x, y));
     }
 
     static public Number remainder(Number x, Number y) {
-        Ops yops = ops(y);
+        Operators yops = with(y);
         if (yops.isZero(y))
             throw new ArithmeticException("Divide by zero");
-        return reduce(ops(x).combine(yops).remainder(x, y));
+        return reduce(with(x).combine(yops).remainder(x, y));
     }
 
     static Number quotient(double n, double d) {
@@ -94,30 +94,30 @@ public class Numbers {
     }
 
     static public boolean equalTo(Number x, Number y) {
-        return ops(x).combine(ops(y)).equalTo(x, y);
+        return with(x).combine(with(y)).equalTo(x, y);
     }
 
     static public boolean lessThan(Number x, Number y) {
-        return ops(x).combine(ops(y)).lessThan(x, y);
+        return with(x).combine(with(y)).lessThan(x, y);
     }
 
     static public boolean lessThanOrEqual(Number x, Number y) {
-        return !ops(x).combine(ops(y)).lessThan(y, x);
+        return !with(x).combine(with(y)).lessThan(y, x);
     }
 
     static public boolean greaterThan(Number x, Number y) {
-        return ops(x).combine(ops(y)).lessThan(y, x);
+        return with(x).combine(with(y)).lessThan(y, x);
     }
 
     static public boolean greaterThanOrEqual(Number x, Number y) {
-        return !ops(x).combine(ops(y)).lessThan(x, y);
+        return !with(x).combine(with(y)).lessThan(x, y);
     }
 
     static public int compare(Number x, Number y) {
-        Ops ops = ops(x).combine(ops(y));
-        if (ops.lessThan(x, y))
+        Operators operators = with(x).combine(with(y));
+        if (operators.lessThan(x, y))
             return -1;
-        else if (ops.lessThan(y, x))
+        else if (operators.lessThan(y, x))
             return 1;
         return 0;
     }
@@ -270,19 +270,19 @@ public class Numbers {
         return x >> n;
     }
 
-    static final IntegerOps INTEGER_OPS = new IntegerOps();
-    static final LongOps LONG_OPS = new LongOps();
-    static final FloatOps FLOAT_OPS = new FloatOps();
-    static final DoubleOps DOUBLE_OPS = new DoubleOps();
-    static final RatioOps RATIO_OPS = new RatioOps();
-    static final BigIntegerOps BIGINTEGER_OPS = new BigIntegerOps();
-    static final BigDecimalOps BIGDECIMAL_OPS = new BigDecimalOps();
+    static final IntegerOperators INTEGER_OPS = new IntegerOperators();
+    static final LongOperators LONG_OPS = new LongOperators();
+    static final FloatOperators FLOAT_OPS = new FloatOperators();
+    static final DoubleOperators DOUBLE_OPS = new DoubleOperators();
+    static final RatioOperators RATIO_OPS = new RatioOperators();
+    static final BigIntegerOperators BIGINTEGER_OPS = new BigIntegerOperators();
+    static final BigDecimalOperators BIGDECIMAL_OPS = new BigDecimalOperators();
 
-    static final IntegerBitOps INTEGER_BITOPS = new IntegerBitOps();
-    static final LongBitOps LONG_BITOPS = new LongBitOps();
-    static final BigIntegerBitOps BIGINTEGER_BITOPS = new BigIntegerBitOps();
+    static final IntegerBitOperators INTEGER_BITOPS = new IntegerBitOperators();
+    static final LongBitOperators LONG_BITOPS = new LongBitOperators();
+    static final BigIntegerBitOperators BIGINTEGER_BITOPS = new BigIntegerBitOperators();
 
-    static Ops ops(Number x) {
+    static Operators with(Number x) {
         Class xc = x.getClass();
 
         if (xc == Integer.class)
@@ -303,7 +303,7 @@ public class Numbers {
             return INTEGER_OPS;
     }
 
-    static BitOps bitOps(Number x) {
+    static BitOperators bitOps(Number x) {
         Class xc = x.getClass();
 
         if (xc == Integer.class)
@@ -312,7 +312,7 @@ public class Numbers {
             return LONG_BITOPS;
         else if (xc == BigInteger.class)
             return BIGINTEGER_BITOPS;
-        else if (xc == Double.class || xc == Float.class || xc == BigDecimalOps.class || xc == Ratio.class)
+        else if (xc == Double.class || xc == Float.class || xc == BigDecimalOperators.class || xc == Ratio.class)
             throw new ArithmeticException("bit operation on non integer type: " + xc);
         else
             return INTEGER_BITOPS;
