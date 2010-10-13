@@ -13,55 +13,77 @@ package com.googlecode.totallylazy.numbers;
 
 import java.math.BigInteger;
 
-final class RatioOperators implements Operators {
-    public Operators combine(Operators y) {
+public final class RatioOperators implements Operators<Ratio> {
+    public final Operators combine(Operators y) {
         return y.opsWith(this);
     }
 
-    final public Operators opsWith(IntegerOperators x) {
+    public final Operators opsWith(IntegerOperators x) {
         return this;
     }
 
-    final public Operators opsWith(LongOperators x) {
+    public final Operators opsWith(LongOperators x) {
         return this;
     }
 
-    final public Operators opsWith(FloatOperators x) {
+    public final Operators opsWith(FloatOperators x) {
         return Numbers.FLOAT_OPS;
     }
 
-    final public Operators opsWith(DoubleOperators x) {
+    public final Operators opsWith(DoubleOperators x) {
         return Numbers.DOUBLE_OPS;
     }
 
-    final public Operators opsWith(RatioOperators x) {
+    public final Operators opsWith(RatioOperators x) {
         return this;
     }
 
-    final public Operators opsWith(BigIntegerOperators x) {
+    public final Operators opsWith(BigIntegerOperators x) {
         return this;
     }
 
-    final public Operators opsWith(BigDecimalOperators x) {
+    public final Operators opsWith(BigDecimalOperators x) {
         return this;
     }
 
-    public boolean isZero(Number x) {
-        Ratio r = (Ratio) x;
-        return r.numerator.signum() == 0;
+    public final Number negate(Ratio x) {
+        return new Ratio(x.numerator.negate(), x.denominator);
     }
 
-    public boolean isPositive(Number x) {
-        Ratio r = (Ratio) x;
-        return r.numerator.signum() > 0;
+    public final Number increment(Ratio x) {
+        return Numbers.add(x, 1);
     }
 
-    public boolean isNegative(Number x) {
-        Ratio r = (Ratio) x;
-        return r.numerator.signum() < 0;
+    public final Number decrement(Ratio x) {
+        return Numbers.add(x, -1);
     }
 
-    final public Number add(Number x, Number y) {
+    public final boolean isZero(Ratio x) {
+        return x.numerator.signum() == 0;
+    }
+
+    public final boolean isPositive(Ratio x) {
+        return x.numerator.signum() > 0;
+    }
+
+    public final boolean isNegative(Ratio x) {
+        return x.numerator.signum() < 0;
+    }
+
+    public final boolean equalTo(Number x, Number y) {
+        Ratio rx = Numbers.toRatio(x);
+        Ratio ry = Numbers.toRatio(y);
+        return rx.numerator.equals(ry.numerator)
+                && rx.denominator.equals(ry.denominator);
+    }
+
+    public final boolean lessThan(Number x, Number y) {
+        Ratio rx = Numbers.toRatio(x);
+        Ratio ry = Numbers.toRatio(y);
+        return Numbers.lessThan(rx.numerator.multiply(ry.denominator), ry.numerator.multiply(rx.denominator));
+    }
+
+    public final Number add(Number x, Number y) {
         Ratio rx = Numbers.toRatio(x);
         Ratio ry = Numbers.toRatio(y);
         return divide(ry.numerator.multiply(rx.denominator)
@@ -69,21 +91,21 @@ final class RatioOperators implements Operators {
                 , ry.denominator.multiply(rx.denominator));
     }
 
-    final public Number multiply(Number x, Number y) {
+    public final Number multiply(Number x, Number y) {
         Ratio rx = Numbers.toRatio(x);
         Ratio ry = Numbers.toRatio(y);
         return Numbers.divide(ry.numerator.multiply(rx.numerator)
                 , ry.denominator.multiply(rx.denominator));
     }
 
-    public Number divide(Number x, Number y) {
+    public final Number divide(Number x, Number y) {
         Ratio rx = Numbers.toRatio(x);
         Ratio ry = Numbers.toRatio(y);
         return Numbers.divide(ry.denominator.multiply(rx.numerator)
                 , ry.numerator.multiply(rx.denominator));
     }
 
-    public Number quotient(Number x, Number y) {
+    public final Number quotient(Number x, Number y) {
         Ratio rx = Numbers.toRatio(x);
         Ratio ry = Numbers.toRatio(y);
         BigInteger q = rx.numerator.multiply(ry.denominator).divide(
@@ -91,39 +113,12 @@ final class RatioOperators implements Operators {
         return Numbers.reduce(q);
     }
 
-    public Number remainder(Number x, Number y) {
+    public final Number remainder(Number x, Number y) {
         Ratio rx = Numbers.toRatio(x);
         Ratio ry = Numbers.toRatio(y);
         BigInteger q = rx.numerator.multiply(ry.denominator).divide(
                 rx.denominator.multiply(ry.numerator));
         return Numbers.subtract(x, Numbers.multiply(q, y));
-    }
-
-    public boolean equalTo(Number x, Number y) {
-        Ratio rx = Numbers.toRatio(x);
-        Ratio ry = Numbers.toRatio(y);
-        return rx.numerator.equals(ry.numerator)
-                && rx.denominator.equals(ry.denominator);
-    }
-
-    public boolean lessThan(Number x, Number y) {
-        Ratio rx = Numbers.toRatio(x);
-        Ratio ry = Numbers.toRatio(y);
-        return Numbers.lessThan(rx.numerator.multiply(ry.denominator), ry.numerator.multiply(rx.denominator));
-    }
-
-    //public Number subtract(Number x, Number y);
-    final public Number negate(Number x) {
-        Ratio r = (Ratio) x;
-        return new Ratio(r.numerator.negate(), r.denominator);
-    }
-
-    public Number increment(Number x) {
-        return Numbers.add(x, 1);
-    }
-
-    public Number decrement(Number x) {
-        return Numbers.add(x, -1);
     }
 
 }

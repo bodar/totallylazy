@@ -14,7 +14,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.toBigInteger;
 
 /* rich Mar 31, 2008 */
 
-final class BigIntegerBitOperators implements BitOperators {
+public final class BigIntegerBitOperators implements BitOperators {
     public BitOperators combine(BitOperators y) {
         return y.bitOpsWith(this);
     }

@@ -12,93 +12,96 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
+import java.math.BigDecimal;
+
 import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.numbers.Numbers.toBigDecimal;
 import static java.math.BigDecimal.ONE;
 import static java.math.MathContext.UNLIMITED;
 
-final class BigDecimalOperators implements Operators {
+public final class BigDecimalOperators implements Operators<BigDecimal> {
 
-    public Operators combine(Operators y) {
+    public final Operators combine(Operators y) {
         return y.opsWith(this);
     }
 
-    final public Operators opsWith(IntegerOperators x) {
+    public final Operators opsWith(IntegerOperators x) {
         return this;
     }
 
-    final public Operators opsWith(LongOperators x) {
+    public final Operators opsWith(LongOperators x) {
         return this;
     }
 
-    final public Operators opsWith(FloatOperators x) {
+    public final Operators opsWith(FloatOperators x) {
         return FLOAT_OPS;
     }
 
-    final public Operators opsWith(DoubleOperators x) {
+    public final Operators opsWith(DoubleOperators x) {
         return DOUBLE_OPS;
     }
 
-    final public Operators opsWith(RatioOperators x) {
+    public final Operators opsWith(RatioOperators x) {
         return RATIO_OPS;
     }
 
-    final public Operators opsWith(BigIntegerOperators x) {
+    public final Operators opsWith(BigIntegerOperators x) {
         return this;
     }
 
-    final public Operators opsWith(BigDecimalOperators x) {
+    public final Operators opsWith(BigDecimalOperators x) {
         return this;
     }
 
-    public boolean isZero(Number x) {
+    public final boolean isZero(BigDecimal x) {
         return toBigDecimal(x).signum() == 0;
     }
 
-    public boolean isPositive(Number x) {
+    public final boolean isPositive(BigDecimal x) {
         return toBigDecimal(x).signum() > 0;
     }
 
-    public boolean isNegative(Number x) {
+    public final boolean isNegative(BigDecimal x) {
         return toBigDecimal(x).signum() < 0;
     }
 
-    final public Number add(Number x, Number y) {
+    public final Number add(Number x, Number y) {
         return toBigDecimal(x).add(toBigDecimal(y), UNLIMITED);
     }
 
-    final public Number multiply(Number x, Number y) {
+    public final Number multiply(Number x, Number y) {
         return toBigDecimal(x).multiply(toBigDecimal(y), UNLIMITED);
     }
 
-    public Number divide(Number x, Number y) {
+    public final Number divide(Number x, Number y) {
         return toBigDecimal(x).divide(toBigDecimal(y), UNLIMITED);
     }
 
-    public Number quotient(Number x, Number y) {
+    public final Number quotient(Number x, Number y) {
         return toBigDecimal(x).divideToIntegralValue(toBigDecimal(y), UNLIMITED);
     }
 
-    public Number remainder(Number x, Number y) {
+    public final Number remainder(Number x, Number y) {
         return toBigDecimal(x).remainder(toBigDecimal(y), UNLIMITED);
     }
 
-    public boolean equalTo(Number x, Number y) {
-        return toBigDecimal(x).equals(toBigDecimal(y));
+    public final boolean equalTo(Number x, Number y) {
+        return x.equals(toBigDecimal(y));
     }
 
-    public boolean lessThan(Number x, Number y) {
+    public final boolean lessThan(Number x, Number y) {
         return toBigDecimal(x).compareTo(toBigDecimal(y)) < 0;
     }
 
-    final public Number negate(Number x) {
-        return toBigDecimal(x).negate(UNLIMITED);
+    public final Number negate(BigDecimal x) {
+        return x.negate(UNLIMITED);
     }
 
-    public Number increment(Number x) {
-        return toBigDecimal(x).add(ONE, UNLIMITED);
+    public final Number increment(BigDecimal x) {
+        return x.add(ONE, UNLIMITED);
     }
 
-    public Number decrement(Number x) {
-        return toBigDecimal(x).subtract(ONE, UNLIMITED);
+    public final Number decrement(BigDecimal x) {
+        return x.subtract(ONE, UNLIMITED);
     }
 }

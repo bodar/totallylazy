@@ -11,91 +11,93 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
+import java.math.BigInteger;
+
 import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static java.math.BigInteger.ONE;
 
-final class BigIntegerOperators implements Operators {
-    public Operators combine(Operators y) {
+public final class BigIntegerOperators implements Operators<BigInteger> {
+    public final Operators combine(Operators y) {
         return y.opsWith(this);
     }
 
-    final public Operators opsWith(IntegerOperators x) {
+    public final Operators opsWith(IntegerOperators x) {
         return this;
     }
 
-    final public Operators opsWith(LongOperators x) {
+    public final Operators opsWith(LongOperators x) {
         return this;
     }
 
-    final public Operators opsWith(FloatOperators x) {
+    public final Operators opsWith(FloatOperators x) {
         return FLOAT_OPS;
     }
 
-    final public Operators opsWith(DoubleOperators x) {
+    public final Operators opsWith(DoubleOperators x) {
         return DOUBLE_OPS;
     }
 
-    final public Operators opsWith(RatioOperators x) {
+    public final Operators opsWith(RatioOperators x) {
         return RATIO_OPS;
     }
 
-    final public Operators opsWith(BigIntegerOperators x) {
+    public final Operators opsWith(BigIntegerOperators x) {
         return this;
     }
 
-    final public Operators opsWith(BigDecimalOperators x) {
+    public final Operators opsWith(BigDecimalOperators x) {
         return BIGDECIMAL_OPS;
     }
 
-    public boolean isZero(Number x) {
-        return toBigInteger(x).signum() == 0;
+    public final Number increment(BigInteger x) {
+        return reduce(x.add(ONE));
     }
 
-    public boolean isPositive(Number x) {
-        return toBigInteger(x).signum() > 0;
+    public final Number decrement(BigInteger x) {
+        return reduce(x.subtract(ONE));
     }
 
-    public boolean isNegative(Number x) {
-        return toBigInteger(x).signum() < 0;
+    public final boolean isZero(BigInteger x) {
+        return x.signum() == 0;
     }
 
-    final public Number add(Number x, Number y) {
-        return reduce(toBigInteger(x).add(toBigInteger(y)));
+    public final boolean isPositive(BigInteger x) {
+        return x.signum() > 0;
     }
 
-    final public Number multiply(Number x, Number y) {
-        return reduce(toBigInteger(x).multiply(toBigInteger(y)));
+    public final boolean isNegative(BigInteger x) {
+        return x.signum() < 0;
     }
 
-    public Number divide(Number x, Number y) {
-        return divide(toBigInteger(x), toBigInteger(y));
-    }
-
-    public Number quotient(Number x, Number y) {
-        return toBigInteger(x).divide(toBigInteger(y));
-    }
-
-    public Number remainder(Number x, Number y) {
-        return toBigInteger(x).remainder(toBigInteger(y));
-    }
-
-    public boolean equalTo(Number x, Number y) {
+    public final boolean equalTo(Number x, Number y) {
         return toBigInteger(x).equals(toBigInteger(y));
     }
 
-    public boolean lessThan(Number x, Number y) {
+    public final boolean lessThan(Number x, Number y) {
         return toBigInteger(x).compareTo(toBigInteger(y)) < 0;
     }
 
-    final public Number negate(Number x) {
-        return toBigInteger(x).negate();
+    public final Number negate(BigInteger x) {
+        return x.negate();
     }
 
-    public Number increment(Number x) {
-        return reduce(toBigInteger(x).add(ONE));
+    public final Number add(Number x, Number y) {
+        return reduce(toBigInteger(x).add(toBigInteger(y)));
     }
 
-    public Number decrement(Number x) {
-        return reduce(toBigInteger(x).subtract(ONE));
+    public final Number multiply(Number x, Number y) {
+        return reduce(toBigInteger(x).multiply(toBigInteger(y)));
+    }
+
+    public final Number divide(Number x, Number y) {
+        return divide(toBigInteger(x), toBigInteger(y));
+    }
+
+    public final Number quotient(Number x, Number y) {
+        return toBigInteger(x).divide(toBigInteger(y));
+    }
+
+    public final Number remainder(Number x, Number y) {
+        return toBigInteger(x).remainder(toBigInteger(y));
     }
 }

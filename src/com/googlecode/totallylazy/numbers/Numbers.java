@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class Numbers {
-    static public boolean isZero(Number x) {
+    public static <T extends Number> boolean isZero(T x) {
         return with(x).isZero(x);
     }
 
@@ -95,7 +95,7 @@ public class Numbers {
 
     static public boolean equalTo(Number x, Number y) {
         return with(x).combine(with(y)).equalTo(x, y);
-    }
+    } 
 
     static public boolean lessThan(Number x, Number y) {
         return with(x).combine(with(y)).lessThan(x, y);

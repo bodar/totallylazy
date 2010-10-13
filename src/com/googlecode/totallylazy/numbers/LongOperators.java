@@ -17,52 +17,78 @@ import static java.lang.Long.MAX_VALUE;
 import static java.lang.Long.MIN_VALUE;
 import static java.math.BigInteger.valueOf;
 
-final class LongOperators implements Operators {
-    public Operators combine(Operators y) {
+public final class LongOperators implements Operators<Long> {
+    public final Operators combine(Operators y) {
         return y.opsWith(this);
     }
 
-    final public Operators opsWith(IntegerOperators x) {
+    public final Operators opsWith(IntegerOperators x) {
         return this;
     }
 
-    final public Operators opsWith(LongOperators x) {
+    public final Operators opsWith(LongOperators x) {
         return this;
     }
 
-    final public Operators opsWith(FloatOperators x) {
+    public final Operators opsWith(FloatOperators x) {
         return FLOAT_OPS;
     }
 
-    final public Operators opsWith(DoubleOperators x) {
+    public final Operators opsWith(DoubleOperators x) {
         return DOUBLE_OPS;
     }
 
-    final public Operators opsWith(RatioOperators x) {
+    public final Operators opsWith(RatioOperators x) {
         return RATIO_OPS;
     }
 
-    final public Operators opsWith(BigIntegerOperators x) {
+    public final Operators opsWith(BigIntegerOperators x) {
         return BIGINTEGER_OPS;
     }
 
-    final public Operators opsWith(BigDecimalOperators x) {
+    public final Operators opsWith(BigDecimalOperators x) {
         return BIGDECIMAL_OPS;
     }
 
-    public boolean isZero(Number x) {
-        return x.longValue() == 0;
+    public final Number increment(Long value) {
+        if (value < MAX_VALUE)
+            return value + 1;
+        return BIGINTEGER_OPS.increment(valueOf(value));
     }
 
-    public boolean isPositive(Number x) {
-        return x.longValue() > 0;
+    public final Number decrement(Long value) {
+        if (value > MIN_VALUE)
+            return value - 1;
+        return BIGINTEGER_OPS.decrement(valueOf(value));
     }
 
-    public boolean isNegative(Number x) {
-        return x.longValue() < 0;
+    public final Number negate(Long value) {
+        if (value > MIN_VALUE)
+            return -value;
+        return valueOf(value).negate();
     }
 
-    final public Number add(Number x, Number y) {
+    public final boolean isZero(Long x) {
+        return x == 0;
+    }
+
+    public final boolean isPositive(Long x) {
+        return x > 0;
+    }
+
+    public final boolean isNegative(Long x) {
+        return x < 0;
+    }
+
+    public final boolean equalTo(Number x, Number y) {
+        return x.longValue() == y.longValue();
+    }
+
+    public final boolean lessThan(Number x, Number y) {
+        return x.longValue() < y.longValue();
+    }
+
+    public final Number add(Number x, Number y) {
         long lx = x.longValue(), ly = y.longValue();
         long ret = lx + ly;
         if ((ret ^ lx) < 0 && (ret ^ ly) < 0)
@@ -70,7 +96,7 @@ final class LongOperators implements Operators {
         return ret;
     }
 
-    final public Number multiply(Number x, Number y) {
+    public final Number multiply(Number x, Number y) {
         long lx = x.longValue(), ly = y.longValue();
         long ret = lx * ly;
         if (ly != 0 && ret / ly != lx)
@@ -78,7 +104,7 @@ final class LongOperators implements Operators {
         return ret;
     }
 
-    static long gcd(long u, long v) {
+    public static long gcd(long u, long v) {
         while (v != 0) {
             long r = u % v;
             u = v;
@@ -87,7 +113,7 @@ final class LongOperators implements Operators {
         return u;
     }
 
-    public Number divide(Number x, Number y) {
+    public final Number divide(Number x, Number y) {
         long n = x.longValue();
         long val = y.longValue();
         long gcd = gcd(n, val);
@@ -105,41 +131,11 @@ final class LongOperators implements Operators {
         return new Ratio(valueOf(n), valueOf(d));
     }
 
-    public Number quotient(Number x, Number y) {
+    public final Number quotient(Number x, Number y) {
         return x.longValue() / y.longValue();
     }
 
-    public Number remainder(Number x, Number y) {
+    public final Number remainder(Number x, Number y) {
         return x.longValue() % y.longValue();
-    }
-
-    public boolean equalTo(Number x, Number y) {
-        return x.longValue() == y.longValue();
-    }
-
-    public boolean lessThan(Number x, Number y) {
-        return x.longValue() < y.longValue();
-    }
-
-    //public Number subtract(Number x, Number y);
-    final public Number negate(Number x) {
-        long val = x.longValue();
-        if (val > MIN_VALUE)
-            return -val;
-        return valueOf(val).negate();
-    }
-
-    public Number increment(Number x) {
-        long val = x.longValue();
-        if (val < MAX_VALUE)
-            return val + 1;
-        return BIGINTEGER_OPS.increment(x);
-    }
-
-    public Number decrement(Number x) {
-        long val = x.longValue();
-        if (val > MIN_VALUE)
-            return val - 1;
-        return BIGINTEGER_OPS.decrement(x);
     }
 }
