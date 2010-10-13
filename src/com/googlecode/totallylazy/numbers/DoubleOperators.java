@@ -15,88 +15,88 @@ import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 
 /* rich Mar 31, 2008 */
 
-final class DoubleOperators implements Operators {
+public final class DoubleOperators implements Operators<Double> {
     public Operators combine(Operators y) {
         return y.opsWith(this);
     }
 
-    final public Operators opsWith(IntegerOperators x) {
+    public final Operators opsWith(IntegerOperators x) {
         return this;
     }
 
-    final public Operators opsWith(LongOperators x) {
+    public final Operators opsWith(LongOperators x) {
         return this;
     }
 
-    final public Operators opsWith(FloatOperators x) {
+    public final Operators opsWith(FloatOperators x) {
         return this;
     }
 
-    final public Operators opsWith(DoubleOperators x) {
+    public final Operators opsWith(DoubleOperators x) {
         return this;
     }
 
-    final public Operators opsWith(RatioOperators x) {
+    public final Operators opsWith(RatioOperators x) {
         return this;
     }
 
-    final public Operators opsWith(BigIntegerOperators x) {
+    public final Operators opsWith(BigIntegerOperators x) {
         return this;
     }
 
-    final public Operators opsWith(BigDecimalOperators x) {
+    public final Operators opsWith(BigDecimalOperators x) {
         return this;
     }
 
-    public boolean isZero(Number x) {
-        return x.doubleValue() == 0;
+    public final Number negate(Double x) {
+        return -x;
     }
 
-    public boolean isPositive(Number x) {
-        return x.doubleValue() > 0;
+    public final Number increment(Double x) {
+        return x + 1;
     }
 
-    public boolean isNegative(Number x) {
-        return x.doubleValue() < 0;
+    public final Number decrement(Double x) {
+        return x - 1;
     }
 
-    final public Number add(Number x, Number y) {
-        return x.doubleValue() + y.doubleValue();
+    public final boolean isZero(Double x) {
+        return x == 0;
     }
 
-    final public Number multiply(Number x, Number y) {
-        return x.doubleValue() * y.doubleValue();
+    public final boolean isPositive(Double x) {
+        return x > 0;
     }
 
-    public Number divide(Number x, Number y) {
-        return x.doubleValue() / y.doubleValue();
+    public final boolean isNegative(Double x) {
+        return x < 0;
     }
 
-    public Number quotient(Number x, Number y) {
-        return Numbers.quotient(x.doubleValue(), y.doubleValue());
-    }
-
-    public Number remainder(Number x, Number y) {
-        return Numbers.remainder(x.doubleValue(), y.doubleValue());
-    }
-
-    public boolean equalTo(Number x, Number y) {
+    public final boolean equalTo(Number x, Number y) {
         return x.doubleValue() == y.doubleValue();
     }
 
-    public boolean lessThan(Number x, Number y) {
+    public final boolean lessThan(Number x, Number y) {
         return x.doubleValue() < y.doubleValue();
     }
 
-    final public Number negate(Number x) {
-        return -x.doubleValue();
+    public final Number add(Number x, Number y) {
+        return x.doubleValue() + y.doubleValue();
     }
 
-    public Number increment(Number x) {
-        return x.doubleValue() + 1;
+    public final Number multiply(Number x, Number y) {
+        return x.doubleValue() * y.doubleValue();
     }
 
-    public Number decrement(Number x) {
-        return x.doubleValue() - 1;
+    public final Number divide(Number x, Number y) {
+        return x.doubleValue() / y.doubleValue();
+    }
+
+    public final Number quotient(Number x, Number y) {
+        return Numbers.quotient(x.doubleValue(), y.doubleValue());
+    }
+
+    public final Number remainder(Number x, Number y) {
+        return Numbers.remainder(x.doubleValue(), y.doubleValue());
     }
 }

@@ -12,7 +12,7 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
-interface Operators extends UnaryOperators, EqualityOperators, ArithmeticOperators {
+interface Operators<T extends Number> extends UnaryOperators<T>, EqualityOperators<T>, ArithmeticOperators {
     Operators combine(Operators y);
 
     Operators opsWith(IntegerOperators x);
