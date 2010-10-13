@@ -20,34 +20,34 @@ public final class IntegerOperators implements Operators<Integer> {
         return Integer.class;
     }
 
-    public final Number negate(Integer val) {
-        if (val > MIN_VALUE)
-            return -val;
-        return -((long) val);
+    public final Number negate(Integer value) {
+        if (value > MIN_VALUE)
+            return -value;
+        return -((long) value);
     }
 
-    public final Number increment(Integer val) {
-        if (val < MAX_VALUE)
-            return val + 1;
-        return (long) val + 1;
+    public final Number increment(Integer value) {
+        if (value < MAX_VALUE)
+            return value + 1;
+        return (long) value + 1;
     }
 
-    public final Number decrement(Integer val) {
-        if (val > MIN_VALUE)
-            return val - 1;
-        return (long) val - 1;
+    public final Number decrement(Integer value) {
+        if (value > MIN_VALUE)
+            return value - 1;
+        return (long) value - 1;
     }
 
-    public final boolean isZero(Integer x) {
-        return x == 0;
+    public final boolean isZero(Integer value) {
+        return value == 0;
     }
 
-    public final boolean isPositive(Integer x) {
-        return x > 0;
+    public final boolean isPositive(Integer value) {
+        return value > 0;
     }
 
-    public final boolean isNegative(Integer x) {
-        return x < 0;
+    public final boolean isNegative(Integer value) {
+        return value < 0;
     }
 
     public final boolean equalTo(Number x, Number y) {

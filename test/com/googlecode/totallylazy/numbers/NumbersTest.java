@@ -19,7 +19,7 @@ public class NumbersTest {
     public void shouldBePrettyFast() throws Exception {
         TimeReporter run = new TimeReporter();
         final Number result = time(iterate(increment(), 0).take(10000), sum(), run);
-
+        System.out.println("run.time() = " + run.time());
         assertThat(run.time(), Matchers.is(lessThan(100d)));
         assertThat(result, NumberMatcher.is(49995000));
     }

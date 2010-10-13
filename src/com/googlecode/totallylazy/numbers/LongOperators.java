@@ -41,16 +41,16 @@ public final class LongOperators implements Operators<Long> {
         return valueOf(value).negate();
     }
 
-    public final boolean isZero(Long x) {
-        return x == 0;
+    public final boolean isZero(Long value) {
+        return value == 0;
     }
 
-    public final boolean isPositive(Long x) {
-        return x > 0;
+    public final boolean isPositive(Long value) {
+        return value > 0;
     }
 
-    public final boolean isNegative(Long x) {
-        return x < 0;
+    public final boolean isNegative(Long value) {
+        return value < 0;
     }
 
     public final boolean equalTo(Number x, Number y) {

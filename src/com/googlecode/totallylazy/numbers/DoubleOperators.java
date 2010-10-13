@@ -20,28 +20,28 @@ public final class DoubleOperators implements Operators<Double> {
         return Double.class;
     }
 
-    public final Number negate(Double x) {
-        return -x;
+    public final Number negate(Double value) {
+        return -value;
     }
 
-    public final Number increment(Double x) {
-        return x + 1;
+    public final Number increment(Double value) {
+        return value + 1;
     }
 
-    public final Number decrement(Double x) {
-        return x - 1;
+    public final Number decrement(Double value) {
+        return value - 1;
     }
 
-    public final boolean isZero(Double x) {
-        return x == 0;
+    public final boolean isZero(Double value) {
+        return value == 0;
     }
 
-    public final boolean isPositive(Double x) {
-        return x > 0;
+    public final boolean isPositive(Double value) {
+        return value > 0;
     }
 
-    public final boolean isNegative(Double x) {
-        return x < 0;
+    public final boolean isNegative(Double value) {
+        return value < 0;
     }
 
     public final boolean equalTo(Number x, Number y) {

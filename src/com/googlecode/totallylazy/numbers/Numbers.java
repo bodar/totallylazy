@@ -140,29 +140,29 @@ public class Numbers {
         return x;
     }
 
-    public static Number reduce(Number val) {
-        if (val instanceof Long)
-            return reduce(val.longValue());
-        else if (val instanceof BigInteger)
-            return reduce((BigInteger) val);
-        return val;
+    public static Number reduce(Number value) {
+        if (value instanceof Long)
+            return reduce(value.longValue());
+        else if (value instanceof BigInteger)
+            return reduce((BigInteger) value);
+        return value;
     }
 
-    public static Number reduce(BigInteger val) {
-        int bitLength = val.bitLength();
+    public static Number reduce(BigInteger value) {
+        int bitLength = value.bitLength();
         if (bitLength < 32)
-            return val.intValue();
+            return value.intValue();
         else if (bitLength < 64)
-            return val.longValue();
+            return value.longValue();
         else
-            return val;
+            return value;
     }
 
-    public static Number reduce(long val) {
-        if (val >= Integer.MIN_VALUE && val <= Integer.MAX_VALUE)
-            return (int) val;
+    public static Number reduce(long value) {
+        if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE)
+            return (int) value;
         else
-            return val;
+            return value;
     }
 
     public static Number divide(BigInteger n, BigInteger d) {

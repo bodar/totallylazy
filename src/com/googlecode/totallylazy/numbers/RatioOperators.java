@@ -19,28 +19,28 @@ public final class RatioOperators implements Operators<Ratio> {
         return Ratio.class;
     }
 
-    public final Number negate(Ratio x) {
-        return new Ratio(x.numerator.negate(), x.denominator);
+    public final Number negate(Ratio value) {
+        return new Ratio(value.numerator.negate(), value.denominator);
     }
 
-    public final Number increment(Ratio x) {
-        return Numbers.add(x, 1);
+    public final Number increment(Ratio value) {
+        return Numbers.add(value, 1);
     }
 
-    public final Number decrement(Ratio x) {
-        return Numbers.add(x, -1);
+    public final Number decrement(Ratio value) {
+        return Numbers.add(value, -1);
     }
 
-    public final boolean isZero(Ratio x) {
-        return x.numerator.signum() == 0;
+    public final boolean isZero(Ratio value) {
+        return value.numerator.signum() == 0;
     }
 
-    public final boolean isPositive(Ratio x) {
-        return x.numerator.signum() > 0;
+    public final boolean isPositive(Ratio value) {
+        return value.numerator.signum() > 0;
     }
 
-    public final boolean isNegative(Ratio x) {
-        return x.numerator.signum() < 0;
+    public final boolean isNegative(Ratio value) {
+        return value.numerator.signum() < 0;
     }
 
     public final boolean equalTo(Number x, Number y) {
