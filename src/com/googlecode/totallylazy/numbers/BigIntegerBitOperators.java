@@ -15,24 +15,24 @@ import static com.googlecode.totallylazy.numbers.BigIntegerOperators.toBigIntege
 /* rich Mar 31, 2008 */
 
 public final class BigIntegerBitOperators implements BitOperators {
-    public final BitOperators combine(BitOperators y) {
-        return y.bitOpsWith(this);
+    public final BitOperators combine(BitOperators operators) {
+        return operators.bitOpsWith(this);
     }
 
-    public final BitOperators bitOpsWith(IntegerBitOperators x) {
+    public final BitOperators bitOpsWith(IntegerBitOperators operators) {
         return this;
     }
 
-    public final BitOperators bitOpsWith(LongBitOperators x) {
+    public final BitOperators bitOpsWith(LongBitOperators operators) {
         return this;
     }
 
-    public final BitOperators bitOpsWith(BigIntegerBitOperators x) {
+    public final BitOperators bitOpsWith(BigIntegerBitOperators operators) {
         return this;
     }
 
-    public final Number not(Number x) {
-        return toBigInteger(x).not();
+    public final Number not(Number value) {
+        return toBigInteger(value).not();
     }
 
     public final Number and(Number x, Number y) {
@@ -51,27 +51,27 @@ public final class BigIntegerBitOperators implements BitOperators {
         return toBigInteger(x).andNot(toBigInteger(y));
     }
 
-    public final Number clearBit(Number x, int n) {
-        return toBigInteger(x).clearBit(n);
+    public final Number clearBit(Number value, int n) {
+        return toBigInteger(value).clearBit(n);
     }
 
-    public final Number setBit(Number x, int n) {
-        return toBigInteger(x).setBit(n);
+    public final Number setBit(Number value, int n) {
+        return toBigInteger(value).setBit(n);
     }
 
-    public final Number flipBit(Number x, int n) {
-        return toBigInteger(x).flipBit(n);
+    public final Number flipBit(Number value, int n) {
+        return toBigInteger(value).flipBit(n);
     }
 
-    public final boolean testBit(Number x, int n) {
-        return toBigInteger(x).testBit(n);
+    public final boolean testBit(Number value, int n) {
+        return toBigInteger(value).testBit(n);
     }
 
-    public final Number shiftLeft(Number x, int n) {
-        return toBigInteger(x).shiftLeft(n);
+    public final Number shiftLeft(Number value, int n) {
+        return toBigInteger(value).shiftLeft(n);
     }
 
-    public final Number shiftRight(Number x, int n) {
-        return toBigInteger(x).shiftRight(n);
+    public final Number shiftRight(Number value, int n) {
+        return toBigInteger(value).shiftRight(n);
     }
 }

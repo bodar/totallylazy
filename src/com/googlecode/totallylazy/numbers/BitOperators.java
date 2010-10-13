@@ -13,15 +13,15 @@ package com.googlecode.totallylazy.numbers;
 /* rich Mar 31, 2008 */
 
 interface BitOperators {
-    BitOperators combine(BitOperators y);
+    BitOperators combine(BitOperators operators);
 
-    BitOperators bitOpsWith(IntegerBitOperators x);
+    BitOperators bitOpsWith(IntegerBitOperators operators);
 
-    BitOperators bitOpsWith(LongBitOperators x);
+    BitOperators bitOpsWith(LongBitOperators operators);
 
-    BitOperators bitOpsWith(BigIntegerBitOperators x);
+    BitOperators bitOpsWith(BigIntegerBitOperators operators);
 
-    public Number not(Number x);
+    public Number not(Number value);
 
     public Number and(Number x, Number y);
 
@@ -31,15 +31,15 @@ interface BitOperators {
 
     public Number andNot(Number x, Number y);
 
-    public Number clearBit(Number x, int n);
+    public Number clearBit(Number value, int n);
 
-    public Number setBit(Number x, int n);
+    public Number setBit(Number value, int n);
 
-    public Number flipBit(Number x, int n);
+    public Number flipBit(Number value, int n);
 
-    public boolean testBit(Number x, int n);
+    public boolean testBit(Number value, int n);
 
-    public Number shiftLeft(Number x, int n);
+    public Number shiftLeft(Number value, int n);
 
-    public Number shiftRight(Number x, int n);
+    public Number shiftRight(Number value, int n);
 }

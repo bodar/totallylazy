@@ -11,28 +11,28 @@ public final class BigDecimalOperators implements Operators<BigDecimal> {
         return BigDecimal.class;
     }
 
-    public final Number negate(BigDecimal x) {
-        return x.negate();
+    public final Number negate(BigDecimal value) {
+        return value.negate();
     }
 
-    public final Number increment(BigDecimal x) {
-        return x.add(ONE);
+    public final Number increment(BigDecimal value) {
+        return value.add(ONE);
     }
 
-    public final Number decrement(BigDecimal x) {
-        return x.subtract(ONE);
+    public final Number decrement(BigDecimal value) {
+        return value.subtract(ONE);
     }
 
-    public final boolean isZero(BigDecimal x) {
-        return x.signum() == 0;
+    public final boolean isZero(BigDecimal value) {
+        return value.signum() == 0;
     }
 
-    public final boolean isPositive(BigDecimal x) {
-        return x.signum() > 0;
+    public final boolean isPositive(BigDecimal value) {
+        return value.signum() > 0;
     }
 
-    public final boolean isNegative(BigDecimal x) {
-        return x.signum() < 0;
+    public final boolean isNegative(BigDecimal value) {
+        return value.signum() < 0;
     }
 
     public final boolean equalTo(Number x, Number y) {
@@ -63,12 +63,12 @@ public final class BigDecimalOperators implements Operators<BigDecimal> {
         return toBigDecimal(x).remainder(toBigDecimal(y));
     }
 
-    public static BigDecimal toBigDecimal(Number x) {
-        if (x instanceof BigDecimal)
-            return (BigDecimal) x;
-        else if (x instanceof BigInteger)
-            return new BigDecimal((BigInteger) x);
+    public static BigDecimal toBigDecimal(Number number) {
+        if (number instanceof BigDecimal)
+            return (BigDecimal) number;
+        else if (number instanceof BigInteger)
+            return new BigDecimal((BigInteger) number);
         else
-            return BigDecimal.valueOf((x).longValue());
+            return BigDecimal.valueOf((number).longValue());
     }
 }

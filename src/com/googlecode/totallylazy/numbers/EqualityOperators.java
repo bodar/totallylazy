@@ -1,11 +1,11 @@
 package com.googlecode.totallylazy.numbers;
 
 public interface EqualityOperators<T extends Number>  {
-    boolean isZero(T x);
+    boolean isZero(T value);
 
-    boolean isPositive(T x);
+    boolean isPositive(T value);
 
-    boolean isNegative(T x);
+    boolean isNegative(T value);
 
     boolean equalTo(Number x, Number y);
 

@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy.numbers;
 
 public interface UnaryOperators<T extends Number> {
-    Number negate(T x);
+    Number negate(T value);
 
-    Number increment(T x);
+    Number increment(T value);
 
-    Number decrement(T x);
+    Number decrement(T value);
 }

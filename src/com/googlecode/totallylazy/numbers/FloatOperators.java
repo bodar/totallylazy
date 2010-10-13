@@ -17,28 +17,28 @@ public final class FloatOperators implements Operators<Float> {
         return Float.class;
     }
 
-    public final Number negate(Float x) {
-        return -x;
+    public final Number negate(Float value) {
+        return -value;
     }
 
-    public final Number increment(Float x) {
-        return x + 1;
+    public final Number increment(Float value) {
+        return value + 1;
     }
 
-    public final Number decrement(Float x) {
-        return x - 1;
+    public final Number decrement(Float value) {
+        return value - 1;
     }
 
-    public final boolean isZero(Float x) {
-        return x == 0;
+    public final boolean isZero(Float value) {
+        return value == 0;
     }
 
-    public final boolean isPositive(Float x) {
-        return x > 0;
+    public final boolean isPositive(Float value) {
+        return value > 0;
     }
 
-    public final boolean isNegative(Float x) {
-        return x < 0;
+    public final boolean isNegative(Float value) {
+        return value < 0;
     }
 
     public final boolean equalTo(Number x, Number y) {

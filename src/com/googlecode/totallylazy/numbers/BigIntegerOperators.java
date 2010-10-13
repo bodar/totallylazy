@@ -13,32 +13,34 @@ package com.googlecode.totallylazy.numbers;
 
 import java.math.BigInteger;
 
-import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.numbers.Numbers.reduce;
 import static java.math.BigInteger.ONE;
+import static java.math.BigInteger.ZERO;
+import static java.math.BigInteger.valueOf;
 
 public final class BigIntegerOperators implements Operators<BigInteger> {
     public Class<BigInteger> forClass() {
         return BigInteger.class;
     }
 
-    public final Number increment(BigInteger x) {
-        return reduce(x.add(ONE));
+    public final Number increment(BigInteger value) {
+        return reduce(value.add(ONE));
     }
 
-    public final Number decrement(BigInteger x) {
-        return reduce(x.subtract(ONE));
+    public final Number decrement(BigInteger value) {
+        return reduce(value.subtract(ONE));
     }
 
-    public final boolean isZero(BigInteger x) {
-        return x.signum() == 0;
+    public final boolean isZero(BigInteger value) {
+        return value.signum() == 0;
     }
 
-    public final boolean isPositive(BigInteger x) {
-        return x.signum() > 0;
+    public final boolean isPositive(BigInteger value) {
+        return value.signum() > 0;
     }
 
-    public final boolean isNegative(BigInteger x) {
-        return x.signum() < 0;
+    public final boolean isNegative(BigInteger value) {
+        return value.signum() < 0;
     }
 
     public final boolean equalTo(Number x, Number y) {
@@ -49,8 +51,8 @@ public final class BigIntegerOperators implements Operators<BigInteger> {
         return toBigInteger(x).compareTo(toBigInteger(y)) < 0;
     }
 
-    public final Number negate(BigInteger x) {
-        return x.negate();
+    public final Number negate(BigInteger value) {
+        return value.negate();
     }
 
     public final Number add(Number x, Number y) {
@@ -62,7 +64,31 @@ public final class BigIntegerOperators implements Operators<BigInteger> {
     }
 
     public final Number divide(Number x, Number y) {
-        return Numbers.divide(toBigInteger(x), toBigInteger(y));
+        BigInteger n = toBigInteger(x);
+        BigInteger d = toBigInteger(y);
+
+        if (d.equals(ZERO)) {
+            throw new ArithmeticException("Divide by zero");
+        }
+
+        BigInteger gcd = n.gcd(d);
+
+        if (gcd.equals(ZERO)) {
+            return 0;
+        }
+
+        n = n.divide(gcd);
+        d = d.divide(gcd);
+
+        if (d.equals(BigInteger.ONE)) {
+            return reduce(n);
+        }
+
+        if (d.equals(BigInteger.ONE.negate())) {
+            return reduce(n.negate());
+        }
+
+        return new Ratio((d.signum() < 0 ? n.negate() : n), (d.signum() < 0 ? d.negate() : d));
     }
 
     public final Number quotient(Number x, Number y) {
@@ -73,11 +99,11 @@ public final class BigIntegerOperators implements Operators<BigInteger> {
         return toBigInteger(x).remainder(toBigInteger(y));
     }
 
-    public static BigInteger toBigInteger(Number x) {
-        if (x instanceof BigInteger)
-            return (BigInteger) x;
-        else
-            return BigInteger.valueOf((x).longValue());
+    public static BigInteger toBigInteger(Number value) {
+        if (value instanceof BigInteger) {
+            return (BigInteger) value;
+        }
+        return valueOf(value.longValue());
     }
 
 }
