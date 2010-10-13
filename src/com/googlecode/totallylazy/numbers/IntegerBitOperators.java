@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.numbers;
 
+import static com.googlecode.totallylazy.numbers.BigIntegerOperators.toBigInteger;
+
 /**
  * Copyright (c) Rich Hickey. All rights reserved.
  * The use and distribution terms for this software are covered by the
@@ -29,7 +31,6 @@ final class IntegerBitOperators implements BitOperators {
         return Numbers.BIGINTEGER_BITOPS;
     }
 
-
     public Number not(Number x) {
         return ~x.intValue();
     }
@@ -56,7 +57,7 @@ final class IntegerBitOperators implements BitOperators {
         else if (n < 63)
             return x.longValue() & ~(1L << n);
         else
-            return Numbers.toBigInteger(x).clearBit(n);
+            return toBigInteger(x).clearBit(n);
     }
 
     public Number setBit(Number x, int n) {
@@ -65,7 +66,7 @@ final class IntegerBitOperators implements BitOperators {
         else if (n < 63)
             return x.longValue() | (1L << n);
         else
-            return Numbers.toBigInteger(x).setBit(n);
+            return toBigInteger(x).setBit(n);
     }
 
     public Number flipBit(Number x, int n) {
@@ -74,7 +75,7 @@ final class IntegerBitOperators implements BitOperators {
         else if (n < 63)
             return x.longValue() ^ (1L << n);
         else
-            return Numbers.toBigInteger(x).flipBit(n);
+            return toBigInteger(x).flipBit(n);
     }
 
     public boolean testBit(Number x, int n) {
@@ -83,7 +84,7 @@ final class IntegerBitOperators implements BitOperators {
         else if (n < 64)
             return (x.longValue() & (1L << n)) != 0;
         else
-            return Numbers.toBigInteger(x).testBit(n);
+            return toBigInteger(x).testBit(n);
     }
 
     public Number shiftLeft(Number x, int n) {
@@ -92,7 +93,7 @@ final class IntegerBitOperators implements BitOperators {
                 return shiftRight(x, -n);
             return Numbers.reduce(x.longValue() << n);
         } else
-            return Numbers.reduce(Numbers.toBigInteger(x).shiftLeft(n));
+            return Numbers.reduce(toBigInteger(x).shiftLeft(n));
     }
 
     public Number shiftRight(Number x, int n) {

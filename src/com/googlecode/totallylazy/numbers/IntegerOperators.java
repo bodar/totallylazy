@@ -11,44 +11,13 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
-import static com.googlecode.totallylazy.numbers.Numbers.*;
-import static com.googlecode.totallylazy.numbers.Numbers.BIGDECIMAL_OPS;
-import static com.googlecode.totallylazy.numbers.Numbers.BIGINTEGER_OPS;
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 import static java.math.BigInteger.valueOf;
 
 public final class IntegerOperators implements Operators<Integer> {
-    public final Operators combine(Operators y) {
-        return y.opsWith(this);
-    }
-
-    public final Operators opsWith(IntegerOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(LongOperators x) {
-        return LONG_OPS;
-    }
-
-    public final Operators opsWith(FloatOperators x) {
-        return FLOAT_OPS;
-    }
-
-    public final Operators opsWith(DoubleOperators x) {
-        return DOUBLE_OPS;
-    }
-
-    public final Operators opsWith(RatioOperators x) {
-        return RATIO_OPS;
-    }
-
-    public final Operators opsWith(BigIntegerOperators x) {
-        return BIGINTEGER_OPS;
-    }
-
-    public final Operators opsWith(BigDecimalOperators x) {
-        return BIGDECIMAL_OPS;
+    public Class<Integer> forClass() {
+        return Integer.class;
     }
 
     public final Number negate(Integer val) {

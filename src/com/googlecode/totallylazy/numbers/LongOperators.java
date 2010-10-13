@@ -11,55 +11,28 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
+import java.math.BigInteger;
+
 import static com.googlecode.totallylazy.numbers.Numbers.*;
-import static com.googlecode.totallylazy.numbers.Numbers.BIGDECIMAL_OPS;
 import static java.lang.Long.MAX_VALUE;
 import static java.lang.Long.MIN_VALUE;
 import static java.math.BigInteger.valueOf;
 
 public final class LongOperators implements Operators<Long> {
-    public final Operators combine(Operators y) {
-        return y.opsWith(this);
-    }
-
-    public final Operators opsWith(IntegerOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(LongOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(FloatOperators x) {
-        return FLOAT_OPS;
-    }
-
-    public final Operators opsWith(DoubleOperators x) {
-        return DOUBLE_OPS;
-    }
-
-    public final Operators opsWith(RatioOperators x) {
-        return RATIO_OPS;
-    }
-
-    public final Operators opsWith(BigIntegerOperators x) {
-        return BIGINTEGER_OPS;
-    }
-
-    public final Operators opsWith(BigDecimalOperators x) {
-        return BIGDECIMAL_OPS;
+    public Class<Long> forClass() {
+        return Long.class;
     }
 
     public final Number increment(Long value) {
         if (value < MAX_VALUE)
             return value + 1;
-        return BIGINTEGER_OPS.increment(valueOf(value));
+        return operatorsFor(BigInteger.class).increment(valueOf(value));
     }
 
     public final Number decrement(Long value) {
         if (value > MIN_VALUE)
             return value - 1;
-        return BIGINTEGER_OPS.decrement(valueOf(value));
+        return operatorsFor(BigInteger.class).decrement(valueOf(value));
     }
 
     public final Number negate(Long value) {
@@ -92,7 +65,7 @@ public final class LongOperators implements Operators<Long> {
         long lx = x.longValue(), ly = y.longValue();
         long ret = lx + ly;
         if ((ret ^ lx) < 0 && (ret ^ ly) < 0)
-            return BIGINTEGER_OPS.add(x, y);
+            return operatorsFor(BigInteger.class).add(x, y);
         return ret;
     }
 
@@ -100,7 +73,7 @@ public final class LongOperators implements Operators<Long> {
         long lx = x.longValue(), ly = y.longValue();
         long ret = lx * ly;
         if (ly != 0 && ret / ly != lx)
-            return BIGINTEGER_OPS.multiply(x, y);
+            return operatorsFor(BigInteger.class).multiply(x, y);
         return ret;
     }
 

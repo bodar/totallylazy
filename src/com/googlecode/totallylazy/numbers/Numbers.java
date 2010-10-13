@@ -12,66 +12,69 @@
 
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.Callable2;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.googlecode.totallylazy.Callables.toClass;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Numbers {
     public static <T extends Number> boolean isZero(T x) {
-        return with(x).isZero(x);
+        return operatorsFor(x).isZero(x);
     }
 
-    static public boolean isPositive(Number x) {
-        return with(x).isPositive(x);
+    public static <T extends Number> boolean isPositive(T x) {
+        return operatorsFor(x).isPositive(x);
     }
 
-    static public boolean isNegative(Number x) {
-        return with(x).isNegative(x);
+    public static <T extends Number> boolean isNegative(T x) {
+        return operatorsFor(x).isNegative(x);
     }
 
-    static public Number negate(Number x) {
-        return with(x).negate(x);
+    public static <T extends Number> Number negate(T x) {
+        return operatorsFor(x).negate(x);
     }
 
-    static public Number increment(Number x) {
-        return with(x).increment(x);
+    public static <T extends Number> Number increment(T x) {
+        return operatorsFor(x).increment(x);
     }
 
-    static public Number decrement(Number x) {
-        return with(x).decrement(x);
+    public static <T extends Number> Number decrement(T x) {
+        return operatorsFor(x).decrement(x);
     }
 
-    static public Number add(Number x, Number y) {
-        return with(x).combine(with(y)).add(x, y);
+    public static <X extends Number, Y extends Number> Number add(X x, Y y) {
+        return operatorsFor(x,y).add(x, y);
     }
 
-    static public Number subtract(Number x, Number y) {
-        Operators yops = with(y);
-        return with(x).combine(yops).add(x, yops.negate(y));
+    public static <X extends Number, Y extends Number>  Number subtract(X x, Y y) {
+        return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
-    static public Number multiply(Number x, Number y) {
-        return with(x).combine(with(y)).multiply(x, y);
+    public static <X extends Number, Y extends Number>  Number multiply(X x, Y y) {
+        return operatorsFor(x, y).multiply(x, y);
     }
 
-    static public Number divide(Number x, Number y) {
-        Operators yops = with(y);
-        if (yops.isZero(y))
+    public static <X extends Number, Y extends Number> Number divide(X x, Y y) {
+        if (operatorsFor(y).isZero(y))
             throw new ArithmeticException("Divide by zero");
-        return with(x).combine(yops).divide(x, y);
+        return operatorsFor(x, y).divide(x, y);
     }
 
-    static public Number quotient(Number x, Number y) {
-        Operators yops = with(y);
-        if (yops.isZero(y))
+    public static <X extends Number, Y extends Number> Number quotient(X x, Y y) {
+        if (operatorsFor(y).isZero(y))
             throw new ArithmeticException("Divide by zero");
-        return reduce(with(x).combine(yops).quotient(x, y));
+        return reduce(operatorsFor(x, y).quotient(x, y));
     }
 
-    static public Number remainder(Number x, Number y) {
-        Operators yops = with(y);
-        if (yops.isZero(y))
+    public static <X extends Number, Y extends Number> Number remainder(X x, Y y) {
+        if (operatorsFor(y).isZero(y))
             throw new ArithmeticException("Divide by zero");
-        return reduce(with(x).combine(yops).remainder(x, y));
+        return reduce(operatorsFor(x, y).remainder(x, y));
     }
 
     static Number quotient(double n, double d) {
@@ -93,28 +96,28 @@ public class Numbers {
         }
     }
 
-    static public boolean equalTo(Number x, Number y) {
-        return with(x).combine(with(y)).equalTo(x, y);
+    public static boolean equalTo(Number x, Number y) {
+        return operatorsFor(x, y).equalTo(x, y);
     } 
 
-    static public boolean lessThan(Number x, Number y) {
-        return with(x).combine(with(y)).lessThan(x, y);
+    public static boolean lessThan(Number x, Number y) {
+        return operatorsFor(x, y).lessThan(x, y);
     }
 
-    static public boolean lessThanOrEqual(Number x, Number y) {
-        return !with(x).combine(with(y)).lessThan(y, x);
+    public static boolean lessThanOrEqual(Number x, Number y) {
+        return !operatorsFor(x, y).lessThan(y, x);
     }
 
-    static public boolean greaterThan(Number x, Number y) {
-        return with(x).combine(with(y)).lessThan(y, x);
+    public static boolean greaterThan(Number x, Number y) {
+        return operatorsFor(x, y).lessThan(y, x);
     }
 
-    static public boolean greaterThanOrEqual(Number x, Number y) {
-        return !with(x).combine(with(y)).lessThan(x, y);
+    public static boolean greaterThanOrEqual(Number x, Number y) {
+        return !operatorsFor(x,y).lessThan(x, y);
     }
 
-    static public int compare(Number x, Number y) {
-        Operators operators = with(x).combine(with(y));
+    public static int compare(Number x, Number y) {
+        Operators operators = operatorsFor(x,y);
         if (operators.lessThan(x, y))
             return -1;
         else if (operators.lessThan(y, x))
@@ -122,38 +125,7 @@ public class Numbers {
         return 0;
     }
 
-    static BigInteger toBigInteger(Number x) {
-        if (x instanceof BigInteger)
-            return (BigInteger) x;
-        else
-            return BigInteger.valueOf((x).longValue());
-    }
-
-    static BigDecimal toBigDecimal(Number x) {
-        if (x instanceof BigDecimal)
-            return (BigDecimal) x;
-        else if (x instanceof BigInteger)
-            return new BigDecimal((BigInteger) x);
-        else
-            return BigDecimal.valueOf((x).longValue());
-    }
-
-    static Ratio toRatio(Number x) {
-        if (x instanceof Ratio)
-            return (Ratio) x;
-        else if (x instanceof BigDecimal) {
-            BigDecimal bx = (BigDecimal) x;
-            BigInteger bv = bx.unscaledValue();
-            int scale = bx.scale();
-            if (scale < 0)
-                return new Ratio(bv.multiply(BigInteger.TEN.pow(-scale)), BigInteger.ONE);
-            else
-                return new Ratio(bv, BigInteger.TEN.pow(scale));
-        }
-        return new Ratio(toBigInteger(x), BigInteger.ONE);
-    }
-
-    static public Number rationalize(Number x) {
+    public static Number rationalize(Number x) {
         if (x instanceof Float || x instanceof Double)
             return rationalize(BigDecimal.valueOf(x.doubleValue()));
         else if (x instanceof BigDecimal) {
@@ -168,7 +140,7 @@ public class Numbers {
         return x;
     }
 
-    static public Number reduce(Number val) {
+    public static Number reduce(Number val) {
         if (val instanceof Long)
             return reduce(val.longValue());
         else if (val instanceof BigInteger)
@@ -176,7 +148,7 @@ public class Numbers {
         return val;
     }
 
-    static public Number reduce(BigInteger val) {
+    public static Number reduce(BigInteger val) {
         int bitLength = val.bitLength();
         if (bitLength < 32)
             return val.intValue();
@@ -186,14 +158,14 @@ public class Numbers {
             return val;
     }
 
-    static public Number reduce(long val) {
+    public static Number reduce(long val) {
         if (val >= Integer.MIN_VALUE && val <= Integer.MAX_VALUE)
             return (int) val;
         else
             return val;
     }
 
-    static public Number divide(BigInteger n, BigInteger d) {
+    public static Number divide(BigInteger n, BigInteger d) {
         if (d.equals(BigInteger.ZERO))
             throw new ArithmeticException("Divide by zero");
         BigInteger gcd = n.gcd(d);
@@ -209,98 +181,103 @@ public class Numbers {
                 (d.signum() < 0 ? d.negate() : d));
     }
 
-    static public Number not(Number x) {
+    public static Number not(Number x) {
         return bitOps(x).not(x);
     }
 
 
-    static public Number and(Number x, Number y) {
+    public static Number and(Number x, Number y) {
         return bitOps(x).combine(bitOps(y)).and(x, y);
     }
 
-    static public Number or(Number x, Number y) {
+    public static Number or(Number x, Number y) {
         return bitOps(x).combine(bitOps(y)).or(x, y);
     }
 
-    static public Number xor(Number x, Number y) {
+    public static Number xor(Number x, Number y) {
         return bitOps(x).combine(bitOps(y)).xor(x, y);
     }
 
-    static public Number andNot(Number x, Number y) {
+    public static Number andNot(Number x, Number y) {
         return bitOps(x).combine(bitOps(y)).andNot(x, y);
     }
 
-    static public Number clearBit(Number x, int n) {
+    public static Number clearBit(Number x, int n) {
         if (n < 0)
             throw new ArithmeticException("Negative bit index");
         return bitOps(x).clearBit(x, n);
     }
 
-    static public Number setBit(Number x, int n) {
+    public static Number setBit(Number x, int n) {
         if (n < 0)
             throw new ArithmeticException("Negative bit index");
         return bitOps(x).setBit(x, n);
     }
 
-    static public Number flipBit(Number x, int n) {
+    public static Number flipBit(Number x, int n) {
         if (n < 0)
             throw new ArithmeticException("Negative bit index");
         return bitOps(x).flipBit(x, n);
     }
 
-    static public boolean testBit(Number x, int n) {
+    public static boolean testBit(Number x, int n) {
         if (n < 0)
             throw new ArithmeticException("Negative bit index");
         return bitOps(x).testBit(x, n);
     }
 
-    static public Number shiftLeft(Number x, Number n) {
+    public static Number shiftLeft(Number x, Number n) {
         return bitOps(x).shiftLeft(x, (n).intValue());
     }
 
-    static public int shiftLeft(int x, int n) {
+    public static int shiftLeft(int x, int n) {
         return x << n;
     }
 
-    static public Number shiftRight(Number x, Number n) {
+    public static Number shiftRight(Number x, Number n) {
         return bitOps(x).shiftRight(x, (n).intValue());
     }
 
-    static public int shiftRight(int x, int n) {
+    public static int shiftRight(int x, int n) {
         return x >> n;
     }
-
-    static final IntegerOperators INTEGER_OPS = new IntegerOperators();
-    static final LongOperators LONG_OPS = new LongOperators();
-    static final FloatOperators FLOAT_OPS = new FloatOperators();
-    static final DoubleOperators DOUBLE_OPS = new DoubleOperators();
-    static final RatioOperators RATIO_OPS = new RatioOperators();
-    static final BigIntegerOperators BIGINTEGER_OPS = new BigIntegerOperators();
-    static final BigDecimalOperators BIGDECIMAL_OPS = new BigDecimalOperators();
 
     static final IntegerBitOperators INTEGER_BITOPS = new IntegerBitOperators();
     static final LongBitOperators LONG_BITOPS = new LongBitOperators();
     static final BigIntegerBitOperators BIGINTEGER_BITOPS = new BigIntegerBitOperators();
 
-    static Operators with(Number x) {
-        Class xc = x.getClass();
+    static final List<Operators> operators = new ArrayList<Operators>();
+    static final List<Class> order = new ArrayList<Class>();
 
-        if (xc == Integer.class)
-            return INTEGER_OPS;
-        else if (xc == Double.class)
-            return DOUBLE_OPS;
-        else if (xc == Float.class)
-            return FLOAT_OPS;
-        else if (xc == BigInteger.class)
-            return BIGINTEGER_OPS;
-        else if (xc == Long.class)
-            return LONG_OPS;
-        else if (xc == Ratio.class)
-            return RATIO_OPS;
-        else if (xc == BigDecimal.class)
-            return BIGDECIMAL_OPS;
-        else
-            return INTEGER_OPS;
+    static {
+        addOperators(new IntegerOperators());
+        addOperators(new LongOperators());
+        addOperators(new BigIntegerOperators());
+        addOperators(new BigDecimalOperators());
+        addOperators(new RatioOperators());
+        addOperators(new FloatOperators());
+        addOperators(new DoubleOperators());
+    }
+
+    private static void addOperators(Operators newOperators) {
+        operators.add(newOperators);
+        order.add(newOperators.forClass());
+    }
+
+    public static <T extends Number> Operators<T> operatorsFor(Class<T> numberClass) {
+        return (Operators<T>) operators.get(order.indexOf(numberClass));
+    }
+
+    public static <T extends Number> Operators<T> operatorsFor(T... numbers) {
+        int highestIndex = 0;
+        for (T number : numbers) {
+            final int index = order.indexOf(number.getClass());
+            if(index > highestIndex){
+                highestIndex = index;
+            }
+        }
+
+        return (Operators<T>) operators.get(highestIndex);
     }
 
     static BitOperators bitOps(Number x) {

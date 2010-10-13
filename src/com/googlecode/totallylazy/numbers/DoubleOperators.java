@@ -16,36 +16,8 @@ import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 /* rich Mar 31, 2008 */
 
 public final class DoubleOperators implements Operators<Double> {
-    public Operators combine(Operators y) {
-        return y.opsWith(this);
-    }
-
-    public final Operators opsWith(IntegerOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(LongOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(FloatOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(DoubleOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(RatioOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(BigIntegerOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(BigDecimalOperators x) {
-        return this;
+    public Class<Double> forClass() {
+        return Double.class;
     }
 
     public final Number negate(Double x) {

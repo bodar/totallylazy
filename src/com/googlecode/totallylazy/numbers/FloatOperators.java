@@ -13,36 +13,8 @@ package com.googlecode.totallylazy.numbers;
 /* rich Mar 31, 2008 */
 
 public final class FloatOperators implements Operators<Float> {
-    public final Operators combine(Operators y) {
-        return y.opsWith(this);
-    }
-
-    public final Operators opsWith(IntegerOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(LongOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(FloatOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(DoubleOperators x) {
-        return Numbers.DOUBLE_OPS;
-    }
-
-    public final Operators opsWith(RatioOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(BigIntegerOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(BigDecimalOperators x) {
-        return this;
+    public Class<Float> forClass() {
+        return Float.class;
     }
 
     public final Number negate(Float x) {

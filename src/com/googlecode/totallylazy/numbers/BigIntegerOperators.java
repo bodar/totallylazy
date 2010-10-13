@@ -17,36 +17,8 @@ import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static java.math.BigInteger.ONE;
 
 public final class BigIntegerOperators implements Operators<BigInteger> {
-    public final Operators combine(Operators y) {
-        return y.opsWith(this);
-    }
-
-    public final Operators opsWith(IntegerOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(LongOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(FloatOperators x) {
-        return FLOAT_OPS;
-    }
-
-    public final Operators opsWith(DoubleOperators x) {
-        return DOUBLE_OPS;
-    }
-
-    public final Operators opsWith(RatioOperators x) {
-        return RATIO_OPS;
-    }
-
-    public final Operators opsWith(BigIntegerOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(BigDecimalOperators x) {
-        return BIGDECIMAL_OPS;
+    public Class<BigInteger> forClass() {
+        return BigInteger.class;
     }
 
     public final Number increment(BigInteger x) {
@@ -90,7 +62,7 @@ public final class BigIntegerOperators implements Operators<BigInteger> {
     }
 
     public final Number divide(Number x, Number y) {
-        return divide(toBigInteger(x), toBigInteger(y));
+        return Numbers.divide(toBigInteger(x), toBigInteger(y));
     }
 
     public final Number quotient(Number x, Number y) {
@@ -100,4 +72,12 @@ public final class BigIntegerOperators implements Operators<BigInteger> {
     public final Number remainder(Number x, Number y) {
         return toBigInteger(x).remainder(toBigInteger(y));
     }
+
+    public static BigInteger toBigInteger(Number x) {
+        if (x instanceof BigInteger)
+            return (BigInteger) x;
+        else
+            return BigInteger.valueOf((x).longValue());
+    }
+
 }
