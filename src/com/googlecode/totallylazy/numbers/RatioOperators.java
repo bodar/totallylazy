@@ -11,39 +11,12 @@ package com.googlecode.totallylazy.numbers;
 
 /* rich Mar 31, 2008 */
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public final class RatioOperators implements Operators<Ratio> {
-    public final Operators combine(Operators y) {
-        return y.opsWith(this);
-    }
-
-    public final Operators opsWith(IntegerOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(LongOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(FloatOperators x) {
-        return Numbers.FLOAT_OPS;
-    }
-
-    public final Operators opsWith(DoubleOperators x) {
-        return Numbers.DOUBLE_OPS;
-    }
-
-    public final Operators opsWith(RatioOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(BigIntegerOperators x) {
-        return this;
-    }
-
-    public final Operators opsWith(BigDecimalOperators x) {
-        return this;
+    public Class<Ratio> forClass() {
+        return Ratio.class;
     }
 
     public final Number negate(Ratio x) {
@@ -71,54 +44,69 @@ public final class RatioOperators implements Operators<Ratio> {
     }
 
     public final boolean equalTo(Number x, Number y) {
-        Ratio rx = Numbers.toRatio(x);
-        Ratio ry = Numbers.toRatio(y);
+        Ratio rx = toRatio(x);
+        Ratio ry = toRatio(y);
         return rx.numerator.equals(ry.numerator)
                 && rx.denominator.equals(ry.denominator);
     }
 
     public final boolean lessThan(Number x, Number y) {
-        Ratio rx = Numbers.toRatio(x);
-        Ratio ry = Numbers.toRatio(y);
+        Ratio rx = toRatio(x);
+        Ratio ry = toRatio(y);
         return Numbers.lessThan(rx.numerator.multiply(ry.denominator), ry.numerator.multiply(rx.denominator));
     }
 
     public final Number add(Number x, Number y) {
-        Ratio rx = Numbers.toRatio(x);
-        Ratio ry = Numbers.toRatio(y);
+        Ratio rx = toRatio(x);
+        Ratio ry = toRatio(y);
         return divide(ry.numerator.multiply(rx.denominator)
                 .add(rx.numerator.multiply(ry.denominator))
                 , ry.denominator.multiply(rx.denominator));
     }
 
     public final Number multiply(Number x, Number y) {
-        Ratio rx = Numbers.toRatio(x);
-        Ratio ry = Numbers.toRatio(y);
+        Ratio rx = toRatio(x);
+        Ratio ry = toRatio(y);
         return Numbers.divide(ry.numerator.multiply(rx.numerator)
                 , ry.denominator.multiply(rx.denominator));
     }
 
     public final Number divide(Number x, Number y) {
-        Ratio rx = Numbers.toRatio(x);
-        Ratio ry = Numbers.toRatio(y);
+        Ratio rx = toRatio(x);
+        Ratio ry = toRatio(y);
         return Numbers.divide(ry.denominator.multiply(rx.numerator)
                 , ry.numerator.multiply(rx.denominator));
     }
 
     public final Number quotient(Number x, Number y) {
-        Ratio rx = Numbers.toRatio(x);
-        Ratio ry = Numbers.toRatio(y);
+        Ratio rx = toRatio(x);
+        Ratio ry = toRatio(y);
         BigInteger q = rx.numerator.multiply(ry.denominator).divide(
                 rx.denominator.multiply(ry.numerator));
         return Numbers.reduce(q);
     }
 
     public final Number remainder(Number x, Number y) {
-        Ratio rx = Numbers.toRatio(x);
-        Ratio ry = Numbers.toRatio(y);
+        Ratio rx = toRatio(x);
+        Ratio ry = toRatio(y);
         BigInteger q = rx.numerator.multiply(ry.denominator).divide(
                 rx.denominator.multiply(ry.numerator));
         return Numbers.subtract(x, Numbers.multiply(q, y));
+    }
+
+    public static Ratio toRatio(Number x) {
+        if (x instanceof Ratio)
+            return (Ratio) x;
+        else if (x instanceof BigDecimal) {
+            BigDecimal bx = (BigDecimal) x;
+            BigInteger bv = bx.unscaledValue();
+            int scale = bx.scale();
+            if (scale < 0)
+                return new Ratio(bv.multiply(BigInteger.TEN.pow(-scale)), BigInteger.ONE);
+            else
+                return new Ratio(bv, BigInteger.TEN.pow(scale));
+        }
+        return new Ratio(BigIntegerOperators.toBigInteger(x), BigInteger.ONE);
     }
 
 }
