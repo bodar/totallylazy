@@ -11,7 +11,7 @@ import java.util.List;
 import static com.googlecode.totallylazy.Callables.toClass;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-class IgnoreConstructorsEnhancer extends Enhancer {
+public class IgnoreConstructorsEnhancer extends Enhancer {
     Objenesis objenesis = new ObjenesisStd();
     private Callback[] callbacks;
 
