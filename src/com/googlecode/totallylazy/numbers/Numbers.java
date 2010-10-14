@@ -17,24 +17,13 @@ import com.googlecode.totallylazy.Callable2;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Callables.toClass;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Numbers {
-    public static <T extends Number> boolean isZero(T x) {
-        return operatorsFor(x).isZero(x);
-    }
-
-    public static <T extends Number> boolean isPositive(T x) {
-        return operatorsFor(x).isPositive(x);
-    }
-
-    public static <T extends Number> boolean isNegative(T x) {
-        return operatorsFor(x).isNegative(x);
-    }
-
     public static <T extends Number> Number negate(T x) {
         return operatorsFor(x).negate(x);
     }
@@ -47,58 +36,21 @@ public class Numbers {
         return operatorsFor(x).decrement(x);
     }
 
-    public static <X extends Number, Y extends Number> Number add(X x, Y y) {
-        return operatorsFor(x,y).add(x, y);
+    public static <T extends Number> boolean isZero(T x) {
+        return operatorsFor(x).isZero(x);
     }
 
-    public static <X extends Number, Y extends Number>  Number subtract(X x, Y y) {
-        return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
+    public static <T extends Number> boolean isPositive(T x) {
+        return operatorsFor(x).isPositive(x);
     }
 
-    public static <X extends Number, Y extends Number>  Number multiply(X x, Y y) {
-        return operatorsFor(x, y).multiply(x, y);
-    }
-
-    public static <X extends Number, Y extends Number> Number divide(X x, Y y) {
-        if (operatorsFor(y).isZero(y))
-            throw new ArithmeticException("Divide by zero");
-        return operatorsFor(x, y).divide(x, y);
-    }
-
-    public static <X extends Number, Y extends Number> Number quotient(X x, Y y) {
-        if (operatorsFor(y).isZero(y))
-            throw new ArithmeticException("Divide by zero");
-        return reduce(operatorsFor(x, y).quotient(x, y));
-    }
-
-    public static <X extends Number, Y extends Number> Number remainder(X x, Y y) {
-        if (operatorsFor(y).isZero(y))
-            throw new ArithmeticException("Divide by zero");
-        return reduce(operatorsFor(x, y).remainder(x, y));
-    }
-
-    static Number quotient(double n, double d) {
-        double q = n / d;
-        if (q <= Integer.MAX_VALUE && q >= Integer.MIN_VALUE) {
-            return (int) q;
-        } else { //bigint quotient
-            return reduce(new BigDecimal(q).toBigInteger());
-        }
-    }
-
-    static Number remainder(double n, double d) {
-        double q = n / d;
-        if (q <= Integer.MAX_VALUE && q >= Integer.MIN_VALUE) {
-            return (n - ((int) q) * d);
-        } else { //bigint quotient
-            Number bq = reduce(new BigDecimal(q).toBigInteger());
-            return (n - bq.doubleValue() * d);
-        }
+    public static <T extends Number> boolean isNegative(T x) {
+        return operatorsFor(x).isNegative(x);
     }
 
     public static boolean equalTo(Number x, Number y) {
         return operatorsFor(x, y).equalTo(x, y);
-    } 
+    }
 
     public static boolean lessThan(Number x, Number y) {
         return operatorsFor(x, y).lessThan(x, y);
@@ -125,6 +77,55 @@ public class Numbers {
         return 0;
     }
 
+    public static Comparator<Number> ascending(){
+        return new Comparator<Number>() {
+            public int compare(Number x, Number y) {
+                return Numbers.compare(x,y);
+            }
+        };
+    }
+
+    public static Comparator<Number> descending(){
+        return new Comparator<Number>() {
+            public int compare(Number x, Number y) {
+                return ~Numbers.compare(x,y);
+            }
+        };
+    }
+
+    public static <X extends Number, Y extends Number> Number add(X x, Y y) {
+        return operatorsFor(x,y).add(x, y);
+    }
+
+    public static <X extends Number, Y extends Number>  Number subtract(X x, Y y) {
+        return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
+    }
+
+    public static <X extends Number, Y extends Number>  Number multiply(X x, Y y) {
+        return operatorsFor(x, y).multiply(x, y);
+    }
+
+    public static <X extends Number, Y extends Number> Number divide(X x, Y y) {
+        throwIfZero(y);
+        return operatorsFor(x, y).divide(x, y);
+    }
+
+    private static <T extends Number> void throwIfZero(T value) {
+        if (operatorsFor(value).isZero(value)){
+            throw new ArithmeticException("Divide by zero");
+        }
+    }
+
+    public static <X extends Number, Y extends Number> Number quotient(X x, Y y) {
+        throwIfZero(y);
+        return reduce(operatorsFor(x, y).quotient(x, y));
+    }
+
+    public static <X extends Number, Y extends Number> Number remainder(X x, Y y) {
+        throwIfZero(y);
+        return reduce(operatorsFor(x, y).remainder(x, y));
+    }
+
     public static Number rationalize(Number x) {
         if (x instanceof Float || x instanceof Double)
             return rationalize(BigDecimal.valueOf(x.doubleValue()));
@@ -142,49 +143,15 @@ public class Numbers {
 
     public static Number reduce(Number value) {
         if (value instanceof Long)
-            return reduce(value.longValue());
+            return LongOperators.reduce(value.longValue());
         else if (value instanceof BigInteger)
-            return reduce((BigInteger) value);
+            return BigIntegerOperators.reduce((BigInteger) value);
         return value;
-    }
-
-    public static Number reduce(BigInteger value) {
-        int bitLength = value.bitLength();
-        if (bitLength < 32)
-            return value.intValue();
-        else if (bitLength < 64)
-            return value.longValue();
-        else
-            return value;
-    }
-
-    public static Number reduce(long value) {
-        if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE)
-            return (int) value;
-        else
-            return value;
-    }
-
-    public static Number divide(BigInteger n, BigInteger d) {
-        if (d.equals(BigInteger.ZERO))
-            throw new ArithmeticException("Divide by zero");
-        BigInteger gcd = n.gcd(d);
-        if (gcd.equals(BigInteger.ZERO))
-            return 0;
-        n = n.divide(gcd);
-        d = d.divide(gcd);
-        if (d.equals(BigInteger.ONE))
-            return reduce(n);
-        else if (d.equals(BigInteger.ONE.negate()))
-            return reduce(n.negate());
-        return new Ratio((d.signum() < 0 ? n.negate() : n),
-                (d.signum() < 0 ? d.negate() : d));
     }
 
     public static Number not(Number x) {
         return bitOps(x).not(x);
     }
-
 
     public static Number and(Number x, Number y) {
         return bitOps(x).combine(bitOps(y)).and(x, y);

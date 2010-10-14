@@ -111,4 +111,12 @@ public final class LongOperators implements Operators<Long> {
     public final Number remainder(Number x, Number y) {
         return x.longValue() % y.longValue();
     }
+
+    public static Number reduce(long value) {
+        if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE)
+            return (int) value;
+        else
+            return value;
+    }
+    
 }

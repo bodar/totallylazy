@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.numbers;
 
-import static com.googlecode.totallylazy.numbers.Numbers.quotient;
-import static com.googlecode.totallylazy.numbers.Numbers.remainder;
+import java.math.BigDecimal;
 
 /**
  * Copyright (c) Rich Hickey. All rights reserved.
@@ -65,10 +64,30 @@ public final class DoubleOperators implements Operators<Double> {
     }
 
     public final Number quotient(Number x, Number y) {
-        return Numbers.quotient(x.doubleValue(), y.doubleValue());
+        return quotient(x.doubleValue(), y.doubleValue());
     }
 
+
     public final Number remainder(Number x, Number y) {
-        return Numbers.remainder(x.doubleValue(), y.doubleValue());
+        return remainder(x.doubleValue(), y.doubleValue());
+    }
+
+    static Number quotient(double n, double d) {
+        double q = n / d;
+        if (q <= Integer.MAX_VALUE && q >= Integer.MIN_VALUE) {
+            return (int) q;
+        } else {
+            return BigIntegerOperators.reduce(new BigDecimal(q).toBigInteger());
+        }
+    }
+
+    static Number remainder(double n, double d) {
+        double q = n / d;
+        if (q <= Integer.MAX_VALUE && q >= Integer.MIN_VALUE) {
+            return (n - ((int) q) * d);
+        } else {
+            Number bq = BigIntegerOperators.reduce(new BigDecimal(q).toBigInteger());
+            return (n - bq.doubleValue() * d);
+        }
     }
 }

@@ -94,11 +94,11 @@ public final class RatioOperators implements Operators<Ratio> {
         return Numbers.subtract(x, Numbers.multiply(q, y));
     }
 
-    public static Ratio toRatio(Number x) {
-        if (x instanceof Ratio)
-            return (Ratio) x;
-        else if (x instanceof BigDecimal) {
-            BigDecimal bx = (BigDecimal) x;
+    public static Ratio toRatio(Number value) {
+        if (value instanceof Ratio)
+            return (Ratio) value;
+        else if (value instanceof BigDecimal) {
+            BigDecimal bx = (BigDecimal) value;
             BigInteger bv = bx.unscaledValue();
             int scale = bx.scale();
             if (scale < 0)
@@ -106,7 +106,7 @@ public final class RatioOperators implements Operators<Ratio> {
             else
                 return new Ratio(bv, BigInteger.TEN.pow(scale));
         }
-        return new Ratio(BigIntegerOperators.toBigInteger(x), BigInteger.ONE);
+        return new Ratio(BigIntegerOperators.toBigInteger(value), BigInteger.ONE);
     }
 
 }
