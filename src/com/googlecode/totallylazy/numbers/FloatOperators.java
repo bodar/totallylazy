@@ -62,10 +62,10 @@ public final class FloatOperators implements Operators<Float> {
     }
 
     public final Number quotient(Number x, Number y) {
-        return Numbers.quotient(x.doubleValue(), y.doubleValue());
+        return DoubleOperators.quotient(x.doubleValue(), y.doubleValue());
     }
 
     public final Number remainder(Number x, Number y) {
-        return Numbers.remainder(x.doubleValue(), y.doubleValue());
+        return DoubleOperators.remainder(x.doubleValue(), y.doubleValue());
     }
 }

@@ -91,6 +91,16 @@ public final class BigIntegerOperators implements Operators<BigInteger> {
         return new Ratio((d.signum() < 0 ? n.negate() : n), (d.signum() < 0 ? d.negate() : d));
     }
 
+    public static Number reduce(BigInteger value) {
+        int bitLength = value.bitLength();
+        if (bitLength < 32)
+            return value.intValue();
+        else if (bitLength < 64)
+            return value.longValue();
+        else
+            return value;
+    }
+
     public final Number quotient(Number x, Number y) {
         return toBigInteger(x).divide(toBigInteger(y));
     }
