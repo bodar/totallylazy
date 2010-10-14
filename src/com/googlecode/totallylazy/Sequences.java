@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.ArrayIterator;
-import com.googlecode.totallylazy.iterators.CharacterIterator;
-import com.googlecode.totallylazy.iterators.ZipIterator;
+import com.googlecode.totallylazy.iterators.*;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -32,6 +30,14 @@ public class Sequences {
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return iterator;
+            }
+        };
+    }
+
+    public static <T> Sequence<T> sequence(final Enumeration<T> enumeration) {
+        return new Sequence<T>() {
+            public Iterator<T> iterator() {
+                return new EnumerationIterator<T>(enumeration);
             }
         };
     }
@@ -327,4 +333,5 @@ public class Sequences {
     public static <T> Sequence<T> realise(final Iterable<T> iterable) {
         return sequence(Iterators.toList(iterable.iterator()));
     }
+
 }

@@ -13,12 +13,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.numbers.BigIntegerOperators.bigInteger;
-import static com.googlecode.totallylazy.numbers.Numbers.descending;
-import static com.googlecode.totallylazy.numbers.Numbers.fibonacci;
-import static com.googlecode.totallylazy.numbers.Numbers.numbers;
-import static com.googlecode.totallylazy.numbers.Numbers.powersOf;
-import static com.googlecode.totallylazy.numbers.Numbers.primeFactorsOf;
-import static com.googlecode.totallylazy.numbers.Numbers.primes;
+import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
 import static org.hamcrest.CoreMatchers.is;
@@ -49,7 +44,7 @@ public class NumbersTest {
         };
     }
 
-        @Test
+    @Test
     public void toStringingAnInfiniteListWillTruncateByDefault() throws Exception {
         assertThat(primes().toString(), is(primes().take(100).toString()));
     }

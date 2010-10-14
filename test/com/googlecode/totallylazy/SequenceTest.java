@@ -5,8 +5,10 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.NumberMatcher;
 import org.junit.Test;
 
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Callables.ascending;
@@ -34,6 +36,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
+    @Test
+    public void supportsEnumeration() throws Exception {
+        Vector<String> vector = new Vector<String>();
+        vector.add("foo");
+        Enumeration<String> enumeration = vector.elements();
+        
+        assertThat(sequence(enumeration).head(), is("foo"));
+    }
+
     @Test
     public void supportsSize() throws Exception {
         assertThat(range(10000000000L, 10000000100L).size(), NumberMatcher.is(100));
