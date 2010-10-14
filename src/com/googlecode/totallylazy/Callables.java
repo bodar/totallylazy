@@ -5,10 +5,25 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
+import static com.googlecode.totallylazy.Pair.pair;
+
 public class Callables {
+    public static <K, V> Callable1<Map.Entry<K, V>, Pair<K, V>> entryToPair() {
+        return new Callable1<Map.Entry<K, V>, Pair<K, V>>() {
+            public Pair<K, V> call(Map.Entry<K, V> entry) throws Exception {
+                return pair(entry.getKey(), entry.getValue());
+            }
+        };
+    }
+
+    public static <K, V> Callable1<Map.Entry<K, V>, Pair<K, V>> entryToPair(Class<K> keyClass, Class<V> valueClass) {
+        return entryToPair();
+    }
+
     public static <T> Callable1<Sequence<T>, Sequence<T>> reduceAndShift(final Callable2<T, T, T> action) {
         return new Callable1<Sequence<T>, Sequence<T>>() {
             public Sequence<T> call(Sequence<T> values) throws Exception {
