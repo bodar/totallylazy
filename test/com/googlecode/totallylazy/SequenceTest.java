@@ -8,24 +8,27 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Callables.add;
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.totallylazy.Sequences.*;
-import static com.googlecode.totallylazy.callables.CountingCallable.counting;
-import static com.googlecode.totallylazy.callables.TimeCallable.time;
-import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Predicates.odd;
+import static com.googlecode.totallylazy.Sequences.cons;
+import static com.googlecode.totallylazy.Sequences.range;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Sequences.sort;
+import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
+import static com.googlecode.totallylazy.numbers.Numbers.numbers;
+import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
@@ -198,7 +201,7 @@ public class SequenceTest {
 
     @Test
     public void supportsReduceLeft() throws Exception {
-        Number sum = sequence((Number)1, 2, 3).reduceLeft(add());
+        Number sum = numbers(1, 2, 3).reduceLeft(add());
         assertThat(sum, NumberMatcher.is(6));
     }
 

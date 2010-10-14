@@ -1,5 +1,9 @@
 package com.googlecode.totallylazy.numbers;
 
+/*
+This code is a a modified version of Ratio from Rich Hickeys clojure core
+ */
+
 /**
  *   Copyright (c) Rich Hickey. All rights reserved.
  *   The use and distribution terms for this software are covered by the

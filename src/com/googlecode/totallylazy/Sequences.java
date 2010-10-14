@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.*;
-import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static java.nio.CharBuffer.wrap;
 
 public class Sequences {
@@ -42,56 +42,6 @@ public class Sequences {
                 return iterator;
             }
         });
-    }
-
-    public static Sequence<Number> primeFactorsOf(Number value) {
-        return primes().takeWhile(primeSquaredLessThan(value)).filter(remainderIsZero(value));
-    }
-
-//    public static Sequence<Number> primeFactorsOf(Number value) {
-//        return iterate(incrementCandidateFactorAndReduceCeiling(), pair((Number)2, value)).filter(factorsOfCeiling()).takeWhile(factorIsLessThanCeiling()).map(Callables.<Number>first());
-//    }
-//
-//    private static Predicate<? super Pair<Number, Number>> factorsOfCeiling() {
-//        return new Predicate<Pair<Number, Number>>() {
-//            public boolean matches(Pair<Number, Number> pair) {
-//                return isZero(remainder(pair.second(), pair.first()));
-//            }
-//        };
-//    }
-//
-//    private static Predicate<? super Pair<Number, Number>> factorIsLessThanCeiling() {
-//        return new Predicate<Pair<Number, Number>>() {
-//            public boolean matches(Pair<Number, Number> pair) {
-//                return Numbers.lessThanOrEqual(Numbers.multiply(pair.first(), pair.first()) , pair.second());
-//            }
-//        };
-//    }
-//
-//    private static Callable1<? super Pair<Number, Number>, Pair<Number, Number>> incrementCandidateFactorAndReduceCeiling() {
-//        return new Callable1<Pair<Number, Number>, Pair<Number, Number>>() {
-//            public Pair<Number, Number> call(Pair<Number, Number> pair) throws Exception {
-//                Number ceiling = pair.second();
-//                if(isZero(remainder(pair.second(), pair.first()))){
-//                    ceiling = Numbers.divide(pair.second(), pair.first());
-//                }
-//                return pair(Numbers.add(pair.first(), 1), ceiling);
-//            }
-//        };
-//    }
-
-    private static final MemorisedSequence<Number> primes = Sequences.<Number>sequence(2).join(iterate(Callables.add(2), 3).filter(prime())).memorise();
-
-    public static MemorisedSequence<Number> primes() {
-        return primes;
-    }
-
-    public static Sequence<Number> fibonacci() {
-        return iterate(reduceAndShift(Callables.add()), Sequences.<Number>sequence(0, 1)).map(Callables.<Number>first());
-    }
-
-    public static Sequence<Number> powersOf(Number amount) {
-        return iterate(multiply(amount), 1);
     }
 
     public static Sequence<Character> characters(final CharSequence value) {

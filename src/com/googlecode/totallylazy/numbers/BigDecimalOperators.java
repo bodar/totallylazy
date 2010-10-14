@@ -1,3 +1,7 @@
+/*
+This code is a a heavily modified version of Numbers from Rich Hickeys clojure core, see Numbers.java for copyright
+ */
+
 package com.googlecode.totallylazy.numbers;
 
 import java.math.BigDecimal;
@@ -70,5 +74,16 @@ public final class BigDecimalOperators implements Operators<BigDecimal> {
             return new BigDecimal((BigInteger) number);
         else
             return BigDecimal.valueOf((number).longValue());
+    }
+
+    public static Number rationalize(BigDecimal number) {
+        BigInteger unscaled = number.unscaledValue();
+        int scale = number.scale();
+        if (scale < 0) {
+            return unscaled.multiply(BigInteger.TEN.pow(-scale));
+        }
+        else {
+            return unscaled.divide(BigInteger.TEN.pow(scale));
+        }
     }
 }

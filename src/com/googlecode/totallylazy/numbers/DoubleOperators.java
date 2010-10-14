@@ -1,18 +1,10 @@
+/*
+This code is a a heavily modified version of Numbers from Rich Hickeys clojure core, see Numbers.java for copyright
+ */
+
 package com.googlecode.totallylazy.numbers;
 
 import java.math.BigDecimal;
-
-/**
- * Copyright (c) Rich Hickey. All rights reserved.
- * The use and distribution terms for this software are covered by the
- * Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
- * which can be found in the file epl-v10.html at the root of this distribution.
- * By using this software in any fashion, you are agreeing to be bound by
- * the terms of this license.
- * You must not remove this notice, or any other, from this software.
- */
-
-/* rich Mar 31, 2008 */
 
 public final class DoubleOperators implements Operators<Double> {
     public Class<Double> forClass() {
@@ -72,7 +64,7 @@ public final class DoubleOperators implements Operators<Double> {
         return remainder(x.doubleValue(), y.doubleValue());
     }
 
-    static Number quotient(double n, double d) {
+    public static Number quotient(double n, double d) {
         double q = n / d;
         if (q <= Integer.MAX_VALUE && q >= Integer.MIN_VALUE) {
             return (int) q;
@@ -81,7 +73,7 @@ public final class DoubleOperators implements Operators<Double> {
         }
     }
 
-    static Number remainder(double n, double d) {
+    public static Number remainder(double n, double d) {
         double q = n / d;
         if (q <= Integer.MAX_VALUE && q >= Integer.MIN_VALUE) {
             return (n - ((int) q) * d);
@@ -90,4 +82,9 @@ public final class DoubleOperators implements Operators<Double> {
             return (n - bq.doubleValue() * d);
         }
     }
+
+    public static Number rationalize(Double x) {
+        return BigDecimalOperators.rationalize(BigDecimal.valueOf(x));
+    }
+
 }
