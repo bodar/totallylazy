@@ -1,16 +1,23 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.NumberMatcher;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.add;
+import java.util.concurrent.Callable;
+
 import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callables.unCurry;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.predicates.NumberMatcher.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CallablesTest {
+    @Test
+    public void canCurrySingleArgumentCallablesAsWell() throws Exception {
+        final Callable1<Number, Callable1<Number, Number>> curriedAdd = curry(add());
+        final Callable<Number> numberNumberCallable1 = curry(curriedAdd.call(1), 2);
+        assertThat(numberNumberCallable1.call(), is(3));
+    }
+
     @Test
     public void canCurryAdd() throws Exception {
         final Callable1<Number, Callable1<Number, Number>> curriedAdd = curry(add());

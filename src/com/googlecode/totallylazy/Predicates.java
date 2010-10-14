@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.*;
 import org.hamcrest.Matcher;
 
-import static com.googlecode.totallylazy.Sequences.primes;
 import static com.googlecode.totallylazy.numbers.Numbers.*;
 
 public class Predicates {

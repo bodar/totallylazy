@@ -1,19 +1,11 @@
-package com.googlecode.totallylazy.numbers;
-/**
- *   Copyright (c) Rich Hickey. All rights reserved.
- *   The use and distribution terms for this software are covered by the
- *   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
- *   which can be found in the file epl-v10.html at the root of this distribution.
- *   By using this software in any fashion, you are agreeing to be bound by
- * 	 the terms of this license.
- *   You must not remove this notice, or any other, from this software.
- **/
+/*
+This code is a a heavily modified version of Numbers from Rich Hickeys clojure core, see Numbers.java for copyright
+ */
 
-/* rich Mar 31, 2008 */
+package com.googlecode.totallylazy.numbers;
 
 import java.math.BigInteger;
 
-import static com.googlecode.totallylazy.numbers.Numbers.reduce;
 import static java.math.BigInteger.ONE;
 import static java.math.BigInteger.ZERO;
 import static java.math.BigInteger.valueOf;
@@ -36,19 +28,19 @@ public final class BigIntegerOperators implements Operators<BigInteger> {
     }
 
     public final boolean isPositive(BigInteger value) {
-        return value.signum() > 0;
+        return value.signum() == 1;
     }
 
     public final boolean isNegative(BigInteger value) {
-        return value.signum() < 0;
+        return value.signum() == -1;
     }
 
     public final boolean equalTo(Number x, Number y) {
-        return toBigInteger(x).equals(toBigInteger(y));
+        return bigInteger(x).equals(bigInteger(y));
     }
 
     public final boolean lessThan(Number x, Number y) {
-        return toBigInteger(x).compareTo(toBigInteger(y)) < 0;
+        return bigInteger(x).compareTo(bigInteger(y)) < 0;
     }
 
     public final Number negate(BigInteger value) {
@@ -56,17 +48,18 @@ public final class BigIntegerOperators implements Operators<BigInteger> {
     }
 
     public final Number add(Number x, Number y) {
-        return reduce(toBigInteger(x).add(toBigInteger(y)));
+        return reduce(bigInteger(x).add(bigInteger(y)));
     }
 
     public final Number multiply(Number x, Number y) {
-        return reduce(toBigInteger(x).multiply(toBigInteger(y)));
+        return reduce(bigInteger(x).multiply(bigInteger(y)));
     }
 
     public final Number divide(Number x, Number y) {
-        BigInteger n = toBigInteger(x);
-        BigInteger d = toBigInteger(y);
+       return divide(bigInteger(x), bigInteger(y));
+    }
 
+    public static Number divide(BigInteger n, BigInteger d) {
         if (d.equals(ZERO)) {
             throw new ArithmeticException("Divide by zero");
         }
@@ -102,14 +95,14 @@ public final class BigIntegerOperators implements Operators<BigInteger> {
     }
 
     public final Number quotient(Number x, Number y) {
-        return toBigInteger(x).divide(toBigInteger(y));
+        return bigInteger(x).divide(bigInteger(y));
     }
 
     public final Number remainder(Number x, Number y) {
-        return toBigInteger(x).remainder(toBigInteger(y));
+        return bigInteger(x).remainder(bigInteger(y));
     }
 
-    public static BigInteger toBigInteger(Number value) {
+    public static BigInteger bigInteger(Number value) {
         if (value instanceof BigInteger) {
             return (BigInteger) value;
         }

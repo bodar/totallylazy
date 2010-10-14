@@ -170,34 +170,6 @@ public class Callables {
         return call();
     }
 
-    public static Callable1<Number, Number> increment() {
-        return add(1);
-    }
-
-    public static Callable1<Number, Number> add(final Number amount) {
-        return Callers.call(curry(add()), amount);
-    }
-
-    public static  <T extends Number>  Callable1<T, Number> multiply(final T multiplicand) {
-        return Callers.call(curry(Callables.<T>multiply()), multiplicand);
-    }
-
-    public static <T extends Number> Callable2<T, T, Number> multiply() {
-        return new Callable2<T, T, Number> () {
-            public Number call(T multiplicand, T multiplier) throws Exception {
-                return Numbers.multiply(multiplicand,multiplier);
-            }
-        };
-    }
-
-    public static <T extends Number> Callable2<T, T, Number> add() {
-        return new Callable2<T, T, Number>() {
-            public Number call(T a, T b) {
-                return Numbers.add(a, b);
-            }
-        };
-    }
-
     public static <T,R,S> Callable1<T, Callable1<R, S>> curry(final Callable2<T, R, S> callable) {
         return new Callable1<T, Callable1<R, S>>() {
             public Callable1<R, S> call(final T t) throws Exception {
@@ -206,6 +178,14 @@ public class Callables {
                         return callable.call(t, r);
                     }
                 };
+            }
+        };
+    }
+
+    public static <T> Callable<T> curry(final Callable1<T, T> callable, final T value) {
+        return new Callable<T>() {
+            public T call() throws Exception {
+               return callable.call(value);
             }
         };
     }
