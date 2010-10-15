@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
-import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;

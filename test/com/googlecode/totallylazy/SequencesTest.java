@@ -10,8 +10,8 @@ import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.range;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 

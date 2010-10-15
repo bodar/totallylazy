@@ -12,8 +12,8 @@ import static com.googlecode.totallylazy.Callables.unCurry;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
-import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.predicates.NumberMatcher.is;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CallablesTest {

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.NumberMatcher;
+import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
