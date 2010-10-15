@@ -1,16 +1,28 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.*;
+import com.googlecode.totallylazy.iterators.ArrayIterator;
+import com.googlecode.totallylazy.iterators.CharacterIterator;
+import com.googlecode.totallylazy.iterators.EnumerationIterator;
+import com.googlecode.totallylazy.iterators.ZipIterator;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callables.*;
+import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static java.nio.CharBuffer.wrap;
 
 public class Sequences {
     public static <T> Sequence<T> sequence(final Iterable<T> iterable) {
+        if (iterable instanceof Sequence) {
+            return (Sequence<T>) iterable;
+        }
+
         return new Sequence<T>() {
             public Iterator<T> iterator() {
                 return iterable.iterator();
@@ -334,4 +346,9 @@ public class Sequences {
         return sequence(Iterators.toList(iterable.iterator()));
     }
 
+    public static <T> Sequence<T> reverse(final Iterable<T> iterable) {
+        List<T> result = sequence(iterable).toList();
+        Collections.reverse(result);
+        return sequence(result);
+    }
 }

@@ -37,11 +37,16 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
     @Test
+    public void supportsReverse() throws Exception {
+        assertThat(sequence(1,2,3).revercd se(), hasExactly(3,2,1));
+    }
+
+    @Test
     public void supportsEnumeration() throws Exception {
         Vector<String> vector = new Vector<String>();
         vector.add("foo");
         Enumeration<String> enumeration = vector.elements();
-        
+
         assertThat(sequence(enumeration).head(), is("foo"));
     }
 
