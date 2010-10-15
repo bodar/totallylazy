@@ -38,7 +38,7 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
 public class SequenceTest {
     @Test
     public void supportsReverse() throws Exception {
-        assertThat(sequence(1,2,3).revercd se(), hasExactly(3,2,1));
+        assertThat(sequence(1,2,3).reverse(), hasExactly(3,2,1));
     }
 
     @Test
