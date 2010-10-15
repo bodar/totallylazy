@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.proxy;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.proxy.User.user;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
-import com.googlecode.totallylazy.predicates.NumberMatcher;
 import org.junit.Test;
 
 import java.util.Enumeration;
@@ -29,8 +29,8 @@ import static com.googlecode.totallylazy.Sequences.sort;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
-import static com.googlecode.totallylazy.predicates.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.predicates.IterableMatcher.startsWith;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;

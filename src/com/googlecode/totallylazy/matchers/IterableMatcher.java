@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.predicates;
+package com.googlecode.totallylazy.matchers;
 
 import com.googlecode.totallylazy.Sequence;
 import org.hamcrest.Description;
