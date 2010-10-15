@@ -1,12 +1,13 @@
 package com.googlecode.totallylazy.regex;
 
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
 import java.util.regex.Pattern;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Regex {
+public class Regex implements Predicate<CharSequence>{
     private final Pattern pattern;
 
     private Regex(Pattern pattern) {
@@ -25,11 +26,15 @@ public class Regex {
         return new Regex(pattern);
     }
 
-    public Matches matches(CharSequence sequence){
+    public Matches findMatches(CharSequence sequence){
         return new Matches(pattern, sequence);
     }
 
     public Sequence<String> split(CharSequence value) {
         return sequence(pattern.split(value));
+    }
+
+    public boolean matches(CharSequence other) {
+        return pattern.matcher(other).matches();
     }
 }
