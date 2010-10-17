@@ -7,8 +7,16 @@ package com.googlecode.totallylazy.numbers;
 import java.math.BigDecimal;
 
 public final class DoubleOperators implements Operators<Double> {
-    public Class<Double> forClass() {
+    public static DoubleOperators Instance = new DoubleOperators();
+
+    private DoubleOperators() {}
+
+    public final Class<Double> forClass() {
         return Double.class;
+    }
+
+    public final int priority() {
+        return 7;
     }
 
     public final Number negate(Double value) {

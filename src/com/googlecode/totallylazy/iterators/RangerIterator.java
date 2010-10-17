@@ -6,30 +6,30 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 
-public class RangerIterator extends ReadOnlyIterator<Number> {
+public final class RangerIterator extends ReadOnlyIterator<Number> {
     private Number next;
     private final Number end;
     private final Number step;
 
-    public   RangerIterator(Number end) {
+    public RangerIterator(final Number end) {
         this(0, end);
     }
 
-    public RangerIterator(Number start, Number end) {
+    public RangerIterator(final Number start, final Number end) {
         this(start, end, 1);
     }
 
-    public RangerIterator(Number start, Number end, Number step) {
+    public RangerIterator(final Number start, final Number end, final Number step) {
         this.next = start;
         this.end = end;
         this.step = step;
     }
 
-    public boolean hasNext() {
+    public final boolean hasNext() {
         return lessThan(next,end);
     }
 
-    public Number next() {
+    public final Number next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }

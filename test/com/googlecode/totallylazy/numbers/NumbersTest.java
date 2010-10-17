@@ -4,18 +4,20 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.callables.TimeReporter;
-import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.numbers.BigIntegerOperators.bigInteger;
 import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
+import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
@@ -30,18 +32,12 @@ public class NumbersTest {
 
     @Test
     public void shouldBePrettyFast() throws Exception {
-        TimeReporter run = new TimeReporter();
-        final Number result = time(iterate(Numbers.increment(), 0).take(10000), sum(), run);
-        assertThat(run.time(), Matchers.is(lessThan(200d)));
-        assertThat(result, NumberMatcher.is(49995000));
-    }
+        Callable<Number> functional = curry(sum(), iterate(increment(), 0).take(10000));
 
-    private Callable1<Sequence<Number>, Number> sum() {
-        return new Callable1<Sequence<Number>, Number>() {
-            public Number call(Sequence<Number> numberSequence) throws Exception {
-                return numberSequence.reduceLeft(Numbers.add());
-            }
-        };
+        TimeReporter report = new TimeReporter();
+        repeat(time(functional, report)).take(100).realise();
+        System.out.println(report);
+        assertThat(report.average(), Matchers.is(lessThan(10.0)));
     }
 
     @Test
@@ -72,17 +68,15 @@ public class NumbersTest {
 
     @Test
     public void primesIsPrettyFastAndIsMemorised() throws Exception {
-        TimeReporter reporter = new TimeReporter();
-        TimeCallable<Sequence<Number>> timeCallable = time(new Callable<Sequence<Number>>() {
+        TimeReporter report = new TimeReporter();
+        Callable<Sequence<Number>> firstThousandPrimes = new Callable<Sequence<Number>>() {
             public Sequence<Number> call() throws Exception {
                 return primes().take(1000).realise();
             }
-        }, reporter);
-        timeCallable.call();
-        assertThat(reporter.time(), Matchers.is(lessThan(400.0)));
-
-        timeCallable.call();
-        assertThat(reporter.time(), Matchers.is(lessThan(10.0)));
+        };
+        repeat(time(firstThousandPrimes, report)).take(100).realise();
+        System.out.println("report = " + report);
+        assertThat(report.average(), Matchers.is(lessThan(10.0)));
     }
 
 
@@ -97,5 +91,4 @@ public class NumbersTest {
         assertThat(powersOf(3), startsWith(1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683, 59049));
         assertThat(powersOf(10), startsWith(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, 10000000000L, 100000000000L));
     }
-
 }

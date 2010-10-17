@@ -28,19 +28,19 @@ public abstract class Option<T> implements Iterable<T> {
 
     public abstract boolean isEmpty();
 
-    public T getOrElse(T other){
+    public final T getOrElse(T other){
         return isEmpty() ? other : get();
     }
 
-    public T getOrElse(Callable<T> callable){
+    public final T getOrElse(Callable<T> callable){
         return isEmpty() ? call(callable) : get();
     }
 
-    public T getOrNull(){
+    public final T getOrNull(){
         return isEmpty() ? null : get();
     }
 
-    public <S> Option<S> map(Callable1<? super T, S> callable) {
+    public final <S> Option<S> map(Callable1<? super T, S> callable) {
         return isEmpty() ? Option.<S>none() : some(Callers.call(callable, get()));
     }
 }

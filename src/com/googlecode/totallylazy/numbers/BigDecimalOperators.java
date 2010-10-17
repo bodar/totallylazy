@@ -10,9 +10,16 @@ import java.math.BigInteger;
 import static java.math.BigDecimal.ONE;
 
 public final class BigDecimalOperators implements Operators<BigDecimal> {
+    public static BigDecimalOperators Instance = new BigDecimalOperators();
 
-    public Class<BigDecimal> forClass() {
+    private BigDecimalOperators() {}
+
+    public final Class<BigDecimal> forClass() {
         return BigDecimal.class;
+    }
+
+    public final int priority() {
+        return 4;
     }
 
     public final Number negate(BigDecimal value) {

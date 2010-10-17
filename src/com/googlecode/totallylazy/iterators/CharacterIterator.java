@@ -2,19 +2,19 @@ package com.googlecode.totallylazy.iterators;
 
 import java.util.NoSuchElementException;
 
-public class CharacterIterator extends ReadOnlyIterator<Character> {
+public final class CharacterIterator extends ReadOnlyIterator<Character> {
     private int index = 0;
     private final CharSequence charSequence;
 
-    public CharacterIterator(CharSequence charSequence) {
+    public CharacterIterator(final CharSequence charSequence) {
         this.charSequence = charSequence;
     }
 
-    public boolean hasNext() {
+    public final boolean hasNext() {
         return index < charSequence.length();
     }
 
-    public Character next() {
+    public final Character next() {
         if (hasNext()) {
             return charSequence.charAt(index++);
         }

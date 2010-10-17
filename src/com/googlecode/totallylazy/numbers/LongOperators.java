@@ -12,20 +12,28 @@ import static java.lang.Long.MIN_VALUE;
 import static java.math.BigInteger.valueOf;
 
 public final class LongOperators implements Operators<Long> {
-    public Class<Long> forClass() {
+    public static LongOperators Instance = new LongOperators();
+
+    private LongOperators() {}
+
+    public final Class<Long> forClass() {
         return Long.class;
+    }
+
+    public final int priority() {
+        return 2;
     }
 
     public final Number increment(Long value) {
         if (value < MAX_VALUE)
             return value + 1;
-        return operatorsFor(BigInteger.class).increment(valueOf(value));
+        return BigIntegerOperators.Instance.increment(valueOf(value));
     }
 
     public final Number decrement(Long value) {
         if (value > MIN_VALUE)
             return value - 1;
-        return operatorsFor(BigInteger.class).decrement(valueOf(value));
+        return BigIntegerOperators.Instance.decrement(valueOf(value));
     }
 
     public final Number negate(Long value) {
@@ -58,7 +66,7 @@ public final class LongOperators implements Operators<Long> {
         long lx = x.longValue(), ly = y.longValue();
         long ret = lx + ly;
         if ((ret ^ lx) < 0 && (ret ^ ly) < 0)
-            return operatorsFor(BigInteger.class).add(x, y);
+            return BigIntegerOperators.Instance.add(x, y);
         return ret;
     }
 
@@ -66,7 +74,7 @@ public final class LongOperators implements Operators<Long> {
         long lx = x.longValue(), ly = y.longValue();
         long ret = lx * ly;
         if (ly != 0 && ret / ly != lx)
-            return operatorsFor(BigInteger.class).multiply(x, y);
+            return BigIntegerOperators.Instance.multiply(x, y);
         return ret;
     }
 

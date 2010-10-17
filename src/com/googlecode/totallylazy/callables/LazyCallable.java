@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 
-public class LazyCallable<T> implements Callable<T> {
+public final class LazyCallable<T> implements Callable<T> {
     private final Callable<T> callable;
     private Option<T> state = none();
 
@@ -19,8 +19,7 @@ public class LazyCallable<T> implements Callable<T> {
         return new LazyCallable<T>(callable);
     }
 
-    public T call() throws Exception {
-
+    public final T call() throws Exception {
         synchronized (state) {
             if (state.isEmpty()) {
                 state = some(callable.call());

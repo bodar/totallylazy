@@ -2,17 +2,17 @@ package com.googlecode.totallylazy.callables;
 
 import java.util.concurrent.Callable;
 
-public class CountingCallable implements Callable<Integer> {
+public final class CountingCallable implements Callable<Integer> {
     private int count = 0;
 
     private CountingCallable() {
     }
 
-    public Integer call() throws Exception {
+    public final Integer call() throws Exception {
         return count++;
     }
 
-    public int count() {
+    public final int count() {
         return count;
     }
 

@@ -2,12 +2,12 @@ package com.googlecode.totallylazy.iterators;
 
 import java.util.NoSuchElementException;
 
-public class EmptyIterator<T> extends ReadOnlyIterator<T> {
-    public boolean hasNext() {
+public final class EmptyIterator<T> extends ReadOnlyIterator<T> {
+    public final boolean hasNext() {
         return false;
     }
 
-    public T next() {
+    public final T next() {
         throw new NoSuchElementException();
     }
 }

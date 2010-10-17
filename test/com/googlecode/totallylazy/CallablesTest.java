@@ -7,13 +7,12 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.curry;
-import static com.googlecode.totallylazy.Callables.entryToPair;
 import static com.googlecode.totallylazy.Callables.unCurry;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CallablesTest {

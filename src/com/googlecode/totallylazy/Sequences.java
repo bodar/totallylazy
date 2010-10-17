@@ -24,7 +24,7 @@ public class Sequences {
         }
 
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return iterable.iterator();
             }
         };
@@ -32,7 +32,7 @@ public class Sequences {
 
     public static <T> Sequence<T> sequence(final T... items) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return new ArrayIterator<T>(items);
             }
         };
@@ -40,7 +40,7 @@ public class Sequences {
 
     public static <T> Sequence<T> sequence(final Iterator<T> iterator) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return iterator;
             }
         };
@@ -48,7 +48,7 @@ public class Sequences {
 
     public static <T> Sequence<T> sequence(final Enumeration<T> enumeration) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return new EnumerationIterator<T>(enumeration);
             }
         };
@@ -56,7 +56,7 @@ public class Sequences {
 
     public static <T> Sequence<T> memorise(final Iterator<T> iterator) {
         return new MemorisedSequence<T>(new Iterable<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return iterator;
             }
         });
@@ -64,7 +64,7 @@ public class Sequences {
 
     public static Sequence<Character> characters(final CharSequence value) {
         return new Sequence<Character>() {
-            public Iterator<Character> iterator() {
+            public final Iterator<Character> iterator() {
                 return new CharacterIterator(value);
             }
         };
@@ -76,7 +76,7 @@ public class Sequences {
 
     public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
         return new Sequence<S>() {
-            public Iterator<S> iterator() {
+            public final Iterator<S> iterator() {
                 return Iterators.map(iterable.iterator(), callable);
             }
         };
@@ -84,7 +84,7 @@ public class Sequences {
 
     public static <T> Sequence<T> filter(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.filter(iterable.iterator(), predicate);
             }
         };
@@ -92,7 +92,7 @@ public class Sequences {
 
     public static <T, S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, Iterable<S>> callable) {
         return new Sequence<S>() {
-            public Iterator<S> iterator() {
+            public final Iterator<S> iterator() {
                 return Iterators.flatMap(iterable.iterator(), callable);
             }
         };
@@ -100,7 +100,7 @@ public class Sequences {
 
     public static <T> Sequence<T> iterate(final Callable1<? super T, T> callable, final T t) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.iterate(callable, t);
             }
         };
@@ -108,7 +108,7 @@ public class Sequences {
 
     public static <T> Sequence<T> repeat(final Callable<T> callable) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.repeat(callable);
             }
         };
@@ -116,7 +116,7 @@ public class Sequences {
 
     public static <T> Sequence<T> repeat(final T item) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.repeat(item);
             }
         };
@@ -124,7 +124,7 @@ public class Sequences {
 
     public static Sequence<Number> range(final Number end) {
         return new Sequence<Number>() {
-            public Iterator<Number> iterator() {
+            public final Iterator<Number> iterator() {
                 return Iterators.range(end);
             }
         };
@@ -132,7 +132,7 @@ public class Sequences {
 
     public static Sequence<Number> range(final Number start, final Number end) {
         return new Sequence<Number>() {
-            public Iterator<Number> iterator() {
+            public final Iterator<Number> iterator() {
                 return Iterators.range(start, end);
             }
         };
@@ -140,7 +140,7 @@ public class Sequences {
 
     public static Sequence<Number> range(final Number start, final Number end, final Number step) {
         return new Sequence<Number>() {
-            public Iterator<Number> iterator() {
+            public final Iterator<Number> iterator() {
                 return Iterators.range(start, end, step);
             }
         };
@@ -168,17 +168,17 @@ public class Sequences {
 
     public static <T> Sequence<T> tail(final Iterable<T> iterable) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.tail(iterable.iterator());
             }
         };
     }
 
-    public static <T, S> S foldLeft(final Iterable<T> iterable, S seed, Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S foldLeft(final Iterable<T> iterable, S seed, final Callable2<? super S, ? super T, S> callable) {
         return Iterators.foldLeft(iterable.iterator(), seed, callable);
     }
 
-    public static <T> T reduceLeft(final Iterable<T> iterable, Callable2<? super T, ? super T, T> callable) {
+    public static <T> T reduceLeft(final Iterable<T> iterable, final Callable2<? super T, ? super T, T> callable) {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
 
@@ -186,15 +186,15 @@ public class Sequences {
         return Iterators.toString(iterable.iterator());
     }
 
-    public static String toString(final Iterable iterable, String separator) {
+    public static String toString(final Iterable iterable, final String separator) {
         return Iterators.toString(iterable.iterator(), separator);
     }
 
-    public static String toString(final Iterable iterable, String start, String separator, String end) {
+    public static String toString(final Iterable iterable, final String start, final String separator, final String end) {
         return Iterators.toString(iterable.iterator(), start, separator, end);
     }
 
-    public static String toString(final Iterable iterable, String start, String separator, String end, int limit) {
+    public static String toString(final Iterable iterable, final String start, final String separator, final String end, final int limit) {
         return Iterators.toString(iterable.iterator(), start, separator, end, limit);
     }
 
@@ -212,7 +212,7 @@ public class Sequences {
 
     public static <T> Sequence<T> remove(final Iterable<T> iterable, final T t) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.remove(iterable.iterator(), t);
             }
         };
@@ -224,7 +224,7 @@ public class Sequences {
 
     public static <T> Sequence<T> take(final Iterable<T> iterable, final int count) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.take(iterable.iterator(), count);
             }
         };
@@ -232,7 +232,7 @@ public class Sequences {
 
     public static <T> Sequence<T> takeWhile(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.takeWhile(iterable.iterator(), predicate);
             }
         };
@@ -240,7 +240,7 @@ public class Sequences {
 
     public static <T> Sequence<T> drop(final Iterable<T> iterable, final int count) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.drop(iterable.iterator(), count);
             }
         };
@@ -248,7 +248,7 @@ public class Sequences {
 
     public static <T> Sequence<T> dropWhile(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.dropWhile(iterable.iterator(), predicate);
             }
         };
@@ -280,7 +280,7 @@ public class Sequences {
 
     public static <T> Sequence<T> add(final Iterable<T> iterable, final T t) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.add(iterable.iterator(), t);
             }
         };
@@ -288,7 +288,7 @@ public class Sequences {
 
     public static <T> Sequence<T> join(final Iterable<T>... iterables) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.join(sequence(iterables).map(Callables.<T>asIterator()));
             }
         };
@@ -296,7 +296,7 @@ public class Sequences {
 
     public static <T> Sequence<T> cons(final T t, final Iterable<T> iterable) {
         return new Sequence<T>() {
-            public Iterator<T> iterator() {
+            public final Iterator<T> iterator() {
                 return Iterators.cons(t, iterable.iterator());
             }
         };
@@ -308,7 +308,7 @@ public class Sequences {
 
     public static <T1, T2> Sequence<Pair<T1, T2>> zip(final Iterable<T1> left, final Iterable<T2> right) {
         return new Sequence<Pair<T1, T2>>() {
-            public Iterator<Pair<T1, T2>> iterator() {
+            public final Iterator<Pair<T1, T2>> iterator() {
                 return new ZipIterator<T1, T2>(left.iterator(), right.iterator());
             }
         };
@@ -336,7 +336,7 @@ public class Sequences {
 
     public static <T, S> Sequence<S> safeCast(final Iterable<T> iterable, final Class<S> aClass) {
         return new Sequence<S>() {
-            public Iterator<S> iterator() {
+            public final Iterator<S> iterator() {
                 return Iterators.safeCast(iterable.iterator(), aClass);
             }
         };

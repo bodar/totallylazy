@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.callables;
 
 import org.junit.Test;
 
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 import static com.googlecode.totallylazy.callables.SleepyCallable.sleepy;
@@ -14,12 +15,10 @@ import static org.hamcrest.Matchers.lessThan;
 public class TimeCallableTest {
     @Test
     public void canTimeACall() throws Exception {
-        TimeReporter reporter = new TimeReporter();
-        TimeCallable<Integer> timeCallable = time(lazy(sleepy(counting(), 10)), reporter);
-        timeCallable.call();
-        assertThat(reporter.time(), is(greaterThan(10.0)));
-
-        timeCallable.call();
-        assertThat(reporter.time(), is(lessThan(1.0)));
+        TimeReporter report = new TimeReporter();
+        repeat(time(lazy(sleepy(counting(), 10)), report)).take(100).realise();
+        System.out.println("report = " + report);
+        assertThat(report.maximum(), is(greaterThan(10.0)));
+        assertThat(report.average(), is(lessThan(1.0)));
     }
 }

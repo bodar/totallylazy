@@ -2,19 +2,19 @@ package com.googlecode.totallylazy.iterators;
 
 import java.util.NoSuchElementException;
 
-public class ArrayIterator<T> extends ReadOnlyIterator<T> {
+public final class ArrayIterator<T> extends ReadOnlyIterator<T> {
     private final T[] array;
     private int index = 0;
 
-    public ArrayIterator(T[] array) {
+    public ArrayIterator(final T[] array) {
         this.array = array;
     }
 
-    public boolean hasNext() {
+    public final boolean hasNext() {
         return index < array.length;
     }
 
-    public T next() {
+    public final T next() {
         if(hasNext()){
             return array[index++];
         }

@@ -9,7 +9,7 @@ import java.util.List;
 
 import static java.util.Collections.synchronizedList;
 
-public class MemorisedSequence<T> extends Sequence<T> {
+public final class MemorisedSequence<T> extends Sequence<T> {
     private final List<T> memory = synchronizedList(new ArrayList<T>());
     private final Iterable<T> iterable;
     private Iterator<T> iterator = null;
@@ -18,18 +18,18 @@ public class MemorisedSequence<T> extends Sequence<T> {
         this.iterable = iterable;
     }
 
-    public Iterator<T> iterator() {
+    public final Iterator<T> iterator() {
         return new MemorisedIterator<T>(getIterator(), memory);
     }
 
-    public void forget() {
+    public final void forget() {
         synchronized (memory) {
             memory.clear();
             iterator = null;
         }
     }
 
-    public Iterator<T> getIterator() {
+    private Iterator<T> getIterator() {
         synchronized (memory) {
             if (iterator == null) {
                 iterator = iterable.iterator();

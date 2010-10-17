@@ -8,8 +8,16 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public final class RatioOperators implements Operators<Ratio> {
-    public Class<Ratio> forClass() {
+    public static RatioOperators Instance = new RatioOperators();
+
+    private RatioOperators() {}
+    
+    public final Class<Ratio> forClass() {
         return Ratio.class;
+    }
+
+    public final int priority() {
+        return 5;
     }
 
     public final Number negate(Ratio value) {

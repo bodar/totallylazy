@@ -17,13 +17,9 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.MemorisedSequence;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,10 +27,7 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
-import static com.googlecode.totallylazy.Callers.call;
-import static com.googlecode.totallylazy.Predicates.prime;
-import static com.googlecode.totallylazy.Predicates.primeSquaredLessThan;
-import static com.googlecode.totallylazy.Predicates.remainderIsZero;
+import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.iterate;
 
 public class Numbers {
@@ -93,39 +86,26 @@ public class Numbers {
         return iterate(multiply(amount), 1);
     }
 
-
-    static final List<Operators> operators = new ArrayList<Operators>();
-    static final List<Class> order = new ArrayList<Class>();
-
-    static {
-        addOperators(new IntegerOperators());
-        addOperators(new LongOperators());
-        addOperators(new BigIntegerOperators());
-        addOperators(new BigDecimalOperators());
-        addOperators(new RatioOperators());
-        addOperators(new FloatOperators());
-        addOperators(new DoubleOperators());
+    public static <T> Operators operatorsFor(Class<T> numberClass) {
+        if(numberClass == Integer.class) return IntegerOperators.Instance;
+        if(numberClass == Long.class) return LongOperators.Instance;
+        if(numberClass == BigInteger.class) return BigIntegerOperators.Instance;
+        if(numberClass == BigDecimal.class) return BigDecimalOperators.Instance;
+        if(numberClass == Ratio.class) return RatioOperators.Instance;
+        if(numberClass == Float.class) return FloatOperators.Instance;
+        if(numberClass == Double.class) return DoubleOperators.Instance;
+        throw new UnsupportedOperationException("Unsupported number class " + numberClass);
     }
 
-    private static void addOperators(Operators newOperators) {
-        operators.add(newOperators);
-        order.add(newOperators.forClass());
+    public static <T extends Number> Operators<T> operatorsFor(T number) {
+        return (Operators<T>) operatorsFor(number.getClass());
     }
 
-    public static <T extends Number> Operators<T> operatorsFor(Class<T> numberClass) {
-        return (Operators<T>) operators.get(order.indexOf(numberClass));
-    }
+    public static <T extends Number> Operators<T> operatorsFor(T a, T b) {
+        Operators aOperators = operatorsFor(a.getClass());
+        Operators bOperators = operatorsFor(b.getClass());
 
-    public static <T extends Number> Operators<T> operatorsFor(T... numbers) {
-        int highestIndex = 0;
-        for (T number : numbers) {
-            final int index = order.indexOf(number.getClass());
-            if (index > highestIndex) {
-                highestIndex = index;
-            }
-        }
-
-        return (Operators<T>) operators.get(highestIndex);
+        return aOperators.priority() > bOperators.priority() ? aOperators : bOperators;
     }
 
     public static <T extends Number> Number negate(T value) {
@@ -201,6 +181,14 @@ public class Numbers {
         };
     }
 
+    public static Callable1<Iterable<Number>, Number> sum() {
+        return new Callable1<Iterable<Number>, Number>() {
+            public Number call(Iterable<Number> numbers) throws Exception {
+                return Sequences.reduceLeft(numbers, add());
+            }
+        };
+    }
+
     public static <T extends Number> Callable2<T, T, Number> add() {
         return new Callable2<T, T, Number>() {
             public Number call(T a, T b) {
@@ -210,7 +198,7 @@ public class Numbers {
     }
 
     public static Callable1<Number, Number> add(final Number amount) {
-        return call(curry(add()), amount);
+        return curry(add(), amount);
     }
 
     public static <X extends Number, Y extends Number> Number add(X x, Y y) {
@@ -230,7 +218,7 @@ public class Numbers {
     }
 
     public static <T extends Number> Callable1<T, Number> multiply(final T multiplicand) {
-        return call(curry(Numbers.<T>multiply()), multiplicand);
+        return curry(Numbers.<T>multiply(), multiplicand);
     }
 
     public static <X extends Number, Y extends Number> Number multiply(X x, Y y) {
