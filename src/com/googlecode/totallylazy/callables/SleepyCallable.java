@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.callables;
 
 import java.util.concurrent.Callable;
 
-public class SleepyCallable<T> implements Callable<T> {
+public final class SleepyCallable<T> implements Callable<T> {
     private final Callable<T> callable;
     private final int millis;
 
@@ -11,7 +11,7 @@ public class SleepyCallable<T> implements Callable<T> {
         this.millis = millis;
     }
 
-    public T call() throws Exception {
+    public final T call() throws Exception {
         T t = callable.call();
         Thread.sleep(millis);
         return t;

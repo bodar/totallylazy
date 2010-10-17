@@ -11,8 +11,16 @@ import static java.math.BigInteger.ZERO;
 import static java.math.BigInteger.valueOf;
 
 public final class BigIntegerOperators implements Operators<BigInteger> {
-    public Class<BigInteger> forClass() {
+    public static BigIntegerOperators Instance = new BigIntegerOperators();
+
+    private BigIntegerOperators() {}
+
+    public final Class<BigInteger> forClass() {
         return BigInteger.class;
+    }
+
+    public final int priority() {
+        return 3;
     }
 
     public final Number increment(BigInteger value) {

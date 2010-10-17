@@ -6,20 +6,20 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Callers.call;
 
-public class MapIterator<T, S> extends ReadOnlyIterator<S> {
+public final class MapIterator<T, S> extends ReadOnlyIterator<S> {
     private final Iterator<T> iterator;
     private final Callable1<? super T, S> callable;
 
-    public MapIterator(Iterator<T> iterator, Callable1<? super T, S> callable) {
+    public MapIterator(final Iterator<T> iterator, final Callable1<? super T, S> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }
 
-    public boolean hasNext() {
+    public final boolean hasNext() {
         return iterator.hasNext();
     }
 
-    public S next() {
+    public final S next() {
         return call(callable, iterator.next());
     }
 }

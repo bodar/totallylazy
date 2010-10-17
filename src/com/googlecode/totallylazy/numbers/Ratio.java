@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 
-public class Ratio extends Number implements Comparable {
+public final class Ratio extends Number implements Comparable {
     final public BigInteger numerator;
     final public BigInteger denominator;
 
@@ -29,53 +29,53 @@ public class Ratio extends Number implements Comparable {
         this.denominator = denominator;
     }
 
-    public boolean equals(Object arg0) {
+    public final boolean equals(Object arg0) {
         return arg0 != null
                 && arg0 instanceof Ratio
                 && ((Ratio) arg0).numerator.equals(numerator)
                 && ((Ratio) arg0).denominator.equals(denominator);
     }
 
-    public int hashCode() {
+    public final int hashCode() {
         return numerator.hashCode() ^ denominator.hashCode();
     }
 
-    public String toString() {
+    public final String toString() {
         return numerator.toString() + "/" + denominator.toString();
     }
 
-    public int intValue() {
+    public final int intValue() {
         return (int) doubleValue();
     }
 
-    public long longValue() {
+    public final long longValue() {
         return bigIntegerValue().longValue();
     }
 
-    public float floatValue() {
+    public final float floatValue() {
         return (float) doubleValue();
     }
 
-    public double doubleValue() {
+    public final double doubleValue() {
         return decimalValue(MathContext.DECIMAL64).doubleValue();
     }
 
-    public BigDecimal decimalValue() {
+    public final BigDecimal decimalValue() {
         return decimalValue(MathContext.UNLIMITED);
     }
 
-    public BigDecimal decimalValue(MathContext mc) {
+    public final BigDecimal decimalValue(MathContext mc) {
         BigDecimal numerator = new BigDecimal(this.numerator);
         BigDecimal denominator = new BigDecimal(this.denominator);
 
         return numerator.divide(denominator, mc);
     }
 
-    public BigInteger bigIntegerValue() {
+    public final BigInteger bigIntegerValue() {
         return numerator.divide(denominator);
     }
 
-    public int compareTo(Object o) {
+    public final int compareTo(Object o) {
         Number other = (Number) o;
         return Numbers.compare(this, other);
     }

@@ -8,17 +8,17 @@ import java.util.Iterator;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 
-public class TakeWhileIterator<T> extends StatefulIterator<T> {
+public final class TakeWhileIterator<T> extends StatefulIterator<T> {
     private final Iterator<T> iterator;
     private final Predicate<? super T> predicate;
 
-    public TakeWhileIterator(Iterator<T> iterator, Predicate<? super T> predicate) {
+    public TakeWhileIterator(final Iterator<T> iterator, final Predicate<? super T> predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }
 
     @Override
-    public Option<T> getNext() {
+    public final Option<T> getNext() {
         if(iterator.hasNext()){
             T item = iterator.next();
             if(predicate.matches(item)){

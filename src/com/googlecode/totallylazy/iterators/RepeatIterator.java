@@ -4,18 +4,18 @@ import com.googlecode.totallylazy.Callers;
 
 import java.util.concurrent.Callable;
 
-public class RepeatIterator<T> extends ReadOnlyIterator<T> {
+public final class RepeatIterator<T> extends ReadOnlyIterator<T> {
     private final Callable<T>  callable;
 
-    public RepeatIterator(Callable<T> callable) {
+    public RepeatIterator(final Callable<T> callable) {
         this.callable = callable;
     }
 
-    public boolean hasNext() {
+    public final boolean hasNext() {
         return true;
     }
 
-    public T next() {
+    public final T next() {
         return Callers.call(callable);
     }
 }

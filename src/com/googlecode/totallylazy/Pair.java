@@ -17,25 +17,25 @@ public class Pair<F, S> implements Iterable, First<F>, Second<S> {
         this.second = second;
     }
 
-    public F first() {
+    public final F first() {
         return first;
     }
 
-    public S second() {
+    public final S second() {
         return second;
     }
 
-    public Iterator iterator() {
+    public final Iterator iterator() {
         return sequence(first, second).iterator();
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return sequence(first, second).toString("[", ",", "]");
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -48,7 +48,7 @@ public class Pair<F, S> implements Iterable, First<F>, Second<S> {
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         int result = first != null ? first.hashCode() : 0;
         result = 31 * result + (second != null ? second.hashCode() : 0);
         return result;

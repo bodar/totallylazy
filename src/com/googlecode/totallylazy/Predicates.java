@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.*;
 public class Predicates {
     public static <T> Predicate<T> predicate(final Matcher<T> matcher) {
         return new Predicate<T>() {
-            public boolean matches(T other) {
+            public final boolean matches(T other) {
                 return matcher.matches(other);
             }
         };
@@ -52,7 +52,7 @@ public class Predicates {
 
     public static Predicate<Number> prime() {
         return new Predicate<Number>() {
-            public boolean matches(Number candidate) {
+            public final boolean matches(final Number candidate) {
                 return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(not(remainderIsZero(candidate)));
             }
         };
@@ -60,7 +60,7 @@ public class Predicates {
 
     public static Predicate<Number> primeSquaredLessThan(final Number candidate) {
         return new Predicate<Number>() {
-            public boolean matches(Number prime) {
+            public final boolean matches(final Number prime) {
                 return Numbers.lessThanOrEqual(multiply(prime, prime),candidate);
             }
         };
@@ -68,27 +68,27 @@ public class Predicates {
 
     public static Predicate<Number> remainderIsZero(final Number dividend) {
         return new Predicate<Number>() {
-            public boolean matches(Number divisor) {
+            public final boolean matches(Number divisor) {
                 return Numbers.isZero(remainder(dividend,divisor));
             }
         };
     }
 
-    public static Predicate<Number> remainderIs(Number divisor, Number remainder) {
+    public static Predicate<Number> remainderIs(final Number divisor, final Number remainder) {
         return new RemainderIs(divisor, remainder);
     }
 
-    public static <T> Predicate<T> notNull(Class<T> aClass) {
+    public static <T> Predicate<T> notNull(final Class<T> aClass) {
         return not(aNull(aClass));
     }
 
-    public static <T> Predicate<T> aNull(Class<T> aClass) {
+    public static <T> Predicate<T> aNull(final Class<T> aClass) {
         return new Null<T>();
     }
 
     public static <T> Predicate<Option<T>> some() {
         return new Predicate<Option<T>>() {
-            public boolean matches(Option<T> other) {
+            public final boolean matches(Option<T> other) {
                 return !other.isEmpty();
             }
         };

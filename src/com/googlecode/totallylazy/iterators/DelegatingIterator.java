@@ -2,18 +2,18 @@ package com.googlecode.totallylazy.iterators;
 
 import java.util.Iterator;
 
-public class DelegatingIterator<T> extends ReadOnlyIterator<T> {
+public final class DelegatingIterator<T> extends ReadOnlyIterator<T> {
     private final Iterator<T> iterator;
 
-    public DelegatingIterator(Iterator<T> iterator) {
+    public DelegatingIterator(final Iterator<T> iterator) {
         this.iterator = iterator;
     }
 
-    public boolean hasNext() {
+    public final boolean hasNext() {
         return iterator.hasNext();
     }
 
-    public T next() {
+    public final T next() {
         return iterator.next();
     }
 }

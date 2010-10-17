@@ -8,17 +8,17 @@ import java.util.List;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 
-public class MemorisedIterator<T> extends StatefulIterator<T> {
+public final class MemorisedIterator<T> extends StatefulIterator<T> {
     private final Iterator<T> iterator;
     private final List<T> memory;
     private int position = 0;
 
-    public MemorisedIterator(Iterator<T> iterator, List<T> memory) {
+    public MemorisedIterator(final Iterator<T> iterator, final List<T> memory) {
         this.iterator = iterator;
         this.memory = memory;
     }
 
-    public Option<T> getNext() {
+    public final Option<T> getNext() {
         synchronized (memory) {
             int currentPosition = position++;
             if (haveCachedAnswer(currentPosition)) {

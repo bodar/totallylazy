@@ -9,8 +9,16 @@ import static java.lang.Integer.MIN_VALUE;
 import static java.math.BigInteger.valueOf;
 
 public final class IntegerOperators implements Operators<Integer> {
-    public Class<Integer> forClass() {
+    public static IntegerOperators Instance = new IntegerOperators();
+
+    private IntegerOperators() {}
+
+    public final Class<Integer> forClass() {
         return Integer.class;
+    }
+
+    public final int priority() {
+        return 0;
     }
 
     public final Number negate(Integer value) {
