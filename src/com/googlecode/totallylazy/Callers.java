@@ -22,7 +22,7 @@ public final class Callers {
         ExecutorService service = Executors.newFixedThreadPool(callables.size());
         Sequence<Future<T>> result = sequence(service.invokeAll(callables));
         service.shutdown();
-        return result.map(Callables.<T>realise());
+        return result.map(Callables.<T>realiseFuture());
     }
 
     public static <T> T call(final Callable<T> callable) {

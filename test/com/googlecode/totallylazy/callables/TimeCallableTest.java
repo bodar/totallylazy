@@ -17,7 +17,7 @@ public class TimeCallableTest {
     public void canTimeACall() throws Exception {
         TimeReporter report = new TimeReporter();
         repeat(time(lazy(sleepy(counting(), 10)), report)).take(100).realise();
-        System.out.println("report = " + report);
+        System.out.println(report);
         assertThat(report.maximum(), is(greaterThan(10.0)));
         assertThat(report.average(), is(lessThan(1.0)));
     }

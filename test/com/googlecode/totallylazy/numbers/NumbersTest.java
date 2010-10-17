@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.callables.TimeReporter;
@@ -32,10 +34,8 @@ public class NumbersTest {
 
     @Test
     public void shouldBePrettyFast() throws Exception {
-        Callable<Number> functional = curry(sum(), iterate(increment(), 0).take(10000));
-
         TimeReporter report = new TimeReporter();
-        repeat(time(functional, report)).take(100).realise();
+        repeat(time(curry(sum(), iterate(increment(), 0).take(10000)), report)).take(100).realise();
         System.out.println(report);
         assertThat(report.average(), Matchers.is(lessThan(10.0)));
     }
@@ -69,15 +69,11 @@ public class NumbersTest {
     @Test
     public void primesIsPrettyFastAndIsMemorised() throws Exception {
         TimeReporter report = new TimeReporter();
-        Callable<Sequence<Number>> firstThousandPrimes = new Callable<Sequence<Number>>() {
-            public Sequence<Number> call() throws Exception {
-                return primes().take(1000).realise();
-            }
-        };
-        repeat(time(firstThousandPrimes, report)).take(100).realise();
-        System.out.println("report = " + report);
+        repeat(time(curry(Callables.<Number>realise(), primes().take(1000)), report)).take(100).realise();
+        System.out.println(report);
         assertThat(report.average(), Matchers.is(lessThan(10.0)));
     }
+
 
 
     @Test
