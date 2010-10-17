@@ -74,7 +74,15 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<Future<T>, T> realise() {
+    public static <T> Callable1<Sequence<T>, Sequence<T>> realise() {
+        return new Callable1<Sequence<T>, Sequence<T>>() {
+            public final Sequence<T> call(final Sequence<T> sequence) throws Exception {
+                return sequence.realise();
+            }
+        };
+    }
+
+    public static <T> Callable1<Future<T>, T> realiseFuture() {
         return new Callable1<Future<T>, T>() {
             public final T call(final Future<T> future) throws Exception {
                 return future.get();
