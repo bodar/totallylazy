@@ -1,9 +1,6 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Runnable1;
-import com.googlecode.totallylazy.Runnables;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.*;
 
 import java.util.concurrent.Callable;
 
@@ -39,11 +36,19 @@ public final class TimeCallable<T> implements Callable<T> {
         return new TimeCallable<T>(callable, reporter);
     }
 
+    public static <T,R> TimeCallable<R> time(Callable1<T,R> callable, T value){
+        return time(callable, value, DEFAULT_REPORTER);
+    }
+
+    public static <T,R> TimeCallable<R> time(Callable1<T,R> callable, T value, Runnable1<Double> reporter){
+        return new TimeCallable<R>(curry(callable, value), reporter);
+    }
+
     public static <T> TimeCallable<Sequence<T>> time(Sequence<T> sequence){
-        return time(curry(Callables.<T>realise(), sequence), DEFAULT_REPORTER);
+        return time(Callables.<T>realise(), sequence, DEFAULT_REPORTER);
     }
 
     public static <T> TimeCallable<Sequence<T>> time(Sequence<T> sequence, Runnable1<Double> reporter){
-        return time(curry(Callables.<T>realise(), sequence), reporter);
+        return time(Callables.<T>realise(), sequence, reporter);
     }
 }
