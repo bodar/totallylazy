@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.proxy.Generics;
+
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.List;
