@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+
+import java.util.Enumeration;
+import java.util.Vector;
 
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Predicates.even;
@@ -9,6 +13,7 @@ import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.range;
 import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
@@ -16,6 +21,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
+    @Test
+    public void supportsEnumeration() throws Exception {
+        Vector<String> vector = new Vector<String>();
+        vector.add("foo");
+        Enumeration enumeration = vector.elements();
+        assertThat(sequence(enumeration, String.class).head(), CoreMatchers.is("foo"));
+        Enumeration<String> typeSafeEnumeration = vector.elements();
+        assertThat(sequence(typeSafeEnumeration).head(), CoreMatchers.is("foo"));
+    }
+
     @Test
     public void supportRepeat() throws Exception {
         assertThat(repeat(10), startsWith(10, 10, 10, 10, 10));

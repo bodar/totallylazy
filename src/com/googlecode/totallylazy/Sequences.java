@@ -54,6 +54,14 @@ public class Sequences {
         };
     }
 
+    public static <T> Sequence<T> sequence(final Enumeration enumeration, Class<T> aClass) {
+        return new Sequence<T>() {
+            public final Iterator<T> iterator() {
+                return new EnumerationIterator<T>(enumeration);
+            }
+        };
+    }
+
     public static <T> Sequence<T> memorise(final Iterator<T> iterator) {
         return new MemorisedSequence<T>(new Iterable<T>() {
             public final Iterator<T> iterator() {
