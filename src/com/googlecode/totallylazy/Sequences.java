@@ -54,7 +54,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> sequence(final Enumeration enumeration, Class<T> aClass) {
+    public static <T> Sequence<T> sequence(final Enumeration enumeration, final Class<T> aClass) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return new EnumerationIterator<T>(enumeration);
