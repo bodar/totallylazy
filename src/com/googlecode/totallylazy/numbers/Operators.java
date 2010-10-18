@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.numbers;
 
-interface Operators<T extends Number> extends UnaryOperators<T>, EqualityOperators<T>, ArithmeticOperators {
-    Class<T> forClass();
+import com.googlecode.totallylazy.GenericType;
 
+interface Operators<T extends Number> extends UnaryOperators<T>, EqualityOperators<T>, ArithmeticOperators, GenericType<T> {
     int priority();
 }
