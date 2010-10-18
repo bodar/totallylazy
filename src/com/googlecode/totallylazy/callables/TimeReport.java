@@ -39,11 +39,11 @@ public class TimeReport implements Runnable1<Double> {
     }
 
     public double average() {
-        List<Number> excludeTopAndBottom = sequence(times).sortBy(ascending()).drop(fivePercent()).reverse().drop(fivePercent()).toList();
+        List<Number> excludeTopAndBottom = sequence(times).sortBy(ascending()).drop(tenPercent()).reverse().drop(tenPercent()).toList();
         return divide(reduceLeft(excludeTopAndBottom, add()), excludeTopAndBottom.size()).doubleValue();
     }
 
-    private int fivePercent() {
+    private int tenPercent() {
         return (int) Math.floor(times.size() * 0.10);
     }
 
