@@ -10,7 +10,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 
-public class TimeReporter implements Runnable1<Double> {
+public class TimeReport implements Runnable1<Double> {
     private final List<Number> times = new ArrayList<Number>();
 
     public void run(Double time) {

@@ -1,15 +1,9 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.callables.TimeCallable;
-import com.googlecode.totallylazy.callables.TimeReporter;
+import com.googlecode.totallylazy.callables.TimeReport;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Sequences.iterate;
@@ -34,10 +28,10 @@ public class NumbersTest {
 
     @Test
     public void shouldBePrettyFast() throws Exception {
-        TimeReporter report = new TimeReporter();
+        TimeReport report = new TimeReport();
         repeat(time(curry(sum(), iterate(increment(), 0).take(10000)), report)).take(100).realise();
         System.out.println(report);
-        assertThat(report.average(), Matchers.is(lessThan(10.0)));
+        assertThat(report.average(), is(lessThan(10.0)));
     }
 
     @Test
@@ -68,8 +62,8 @@ public class NumbersTest {
 
     @Test
     public void primesIsPrettyFastAndIsMemorised() throws Exception {
-        TimeReporter report = new TimeReporter();
-        repeat(time(curry(Callables.<Number>realise(), primes().take(1000)), report)).take(100).realise();
+        TimeReport report = new TimeReport();
+        repeat(time(primes().take(1000), report)).take(100).realise();
         System.out.println(report);
         assertThat(report.average(), Matchers.is(lessThan(10.0)));
     }
