@@ -14,9 +14,9 @@ import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.range;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
+import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -26,9 +26,9 @@ public class SequencesTest {
         Vector<String> vector = new Vector<String>();
         vector.add("foo");
         Enumeration enumeration = vector.elements();
-        assertThat(sequence(enumeration, String.class).head(), CoreMatchers.is("foo"));
+        assertThat(sequence(enumeration, String.class).head(), is("foo"));
         Enumeration<String> typeSafeEnumeration = vector.elements();
-        assertThat(sequence(typeSafeEnumeration).head(), CoreMatchers.is("foo"));
+        assertThat(sequence(typeSafeEnumeration).head(), is("foo"));
     }
 
     @Test
