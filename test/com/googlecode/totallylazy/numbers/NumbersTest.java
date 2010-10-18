@@ -29,7 +29,7 @@ public class NumbersTest {
     @Test
     public void shouldBePrettyFast() throws Exception {
         TimeReport report = new TimeReport();
-        repeat(time(curry(sum(), iterate(increment(), 0).take(10000)), report)).take(100).realise();
+        repeat(time(sum(), iterate(increment(), 0).take(10000), report)).take(100).realise();
         System.out.println(report);
         assertThat(report.average(), is(lessThan(10.0)));
     }
