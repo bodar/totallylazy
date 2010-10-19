@@ -4,6 +4,8 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.*;
 import org.hamcrest.Matcher;
 
+import java.lang.reflect.Method;
+
 import static com.googlecode.totallylazy.numbers.Numbers.*;
 
 public class Predicates {
@@ -27,9 +29,21 @@ public class Predicates {
         return new Is<T>(t);
     }
 
+    public static <T> Predicate<? super T> and(final Predicate<? super T>... predicates) {
+        return new Predicate<T>() {
+            public boolean matches(T value) {
+                for (Predicate<? super T> predicate : predicates) {
+                    if (!predicate.matches(value)) return false;
+                }
+                return true;
+            }
+        };
+    }
+
     public static <T> Predicate<T> not(final T t) {
         return new Not<T>(is(t));
     }
+   
     public static <T> Predicate<T> not(final Predicate<? super T> t) {
         return new Not<T>(t);
     }
@@ -93,4 +107,33 @@ public class Predicates {
             }
         };
     }
+
+    public static Predicate<Method> arguments(final Class<?>... expectedClasses) {
+        return new Predicate<Method>() {
+            public boolean matches(Method method) {
+                final Class<?>[] actualClasses = method.getParameterTypes();
+                if (actualClasses.length != expectedClasses.length) {
+                    return false;
+                }
+                for (int i = 0; i < actualClasses.length; i++) {
+                    Class<?> actual = actualClasses[i];
+                    Class<?> expected = expectedClasses[i];
+                    if(!actual.isAssignableFrom(expected)){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        };
+
+    }
+
+    public static Predicate<Method> modifier(final int modifier) {
+        return new Predicate<Method>() {
+            public boolean matches(Method method) {
+                return (method.getModifiers() & modifier) != 0;
+            }
+        };
+    }
+
 }
