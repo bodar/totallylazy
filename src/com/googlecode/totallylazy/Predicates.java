@@ -136,4 +136,11 @@ public class Predicates {
         };
     }
 
+    public static Predicate<Object> assignableTo(final Class aClass) {
+        return new Predicate<Object>() {
+            public boolean matches(Object other) {
+                return aClass.isAssignableFrom(other.getClass());
+            }
+        };
+    }
 }
