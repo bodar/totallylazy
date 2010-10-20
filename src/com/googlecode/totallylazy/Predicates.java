@@ -143,4 +143,20 @@ public class Predicates {
             }
         };
     }
+
+    public static <T,R> Predicate<? super T> by(final Callable1<T, R> callable, final Predicate<R> predicate) {
+        return new Predicate<T>() {
+            public boolean matches(T o) {
+                return predicate.matches(Callers.call(callable, o));
+            }
+        };
+    }
+
+    public static <T> Predicate<? super Predicate<T>> matches(final T instance) {
+        return new Predicate<Predicate<T>>() {
+            public boolean matches(Predicate<T> predicate) {
+                return predicate.matches(instance);
+            }
+        };
+    }
 }
