@@ -3,7 +3,11 @@ package com.googlecode.totallylazy;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
 import static com.googlecode.totallylazy.Callables.returns;
@@ -11,16 +15,31 @@ import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.odd;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Sequences.join;
 import static com.googlecode.totallylazy.Sequences.range;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
+    @Test
+    public void supportsAddingToAnEmptyList() throws Exception {
+        assertThat(sequence().add(1).add(2).add(3), hasExactly(1,2,3));
+    }
+
+    @Test
+    public void joinWorksEvenWhenFirstIterableIsEmpty() throws Exception {
+        final List<Integer> emptyList = Collections.<Integer>emptyList();
+        assertThat(join(emptyList, asList(1, 2, 3)), hasExactly(1,2,3));
+        assertThat(join(emptyList, asList(1, 2, 3), emptyList, asList(4, 5, 6)), hasExactly(1,2,3,4,5,6));
+    }
+
     @Test
     public void supportsEnumeration() throws Exception {
         Vector<String> vector = new Vector<String>();

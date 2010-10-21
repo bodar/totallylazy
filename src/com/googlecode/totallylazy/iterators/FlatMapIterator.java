@@ -29,7 +29,7 @@ public class FlatMapIterator<T, S> extends StatefulIterator<S> {
     }
 
     public Iterator<S> getCurrentIterator() {
-        if(!currentIterator.hasNext()){
+        while (!currentIterator.hasNext()){
             if(!iterator.hasNext()){
                 return new EmptyIterator<S>();
             }
