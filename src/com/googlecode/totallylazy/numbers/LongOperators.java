@@ -97,7 +97,7 @@ public final class LongOperators implements Operators<Long> {
         n = n / gcd;
         long d = val / gcd;
         if (d == 1)
-            return n;
+            return reduce(n);
         if (d < 0) {
             n = -n;
             d = -d;
