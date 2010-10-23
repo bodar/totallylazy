@@ -90,7 +90,11 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<First<T>, T> first() {
+    public static <T> Callable1<? super First<T>, T> first(Class<T> aClass) {
+        return first();
+    }
+
+    public static <T> Callable1<? super First<T>, T> first() {
         return new Callable1<First<T>, T>() {
             public final T call(final First<T> first) throws Exception {
                 return first.first();
@@ -98,7 +102,11 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<Second<T>, T> second() {
+    public static <T> Callable1<? super Second<T>, T> second(Class<T> aClass) {
+        return second();
+    }
+
+    public static <T> Callable1<? super Second<T>, T> second() {
         return new Callable1<Second<T>, T>() {
             public final T call(final Second<T> second) throws Exception {
                 return second.second();
@@ -106,7 +114,7 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<Iterable<T>, T> head() {
+    public static <T> Callable1<? super Iterable<T>, T> head() {
         return new Callable1<Iterable<T>, T>() {
             public final T call(final Iterable<T> iterable) throws Exception {
                 return Sequences.head(iterable);
