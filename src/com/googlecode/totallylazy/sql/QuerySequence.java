@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.predicates.ByPredicate;
+import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.predicates.Is;
 
 import java.sql.Connection;
@@ -43,8 +43,8 @@ public class QuerySequence extends Sequence<Record> {
 
     @Override
     public Sequence<Record> filter(Predicate<? super Record> predicate) {
-        if(predicate instanceof ByPredicate){
-            ByPredicate by = (ByPredicate) predicate;
+        if(predicate instanceof WherePredicate){
+            WherePredicate by = (WherePredicate) predicate;
             if(by.callable() instanceof Keyword && by.predicate() instanceof Is){
                 return new QuerySequence(connection, query.where((Keyword) by.callable(), (Is) by.predicate()));
             }

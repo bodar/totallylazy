@@ -1,21 +1,20 @@
 package com.googlecode.totallylazy.sql;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.when;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.sql.Keyword.keyword;
+import static com.googlecode.totallylazy.sql.KeywordsCallable.select;
 import static com.googlecode.totallylazy.sql.MapRecord.record;
-import static com.googlecode.totallylazy.sql.Records.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SqlTest {
@@ -23,14 +22,14 @@ public class SqlTest {
     private static final Keyword<Integer> age = keyword("age", Integer.class);
     private static final Keyword<String> firstName = keyword("firstName", String.class);
     private static final Keyword<String> lastName = keyword("lastName", String.class);
-    private static Connection connection;
+    private static Records records;
 
     @BeforeClass
     public static void setupDatabase() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:hsqldb:mem:totallylazy", "SA", "");
+        records =  new Records(DriverManager.getConnection("jdbc:hsqldb:mem:totallylazy", "SA", ""));
 
-        define(connection, user, age, firstName, lastName);
-        insert(connection, user,
+        records.define(user, age, firstName, lastName);
+        records.insert(user,
                 record().set(firstName, "dan").set(lastName, "bodart").set(age, 10),
                 record().set(firstName, "matt").set(lastName, "savage").set(age, 12),
                 record().set(firstName, "bob").set(lastName, "martin").set(age, 10));
@@ -38,33 +37,35 @@ public class SqlTest {
 
     @Test
     public void supportsSelectingAllKeywords() throws Exception {
-        Sequence<Record> results = records(connection, user);
-        System.out.println("results = " + results);
+        Sequence<Record> results = records.query(user);
+        assertThat(results.first(), Matchers.is(record().set(firstName, "dan").set(lastName, "bodart").set(age, 10)));
     }
 
     @Test
     public void supportsMappingASingleKeyword() throws Exception {
-        Sequence<Record> results = records(connection, user);
+        Sequence<Record> results = records.query(user);
         Sequence<String> names = results.map(firstName);
         assertThat(names, hasExactly("dan", "matt", "bob"));
     }
 
     @Test
     public void supportsSelectingMultipleKeywords() throws Exception {
-        Sequence<Record> results = records(connection, user);
-        Sequence<Record> names = results.map(keywords(firstName, lastName));
+        Sequence<Record> results = records.query(user);
+        Sequence<Record> names = results.map(select(firstName, lastName));
         assertThat(names.first(), Matchers.is(record().set(firstName, "dan").set(lastName, "bodart")));
     }
 
-    private Callable1<? super Record, Record> keywords(final Keyword... keywords) {
-        return new KeywordsCallable(keywords);
-    }
-
     @Test
-    public void canDoSimpleServerBasedFilteringAndMap() throws Exception {
-        Sequence<Record> results = records(connection, user);
-        Sequence<String> names = results.filter(when(age, is(10))).map(firstName);
+    public void supportsFilteringByASingleKeyword() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<String> names = results.filter(where(age, is(10))).map(firstName);
         assertThat(names, hasExactly("dan", "bob"));
     }
 
+    @Test
+    public void supportsFilteringByMultipleKeywords() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<String> names = results.filter(and(where(age, is(10)), where(lastName, is("martin")))).map(firstName);
+        assertThat(names, hasExactly("bob"));
+    }
 }

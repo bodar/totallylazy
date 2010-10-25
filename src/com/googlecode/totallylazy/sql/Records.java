@@ -20,11 +20,17 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.sql.Keyword.keyword;
 
 public class Records {
-    public static QuerySequence records(Connection connection, Keyword keyword) {
+    private final Connection connection;
+
+    public Records(Connection connection) {
+        this.connection = connection;
+    }
+
+    public QuerySequence query(Keyword keyword) {
         return new QuerySequence(connection, Query.selectAll(keyword));
     }
 
-    public static int define(Connection connection, Keyword recordName, Keyword<?>... fields) {
+    public int define(Keyword recordName, Keyword<?>... fields) {
         try {
             return connection.createStatement().executeUpdate(String.format("create table %s (%s)", recordName, sequence(fields).map(asColumn())));
         } catch (SQLException e) {
@@ -40,19 +46,21 @@ public class Records {
         };
     }
 
-    public static void insert(Connection connection, Keyword recordName, Record... recordsArray) {
+    public int insert(Keyword recordName, Record... recordsArray) {
         try {
             final Sequence<Record> records = sequence(recordsArray);
             final Record first = records.first();
             final String sql = String.format("insert into %s (%s) values (%s)",
                     recordName, first.fields().map(first(Keyword.class)), repeat("?").take((Integer) first.fields().size()));
             final PreparedStatement statement = connection.prepareStatement(sql);
+            int rowCount = 0;
             for (Record record : records) {
                 for (Pair<Integer, Object> numberAndValue : iterate(increment(), 1).safeCast(Integer.class).zip(record.fields().map(second()))) {
                     statement.setObject(numberAndValue.first(), numberAndValue.second());
                 }
-                statement.executeUpdate();
+                rowCount += statement.executeUpdate();
             }
+            return rowCount;
         } catch (SQLException e) {
             throw new UnsupportedOperationException(e);
         }

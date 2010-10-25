@@ -119,6 +119,14 @@ public class Iterators {
         return result;
     }
 
+    public static <T> Set<T> toSet(final Iterator<T> iterator) {
+        Set<T> result = new HashSet<T>();
+        while (iterator.hasNext()) {
+            result.add(iterator.next());
+        }
+        return result;
+    }
+
     public static <T> List<T> toList(final Iterator<T> iterator) {
         final List<T> result = new ArrayList<T>();
         while (iterator.hasNext()) {

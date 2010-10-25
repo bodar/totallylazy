@@ -219,6 +219,10 @@ public class Sequences {
         return Iterators.union(map(iterables, Callables.<T>asIterator()));
     }
 
+    public static <T> Set<T> toSet(final Iterable<T> iterable) {
+        return Iterators.toSet(iterable.iterator());
+    }
+
     public static boolean isEmpty(final Iterable iterable) {
         return !iterable.iterator().hasNext();
     }
