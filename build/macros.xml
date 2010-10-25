@@ -56,7 +56,7 @@
                 <formatter type="xml"/>
                 <batchtest todir="@{reports}">
                     <fileset dir="${unzipped.jar}">
-                        <include name="**/*Test"/>
+                        <include name="**/*Test.class"/>
                         <exclude name="**/*$*"/>
                     </fileset>
                 </batchtest>
