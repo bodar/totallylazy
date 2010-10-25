@@ -6,7 +6,6 @@ import com.googlecode.totallylazy.iterators.StatefulIterator;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Option.none;
@@ -18,11 +17,9 @@ import static com.googlecode.totallylazy.sql.Keyword.keyword;
 import static com.googlecode.totallylazy.sql.MapRecord.record;
 
 public class RecordIterator extends StatefulIterator<Record> {
-    private final Connection connection;
     private final Callable<ResultSet> lazyResults;
 
     public RecordIterator(final Connection connection, final Query query) {
-        this.connection = connection;
         this.lazyResults = lazy(new Callable<ResultSet>() {
             public ResultSet call() throws Exception {
                 System.out.println("query = " + query);

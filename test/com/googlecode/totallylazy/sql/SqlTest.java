@@ -50,10 +50,8 @@ public class SqlTest {
 
     @Test
     public void canDoSimpleServerBasedFilteringAndMap() throws Exception {
-        QuerySequence results = records(connection, user);
+        Sequence<Record> results = records(connection, user);
         Sequence<String> names = results.filter(when(age, is(10))).map(name);
         assertThat(names, hasExactly("dan", "bob"));
     }
-
-
 }
