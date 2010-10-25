@@ -30,14 +30,7 @@ public class Predicates {
     }
 
     public static <T> Predicate<? super T> and(final Predicate<? super T>... predicates) {
-        return new Predicate<T>() {
-            public boolean matches(T value) {
-                for (Predicate<? super T> predicate : predicates) {
-                    if (!predicate.matches(value)) return false;
-                }
-                return true;
-            }
-        };
+        return new AndPredicate<T>(predicates);
     }
 
     public static <T> Predicate<T> not(final T t) {
@@ -144,12 +137,12 @@ public class Predicates {
         };
     }
 
-    public static <T,R> Predicate<? super T> when(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
-        return by(callable, predicate);
+    public static <T,R> Predicate<? super T> where(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
+        return new WherePredicate<T,R>(predicate, callable);
     }
 
     public static <T,R> Predicate<? super T> by(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
-        return new ByPredicate<T,R>(predicate, callable);
+        return where(callable, predicate);
     }
 
     public static <T> Predicate<? super Predicate<T>> matches(final T instance) {

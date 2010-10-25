@@ -4,11 +4,11 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Predicate;
 
-public class ByPredicate<T, R> implements Predicate<T> {
+public class WherePredicate<T, R> implements Predicate<T> {
     private final Predicate<? super R> predicate;
     private final Callable1<? super T, R> callable;
 
-    public ByPredicate(Predicate<? super R> predicate, Callable1<? super T, R> callable) {
+    public WherePredicate(Predicate<? super R> predicate, Callable1<? super T, R> callable) {
         this.predicate = predicate;
         this.callable = callable;
     }

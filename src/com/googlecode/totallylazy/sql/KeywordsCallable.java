@@ -23,4 +23,9 @@ public class KeywordsCallable implements Callable1<Record, Record> {
     public Keyword[] keywords() {
         return keywords;
     }
+
+    public static Callable1<? super Record, Record> select(final Keyword... keywords) {
+        return new KeywordsCallable(keywords);
+    }
+
 }

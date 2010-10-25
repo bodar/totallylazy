@@ -2,11 +2,13 @@ package com.googlecode.totallylazy.sql;
 
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.entryToPair;
@@ -40,7 +42,19 @@ public class MapRecord implements Record{
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof MapRecord && hasExactly(this.fields()).matches(((MapRecord) other).fields());
+        if (other instanceof MapRecord) {
+            MapRecord otherRecord = (MapRecord) other;
+            if(fields.size() != otherRecord.fields.size()){
+                return false;
+            }
+            for (Pair<Keyword, Object> entry : fields()) {
+                if(!otherRecord.fields().contains(entry)){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override

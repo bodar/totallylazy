@@ -71,6 +71,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.union(Sequences.sequence(this, other));
     }
 
+    public Set<T> toSet() {
+        return Sequences.toSet(this);
+    }
+
     public boolean isEmpty() {
         return Sequences.isEmpty(this);
     }
