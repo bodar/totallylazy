@@ -54,4 +54,9 @@ public class QuerySequence extends Sequence<Record> {
 
         throw new UnsupportedOperationException("Unsupported callable type " + predicate);
     }
+
+    @Override
+    public String toString() {
+        return query.toString();
+    }
 }
