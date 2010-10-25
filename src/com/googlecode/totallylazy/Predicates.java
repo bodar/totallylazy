@@ -144,6 +144,10 @@ public class Predicates {
         };
     }
 
+    public static <T,R> Predicate<? super T> when(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
+        return by(callable, predicate);
+    }
+
     public static <T,R> Predicate<? super T> by(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
         return new Predicate<T>() {
             public boolean matches(T o) {

@@ -25,12 +25,12 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof Keyword && value.equals(((Keyword) other).value);
+        return other instanceof Keyword && value.equalsIgnoreCase(((Keyword) other).value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value.toLowerCase().hashCode();
     }
 
     public T call(Record record) throws Exception {

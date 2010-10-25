@@ -9,19 +9,29 @@ import java.sql.DriverManager;
 
 import static com.googlecode.totallylazy.Predicates.by;
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.when;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.sql.Keyword.keyword;
+import static com.googlecode.totallylazy.sql.MapRecord.record;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SqlTest {
     @Test
-    @Ignore
     public void canDoSimpleClientBasedFiltering() throws Exception {
         Connection connection = DriverManager.getConnection("jdbc:hsqldb:mem:totallylazy", "SA", "");
-        Records.define(connection, keyword("user"), keyword("age", Integer.class), keyword("name", String.class));
+        final Keyword user = keyword("user");
+        final Keyword<Integer> age = keyword("age", Integer.class);
+        final Keyword<String> name = keyword("name", String.class);
 
-        Sequence<Record> results = Records.records(connection, keyword("user"));
-        Sequence<String> names = results.filter(by(keyword("age", Integer.class), is(10))).map(keyword("name", String.class));
-        assertThat(names, hasExactly("dan"));
+        Records.define(connection, user, age, name);
+
+        Records.insert(connection,
+                record(user).set(name, "dan").set(age, 10),
+                record(user).set(name, "matt").set(age, 12),
+                record(user).set(name, "bob").set(age, 10));
+
+        Sequence<Record> results = Records.records(connection, user);
+        Sequence<String> names = results.filter(when(age, is(10))).map(name);
+        assertThat(names, hasExactly("dan", "bob"));
     }
 }
