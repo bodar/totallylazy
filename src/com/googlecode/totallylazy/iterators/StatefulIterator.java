@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.iterators;
 
+import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Peekable;
 
@@ -11,7 +12,7 @@ public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements
     private Option<T> state = none();
     private boolean finished = false;
 
-    protected abstract Option<T> getNext();
+    protected abstract Option<T> getNext() throws Exception;
 
     public final boolean hasNext() {
         if(finished){
@@ -19,7 +20,11 @@ public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements
         }
 
         if (state.isEmpty()) {
-            state = getNext();
+            try {
+                state = getNext();
+            } catch (Exception e) {
+                throw new LazyException(e);
+            }
             if (state.isEmpty()) {
                 finished = true;
                 return false;
