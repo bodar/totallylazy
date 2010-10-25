@@ -2,21 +2,15 @@ package com.googlecode.totallylazy.sql;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Iterators;
-import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.predicates.ByPredicate;
 import com.googlecode.totallylazy.predicates.Is;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static java.util.Arrays.asList;
 
 public class QuerySequence extends Sequence<Record> {
     private final Connection connection;
@@ -40,7 +34,11 @@ public class QuerySequence extends Sequence<Record> {
                 }
             };
         }
-        throw new UnsupportedOperationException("Unsupported callable type " + callable);
+        if(callable instanceof KeywordsCallable){
+            return (Sequence<S>) new QuerySequence(connection, query.select(((KeywordsCallable) callable).keywords()));
+        }
+        System.out.print(String.format("Warning: unsupported callables %s dropping down to client side sequence functionality", callable));
+        return super.map(callable);
     }
 
     @Override
@@ -51,8 +49,8 @@ public class QuerySequence extends Sequence<Record> {
                 return new QuerySequence(connection, query.where((Keyword) by.callable(), (Is) by.predicate()));
             }
         }
-
-        throw new UnsupportedOperationException("Unsupported callable type " + predicate);
+        System.out.print(String.format("Warning: unsupported predicate %s dropping down to client side sequence functionality", predicate));
+        return super.filter(predicate);
     }
 
     @Override
