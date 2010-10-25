@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
+import com.googlecode.totallylazy.iterators.EmptyIterator;
 import com.googlecode.totallylazy.iterators.EnumerationIterator;
 import com.googlecode.totallylazy.iterators.ZipIterator;
 
@@ -18,6 +19,14 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static java.nio.CharBuffer.wrap;
 
 public class Sequences {
+    public static <T> Sequence<T> empty() {
+        return new Sequence<T>() {
+            public final Iterator<T> iterator() {
+                return new EmptyIterator<T>();
+            }
+        };
+    }
+
     public static <T> Sequence<T> sequence(final Iterable<T> iterable) {
         if (iterable instanceof Sequence) {
             return (Sequence<T>) iterable;

@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Pair<F, S> implements Iterable, First<F>, Second<S> {
+public class Pair<F, S> implements First<F>, Second<S> {
     private final F first;
     private final S second;
 
@@ -23,10 +23,6 @@ public class Pair<F, S> implements Iterable, First<F>, Second<S> {
 
     public final S second() {
         return second;
-    }
-
-    public final Iterator iterator() {
-        return sequence(first, second).iterator();
     }
 
     @Override

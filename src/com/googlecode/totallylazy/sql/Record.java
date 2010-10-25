@@ -8,7 +8,5 @@ public interface Record {
 
     <T> Record set(Keyword<T> name, T value);
 
-    Keyword name();
-
     Sequence<Pair<Keyword, Object>> fields();
 }
