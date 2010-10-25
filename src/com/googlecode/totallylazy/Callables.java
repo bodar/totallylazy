@@ -130,6 +130,14 @@ public final class Callables {
         };
     }
 
+    public static Callable2<Integer, Object, Integer> asHashCode() {
+        return new Callable2<Integer, Object, Integer>() {
+            public Integer call(Integer hash, Object value) throws Exception {
+                return hash * (value == null ? 0 :value.hashCode());
+            }
+        };
+    }
+
     public static <T> Callable1<Iterable<T>, Iterator<T>> asIterator() {
         return new Callable1<Iterable<T>, Iterator<T>>() {
             public final Iterator<T> call(final Iterable<T> iterable) throws Exception {
