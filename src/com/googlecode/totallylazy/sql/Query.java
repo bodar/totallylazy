@@ -38,7 +38,13 @@ public class Query {
 
     @Override
     public String toString() {
-        return String.format("select %s from %s %s", selectClause(), table, whereClause());
+        final Pair<String, Sequence<Object>> pair = sqlAndValues();
+        return String.format(String.format("SQL:'%s' VALUES:'%s'", pair.first(), pair.second()));
+    }
+
+    private Pair<String, Sequence<Object>> sqlAndValues() {
+        final Pair<String, Sequence<Object>> whereClause = whereClause();
+        return pair(String.format("select %s from %s %s", selectClause(), table, whereClause.first()), whereClause.second());
     }
 
     private Object selectClause() {
@@ -61,9 +67,10 @@ public class Query {
         return query(table, select, where.add(predicate));
     }
 
-    private String whereClause() {
-        if(where.isEmpty()) return "";
-        return "where " + where.map(toSql()).map(Callables.<String>first()).toString(" ");
+    private Pair<String, Sequence<Object>> whereClause() {
+        if(where.isEmpty()) return pair("", empty());
+        final Sequence<Pair<String, Sequence<Object>>> sqlAndValues = where.map(toSql());
+        return pair("where " + sqlAndValues.map(Callables.<String>first()).toString(" "),  sqlAndValues.flatMap(values()));
     }
 
     public boolean isSupported(Predicate<? super Record> predicate) {
@@ -71,6 +78,7 @@ public class Query {
             toSql(predicate);
             return true;
         } catch( UnsupportedOperationException e){
+            System.out.println(String.format("Warning: %s dropping down to client side sequence functionality", e.getMessage()));
             return false;
         }
     }
@@ -109,7 +117,7 @@ public class Query {
         if(predicate instanceof LessThanOrEqualToPredicate){
             return pair("<= ? ", sequence((Object)((LessThanOrEqualToPredicate) predicate).value()));
         }
-        throw new UnsupportedOperationException("Unknown predicate " + predicate);
+        throw new UnsupportedOperationException("Unsupported predicate " + predicate);
     }
 
     private Callable1<Pair<String, Sequence<Object>>, Iterable<Object>> values() {
@@ -135,14 +143,14 @@ public class Query {
         if(callable instanceof KeywordsCallable){
             return pair(sequence(((KeywordsCallable) callable).keywords()).toString(), empty());
         }
-        throw new UnsupportedOperationException("Unknown callable " + callable);
+        throw new UnsupportedOperationException("Unsupported callable " + callable);
     }
 
 
     public ResultSet execute(Connection connection) throws SQLException {
-        final PreparedStatement statement = connection.prepareStatement(toString());
-        final Sequence<Object> values = where.map(toSql()).flatMap(values());
-        Records.addValues(statement, values);
+        final Pair<String, Sequence<Object>> sqlAndValues = sqlAndValues();
+        final PreparedStatement statement = connection.prepareStatement(sqlAndValues.first());
+        Records.addValues(statement, sqlAndValues.second());
         return statement.executeQuery();
     }
 }

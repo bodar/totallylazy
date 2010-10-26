@@ -41,7 +41,7 @@ public class Records {
     private static Callable1<? super Keyword<?>, String> asColumn() {
         return new Callable1<Keyword<?>, String>() {
             public String call(Keyword<?> keyword) throws Exception {
-                return String.format("%s %s", keyword, keyword.forClass() == Integer.class ? "integer" : "varchar(20)");
+                return String.format("%s %s", keyword, keyword.forClass() == Integer.class ? "integer" : "varchar(256)");
             }
         };
     }
