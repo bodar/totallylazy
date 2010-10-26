@@ -2,10 +2,10 @@ package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Predicate;
 
-public class Is<T> implements Predicate<T> {
+public class EqualsPredicate<T> implements Predicate<T> {
     private final T value;
 
-    public Is(T value) {
+    public EqualsPredicate(T value) {
         this.value = value;
     }
 

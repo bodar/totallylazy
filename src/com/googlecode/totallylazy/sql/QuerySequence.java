@@ -4,9 +4,6 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.predicates.AndPredicate;
-import com.googlecode.totallylazy.predicates.WherePredicate;
-import com.googlecode.totallylazy.predicates.Is;
 
 import java.sql.Connection;
 import java.util.Iterator;
@@ -38,7 +35,7 @@ public class QuerySequence extends Sequence<Record> {
         if(callable instanceof KeywordsCallable){
             return (Sequence<S>) new QuerySequence(connection, query.select(((KeywordsCallable) callable).keywords()));
         }
-        System.out.print(String.format("Warning: unsupported callables %s dropping down to client side sequence functionality", callable));
+        System.out.println(String.format("Warning: unsupported callables %s dropping down to client side sequence functionality", callable));
         return super.map(callable);
     }
 
@@ -47,7 +44,7 @@ public class QuerySequence extends Sequence<Record> {
         if(query.isSupported(predicate)){
             return new QuerySequence(connection, query.where(predicate));
         }
-        System.out.print(String.format("Warning: unsupported predicate %s dropping down to client side sequence functionality", predicate));
+        System.out.println(String.format("Warning: unsupported predicate %s dropping down to client side sequence functionality", predicate));
         return super.filter(predicate);
     }
 

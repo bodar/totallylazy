@@ -6,8 +6,13 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.numbers.GreaterThanOrEqualToPredicate;
+import com.googlecode.totallylazy.numbers.GreaterThanPredicate;
+import com.googlecode.totallylazy.numbers.LessThanOrEqualToPredicate;
+import com.googlecode.totallylazy.numbers.LessThanPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
-import com.googlecode.totallylazy.predicates.Is;
+import com.googlecode.totallylazy.predicates.EqualsPredicate;
+import com.googlecode.totallylazy.predicates.Not;
 import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 
@@ -70,7 +75,7 @@ public class Query {
         }
     }
 
-    public Pair<String, Sequence<Object>> toSql(Predicate<? super Record> predicate) {
+    public Pair<String, Sequence<Object>> toSql(Predicate predicate) {
         if(predicate instanceof WherePredicate){
             WherePredicate wherePredicate = (WherePredicate) predicate;
             final Pair<String, Sequence<Object>> pair = toSql(wherePredicate.predicate());
@@ -86,8 +91,23 @@ public class Query {
             final Sequence<Pair<String, Sequence<Object>>> pairs = sequence(andPredicate.predicates()).map(toSql());
             return pair(pairs.map(Callables.first(String.class)).toString("or "), pairs.flatMap(values()));
         }
-        if(predicate instanceof Is){
-            return pair("= ? ", sequence(((Is) predicate).value()));
+        if(predicate instanceof EqualsPredicate){
+            return pair("= ? ", sequence(((EqualsPredicate) predicate).value()));
+        }
+        if(predicate instanceof Not){
+            return pair("<> ? ", sequence(toSql(((Not) predicate).predicate()).second()));
+        }
+        if(predicate instanceof GreaterThanPredicate){
+            return pair("> ? ", sequence((Object)((GreaterThanPredicate) predicate).value()));
+        }
+        if(predicate instanceof GreaterThanOrEqualToPredicate){
+            return pair(">= ? ", sequence((Object)((GreaterThanOrEqualToPredicate) predicate).value()));
+        }
+        if(predicate instanceof LessThanPredicate){
+            return pair("< ? ", sequence((Object)((LessThanPredicate) predicate).value()));
+        }
+        if(predicate instanceof LessThanOrEqualToPredicate){
+            return pair("<= ? ", sequence((Object)((LessThanOrEqualToPredicate) predicate).value()));
         }
         throw new UnsupportedOperationException("Unknown predicate " + predicate);
     }

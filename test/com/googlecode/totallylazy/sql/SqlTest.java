@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.sql;
 
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.numbers.Numbers;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -9,8 +10,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.numbers.Numbers.greaterThan;
+import static com.googlecode.totallylazy.numbers.Numbers.greaterThanOrEqualTo;
+import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
+import static com.googlecode.totallylazy.numbers.Numbers.lessThanOrEqualTo;
 import static com.googlecode.totallylazy.sql.Keyword.keyword;
 import static com.googlecode.totallylazy.sql.KeywordsCallable.select;
 import static com.googlecode.totallylazy.sql.MapRecord.record;
@@ -73,5 +79,40 @@ public class SqlTest {
         Sequence<Record> results = records.query(user);
         Sequence<String> names = results.filter(where(age, is(12)).or(where(lastName, is("martin")))).map(firstName);
         assertThat(names, hasExactly("matt", "bob"));
+    }
+
+    @Test
+    public void supportsFilteringWithNot() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<String> names = results.filter(where(age, is(not(10)))).map(firstName);
+        assertThat(names, hasExactly("matt"));
+    }
+
+    @Test
+    public void supportsFilteringWithGreaterThan() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<String> names = results.filter(where(age, is(greaterThan(10)))).map(firstName);
+        assertThat(names, hasExactly("matt"));
+    }
+
+    @Test
+    public void supportsFilteringWithGreaterThanOrEqualTo() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<String> names = results.filter(where(age, is(greaterThanOrEqualTo(12)))).map(firstName);
+        assertThat(names, hasExactly("matt"));
+    }
+
+    @Test
+    public void supportsFilteringWithLessThan() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<String> names = results.filter(where(age, is(lessThan(12)))).map(firstName);
+        assertThat(names, hasExactly("dan", "bob"));
+    }
+
+    @Test
+    public void supportsFilteringWithLessThanOrEqualTo() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<String> names = results.filter(where(age, is(lessThanOrEqualTo(10)))).map(firstName);
+        assertThat(names, hasExactly("dan", "bob"));
     }
 }

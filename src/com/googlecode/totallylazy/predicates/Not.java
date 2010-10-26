@@ -12,4 +12,8 @@ public class Not<T> implements Predicate<T> {
     public boolean matches(T other) {
         return !predicate.matches(other);
     }
+
+    public Predicate<? super T> predicate() {
+        return predicate;
+    }
 }
