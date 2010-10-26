@@ -27,7 +27,7 @@ public class Records {
     }
 
     public QuerySequence query(Keyword keyword) {
-        return new QuerySequence(connection, Query.selectAll(keyword));
+        return new QuerySequence(connection, Query.query(keyword));
     }
 
     public int define(Keyword recordName, Keyword<?>... fields) {
@@ -55,14 +55,18 @@ public class Records {
             final PreparedStatement statement = connection.prepareStatement(sql);
             int rowCount = 0;
             for (Record record : records) {
-                for (Pair<Integer, Object> numberAndValue : iterate(increment(), 1).safeCast(Integer.class).zip(record.fields().map(second()))) {
-                    statement.setObject(numberAndValue.first(), numberAndValue.second());
-                }
+                addValues(statement, record.fields().map(second()));
                 rowCount += statement.executeUpdate();
             }
             return rowCount;
         } catch (SQLException e) {
             throw new UnsupportedOperationException(e);
+        }
+    }
+
+    static void addValues(PreparedStatement statement, Sequence<Object> values) throws SQLException {
+        for (Pair<Integer, Object> numberAndValue : iterate(increment(), 1).safeCast(Integer.class).zip(values)) {
+            statement.setObject(numberAndValue.first(), numberAndValue.second());
         }
     }
 }

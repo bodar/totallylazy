@@ -138,7 +138,7 @@ public class Predicates {
     }
 
     public static <T,R> Predicate<? super T> where(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
-        return new WherePredicate<T,R>(predicate, callable);
+        return new WherePredicate<T,R>(callable, predicate);
     }
 
     public static <T,R> Predicate<? super T> by(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {

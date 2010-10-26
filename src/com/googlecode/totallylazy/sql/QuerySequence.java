@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.predicates.Is;
 
@@ -43,11 +44,8 @@ public class QuerySequence extends Sequence<Record> {
 
     @Override
     public Sequence<Record> filter(Predicate<? super Record> predicate) {
-        if(predicate instanceof WherePredicate){
-            WherePredicate by = (WherePredicate) predicate;
-            if(by.callable() instanceof Keyword && by.predicate() instanceof Is){
-                return new QuerySequence(connection, query.where((Keyword) by.callable(), (Is) by.predicate()));
-            }
+        if(query.isSupported(predicate)){
+            return new QuerySequence(connection, query.where(predicate));
         }
         System.out.print(String.format("Warning: unsupported predicate %s dropping down to client side sequence functionality", predicate));
         return super.filter(predicate);
