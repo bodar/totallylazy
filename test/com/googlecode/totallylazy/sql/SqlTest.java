@@ -8,7 +8,6 @@ import org.junit.Test;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
@@ -51,8 +50,8 @@ public class SqlTest {
     @Test
     public void supportsSelectingMultipleKeywords() throws Exception {
         Sequence<Record> results = records.query(user);
-        Sequence<Record> names = results.map(select(firstName, lastName));
-        assertThat(names.first(), Matchers.is(record().set(firstName, "dan").set(lastName, "bodart")));
+        Sequence<Record> fullNames = results.map(select(firstName, lastName));
+        assertThat(fullNames.first(), Matchers.is(record().set(firstName, "dan").set(lastName, "bodart")));
     }
 
     @Test
@@ -65,7 +64,7 @@ public class SqlTest {
     @Test
     public void supportsFilteringByMultipleKeywords() throws Exception {
         Sequence<Record> results = records.query(user);
-        Sequence<String> names = results.filter(and(where(age, is(10)), where(lastName, is("martin")))).map(firstName);
+        Sequence<String> names = results.filter(where(age, is(10)).and(where(lastName, is("martin")))).map(firstName);
         assertThat(names, hasExactly("bob"));
     }
 }

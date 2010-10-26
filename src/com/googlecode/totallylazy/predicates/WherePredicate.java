@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Predicate;
 
-public class WherePredicate<T, R> implements Predicate<T> {
+public class WherePredicate<T, R> extends LogicalPredicate<T> {
     private final Callable1<? super T, R> callable;
     private final Predicate<? super R> predicate;
 

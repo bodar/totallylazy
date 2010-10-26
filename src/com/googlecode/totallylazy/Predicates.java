@@ -29,7 +29,7 @@ public class Predicates {
         return new Is<T>(t);
     }
 
-    public static <T> Predicate<? super T> and(final Predicate<? super T>... predicates) {
+    public static <T> AndPredicate<T> and(final Predicate<? super T>... predicates) {
         return new AndPredicate<T>(predicates);
     }
 
@@ -137,11 +137,11 @@ public class Predicates {
         };
     }
 
-    public static <T,R> Predicate<? super T> where(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
+    public static <T,R> WherePredicate<T,R> where(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
         return new WherePredicate<T,R>(callable, predicate);
     }
 
-    public static <T,R> Predicate<? super T> by(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
+    public static <T,R> WherePredicate<T,R> by(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
         return where(callable, predicate);
     }
 
