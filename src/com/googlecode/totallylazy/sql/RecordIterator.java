@@ -23,7 +23,7 @@ public class RecordIterator extends StatefulIterator<Record> {
         this.lazyResults = lazy(new Callable<ResultSet>() {
             public ResultSet call() throws Exception {
                 System.out.println("query = " + query);
-                return connection.createStatement().executeQuery(query.toString());
+                return query.execute(connection);
             }
         });
     }

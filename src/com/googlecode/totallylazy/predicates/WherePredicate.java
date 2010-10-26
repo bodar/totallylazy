@@ -5,10 +5,10 @@ import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Predicate;
 
 public class WherePredicate<T, R> implements Predicate<T> {
-    private final Predicate<? super R> predicate;
     private final Callable1<? super T, R> callable;
+    private final Predicate<? super R> predicate;
 
-    public WherePredicate(Predicate<? super R> predicate, Callable1<? super T, R> callable) {
+    public WherePredicate(Callable1<? super T, R> callable, Predicate<? super R> predicate) {
         this.predicate = predicate;
         this.callable = callable;
     }
@@ -17,11 +17,11 @@ public class WherePredicate<T, R> implements Predicate<T> {
         return predicate.matches(Callers.call(callable, o));
     }
 
-    public Predicate<? super R> predicate() {
-        return predicate;
-    }
-
     public Callable1<? super T, R> callable() {
         return callable;
+    }
+
+    public Predicate<? super R> predicate() {
+        return predicate;
     }
 }
