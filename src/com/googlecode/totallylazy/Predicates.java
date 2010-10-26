@@ -26,7 +26,11 @@ public class Predicates {
     }
 
     public static <T> Predicate<T> is(final T t) {
-        return new Is<T>(t);
+        return new EqualsPredicate<T>(t);
+    }
+
+    public static <T> Predicate<T> is(final Predicate<T> t) {
+        return t;
     }
 
     public static <T> AndPredicate<T> and(final Predicate<? super T>... predicates) {
@@ -72,7 +76,7 @@ public class Predicates {
     public static Predicate<Number> primeSquaredLessThan(final Number candidate) {
         return new Predicate<Number>() {
             public final boolean matches(final Number prime) {
-                return Numbers.lessThanOrEqual(multiply(prime, prime),candidate);
+                return Numbers.lessThanOrEqualTo(multiply(prime, prime),candidate);
             }
         };
     }

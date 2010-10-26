@@ -21,9 +21,7 @@ import com.googlecode.totallylazy.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
@@ -140,19 +138,35 @@ public class Numbers {
         return operatorsFor(x, y).equalTo(x, y);
     }
 
+    public static Predicate<Number> lessThan(final Number value){
+        return new LessThanPredicate(value);
+    }
+
     public static boolean lessThan(Number x, Number y) {
         return operatorsFor(x, y).lessThan(x, y);
     }
 
-    public static boolean lessThanOrEqual(Number x, Number y) {
+    public static Predicate<Number> lessThanOrEqualTo(final Number value){
+        return new LessThanOrEqualToPredicate(value);
+    }
+
+    public static boolean lessThanOrEqualTo(Number x, Number y) {
         return !operatorsFor(x, y).lessThan(y, x);
+    }
+
+    public static Predicate<Number> greaterThan(final Number value){
+        return new GreaterThanPredicate(value);
     }
 
     public static boolean greaterThan(Number x, Number y) {
         return operatorsFor(x, y).lessThan(y, x);
     }
 
-    public static boolean greaterThanOrEqual(Number x, Number y) {
+    public static Predicate<Number> greaterThanOrEqualTo(final Number value){
+        return new GreaterThanOrEqualToPredicate(value);
+    }
+
+    public static boolean greaterThanOrEqualTo(Number x, Number y) {
         return !operatorsFor(x, y).lessThan(x, y);
     }
 
@@ -253,4 +267,5 @@ public class Numbers {
             return BigIntegerOperators.reduce((BigInteger) value);
         return value;
     }
+
 }
