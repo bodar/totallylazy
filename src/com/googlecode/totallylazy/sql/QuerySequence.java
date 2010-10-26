@@ -8,8 +8,6 @@ import com.googlecode.totallylazy.Sequence;
 import java.sql.Connection;
 import java.util.Iterator;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
-
 public class QuerySequence extends Sequence<Record> {
     private final Connection connection;
     private final Query query;
@@ -44,7 +42,6 @@ public class QuerySequence extends Sequence<Record> {
         if(query.isSupported(predicate)){
             return new QuerySequence(connection, query.where(predicate));
         }
-        System.out.println(String.format("Warning: unsupported predicate %s dropping down to client side sequence functionality", predicate));
         return super.filter(predicate);
     }
 

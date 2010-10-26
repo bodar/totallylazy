@@ -37,7 +37,7 @@ public class SqlTest {
         records.insert(user,
                 record().set(firstName, "dan").set(lastName, "bodart").set(age, 10),
                 record().set(firstName, "matt").set(lastName, "savage").set(age, 12),
-                record().set(firstName, "bob").set(lastName, "martin").set(age, 10));
+                record().set(firstName, "bob").set(lastName, "martin").set(age, 11));
     }
 
     @Test
@@ -63,14 +63,14 @@ public class SqlTest {
     @Test
     public void supportsFilteringByASingleKeyword() throws Exception {
         Sequence<Record> results = records.query(user);
-        Sequence<String> names = results.filter(where(age, is(10))).map(firstName);
-        assertThat(names, hasExactly("dan", "bob"));
+        Sequence<String> names = results.filter(where(age, is(11))).map(firstName);
+        assertThat(names, hasExactly("bob"));
     }
 
     @Test
     public void supportsFilteringByMultipleKeywords() throws Exception {
         Sequence<Record> results = records.query(user);
-        Sequence<String> names = results.filter(where(age, is(10)).and(where(lastName, is("martin")))).map(firstName);
+        Sequence<String> names = results.filter(where(age, is(11)).and(where(lastName, is("martin")))).map(firstName);
         assertThat(names, hasExactly("bob"));
     }
 
@@ -84,22 +84,22 @@ public class SqlTest {
     @Test
     public void supportsFilteringWithNot() throws Exception {
         Sequence<Record> results = records.query(user);
-        Sequence<String> names = results.filter(where(age, is(not(10)))).map(firstName);
-        assertThat(names, hasExactly("matt"));
+        Sequence<String> names = results.filter(where(age, is(not(11)))).map(firstName);
+        assertThat(names, hasExactly("dan", "matt"));
     }
 
     @Test
     public void supportsFilteringWithGreaterThan() throws Exception {
         Sequence<Record> results = records.query(user);
-        Sequence<String> names = results.filter(where(age, is(greaterThan(10)))).map(firstName);
+        Sequence<String> names = results.filter(where(age, is(greaterThan(11)))).map(firstName);
         assertThat(names, hasExactly("matt"));
     }
 
     @Test
     public void supportsFilteringWithGreaterThanOrEqualTo() throws Exception {
         Sequence<Record> results = records.query(user);
-        Sequence<String> names = results.filter(where(age, is(greaterThanOrEqualTo(12)))).map(firstName);
-        assertThat(names, hasExactly("matt"));
+        Sequence<String> names = results.filter(where(age, is(greaterThanOrEqualTo(11)))).map(firstName);
+        assertThat(names, hasExactly("matt", "bob"));
     }
 
     @Test
@@ -113,6 +113,6 @@ public class SqlTest {
     public void supportsFilteringWithLessThanOrEqualTo() throws Exception {
         Sequence<Record> results = records.query(user);
         Sequence<String> names = results.filter(where(age, is(lessThanOrEqualTo(10)))).map(firstName);
-        assertThat(names, hasExactly("dan", "bob"));
+        assertThat(names, hasExactly("dan"));
     }
 }
