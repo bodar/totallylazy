@@ -32,7 +32,10 @@ public class Records {
 
     public int define(Keyword recordName, Keyword<?>... fields) {
         try {
-            return connection.createStatement().executeUpdate(String.format("create table %s (%s)", recordName, sequence(fields).map(asColumn())));
+            final String sql = String.format("create table %s (%s)", recordName, sequence(fields).map(asColumn()));
+            final int rowCount = connection.createStatement().executeUpdate(sql);
+            System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
+            return rowCount;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -58,6 +61,7 @@ public class Records {
                 addValues(statement, record.fields().map(second()));
                 rowCount += statement.executeUpdate();
             }
+            System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
             return rowCount;
         } catch (SQLException e) {
             throw new UnsupportedOperationException(e);
