@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.Is;
+import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 
 import java.sql.Connection;
@@ -61,36 +62,12 @@ public class Query {
     }
 
     public boolean isSupported(Predicate<? super Record> predicate) {
-        if(predicate instanceof WherePredicate){
-            WherePredicate wherePredicate = (WherePredicate) predicate;
-            return isSupported(wherePredicate.callable()) && isSupported(wherePredicate.predicate());
-        }
-        if(predicate instanceof AndPredicate){
-            AndPredicate andPredicate = (AndPredicate) predicate;
-            return sequence(andPredicate.predicates()).forAll(isSupported());
-        }
-        if(predicate instanceof Is){
+        try{
+            toSql(predicate);
             return true;
+        } catch( UnsupportedOperationException e){
+            return false;
         }
-        return false;
-    }
-
-    private Predicate<? super Predicate> isSupported() {
-        return new Predicate<Predicate>() {
-            public boolean matches(Predicate other) {
-                return isSupported(other);
-            }
-        };
-    }
-
-    public <T> boolean isSupported(Callable1<? super Record, T> callable) {
-        if(callable instanceof Keyword){
-            return true;
-        }
-        if(callable instanceof KeywordsCallable){
-            return true;
-        }
-        return false;
     }
 
     public Pair<String, Sequence<Object>> toSql(Predicate<? super Record> predicate) {
@@ -102,10 +79,15 @@ public class Query {
         if(predicate instanceof AndPredicate){
             AndPredicate andPredicate = (AndPredicate) predicate;
             final Sequence<Pair<String, Sequence<Object>>> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return pair(pairs.map(Callables.first(String.class)).toString(" and "), pairs.flatMap(values()));
+            return pair(pairs.map(Callables.first(String.class)).toString("and "), pairs.flatMap(values()));
+        }
+        if(predicate instanceof OrPredicate){
+            OrPredicate andPredicate = (OrPredicate) predicate;
+            final Sequence<Pair<String, Sequence<Object>>> pairs = sequence(andPredicate.predicates()).map(toSql());
+            return pair(pairs.map(Callables.first(String.class)).toString("or "), pairs.flatMap(values()));
         }
         if(predicate instanceof Is){
-            return pair(" = ? ", sequence(((Is) predicate).value()));
+            return pair("= ? ", sequence(((Is) predicate).value()));
         }
         throw new UnsupportedOperationException("Unknown predicate " + predicate);
     }

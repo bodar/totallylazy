@@ -33,6 +33,10 @@ public class Predicates {
         return new AndPredicate<T>(predicates);
     }
 
+    public static <T> OrPredicate<T> or(final Predicate<? super T>... predicates) {
+        return new OrPredicate<T>(predicates);
+    }
+
     public static <T> Predicate<T> not(final T t) {
         return new Not<T>(is(t));
     }
