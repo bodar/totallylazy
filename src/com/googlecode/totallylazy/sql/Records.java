@@ -26,16 +26,15 @@ public class Records {
         this.connection = connection;
     }
 
-    public QuerySequence query(Keyword keyword) {
-        return new QuerySequence(connection, Query.query(keyword));
+    public QuerySequence query(Keyword recordName) {
+        return new QuerySequence(connection, Query.query(recordName));
     }
 
-    public int define(Keyword recordName, Keyword<?>... fields) {
+    public void define(Keyword recordName, Keyword<?>... fields) {
         try {
             final String sql = String.format("create table %s (%s)", recordName, sequence(fields).map(asColumn()));
-            final int rowCount = connection.createStatement().executeUpdate(sql);
-            System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
-            return rowCount;
+            connection.createStatement().executeUpdate(sql);
+            System.out.println(String.format("SQL:'%s'", sql));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -49,7 +48,7 @@ public class Records {
         };
     }
 
-    public int insert(Keyword recordName, Record... recordsArray) {
+    public int add(Keyword recordName, Record... recordsArray) {
         try {
             final Sequence<Record> records = sequence(recordsArray);
             final Record first = records.first();

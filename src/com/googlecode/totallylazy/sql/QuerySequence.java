@@ -6,7 +6,10 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
 import java.sql.Connection;
+import java.util.Comparator;
 import java.util.Iterator;
+
+import static com.googlecode.totallylazy.Callables.ascending;
 
 public class QuerySequence extends Sequence<Record> {
     private final Connection connection;
@@ -43,6 +46,19 @@ public class QuerySequence extends Sequence<Record> {
             return new QuerySequence(connection, query.where(predicate));
         }
         return super.filter(predicate);
+    }
+
+    @Override
+    public Sequence<Record> sortBy(Callable1<Record, ? extends Comparable> callable) {
+        return sortBy(ascending(callable));
+    }
+
+    @Override
+    public Sequence<Record> sortBy(Comparator<? super Record> comparator) {
+        if(query.isSupported(comparator)){
+            return new QuerySequence(connection, query.orderBy(comparator));
+        }
+        return super.sortBy(comparator);
     }
 
     @Override
