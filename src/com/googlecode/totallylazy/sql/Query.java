@@ -1,25 +1,19 @@
 package com.googlecode.totallylazy.sql;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.callables.AscendingComparator;
+import com.googlecode.totallylazy.callables.DescendingComparator;
 import com.googlecode.totallylazy.numbers.GreaterThanOrEqualToPredicate;
 import com.googlecode.totallylazy.numbers.GreaterThanPredicate;
 import com.googlecode.totallylazy.numbers.LessThanOrEqualToPredicate;
 import com.googlecode.totallylazy.numbers.LessThanPredicate;
-import com.googlecode.totallylazy.predicates.AndPredicate;
-import com.googlecode.totallylazy.predicates.EqualsPredicate;
-import com.googlecode.totallylazy.predicates.Not;
-import com.googlecode.totallylazy.predicates.OrPredicate;
-import com.googlecode.totallylazy.predicates.WherePredicate;
+import com.googlecode.totallylazy.predicates.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.empty;
@@ -29,11 +23,13 @@ public class Query {
     private final Keyword table;
     private final Sequence<Keyword> select;
     private final Sequence<Predicate<? super Record>> where;
+    private final Option<Comparator<? super Record>> comparator;
 
-    private Query(Keyword table, Sequence<Keyword> select, Sequence<Predicate<? super Record>> where) {
+    private Query(Keyword table, Sequence<Keyword> select, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
         this.table = table;
         this.select = select;
         this.where = where;
+        this.comparator = comparator;
     }
 
     @Override
@@ -44,27 +40,35 @@ public class Query {
 
     private Pair<String, Sequence<Object>> sqlAndValues() {
         final Pair<String, Sequence<Object>> whereClause = whereClause();
-        return pair(String.format("select %s from %s %s", selectClause(), table, whereClause.first()), whereClause.second());
+        return pair(String.format("select %s from %s %s %s", selectClause(), table, whereClause.first(), orderByClause()), whereClause.second());
+    }
+
+    private String orderByClause() {
+        return comparator.map(new Callable1<Comparator<? super Record>, String>() {
+            public String call(Comparator<? super Record> comparator) throws Exception {
+                return "order by " + toSql(comparator);
+            }
+        }).getOrElse("");
     }
 
     private Object selectClause() {
         return select.isEmpty() ? "*" : sequence(select);
     }
 
-    public static Query query(Keyword table, Sequence<Keyword> select, Sequence<Predicate<? super Record>> where) {
-        return new Query(table, select, where);
+    public static Query query(Keyword table, Sequence<Keyword> select, Sequence<Predicate<? super Record>> where,  Option<Comparator<? super Record>> comparator) {
+        return new Query(table, select, where, comparator);
     }
 
     public static Query query(Keyword table) {
-        return query(table, Sequences.<Keyword>empty(), Sequences.<Predicate<? super Record>>empty());
+        return query(table, Sequences.<Keyword>empty(), Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none());
     }
 
     public Query select(Keyword... columns){
-        return query(table, sequence(columns), where);
+        return query(table, sequence(columns), where, comparator);
     }
 
     public Query where(Predicate<? super Record> predicate) {
-        return query(table, select, where.add(predicate));
+        return query(table, select, where.add(predicate), comparator);
     }
 
     private Pair<String, Sequence<Object>> whereClause() {
@@ -136,6 +140,36 @@ public class Query {
         };
     }
 
+    public <T> boolean isSupported(Comparator<? super Record> comparator) {
+        try{
+            toSql(comparator);
+            return true;
+        } catch( UnsupportedOperationException e){
+            System.out.println(String.format("Warning: %s dropping down to client side sequence functionality", e.getMessage()));
+            return false;
+        }
+    }
+
+    public <T> String toSql(Comparator<? super Record> comparator) {
+        if(comparator instanceof AscendingComparator){
+            return toSql(((AscendingComparator) comparator).callable()).first() + " asc ";
+        }
+        if(comparator instanceof DescendingComparator){
+            return toSql(((DescendingComparator) comparator).callable()).first() + " desc ";
+        }
+        throw new UnsupportedOperationException("Unsupported comparator " + comparator);
+    }
+
+    public <T> boolean isSupported(Callable1<? super Record, T> callable) {
+        try{
+            toSql(callable);
+            return true;
+        } catch( UnsupportedOperationException e){
+            System.out.println(String.format("Warning: %s dropping down to client side sequence functionality", e.getMessage()));
+            return false;
+        }
+    }
+
     public <T> Pair<String, Sequence<Object>> toSql(Callable1<? super Record, T> callable) {
         if(callable instanceof Keyword){
             return pair(callable.toString(), empty());
@@ -152,5 +186,9 @@ public class Query {
         final PreparedStatement statement = connection.prepareStatement(sqlAndValues.first());
         Records.addValues(statement, sqlAndValues.second());
         return statement.executeQuery();
+    }
+
+    public Query orderBy(Comparator<? super Record> comparator) {
+        return query(table, select, where, Option.<Comparator<? super Record>>some(comparator));
     }
 }

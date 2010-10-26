@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.callables.AscendingComparator;
+import com.googlecode.totallylazy.callables.DescendingComparator;
+
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -47,19 +50,11 @@ public final class Callables {
     }
 
     public static <T> Comparator<T> ascending(final Callable1<T, ? extends Comparable> callable) {
-        return new Comparator<T>() {
-            public final int compare(final T first, final T second) {
-                return Callers.call(callable, first).compareTo(Callers.call(callable, second));
-            }
-        };
+        return new AscendingComparator<T>(callable);
     }
 
     public static <T> Comparator<T> descending(final Callable1<T, ? extends Comparable> callable) {
-        return new Comparator<T>() {
-            public final int compare(final T first, final T second) {
-                return ascending(callable).compare(first, second) * -1;
-            }
-        };
+        return new DescendingComparator<T>(callable);
     }
 
     public static <T> Callable1<T, Integer> length() {
@@ -238,4 +233,5 @@ public final class Callables {
             }
         };
     }
+
 }
