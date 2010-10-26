@@ -67,4 +67,11 @@ public class SqlTest {
         Sequence<String> names = results.filter(where(age, is(10)).and(where(lastName, is("martin")))).map(firstName);
         assertThat(names, hasExactly("bob"));
     }
+
+    @Test
+    public void supportsFilteringWithLogicalOr() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<String> names = results.filter(where(age, is(12)).or(where(lastName, is("martin")))).map(firstName);
+        assertThat(names, hasExactly("matt", "bob"));
+    }
 }
