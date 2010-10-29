@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.sql;
 
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,7 +18,6 @@ import static com.googlecode.totallylazy.numbers.Numbers.greaterThan;
 import static com.googlecode.totallylazy.numbers.Numbers.greaterThanOrEqualTo;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThanOrEqualTo;
-import static com.googlecode.totallylazy.sql.ID.unique;
 import static com.googlecode.totallylazy.sql.Keyword.keyword;
 import static com.googlecode.totallylazy.sql.KeywordsCallable.select;
 import static com.googlecode.totallylazy.sql.MapRecord.record;
@@ -124,5 +124,11 @@ public class SqlTest {
         assertThat(results.sortBy(age).map(firstName), hasExactly("dan", "bob", "matt"));
         assertThat(results.sortBy(ascending(age)).map(firstName), hasExactly("dan", "bob", "matt"));
         assertThat(results.sortBy(descending(age)).map(firstName), hasExactly("matt", "bob", "dan"));
+    }
+
+    @Test
+    public void supportsSize() throws Exception {
+        Sequence<Record> results = records.query(user);
+        assertThat(results.size(), NumberMatcher.is(3));
     }
 }
