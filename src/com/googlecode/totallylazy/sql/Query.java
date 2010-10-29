@@ -22,12 +22,14 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 public class Query {
     private final Keyword table;
     private final Sequence<Keyword> select;
+    private final String selectFunction;
     private final Sequence<Predicate<? super Record>> where;
     private final Option<Comparator<? super Record>> comparator;
 
-    private Query(Keyword table, Sequence<Keyword> select, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
+    private Query(Keyword table, Sequence<Keyword> select, String selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
         this.table = table;
         this.select = select;
+        this.selectFunction = selectFunction;
         this.where = where;
         this.comparator = comparator;
     }
@@ -52,23 +54,27 @@ public class Query {
     }
 
     private Object selectClause() {
-        return select.isEmpty() ? "*" : sequence(select);
+        return applyFunction( select.isEmpty() ? "*" : sequence(select).toString() );
     }
 
-    public static Query query(Keyword table, Sequence<Keyword> select, Sequence<Predicate<? super Record>> where,  Option<Comparator<? super Record>> comparator) {
-        return new Query(table, select, where, comparator);
+    private Object applyFunction(String columns) {
+        return selectFunction == null ? columns : String.format(selectFunction, columns);
+    }
+
+    public static Query query(Keyword table, Sequence<Keyword> select, String selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
+        return new Query(table, select, selectFunction, where, comparator);
     }
 
     public static Query query(Keyword table) {
-        return query(table, Sequences.<Keyword>empty(), Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none());
+        return query(table, Sequences.<Keyword>empty(), null, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none());
     }
 
     public Query select(Keyword... columns){
-        return query(table, sequence(columns), where, comparator);
+        return query(table, sequence(columns), selectFunction, where, comparator);
     }
 
     public Query where(Predicate<? super Record> predicate) {
-        return query(table, select, where.add(predicate), comparator);
+        return query(table, select, selectFunction, where.add(predicate), comparator);
     }
 
     private Pair<String, Sequence<Object>> whereClause() {
@@ -189,6 +195,10 @@ public class Query {
     }
 
     public Query orderBy(Comparator<? super Record> comparator) {
-        return query(table, select, where, Option.<Comparator<? super Record>>some(comparator));
+        return query(table, select, selectFunction, where, Option.<Comparator<? super Record>>some(comparator));
+    }
+
+    public Query count() {
+        return query(table, select, "count(%s)", where, comparator);
     }
 }

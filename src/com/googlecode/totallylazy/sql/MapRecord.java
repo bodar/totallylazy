@@ -1,19 +1,14 @@
 package com.googlecode.totallylazy.sql;
 
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.entryToPair;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 
 public class MapRecord implements Record{
     private final Map<Keyword, Object> fields = new LinkedHashMap<Keyword, Object>();

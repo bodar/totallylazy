@@ -33,6 +33,7 @@ public class RecordIterator extends StatefulIterator<Record> {
         ResultSet resultSet = lazyResults.call();
         boolean hasNext = resultSet.next();
         if (!hasNext) {
+            resultSet.close();
             return none();
         }
 

@@ -6,6 +6,8 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -59,6 +61,21 @@ public class QuerySequence extends Sequence<Record> {
             return new QuerySequence(connection, query.orderBy(comparator));
         }
         return super.sortBy(comparator);
+    }
+
+    @Override
+    public Number size() {
+        try {
+            final Query count = query.count();
+            System.out.println(count);
+            final ResultSet resultSet = count.execute(connection);
+            resultSet.next();
+            final int result = resultSet.getInt(1);
+            resultSet.close();
+            return result;
+        } catch (SQLException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     @Override
