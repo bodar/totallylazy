@@ -5,10 +5,15 @@ import com.googlecode.totallylazy.MemorisedSequence;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 
+import java.nio.ByteBuffer;
+import java.nio.LongBuffer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Callables.second;
@@ -30,6 +35,11 @@ public class Records {
         return new QuerySequence(connection, Query.query(recordName));
     }
 
+    private static final Map<Class, String> typeMap = new HashMap<Class, String>(){{
+       put(String.class, "varchar(256)");
+       put(Integer.class, "integer");
+    }};
+
     public void define(Keyword recordName, Keyword<?>... fields) {
         try {
             final String sql = String.format("create table %s (%s)", recordName, sequence(fields).map(asColumn()));
@@ -43,7 +53,7 @@ public class Records {
     private static Callable1<? super Keyword<?>, String> asColumn() {
         return new Callable1<Keyword<?>, String>() {
             public String call(Keyword<?> keyword) throws Exception {
-                return String.format("%s %s", keyword, keyword.forClass() == Integer.class ? "integer" : "varchar(256)");
+                return String.format("%s %s", keyword, typeMap.get(keyword.forClass()));
             }
         };
     }

@@ -5,12 +5,19 @@ import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.Callables.ascending;
+import static com.googlecode.totallylazy.Callables.descending;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.numbers.Numbers.greaterThan;
+import static com.googlecode.totallylazy.numbers.Numbers.greaterThanOrEqualTo;
+import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
+import static com.googlecode.totallylazy.numbers.Numbers.lessThanOrEqualTo;
+import static com.googlecode.totallylazy.sql.ID.unique;
 import static com.googlecode.totallylazy.sql.Keyword.keyword;
 import static com.googlecode.totallylazy.sql.KeywordsCallable.select;
 import static com.googlecode.totallylazy.sql.MapRecord.record;
@@ -26,7 +33,7 @@ public class SqlTest {
 
     @BeforeClass
     public static void setupDatabase() throws SQLException {
-        records =  new Records(getConnection("jdbc:hsqldb:mem:totallylazy", "SA", ""));
+        records = new Records(getConnection("jdbc:hsqldb:mem:totallylazy", "SA", ""));
 
         records.define(user, age, firstName, lastName);
         records.add(user,
@@ -114,7 +121,8 @@ public class SqlTest {
     @Test
     public void supportsSorting() throws Exception {
         Sequence<Record> results = records.query(user);
-        Sequence<String> names = results.sortBy(age).map(firstName);
-        assertThat(names, hasExactly("dan", "bob", "matt"));
+        assertThat(results.sortBy(age).map(firstName), hasExactly("dan", "bob", "matt"));
+        assertThat(results.sortBy(ascending(age)).map(firstName), hasExactly("dan", "bob", "matt"));
+        assertThat(results.sortBy(descending(age)).map(firstName), hasExactly("matt", "bob", "dan"));
     }
 }
