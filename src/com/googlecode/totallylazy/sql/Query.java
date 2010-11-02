@@ -130,9 +130,9 @@ public class Query {
         throw new UnsupportedOperationException("Unsupported predicate " + predicate);
     }
 
-    private Callable1<Pair<String, Sequence<Object>>, Iterable<Object>> values() {
-        return new Callable1<Pair<String, Sequence<Object>>, Iterable<Object>>() {
-            public Iterable<Object> call(Pair<String, Sequence<Object>> pair) throws Exception {
+    private Callable1<? super Pair<String, Sequence<Object>>, Iterable<?>> values() {
+        return new Callable1<Pair<String, Sequence<Object>>, Iterable<?>>() {
+            public Iterable<?> call(Pair<String, Sequence<Object>> pair) throws Exception {
                 return pair.second();
             }
         };

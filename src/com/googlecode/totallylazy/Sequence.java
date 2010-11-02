@@ -19,7 +19,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.filter(this, predicate);
     }
 
-    public <S> Sequence<S> flatMap(final Callable1<? super T, Iterable<S>> callable) {
+    public <S> Sequence<S> flatMap(final Callable1<? super T, Iterable<? extends S>> callable) {
         return Sequences.flatMap(this, callable);
     }
 
@@ -67,7 +67,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.toString(this, start, separator, end, limit);
     }
 
-    public Set<T> union(final Iterable<T> other) {
+    public Set<T> union(final Iterable<? extends T> other) {
         return Sequences.union(Sequences.sequence(this, other));
     }
 
