@@ -133,22 +133,22 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<Iterable<T>, Iterator<T>> asIterator() {
-        return new Callable1<Iterable<T>, Iterator<T>>() {
-            public final Iterator<T> call(final Iterable<T> iterable) throws Exception {
+
+    public static <T>  Callable1<? super Iterable<? extends T>, Iterator<? extends T>> asIterator() {
+        return new Callable1<Iterable<? extends T>, Iterator<? extends T>>() {
+            public Iterator<? extends T> call(Iterable<? extends T> iterable) throws Exception {
                 return iterable.iterator();
             }
         };
     }
 
-    public static <T> Callable1<Iterator<T>, Iterable<T>> asIterable() {
-        return new Callable1<Iterator<T>, Iterable<T>>() {
-            public final Iterable<T> call(final Iterator<T> iterator) throws Exception {
+    public static <T> Callable1<? super Iterator<? extends T>, Iterable<? extends T>> asIterable() {
+        return new Callable1<Iterator<? extends T>, Iterable<? extends T>>() {
+            public final Iterable<? extends T> call(final Iterator<? extends T> iterator) throws Exception {
                 return Sequences.sequence(iterator);
             }
         };
     }
-
 
     public static <T> Callable<T> returns(final T t) {
         return new Callable<T>() {

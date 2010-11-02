@@ -38,7 +38,7 @@ public class Iterators {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> Iterator<S> flatMap(final Iterator<T> iterator, final Callable1<? super T, Iterable<S>> callable) {
+    public static <T, S> Iterator<S> flatMap(final Iterator<? extends T> iterator, final Callable1<? super T, Iterable<? extends S>> callable) {
         return new FlatMapIterator<T, S>(iterator, callable);
     }
 
@@ -109,9 +109,9 @@ public class Iterators {
         return builder.toString();
     }
 
-    public static <T> Set<T> union(final Iterable<Iterator<T>> iterators) {
+    public static <T> Set<T> union(final Iterable<Iterator<? extends T>> iterators) {
         Set<T> result = new HashSet<T>();
-        for (Iterator<T> iterator : iterators) {
+        for (Iterator<? extends T> iterator : iterators) {
             while (iterator.hasNext()) {
                 result.add(iterator.next());
             }
@@ -229,12 +229,12 @@ public class Iterators {
         return join(iterator, sequence(t).iterator());
     }
 
-    public static <T> Iterator<T> join(final Iterator<T>... iterators) {
-        return new FlatMapIterator<Iterator<T>,T>(sequence(iterators).iterator(), Callables.<T>asIterable());
+    public static <T> Iterator<T> join(final Iterator<? extends T>... iterators) {
+        return new FlatMapIterator<Iterator<? extends T>,T>(sequence(iterators).iterator(), Callables.<T>asIterable());
     }
 
-    public static <T> Iterator<T> join(final Iterable<Iterator<T>> iterators) {
-        return new FlatMapIterator<Iterator<T>, T>(sequence(iterators).iterator(), Callables.<T>asIterable());
+    public static <T> Iterator<T> join(final Iterable<Iterator<? extends T>> iterators) {
+        return new FlatMapIterator<Iterator<? extends T>, T>(sequence(iterators).iterator(), Callables.<T>asIterable());
     }
 
     public static <T> Iterator<T> cons(final T t, final Iterator<T> iterator) {
