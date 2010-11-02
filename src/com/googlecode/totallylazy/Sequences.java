@@ -107,7 +107,7 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, Iterable<S>> callable) {
+    public static <T, S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, Iterable<? extends S>> callable) {
         return new Sequence<S>() {
             public final Iterator<S> iterator() {
                 return Iterators.flatMap(iterable.iterator(), callable);
@@ -215,7 +215,7 @@ public class Sequences {
         return Iterators.toString(iterable.iterator(), start, separator, end, limit);
     }
 
-    public static <T> Set<T> union(final Iterable<Iterable<T>> iterables) {
+    public static <T> Set<T> union(final Iterable<Iterable<? extends T>> iterables) {
         return Iterators.union(map(iterables, Callables.<T>asIterator()));
     }
 
@@ -307,7 +307,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> join(final Iterable<T>... iterables) {
+    public static <T> Sequence<T> join(final Iterable<? extends T>... iterables) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.join(sequence(iterables).map(Callables.<T>asIterator()));

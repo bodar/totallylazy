@@ -9,26 +9,25 @@ import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 
-
 public class FlatMapIterator<T, S> extends StatefulIterator<S> {
-    private final Iterator<T> iterator;
-    private final Callable1<? super T, Iterable<S>> callable;
-    private Iterator<S> currentIterator = new EmptyIterator<S>();
+    private final Iterator<? extends T> iterator;
+    private final Callable1<? super T, Iterable<? extends S>> callable;
+    private Iterator<? extends S> currentIterator = new EmptyIterator<S>();
 
-    public FlatMapIterator(Iterator<T> iterator, Callable1<? super T, Iterable<S>> callable) {
+    public FlatMapIterator(Iterator<? extends T> iterator, Callable1<? super T, Iterable<? extends S>> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }
 
     public Option<S> getNext() {
-        Iterator<S> iterator = getCurrentIterator();
+        Iterator<? extends S> iterator = getCurrentIterator();
         if (iterator.hasNext()) {
             return some(iterator.next());
         }
         return none();
     }
 
-    public Iterator<S> getCurrentIterator() {
+    public Iterator<? extends S> getCurrentIterator() {
         while (!currentIterator.hasNext()){
             if(!iterator.hasNext()){
                 return new EmptyIterator<S>();
