@@ -69,12 +69,20 @@ public class Iterators {
         throw new NoSuchElementException();
     }
 
+    public static <T, S> S fold(final Iterator<T> iterator, final S seed, final Callable2<? super S, ? super T, S> callable) {
+        return foldLeft(iterator, seed, callable);
+    }
+
     public static <T, S> S foldLeft(final Iterator<T> iterator, final S seed, final Callable2<? super S, ? super T, S> callable) {
         S accumulator = seed;
         while (iterator.hasNext()) {
             accumulator = call(callable, accumulator, iterator.next());
         }
         return accumulator;
+    }
+
+    public static <T,R> T reduce(final Iterator<T> iterator, final Callable2<? super T, ? super T, T> callable) {
+        return reduceLeft(iterator, callable);
     }
 
     public static <T,R> T reduceLeft(final Iterator<T> iterator, final Callable2<? super T, ? super T, T> callable) {

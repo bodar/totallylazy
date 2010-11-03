@@ -191,8 +191,16 @@ public class Sequences {
         };
     }
 
+    public static <T, S> S fold(final Iterable<T> iterable, S seed, final Callable2<? super S, ? super T, S> callable) {
+        return Iterators.fold(iterable.iterator(), seed, callable);
+    }
+
     public static <T, S> S foldLeft(final Iterable<T> iterable, S seed, final Callable2<? super S, ? super T, S> callable) {
         return Iterators.foldLeft(iterable.iterator(), seed, callable);
+    }
+
+    public static <T> T reduce(final Iterable<T> iterable, final Callable2<? super T, ? super T, T> callable) {
+        return Iterators.reduce(iterable.iterator(), callable);
     }
 
     public static <T> T reduceLeft(final Iterable<T> iterable, final Callable2<? super T, ? super T, T> callable) {

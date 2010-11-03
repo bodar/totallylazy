@@ -43,4 +43,8 @@ public abstract class Option<T> implements Iterable<T> {
     public final <S> Option<S> map(Callable1<? super T, S> callable) {
         return isEmpty() ? Option.<S>none() : some(Callers.call(callable, get()));
     }
+
+    public <S> S fold(final S seed, final Callable2<? super S, ? super T, S> callable) {
+        return isEmpty() ? seed : Callers.call(callable, seed, get());
+    }
 }

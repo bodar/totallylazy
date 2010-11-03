@@ -12,12 +12,20 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.size;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
 public class OptionTest {
+    @Test
+    public void canFold() throws Exception {
+        assertThat(option(1).fold(1, add()), NumberMatcher.is(2));
+        assertThat(some(1).fold(1, add()), NumberMatcher.is(2));
+        assertThat(Option.<Number>none().fold(1, add()), NumberMatcher.is(1));
+    }
+
     @Test
     public void canMap() throws Exception {
         assertThat(option(1).map(asString()), is(option("1")));
