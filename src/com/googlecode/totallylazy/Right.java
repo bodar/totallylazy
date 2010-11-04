@@ -20,4 +20,19 @@ public class Right<L,R> extends Either<L,R> {
     public R right() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "right(" + value + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Right && ((Right) o).value.equals(value);
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
 }

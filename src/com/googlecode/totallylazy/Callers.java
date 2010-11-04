@@ -28,8 +28,6 @@ public final class Callers {
     public static <T> T call(final Callable<T> callable) {
         try {
             return callable.call();
-        } catch (LazyException e) {
-            throw e;
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -40,8 +38,6 @@ public final class Callers {
     public static <T, S> S call(final Callable1<? super T, S> callable, final T t) {
         try {
             return callable.call(t);
-        } catch (LazyException e) {
-            throw e;
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -52,8 +48,6 @@ public final class Callers {
     public static <T, S, R> R call(final Callable2<? super T, ? super S, R> callable, final T t, final S s) {
         try {
             return callable.call(t, s);
-        } catch (LazyException e) {
-            throw e;
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
