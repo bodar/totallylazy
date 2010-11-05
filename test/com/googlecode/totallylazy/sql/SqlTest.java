@@ -14,6 +14,7 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.numbers.Numbers.between;
 import static com.googlecode.totallylazy.numbers.Numbers.greaterThan;
 import static com.googlecode.totallylazy.numbers.Numbers.greaterThanOrEqualTo;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
@@ -130,5 +131,11 @@ public class SqlTest {
     public void supportsSize() throws Exception {
         Sequence<Record> results = records.query(user);
         assertThat(results.size(), NumberMatcher.is(3));
+    }
+
+    @Test
+    public void supportsBetween() throws Exception {
+        Sequence<Record> results = records.query(user);
+        assertThat(results.filter(where(age, is(between(10,11)))).map(firstName), hasExactly("dan", "bob"));
     }
 }
