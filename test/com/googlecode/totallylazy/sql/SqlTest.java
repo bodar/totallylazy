@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
+import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.where;
@@ -137,5 +138,11 @@ public class SqlTest {
     public void supportsBetween() throws Exception {
         Sequence<Record> results = records.query(user);
         assertThat(results.filter(where(age, is(between(10,11)))).map(firstName), hasExactly("dan", "bob"));
+    }
+
+    @Test
+    public void supportsIn() throws Exception {
+        Sequence<Record> results = records.query(user);
+        assertThat(results.filter(where(age, is(in(10,12)))).map(firstName), hasExactly("dan", "matt"));
     }
 }

@@ -18,6 +18,7 @@ import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Query {
@@ -131,6 +132,10 @@ public class Query {
         if(predicate instanceof BetweenPredicate){
             BetweenPredicate betweenPredicate = (BetweenPredicate) predicate;
             return pair("between ? and ? ", sequence((Object) betweenPredicate.lower(), betweenPredicate.upper()));
+        }
+        if(predicate instanceof InPredicate){
+            InPredicate inPredicate = (InPredicate) predicate;
+            return pair(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) inPredicate.values());
         }
         throw new UnsupportedOperationException("Unsupported predicate " + predicate);
     }
