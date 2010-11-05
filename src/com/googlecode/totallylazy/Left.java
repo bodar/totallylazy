@@ -36,4 +36,8 @@ public class Left<L,R> extends Either<L, R> {
         return value.hashCode();
     }
 
+    @Override
+    public Object value() {
+        return value;
+    }
 }
