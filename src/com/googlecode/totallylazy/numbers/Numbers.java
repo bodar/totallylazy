@@ -170,6 +170,10 @@ public class Numbers {
         return !operatorsFor(x, y).lessThan(x, y);
     }
 
+    public static Predicate<Number> between(final Number a, final Number b){
+        return new BetweenPredicate(a, b);
+    }
+
     public static int compare(Number x, Number y) {
         Operators operators = operatorsFor(x, y);
         if (operators.lessThan(x, y))
