@@ -104,12 +104,12 @@ public class Query {
         if(predicate instanceof AndPredicate){
             AndPredicate andPredicate = (AndPredicate) predicate;
             final Sequence<Pair<String, Sequence<Object>>> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return pair(pairs.map(Callables.first(String.class)).toString("and "), pairs.flatMap(values()));
+            return pair("( " + pairs.map(Callables.first(String.class)).toString("and ") + " ) ", pairs.flatMap(values()));
         }
         if(predicate instanceof OrPredicate){
             OrPredicate andPredicate = (OrPredicate) predicate;
             final Sequence<Pair<String, Sequence<Object>>> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return pair(pairs.map(Callables.first(String.class)).toString("or "), pairs.flatMap(values()));
+            return pair("( " + pairs.map(Callables.first(String.class)).toString("or ") + " ) ", pairs.flatMap(values()));
         }
         if(predicate instanceof EqualsPredicate){
             return pair("= ? ", sequence(((EqualsPredicate) predicate).value()));
