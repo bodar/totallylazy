@@ -86,6 +86,15 @@ public class SqlTest {
     }
 
     @Test
+    public void supportsFilteringWithLogicalOrCombineWithAnd() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<String> names = results.filter(where(age, is(12)).and(where(lastName, is("savage"))).
+                or(where(firstName, is("dan")).
+                or(where(lastName, is("martin"))))).map(firstName);
+        assertThat(names, hasExactly("dan", "matt", "bob"));
+    }
+
+    @Test
     public void supportsFilteringWithNot() throws Exception {
         Sequence<Record> results = records.query(user);
         Sequence<String> names = results.filter(where(age, is(not(11)))).map(firstName);

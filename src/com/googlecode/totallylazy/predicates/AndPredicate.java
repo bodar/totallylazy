@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Predicate;
 
-public class AndPredicate<T> implements Predicate<T> {
+public class AndPredicate<T> extends LogicalPredicate<T> {
     private final Predicate<? super T>[] predicates;
 
     public AndPredicate(Predicate<? super T>... predicates) {
