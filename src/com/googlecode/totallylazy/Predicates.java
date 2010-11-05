@@ -9,6 +9,22 @@ import java.lang.reflect.Method;
 import static com.googlecode.totallylazy.numbers.Numbers.*;
 
 public class Predicates {
+    public static Predicate<? super Either> isLeft() {
+        return new Predicate<Either>() {
+            public boolean matches(Either either) {
+                return either.isLeft();
+            }
+        };
+    }
+
+    public static Predicate<? super Either> isRight() {
+        return new Predicate<Either>() {
+            public boolean matches(Either either) {
+                return either.isRight();
+            }
+        };
+    }
+
     public static <T> Predicate<T> predicate(final Matcher<T> matcher) {
         return new Predicate<T>() {
             public final boolean matches(T other) {

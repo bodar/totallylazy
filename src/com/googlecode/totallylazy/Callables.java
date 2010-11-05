@@ -234,4 +234,28 @@ public final class Callables {
         };
     }
 
+    public static <L> Callable1<Either<L, ?>, L> left(Class<L> aClass) {
+        return left();
+    }
+
+    public static <L> Callable1<Either<L, ?>, L> left() {
+        return new Callable1<Either<L, ?>, L>() {
+            public L call(Either<L, ?> either) throws Exception {
+                return either.left();
+            }
+        };
+    }
+
+    public static <R> Callable1<Either<?, R>, R> right(Class<R> aClass) {
+        return right();
+    }
+
+    public static <R> Callable1<Either<?, R>, R> right() {
+        return new Callable1<Either<?, R>, R>() {
+            public R call(Either<?, R> either) throws Exception {
+                return either.right();
+            }
+        };
+    }
+
 }

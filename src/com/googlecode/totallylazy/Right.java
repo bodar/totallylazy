@@ -35,4 +35,9 @@ public class Right<L,R> extends Either<L,R> {
     public int hashCode() {
         return value.hashCode();
     }
+
+    @Override
+    public Object value() {
+        return value;
+    }
 }
