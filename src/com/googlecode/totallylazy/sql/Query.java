@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.sql;
 import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
+import com.googlecode.totallylazy.numbers.BetweenPredicate;
 import com.googlecode.totallylazy.numbers.GreaterThanOrEqualToPredicate;
 import com.googlecode.totallylazy.numbers.GreaterThanPredicate;
 import com.googlecode.totallylazy.numbers.LessThanOrEqualToPredicate;
@@ -126,6 +127,10 @@ public class Query {
         }
         if(predicate instanceof LessThanOrEqualToPredicate){
             return pair("<= ? ", sequence((Object)((LessThanOrEqualToPredicate) predicate).value()));
+        }
+        if(predicate instanceof BetweenPredicate){
+            BetweenPredicate betweenPredicate = (BetweenPredicate) predicate;
+            return pair("between ? and ? ", sequence((Object) betweenPredicate.lower(), betweenPredicate.upper()));
         }
         throw new UnsupportedOperationException("Unsupported predicate " + predicate);
     }
