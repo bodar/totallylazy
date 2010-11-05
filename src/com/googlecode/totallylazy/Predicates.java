@@ -1,14 +1,20 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.numbers.BetweenPredicate;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.*;
 import org.hamcrest.Matcher;
 
 import java.lang.reflect.Method;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.*;
 
 public class Predicates {
+    public static <T> Predicate<T> in(final T... values){
+        return new InPredicate<T>(sequence(values));
+    }
+
     public static Predicate<? super Either> isLeft() {
         return new Predicate<Either>() {
             public boolean matches(Either either) {
