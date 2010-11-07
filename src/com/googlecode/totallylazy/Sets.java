@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.size;
+import static com.googlecode.totallylazy.Predicates.contains;
 import static java.util.Arrays.asList;
 
 public class Sets {
@@ -55,13 +56,4 @@ public class Sets {
         }
         return result;
     }
-
-    private static <T> Predicate<? super Set<? extends T>> contains(final T t) {
-        return new Predicate<Set<? extends T>>() {
-            public boolean matches(Set<? extends T> other) {
-                return other.contains(t);
-            }
-        };
-    }
-
 }

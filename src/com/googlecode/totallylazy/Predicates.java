@@ -1,16 +1,37 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.numbers.BetweenPredicate;
 import com.googlecode.totallylazy.numbers.Numbers;
-import com.googlecode.totallylazy.predicates.*;
+import com.googlecode.totallylazy.predicates.AndPredicate;
+import com.googlecode.totallylazy.predicates.CountTo;
+import com.googlecode.totallylazy.predicates.EqualsPredicate;
+import com.googlecode.totallylazy.predicates.InPredicate;
+import com.googlecode.totallylazy.predicates.InstanceOf;
+import com.googlecode.totallylazy.predicates.Not;
+import com.googlecode.totallylazy.predicates.Null;
+import com.googlecode.totallylazy.predicates.OnlyOnce;
+import com.googlecode.totallylazy.predicates.OrPredicate;
+import com.googlecode.totallylazy.predicates.RemainderIs;
+import com.googlecode.totallylazy.predicates.WherePredicate;
+import com.googlecode.totallylazy.predicates.WhileTrue;
 import org.hamcrest.Matcher;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.numbers.Numbers.multiply;
+import static com.googlecode.totallylazy.numbers.Numbers.primes;
+import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 
 public class Predicates {
+    public static <T> Predicate<Collection<? extends T>> contains(final T t) {
+        return new Predicate<Collection<? extends T>>() {
+            public boolean matches(Collection<? extends T> other) {
+                return other.contains(t);
+            }
+        };
+    }
+
     public static <T> Predicate<T> in(final T... values){
         return new InPredicate<T>(sequence(values));
     }
