@@ -192,13 +192,6 @@ public class SequenceTest {
     }
 
     @Test
-    public void supportsUnion() throws Exception {
-        Set<Integer> union = sequence(1, 2, 3).union(sequence(5, 4, 3));
-        assertThat(union.size(), is(5));
-        assertThat(union, hasItems(1, 2, 3, 4, 5));
-    }
-
-    @Test
     public void supportsToString() throws Exception {
         assertThat(sequence(1, 2, 3).toString(), is("1,2,3"));
         assertThat(sequence(1, 2, 3).toString(":"), is("1:2:3"));
