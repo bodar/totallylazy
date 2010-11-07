@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -50,9 +49,25 @@ public class Sets {
         Sequence<Set<? extends T>> theRest = sets.tail();
         Set<T> result = new HashSet<T>();
         for (T t : smallest) {
-            if(theRest.forAll(contains(t))){
+            if (theRest.forAll(contains(t))) {
                 result.add(t);
             }
+        }
+        return result;
+    }
+
+    public static <T> Set<T> complement(final Set<? extends T>... sets) {
+        return complement(asList(sets));
+    }
+
+    public static <T> Set<T> complement(final Iterable<Set<? extends T>> iterables) {
+        Sequence<Set<? extends T>> sets = Sequences.sequence(iterables);
+        Set<? extends T> head = sets.head();
+        Sequence<Set<? extends T>> theRest = sets.tail();
+        Set<T> result = new HashSet<T>();
+        result.addAll(head);
+        for (Set<? extends T> set : theRest) {
+            result.removeAll(set);
         }
         return result;
     }

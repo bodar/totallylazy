@@ -76,11 +76,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Set<T> union(final Iterable<? extends T> other) {
-        return Sets.union(Sets.set(this), Sets.set(other));
+        return Sets.union(this.toSet(), Sets.set(other));
     }
 
     public Set<T> intersection(final Iterable<? extends T> other) {
-        return Sets.intersection(Sets.set(this), Sets.set(other));
+        return Sets.intersection(this.toSet(), Sets.set(other));
     }
 
     public Set<T> toSet() {
