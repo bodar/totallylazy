@@ -117,24 +117,6 @@ public class Iterators {
         return builder.toString();
     }
 
-    public static <T> Set<T> union(final Iterable<Iterator<? extends T>> iterators) {
-        Set<T> result = new HashSet<T>();
-        for (Iterator<? extends T> iterator : iterators) {
-            while (iterator.hasNext()) {
-                result.add(iterator.next());
-            }
-        }
-        return result;
-    }
-
-    public static <T> Set<T> toSet(final Iterator<T> iterator) {
-        Set<T> result = new HashSet<T>();
-        while (iterator.hasNext()) {
-            result.add(iterator.next());
-        }
-        return result;
-    }
-
     public static <T> List<T> toList(final Iterator<T> iterator) {
         final List<T> result = new ArrayList<T>();
         while (iterator.hasNext()) {

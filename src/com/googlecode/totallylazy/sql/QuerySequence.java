@@ -51,7 +51,7 @@ public class QuerySequence extends Sequence<Record> {
     }
 
     @Override
-    public Sequence<Record> sortBy(Callable1<Record, ? extends Comparable> callable) {
+    public Sequence<Record> sortBy(Callable1<? super Record, ? extends Comparable> callable) {
         return sortBy(ascending(callable));
     }
 

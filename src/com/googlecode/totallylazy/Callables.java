@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
 
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
@@ -65,6 +66,14 @@ public final class Callables {
                     return Array.getLength(object);
                 }
                 throw new UnsupportedOperationException("Dont support methods or fields yet");
+            }
+        };
+    }
+
+    public static <T> Callable1<Collection<? extends T>, ? extends Comparable> size() {
+        return new Callable1<Collection<? extends T>, Comparable>() {
+            public Comparable call(Collection<? extends T> set) throws Exception {
+                return set.size();
             }
         };
     }
