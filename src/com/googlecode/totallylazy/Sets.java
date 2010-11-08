@@ -10,17 +10,26 @@ import static java.util.Arrays.asList;
 
 public class Sets {
     public static <T> Set<T> set(T... values) {
-        Set<T> result = new HashSet<T>();
-        result.addAll(asList(values));
-        return result;
+        return set(new HashSet<T>(), values);
+    }
+
+    public static <T, S extends Set<T>> S set(S result, T... values) {
+        return set(result, asList(values));
     }
 
     public static <T> Set<T> set(final Iterable<? extends T> iterable) {
-        return set(iterable.iterator());
+        return set(new HashSet<T>(), iterable);
+    }
+
+    public static <T, S extends Set<T>> S set(S result, final Iterable<? extends T> iterable) {
+        return set(result, iterable.iterator());
     }
 
     public static <T> Set<T> set(final Iterator<? extends T> iterator) {
-        Set<T> result = new HashSet<T>();
+        return set(new HashSet<T>(), iterator);
+    }
+
+    public static <T, S extends Set<T>> S set(S result, final Iterator<? extends T> iterator) {
         while (iterator.hasNext()) {
             result.add(iterator.next());
         }
