@@ -137,6 +137,15 @@ public class Query {
             InPredicate inPredicate = (InPredicate) predicate;
             return pair(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) inPredicate.values());
         }
+        if(predicate instanceof StartsWithPredicate){
+            return pair("like ? ", sequence((Object)(((StartsWithPredicate) predicate).value() + "%%")));
+        }
+        if(predicate instanceof EndsWithPredicate){
+            return pair("like ? ", sequence((Object)("%%" + ((EndsWithPredicate) predicate).value())));
+        }
+        if(predicate instanceof ContainsPredicate){
+            return pair("like ? ", sequence((Object)("%%" + ((ContainsPredicate) predicate).value() + "%%")));
+        }
         throw new UnsupportedOperationException("Unsupported predicate " + predicate);
     }
 
