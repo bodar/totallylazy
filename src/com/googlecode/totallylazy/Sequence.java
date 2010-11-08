@@ -83,6 +83,9 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sets.intersection(this.toSet(), Sets.set(other));
     }
 
+    public <S extends Set<T>> S toSet(S set) {
+        return Sets.set(set, this);
+    }
     public Set<T> toSet() {
         return Sets.set(this);
     }
