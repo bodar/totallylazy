@@ -16,4 +16,12 @@ public class Strings {
             }
         };
     }
+
+    public static Predicate<String> startsWith(final String value){
+        return new Predicate<String>() {
+            public boolean matches(String other) {
+                return other.startsWith(value);
+            }
+        };
+    }
 }
