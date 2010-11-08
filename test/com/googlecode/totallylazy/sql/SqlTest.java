@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.sql;
 
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
@@ -14,6 +15,8 @@ import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Strings.contains;
+import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.between;
 import static com.googlecode.totallylazy.numbers.Numbers.greaterThan;
@@ -153,5 +156,23 @@ public class SqlTest {
     public void supportsIn() throws Exception {
         Sequence<Record> results = records.query(user);
         assertThat(results.filter(where(age, is(in(10,12)))).map(firstName), hasExactly("dan", "matt"));
+    }
+
+    @Test
+    public void supportsStartsWith() throws Exception {
+        Sequence<Record> results = records.query(user);
+        assertThat(results.filter(where(firstName, startsWith("d"))).map(firstName), hasExactly("dan"));
+    }
+
+    @Test
+    public void supportsContains() throws Exception {
+        Sequence<Record> results = records.query(user);
+        assertThat(results.filter(where(firstName, contains("a"))).map(firstName), hasExactly("dan", "matt"));
+    }
+
+    @Test
+    public void supportsEndsWith() throws Exception {
+        Sequence<Record> results = records.query(user);
+        assertThat(results.filter(where(firstName, Strings.endsWith("b"))).map(firstName), hasExactly("bob"));
     }
 }

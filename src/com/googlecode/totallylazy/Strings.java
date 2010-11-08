@@ -1,5 +1,9 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.ContainsPredicate;
+import com.googlecode.totallylazy.predicates.EndsWithPredicate;
+import com.googlecode.totallylazy.predicates.StartsWithPredicate;
+
 public class Strings {
     public static Callable1<String, String> toLowerCase() {
         return new Callable1<String, String>() {
@@ -18,10 +22,15 @@ public class Strings {
     }
 
     public static Predicate<String> startsWith(final String value){
-        return new Predicate<String>() {
-            public boolean matches(String other) {
-                return other.startsWith(value);
-            }
-        };
+        return new StartsWithPredicate(value);
     }
+
+    public static Predicate<String> endsWith(final String value){
+        return new EndsWithPredicate(value);
+    }
+
+    public static Predicate<String> contains(final String value){
+        return new ContainsPredicate(value);
+    }
+
 }
