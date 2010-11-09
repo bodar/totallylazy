@@ -33,7 +33,11 @@ public class Predicates {
     }
 
     public static <T> Predicate<T> in(final T... values){
-        return new InPredicate<T>(sequence(values));
+        return in(sequence(values));
+    }
+
+    public static <T> Predicate<T> in(final Sequence<T> values){
+        return new InPredicate<T>(values);
     }
 
     public static Predicate<? super Either> isLeft() {

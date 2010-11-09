@@ -13,6 +13,9 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Callables.second;
+import static com.googlecode.totallylazy.Predicates.in;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -61,13 +64,13 @@ public class Records {
         return add(recordName, records.first().fields().map(first(Keyword.class)).realise(), records);
     }
 
-    private Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
+    public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
         try {
             final String sql = String.format("insert into %s (%s) values (%s)",
                     recordName, fields, repeat("?").take((Integer) fields.size()));
             final PreparedStatement statement = connection.prepareStatement(sql);
             for (Record record : records) {
-                addValues(statement, record.fields().map(second()));
+                addValues(statement, record.fields().filter(where(first(Keyword.class), is(in(fields)))).map(second()));
                 statement.addBatch();
             }
             Number rowCount = numbers(statement.executeBatch()).reduce(Numbers.add());
