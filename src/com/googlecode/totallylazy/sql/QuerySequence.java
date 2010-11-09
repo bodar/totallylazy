@@ -44,7 +44,7 @@ public class QuerySequence extends Sequence<Record> {
 
     @Override
     public Sequence<Record> filter(Predicate<? super Record> predicate) {
-        if(query.isSupported(predicate)){
+        if(Sql.isSupported(predicate)){
             return new QuerySequence(connection, query.where(predicate));
         }
         return super.filter(predicate);
@@ -57,7 +57,7 @@ public class QuerySequence extends Sequence<Record> {
 
     @Override
     public Sequence<Record> sortBy(Comparator<? super Record> comparator) {
-        if(query.isSupported(comparator)){
+        if(Sql.isSupported(comparator)){
             return new QuerySequence(connection, query.orderBy(comparator));
         }
         return super.sortBy(comparator);

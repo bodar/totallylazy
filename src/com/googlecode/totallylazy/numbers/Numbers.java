@@ -17,7 +17,13 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.MemorisedSequence;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,13 +31,19 @@ import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
-import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.Predicates.prime;
+import static com.googlecode.totallylazy.Predicates.primeSquaredLessThan;
+import static com.googlecode.totallylazy.Predicates.remainderIsZero;
 import static com.googlecode.totallylazy.Sequences.iterate;
 
 public class Numbers {
 
     public static Sequence<Number> numbers(Number... numbers) {
         return Sequences.sequence(numbers);
+    }
+
+    public static Sequence<Number> numbers(int[] numbers) {
+        return Sequences.sequence(new IntIterator(numbers));
     }
 
     public static Sequence<Number> primeFactorsOf(Number value) {
