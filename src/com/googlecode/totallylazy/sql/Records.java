@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public class Records {
 
     private static final Map<Class, String> typeMap = new HashMap<Class, String>(){{
        put(String.class, "varchar(256)");
+       put(Date.class, "timestamp");
        put(Integer.class, "integer");
     }};
 

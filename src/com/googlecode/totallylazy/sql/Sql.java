@@ -1,22 +1,22 @@
 package com.googlecode.totallylazy.sql;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
 import com.googlecode.totallylazy.numbers.BetweenPredicate;
 import com.googlecode.totallylazy.numbers.GreaterThanOrEqualToPredicate;
-import com.googlecode.totallylazy.numbers.GreaterThanPredicate;
 import com.googlecode.totallylazy.numbers.LessThanOrEqualToPredicate;
 import com.googlecode.totallylazy.numbers.LessThanPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
 import com.googlecode.totallylazy.predicates.EndsWithPredicate;
 import com.googlecode.totallylazy.predicates.EqualsPredicate;
+import com.googlecode.totallylazy.predicates.GreaterThan;
 import com.googlecode.totallylazy.predicates.InPredicate;
 import com.googlecode.totallylazy.predicates.Not;
 import com.googlecode.totallylazy.predicates.OrPredicate;
@@ -25,6 +25,7 @@ import com.googlecode.totallylazy.predicates.WherePredicate;
 
 import java.util.Comparator;
 
+import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.repeat;
@@ -34,7 +35,7 @@ public class Sql {
     public static Pair<String, Sequence<Object>> whereClause(Sequence<Predicate<? super Record>> where) {
         if(where.isEmpty()) return pair("", empty());
         final Sequence<Pair<String, Sequence<Object>>> sqlAndValues = where.map(toSql());
-        return pair("where " + sqlAndValues.map(Callables.<String>first()).toString(" "),  sqlAndValues.flatMap(values()));
+        return pair("where " + sqlAndValues.map(first(String.class)).toString(" "),  sqlAndValues.flatMap(values()));
     }
 
     public static String orderByClause(Option<Comparator<? super Record>> comparator) {
@@ -48,10 +49,10 @@ public class Sql {
 
     public static <T> String toSql(Comparator<? super Record> comparator) {
         if(comparator instanceof AscendingComparator){
-            return toSql(((AscendingComparator) comparator).callable()).first() + " asc ";
+            return toSql(((AscendingComparator<? super Record>) comparator).callable()).first() + " asc ";
         }
         if(comparator instanceof DescendingComparator){
-            return toSql(((DescendingComparator) comparator).callable()).first() + " desc ";
+            return toSql(((DescendingComparator<? super Record>) comparator).callable()).first() + " desc ";
         }
         throw new UnsupportedOperationException("Unsupported comparator " + comparator);
     }
@@ -88,12 +89,12 @@ public class Sql {
         if(predicate instanceof AndPredicate){
             AndPredicate andPredicate = (AndPredicate) predicate;
             final Sequence<Pair<String, Sequence<Object>>> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return pair("( " + pairs.map(Callables.first(String.class)).toString("and ") + " ) ", pairs.flatMap(values()));
+            return pair("( " + pairs.map(first(String.class)).toString("and ") + " ) ", pairs.flatMap(values()));
         }
         if(predicate instanceof OrPredicate){
             OrPredicate andPredicate = (OrPredicate) predicate;
             final Sequence<Pair<String, Sequence<Object>>> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return pair("( " + pairs.map(Callables.first(String.class)).toString("or ") + " ) ", pairs.flatMap(values()));
+            return pair("( " + pairs.map(first(String.class)).toString("or ") + " ) ", pairs.flatMap(values()));
         }
         if(predicate instanceof EqualsPredicate){
             return pair("= ? ", sequence(((EqualsPredicate) predicate).value()));
@@ -101,8 +102,8 @@ public class Sql {
         if(predicate instanceof Not){
             return pair("<> ? ", sequence(toSql(((Not) predicate).predicate()).second()));
         }
-        if(predicate instanceof GreaterThanPredicate){
-            return pair("> ? ", sequence((Object)((GreaterThanPredicate) predicate).value()));
+        if(predicate instanceof GreaterThan){
+            return pair("> ? ", sequence(((Value) predicate).value()));
         }
         if(predicate instanceof GreaterThanOrEqualToPredicate){
             return pair(">= ? ", sequence((Object)((GreaterThanOrEqualToPredicate) predicate).value()));
@@ -158,7 +159,4 @@ public class Sql {
             return false;
         }
     }
-
-    
-    
 }

@@ -1,12 +1,15 @@
 package com.googlecode.totallylazy.sql;
 
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.dates.Dates;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
@@ -17,6 +20,7 @@ import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
+import static com.googlecode.totallylazy.dates.Dates.after;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.between;
 import static com.googlecode.totallylazy.numbers.Numbers.greaterThan;
@@ -32,6 +36,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class SqlTest {
     private static final Keyword user = keyword("user");
     private static final Keyword<Integer> age = keyword("age", Integer.class);
+    private static final Keyword<Date> dob = keyword("dob", Date.class);
     private static final Keyword<String> firstName = keyword("firstName", String.class);
     private static final Keyword<String> lastName = keyword("lastName", String.class);
     private static Records records;
@@ -40,17 +45,21 @@ public class SqlTest {
     public static void setupDatabase() throws SQLException {
         records = new Records(getConnection("jdbc:hsqldb:mem:totallylazy", "SA", ""));
 
-        records.define(user, age, firstName, lastName);
+        records.define(user, age, dob, firstName, lastName);
         records.add(user,
-                record().set(firstName, "dan").set(lastName, "bodart").set(age, 10),
-                record().set(firstName, "matt").set(lastName, "savage").set(age, 12),
-                record().set(firstName, "bob").set(lastName, "martin").set(age, 11));
+                record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 01, 10)),
+                record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 01, 10)),
+                record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 01, 10)));
+    }
+
+    private static Date date(int year, int month, int day) {
+        return new GregorianCalendar(year, month, day).getTime();
     }
 
     @Test
     public void supportsSelectingAllKeywords() throws Exception {
         Sequence<Record> results = records.query(user);
-        assertThat(results.first(), Matchers.is(record().set(firstName, "dan").set(lastName, "bodart").set(age, 10)));
+        assertThat(results.first(), Matchers.is(record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 01, 10))));
     }
 
     @Test
@@ -109,6 +118,11 @@ public class SqlTest {
         Sequence<Record> results = records.query(user);
         Sequence<String> names = results.filter(where(age, is(greaterThan(11)))).map(firstName);
         assertThat(names, hasExactly("matt"));
+    }
+
+    @Test
+    public void supportsFilteringWithDates() throws Exception {
+        assertThat(records.query(user).filter(where(dob, is(after(date(1977, 1, 1))))).map(firstName), hasExactly("dan"));
     }
 
     @Test
