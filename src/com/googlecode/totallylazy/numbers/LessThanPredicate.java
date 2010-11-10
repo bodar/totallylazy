@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.LessThan;
 
-public class LessThanPredicate implements Predicate<Number> {
+public class LessThanPredicate implements LessThan<Number> {
     private final Number value;
 
     public LessThanPredicate(Number value) {
