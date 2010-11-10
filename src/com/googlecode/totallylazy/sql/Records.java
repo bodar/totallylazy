@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.sql;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
@@ -67,7 +68,7 @@ public class Records {
     }
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
-        if(records.size() == (Number)0){
+        if((Integer)records.size() == 0){
             return 0;
         }
         try {
@@ -82,7 +83,7 @@ public class Records {
             System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
             return rowCount;
         } catch (SQLException e) {
-            throw new UnsupportedOperationException(e);
+            throw new LazyException(e);
         }
     }
 
