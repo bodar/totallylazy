@@ -10,6 +10,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LazyExceptionTest {
     @Test
+    public void neverContainsItSelf() throws Exception {
+        final ParseException expected = new ParseException("blah blah", 1);
+        final LazyException lazyException = new LazyException(new LazyException(new LazyException(expected)));
+
+        checkException(lazyException, ParseException.class, expected);
+    }
+
+    @Test
     public void shouldUnwrapSpecificCheckedCause() throws Exception {
         final ParseException expected = new ParseException("blah blah", 1);
         final LazyException lazyException = new LazyException(expected);
