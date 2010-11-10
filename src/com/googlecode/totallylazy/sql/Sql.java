@@ -8,11 +8,8 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
-import com.googlecode.totallylazy.numbers.BetweenPredicate;
-import com.googlecode.totallylazy.numbers.GreaterThanOrEqualToPredicate;
-import com.googlecode.totallylazy.numbers.LessThanOrEqualToPredicate;
-import com.googlecode.totallylazy.numbers.LessThanPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
+import com.googlecode.totallylazy.predicates.Between;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
 import com.googlecode.totallylazy.predicates.EndsWithPredicate;
 import com.googlecode.totallylazy.predicates.EqualsPredicate;
@@ -100,7 +97,7 @@ public class Sql {
             return pair("( " + pairs.map(first(String.class)).toString("or ") + " ) ", pairs.flatMap(values()));
         }
         if(predicate instanceof EqualsPredicate){
-            return pair("= ? ", sequence(((EqualsPredicate) predicate).value()));
+            return pair("= ? ", getValue(predicate));
         }
         if(predicate instanceof Not){
             return pair("<> ? ", sequence(toSql(((Not) predicate).predicate()).second()));
@@ -117,9 +114,9 @@ public class Sql {
         if(predicate instanceof LessThanOrEqualTo){
             return pair("<= ? ", getValue(predicate));
         }
-        if(predicate instanceof BetweenPredicate){
-            BetweenPredicate betweenPredicate = (BetweenPredicate) predicate;
-            return pair("between ? and ? ", sequence((Object) betweenPredicate.lower(), betweenPredicate.upper()));
+        if(predicate instanceof Between){
+            Between between = (Between) predicate;
+            return pair("between ? and ? ", sequence(between.lower(), between.upper()));
         }
         if(predicate instanceof InPredicate){
             InPredicate inPredicate = (InPredicate) predicate;

@@ -23,6 +23,7 @@ import static com.googlecode.totallylazy.dates.Dates.greaterThan;
 import static com.googlecode.totallylazy.dates.Dates.greaterThanOrEqualTo;
 import static com.googlecode.totallylazy.dates.Dates.lessThan;
 import static com.googlecode.totallylazy.dates.Dates.lessThanOrEqualTo;
+import static com.googlecode.totallylazy.dates.Dates.between;
 import static com.googlecode.totallylazy.dates.Dates.date;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.between;
@@ -122,10 +123,12 @@ public class SqlTest {
 
     @Test
     public void supportsFilteringWithDates() throws Exception {
+        assertThat(records.query(user).filter(where(dob, is(date(1977, 1, 10)))).map(firstName), hasExactly("dan"));
         assertThat(records.query(user).filter(where(dob, is(greaterThan(date(1977, 1, 1))))).map(firstName), hasExactly("dan"));
         assertThat(records.query(user).filter(where(dob, is(greaterThanOrEqualTo(date(1977, 1, 10))))).map(firstName), hasExactly("dan"));
         assertThat(records.query(user).filter(where(dob, is(lessThan(date(1976, 2, 10))))).map(firstName), hasExactly("matt", "bob"));
         assertThat(records.query(user).filter(where(dob, is(lessThanOrEqualTo(date(1975, 1, 10))))).map(firstName), hasExactly("matt"));
+        assertThat(records.query(user).filter(where(dob, is(between(date(1975, 6, 10), date(1976, 6, 10))))).map(firstName), hasExactly("bob"));
     }
 
     @Test

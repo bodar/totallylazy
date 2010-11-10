@@ -1,11 +1,12 @@
 package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Between;
 
 import static com.googlecode.totallylazy.numbers.Numbers.greaterThanOrEqualTo;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThanOrEqualTo;
 
-public class BetweenPredicate implements Predicate<Number> {
+public class BetweenPredicate implements Between<Number> {
     private final Number lower;
     private final Number upper;
 
