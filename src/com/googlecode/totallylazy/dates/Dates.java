@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.dates;
 
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Between;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -24,6 +25,10 @@ public class Dates {
 
     public static Predicate<Date> lessThanOrEqualTo(final Date date) {
         return new LessThanOrEqualToPredicate(date);
+    }
+
+    public static Between<Date> between(final Date lower, final Date upper) {
+        return new BetweenPredicate(lower, upper);
     }
 
 }
