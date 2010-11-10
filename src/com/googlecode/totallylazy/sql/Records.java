@@ -67,6 +67,9 @@ public class Records {
     }
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
+        if(records.size() == (Number)0){
+            return 0;
+        }
         try {
             final String sql = String.format("insert into %s (%s) values (%s)",
                     recordName, fields, repeat("?").take((Integer) fields.size()));
