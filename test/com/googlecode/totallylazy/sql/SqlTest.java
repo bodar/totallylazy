@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
@@ -20,7 +19,11 @@ import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
-import static com.googlecode.totallylazy.dates.Dates.after;
+import static com.googlecode.totallylazy.dates.Dates.greaterThan;
+import static com.googlecode.totallylazy.dates.Dates.greaterThanOrEqualTo;
+import static com.googlecode.totallylazy.dates.Dates.lessThan;
+import static com.googlecode.totallylazy.dates.Dates.lessThanOrEqualTo;
+import static com.googlecode.totallylazy.dates.Dates.date;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.between;
 import static com.googlecode.totallylazy.numbers.Numbers.greaterThan;
@@ -52,9 +55,6 @@ public class SqlTest {
                 record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 01, 10)));
     }
 
-    private static Date date(int year, int month, int day) {
-        return new GregorianCalendar(year, month, day).getTime();
-    }
 
     @Test
     public void supportsSelectingAllKeywords() throws Exception {
@@ -122,7 +122,10 @@ public class SqlTest {
 
     @Test
     public void supportsFilteringWithDates() throws Exception {
-        assertThat(records.query(user).filter(where(dob, is(after(date(1977, 1, 1))))).map(firstName), hasExactly("dan"));
+        assertThat(records.query(user).filter(where(dob, is(greaterThan(date(1977, 1, 1))))).map(firstName), hasExactly("dan"));
+        assertThat(records.query(user).filter(where(dob, is(greaterThanOrEqualTo(date(1977, 1, 10))))).map(firstName), hasExactly("dan"));
+        assertThat(records.query(user).filter(where(dob, is(lessThan(date(1976, 2, 10))))).map(firstName), hasExactly("matt", "bob"));
+        assertThat(records.query(user).filter(where(dob, is(lessThanOrEqualTo(date(1975, 1, 10))))).map(firstName), hasExactly("matt"));
     }
 
     @Test
