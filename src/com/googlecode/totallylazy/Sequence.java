@@ -158,7 +158,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.add(this, t);
     }
 
-    public Sequence<T> join(final Iterable<T> iterable) {
+    public Sequence<T> join(final Iterable<? extends T> iterable) {
         return Sequences.join(this, iterable);
     }
 
