@@ -8,16 +8,16 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
-import com.googlecode.totallylazy.numbers.BetweenPredicate;
-import com.googlecode.totallylazy.numbers.GreaterThanOrEqualToPredicate;
-import com.googlecode.totallylazy.numbers.LessThanOrEqualToPredicate;
-import com.googlecode.totallylazy.numbers.LessThanPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
+import com.googlecode.totallylazy.predicates.Between;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
 import com.googlecode.totallylazy.predicates.EndsWithPredicate;
 import com.googlecode.totallylazy.predicates.EqualsPredicate;
 import com.googlecode.totallylazy.predicates.GreaterThan;
+import com.googlecode.totallylazy.predicates.GreaterThanOrEqualTo;
 import com.googlecode.totallylazy.predicates.InPredicate;
+import com.googlecode.totallylazy.predicates.LessThan;
+import com.googlecode.totallylazy.predicates.LessThanOrEqualTo;
 import com.googlecode.totallylazy.predicates.Not;
 import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
@@ -97,26 +97,26 @@ public class Sql {
             return pair("( " + pairs.map(first(String.class)).toString("or ") + " ) ", pairs.flatMap(values()));
         }
         if(predicate instanceof EqualsPredicate){
-            return pair("= ? ", sequence(((EqualsPredicate) predicate).value()));
+            return pair("= ? ", getValue(predicate));
         }
         if(predicate instanceof Not){
             return pair("<> ? ", sequence(toSql(((Not) predicate).predicate()).second()));
         }
         if(predicate instanceof GreaterThan){
-            return pair("> ? ", sequence(((Value) predicate).value()));
+            return pair("> ? ", getValue(predicate));
         }
-        if(predicate instanceof GreaterThanOrEqualToPredicate){
-            return pair(">= ? ", sequence((Object)((GreaterThanOrEqualToPredicate) predicate).value()));
+        if(predicate instanceof GreaterThanOrEqualTo){
+            return pair(">= ? ", getValue(predicate));
         }
-        if(predicate instanceof LessThanPredicate){
-            return pair("< ? ", sequence((Object)((LessThanPredicate) predicate).value()));
+        if(predicate instanceof LessThan){
+            return pair("< ? ", getValue(predicate));
         }
-        if(predicate instanceof LessThanOrEqualToPredicate){
-            return pair("<= ? ", sequence((Object)((LessThanOrEqualToPredicate) predicate).value()));
+        if(predicate instanceof LessThanOrEqualTo){
+            return pair("<= ? ", getValue(predicate));
         }
-        if(predicate instanceof BetweenPredicate){
-            BetweenPredicate betweenPredicate = (BetweenPredicate) predicate;
-            return pair("between ? and ? ", sequence((Object) betweenPredicate.lower(), betweenPredicate.upper()));
+        if(predicate instanceof Between){
+            Between between = (Between) predicate;
+            return pair("between ? and ? ", sequence(between.lower(), between.upper()));
         }
         if(predicate instanceof InPredicate){
             InPredicate inPredicate = (InPredicate) predicate;
@@ -132,6 +132,10 @@ public class Sql {
             return pair("like ? ", sequence((Object)("%%" + ((ContainsPredicate) predicate).value() + "%%")));
         }
         throw new UnsupportedOperationException("Unsupported predicate " + predicate);
+    }
+
+    private static Sequence<Object> getValue(Predicate predicate) {
+        return sequence(((Value) predicate).value());
     }
 
     public static  Callable1<? super Pair<String, Sequence<Object>>, Iterable<?>> values() {
