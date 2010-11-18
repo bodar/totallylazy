@@ -38,11 +38,11 @@ public class Predicates {
         };
     }
 
-    public static <T> Predicate<T> in(final T... values){
+    public static <T> Predicate<T> in(final T... values) {
         return in(sequence(values));
     }
 
-    public static <T> Predicate<T> in(final Sequence<T> values){
+    public static <T> Predicate<T> in(final Sequence<T> values) {
         return new InPredicate<T>(values);
     }
 
@@ -97,7 +97,7 @@ public class Predicates {
     public static <T> Predicate<T> not(final T t) {
         return new Not<T>(is(t));
     }
-   
+
     public static <T> Predicate<T> not(final Predicate<? super T> t) {
         return new Not<T>(t);
     }
@@ -129,7 +129,7 @@ public class Predicates {
     public static Predicate<Number> primeSquaredLessThan(final Number candidate) {
         return new Predicate<Number>() {
             public final boolean matches(final Number prime) {
-                return Numbers.lessThanOrEqualTo(multiply(prime, prime),candidate);
+                return Numbers.lessThanOrEqualTo(multiply(prime, prime), candidate);
             }
         };
     }
@@ -137,7 +137,7 @@ public class Predicates {
     public static Predicate<Number> remainderIsZero(final Number dividend) {
         return new Predicate<Number>() {
             public final boolean matches(Number divisor) {
-                return Numbers.isZero(remainder(dividend,divisor));
+                return Numbers.isZero(remainder(dividend, divisor));
             }
         };
     }
@@ -172,7 +172,7 @@ public class Predicates {
                 for (int i = 0; i < actualClasses.length; i++) {
                     Class<?> actual = actualClasses[i];
                     Class<?> expected = expectedClasses[i];
-                    if(!actual.isAssignableFrom(expected)){
+                    if (!actual.isAssignableFrom(expected)) {
                         return false;
                     }
                 }
@@ -198,11 +198,11 @@ public class Predicates {
         };
     }
 
-    public static <T,R> WherePredicate<T,R> where(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
-        return new WherePredicate<T,R>(callable, predicate);
+    public static <T, R> WherePredicate<T, R> where(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
+        return new WherePredicate<T, R>(callable, predicate);
     }
 
-    public static <T,R> WherePredicate<T,R> by(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> WherePredicate<T, R> by(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
         return where(callable, predicate);
     }
 
@@ -214,23 +214,23 @@ public class Predicates {
         };
     }
 
-    public static <T> Predicate<Comparable<T>> greaterThan(final Comparable<T> comparable) {
+    public static <T extends Comparable<T>> Predicate<T> greaterThan(final T comparable) {
         return new GreaterThanPredicate<T>(comparable);
     }
 
-    public static <T>Predicate<Comparable<T>> greaterThanOrEqualTo(final Comparable<T> comparable) {
+    public static <T extends Comparable<T>> Predicate<T> greaterThanOrEqualTo(final T comparable) {
         return new GreaterThanOrEqualToPredicate<T>(comparable);
     }
 
-    public static <T>Predicate<Comparable<T>> lessThan(final Comparable<T> comparable) {
+    public static <T extends Comparable<T>> Predicate<T> lessThan(final T comparable) {
         return new LessThanPredicate<T>(comparable);
     }
 
-    public static <T>Predicate<Comparable<T>> lessThanOrEqualTo(final Comparable<T> comparable) {
+    public static <T extends Comparable<T>> Predicate<T> lessThanOrEqualTo(final T comparable) {
         return new LessThanOrEqualToPredicate<T>(comparable);
     }
 
-    public static <T> Between<Comparable<T>> between(final Comparable<T> lower, final Comparable<T> upper) {
+    public static <T extends Comparable<T>> Between<T> between(final T lower, final T upper) {
         return new BetweenPredicate<T>(lower, upper);
     }
 
