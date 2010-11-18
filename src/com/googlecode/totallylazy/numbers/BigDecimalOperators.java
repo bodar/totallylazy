@@ -77,10 +77,9 @@ public final class BigDecimalOperators implements Operators<BigDecimal> {
     public static BigDecimal toBigDecimal(Number number) {
         if (number instanceof BigDecimal)
             return (BigDecimal) number;
-        else if (number instanceof BigInteger)
+        if (number instanceof BigInteger)
             return new BigDecimal((BigInteger) number);
-        else
-            return BigDecimal.valueOf((number).longValue());
+        return BigDecimal.valueOf((number).longValue());
     }
 
     public static Number rationalize(BigDecimal number) {
@@ -89,8 +88,6 @@ public final class BigDecimalOperators implements Operators<BigDecimal> {
         if (scale < 0) {
             return unscaled.multiply(BigInteger.TEN.pow(-scale));
         }
-        else {
-            return unscaled.divide(BigInteger.TEN.pow(scale));
-        }
+        return unscaled.divide(BigInteger.TEN.pow(scale));
     }
 }

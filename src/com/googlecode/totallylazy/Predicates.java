@@ -1,7 +1,13 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.BetweenPredicate;
+import com.googlecode.totallylazy.predicates.GreaterThanOrEqualToPredicate;
+import com.googlecode.totallylazy.predicates.GreaterThanPredicate;
+import com.googlecode.totallylazy.predicates.LessThanOrEqualToPredicate;
+import com.googlecode.totallylazy.predicates.LessThanPredicate;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.AndPredicate;
+import com.googlecode.totallylazy.predicates.Between;
 import com.googlecode.totallylazy.predicates.CountTo;
 import com.googlecode.totallylazy.predicates.EqualsPredicate;
 import com.googlecode.totallylazy.predicates.InPredicate;
@@ -206,6 +212,26 @@ public class Predicates {
                 return predicate.matches(instance);
             }
         };
+    }
+
+    public static <T> Predicate<Comparable<T>> greaterThan(final Comparable<T> comparable) {
+        return new GreaterThanPredicate<T>(comparable);
+    }
+
+    public static <T>Predicate<Comparable<T>> greaterThanOrEqualTo(final Comparable<T> comparable) {
+        return new GreaterThanOrEqualToPredicate<T>(comparable);
+    }
+
+    public static <T>Predicate<Comparable<T>> lessThan(final Comparable<T> comparable) {
+        return new LessThanPredicate<T>(comparable);
+    }
+
+    public static <T>Predicate<Comparable<T>> lessThanOrEqualTo(final Comparable<T> comparable) {
+        return new LessThanOrEqualToPredicate<T>(comparable);
+    }
+
+    public static <T> Between<Comparable<T>> between(final Comparable<T> lower, final Comparable<T> upper) {
+        return new BetweenPredicate<T>(lower, upper);
     }
 
 }
