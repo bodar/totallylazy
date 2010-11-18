@@ -2,7 +2,14 @@ package com.googlecode.totallylazy;
 
 public class LazyException extends RuntimeException {
     public LazyException(Throwable cause) {
-        super(cause);
+        super(unwrapLazy(cause));
+    }
+
+    private static Throwable unwrapLazy(Throwable cause) {
+        if(cause instanceof LazyException){
+            return cause.getCause();
+        }
+        return cause;
     }
 
     public <E extends Exception> E unwrap(Class<E> exception) throws E{
