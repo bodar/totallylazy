@@ -1,17 +1,17 @@
 package com.googlecode.totallylazy.predicates;
 
-public class LessThanPredicate<T> implements LessThan<Comparable<T>> {
-    private final Comparable<T> comparable;
+public class LessThanPredicate<T extends Comparable<T>>  implements LessThan<T> {
+    private final T comparable;
 
-    public LessThanPredicate(Comparable<T> comparable) {
+    public LessThanPredicate(T comparable) {
         this.comparable = comparable;
     }
 
-    public boolean matches(Comparable<T> other) {
-        return other.compareTo((T) comparable) < 0;
+    public boolean matches(T other) {
+        return other.compareTo(comparable) < 0;
     }
 
-    public Comparable<T> value() {
+    public T value() {
         return comparable;
     }
 }
