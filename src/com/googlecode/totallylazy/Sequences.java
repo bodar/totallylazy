@@ -223,14 +223,6 @@ public class Sequences {
         return Iterators.toString(iterable.iterator(), start, separator, end, limit);
     }
 
-    public static <T> Set<T> union(final Iterable<Iterable<? extends T>> iterables) {
-        return Iterators.union(map(iterables, Callables.<T>asIterator()));
-    }
-
-    public static <T> Set<T> toSet(final Iterable<T> iterable) {
-        return Iterators.toSet(iterable.iterator());
-    }
-
     public static boolean isEmpty(final Iterable iterable) {
         return !iterable.iterator().hasNext();
     }
@@ -347,7 +339,7 @@ public class Sequences {
         return zip(iterate(increment(), 0), iterable);
     }
 
-    public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<T, ? extends Comparable> callable) {
+    public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<? super T, ? extends Comparable> callable) {
         return sortBy(iterable, ascending(callable));
     }
 

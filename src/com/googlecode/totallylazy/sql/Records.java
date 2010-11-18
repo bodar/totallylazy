@@ -1,28 +1,28 @@
 package com.googlecode.totallylazy.sql;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.MemorisedSequence;
+import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.numbers.Numbers;
 
-import java.nio.ByteBuffer;
-import java.nio.LongBuffer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Callables.second;
-import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Predicates.in;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static com.googlecode.totallylazy.sql.Keyword.keyword;
+import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 
 public class Records {
     private final Connection connection;
@@ -37,6 +37,7 @@ public class Records {
 
     private static final Map<Class, String> typeMap = new HashMap<Class, String>(){{
        put(String.class, "varchar(256)");
+       put(Date.class, "timestamp");
        put(Integer.class, "integer");
     }};
 
@@ -58,22 +59,31 @@ public class Records {
         };
     }
 
-    public int add(Keyword recordName, Record... recordsArray) {
+    public Number add(Keyword recordName, Record... records) {
+        return add(recordName, sequence(records));
+    }
+
+    public Number add(Keyword recordName, Sequence<Record> records) {
+        return add(recordName, records.first().fields().map(first(Keyword.class)).realise(), records);
+    }
+
+    public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
+        if((Integer)records.size() == 0){
+            return 0;
+        }
         try {
-            final Sequence<Record> records = sequence(recordsArray);
-            final Record first = records.first();
             final String sql = String.format("insert into %s (%s) values (%s)",
-                    recordName, first.fields().map(first(Keyword.class)), repeat("?").take((Integer) first.fields().size()));
+                    recordName, fields, repeat("?").take((Integer) fields.size()));
             final PreparedStatement statement = connection.prepareStatement(sql);
-            int rowCount = 0;
             for (Record record : records) {
-                addValues(statement, record.fields().map(second()));
-                rowCount += statement.executeUpdate();
+                addValues(statement, record.fields().filter(where(first(Keyword.class), is(in(fields)))).map(second()));
+                statement.addBatch();
             }
+            Number rowCount = numbers(statement.executeBatch()).reduce(Numbers.add());
             System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
             return rowCount;
         } catch (SQLException e) {
-            throw new UnsupportedOperationException(e);
+            throw new LazyException(e);
         }
     }
 

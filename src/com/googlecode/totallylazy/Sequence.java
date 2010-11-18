@@ -76,11 +76,18 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Set<T> union(final Iterable<? extends T> other) {
-        return Sequences.union(Sequences.sequence(this, other));
+        return Sets.union(this.toSet(), Sets.set(other));
     }
 
+    public Set<T> intersection(final Iterable<? extends T> other) {
+        return Sets.intersection(this.toSet(), Sets.set(other));
+    }
+
+    public <S extends Set<T>> S toSet(S set) {
+        return Sets.set(set, this);
+    }
     public Set<T> toSet() {
-        return Sequences.toSet(this);
+        return Sets.set(this);
     }
 
     public boolean isEmpty() {
@@ -151,7 +158,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.add(this, t);
     }
 
-    public Sequence<T> join(final Iterable<T> iterable) {
+    public Sequence<T> join(final Iterable<? extends T> iterable) {
         return Sequences.join(this, iterable);
     }
 
@@ -171,7 +178,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.zipWithIndex(this);
     }
 
-    public Sequence<T> sortBy(final Callable1<T, ? extends Comparable> callable) {
+    public Sequence<T> sortBy(final Callable1<? super T, ? extends Comparable> callable) {
         return Sequences.sortBy(this, callable);
     }
 
@@ -190,6 +197,4 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     public Sequence<T> reverse() {
         return Sequences.reverse(this);
     }
-
-
 }
