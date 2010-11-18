@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy;
 
-import java.util.Formatter;
-
 public class Enums {
     public static <T extends Enum<T>> Callable1<T, String> name() {
         return new Callable1<T, String>() {

@@ -35,7 +35,6 @@ import static com.googlecode.totallylazy.Predicates.prime;
 import static com.googlecode.totallylazy.Predicates.primeSquaredLessThan;
 import static com.googlecode.totallylazy.Predicates.remainderIsZero;
 import static com.googlecode.totallylazy.Sequences.iterate;
-import static com.googlecode.totallylazy.numbers.BigIntegerOperators.reduce;
 
 public class Numbers {
     public static Number valueOf(String string) {

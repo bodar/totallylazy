@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Runnable1;
+import com.googlecode.totallylazy.Runnables;
+import com.googlecode.totallylazy.Sequence;
 
 import java.util.concurrent.Callable;
 
