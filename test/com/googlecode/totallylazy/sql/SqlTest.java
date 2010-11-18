@@ -127,6 +127,15 @@ public class SqlTest {
     }
 
     @Test
+    public void supportsFilteringWithStrings() throws Exception {
+        assertThat(records.query(user).filter(where(firstName, is(greaterThan("e")))).map(firstName), hasExactly("matt"));
+        assertThat(records.query(user).filter(where(firstName, is(greaterThanOrEqualTo("dan")))).map(firstName), hasExactly("dan", "matt"));
+        assertThat(records.query(user).filter(where(firstName, is(lessThan("dan")))).map(firstName), hasExactly("bob"));
+        assertThat(records.query(user).filter(where(firstName, is(lessThanOrEqualTo("dan")))).map(firstName), hasExactly("dan", "bob"));
+        assertThat(records.query(user).filter(where(firstName, is(between("b", "d")))).map(firstName), hasExactly("bob"));
+    }
+
+    @Test
     public void supportsFilteringWithGreaterThanOrEqualTo() throws Exception {
         Sequence<Record> results = records.query(user);
         Sequence<String> names = results.filter(where(age, is(greaterThanOrEqualTo(11)))).map(firstName);
