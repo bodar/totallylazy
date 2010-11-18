@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.predicates.LessThan;
-
 public class LessThanPredicate<T> implements LessThan<Comparable<T>> {
     private final Comparable<T> comparable;
 

@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.EmptyIterator;
 import com.googlecode.totallylazy.iterators.MemorisedIterator;
 
 import java.util.ArrayList;

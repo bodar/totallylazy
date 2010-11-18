@@ -1,17 +1,17 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.BetweenPredicate;
-import com.googlecode.totallylazy.predicates.GreaterThanOrEqualToPredicate;
-import com.googlecode.totallylazy.predicates.GreaterThanPredicate;
-import com.googlecode.totallylazy.predicates.LessThanOrEqualToPredicate;
-import com.googlecode.totallylazy.predicates.LessThanPredicate;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.Between;
+import com.googlecode.totallylazy.predicates.BetweenPredicate;
 import com.googlecode.totallylazy.predicates.CountTo;
 import com.googlecode.totallylazy.predicates.EqualsPredicate;
+import com.googlecode.totallylazy.predicates.GreaterThanOrEqualToPredicate;
+import com.googlecode.totallylazy.predicates.GreaterThanPredicate;
 import com.googlecode.totallylazy.predicates.InPredicate;
 import com.googlecode.totallylazy.predicates.InstanceOf;
+import com.googlecode.totallylazy.predicates.LessThanOrEqualToPredicate;
+import com.googlecode.totallylazy.predicates.LessThanPredicate;
 import com.googlecode.totallylazy.predicates.Not;
 import com.googlecode.totallylazy.predicates.Null;
 import com.googlecode.totallylazy.predicates.OnlyOnce;
