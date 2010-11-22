@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.sql;
 
-import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
@@ -46,16 +45,16 @@ public class SqlTest {
 
         records.define(user, age, dob, firstName, lastName);
         records.add(user,
-                record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 01, 10)),
-                record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 01, 10)),
-                record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 01, 10)));
+                record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)),
+                record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 1, 10)),
+                record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 1, 10)));
     }
 
 
     @Test
     public void supportsSelectingAllKeywords() throws Exception {
         Sequence<Record> results = records.query(user);
-        assertThat(results.first(), Matchers.is(record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 01, 10))));
+        assertThat(results.first(), Matchers.is(record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10))));
     }
 
     @Test
@@ -180,6 +179,13 @@ public class SqlTest {
     public void supportsIn() throws Exception {
         Sequence<Record> results = records.query(user);
         assertThat(results.filter(where(age, is(in(10,12)))).map(firstName), hasExactly("dan", "matt"));
+    }
+
+    @Test
+    public void supportsInWithSubSelects() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<Integer> ages = records.query(user).filter(where(firstName, is(between("a", "e")))).map(age);
+        assertThat(results.filter(where(age, is(in(ages)))).map(firstName), hasExactly("dan", "bob"));
     }
 
     @Test
