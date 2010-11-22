@@ -120,7 +120,12 @@ public class Sql {
         }
         if(predicate instanceof InPredicate){
             InPredicate inPredicate = (InPredicate) predicate;
-            return pair(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) inPredicate.values());
+            Sequence sequence = inPredicate.values();
+            if(sequence instanceof QuerySequence){
+                Pair<String, Sequence<Object>> pair = ((QuerySequence) sequence).query().sqlAndValues();
+                return pair("in ( " + pair.first() + ")", pair.second());
+            }
+            return pair(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) sequence);
         }
         if(predicate instanceof StartsWithPredicate){
             return pair("like ? ", sequence((Object)(((StartsWithPredicate) predicate).value() + "%%")));
