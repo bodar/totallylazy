@@ -39,13 +39,17 @@ public class Query implements Callable<ResultSet> {
         return String.format(String.format("SQL:'%s' VALUES:'%s'", pair.first(), pair.second()));
     }
 
+    public Sql sql(){
+        return new Sql(table);
+    }
+
     public Pair<String, Sequence<Object>> sqlAndValues() {
-        final Pair<String, Sequence<Object>> whereClause = Sql.whereClause(where);
-        return pair(String.format("select %s from %s %s %s", selectClause(), table, whereClause.first(), Sql.orderByClause(comparator)), whereClause.second());
+        final Pair<String, Sequence<Object>> whereClause = sql().whereClause(where);
+        return pair(String.format("select %s from %s %s %s", selectClause(), table, whereClause.first(), sql().orderByClause(comparator)), whereClause.second());
     }
 
     private Object selectClause() {
-        return applyFunction( select.isEmpty() ? "*" : sequence(select).toString() );
+        return applyFunction( select.isEmpty() ? "*" : sequence(select).toString(table.toString() + ".", ",", "") );
     }
 
     private Object applyFunction(String columns) {
