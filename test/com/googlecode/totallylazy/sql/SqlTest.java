@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.sql;
 
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.dates.Dates;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
@@ -12,25 +11,20 @@ import java.util.Date;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
+import static com.googlecode.totallylazy.Predicates.between;
+import static com.googlecode.totallylazy.Predicates.greaterThan;
+import static com.googlecode.totallylazy.Predicates.greaterThanOrEqualTo;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.lessThan;
+import static com.googlecode.totallylazy.Predicates.lessThanOrEqualTo;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
-import static com.googlecode.totallylazy.dates.Dates.greaterThan;
-import static com.googlecode.totallylazy.dates.Dates.greaterThanOrEqualTo;
-import static com.googlecode.totallylazy.dates.Dates.lessThan;
-import static com.googlecode.totallylazy.dates.Dates.lessThanOrEqualTo;
-import static com.googlecode.totallylazy.dates.Dates.between;
 import static com.googlecode.totallylazy.dates.Dates.date;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.numbers.Numbers.between;
-import static com.googlecode.totallylazy.numbers.Numbers.greaterThan;
-import static com.googlecode.totallylazy.numbers.Numbers.greaterThanOrEqualTo;
-import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
-import static com.googlecode.totallylazy.numbers.Numbers.lessThanOrEqualTo;
 import static com.googlecode.totallylazy.sql.Keyword.keyword;
 import static com.googlecode.totallylazy.sql.KeywordsCallable.select;
 import static com.googlecode.totallylazy.sql.MapRecord.record;
@@ -51,16 +45,16 @@ public class SqlTest {
 
         records.define(user, age, dob, firstName, lastName);
         records.add(user,
-                record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 01, 10)),
-                record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 01, 10)),
-                record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 01, 10)));
+                record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)),
+                record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 1, 10)),
+                record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 1, 10)));
     }
 
 
     @Test
     public void supportsSelectingAllKeywords() throws Exception {
         Sequence<Record> results = records.query(user);
-        assertThat(results.first(), Matchers.is(record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 01, 10))));
+        assertThat(results.first(), Matchers.is(record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10))));
     }
 
     @Test
@@ -132,6 +126,15 @@ public class SqlTest {
     }
 
     @Test
+    public void supportsFilteringWithStrings() throws Exception {
+        assertThat(records.query(user).filter(where(firstName, is(greaterThan("e")))).map(firstName), hasExactly("matt"));
+        assertThat(records.query(user).filter(where(firstName, is(greaterThanOrEqualTo("dan")))).map(firstName), hasExactly("dan", "matt"));
+        assertThat(records.query(user).filter(where(firstName, is(lessThan("dan")))).map(firstName), hasExactly("bob"));
+        assertThat(records.query(user).filter(where(firstName, is(lessThanOrEqualTo("dan")))).map(firstName), hasExactly("dan", "bob"));
+        assertThat(records.query(user).filter(where(firstName, is(between("b", "d")))).map(firstName), hasExactly("bob"));
+    }
+
+    @Test
     public void supportsFilteringWithGreaterThanOrEqualTo() throws Exception {
         Sequence<Record> results = records.query(user);
         Sequence<String> names = results.filter(where(age, is(greaterThanOrEqualTo(11)))).map(firstName);
@@ -176,6 +179,13 @@ public class SqlTest {
     public void supportsIn() throws Exception {
         Sequence<Record> results = records.query(user);
         assertThat(results.filter(where(age, is(in(10,12)))).map(firstName), hasExactly("dan", "matt"));
+    }
+
+    @Test
+    public void supportsInWithSubSelects() throws Exception {
+        Sequence<Record> results = records.query(user);
+        Sequence<Integer> ages = records.query(user).filter(where(firstName, is(between("a", "e")))).map(age);
+        assertThat(results.filter(where(age, is(in(ages)))).map(firstName), hasExactly("dan", "bob"));
     }
 
     @Test

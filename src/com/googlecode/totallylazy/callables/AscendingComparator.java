@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callers;
 
 import java.util.Comparator;
 

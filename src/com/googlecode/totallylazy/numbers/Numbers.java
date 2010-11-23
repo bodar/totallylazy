@@ -37,6 +37,9 @@ import static com.googlecode.totallylazy.Predicates.remainderIsZero;
 import static com.googlecode.totallylazy.Sequences.iterate;
 
 public class Numbers {
+    public static Number valueOf(String string) {
+        return reduce(new BigInteger(string));
+    }
 
     public static Sequence<Number> numbers(Number... numbers) {
         return Sequences.sequence(numbers);
@@ -284,4 +287,11 @@ public class Numbers {
         return value;
     }
 
+    public static Callable1<Number, Character> toCharacter() {
+        return new Callable1<Number, Character>() {
+            public Character call(Number number) throws Exception {
+                return (char)number.shortValue();
+            }
+        };
+    }
 }
