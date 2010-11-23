@@ -4,9 +4,6 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import java.math.BigInteger;
-
-import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static java.lang.Long.MAX_VALUE;
 import static java.lang.Long.MIN_VALUE;
 import static java.math.BigInteger.valueOf;

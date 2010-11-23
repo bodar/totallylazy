@@ -19,13 +19,8 @@ import static com.googlecode.totallylazy.sql.MapRecord.record;
 public class RecordIterator extends StatefulIterator<Record> {
     private final Callable<ResultSet> lazyResults;
 
-    public RecordIterator(final Connection connection, final Query query) {
-        this.lazyResults = lazy(new Callable<ResultSet>() {
-            public ResultSet call() throws Exception {
-                System.out.println(query);
-                return query.execute(connection);
-            }
-        });
+    public RecordIterator(final Query query) {
+        this.lazyResults = lazy(query);
     }
 
     @Override

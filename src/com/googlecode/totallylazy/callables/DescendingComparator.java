@@ -1,11 +1,9 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
 
 import java.util.Comparator;
 
-import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callers.call;
 
 public class DescendingComparator<T> implements Comparator<T> {

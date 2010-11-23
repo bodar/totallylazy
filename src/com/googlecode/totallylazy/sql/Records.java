@@ -31,8 +31,8 @@ public class Records {
         this.connection = connection;
     }
 
-    public QuerySequence query(Keyword recordName) {
-        return new QuerySequence(connection, Query.query(recordName));
+    public RecordSequence query(Keyword recordName) {
+        return new RecordSequence(Query.query(connection, recordName));
     }
 
     private static final Map<Class, String> typeMap = new HashMap<Class, String>(){{
