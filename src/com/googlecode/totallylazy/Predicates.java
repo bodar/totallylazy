@@ -162,6 +162,15 @@ public class Predicates {
         };
     }
 
+    public static Predicate<String> equalIgnoringCase(final String expected) {
+        return new Predicate<String>() {
+            public boolean matches(String actual) {
+                return expected.equalsIgnoreCase(actual);
+            }
+        };
+    }
+
+    
     public static Predicate<Method> arguments(final Class<?>... expectedClasses) {
         return new Predicate<Method>() {
             public boolean matches(Method method) {
