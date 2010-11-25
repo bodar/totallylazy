@@ -25,7 +25,15 @@ public class Pair<F, S> implements First<F>, Second<S> {
 
     @Override
     public final String toString() {
-        return sequence(first, second).toString("[", ",", "]");
+        return toString("[", ",", "]");
+    }
+
+    public final String toString(String separator) {
+        return toString("", separator, "");
+    }
+
+    public final String toString(String start, String separator, String end){
+        return sequence(first, second).toString(start, separator, end);
     }
 
     @Override
