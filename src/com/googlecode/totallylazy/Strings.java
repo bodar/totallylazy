@@ -33,4 +33,11 @@ public class Strings {
         return new ContainsPredicate(value);
     }
 
+    public static Predicate<String> equalIgnoringCase(final String expected) {
+        return new Predicate<String>() {
+            public boolean matches(String actual) {
+                return expected.equalsIgnoreCase(actual);
+            }
+        };
+    }
 }
