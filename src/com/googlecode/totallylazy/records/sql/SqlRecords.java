@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
+import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
@@ -27,7 +28,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 
-public class SqlRecords implements Records {
+public class SqlRecords extends AbstractRecords {
     private final Connection connection;
 
     public SqlRecords(Connection connection) {
@@ -60,14 +61,6 @@ public class SqlRecords implements Records {
                 return String.format("%s %s", keyword, typeMap.get(keyword.forClass()));
             }
         };
-    }
-
-    public Number add(Keyword recordName, Record... records) {
-        return add(recordName, sequence(records));
-    }
-
-    public Number add(Keyword recordName, Sequence<Record> records) {
-        return add(recordName, records.first().fields().map(first(Keyword.class)).realise(), records);
     }
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {

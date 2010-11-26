@@ -1,12 +1,8 @@
-package com.googlecode.totallylazy.records.sql;
+package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
-import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.Records;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.sql.SQLException;
@@ -29,12 +25,11 @@ import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.dates.Dates.date;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
-import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static com.googlecode.totallylazy.records.MapRecord.record;
-import static java.sql.DriverManager.getConnection;
+import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class SqlTest {
+public abstract class AbstractRecordsTests {
     private static final Keyword user = keyword("user");
     private static final Keyword<Integer> age = keyword("age", Integer.class);
     private static final Keyword<Date> dob = keyword("dob", Date.class);
@@ -42,9 +37,8 @@ public class SqlTest {
     private static final Keyword<String> lastName = keyword("lastName", String.class);
     private static Records records;
 
-    @BeforeClass
-    public static void setupDatabase() throws SQLException {
-        records = new SqlRecords(getConnection("jdbc:hsqldb:mem:totallylazy", "SA", ""));
+    public static void addRecords(Records records) throws SQLException {
+        AbstractRecordsTests.records = records;
 
         records.define(user, age, dob, firstName, lastName);
         records.add(user,
@@ -52,7 +46,6 @@ public class SqlTest {
                 record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 1, 10)),
                 record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 1, 10)));
     }
-
 
     @Test
     public void supportsSelectingAllKeywords() throws Exception {

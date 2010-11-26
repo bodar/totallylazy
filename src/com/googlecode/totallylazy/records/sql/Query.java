@@ -67,7 +67,11 @@ public class Query implements Callable<ResultSet> {
     }
 
     public Query select(Keyword... columns){
-        return query(connection, table, sequence(columns), selectFunction, where, comparator);
+        return select(sequence(columns));
+    }
+
+    public Query select(Sequence<Keyword> columns){
+        return query(connection, table, columns, selectFunction, where, comparator);
     }
 
     public Query where(Predicate<? super Record> predicate) {
