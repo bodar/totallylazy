@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.RecordSequence;
 
 public interface Records {
-    RecordSequence query(Keyword recordName);
+    Sequence<Record> query(Keyword recordName);
 
     void define(Keyword recordName, Keyword<?>... fields);
 
