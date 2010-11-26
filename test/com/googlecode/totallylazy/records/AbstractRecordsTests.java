@@ -37,7 +37,7 @@ public abstract class AbstractRecordsTests {
     private static final Keyword<String> lastName = keyword("lastName", String.class);
     private static Records records;
 
-    public static void addRecords(Records records) throws SQLException {
+    public static void addRecords(Records records) {
         AbstractRecordsTests.records = records;
 
         records.define(user, age, dob, firstName, lastName);
