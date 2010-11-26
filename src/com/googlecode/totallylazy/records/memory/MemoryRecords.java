@@ -31,7 +31,7 @@ public class MemoryRecords extends AbstractRecords {
         }
         List<Record> list = memory.get(recordName);
         Number count = 0;
-        for (Record record : records.map(select(fields)).realise()) {
+        for (Record record : records.map(select(fields))) {
             list.add(record);
             count = increment(count);
         }
