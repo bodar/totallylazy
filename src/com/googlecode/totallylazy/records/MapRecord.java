@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.sql;
+package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;

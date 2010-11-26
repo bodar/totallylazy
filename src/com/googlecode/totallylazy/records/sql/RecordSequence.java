@@ -1,8 +1,11 @@
-package com.googlecode.totallylazy.sql;
+package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.SelectCallable;
+import com.googlecode.totallylazy.records.Record;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,8 +30,8 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
         if(callable instanceof Keyword){
             return new SingleValueSequence<S>(query.select((Keyword) callable), callable);
         }
-        if(callable instanceof KeywordsCallable){
-            return (Sequence<S>) new RecordSequence(query.select(((KeywordsCallable) callable).keywords()));
+        if(callable instanceof SelectCallable){
+            return (Sequence<S>) new RecordSequence(query.select(((SelectCallable) callable).keywords()));
         }
         System.out.println(String.format("Warning: unsupported callables %s dropping down to client side sequence functionality", callable));
         return super.map(callable);

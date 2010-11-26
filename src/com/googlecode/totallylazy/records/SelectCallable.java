@@ -1,11 +1,11 @@
-package com.googlecode.totallylazy.sql;
+package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Callable1;
 
-public class KeywordsCallable implements Callable1<Record, Record> {
+public class SelectCallable implements Callable1<Record, Record> {
     private final Keyword[] keywords;
 
-    public KeywordsCallable(Keyword... keywords) {
+    public SelectCallable(Keyword... keywords) {
         this.keywords = keywords;
     }
 
@@ -22,7 +22,7 @@ public class KeywordsCallable implements Callable1<Record, Record> {
     }
 
     public static Callable1<? super Record, Record> select(final Keyword... keywords) {
-        return new KeywordsCallable(keywords);
+        return new SelectCallable(keywords);
     }
 
 }

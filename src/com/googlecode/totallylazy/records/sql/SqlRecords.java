@@ -1,10 +1,13 @@
-package com.googlecode.totallylazy.sql;
+package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
+import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.Records;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,10 +27,10 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 
-public class Records {
+public class SqlRecords implements Records {
     private final Connection connection;
 
-    public Records(Connection connection) {
+    public SqlRecords(Connection connection) {
         this.connection = connection;
     }
 

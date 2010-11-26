@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.sql;
+package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;
@@ -8,6 +8,9 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
+import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.SelectCallable;
+import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.Between;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
@@ -78,8 +81,8 @@ public class Sql {
         if(callable instanceof Keyword){
             return pair(table.toString() + "." + callable.toString(), empty());
         }
-        if(callable instanceof KeywordsCallable){
-            return pair(sequence(((KeywordsCallable) callable).keywords()).toString(table.toString() + ".", ",", ""), empty());
+        if(callable instanceof SelectCallable){
+            return pair(sequence(((SelectCallable) callable).keywords()).toString(table.toString() + ".", ",", ""), empty());
         }
         throw new UnsupportedOperationException("Unsupported callable " + callable);
     }
