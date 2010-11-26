@@ -1,7 +1,10 @@
-package com.googlecode.totallylazy.sql;
+package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.Records;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,9 +28,9 @@ import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.dates.Dates.date;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.sql.Keyword.keyword;
-import static com.googlecode.totallylazy.sql.KeywordsCallable.select;
-import static com.googlecode.totallylazy.sql.MapRecord.record;
+import static com.googlecode.totallylazy.records.Keyword.keyword;
+import static com.googlecode.totallylazy.records.SelectCallable.select;
+import static com.googlecode.totallylazy.records.MapRecord.record;
 import static java.sql.DriverManager.getConnection;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -41,7 +44,7 @@ public class SqlTest {
 
     @BeforeClass
     public static void setupDatabase() throws SQLException {
-        records = new Records(getConnection("jdbc:hsqldb:mem:totallylazy", "SA", ""));
+        records = new SqlRecords(getConnection("jdbc:hsqldb:mem:totallylazy", "SA", ""));
 
         records.define(user, age, dob, firstName, lastName);
         records.add(user,
