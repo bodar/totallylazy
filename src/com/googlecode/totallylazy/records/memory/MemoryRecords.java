@@ -25,8 +25,15 @@ import static com.googlecode.totallylazy.records.SelectCallable.select;
 public class MemoryRecords extends AbstractRecords {
     private final Map<Keyword, List<Record>> memory = new HashMap<Keyword, List<Record>>();
 
-    public Sequence<Record> query(Keyword recordName) {
-        return sequence(memory.get(recordName));
+    public Sequence<Record> get(Keyword recordName) {
+        return sequence(getRecordsFor(recordName));
+    }
+
+    private List<Record> getRecordsFor(Keyword recordName) {
+        if (!memory.containsKey(recordName)) {
+            memory.put(recordName, new ArrayList<Record>());
+        }
+        return memory.get(recordName);
     }
 
     public void define(Keyword recordName, Keyword<?>... fields) {
@@ -37,10 +44,7 @@ public class MemoryRecords extends AbstractRecords {
             return 0;
         }
 
-        if (!memory.containsKey(recordName)) {
-            memory.put(recordName, new ArrayList<Record>());
-        }
-        List<Record> list = memory.get(recordName);
+        List<Record> list = getRecordsFor(recordName);
         Number count = 0;
         for (Record record : records.map(select(fields))) {
             list.add(record);
@@ -50,9 +54,9 @@ public class MemoryRecords extends AbstractRecords {
     }
 
     public Number set(Keyword recordName, Predicate<Record> predicate, Sequence<Keyword> fields, Record record) {
-        List<Record> records = memory.get(recordName);
+        List<Record> records = getRecordsFor(recordName);
         Number count = 0;
-        Sequence<Integer> indexes = query(recordName).zipWithIndex().
+        Sequence<Integer> indexes = get(recordName).zipWithIndex().
                 filter(where(second(Record.class), is(predicate))).
                 map(first(Number.class)).safeCast(Integer.class);
         for (Integer index : indexes) {

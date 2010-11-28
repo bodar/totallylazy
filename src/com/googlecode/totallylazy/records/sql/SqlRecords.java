@@ -31,7 +31,7 @@ public class SqlRecords extends AbstractRecords {
         this.connection = connection;
     }
 
-    public RecordSequence query(Keyword recordName) {
+    public RecordSequence get(Keyword recordName) {
         return new RecordSequence(Query.query(connection, recordName));
     }
 

@@ -1,15 +1,10 @@
 package com.googlecode.totallylazy.records;
 
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.predicates.WherePredicate;
-import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.sql.RecordSequence;
 
 public interface Records {
-    Sequence<Record> query(Keyword recordName);
+    Sequence<Record> get(Keyword recordName);
 
     void define(Keyword recordName, Keyword<?>... fields);
 
