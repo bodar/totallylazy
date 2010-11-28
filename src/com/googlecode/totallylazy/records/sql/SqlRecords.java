@@ -3,12 +3,12 @@ package com.googlecode.totallylazy.records.sql;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.Records;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,10 +39,10 @@ public class SqlRecords extends AbstractRecords {
         return new RecordSequence(Query.query(connection, recordName));
     }
 
-    private static final Map<Class, String> typeMap = new HashMap<Class, String>(){{
-       put(String.class, "varchar(256)");
-       put(Date.class, "timestamp");
-       put(Integer.class, "integer");
+    private static final Map<Class, String> typeMap = new HashMap<Class, String>() {{
+        put(String.class, "varchar(256)");
+        put(Date.class, "timestamp");
+        put(Integer.class, "integer");
     }};
 
     public void define(Keyword recordName, Keyword<?>... fields) {
@@ -64,7 +64,7 @@ public class SqlRecords extends AbstractRecords {
     }
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
-        if((Integer)records.size() == 0){
+        if ((Integer) records.size() == 0) {
             return 0;
         }
         try {
@@ -73,6 +73,26 @@ public class SqlRecords extends AbstractRecords {
             final PreparedStatement statement = connection.prepareStatement(sql);
             for (Record record : records) {
                 addValues(statement, record.fields().filter(where(first(Keyword.class), is(in(fields)))).map(second()));
+                statement.addBatch();
+            }
+            Number rowCount = numbers(statement.executeBatch()).reduce(Numbers.add());
+            System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
+            return rowCount;
+        } catch (SQLException e) {
+            throw new LazyException(e);
+        }
+    }
+
+    public Number set(Keyword recordName, Pair<? extends Predicate<Record>, Record>... pairs) {
+        try {
+            Pair<? extends Predicate<Record>, Record> firstRecord = sequence(pairs).first();
+            Sequence<Pair<Keyword, Object>> fields = firstRecord.second().fields();
+            Pair<String, Sequence<Object>> where = new Sql(recordName).toSql(firstRecord.first());
+            final String sql = String.format("update %s set %s where %s",
+                    recordName, fields.map(first(Keyword.class)).toString("", "=?,", "=?"), where.first());
+            final PreparedStatement statement = connection.prepareStatement(sql);
+            for (Pair<? extends Predicate<Record>, Record> pair : pairs) {
+                addValues(statement, pair.second().fields().map(second()).join(where.second()));
                 statement.addBatch();
             }
             Number rowCount = numbers(statement.executeBatch()).reduce(Numbers.add());
