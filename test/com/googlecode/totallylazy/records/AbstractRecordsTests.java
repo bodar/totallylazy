@@ -51,10 +51,10 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsUpdating() throws Exception {
         Predicate<Record> whereFirstNameIsDan = where(firstName, is("dan"));
-        Number count = records.set(user, pair(whereFirstNameIsDan, record().set(lastName, "bod")));
+        Number count = records.set(user, whereFirstNameIsDan, record().set(lastName, "bod"));
         assertThat(count, NumberMatcher.is(1));
         assertThat(records.query(user).filter(whereFirstNameIsDan).map(lastName), hasExactly("bod"));
-        records.set(user, pair(whereFirstNameIsDan, record().set(lastName, "bodart")));
+        records.set(user, whereFirstNameIsDan, record().set(lastName, "bodart"));
     }
 
     @Test

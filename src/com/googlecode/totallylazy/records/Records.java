@@ -19,5 +19,7 @@ public interface Records {
 
     Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records);
 
-    Number set(Keyword recordName, Pair<? extends Predicate<Record>, Record>... pairs);
+    Number set(Keyword recordName, Predicate<Record> predicate, Record record);
+
+    Number set(Keyword recordName, Predicate<Record> predicate, Sequence<Keyword> fields, Record record);
 }
