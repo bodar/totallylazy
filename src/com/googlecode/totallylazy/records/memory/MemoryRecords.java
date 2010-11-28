@@ -33,7 +33,11 @@ public class MemoryRecords extends AbstractRecords {
     }
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
-        if(!memory.containsKey(recordName)){
+        if (records.isEmpty()) {
+            return 0;
+        }
+
+        if (!memory.containsKey(recordName)) {
             memory.put(recordName, new ArrayList<Record>());
         }
         List<Record> list = memory.get(recordName);
@@ -45,18 +49,16 @@ public class MemoryRecords extends AbstractRecords {
         return count;
     }
 
-    public Number set(Keyword recordName, Pair<? extends Predicate<Record>, Record>... pairs) {
+    public Number set(Keyword recordName, Predicate<Record> predicate, Sequence<Keyword> fields, Record record) {
         List<Record> records = memory.get(recordName);
         Number count = 0;
-        for (Pair<? extends Predicate<Record>, Record> pair : pairs) {
-            Sequence<Integer> indexes = query(recordName).zipWithIndex().
-                    filter(where(second(Record.class), is(pair.first()))).
-                    map(first(Number.class)).safeCast(Integer.class);
-            for (Integer index : indexes) {
-                records.set(index, pair.second().fields().fold(records.get(index), updateValues()));
-            }
-            count = Numbers.add(count, indexes.size());
+        Sequence<Integer> indexes = query(recordName).zipWithIndex().
+                filter(where(second(Record.class), is(predicate))).
+                map(first(Number.class)).safeCast(Integer.class);
+        for (Integer index : indexes) {
+            records.set(index, record.fields().fold(records.get(index), updateValues()));
         }
+        count = Numbers.add(count, indexes.size());
         return count;
     }
 

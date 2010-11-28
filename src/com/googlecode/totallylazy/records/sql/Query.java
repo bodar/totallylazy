@@ -42,7 +42,7 @@ public class Query implements Callable<ResultSet> {
     }
 
     public Sql sql(){
-        return new Sql(table);
+        return Sql.sql(table);
     }
 
     public Pair<String, Sequence<Object>> sqlAndValues() {

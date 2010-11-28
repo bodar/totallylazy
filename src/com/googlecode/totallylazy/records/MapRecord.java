@@ -8,12 +8,17 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.entryToPair;
+import static com.googlecode.totallylazy.Callables.first;
+import static com.googlecode.totallylazy.Callables.second;
+import static com.googlecode.totallylazy.Predicates.in;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class MapRecord implements Record{
+public class MapRecord implements Record {
     private final Map<Keyword, Object> fields = new LinkedHashMap<Keyword, Object>();
 
-    public <T> T get(Keyword<T> keyword)  {
+    public <T> T get(Keyword<T> keyword) {
         return (T) fields.get(keyword);
     }
 
@@ -24,6 +29,14 @@ public class MapRecord implements Record{
 
     public Sequence<Pair<Keyword, Object>> fields() {
         return sequence(fields.entrySet()).map(entryToPair(Keyword.class, Object.class));
+    }
+
+    public Sequence<Keyword> keywords() {
+        return sequence(fields.keySet());
+    }
+
+    public Sequence<Object> getValuesFor(Sequence<Keyword> keywords) {
+        return fields().filter(where(first(Keyword.class), is(in(keywords)))).map(second());
     }
 
     @Override
@@ -39,11 +52,11 @@ public class MapRecord implements Record{
     public boolean equals(Object other) {
         if (other instanceof MapRecord) {
             MapRecord otherRecord = (MapRecord) other;
-            if(fields.size() != otherRecord.fields.size()){
+            if (fields.size() != otherRecord.fields.size()) {
                 return false;
             }
             for (Pair<Keyword, Object> entry : fields()) {
-                if(!otherRecord.fields().contains(entry)){
+                if (!otherRecord.fields().contains(entry)) {
                     return false;
                 }
             }
