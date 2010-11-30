@@ -79,7 +79,7 @@ public class SqlRecords extends AbstractRecords {
         }
     }
 
-    public Number set(Keyword recordName, Predicate<Record> predicate, Sequence<Keyword> fields, Record record) {
+    public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
         try {
             Pair<String, Sequence<Object>> where = sql(recordName).toSql(predicate);
             final String sql = String.format("update %s set %s where %s",
