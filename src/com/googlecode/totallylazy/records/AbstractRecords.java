@@ -15,7 +15,7 @@ public abstract class AbstractRecords implements Records{
         return add(recordName, records.first().keywords(), records);
     }
 
-    public Number set(Keyword recordName, Predicate<Record> predicate, Record record) {
+    public Number set(Keyword recordName, Predicate<? super Record> predicate, Record record) {
         return set(recordName, predicate, record.keywords(), record);
     }
 }

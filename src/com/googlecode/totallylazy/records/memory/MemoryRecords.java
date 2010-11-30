@@ -53,7 +53,9 @@ public class MemoryRecords extends AbstractRecords {
         return count;
     }
 
-    public Number set(Keyword recordName, Predicate<Record> predicate, Sequence<Keyword> fields, Record record) {
+
+    @SuppressWarnings({"unchecked"})
+    public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
         List<Record> records = getRecordsFor(recordName);
         Number count = 0;
         Sequence<Integer> indexes = get(recordName).zipWithIndex().
@@ -66,6 +68,7 @@ public class MemoryRecords extends AbstractRecords {
         return count;
     }
 
+    @SuppressWarnings({"unchecked"})
     private Callable2<? super Record, ? super Pair<Keyword, Object>, Record> updateValues() {
         return new Callable2<Record, Pair<Keyword, Object>, Record>() {
             public Record call(Record record, Pair<Keyword, Object> field) throws Exception {
