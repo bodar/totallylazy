@@ -73,6 +73,8 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
         }
     }
 
+    
+
     @Override
     public String toString() {
         return query.toString();
