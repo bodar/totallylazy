@@ -1,10 +1,12 @@
-package com.googlecode.totallylazy.sql;
+package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Record;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,7 +42,7 @@ public class Query implements Callable<ResultSet> {
     }
 
     public Sql sql(){
-        return new Sql(table);
+        return Sql.sql(table);
     }
 
     public Pair<String, Sequence<Object>> sqlAndValues() {
@@ -65,7 +67,11 @@ public class Query implements Callable<ResultSet> {
     }
 
     public Query select(Keyword... columns){
-        return query(connection, table, sequence(columns), selectFunction, where, comparator);
+        return select(sequence(columns));
+    }
+
+    public Query select(Sequence<Keyword> columns){
+        return query(connection, table, columns, selectFunction, where, comparator);
     }
 
     public Query where(Predicate<? super Record> predicate) {
@@ -75,7 +81,7 @@ public class Query implements Callable<ResultSet> {
     public ResultSet execute() throws SQLException {
         final Pair<String, Sequence<Object>> sqlAndValues = sqlAndValues();
         final PreparedStatement statement = connection.prepareStatement(sqlAndValues.first());
-        Records.addValues(statement, sqlAndValues.second());
+        SqlRecords.addValues(statement, sqlAndValues.second());
         return statement.executeQuery();
     }
 

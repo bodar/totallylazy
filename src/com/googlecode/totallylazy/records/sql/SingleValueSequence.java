@@ -1,8 +1,9 @@
-package com.googlecode.totallylazy.sql;
+package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.records.Record;
 
 import java.util.Iterator;
 

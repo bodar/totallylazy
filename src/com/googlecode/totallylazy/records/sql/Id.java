@@ -1,21 +1,21 @@
-package com.googlecode.totallylazy.sql;
+package com.googlecode.totallylazy.records.sql;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
 
-public class ID {
+public class Id {
     private final byte[] bytes;
     private static SecureRandom secureRandom = new SecureRandom();
 
-    public ID(byte[] bytes) {
+    public Id(byte[] bytes) {
         if(bytes == null) throw new IllegalArgumentException("bytes");
         this.bytes = bytes;
     }
 
-    public static ID unique(){
+    public static Id unique(){
         byte[] randomBytes = new byte[16];
         secureRandom.nextBytes(randomBytes);
-        return new ID(randomBytes);
+        return new Id(randomBytes);
     }
 
     public byte[] bytes() {
@@ -24,7 +24,7 @@ public class ID {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof ID && Arrays.equals(bytes, ((ID) o).bytes());
+        return o instanceof Id && Arrays.equals(bytes, ((Id) o).bytes());
     }
 
     @Override
