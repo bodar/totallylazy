@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.sql;
+package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
@@ -9,4 +9,8 @@ public interface Record {
     <T> Record set(Keyword<T> name, T value);
 
     Sequence<Pair<Keyword, Object>> fields();
+
+    Sequence<Keyword> keywords();
+
+    Sequence<Object> getValuesFor(Sequence<Keyword> keywords);
 }
