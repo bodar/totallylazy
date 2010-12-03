@@ -22,12 +22,12 @@ import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.Dates.date;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
 
 public abstract class AbstractRecordsTests {
     private static final Keyword user = keyword("user");
@@ -39,7 +39,6 @@ public abstract class AbstractRecordsTests {
 
     public static void addRecords(Records records) {
         AbstractRecordsTests.records = records;
-
         records.define(user, age, dob, firstName, lastName);
         addUsers(records);
     }
@@ -219,12 +218,13 @@ public abstract class AbstractRecordsTests {
 
     @Test
     public void supportsRemove() throws Exception {
-        assertThat(records.remove(user, where(age, is(greaterThan(10)))).intValue(), equalTo(2));
-        assertThat(records.remove(user, where(age, is(greaterThan(10)))).intValue(), equalTo(0));
+        assertThat(records.remove(user, where(age, is(greaterThan(10)))), equalTo(2));
+        assertThat(records.remove(user, where(age, is(greaterThan(10)))), equalTo(0));
 
-        assertThat(records.get(user).size().intValue(), equalTo(1));
+        assertThat(records.get(user).size(), equalTo(1));
 
-        assertThat(records.remove(user, where(age, is(10))).intValue(), equalTo(1));
+        assertThat(records.remove(user), equalTo(1));
+        assertThat(records.get(user).size(), equalTo(0));
         addUsers(records);
     }
 }

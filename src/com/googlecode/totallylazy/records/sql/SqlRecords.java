@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
@@ -12,10 +13,12 @@ import com.googlecode.totallylazy.records.Record;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import static com.googlecode.totallylazy.Sequences.iterate;
@@ -34,7 +37,7 @@ public class SqlRecords extends AbstractRecords {
     }
 
     public RecordSequence get(Keyword recordName) {
-        return new RecordSequence(query(connection, recordName));
+        return new RecordSequence(Query.query(connection, recordName));
     }
 
     private static final Map<Class, String> typeMap = new HashMap<Class, String>() {{
@@ -82,41 +85,73 @@ public class SqlRecords extends AbstractRecords {
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        try {
-            Pair<String, Sequence<Object>> where = sql(recordName).toSql(predicate);
-            final String sql = String.format("update %s set %s where %s",
-                    recordName, fields.toString("", "=?,", "=?"), where.first());
-            final PreparedStatement statement = connection.prepareStatement(sql);
-            addValues(statement, record.getValuesFor(fields).join(where.second()));
+        Pair<String, Sequence<Object>> where = sql(recordName).toSql(predicate);
+        final String sql = String.format("update %s set %s where %s",
+                recordName, fields.toString("", "=?,", "=?"), where.first());
+        return update(sql, record.getValuesFor(fields).join(where.second()));
+    }
 
+    public Number update(String expression, Object... parameters) {
+        return update(expression, sequence(parameters));
+    }
+
+    public Number update(String expression, Sequence<?> parameters) {
+        try {
+            final PreparedStatement statement = connection.prepareStatement(expression);
+            addValues(statement, parameters);
             Number rowCount = statement.executeUpdate();
-            Sql.LOGGER.log(Level.FINE, String.format("SQL:'%s' Row Count: %s", sql, rowCount));
+            Sql.LOGGER.log(Level.FINE, String.format("SQL:'%s' Row Count: %s", expression, rowCount));
             return rowCount;
+        } catch (SQLException e) {
+            throw new LazyException(e);
+        }
+
+    }
+
+    public Sequence<Record> query(String expression, Sequence<?> parameters) {
+        try {
+            final PreparedStatement statement = connection.prepareStatement(expression);
+            addValues(statement, parameters);
+            String message = String.format("SQL:'%s' VALUES:'%s'", expression, parameters);
+            return Sequences.sequence(new RecordIterator(log(message, lazyExecute(statement))));
         } catch (SQLException e) {
             throw new LazyException(e);
         }
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        try {
-            Pair<String, Sequence<Object>> where = sql(recordName).toSql(predicate);
-
-            final String sql = String.format("delete from %s where %s",
-                    recordName, where.first());
-            final PreparedStatement statement = connection.prepareStatement(sql);
-            addValues(statement, where.second());
-            Number rowCount = statement.executeUpdate();
-            System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
-            return rowCount;
-        } catch (SQLException e) {
-            throw new LazyException(e);
-        }
+        Pair<String, Sequence<Object>> where = sql(recordName).toSql(predicate);
+        final String sql = String.format("delete from %s where %s",
+                recordName, where.first());
+        return update(sql, where.second());
     }
 
+    public Number remove(Keyword recordName) {
+        return update(String.format("delete from %s", recordName));
+    }
 
-    static void addValues(PreparedStatement statement, Sequence<Object> values) throws SQLException {
-        for (Pair<Integer, Object> numberAndValue : iterate(increment(), 1).safeCast(Integer.class).zip(values)) {
+    static void addValues(PreparedStatement statement, Sequence<?> values) throws SQLException {
+        for (Pair<Integer, ?> numberAndValue : iterate(increment(), 1).safeCast(Integer.class).zip(values)) {
             statement.setObject(numberAndValue.first(), numberAndValue.second());
         }
     }
+
+    private <T> Callable<T> log(final String message, final Callable<T> callable) {
+        return new Callable<T>() {
+            public T call() throws Exception {
+                Sql.LOGGER.log(Level.FINE, message);
+                return callable.call();
+            }
+        };
+    }
+
+    private Callable<ResultSet> lazyExecute(final PreparedStatement statement) {
+        return new Callable<ResultSet>() {
+            public ResultSet call() throws Exception {
+                return statement.executeQuery();
+            }
+        };
+    }
+
+
 }
