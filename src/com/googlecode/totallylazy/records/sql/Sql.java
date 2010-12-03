@@ -27,6 +27,8 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.SelectCallable;
 
 import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -35,6 +37,8 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Sql {
+    static final Logger LOGGER = Logger.getLogger(Sql.class.getName());
+
     private final Keyword table;
 
     public Sql(Keyword table) {
@@ -45,6 +49,7 @@ public class Sql {
         return new Sql(table);
     }
 
+    @SuppressWarnings("unchecked")
     public Pair<String, Sequence<Object>> whereClause(Sequence<Predicate<? super Record>> where) {
         if (where.isEmpty()) return pair("", empty());
         final Sequence<Pair<String, Sequence<Object>>> sqlAndValues = where.map(toSql());
@@ -76,7 +81,7 @@ public class Sql {
             toSql(predicate);
             return true;
         } catch (UnsupportedOperationException e) {
-            System.out.println(String.format("Warning: %s dropping down to client side sequence functionality", e.getMessage()));
+            Sql.LOGGER.log(Level.WARNING, String.format("Warning: %s dropping down to client side sequence functionality", e.getMessage()));
             return false;
         }
     }
@@ -91,7 +96,7 @@ public class Sql {
         throw new UnsupportedOperationException("Unsupported callable " + callable);
     }
 
-
+    @SuppressWarnings("unchecked")
     public Pair<String, Sequence<Object>> toSql(Predicate predicate) {
         if (predicate instanceof WherePredicate) {
             WherePredicate wherePredicate = (WherePredicate) predicate;
@@ -176,7 +181,7 @@ public class Sql {
             toSql(comparator);
             return true;
         } catch (UnsupportedOperationException e) {
-            System.out.println(String.format("Warning: %s dropping down to client side sequence functionality", e.getMessage()));
+            Sql.LOGGER.log(Level.WARNING, String.format("Warning: %s dropping down to client side sequence functionality", e.getMessage()));
             return false;
         }
     }
