@@ -19,4 +19,6 @@ public interface Records {
     Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record);
 
     Number remove(Keyword recordName, Predicate<? super Record> predicate);
+
+    Number remove(Keyword recordName);
 }

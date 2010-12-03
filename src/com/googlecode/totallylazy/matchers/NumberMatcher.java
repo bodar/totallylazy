@@ -25,4 +25,8 @@ public class NumberMatcher extends TypeSafeMatcher<Number> {
         return new NumberMatcher(other);
     }
 
+    public static Matcher<? super Number> equalTo(final Number other) {
+        return is(other);
+    }
+
 }
