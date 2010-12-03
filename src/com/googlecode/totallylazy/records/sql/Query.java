@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -94,7 +95,7 @@ public class Query implements Callable<ResultSet> {
     }
 
     public ResultSet call() throws Exception {
-        System.out.println(this);
+        Sql.LOGGER.log(Level.FINE, this.toString());
         return execute();
     }
 }

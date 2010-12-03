@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.dates;
+package com.googlecode.totallylazy;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
