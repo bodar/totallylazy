@@ -5,10 +5,7 @@ import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import org.junit.Test;
 
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Set;
-import java.util.Vector;
 
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Callables.ascending;
@@ -27,13 +24,12 @@ import static com.googlecode.totallylazy.Sequences.range;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
-import static com.googlecode.totallylazy.numbers.Numbers.add;
-import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
+import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class SequenceTest {
     @Test

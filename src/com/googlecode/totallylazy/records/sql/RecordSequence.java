@@ -4,11 +4,10 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.SelectCallable;
 import com.googlecode.totallylazy.records.Record;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -16,24 +15,26 @@ import java.util.logging.Level;
 import static com.googlecode.totallylazy.Callables.ascending;
 
 public class RecordSequence extends Sequence<Record> implements QuerySequence {
+    private final Queryable queryable;
     private final Query query;
 
-    public RecordSequence(final Query query) {
+    public RecordSequence(final Queryable queryable, final Query query) {
+        this.queryable = queryable;
         this.query = query;
     }
 
     public Iterator<Record> iterator() {
-        return new RecordIterator(query);
+        return queryable.query(query.expressionAndParameters());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <S> Sequence<S> map(final Callable1<? super Record, S> callable) {
-        if(callable instanceof Keyword){
-            return new SingleValueSequence<S>(query.select((Keyword) callable), callable);
+        if (callable instanceof Keyword) {
+            return new SingleValueSequence<S>(queryable, query.select((Keyword) callable), callable);
         }
-        if(callable instanceof SelectCallable){
-            return (Sequence<S>) new RecordSequence(query.select(((SelectCallable) callable).keywords()));
+        if (callable instanceof SelectCallable) {
+            return (Sequence<S>) new RecordSequence(queryable, query.select(((SelectCallable) callable).keywords()));
         }
         Sql.LOGGER.log(Level.FINE, String.format("Warning: unsupported callables %s dropping down to client side sequence functionality", callable));
         return super.map(callable);
@@ -41,8 +42,8 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public Sequence<Record> filter(Predicate<? super Record> predicate) {
-        if(query.sql().isSupported(predicate)){
-            return new RecordSequence(query.where(predicate));
+        if (query.sql().isSupported(predicate)) {
+            return new RecordSequence(queryable, query.where(predicate));
         }
         return super.filter(predicate);
     }
@@ -54,25 +55,16 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public Sequence<Record> sortBy(Comparator<? super Record> comparator) {
-        if(query.sql().isSupported(comparator)){
-            return new RecordSequence(query.orderBy(comparator));
+        if (query.sql().isSupported(comparator)) {
+            return new RecordSequence(queryable, query.orderBy(comparator));
         }
         return super.sortBy(comparator);
     }
 
     @Override
     public Number size() {
-        try {
-            final Query count = query.count();
-            Sql.LOGGER.log(Level.FINE, count.toString());
-            final ResultSet resultSet = count.execute();
-            resultSet.next();
-            final int result = resultSet.getInt(1);
-            resultSet.close();
-            return result;
-        } catch (SQLException e) {
-            throw new UnsupportedOperationException(e);
-        }
+        Record record = queryable.query(query.count().expressionAndParameters()).next();
+        return (Number) record.fields().head().second();
     }
 
     @Override
