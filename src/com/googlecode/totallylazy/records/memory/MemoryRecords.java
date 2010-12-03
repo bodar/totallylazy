@@ -53,7 +53,6 @@ public class MemoryRecords extends AbstractRecords {
         return count;
     }
 
-
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
         List<Record> matches = sequence(memory.get(recordName)).
                 filter(predicate).
