@@ -86,8 +86,23 @@ public class SqlRecords extends AbstractRecords {
                     recordName, fields.toString("", "=?,", "=?"), where.first());
             final PreparedStatement statement = connection.prepareStatement(sql);
             addValues(statement, record.getValuesFor(fields).join(where.second()));
-            statement.addBatch();
-            Number rowCount = numbers(statement.executeBatch()).reduce(Numbers.add());
+            Number rowCount = statement.executeUpdate();
+            System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
+            return rowCount;
+        } catch (SQLException e) {
+            throw new LazyException(e);
+        }
+    }
+
+    public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
+        try {
+            Pair<String, Sequence<Object>> where = sql(recordName).toSql(predicate);
+
+            final String sql = String.format("delete from %s where %s",
+                    recordName, where.first());
+            final PreparedStatement statement = connection.prepareStatement(sql);
+            addValues(statement, where.second());
+            Number rowCount = statement.executeUpdate();
             System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
             return rowCount;
         } catch (SQLException e) {

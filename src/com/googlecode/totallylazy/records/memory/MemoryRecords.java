@@ -54,6 +54,16 @@ public class MemoryRecords extends AbstractRecords {
     }
 
 
+    public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
+        List<Record> matches = sequence(memory.get(recordName)).
+                filter(predicate).
+                toList();
+
+        memory.get(recordName).removeAll(matches);
+
+        return matches.size();
+    }
+
     @SuppressWarnings({"unchecked"})
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
         List<Record> records = getRecordsFor(recordName);

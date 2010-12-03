@@ -28,6 +28,7 @@ import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 
 public abstract class AbstractRecordsTests {
     private static final Keyword user = keyword("user");
@@ -206,5 +207,13 @@ public abstract class AbstractRecordsTests {
     public void supportsEndsWith() throws Exception {
         Sequence<Record> users = records.get(user);
         assertThat(users.filter(where(firstName, endsWith("b"))).map(firstName), containsInAnyOrder("bob"));
+    }
+
+    @Test
+    public void supportsRemove() throws Exception {
+        assertThat(records.remove(user, where(age, is(greaterThan(10)))).intValue(), equalTo(2));
+        assertThat(records.remove(user, where(age, is(greaterThan(10)))).intValue(), equalTo(0));
+
+        assertThat(records.get(user).size().intValue(), equalTo(1));
     }
 }
