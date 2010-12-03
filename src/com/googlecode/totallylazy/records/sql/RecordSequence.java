@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.logging.Level;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 
@@ -26,6 +27,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <S> Sequence<S> map(final Callable1<? super Record, S> callable) {
         if(callable instanceof Keyword){
             return new SingleValueSequence<S>(query.select((Keyword) callable), callable);
@@ -33,7 +35,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
         if(callable instanceof SelectCallable){
             return (Sequence<S>) new RecordSequence(query.select(((SelectCallable) callable).keywords()));
         }
-        System.out.println(String.format("Warning: unsupported callables %s dropping down to client side sequence functionality", callable));
+        Sql.LOGGER.log(Level.FINE, String.format("Warning: unsupported callables %s dropping down to client side sequence functionality", callable));
         return super.map(callable);
     }
 
@@ -62,7 +64,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     public Number size() {
         try {
             final Query count = query.count();
-            System.out.println(count);
+            Sql.LOGGER.log(Level.FINE, count.toString());
             final ResultSet resultSet = count.execute();
             resultSet.next();
             final int result = resultSet.getInt(1);
