@@ -41,6 +41,10 @@ public abstract class AbstractRecordsTests {
         AbstractRecordsTests.records = records;
 
         records.define(user, age, dob, firstName, lastName);
+        addUsers(records);
+    }
+
+    private static void addUsers(Records records) {
         records.add(user,
                 record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)),
                 record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 1, 10)),
@@ -104,7 +108,7 @@ public abstract class AbstractRecordsTests {
         Sequence<Record> users = records.get(user);
         Sequence<String> names = users.filter(where(age, is(12)).and(where(lastName, is("savage"))).
                 or(where(firstName, is("dan")).
-                or(where(lastName, is("martin"))))).map(firstName);
+                        or(where(lastName, is("martin"))))).map(firstName);
         assertThat(names, containsInAnyOrder("dan", "matt", "bob"));
     }
 
@@ -185,7 +189,7 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsIn() throws Exception {
         Sequence<Record> users = records.get(user);
-        assertThat(users.filter(where(age, is(in(10,12)))).map(firstName), containsInAnyOrder("dan", "matt"));
+        assertThat(users.filter(where(age, is(in(10, 12)))).map(firstName), containsInAnyOrder("dan", "matt"));
     }
 
     @Test
@@ -219,5 +223,8 @@ public abstract class AbstractRecordsTests {
         assertThat(records.remove(user, where(age, is(greaterThan(10)))).intValue(), equalTo(0));
 
         assertThat(records.get(user).size().intValue(), equalTo(1));
+
+        assertThat(records.remove(user, where(age, is(10))).intValue(), equalTo(1));
+        addUsers(records);
     }
 }
