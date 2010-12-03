@@ -139,7 +139,7 @@ public class Sql {
             InPredicate inPredicate = (InPredicate) predicate;
             Sequence sequence = inPredicate.values();
             if (sequence instanceof QuerySequence) {
-                Pair<String, Sequence<Object>> pair = ((QuerySequence) sequence).query().sqlAndValues();
+                Pair<String, Sequence<Object>> pair = ((QuerySequence) sequence).query().expressionAndParameters();
                 return pair("in ( " + pair.first() + ")", pair.second());
             }
             return pair(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) sequence);

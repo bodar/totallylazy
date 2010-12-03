@@ -5,10 +5,10 @@ import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 
 import java.sql.Connection;
@@ -26,10 +26,9 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
-import static com.googlecode.totallylazy.records.sql.Query.query;
 import static com.googlecode.totallylazy.records.sql.Sql.sql;
 
-public class SqlRecords extends AbstractRecords {
+public class SqlRecords extends AbstractRecords implements Queryable {
     private final Connection connection;
 
     public SqlRecords(Connection connection) {
@@ -37,7 +36,7 @@ public class SqlRecords extends AbstractRecords {
     }
 
     public RecordSequence get(Keyword recordName) {
-        return new RecordSequence(Query.query(connection, recordName));
+        return new RecordSequence(this, Query.query(recordName));
     }
 
     private static final Map<Class, String> typeMap = new HashMap<Class, String>() {{
@@ -108,12 +107,16 @@ public class SqlRecords extends AbstractRecords {
 
     }
 
-    public Sequence<Record> query(String expression, Sequence<?> parameters) {
+    public RecordIterator query(Pair<String, Sequence<Object>> pair) {
+        return query(pair.first(), pair.second());
+    }
+
+    public RecordIterator query(String expression, Sequence<?> parameters) {
         try {
             final PreparedStatement statement = connection.prepareStatement(expression);
             addValues(statement, parameters);
             String message = String.format("SQL:'%s' VALUES:'%s'", expression, parameters);
-            return Sequences.sequence(new RecordIterator(log(message, lazyExecute(statement))));
+            return new RecordIterator(log(message, lazyExecute(statement)));
         } catch (SQLException e) {
             throw new LazyException(e);
         }

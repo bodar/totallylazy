@@ -8,27 +8,19 @@ import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Comparator;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Query implements Callable<ResultSet> {
-    private final Connection connection;
+public class Query {
     private final Keyword table;
     private final Sequence<Keyword> select;
     private final String selectFunction;
     private final Sequence<Predicate<? super Record>> where;
     private final Option<Comparator<? super Record>> comparator;
 
-    private Query(Connection connection, Keyword table, Sequence<Keyword> select, String selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
-        this.connection = connection;
+    private Query(Keyword table, Sequence<Keyword> select, String selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
         this.table = table;
         this.select = select;
         this.selectFunction = selectFunction;
@@ -38,7 +30,7 @@ public class Query implements Callable<ResultSet> {
 
     @Override
     public String toString() {
-        final Pair<String, Sequence<Object>> pair = sqlAndValues();
+        final Pair<String, Sequence<Object>> pair = expressionAndParameters();
         return String.format(String.format("SQL:'%s' VALUES:'%s'", pair.first(), pair.second()));
     }
 
@@ -46,7 +38,7 @@ public class Query implements Callable<ResultSet> {
         return Sql.sql(table);
     }
 
-    public Pair<String, Sequence<Object>> sqlAndValues() {
+    public Pair<String, Sequence<Object>> expressionAndParameters() {
         final Pair<String, Sequence<Object>> whereClause = sql().whereClause(where);
         return pair(String.format("select %s from %s %s %s", selectClause(), table, whereClause.first(), sql().orderByClause(comparator)), whereClause.second());
     }
@@ -59,12 +51,12 @@ public class Query implements Callable<ResultSet> {
         return selectFunction == null ? columns : String.format(selectFunction, columns);
     }
 
-    public static Query query(Connection connection, Keyword table, Sequence<Keyword> select, String selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
-        return new Query(connection, table, select, selectFunction, where, comparator);
+    public static Query query(Keyword table, Sequence<Keyword> select, String selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
+        return new Query(table, select, selectFunction, where, comparator);
     }
 
-    public static Query query(Connection connection, Keyword table) {
-        return query(connection, table, Sequences.<Keyword>empty(), null, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none());
+    public static Query query(Keyword table) {
+        return query(table, Sequences.<Keyword>empty(), null, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none());
     }
 
     public Query select(Keyword... columns){
@@ -72,30 +64,18 @@ public class Query implements Callable<ResultSet> {
     }
 
     public Query select(Sequence<Keyword> columns){
-        return query(connection, table, columns, selectFunction, where, comparator);
+        return query(table, columns, selectFunction, where, comparator);
     }
 
     public Query where(Predicate<? super Record> predicate) {
-        return query(connection, table, select, selectFunction, where.add(predicate), comparator);
-    }
-
-    public ResultSet execute() throws SQLException {
-        final Pair<String, Sequence<Object>> sqlAndValues = sqlAndValues();
-        final PreparedStatement statement = connection.prepareStatement(sqlAndValues.first());
-        SqlRecords.addValues(statement, sqlAndValues.second());
-        return statement.executeQuery();
+        return query(table, select, selectFunction, where.add(predicate), comparator);
     }
 
     public Query orderBy(Comparator<? super Record> comparator) {
-        return query(connection, table, select, selectFunction, where, Option.<Comparator<? super Record>>some(comparator));
+        return query(table, select, selectFunction, where, Option.<Comparator<? super Record>>some(comparator));
     }
 
     public Query count() {
-        return query(connection, table, select, "count(%s)", where, comparator);
-    }
-
-    public ResultSet call() throws Exception {
-        Sql.LOGGER.log(Level.FINE, this.toString());
-        return execute();
+        return query(table, select, "count(%s)", where, comparator);
     }
 }
