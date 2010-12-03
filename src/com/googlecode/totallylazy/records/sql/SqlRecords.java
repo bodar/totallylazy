@@ -16,12 +16,14 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
+import static com.googlecode.totallylazy.records.sql.Query.query;
 import static com.googlecode.totallylazy.records.sql.Sql.sql;
 
 public class SqlRecords extends AbstractRecords {
@@ -32,7 +34,7 @@ public class SqlRecords extends AbstractRecords {
     }
 
     public RecordSequence get(Keyword recordName) {
-        return new RecordSequence(Query.query(connection, recordName));
+        return new RecordSequence(query(connection, recordName));
     }
 
     private static final Map<Class, String> typeMap = new HashMap<Class, String>() {{
@@ -45,7 +47,7 @@ public class SqlRecords extends AbstractRecords {
         try {
             final String sql = String.format("create table %s (%s)", recordName, sequence(fields).map(asColumn()));
             connection.createStatement().executeUpdate(sql);
-            System.out.println(String.format("SQL:'%s'", sql));
+            Sql.LOGGER.log(Level.FINE, String.format("SQL:'%s'", sql));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -72,7 +74,7 @@ public class SqlRecords extends AbstractRecords {
                 statement.addBatch();
             }
             Number rowCount = numbers(statement.executeBatch()).reduce(Numbers.add());
-            System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
+            Sql.LOGGER.log(Level.FINE, String.format("SQL:'%s' Row Count: %s", sql, rowCount));
             return rowCount;
         } catch (SQLException e) {
             throw new LazyException(e);
@@ -88,7 +90,7 @@ public class SqlRecords extends AbstractRecords {
             addValues(statement, record.getValuesFor(fields).join(where.second()));
             statement.addBatch();
             Number rowCount = numbers(statement.executeBatch()).reduce(Numbers.add());
-            System.out.println(String.format("SQL:'%s' Row Count: %s", sql, rowCount));
+            Sql.LOGGER.log(Level.FINE, String.format("SQL:'%s' Row Count: %s", sql, rowCount));
             return rowCount;
         } catch (SQLException e) {
             throw new LazyException(e);
