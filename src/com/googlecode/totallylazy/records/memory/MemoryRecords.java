@@ -31,7 +31,7 @@ public class MemoryRecords extends AbstractRecords {
 
     private List<Record> getRecordsFor(Keyword recordName) {
         if (!memory.containsKey(recordName)) {
-            memory.put(recordName, new ArrayList<Record>());
+            memory.put(recordName, new ArrayList<Record >());
         }
         return memory.get(recordName);
     }
@@ -54,7 +54,7 @@ public class MemoryRecords extends AbstractRecords {
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        List<Record> matches = sequence(memory.get(recordName)).
+        List<Record> matches = sequence(getRecordsFor(recordName)).
                 filter(predicate).
                 toList();
 
