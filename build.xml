@@ -56,7 +56,7 @@
             <entry key="release.path" value="com/googlecode/totallylazy/totallylazy/${release.version}/"/>
             <entry key="release.files" value="${release.jar},${release.pom},${release.src}"/>
             <entry key="${release.jar}.description" value="${hg.summary} build:${build.number} "/>
-            <entry key="${release.jar}.labels" value="Featured"/>
+            <entry key="${release.jar}.labels" value="Jar"/>
             <entry key="${release.pom}.description" value="Maven POM file build:${build.number}"/>
             <entry key="${release.pom}.labels" value="POM"/>
             <entry key="${release.src}.description" value="Source file build:${build.number}"/>
