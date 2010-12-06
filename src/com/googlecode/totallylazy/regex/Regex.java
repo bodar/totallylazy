@@ -37,4 +37,9 @@ public class Regex implements Predicate<CharSequence>{
     public boolean matches(CharSequence other) {
         return pattern.matcher(other).matches();
     }
+
+    @Override
+    public String toString() {
+        return pattern.pattern();
+    }
 }
