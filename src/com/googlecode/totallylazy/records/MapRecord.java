@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Callables.asHashCode;
-import static com.googlecode.totallylazy.Callables.entryToPair;
+import static com.googlecode.totallylazy.Maps.entryToPair;
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Predicates.in;
