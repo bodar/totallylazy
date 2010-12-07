@@ -14,18 +14,6 @@ import java.util.concurrent.Future;
 import static com.googlecode.totallylazy.Pair.pair;
 
 public final class Callables {
-    public static <K, V> Callable1<Map.Entry<K, V>, Pair<K, V>> entryToPair() {
-        return new Callable1<Map.Entry<K, V>, Pair<K, V>>() {
-            public final Pair<K, V> call(final Map.Entry<K, V> entry) throws Exception {
-                return pair(entry.getKey(), entry.getValue());
-            }
-        };
-    }
-
-    public static <K, V> Callable1<Map.Entry<K, V>, Pair<K, V>> entryToPair(final Class<K> keyClass, final Class<V> valueClass) {
-        return entryToPair();
-    }
-
     public static <T> Callable1<Sequence<T>, Sequence<T>> reduceAndShift(final Callable2<T, T, T> action) {
         return new Callable1<Sequence<T>, Sequence<T>>() {
             public final Sequence<T> call(final Sequence<T> values) throws Exception {
