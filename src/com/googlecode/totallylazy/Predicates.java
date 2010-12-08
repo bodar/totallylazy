@@ -30,6 +30,26 @@ import static com.googlecode.totallylazy.numbers.Numbers.primes;
 import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 
 public class Predicates {
+    public static <T> Predicate<T> always(Class<T> aClass) {
+        return always();
+    }
+
+    public static <T> Predicate<T> always() {
+        return new Predicate<T>() {
+            public boolean matches(T instance) {
+                return true;
+            }
+        };
+    }
+
+    public static <T> Predicate<T> never(Class<T> aClass) {
+        return never();
+    }
+
+    public static <T> Predicate<T> never() {
+        return not(always());
+    }
+
     public static <T> Predicate<Collection<? extends T>> contains(final T t) {
         return new Predicate<Collection<? extends T>>() {
             public boolean matches(Collection<? extends T> other) {
