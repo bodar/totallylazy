@@ -12,6 +12,7 @@ public abstract class AbstractRecords implements Records{
     }
 
     public Number add(Keyword recordName, Sequence<Record> records) {
+        if(records.isEmpty()) return 0;
         return add(recordName, records.first().keywords(), records);
     }
 
