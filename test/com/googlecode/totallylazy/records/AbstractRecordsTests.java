@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
 
@@ -17,6 +18,7 @@ import static com.googlecode.totallylazy.Predicates.lessThan;
 import static com.googlecode.totallylazy.Predicates.lessThanOrEqualTo;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
@@ -226,5 +228,12 @@ public abstract class AbstractRecordsTests {
         assertThat(records.remove(user), equalTo(1));
         assertThat(records.get(user).size(), equalTo(0));
         addUsers(records);
+    }
+
+    @Test
+    public void willNotFailIfAskedToAddAnEmptySequenceOfRecords() throws Exception {
+        assertThat(records.add(user, new Record[0]), equalTo(0));
+        assertThat(records.add(user, Sequences.<Record>sequence()), equalTo(0));
+        assertThat(records.add(user, Sequences.<Keyword>sequence(), Sequences.<Record>sequence()), equalTo(0));
     }
 }
