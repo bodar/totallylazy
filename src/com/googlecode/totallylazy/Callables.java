@@ -14,6 +14,15 @@ import java.util.concurrent.Future;
 import static com.googlecode.totallylazy.Pair.pair;
 
 public final class Callables {
+    public static <T> Callable1<? super T, T> nullGuard(final Callable1<? super T, T> callable) {
+        return new Callable1<T, T>() {
+            public T call(T o) throws Exception {
+                if(o == null) return null;
+                return callable.call(o);
+            }
+        };
+    }
+
     public static <T> Callable1<Sequence<T>, Sequence<T>> reduceAndShift(final Callable2<T, T, T> action) {
         return new Callable1<Sequence<T>, Sequence<T>>() {
             public final Sequence<T> call(final Sequence<T> values) throws Exception {

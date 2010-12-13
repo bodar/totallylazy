@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.cast;
+import static com.googlecode.totallylazy.Callables.nullGuard;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
@@ -48,7 +49,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> iterate(final Callable1<? super T, T> callable, final T t) {
-        return new IterateIterator<T>(callable, t);
+        return new IterateIterator<T>(nullGuard(callable), t);
     }
 
     public static <T> T head(final Iterator<T> iterator) {
