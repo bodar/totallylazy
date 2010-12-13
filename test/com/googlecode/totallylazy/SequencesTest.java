@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Predicates.even;
+import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Predicates.odd;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
@@ -25,6 +26,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
@@ -74,6 +76,19 @@ public class SequencesTest {
     public void supportsIterate() throws Exception {
         assertThat(iterate(increment(), 1), startsWith(1, 2, 3, 4, 5));
     }
+
+    @Test
+    public void supportsIteratingEvenWhenCallableReturnNull() throws Exception {
+        final Sequence<Integer> sequence = iterate(new Callable1<Integer, Integer>() {
+            public Integer call(Integer integer) throws Exception {
+                assertThat("Should never see a null value", integer, is(notNullValue()));
+                return null;
+            }
+        }, 1).takeWhile(notNull(Integer.class));
+        assertThat(sequence, hasExactly(1));
+    }
+
+
 
     @Test
     public void canCombineIterateWithOtherOperations() throws Exception {

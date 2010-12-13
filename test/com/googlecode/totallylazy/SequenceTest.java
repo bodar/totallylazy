@@ -20,6 +20,7 @@ import static com.googlecode.totallylazy.Predicates.even;
 import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Predicates.odd;
 import static com.googlecode.totallylazy.Sequences.cons;
+import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.range;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;

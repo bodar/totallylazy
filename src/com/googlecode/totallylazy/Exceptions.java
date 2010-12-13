@@ -18,7 +18,7 @@ public class Exceptions {
     public static Callable1<Throwable, Throwable> getCause() {
         return new Callable1<Throwable, Throwable>() {
             public Throwable call(final Throwable throwable) throws Exception {
-                return throwable == null ? null : throwable.getCause();
+                return throwable.getCause();
             }
         };
     }
