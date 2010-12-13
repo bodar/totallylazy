@@ -18,6 +18,10 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<? super T>> {
         this.shouldBeSameSize = shouldBeSameSize;
     }
 
+    public static Matcher<Iterable> hasSize(final Number size) {
+        return new HasSizeMatcher(size);
+    }
+
     public static <T> Matcher<Iterable<? super T>> isEmpty(Class<T> aClass) {
         return IterableMatcher.<T>isEmpty();
     }
@@ -64,4 +68,5 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<? super T>> {
     public void describeTo(Description description) {
         description.appendValue(expected);
     }
+
 }
