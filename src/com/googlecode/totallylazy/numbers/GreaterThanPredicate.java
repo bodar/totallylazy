@@ -1,8 +1,9 @@
 package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.predicates.GreaterThan;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
-public class GreaterThanPredicate implements GreaterThan<Number> {
+public class GreaterThanPredicate extends LogicalPredicate<Number> implements GreaterThan<Number> {
     private final Number value;
 
     public GreaterThanPredicate(Number value) {

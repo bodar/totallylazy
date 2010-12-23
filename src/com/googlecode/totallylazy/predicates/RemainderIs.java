@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.numbers.Numbers;
 
 import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 
-public class RemainderIs implements Predicate<Number> {
+public class RemainderIs extends LogicalPredicate<Number> {
     private final Number divisor;
     private final Number remainder;
 
