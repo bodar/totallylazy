@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
-
-public class InstanceOf<T> implements Predicate<T> {
+public class InstanceOf<T> extends LogicalPredicate<T> {
     private final Class aClass;
 
     public InstanceOf(Class aClass) {
