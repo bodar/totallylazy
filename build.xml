@@ -46,7 +46,9 @@
 
         <zip destfile="${artifacts}/${release.src}" basedir="src"/>
 
-        <exec command='hg log -l 1' output="${artifacts}/hg.properties"/>
+        <exec executable="hg" output="${artifacts}/hg.properties">
+		<arg line="log -l 1"/>
+	</exec>
         <property file="${artifacts}/hg.properties" prefix="hg"/>
 
         <propertyfile file="${artifacts}/release.properties">
