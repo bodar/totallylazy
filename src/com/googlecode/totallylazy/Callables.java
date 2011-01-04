@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -14,6 +15,14 @@ import java.util.concurrent.Future;
 import static com.googlecode.totallylazy.Pair.pair;
 
 public final class Callables {
+    public static <T, R> Callable1<T, R> asCallable1(final Callable<? extends R> callable) {
+        return new Callable1<T, R>() {
+            public R call(T t) throws Exception {
+                return callable.call();
+            }
+        };
+    }
+
     public static <T> Callable1<? super T, T> nullGuard(final Callable1<? super T, T> callable) {
         return new Callable1<T, T>() {
             public T call(T o) throws Exception {
