@@ -45,7 +45,7 @@ public class SequenceTest {
 
     @Test
     public void canRealiseASequence() throws Exception {
-        CountingCallable counting = counting();
+        CountingCallable<Integer> counting = counting();
         Sequence<Integer> lazy = sequence(counting).map(call(Integer.class));
         assertThat(counting.count(), is(0));
         assertThat(lazy, hasExactly(0)); // this will increment count by 1
