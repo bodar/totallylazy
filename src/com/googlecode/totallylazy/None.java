@@ -6,9 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class None<T> extends Option<T>{
-    static final None Instance = new None();
-
-    private None() {}
+    public None() {}
 
     public Iterator<T> iterator() {
         return new EmptyIterator<T>();
@@ -27,5 +25,15 @@ public class None<T> extends Option<T>{
     @Override
     public String toString() {
         return "none()";
+    }
+
+    @Override
+    public int hashCode() {
+        return 19;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof None;
     }
 }

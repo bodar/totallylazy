@@ -9,6 +9,7 @@ import static com.googlecode.totallylazy.Option.some;
 
 public final class LazyCallable<T> implements Callable<T> {
     private final Callable<T> callable;
+    private final Object lock = new Object();
     private Option<T> state = none();
 
     private LazyCallable(Callable<T> callable) {
@@ -20,7 +21,7 @@ public final class LazyCallable<T> implements Callable<T> {
     }
 
     public final T call() throws Exception {
-        synchronized (state) {
+        synchronized (lock) {
             if (state.isEmpty()) {
                 state = some(callable.call());
             }
