@@ -5,6 +5,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import static com.googlecode.totallylazy.Predicates.matcher;
+
 public class NumberMatcher extends TypeSafeMatcher<Number> {
     private final Number other;
 
@@ -21,12 +23,16 @@ public class NumberMatcher extends TypeSafeMatcher<Number> {
         return Numbers.equalTo(number, other);
     }
 
-    public static Matcher<? super Number> is(final Number other) {
+    public static Matcher<? super Number>  is(final Number other) {
         return new NumberMatcher(other);
     }
 
     public static Matcher<? super Number> equalTo(final Number other) {
         return is(other);
+    }
+
+    public static Matcher<? super Number> between(Number lower, Number upper) {
+        return matcher(Numbers.between(lower, upper));
     }
 
 }
