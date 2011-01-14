@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.AndPredicate;
-import com.googlecode.totallylazy.predicates.Between;
 import com.googlecode.totallylazy.predicates.BetweenPredicate;
 import com.googlecode.totallylazy.predicates.CountTo;
 import com.googlecode.totallylazy.predicates.EqualsPredicate;
@@ -17,20 +15,15 @@ import com.googlecode.totallylazy.predicates.Not;
 import com.googlecode.totallylazy.predicates.Null;
 import com.googlecode.totallylazy.predicates.OnlyOnce;
 import com.googlecode.totallylazy.predicates.OrPredicate;
-import com.googlecode.totallylazy.predicates.RemainderIs;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.predicates.WhileTrue;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.numbers.Numbers.multiply;
-import static com.googlecode.totallylazy.numbers.Numbers.primes;
-import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 
 public class Predicates {
     public static <T> LogicalPredicate<T> always(Class<T> aClass) {
@@ -57,6 +50,14 @@ public class Predicates {
         return new LogicalPredicate<Collection<? extends T>>() {
             public boolean matches(Collection<? extends T> other) {
                 return other.contains(t);
+            }
+        };
+    }
+
+    public static <T> LogicalPredicate<? super Iterable<T>> exists(final Predicate<? super T> predicate) {
+        return new LogicalPredicate<Iterable<T>>() {
+            public boolean matches(Iterable<T> iterable) {
+                return sequence(iterable).exists(predicate);
             }
         };
     }
@@ -167,34 +168,6 @@ public class Predicates {
         };
     }
     
-    public static LogicalPredicate<Method> arguments(final Class<?>... expectedClasses) {
-        return new LogicalPredicate<Method>() {
-            public boolean matches(Method method) {
-                final Class<?>[] actualClasses = method.getParameterTypes();
-                if (actualClasses.length != expectedClasses.length) {
-                    return false;
-                }
-                for (int i = 0; i < actualClasses.length; i++) {
-                    Class<?> actual = actualClasses[i];
-                    Class<?> expected = expectedClasses[i];
-                    if (!actual.isAssignableFrom(expected)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        };
-
-    }
-
-    public static LogicalPredicate<Method> modifier(final int modifier) {
-        return new LogicalPredicate<Method>() {
-            public boolean matches(Method method) {
-                return (method.getModifiers() & modifier) != 0;
-            }
-        };
-    }
-
     public static LogicalPredicate<Object> assignableTo(final Class aClass) {
         return new LogicalPredicate<Object>() {
             public boolean matches(Object other) {
