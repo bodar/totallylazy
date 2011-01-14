@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/hamcrest-library-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/cglib-nodep-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/objenesis-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hsqldb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-dep-4.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hamcrest-core-1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
