@@ -1,8 +1,7 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
 
-public class CountTo<T> implements Predicate<T> {
+public class CountTo<T> extends LogicalPredicate<T> {
     private int count;
 
     public CountTo(int count) {

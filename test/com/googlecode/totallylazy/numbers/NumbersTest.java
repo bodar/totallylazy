@@ -21,9 +21,7 @@ import static org.hamcrest.Matchers.lessThan;
 public class NumbersTest {
     @Test
     public void supportsSorting() throws Exception {
-        final Sequence<Number> unsorted = numbers(5d, 1, 4L, bigInteger(2), 3f);
-        final Sequence<Number> sorted = unsorted.sortBy(descending());
-        assertThat(sorted, hasExactly(5d, 4L, 3f, bigInteger(2), 1));
+        assertThat(numbers(5d, 1, 4L, bigInteger(2), 3f).sortBy(descending()), hasExactly(5d, 4L, 3f, bigInteger(2), 1));
     }
 
     @Test
@@ -39,11 +37,19 @@ public class NumbersTest {
         assertThat(primes().toString(), is(primes().take(100).toString()));
     }
 
-//    @Test
-//    public void supportsPrimeFactorsOfLargeNumbers() throws Exception {
-//        time(primeFactorsOf(600851475143L));
-//        assertThat(time(primeFactorsOf(600851475143L)), hasExactly(71, 839, 1471, 6857));
-//    }
+    @Test
+    public void supportsPrimeFactorsOfLargeNumbers() throws Exception {
+        assertThat(primeFactorsOf(600851475143L), hasExactly(71, 839, 1471, 6857));
+    }
+
+    @Test
+    public void primeFactorsOfLargeNumbersIsPrettyFast() throws Exception {
+        TimeReport report = new TimeReport();
+        repeat(time(primeFactorsOf(600851475143L), report)).take(100).realise();
+        System.out.println(report);
+        assertThat(report.maximum(), is(lessThan(10.0)));
+        assertThat(report.average(), is(lessThan(1.0)));
+    }
 
     @Test
     public void supportsPrimeFactors() throws Exception {
@@ -67,7 +73,6 @@ public class NumbersTest {
         System.out.println(report);
         assertThat(report.average(), Matchers.is(lessThan(10.0)));
     }
-
 
 
     @Test
