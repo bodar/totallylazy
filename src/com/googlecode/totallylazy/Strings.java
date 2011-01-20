@@ -79,7 +79,7 @@ public class Strings {
                 .append(value.substring(1))
                 .toString();
     }
-
+    
     public static String toString(File file) {
         try {
             return toString(new FileReader(file));
