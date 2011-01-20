@@ -123,6 +123,10 @@ public final class Callables {
         };
     }
 
+    public static <T> Callable1<T, String> asString(Class<T> aClass) {
+        return asString();
+    }
+
     public static <T> Callable1<T, String> asString() {
         return new Callable1<T, String>() {
             public final String call(final T value) {

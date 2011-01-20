@@ -18,4 +18,23 @@ public class Files {
              }
          };
      }
+
+    public static void ensureDirectoryExists(File directory){
+        if (directory.exists()) {
+            if (directory.isFile()) {
+                String message =
+                    "File "
+                        + directory
+                        + " exists and is "
+                        + "not a directory. Unable to create directory.";
+                throw new RuntimeException(message);
+            }
+        } else {
+            if (false == directory.mkdirs()) {
+                String message =
+                    "Unable to create directory " + directory;
+                throw new RuntimeException(message);
+            }
+        }
+    }
 }
