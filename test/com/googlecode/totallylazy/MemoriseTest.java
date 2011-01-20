@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class MemoriseTest {
     @Test
     public void canForget() throws Exception {
-        CountingCallable counting = counting();
+        CountingCallable<Integer> counting = counting();
         MemorisedSequence<Integer> memory = sequence(counting).map(call(Integer.class)).memorise();
         assertThat(memory.head(), is(0));
         assertThat(counting.count(), is(1));
@@ -38,7 +38,7 @@ public class MemoriseTest {
 
     @Test
     public void memoriseIsThreadSafe() throws Exception {
-        CountingCallable counting = counting();
+        CountingCallable<Integer> counting = counting();
         final Sequence<Integer> number = sequence(sleepy(counting, 10)).map(call(Integer.class)).memorise();
 
         Sequence<Integer> result = callConcurrently(callHead(number), callHead(number));
@@ -58,7 +58,7 @@ public class MemoriseTest {
 
     @Test
     public void supportsMemorise() throws Exception {
-        CountingCallable counting = counting();
+        CountingCallable<Integer> counting = counting();
         Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
         assertThat(sequence.head(), is(0));
         assertThat(sequence.head(), is(0));
@@ -67,7 +67,7 @@ public class MemoriseTest {
     
     @Test
     public void memorisingForEach() throws InterruptedException {
-        CountingCallable counting = counting();
+        CountingCallable<Integer> counting = counting();
         Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
         sequence.forEach(this.<Integer>doNothing());
         sequence.forEach(this.<Integer>doNothing());
@@ -77,7 +77,7 @@ public class MemoriseTest {
 
     @Test
     public void memorisingSize() throws InterruptedException {
-        CountingCallable counting = counting();
+        CountingCallable<Integer> counting = counting();
         Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
         sequence.size();
         sequence.size();

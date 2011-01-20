@@ -24,17 +24,23 @@ import com.googlecode.totallylazy.MemorisedSequence;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.RemainderIs;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
-import static com.googlecode.totallylazy.Predicates.prime;
-import static com.googlecode.totallylazy.Predicates.primeSquaredLessThan;
-import static com.googlecode.totallylazy.Predicates.remainderIsZero;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Numbers {
     public static Number valueOf(String string) {
@@ -49,41 +55,65 @@ public class Numbers {
         return Sequences.sequence(new IntIterator(numbers));
     }
 
+    // TODO: Try to convert to lazy sequence again!
     public static Sequence<Number> primeFactorsOf(Number value) {
-        return primes().takeWhile(primeSquaredLessThan(value)).filter(remainderIsZero(value));
+        Set<Number> factors = new HashSet<Number>();
+        Number ceiling = value;
+        Number possibleFactor = 2;
+
+        while (lessThanOrEqualTo(squared(possibleFactor), ceiling)) {
+            if (isZero(remainder(ceiling, possibleFactor))) {
+                factors.add(possibleFactor);
+                ceiling = divide(ceiling, possibleFactor);
+            } else {
+                possibleFactor = increment(possibleFactor);
+            }
+        }
+        if (!equalTo(ceiling, 1)) {
+            factors.add(ceiling);
+        }
+        return sequence(factors).sortBy(ascending());
     }
 
-//    public static Sequence<Number> primeFactorsOf(Number value) {
-//        return iterate(incrementCandidateFactorAndReduceCeiling(), pair((Number)2, value)).filter(factorsOfCeiling()).takeWhile(factorIsLessThanCeiling()).map(Callables.<Number>first());
-//    }
-//
-//    private static Predicate<? super Pair<Number, Number>> factorsOfCeiling() {
-//        return new Predicate<Pair<Number, Number>>() {
-//            public boolean matches(Pair<Number, Number> pair) {
-//                return isZero(remainder(pair.second(), pair.first()));
-//            }
-//        };
-//    }
-//
-//    private static Predicate<? super Pair<Number, Number>> factorIsLessThanCeiling() {
-//        return new Predicate<Pair<Number, Number>>() {
-//            public boolean matches(Pair<Number, Number> pair) {
-//                return Numbers.lessThanOrEqual(Numbers.multiply(pair.first(), pair.first()) , pair.second());
-//            }
-//        };
-//    }
-//
-//    private static Callable1<? super Pair<Number, Number>, Pair<Number, Number>> incrementCandidateFactorAndReduceCeiling() {
-//        return new Callable1<Pair<Number, Number>, Pair<Number, Number>>() {
-//            public Pair<Number, Number> call(Pair<Number, Number> pair) throws Exception {
-//                Number ceiling = pair.second();
-//                if(isZero(remainder(pair.second(), pair.first()))){
-//                    ceiling = Numbers.divide(pair.second(), pair.first());
-//                }
-//                return pair(Numbers.add(pair.first(), 1), ceiling);
-//            }
-//        };
-//    }
+    private static Number squared(Number value) {
+        return multiply(value, value);
+    }
+
+    public static LogicalPredicate<Number> even() {
+        return remainderIs(2, 0);
+    }
+
+    public static LogicalPredicate<Number> odd() {
+        return remainderIs(2, 1);
+    }
+
+    public static LogicalPredicate<Number> prime() {
+        return new LogicalPredicate<Number>() {
+            public final boolean matches(final Number candidate) {
+                return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(not(remainderIsZero(candidate)));
+            }
+        };
+    }
+
+    public static LogicalPredicate<Number> primeSquaredLessThan(final Number candidate) {
+        return new LogicalPredicate<Number>() {
+            public final boolean matches(final Number prime) {
+                return Numbers.lessThanOrEqualTo(squared(prime), candidate);
+            }
+        };
+    }
+
+    public static LogicalPredicate<Number> remainderIsZero(final Number dividend) {
+        return new LogicalPredicate<Number>() {
+            public final boolean matches(Number divisor) {
+                return Numbers.isZero(remainder(dividend, divisor));
+            }
+        };
+    }
+
+    public static LogicalPredicate<Number> remainderIs(final Number divisor, final Number remainder) {
+        return new RemainderIs(divisor, remainder);
+    }
 
     private static final MemorisedSequence<Number> primes = Sequences.<Number>sequence(2).join(iterate(Numbers.add(2), 3).filter(prime())).memorise();
 
@@ -100,13 +130,13 @@ public class Numbers {
     }
 
     public static <T> Operators operatorsFor(Class<T> numberClass) {
-        if(numberClass == Integer.class) return IntegerOperators.Instance;
-        if(numberClass == Long.class) return LongOperators.Instance;
-        if(numberClass == BigInteger.class) return BigIntegerOperators.Instance;
-        if(numberClass == BigDecimal.class) return BigDecimalOperators.Instance;
-        if(numberClass == Ratio.class) return RatioOperators.Instance;
-        if(numberClass == Float.class) return FloatOperators.Instance;
-        if(numberClass == Double.class) return DoubleOperators.Instance;
+        if (numberClass == Integer.class) return IntegerOperators.Instance;
+        if (numberClass == Long.class) return LongOperators.Instance;
+        if (numberClass == BigInteger.class) return BigIntegerOperators.Instance;
+        if (numberClass == BigDecimal.class) return BigDecimalOperators.Instance;
+        if (numberClass == Ratio.class) return RatioOperators.Instance;
+        if (numberClass == Float.class) return FloatOperators.Instance;
+        if (numberClass == Double.class) return DoubleOperators.Instance;
         throw new UnsupportedOperationException("Unsupported number class " + numberClass);
     }
 
@@ -153,7 +183,7 @@ public class Numbers {
         return operatorsFor(x, y).equalTo(x, y);
     }
 
-    public static Predicate<Number> lessThan(final Number value){
+    public static Predicate<Number> lessThan(final Number value) {
         return new LessThanPredicate(value);
     }
 
@@ -161,7 +191,7 @@ public class Numbers {
         return operatorsFor(x, y).lessThan(x, y);
     }
 
-    public static Predicate<Number> lessThanOrEqualTo(final Number value){
+    public static LogicalPredicate<Number> lessThanOrEqualTo(final Number value) {
         return new LessThanOrEqualToPredicate(value);
     }
 
@@ -169,7 +199,7 @@ public class Numbers {
         return !operatorsFor(x, y).lessThan(y, x);
     }
 
-    public static Predicate<Number> greaterThan(final Number value){
+    public static LogicalPredicate<Number> greaterThan(final Number value) {
         return new GreaterThanPredicate(value);
     }
 
@@ -177,7 +207,7 @@ public class Numbers {
         return operatorsFor(x, y).lessThan(y, x);
     }
 
-    public static Predicate<Number> greaterThanOrEqualTo(final Number value){
+    public static LogicalPredicate<Number> greaterThanOrEqualTo(final Number value) {
         return new GreaterThanOrEqualToPredicate(value);
     }
 
@@ -185,7 +215,7 @@ public class Numbers {
         return !operatorsFor(x, y).lessThan(x, y);
     }
 
-    public static Predicate<Number> between(final Number a, final Number b){
+    public static LogicalPredicate<Number> between(final Number a, final Number b) {
         return new BetweenPredicate(a, b);
     }
 
@@ -290,7 +320,7 @@ public class Numbers {
     public static Callable1<Number, Character> toCharacter() {
         return new Callable1<Number, Character>() {
             public Character call(Number number) throws Exception {
-                return (char)number.shortValue();
+                return (char) number.shortValue();
             }
         };
     }

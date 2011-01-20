@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
-
-public class ContainsPredicate implements Predicate<String> {
+public class ContainsPredicate extends LogicalPredicate<String> {
     private final String value;
 
     public ContainsPredicate(String value) {
@@ -13,7 +11,7 @@ public class ContainsPredicate implements Predicate<String> {
         return other.contains(value);
     }
 
-    public String value() {
+    public CharSequence value() {
         return value;
     }
 }

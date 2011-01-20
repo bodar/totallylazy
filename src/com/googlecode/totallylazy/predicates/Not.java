@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Predicate;
 
-public class Not<T> implements Predicate<T> {
+public class Not<T> extends LogicalPredicate<T> {
     private final Predicate<? super T> predicate;
 
     public Not(Predicate<? super T>  predicate) {
