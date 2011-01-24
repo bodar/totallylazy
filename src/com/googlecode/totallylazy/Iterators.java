@@ -28,6 +28,9 @@ import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.numbers.Numbers.equalTo;
+import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 
 public class Iterators {
     public static <T> void forEach(final Iterator<T> iterator, final Runnable1<T> runnable) {
@@ -103,18 +106,18 @@ public class Iterators {
         return toString(iterator,start, separator, end, 100);
     }
 
-    public static String toString(final Iterator iterator, final String start, final String separator, final String end, final int limit) {
-        int count = 0;
+    public static String toString(final Iterator iterator, final String start, final String separator, final String end, final Number limit) {
+        Number count = 0;
         StringBuilder builder = new StringBuilder();
         builder.append(start);
         if (iterator.hasNext()) builder.append(iterator.next());
-        count++;
-        while (iterator.hasNext() && count < limit) {
-            count++;
+        count = increment(count);
+        while (iterator.hasNext() && lessThan(count, limit)) {
+            count = increment(count);
             builder.append(separator);
             builder.append(iterator.next());
         }
-        if(count == limit) builder.append("...");
+        if(equalTo(count, limit)) builder.append("...");
         builder.append(end);
         return builder.toString();
     }
@@ -241,7 +244,7 @@ public class Iterators {
         Number count = 0;
         while (iterator.hasNext()) {
             iterator.next();
-            count = Numbers.increment(count);
+            count = increment(count);
         }
         return count;
     }

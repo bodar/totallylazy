@@ -26,7 +26,7 @@ public class Escaper {
     }
 
     public String escape(String value) {
-        return value == null ? null : characters(value).map(escape()).toString("");
+        return value == null ? null : characters(value).map(escape()).toString("", "", "", Long.MAX_VALUE);
     }
 
     private Callable1<? super Character, String> escape() {
