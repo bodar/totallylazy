@@ -218,7 +218,7 @@ public class Sequences {
         return Iterators.toString(iterable.iterator(), start, separator, end);
     }
 
-    public static String toString(final Iterable iterable, final String start, final String separator, final String end, final int limit) {
+    public static String toString(final Iterable iterable, final String start, final String separator, final String end, final Number limit) {
         return Iterators.toString(iterable.iterator(), start, separator, end, limit);
     }
 
