@@ -47,7 +47,7 @@ public class NumbersTest {
         TimeReport report = new TimeReport();
         repeat(time(primeFactorsOf(600851475143L), report)).take(100).realise();
         System.out.println(report);
-        assertThat(report.maximum(), is(lessThan(10.0)));
+        assertThat(report.maximum(), is(lessThan(20.0)));
         assertThat(report.average(), is(lessThan(1.0)));
     }
 
