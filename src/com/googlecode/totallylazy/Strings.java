@@ -80,6 +80,10 @@ public class Strings {
                 .toString();
     }
     
+    public static String toString(byte[] bytes) {
+        return toString(new ByteArrayInputStream(bytes));
+    }
+
     public static String toString(File file) {
         try {
             return toString(new FileReader(file));
