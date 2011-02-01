@@ -35,6 +35,14 @@ public class Strings {
         return new ContainsPredicate(value);
     }
 
+    public static Callable1<String, Predicate<String>> equalIgnoringCase() {
+        return new Callable1<String, Predicate<String>>() {
+            public Predicate<String> call(String expected) throws Exception {
+                return equalIgnoringCase(expected);
+            }
+        };
+    }
+
     public static Predicate<String> equalIgnoringCase(final String expected) {
         return new Predicate<String>() {
             public boolean matches(String actual) {
