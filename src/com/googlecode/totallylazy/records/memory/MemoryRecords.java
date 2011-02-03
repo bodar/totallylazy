@@ -30,11 +30,13 @@ public class MemoryRecords extends AbstractRecords {
     }
 
     private List<Record> recordsFor(Keyword recordName) {
+        if (!memory.containsKey(recordName)) {
+            memory.put(recordName, new ArrayList<Record >());
+        }
         return memory.get(recordName);
     }
 
     public void define(Keyword recordName, Keyword<?>... fields) {
-        memory.put(recordName, new ArrayList<Record >());
     }
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
@@ -56,14 +58,15 @@ public class MemoryRecords extends AbstractRecords {
                 filter(predicate).
                 toList();
 
-        memory.get(recordName).removeAll(matches);
+        recordsFor(recordName).removeAll(matches);
 
         return matches.size();
     }
 
     public Number remove(Keyword recordName) {
-        int count = memory.get(recordName).size();
-        recordsFor(recordName).clear();
+        List<Record> records = recordsFor(recordName);
+        int count = records.size();
+        memory.remove(recordName);
         return count;
     }
 
