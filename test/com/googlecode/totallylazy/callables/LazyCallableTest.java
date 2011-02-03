@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.callConcurrently;
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 import static com.googlecode.totallylazy.callables.SleepyCallable.sleepy;
@@ -18,15 +19,18 @@ public class LazyCallableTest {
     @Test
     public void instancesDoNotInteract() throws Exception {
         TimeReport firstTimes = new TimeReport();
-        Callable<Integer> firstLazy = time(lazy(sleepy(counting(), 10)), firstTimes);
+        Callable<Sequence<Integer>> firstLazy = time(repeat(lazy(sleepy(counting(), 5))).take(200), firstTimes);
 
         TimeReport secondTimes = new TimeReport();
-        Callable<Integer> secondLazy = time(lazy(sleepy(counting(), 20)), secondTimes);
+        Callable<Sequence<Integer>> secondLazy = time(repeat(lazy(sleepy(counting(), 50))).take(100), secondTimes);
 
         callConcurrently(firstLazy, secondLazy).realise();
 
-        assertThat(firstTimes.lastTime(), is(between(10, 12)));
-        assertThat(secondTimes.lastTime(), is(between(20, 22)));
+        System.out.println(firstTimes);
+        System.out.println(secondTimes);
+
+        assertThat(firstTimes.average(), is(between(5, 50)));
+        assertThat(secondTimes.average(), is(between(50, 100)));
     }
 
     @Test
