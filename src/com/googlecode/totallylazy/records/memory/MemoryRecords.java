@@ -26,17 +26,15 @@ public class MemoryRecords extends AbstractRecords {
     private final Map<Keyword, List<Record>> memory = new HashMap<Keyword, List<Record>>();
 
     public Sequence<Record> get(Keyword recordName) {
-        return sequence(getRecordsFor(recordName));
+        return sequence(recordsFor(recordName));
     }
 
-    private List<Record> getRecordsFor(Keyword recordName) {
-        if (!memory.containsKey(recordName)) {
-            memory.put(recordName, new ArrayList<Record >());
-        }
+    private List<Record> recordsFor(Keyword recordName) {
         return memory.get(recordName);
     }
 
     public void define(Keyword recordName, Keyword<?>... fields) {
+        memory.put(recordName, new ArrayList<Record >());
     }
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
@@ -44,7 +42,7 @@ public class MemoryRecords extends AbstractRecords {
             return 0;
         }
 
-        List<Record> list = getRecordsFor(recordName);
+        List<Record> list = recordsFor(recordName);
         Number count = 0;
         for (Record record : records.map(select(fields))) {
             list.add(record);
@@ -54,7 +52,7 @@ public class MemoryRecords extends AbstractRecords {
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        List<Record> matches = sequence(getRecordsFor(recordName)).
+        List<Record> matches = sequence(recordsFor(recordName)).
                 filter(predicate).
                 toList();
 
@@ -65,13 +63,13 @@ public class MemoryRecords extends AbstractRecords {
 
     public Number remove(Keyword recordName) {
         int count = memory.get(recordName).size();
-        memory.remove(recordName);
+        recordsFor(recordName).clear();
         return count;
     }
 
     @SuppressWarnings({"unchecked"})
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        List<Record> records = getRecordsFor(recordName);
+        List<Record> records = recordsFor(recordName);
         Number count = 0;
         Sequence<Integer> indexes = get(recordName).zipWithIndex().
                 filter(where(second(Record.class), is(predicate))).

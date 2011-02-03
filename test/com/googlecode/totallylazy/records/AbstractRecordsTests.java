@@ -36,7 +36,7 @@ public abstract class AbstractRecordsTests {
     private static final Keyword<Date> dob = keyword("dob", Date.class);
     private static final Keyword<String> firstName = keyword("firstName", String.class);
     private static final Keyword<String> lastName = keyword("lastName", String.class);
-    private static Records records;
+    protected static Records records;
 
     public static void addRecords(Records records) {
         AbstractRecordsTests.records = records;
@@ -225,7 +225,8 @@ public abstract class AbstractRecordsTests {
         assertThat(records.get(user).size(), equalTo(1));
 
         assertThat(records.remove(user), equalTo(1));
-        assertThat(records.get(user).size(), equalTo(0));
+        Sequence<Record> recordSequence = records.get(user);
+        assertThat(recordSequence.size(), equalTo(0));
         addUsers(records);
     }
 
@@ -235,4 +236,5 @@ public abstract class AbstractRecordsTests {
         assertThat(records.add(user, Sequences.<Record>sequence()), equalTo(0));
         assertThat(records.add(user, Sequences.<Keyword>sequence(), Sequences.<Record>sequence()), equalTo(0));
     }
+
 }
