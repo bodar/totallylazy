@@ -25,6 +25,12 @@ public class EitherTest {
     }
 
     @Test
+    public void supportsMap() throws Exception {
+        assertThat(left((Number)3).map(add(2), null), NumberMatcher.is(5));
+        assertThat(right((Number)3).map(null, add(2)), NumberMatcher.is(5));
+    }
+
+    @Test
     public void supportsFold() throws Exception {
         assertThat(left((Number)3).fold(2, add(), null), NumberMatcher.is(5));
         assertThat(right((Number)3).fold(2, null, add()), NumberMatcher.is(5));
