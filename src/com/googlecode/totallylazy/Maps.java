@@ -8,15 +8,15 @@ import java.util.Map;
 import static com.googlecode.totallylazy.Pair.pair;
 
 public class Maps {
-    public static <K,V> HashMap<K, V> map(Pair<K, V>... entries) {
+    public static <K,V> HashMap<K, V> map(Pair<? extends K, ? extends V>... entries) {
         HashMap<K, V> map = new HashMap<K, V>();
-        for (Pair<K, V> entry : entries) {
+        for (Pair<? extends K, ? extends V> entry : entries) {
             map.put(entry.first(), entry.second());
         }
         return map;
     }
 
-    public static <K,V> HashMap<K, V> map(Class<K> key, Class<V> value, Pair<K, V>... entries) {
+    public static <K,V> HashMap<K, V> map(Class<K> key, Class<V> value, Pair<? extends K, ? extends V>... entries) {
         return map(entries);
     }
 
