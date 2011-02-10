@@ -27,6 +27,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.first(this);
     }
 
+    public T last() {
+        return reverse().head();
+    }
+
     public T second() {
         return Sequences.second(this);
     }
