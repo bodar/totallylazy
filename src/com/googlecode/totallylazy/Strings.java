@@ -5,8 +5,29 @@ import com.googlecode.totallylazy.predicates.EndsWithPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 
 import java.io.*;
+import java.util.concurrent.Callable;
+
+import static com.googlecode.totallylazy.Predicates.notNull;
+import static com.googlecode.totallylazy.Sequences.repeat;
 
 public class Strings {
+    public static Sequence<String> lines(File file)  {
+        try {
+            return repeat(readLine(new BufferedReader(new FileReader(file)))).takeWhile(notNull(String.class));
+        } catch (FileNotFoundException e) {
+            throw new LazyException(e);
+        }
+    }
+
+    public static Callable<String> readLine(final BufferedReader reader) {
+        return new Callable<String>() {
+            public String call() throws Exception {
+                return reader.readLine();
+            }
+        };
+    }
+
+
     public static Callable1<String, String> toLowerCase() {
         return new Callable1<String, String>() {
             public String call(String value) throws Exception {
@@ -96,7 +117,7 @@ public class Strings {
         try {
             return toString(new FileReader(file));
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new LazyException(e);
         }
     }
 
@@ -116,7 +137,7 @@ public class Strings {
             }
             return builder.toString();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new LazyException(e);
         }
     }
 }
