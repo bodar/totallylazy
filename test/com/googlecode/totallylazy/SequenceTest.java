@@ -34,6 +34,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SequenceTest {
     @Test
+    public void supportsLast() throws Exception {
+        assertThat(sequence(1,2,3).last(), is(3));
+    }
+
+    @Test
     public void supportsReverse() throws Exception {
         assertThat(sequence(1,2,3).reverse(), hasExactly(3,2,1));
     }
