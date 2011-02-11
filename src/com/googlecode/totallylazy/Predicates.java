@@ -17,9 +17,6 @@ import com.googlecode.totallylazy.predicates.OnlyOnce;
 import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.predicates.WhileTrue;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Collection;
 
@@ -85,28 +82,6 @@ public class Predicates {
             }
         };
     }
-
-    public static <T> LogicalPredicate<T> predicate(final Matcher<T> matcher) {
-        return new LogicalPredicate<T>() {
-            public final boolean matches(T other) {
-                return matcher.matches(other);
-            }
-        };
-    }
-
-    public static <T> Matcher<T> matcher(final Predicate<T> predicate) {
-        return new TypeSafeMatcher<T>() {
-            @Override
-            protected boolean matchesSafely(T t) {
-                return predicate.matches(t);
-            }
-
-            public void describeTo(Description description) {
-                description.appendText(predicate.toString());
-            }
-        };
-    }
-
 
     public static <T> LogicalPredicate<? super T> onlyOnce(final Predicate<? super T> predicate) {
         return new OnlyOnce<T>(predicate);
