@@ -5,7 +5,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import static com.googlecode.totallylazy.Predicates.matcher;
+import static com.googlecode.totallylazy.matchers.Matchers.matcher;
 
 public class NumberMatcher extends TypeSafeMatcher<Number> {
     private final Number other;
