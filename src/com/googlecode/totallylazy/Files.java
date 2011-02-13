@@ -2,6 +2,9 @@ package com.googlecode.totallylazy;
 
 import java.io.File;
 
+import static java.lang.System.getProperty;
+import static java.util.UUID.randomUUID;
+
 public class Files {
     public static Callable1<File, String> getName() {
          return new Callable1<File, String>() {
@@ -19,22 +22,15 @@ public class Files {
          };
      }
 
-    public static void ensureDirectoryExists(File directory){
-        if (directory.exists()) {
-            if (directory.isFile()) {
-                String message =
-                    "File "
-                        + directory
-                        + " exists and is "
-                        + "not a directory. Unable to create directory.";
-                throw new RuntimeException(message);
-            }
-        } else {
-            if (false == directory.mkdirs()) {
-                String message =
-                    "Unable to create directory " + directory;
-                throw new RuntimeException(message);
-            }
-        }
+    public static File temporaryFile(){
+        File file = new File(getProperty("java.io.tmpdir"), randomUUID().toString());
+        file.deleteOnExit();
+        return file;
+    }
+
+    public static File temporaryDirectory(){
+        File file = temporaryFile();
+        file.mkdirs();
+        return file;
     }
 }
