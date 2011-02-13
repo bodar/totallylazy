@@ -2,6 +2,8 @@ package com.googlecode.totallylazy;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import com.googlecode.totallylazy.iterators.*;
+
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 
 import static java.nio.CharBuffer.wrap;
@@ -87,6 +89,11 @@ public class Sequences {
                 return Iterators.map(iterable.iterator(), callable);
             }
         };
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterable<T> iterable, Predicate<? super T> predicate) {
+        Sequence<T> sequence = sequence(iterable).memorise();
+        return Pair.pair(filter(sequence, predicate), filter(sequence, not(predicate)));
     }
 
     public static <T> Sequence<T> filter(final Iterable<T> iterable, final Predicate<? super T> predicate) {
@@ -366,4 +373,5 @@ public class Sequences {
         Collections.reverse(result);
         return sequence(result);
     }
+
 }

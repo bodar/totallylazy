@@ -34,6 +34,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SequenceTest {
     @Test
+    public void supportsPartition() throws Exception {
+        Pair<Sequence<Integer>, Sequence<Integer>> result = sequence(1, 2, 3, 4).partition(even());
+        assertThat(result.first(), hasExactly(2, 4));
+        assertThat(result.second(), hasExactly(1, 3));
+    }
+
+    @Test
     public void supportsLast() throws Exception {
         assertThat(sequence(1,2,3).last(), is(3));
     }
