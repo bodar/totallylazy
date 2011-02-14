@@ -72,6 +72,11 @@ public class Files {
         };
     }
 
-
-
+    public static Callable1<? super String,File> asFile() {
+        return new Callable1<String, File>() {
+            public File call(String name) throws Exception {
+                return new File(name);
+            }
+        };
+    }
 }
