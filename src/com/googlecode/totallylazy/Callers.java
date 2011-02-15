@@ -19,6 +19,9 @@ public final class Callers {
     }
 
     public static <T> Sequence<T> callConcurrently(final Collection<Callable<T>> callables) throws InterruptedException {
+        if(callables.size() == 0){
+            return Sequences.empty();
+        }
         ExecutorService service = Executors.newFixedThreadPool(callables.size());
         Sequence<Future<T>> result = sequence(service.invokeAll(callables));
         service.shutdown();
