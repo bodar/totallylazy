@@ -15,6 +15,7 @@ import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Sequences.cons;
@@ -329,5 +330,14 @@ public class SequenceTest {
     @Test
     public void supportsZipWithIndex() {
         assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(), hasExactly(pair((Number)0, "Dan"), pair((Number)1, "Matt"), pair((Number)2, "Bob")));
+    }
+
+
+    @Test
+    public void supportsForwardOnly() throws Exception {
+        Sequence<Integer> sequence = sequence(1, 2, 3, 4).forwardOnly();
+
+        assertThat(sequence.headOption(), is(option(1)));
+        assertThat(sequence.headOption(), is(option(2)));
     }
 }

@@ -39,14 +39,6 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> sequence(final Iterator<T> iterator) {
-        return new Sequence<T>() {
-            public final Iterator<T> iterator() {
-                return iterator;
-            }
-        };
-    }
-
     public static <T> Sequence<T> sequence(final Enumeration<T> enumeration) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
@@ -70,6 +62,19 @@ public class Sequences {
             }
         });
     }
+
+    public static <T> Sequence<T> forwardOnly(final Iterator<T> iterator) {
+        return new Sequence<T>() {
+            public final Iterator<T> iterator() {
+                return iterator;
+            }
+        };
+    }
+
+    public static <T> Sequence<T> forwardOnly(Iterable<T> iterable) {
+        return forwardOnly(iterable.iterator());
+    }
+
 
     public static Sequence<Character> characters(final CharSequence value) {
         return new Sequence<Character>() {

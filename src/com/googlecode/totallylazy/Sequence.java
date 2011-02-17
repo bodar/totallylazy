@@ -180,6 +180,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.memorise(this);
     }
 
+    public Sequence<T> forwardOnly(){
+        return Sequences.forwardOnly(this);
+    }
+
     public <T2> Sequence<Pair<T, T2>> zip(final Iterable<T2> iterable) {
         return Sequences.zip(this, iterable);
     }
