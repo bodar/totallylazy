@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.iterators.PartitionIterator;
 
 import java.util.*;
 
-public class Partition<T> {
+public class Partition<T> implements First<Sequence<T>>, Second<Sequence<T>>{
     private final Queue<T> matched = new LinkedList<T>();
     private final Queue<T> unmatched = new LinkedList<T>();
     private final Iterator<T> matchedIterator;
@@ -24,5 +24,13 @@ public class Partition<T> {
 
     public ForwardOnlySequence<T> unmatched() {
         return forwardOnly(unmatchedIterator);
+    }
+
+    public Sequence<T> first() {
+        return matched();
+    }
+
+    public Sequence<T> second() {
+        return unmatched();
     }
 }
