@@ -63,15 +63,11 @@ public class Sequences {
         });
     }
 
-    public static <T> Sequence<T> forwardOnly(final Iterator<T> iterator) {
-        return new Sequence<T>() {
-            public final Iterator<T> iterator() {
-                return iterator;
-            }
-        };
+    public static <T> ForwardOnlySequence<T> forwardOnly(final Iterator<T> iterator) {
+        return new ForwardOnlySequence<T>(iterator);
     }
 
-    public static <T> Sequence<T> forwardOnly(Iterable<T> iterable) {
+    public static <T> ForwardOnlySequence<T> forwardOnly(Iterable<T> iterable) {
         return forwardOnly(iterable.iterator());
     }
 
@@ -96,9 +92,8 @@ public class Sequences {
         };
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterable<T> iterable, Predicate<? super T> predicate) {
-        Sequence<T> sequence = sequence(iterable).memorise();
-        return Pair.pair(filter(sequence, predicate), filter(sequence, not(predicate)));
+    public static <T> Partition<T> partition(final Iterable<T> iterable, Predicate<? super T> predicate) {
+        return new Partition<T>(iterable, predicate);
     }
 
     public static <T> Sequence<T> filter(final Iterable<T> iterable, final Predicate<? super T> predicate) {

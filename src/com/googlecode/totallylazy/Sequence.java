@@ -17,7 +17,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.map(this, callable);
     }
 
-    public <T> Pair<Sequence<T>,Sequence<T>> partition(final Predicate<? super T> predicate) {
+    public <T> Partition<T> partition(final Predicate<? super T> predicate) {
         return Sequences.partition((Iterable<T>) this, predicate);
     }
 
@@ -180,7 +180,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.memorise(this);
     }
 
-    public Sequence<T> forwardOnly(){
+    public ForwardOnlySequence<T> forwardOnly(){
         return Sequences.forwardOnly(this);
     }
 
