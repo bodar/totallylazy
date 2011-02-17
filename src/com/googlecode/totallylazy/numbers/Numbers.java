@@ -29,11 +29,8 @@ import com.googlecode.totallylazy.predicates.RemainderIs;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.curry;
@@ -52,7 +49,7 @@ public class Numbers {
     }
 
     public static Sequence<Number> numbers(int[] numbers) {
-        return Sequences.sequence(new IntIterator(numbers));
+        return Sequences.forwardOnly(new IntIterator(numbers));
     }
 
     // TODO: Try to convert to lazy sequence again!

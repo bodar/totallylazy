@@ -2,6 +2,8 @@ package com.googlecode.totallylazy;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import com.googlecode.totallylazy.iterators.*;
+
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 
 import static java.nio.CharBuffer.wrap;
@@ -9,6 +11,10 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 public class Sequences {
+    public static <T> Sequence<T> empty(Class<T> aClass) {
+        return empty();
+    }
+
     public static <T> Sequence<T> empty() {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
@@ -37,14 +43,6 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> sequence(final Iterator<T> iterator) {
-        return new Sequence<T>() {
-            public final Iterator<T> iterator() {
-                return iterator;
-            }
-        };
-    }
-
     public static <T> Sequence<T> sequence(final Enumeration<T> enumeration) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
@@ -69,6 +67,15 @@ public class Sequences {
         });
     }
 
+    public static <T> ForwardOnlySequence<T> forwardOnly(final Iterator<T> iterator) {
+        return new ForwardOnlySequence<T>(iterator);
+    }
+
+    public static <T> ForwardOnlySequence<T> forwardOnly(Iterable<T> iterable) {
+        return forwardOnly(iterable.iterator());
+    }
+
+
     public static Sequence<Character> characters(final CharSequence value) {
         return new Sequence<Character>() {
             public final Iterator<Character> iterator() {
@@ -87,6 +94,10 @@ public class Sequences {
                 return Iterators.map(iterable.iterator(), callable);
             }
         };
+    }
+
+    public static <T> Partition<T> partition(final Iterable<T> iterable, Predicate<? super T> predicate) {
+        return new Partition<T>(iterable, predicate);
     }
 
     public static <T> Sequence<T> filter(final Iterable<T> iterable, final Predicate<? super T> predicate) {
@@ -366,4 +377,5 @@ public class Sequences {
         Collections.reverse(result);
         return sequence(result);
     }
+
 }
