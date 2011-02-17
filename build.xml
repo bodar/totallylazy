@@ -14,11 +14,14 @@
     <property name="release.src" value="${release.name}-sources.jar"/>
     <property name="release.jar.path" value="${artifacts}/${release.jar}"/>
     <property name="test.jar.path" value="${artifacts}/${release.name}.test.jar"/>
+    <property name="build.dependencies.dir" value="lib/build"/>
+    <property name="runtime.dependencies.dir" value="lib/runtime"/>
 
     <import file="${build}/macros.xml"/>
+    <import file="${build}/shavenmaven.xml"/>
 
     <path id="all.dependancies">
-        <fileset id="release.dependancies" dir="lib" includes="**/*.jar"/>
+        <fileset dir="lib" includes="**/*.jar"/>
     </path>
 
     <path id="all.jars">
@@ -39,6 +42,16 @@
 
     <target name="test">
         <test jar="${test.jar.path}" classpathref="all.jars" reports="${reports}"/>
+    </target>
+
+    <target name="update">
+        <!--<install version="16" directory="lib"/>-->
+        <parallel>
+            <update shavenmaven.jar="lib/shavenmaven.jar" dependencies="lib/build.dependencies"
+                    directory="${build.dependencies.dir}"/>
+            <update shavenmaven.jar="lib/shavenmaven.jar" dependencies="lib/optional.runtime.dependencies"
+                    directory="${runtime.dependencies.dir}"/>
+        </parallel>
     </target>
 
     <target name="package">
@@ -72,6 +85,6 @@
         </copy>
     </target>
 
-    <target name="build" depends="clean, compile, test, package" description="build all"/>
+    <target name="build" depends="clean, update, compile, test, package" description="build all"/>
 
 </project>
