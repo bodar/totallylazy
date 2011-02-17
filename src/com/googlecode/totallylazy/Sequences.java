@@ -11,6 +11,10 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 public class Sequences {
+    public static <T> Sequence<T> empty(Class<T> aClass) {
+        return empty();
+    }
+
     public static <T> Sequence<T> empty() {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
