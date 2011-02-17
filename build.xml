@@ -21,7 +21,8 @@
     <import file="${build}/shavenmaven.xml"/>
 
     <path id="all.dependancies">
-        <fileset dir="lib" includes="**/*.jar"/>
+        <fileset dir="${build.dependencies.dir}" includes="**/*.jar"/>
+        <fileset dir="${runtime.dependencies.dir}" includes="**/*.jar"/>
     </path>
 
     <path id="all.jars">
