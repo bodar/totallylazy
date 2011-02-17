@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.List;
@@ -13,6 +15,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     public <S> Sequence<S> map(final Callable1<? super T, S> callable) {
         return Sequences.map(this, callable);
+    }
+
+    public <T> Partition<T> partition(final Predicate<? super T> predicate) {
+        return Sequences.partition((Iterable<T>) this, predicate);
     }
 
     public Sequence<T> filter(final Predicate<? super T> predicate) {
@@ -172,6 +178,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     public MemorisedSequence<T> memorise() {
         return Sequences.memorise(this);
+    }
+
+    public ForwardOnlySequence<T> forwardOnly(){
+        return Sequences.forwardOnly(this);
     }
 
     public <T2> Sequence<Pair<T, T2>> zip(final Iterable<T2> iterable) {

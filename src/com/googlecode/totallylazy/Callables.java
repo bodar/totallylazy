@@ -4,15 +4,11 @@ import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-
-import static com.googlecode.totallylazy.Pair.pair;
 
 public final class Callables {
     public static <T, R> Callable1<T, R> asCallable1(final Callable<? extends R> callable) {
@@ -164,7 +160,7 @@ public final class Callables {
     public static <T> Callable1<? super Iterator<? extends T>, Iterable<? extends T>> asIterable() {
         return new Callable1<Iterator<? extends T>, Iterable<? extends T>>() {
             public final Iterable<? extends T> call(final Iterator<? extends T> iterator) throws Exception {
-                return Sequences.sequence(iterator);
+                return Sequences.forwardOnly(iterator);
             }
         };
     }

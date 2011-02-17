@@ -29,7 +29,7 @@ public class NumbersTest {
         TimeReport report = new TimeReport();
         repeat(time(sum(), iterate(increment(), 0).take(10000), report)).take(100).realise();
         System.out.println(report);
-        assertThat(report.average(), is(lessThan(10.0)));
+        assertThat(report.average(), is(lessThan(20.0)));
     }
 
     @Test
