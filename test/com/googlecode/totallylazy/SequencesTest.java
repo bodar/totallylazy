@@ -12,14 +12,11 @@ import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.join;
-import static com.googlecode.totallylazy.Sequences.range;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
-import static com.googlecode.totallylazy.numbers.Numbers.even;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static com.googlecode.totallylazy.numbers.Numbers.odd;
+import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -27,15 +24,20 @@ import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
     @Test
+    public void supportsCycle() throws Exception {
+        assertThat(range(1, 4).cycle(), startsWith(1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3));
+    }
+
+    @Test
     public void supportsAddingToAnEmptyList() throws Exception {
-        assertThat(sequence().add(1).add(2).add(3), hasExactly(1,2,3));
+        assertThat(sequence().add(1).add(2).add(3), hasExactly(1, 2, 3));
     }
 
     @Test
     public void joinWorksEvenWhenFirstIterableIsEmpty() throws Exception {
         final List<Integer> emptyList = Collections.<Integer>emptyList();
-        assertThat(join(emptyList, asList(1, 2, 3)), hasExactly(1,2,3));
-        assertThat(join(emptyList, asList(1, 2, 3), emptyList, asList(4, 5, 6)), hasExactly(1,2,3,4,5,6));
+        assertThat(join(emptyList, asList(1, 2, 3)), hasExactly(1, 2, 3));
+        assertThat(join(emptyList, asList(1, 2, 3), emptyList, asList(4, 5, 6)), hasExactly(1, 2, 3, 4, 5, 6));
     }
 
     @Test
@@ -62,13 +64,6 @@ public class SequencesTest {
     }
 
     @Test
-    public void supportsRange() throws Exception {
-        assertThat(range(5), hasExactly(0, 1, 2, 3, 4));
-        assertThat(range(0, 5), hasExactly(0, 1, 2, 3, 4));
-        assertThat(range(0, 5, 2), hasExactly(0, 2, 4));
-    }
-
-    @Test
     public void supportsIterate() throws Exception {
         assertThat(iterate(increment(), 1), startsWith(1, 2, 3, 4, 5));
     }
@@ -83,7 +78,6 @@ public class SequencesTest {
         }, 1).takeWhile(notNull(Integer.class));
         assertThat(sequence, hasExactly(1));
     }
-
 
 
     @Test

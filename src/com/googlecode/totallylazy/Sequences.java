@@ -140,30 +140,6 @@ public class Sequences {
         };
     }
 
-    public static Sequence<Number> range(final Number end) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(end);
-            }
-        };
-    }
-
-    public static Sequence<Number> range(final Number start, final Number end) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(start, end);
-            }
-        };
-    }
-
-    public static Sequence<Number> range(final Number start, final Number end, final Number step) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(start, end, step);
-            }
-        };
-    }
-
     public static <T> void forEach(final Iterable<T> iterable, final Runnable1<T> runnable) {
         Iterators.forEach(iterable.iterator(), runnable);
     }
@@ -378,4 +354,16 @@ public class Sequences {
         return sequence(result);
     }
 
+    public static <T> Sequence<T> cycle(Iterable<T> iterable) {
+        Sequence<T> sequence = sequence(iterable).memorise();
+        return repeat(sequence).flatMap(Sequences.<T>asIterable());
+    }
+
+    public static <T> Callable1<? super Sequence<T>, Iterable<? extends T>> asIterable() {
+        return new Callable1<Sequence<T>, Iterable<? extends T>>() {
+            public Iterable<? extends T> call(Sequence<T> sequence) throws Exception {
+                return sequence;
+            }
+        };
+    }
 }
