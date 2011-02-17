@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+
+    <!--
+    <target name="update">
+        <install version="14" directory="lib/build"/>
+        <parallel>
+            <update classpathref="all.dependancies" dependencies="lib/build.dependencies" directory="${build.dependencies.dir}"/>
+            <update classpathref="all.dependancies" dependencies="lib/optional.runtime.dependencies" directory="${runtime.dependencies.dir}"/>
+        </parallel>
+    </target>
+        -->
+
+    <macrodef name="install">
+        <attribute name="version"/>
+        <attribute name="directory"/>
+
+        <sequential>
+            <mkdir dir="@{directory}"/>
+            <get src="http://shavenmaven.googlecode.com/files/shavenmaven-nodep-@{version}.jar"
+                 dest="@{directory}/shavenmaven.jar" usetimestamp="true"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="update">
+        <attribute name="dependencies"/>
+        <attribute name="directory"/>
+        <attribute name="shavenmaven.jar"/>
+
+        <sequential>
+            <mkdir dir="@{directory}"/>
+            <java classname="com.googlecode.shavenmaven.Dependencies" classpath="@{shavenmaven.jar}" fork="true"
+                  failonerror="true">
+                <arg value="@{dependencies}"/>
+                <arg value="@{directory}"/>
+            </java>
+        </sequential>
+    </macrodef>
+</project>
