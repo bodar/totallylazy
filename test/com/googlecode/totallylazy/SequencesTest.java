@@ -35,9 +35,9 @@ public class SequencesTest {
 
     @Test
     public void joinWorksEvenWhenFirstIterableIsEmpty() throws Exception {
-        final List<Integer> emptyList = Collections.<Integer>emptyList();
-        assertThat(join(emptyList, asList(1, 2, 3)), hasExactly(1, 2, 3));
-        assertThat(join(emptyList, asList(1, 2, 3), emptyList, asList(4, 5, 6)), hasExactly(1, 2, 3, 4, 5, 6));
+        final Sequence<Integer> empty = Sequences.<Integer>empty();
+        assertThat(empty.add(1).join(sequence(2,3)).add(4), hasExactly(1, 2, 3, 4));
+        assertThat(join(empty, sequence(1, 2, 3), empty, asList(4, 5, 6)), hasExactly(1, 2, 3, 4, 5, 6));
     }
 
     @Test
