@@ -1,12 +1,14 @@
 package com.googlecode.totallylazy;
 
 import static com.googlecode.totallylazy.Callables.ascending;
+
 import com.googlecode.totallylazy.iterators.*;
 
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 
 import static java.nio.CharBuffer.wrap;
+
 import java.util.*;
 import java.util.concurrent.Callable;
 

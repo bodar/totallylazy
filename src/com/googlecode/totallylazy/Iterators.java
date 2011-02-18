@@ -1,13 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.DelegatingIterator;
-import com.googlecode.totallylazy.iterators.FilterIterator;
-import com.googlecode.totallylazy.iterators.FlatMapIterator;
-import com.googlecode.totallylazy.iterators.IterateIterator;
-import com.googlecode.totallylazy.iterators.MapIterator;
-import com.googlecode.totallylazy.iterators.RangerIterator;
-import com.googlecode.totallylazy.iterators.RepeatIterator;
-import com.googlecode.totallylazy.iterators.TakeWhileIterator;
+import com.googlecode.totallylazy.iterators.*;
 import com.googlecode.totallylazy.numbers.Numbers;
 
 import java.util.ArrayList;
@@ -69,7 +62,7 @@ public class Iterators {
     public static <T> Iterator<T> tail(final Iterator<T> iterator) {
         if (iterator.hasNext()) {
             iterator.next();
-            return new DelegatingIterator<T>(iterator);
+            return new PeekingIterator<T>(iterator);
         }
         throw new NoSuchElementException();
     }
