@@ -46,11 +46,11 @@
     </target>
 
     <target name="update">
-        <install version="20"/>
+        <!--<install version="20"/>-->
         <parallel>
-            <update dependencies="lib/build.dependencies"
+            <update dependencies="build/build.dependencies"
                     directory="${build.dependencies.dir}"/>
-            <update dependencies="lib/optional.runtime.dependencies"
+            <update dependencies="build/optional.runtime.dependencies"
                     directory="${runtime.dependencies.dir}"/>
         </parallel>
     </target>
@@ -80,7 +80,7 @@
         </propertyfile>
 
         <generate.pom artifact.uri="mvn:com.googlecode.totallylazy:totallylazy:jar:${release.version}"
-                             dependencies="lib/runtime.dependencies"
+                             dependencies="build/runtime.dependencies"
                              directory="${artifacts}"/>
 
     </target>
