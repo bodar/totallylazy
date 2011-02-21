@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import static com.googlecode.totallylazy.Callables.ascending;
+
 import com.googlecode.totallylazy.iterators.*;
 
 import static com.googlecode.totallylazy.Predicates.not;
@@ -9,6 +10,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
 import com.googlecode.totallylazy.numbers.Numbers;
 
 import static java.nio.CharBuffer.wrap;
+
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -138,30 +140,6 @@ public class Sequences {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.repeat(item);
-            }
-        };
-    }
-
-    public static Sequence<Number> range(final Number end) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(end);
-            }
-        };
-    }
-
-    public static Sequence<Number> range(final Number start, final Number end) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(start, end);
-            }
-        };
-    }
-
-    public static Sequence<Number> range(final Number start, final Number end, final Number step) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(start, end, step);
             }
         };
     }
@@ -380,4 +358,16 @@ public class Sequences {
         return sequence(result);
     }
 
+    public static <T> Sequence<T> cycle(Iterable<T> iterable) {
+        Sequence<T> sequence = sequence(iterable).memorise();
+        return repeat(sequence).flatMap(Sequences.<T>asIterable());
+    }
+
+    public static <T> Callable1<? super Sequence<T>, Iterable<? extends T>> asIterable() {
+        return new Callable1<Sequence<T>, Iterable<? extends T>>() {
+            public Iterable<? extends T> call(Sequence<T> sequence) throws Exception {
+                return sequence;
+            }
+        };
+    }
 }
