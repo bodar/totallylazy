@@ -46,11 +46,11 @@
     </target>
 
     <target name="update">
-        <!--<install version="16" directory="lib"/>-->
+        <install version="20"/>
         <parallel>
-            <update shavenmaven.jar="lib/shavenmaven.jar" dependencies="lib/build.dependencies"
+            <update dependencies="lib/build.dependencies"
                     directory="${build.dependencies.dir}"/>
-            <update shavenmaven.jar="lib/shavenmaven.jar" dependencies="lib/optional.runtime.dependencies"
+            <update dependencies="lib/optional.runtime.dependencies"
                     directory="${runtime.dependencies.dir}"/>
         </parallel>
     </target>
@@ -79,11 +79,10 @@
             <entry key="${release.src}.labels" value="Source"/>
         </propertyfile>
 
-        <copy file="${build}/pom.xml" tofile="${artifacts}/${release.pom}">
-            <filterset>
-                <filter token="VERSION" value="${build.number}"/>
-            </filterset>
-        </copy>
+        <generate.pom artifact.uri="mvn:com.googlecode.totallylazy:totallylazy:jar:${release.version}"
+                             dependencies="lib/runtime.dependencies"
+                             directory="${artifacts}"/>
+
     </target>
 
     <target name="build" depends="clean, update, compile, test, package" description="build all"/>
