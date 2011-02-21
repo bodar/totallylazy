@@ -5,6 +5,8 @@ import com.googlecode.totallylazy.iterators.*;
 
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
+import com.googlecode.totallylazy.numbers.Numbers;
 
 import static java.nio.CharBuffer.wrap;
 import java.util.*;
@@ -341,7 +343,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<Pair<Number, T>> zipWithIndex(final Iterable<T> iterable) {
-        return zip(iterate(increment(), 0), iterable);
+        return zip(integersStartingFrom(0), iterable);
     }
 
     public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<? super T, ? extends Comparable> callable) {
