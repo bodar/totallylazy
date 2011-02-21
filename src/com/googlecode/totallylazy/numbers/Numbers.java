@@ -17,13 +17,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.MemorisedSequence;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
@@ -31,6 +25,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.curry;
@@ -40,6 +35,30 @@ import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Numbers {
+    public static Sequence<Number> range(final Number end) {
+        return new Sequence<Number>() {
+            public final Iterator<Number> iterator() {
+                return Iterators.range(end);
+            }
+        };
+    }
+
+    public static Sequence<Number> range(final Number start, final Number end) {
+        return new Sequence<Number>() {
+            public final Iterator<Number> iterator() {
+                return Iterators.range(start, end);
+            }
+        };
+    }
+
+    public static Sequence<Number> range(final Number start, final Number end, final Number step) {
+        return new Sequence<Number>() {
+            public final Iterator<Number> iterator() {
+                return Iterators.range(start, end, step);
+            }
+        };
+    }
+
     public static Number valueOf(String string) {
         return reduce(new BigInteger(string));
     }

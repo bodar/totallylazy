@@ -211,4 +211,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     public Sequence<T> reverse() {
         return Sequences.reverse(this);
     }
+
+    public Sequence<T> cycle() {
+        return Sequences.cycle(this);
+    }
 }
