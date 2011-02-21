@@ -44,6 +44,10 @@ public class Numbers {
         return reduce(new BigInteger(string));
     }
 
+    public static Sequence<Number> integersStartingFrom(final int value) {
+        return iterate(increment(), value);
+    }
+
     public static Sequence<Number> numbers(Number... numbers) {
         return Sequences.sequence(numbers);
     }
