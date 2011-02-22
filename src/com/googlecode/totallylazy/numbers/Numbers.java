@@ -99,6 +99,14 @@ public class Numbers {
         return multiply(value, value);
     }
 
+    public static LogicalPredicate<Number> not(Number value) {
+        return Predicates.not(value);
+    }
+
+    public static LogicalPredicate<Number> not(Predicate<? super Number> predicate) {
+        return Predicates.not(predicate);
+    }
+
     public static LogicalPredicate<Number> even() {
         return remainderIs(2, 0);
     }
@@ -176,11 +184,23 @@ public class Numbers {
     }
 
     public static Callable1<Number, Number> increment() {
-        return add(1);
+        return new Callable1<Number, Number>() {
+            public Number call(Number number) throws Exception {
+                return Numbers.increment(number);
+            }
+        };
     }
 
     public static <T extends Number> Number increment(T value) {
         return operatorsFor(value).increment(value);
+    }
+
+    public static Callable1<Number, Number> decrement() {
+        return new Callable1<Number, Number>() {
+            public Number call(Number number) throws Exception {
+                return Numbers.decrement(number);
+            }
+        };
     }
 
     public static <T extends Number> Number decrement(T value) {
@@ -286,6 +306,22 @@ public class Numbers {
 
     public static <X extends Number, Y extends Number> Number add(X x, Y y) {
         return operatorsFor(x, y).add(x, y);
+    }
+
+    public static <T extends Number> Callable2<T, T, Number> subtract() {
+        return new Callable2<T, T, Number>() {
+            public Number call(T a, T b) {
+                return Numbers.subtract(a, b);
+            }
+        };
+    }
+
+    public static Callable1<Number, Number> subtract(final Number amount) {
+        return new Callable1<Number, Number>() {
+            public Number call(Number number) throws Exception {
+                return Numbers.subtract(number, amount);
+            }
+        };
     }
 
     public static <X extends Number, Y extends Number> Number subtract(X x, Y y) {
