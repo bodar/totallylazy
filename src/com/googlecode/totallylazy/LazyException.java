@@ -2,7 +2,10 @@ package com.googlecode.totallylazy;
 
 public class LazyException extends RuntimeException {
     public LazyException(Throwable cause) {
-        super(unwrapLazy(cause));
+        this(null, cause);
+    }
+    public LazyException(String message, Throwable cause) {
+        super(message, unwrapLazy(cause));
     }
 
     private static Throwable unwrapLazy(Throwable cause) {
