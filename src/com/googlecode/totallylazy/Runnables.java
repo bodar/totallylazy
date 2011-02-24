@@ -25,4 +25,12 @@ public class Runnables {
             }
         };
     }
+
+    public static Runnable1<Runnable> run() {
+        return new Runnable1<Runnable>() {
+            public void run(Runnable runnable) {
+                runnable.run();
+            }
+        };
+    }
 }
