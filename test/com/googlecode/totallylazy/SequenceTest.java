@@ -278,7 +278,7 @@ public class SequenceTest {
 
     @Test
     public void supportsFlatMap() throws Exception {
-        Iterable<Integer> result = sequence(1, 2, 3).flatMap(new Callable1<Integer, Iterable<? extends Integer>>() {
+        Iterable<Integer> result = sequence(1, 2, 3).flatMap(new Callable1<Integer, Iterable<Integer>>() {
             public Iterable<Integer> call(Integer value) throws Exception {
                 return sequence(value, value * 3);
             }

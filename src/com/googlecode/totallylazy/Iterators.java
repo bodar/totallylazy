@@ -36,7 +36,7 @@ public class Iterators {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> Iterator<S> flatMap(final Iterator<? extends T> iterator, final Callable1<? super T, Iterable<? extends S>> callable) {
+    public static <T, S> Iterator<S> flatMap(final Iterator<T> iterator, final Callable1<? super T, Iterable<S>> callable) {
         return new FlatMapIterator<T, S>(iterator, callable);
     }
 
@@ -217,12 +217,12 @@ public class Iterators {
         return join(iterator, sequence(t).iterator());
     }
 
-    public static <T> Iterator<T> join(final Iterator<? extends T>... iterators) {
-        return new FlatMapIterator<Iterator<? extends T>,T>(sequence(iterators).iterator(), Callables.<T>asIterable());
+    public static <T> Iterator<T> join(final Iterator<T>... iterators) {
+        return join(sequence(iterators));
     }
 
-    public static <T> Iterator<T> join(final Iterable<Iterator<? extends T>> iterators) {
-        return new FlatMapIterator<Iterator<? extends T>, T>(sequence(iterators).iterator(), Callables.<T>asIterable());
+    public static <T> Iterator<T> join(final Iterable<Iterator<T>> iterable) {
+        return new FlatMapIterator<Iterator<T>,T>(iterable.iterator(), Callables.<T>asIterable());
     }
 
     public static <T> Iterator<T> cons(final T t, final Iterator<T> iterator) {

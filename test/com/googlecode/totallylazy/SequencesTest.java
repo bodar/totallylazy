@@ -36,8 +36,17 @@ public class SequencesTest {
     @Test
     public void joinWorksEvenWhenFirstIterableIsEmpty() throws Exception {
         final Sequence<Integer> empty = Sequences.<Integer>empty();
-        assertThat(empty.add(1).join(sequence(2,3)).add(4), hasExactly(1, 2, 3, 4));
+        assertThat(empty.add(1).join(sequence(2, 3)).add(4), hasExactly(1, 2, 3, 4));
         assertThat(join(empty, sequence(1, 2, 3), empty, asList(4, 5, 6)), hasExactly(1, 2, 3, 4, 5, 6));
+    }
+
+    @Test
+    public void supportsJoiningSubTypes() throws Exception {
+        final Sequence<Number> numbers = numbers(2, 3.0D);
+        Sequence<Integer> integers = sequence(2, 3);
+        Sequence<Long> longs = sequence(2L, 3L);
+        assertThat(numbers.join(integers).join(longs), hasExactly(2, 3.0D, 2, 3, 2L, 3L));
+        assertThat(join(sequence(1L, 2.0D, 3), numbers, asList(4, 5, 6), integers), hasExactly(1L, 2.0D, 3, 2, 3.0D, 4, 5, 6, 2, 3));
     }
 
     @Test

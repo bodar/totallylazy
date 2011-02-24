@@ -10,11 +10,11 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 
 public class FlatMapIterator<T, S> extends StatefulIterator<S> {
-    private final Iterator<? extends T> iterator;
-    private final Callable1<? super T, Iterable<? extends S>> callable;
+    private final Iterator<T> iterator;
+    private final Callable1<? super T, Iterable<S>> callable;
     private Iterator<? extends S> currentIterator = new EmptyIterator<S>();
 
-    public FlatMapIterator(Iterator<? extends T> iterator, Callable1<? super T, Iterable<? extends S>> callable) {
+    public FlatMapIterator(Iterator<T> iterator, Callable1<? super T, Iterable<S>> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }

@@ -25,7 +25,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.filter(this, predicate);
     }
 
-    public <S> Sequence<S> flatMap(final Callable1<? super T, Iterable<? extends S>> callable) {
+    public <S> Sequence<S> flatMap(final Callable1<? super T, Iterable<S>> callable) {
         return Sequences.flatMap(this, callable);
     }
 

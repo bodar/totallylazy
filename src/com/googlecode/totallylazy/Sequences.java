@@ -112,7 +112,7 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, Iterable<? extends S>> callable) {
+    public static <T, S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, Iterable<S>> callable) {
         return new Sequence<S>() {
             public final Iterator<S> iterator() {
                 return Iterators.flatMap(iterable.iterator(), callable);
@@ -295,7 +295,11 @@ public class Sequences {
     public static <T> Sequence<T> join(final Iterable<? extends T>... iterables) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
-                return Iterators.join(sequence(iterables).map(Callables.<T>asIterator()));
+                return Iterators.join(sequence(iterables).map(new Callable1<Iterable<? extends T>, Iterator<T>>() {
+                    public Iterator<T> call(Iterable<? extends T> iterable) throws Exception {
+                        return (Iterator<T>) iterable.iterator();
+                    }
+                }));
             }
         };
     }
@@ -359,15 +363,6 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> cycle(Iterable<T> iterable) {
-        Sequence<T> sequence = sequence(iterable).memorise();
-        return repeat(sequence).flatMap(Sequences.<T>asIterable());
-    }
-
-    public static <T> Callable1<? super Sequence<T>, Iterable<? extends T>> asIterable() {
-        return new Callable1<Sequence<T>, Iterable<? extends T>>() {
-            public Iterable<? extends T> call(Sequence<T> sequence) throws Exception {
-                return sequence;
-            }
-        };
+        return repeat(sequence(iterable).memorise()).flatMap(Callables.<Iterable<T>>returnArgument());
     }
 }
