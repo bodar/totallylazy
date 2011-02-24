@@ -135,6 +135,10 @@ public class Predicates {
         return new Null<T>();
     }
 
+    public static <T> LogicalPredicate<Option<T>> some(final Class<T> aClass) {
+        return some();
+    }
+
     public static <T> LogicalPredicate<Option<T>> some() {
         return new LogicalPredicate<Option<T>>() {
             public final boolean matches(Option<T> other) {
