@@ -26,6 +26,14 @@ public class Runnables {
         };
     }
 
+    public static Runnable1<Runnable> run() {
+        return new Runnable1<Runnable>() {
+            public void run(Runnable runnable) {
+                runnable.run();
+            }
+        };
+    }
+
     public static <T> Callable1<? super T, T> run(final Runnable1<T> runnable) {
         return new Callable1<T, T>() {
             public T call(T t) throws Exception {
