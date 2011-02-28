@@ -10,10 +10,8 @@ import org.objenesis.instantiator.ObjectInstantiator;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.toClass;
-import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Proxy {
@@ -25,33 +23,31 @@ public class Proxy {
     }
 
     public Object createInstance(final Class aClass, final Callback invocationHandler){
-        Callback[] callbacks = {invocationHandler, NoOp.INSTANCE};
-        ObjectInstantiator instantiator = option(cache.get(aClass)).getOrElse(createAndCacheClass(aClass, callbacks));
-        Object instance = instantiator.newInstance();
-        Factory factory = (Factory) instance;
-        factory.setCallbacks(callbacks);
-        return instance;
-
+            Callback[] callbacks = {invocationHandler, NoOp.INSTANCE};
+            ObjectInstantiator instantiator = get(aClass, callbacks);
+            Object instance = instantiator.newInstance();
+            Factory factory = (Factory) instance;
+            factory.setCallbacks(callbacks);
+            return instance;
     }
 
-    private Callable<ObjectInstantiator> createAndCacheClass(final Class aClass, final Callback[] callbacks) {
-        return new Callable<ObjectInstantiator>() {
-            public ObjectInstantiator call() throws Exception {
-                Class enhancedClass = createClass(aClass, callbacks);
-                ObjectInstantiator instantiatorOf = objenesis.getInstantiatorOf(enhancedClass);
-                cache.put(aClass, instantiatorOf);
-                return instantiatorOf;
+    private ObjectInstantiator get(final Class aClass, final Callback[] callbacks) {
+        synchronized (cache){
+            if(!cache.containsKey(aClass)){
+                cache.put(aClass, createInstantiator(aClass, callbacks));
             }
-        };
+            return cache.get(aClass);
+        }
     }
 
-    private Class createClass(Class aClass, Callback[] callbacks) {
+    private ObjectInstantiator createInstantiator(Class aClass, Callback[] callbacks) {
         IgnoreConstructorsEnhancer enhancer = new IgnoreConstructorsEnhancer();
         enhancer.setSuperclass(aClass);
         enhancer.setCallbackTypes(sequence(callbacks).map(toClass()).toArray(Class.class));
         enhancer.setCallbackFilter(new ToStringFilter());
         enhancer.setUseFactory(true);
-        return enhancer.createClass();
+        Class enhancedClass = enhancer.createClass();
+        return objenesis.getInstantiatorOf(enhancedClass);
     }
 
 
