@@ -22,18 +22,18 @@ public class Proxy {
         return (T) new Proxy().createInstance(aCLass, invocationHandler);
     }
 
-    public Object createInstance(final Class aClass, final Callback invocationHandler){
-            Callback[] callbacks = {invocationHandler, NoOp.INSTANCE};
-            ObjectInstantiator instantiator = get(aClass, callbacks);
-            Object instance = instantiator.newInstance();
-            Factory factory = (Factory) instance;
-            factory.setCallbacks(callbacks);
-            return instance;
+    public Object createInstance(final Class aClass, final Callback invocationHandler) {
+        Callback[] callbacks = {invocationHandler, NoOp.INSTANCE};
+        ObjectInstantiator instantiator = get(aClass, callbacks);
+        Object instance = instantiator.newInstance();
+        Factory factory = (Factory) instance;
+        factory.setCallbacks(callbacks);
+        return instance;
     }
 
     private ObjectInstantiator get(final Class aClass, final Callback[] callbacks) {
-        synchronized (cache){
-            if(!cache.containsKey(aClass)){
+        synchronized (cache) {
+            if (!cache.containsKey(aClass)) {
                 cache.put(aClass, createInstantiator(aClass, callbacks));
             }
             return cache.get(aClass);
