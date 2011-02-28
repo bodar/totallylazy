@@ -6,3 +6,4 @@ build/artifacts
 *.orig
 lib/build
 lib/runtime
+lib/optional
