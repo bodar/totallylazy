@@ -1,20 +1,13 @@
 package com.googlecode.totallylazy.records.sql;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,10 +41,30 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     public void define(Keyword recordName, Keyword<?>... fields) {
         try {
             final String sql = String.format("create table %s (%s)", recordName, sequence(fields).map(asColumn()));
-            connection.createStatement().executeUpdate(sql);
+            using(connection.createStatement(), executeUpdate(sql));
             Sql.LOGGER.log(Level.FINE, String.format("SQL:'%s'", sql));
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static Callable1<? super Statement, Integer> executeUpdate(final String sql) {
+        return new Callable1<Statement, Integer>() {
+            public Integer call(Statement statement) throws Exception {
+                return statement.executeUpdate(sql);
+            }
+        };
+    }
+
+    public static <T extends Statement, R> R using(T t, Callable1<? super T, R> callable) {
+        try {
+            return Callers.call(callable, t);
+        } finally {
+            try {
+                t.close();
+            } catch (SQLException e) {
+                throw new LazyException(e);
+            }
         }
     }
 
@@ -63,19 +76,22 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         };
     }
 
-    public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
+    public Number add(Keyword recordName, final Sequence<Keyword> fields, final Sequence<Record> records) {
         if (records.isEmpty()) {
             return 0;
         }
         try {
             final String sql = String.format("insert into %s (%s) values (%s)",
                     recordName, fields, repeat("?").take((Integer) fields.size()));
-            final PreparedStatement statement = connection.prepareStatement(sql);
-            for (Record record : records) {
-                addValues(statement, record.getValuesFor(fields));
-                statement.addBatch();
-            }
-            Number rowCount = numbers(statement.executeBatch()).reduce(Numbers.add());
+            Number rowCount = using(connection.prepareStatement(sql), new Callable1<PreparedStatement, Number>() {
+                public Number call(PreparedStatement statement) throws Exception {
+                    for (Record record : records) {
+                        addValues(statement, record.getValuesFor(fields));
+                        statement.addBatch();
+                    }
+                    return numbers(statement.executeBatch()).reduce(Numbers.add());
+                }
+            });
             Sql.LOGGER.log(Level.FINE, String.format("SQL:'%s' Row Count: %s", sql, rowCount));
             return rowCount;
         } catch (SQLException e) {
@@ -94,11 +110,14 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         return update(expression, sequence(parameters));
     }
 
-    public Number update(String expression, Sequence<?> parameters) {
+    public Number update(String expression, final Sequence<?> parameters) {
         try {
-            final PreparedStatement statement = connection.prepareStatement(expression);
-            addValues(statement, parameters);
-            Number rowCount = statement.executeUpdate();
+            Number rowCount = using(connection.prepareStatement(expression), new Callable1<PreparedStatement, Number>() {
+                public Number call(PreparedStatement statement) throws Exception {
+                    addValues(statement, parameters);
+                    return statement.executeUpdate();
+                }
+            });
             Sql.LOGGER.log(Level.FINE, String.format("SQL:'%s' Row Count: %s", expression, rowCount));
             return rowCount;
         } catch (SQLException e) {
@@ -116,7 +135,8 @@ public class SqlRecords extends AbstractRecords implements Queryable {
             final PreparedStatement statement = connection.prepareStatement(expression);
             addValues(statement, parameters);
             String message = String.format("SQL:'%s' VALUES:'%s'", expression, parameters);
-            return new RecordIterator(log(message, lazyExecute(statement)));
+            Sql.LOGGER.log(Level.FINE, message);
+            return new RecordIterator(statement);
         } catch (SQLException e) {
             throw new LazyException(e);
         }
@@ -138,23 +158,4 @@ public class SqlRecords extends AbstractRecords implements Queryable {
             statement.setObject(numberAndValue.first(), numberAndValue.second());
         }
     }
-
-    private <T> Callable<T> log(final String message, final Callable<T> callable) {
-        return new Callable<T>() {
-            public T call() throws Exception {
-                Sql.LOGGER.log(Level.FINE, message);
-                return callable.call();
-            }
-        };
-    }
-
-    private Callable<ResultSet> lazyExecute(final PreparedStatement statement) {
-        return new Callable<ResultSet>() {
-            public ResultSet call() throws Exception {
-                return statement.executeQuery();
-            }
-        };
-    }
-
-
 }
