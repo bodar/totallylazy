@@ -5,8 +5,10 @@ import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Option.none;
@@ -18,18 +20,19 @@ import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 
 public class RecordIterator extends StatefulIterator<Record> {
-    private final Callable<ResultSet> lazyResults;
+    private final PreparedStatement preparedStatement;
+    private ResultSet resultSet;
 
-    public RecordIterator(final Callable<ResultSet> callable) {
-        this.lazyResults = lazy(callable);
+    public RecordIterator(final PreparedStatement preparedStatement) {
+        this.preparedStatement = preparedStatement;
     }
 
     @Override
     protected Option<Record> getNext() throws Exception {
-        ResultSet resultSet = lazyResults.call();
+        ResultSet resultSet = getResultSet();
         boolean hasNext = resultSet.next();
         if (!hasNext) {
-            resultSet.close();
+            preparedStatement.close();
             return none();
         }
 
@@ -43,5 +46,12 @@ public class RecordIterator extends StatefulIterator<Record> {
         }
 
         return some(record);
+    }
+
+    private ResultSet getResultSet() throws SQLException {
+        if(resultSet == null){
+            resultSet = preparedStatement.executeQuery();
+        }
+        return resultSet;
     }
 }
