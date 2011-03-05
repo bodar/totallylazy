@@ -1,6 +1,9 @@
 package com.googlecode.totallylazy;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Writer;
 
 public class Runnables {
     public static <T> Runnable1<T> printLine(final PrintStream printStream, final String format) {
@@ -39,6 +42,30 @@ public class Runnables {
             public T call(T t) throws Exception {
                 runnable.run(t);
                 return t;
+            }
+        };
+    }
+
+    public static Runnable1<OutputStream> write(final byte[] bytes) {
+        return new Runnable1<OutputStream>() {
+            public void run(OutputStream outputStream) {
+                try {
+                    outputStream.write(bytes);
+                } catch (IOException e) {
+                    throw new LazyException(e);
+                }
+            }
+        };
+    }
+
+    public static Runnable1<Writer> write(final String value) {
+        return new Runnable1<Writer>() {
+            public void run(Writer writer) {
+                try {
+                    writer.write(value);
+                } catch (IOException e) {
+                    throw new LazyException(e);
+                }
             }
         };
     }

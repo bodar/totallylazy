@@ -6,6 +6,8 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Predicates.*;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
+import java.io.PrintWriter;
+
 public class Exceptions {
     public static <T extends Throwable> Option<T> find(final Throwable throwable, final Class<T> aClass) {
         return causes(throwable).
@@ -41,6 +43,14 @@ public class Exceptions {
                     }
                     throw e;
                 }
+            }
+        };
+    }
+
+    public static Runnable1<PrintWriter> printStackTrace(final Throwable e) {
+        return new Runnable1<PrintWriter>() {
+            public void run(PrintWriter writer) {
+                e.printStackTrace(writer);
             }
         };
     }
