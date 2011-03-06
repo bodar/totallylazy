@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Option.none;
@@ -47,10 +48,11 @@ public class Exceptions {
         };
     }
 
-    public static Runnable1<PrintWriter> printStackTrace(final Throwable e) {
-        return new Runnable1<PrintWriter>() {
-            public void run(PrintWriter writer) {
+    public static Callable1<PrintWriter, Void> printStackTrace(final Throwable e) {
+        return new Callable1<PrintWriter, Void>() {
+            public Void call(PrintWriter writer) {
                 e.printStackTrace(writer);
+                return VOID;
             }
         };
     }

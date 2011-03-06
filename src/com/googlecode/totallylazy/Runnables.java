@@ -6,66 +6,65 @@ import java.io.PrintStream;
 import java.io.Writer;
 
 public class Runnables {
-    public static <T> Runnable1<T> printLine(final PrintStream printStream, final String format) {
-        return new Runnable1<T>() {
-            public final void run(T t) {
+    public static final Void VOID = null;
+
+    public static <T> Callable1<T, Void> printLine(final PrintStream printStream, final String format) {
+        return new Callable1<T, Void>() {
+            public final Void call(T t) {
                 printStream.println(String.format(format, t));
+                return VOID;
             }
         };
     }
 
-    public static <T> Runnable1<T> printLine(final String format) {
+    public static <T> Callable1<T, Void> printLine(final String format) {
         return printLine(System.out, format);
     }
 
-    public static <T> Runnable1<T> doNothing(Class<T> aClass) {
+    public static <T> Callable1<T, Void> doNothing(final Class<T> aClass) {
         return doNothing();
     }
 
-    public static <T> Runnable1<T> doNothing() {
-        return new Runnable1<T>() {
-            public void run(T ignore) {
+    public static <T> Callable1<T, Void> doNothing() {
+        return new Callable1<T, Void>() {
+            public Void call(T ignore) {
+                return VOID;
             }
         };
     }
 
-    public static Runnable1<Runnable> run() {
-        return new Runnable1<Runnable>() {
-            public void run(Runnable runnable) {
+    public static Callable1<Runnable, Void> run() {
+        return new Callable1<Runnable, Void>() {
+            public Void call(Runnable runnable) {
                 runnable.run();
+                return VOID;
             }
         };
     }
 
-    public static <T> Callable1<? super T, T> run(final Runnable1<T> runnable) {
+    public static <T> Callable1<? super T, T> run(final Callable1<? super T, Void> callable) {
         return new Callable1<T, T>() {
             public T call(T t) throws Exception {
-                runnable.run(t);
+                callable.call(t);
                 return t;
             }
         };
     }
 
-    public static Runnable1<OutputStream> write(final byte[] bytes) {
-        return new Runnable1<OutputStream>() {
-            public void run(OutputStream outputStream) {
-                try {
-                    outputStream.write(bytes);
-                } catch (IOException e) {
-                    throw new LazyException(e);
-                }
+    public static Callable1<OutputStream, Void> write(final byte[] bytes) {
+        return new Callable1<OutputStream, Void>() {
+            public Void call(OutputStream outputStream) throws IOException {
+                outputStream.write(bytes);
+                return VOID;
             }
         };
     }
 
-    public static Runnable1<Writer> write(final String value) {
-        return new Runnable1<Writer>() {
-            public void run(Writer writer) {
-                try {
-                    writer.write(value);
-                } catch (IOException e) {
-                    throw new LazyException(e);
-                }
+    public static Callable1<Writer, Void> write(final String value) {
+        return new Callable1<Writer, Void>() {
+            public Void call(Writer writer) throws IOException {
+                writer.write(value);
+                return VOID;
             }
         };
     }

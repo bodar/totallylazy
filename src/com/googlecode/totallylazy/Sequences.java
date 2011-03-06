@@ -144,7 +144,7 @@ public class Sequences {
         };
     }
 
-    public static <T> void forEach(final Iterable<T> iterable, final Runnable1<T> runnable) {
+    public static <T> void forEach(final Iterable<T> iterable, final Callable1<T,Void> runnable) {
         Iterators.forEach(iterable.iterator(), runnable);
     }
 
