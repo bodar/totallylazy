@@ -241,9 +241,11 @@ public class SequenceTest {
     @Test
     public void supportsForEach() throws Exception {
         final int[] sum = {0};
-        sequence(1, 2).forEach(new Runnable1<Integer>() {
-            public void run(Integer value) {
+        sequence(1, 2).forEach(new Callable1<Integer, Void>() {
+            public Void call(Integer value) {
                 sum[0] += value;
+                return Runnables.VOID;
+
             }
         });
         assertThat(sum[0], is(3));

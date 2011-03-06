@@ -9,7 +9,7 @@ import java.util.Set;
 
 
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
-    public void forEach(final Runnable1<T> runnable) {
+    public void forEach(final Callable1<T,Void> runnable) {
         Sequences.forEach(this, runnable);
     }
 

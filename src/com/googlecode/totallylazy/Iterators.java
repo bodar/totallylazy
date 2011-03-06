@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.*;
-import com.googlecode.totallylazy.numbers.Numbers;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,9 +25,9 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 
 public class Iterators {
-    public static <T> void forEach(final Iterator<T> iterator, final Runnable1<T> runnable) {
+    public static <T> void forEach(final Iterator<T> iterator, final Callable1<? super T,Void> runnable) {
         while (iterator.hasNext()) {
-            runnable.run(iterator.next());
+            Callers.call(runnable, iterator.next());
         }
     }
 

@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Runnable1;
+
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Runnables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +14,12 @@ import static com.googlecode.totallylazy.numbers.Numbers.ascending;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 
-public class TimeReport implements Runnable1<Double> {
+public class TimeReport implements Callable1<Double, Void> {
     private final List<Number> times = new ArrayList<Number>();
 
-    public void run(Double time) {
+    public Void call(Double time) {
         this.times.add(time);
+        return Runnables.VOID;
     }
 
     public double lastTime() {
