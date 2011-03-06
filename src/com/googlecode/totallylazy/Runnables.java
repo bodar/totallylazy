@@ -33,10 +33,10 @@ public class Runnables {
         };
     }
 
-    public static Callable1<Runnable, Void> run() {
-        return new Callable1<Runnable, Void>() {
-            public Void call(Runnable runnable) {
-                runnable.run();
+    public static <T extends Runnable> Callable1<T, Void> run() {
+        return new Callable1<T, Void>() {
+            public Void call(T t) {
+                t.run();
                 return VOID;
             }
         };
