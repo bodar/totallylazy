@@ -1,19 +1,26 @@
 package com.googlecode.totallylazy.records.sql;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.LazyException;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
+import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -54,18 +61,6 @@ public class SqlRecords extends AbstractRecords implements Queryable {
                 return statement.executeUpdate(sql);
             }
         };
-    }
-
-    public static <T extends Statement, R> R using(T t, Callable1<? super T, R> callable) {
-        try {
-            return Callers.call(callable, t);
-        } finally {
-            try {
-                t.close();
-            } catch (SQLException e) {
-                throw new LazyException(e);
-            }
-        }
     }
 
     private static Callable1<? super Keyword<?>, String> asColumn() {
