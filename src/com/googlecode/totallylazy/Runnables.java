@@ -5,13 +5,15 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 
+import static java.lang.String.format;
+
 public class Runnables {
     public static final Void VOID = null;
 
     public static <T> Callable1<T, Void> printLine(final PrintStream printStream, final String format) {
         return new Callable1<T, Void>() {
             public final Void call(T t) {
-                printStream.println(String.format(format, t));
+                printStream.println(format(format, t));
                 return VOID;
             }
         };
