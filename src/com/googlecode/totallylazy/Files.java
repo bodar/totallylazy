@@ -11,6 +11,14 @@ import static java.util.UUID.randomUUID;
 public class Files {
     public static final File TEMP_DIR = new File(getProperty("java.io.tmpdir"));
 
+    public static Predicate<? super File> isDirectory() {
+        return new Predicate<File>() {
+            public boolean matches(File file) {
+                return file.isDirectory();
+            }
+        };
+    }
+
     public static Callable1<File, String> name() {
         return new Callable1<File, String>() {
             public String call(File file) throws Exception {
