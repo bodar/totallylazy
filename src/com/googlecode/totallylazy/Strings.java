@@ -29,7 +29,7 @@ public class Strings {
         }
     }
 
-    private static Sequence<String> lines(Reader reader) {
+    public static Sequence<String> lines(Reader reader) {
         return repeat(readLine(new BufferedReader(reader))).takeWhile(notNull(String.class)).memorise();
     }
 
