@@ -15,8 +15,8 @@ public class Arrays {
 
     public static <T> Predicate<T[]> empty() {
         return new Predicate<T[]>() {
-            public boolean matches(T[] types) {
-                return types.length == 0;
+            public boolean matches(T[] array) {
+                return array.length == 0;
             }
         };
     }
