@@ -1,14 +1,12 @@
 package com.googlecode.totallylazy;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Vector;
 
 import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.join;
@@ -16,10 +14,13 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
-import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.numbers.Numbers.even;
+import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static com.googlecode.totallylazy.numbers.Numbers.numbers;
+import static com.googlecode.totallylazy.numbers.Numbers.odd;
+import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
@@ -81,10 +82,10 @@ public class SequencesTest {
     public void supportsIteratingEvenWhenCallableReturnNull() throws Exception {
         final Sequence<Integer> sequence = iterate(new Callable1<Integer, Integer>() {
             public Integer call(Integer integer) throws Exception {
-                assertThat("Should never see a null value", integer, is(notNullValue()));
+                assertThat("Should never see a null value", integer, is(Matchers.notNullValue()));
                 return null;
             }
-        }, 1).takeWhile(notNull(Integer.class));
+        }, 1).takeWhile(Predicates.notNullValue());
         assertThat(sequence, hasExactly(1));
     }
 
