@@ -3,13 +3,15 @@ package com.googlecode.totallylazy.records.sql;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sets;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
-import com.googlecode.totallylazy.records.SelectCallable;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.SelectCallable;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 
 import static com.googlecode.totallylazy.Callables.ascending;
@@ -24,6 +26,10 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     }
 
     public Iterator<Record> iterator() {
+        return execute(query);
+    }
+
+    private Iterator<Record> execute(final Query query) {
         return queryable.query(query.expressionAndParameters());
     }
 
@@ -65,6 +71,16 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     public Number size() {
         Record record = queryable.query(query.count().expressionAndParameters()).next();
         return (Number) record.fields().head().second();
+    }
+
+    @Override
+    public <S extends Set<Record>> S toSet(S set) {
+        return Sets.set(set, execute(query.distinct()));
+    }
+
+    @Override
+    public Set<Record> toSet() {
+        return Sets.set(execute(query.distinct()));
     }
 
     @Override
