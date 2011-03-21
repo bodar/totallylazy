@@ -1,13 +1,12 @@
 package com.googlecode.totallylazy;
 
+import java.io.PrintWriter;
+
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Predicates.*;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
-
-import java.io.PrintWriter;
 
 public class Exceptions {
     public static <T extends Throwable> Option<T> find(final Throwable throwable, final Class<T> aClass) {
@@ -18,7 +17,7 @@ public class Exceptions {
 
     public static Sequence<Throwable> causes(Throwable throwable) {
         return iterate(getCause(), throwable).
-                takeWhile(notNull(Throwable.class));
+                takeWhile(notNullValue());
     }
 
     public static Callable1<Throwable, Throwable> getCause() {

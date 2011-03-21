@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Predicates.notNull;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Sequences.repeat;
 
 public class Strings {
@@ -30,7 +30,7 @@ public class Strings {
     }
 
     public static Sequence<String> lines(Reader reader) {
-        return repeat(readLine(new BufferedReader(reader))).takeWhile(notNull(String.class)).memorise();
+        return repeat(readLine(new BufferedReader(reader))).takeWhile(notNullValue(String.class)).memorise();
     }
 
     public static Callable<String> readLine(final BufferedReader reader) {

@@ -1,9 +1,26 @@
 package com.googlecode.totallylazy;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
-import com.googlecode.totallylazy.predicates.*;
+import com.googlecode.totallylazy.predicates.AndPredicate;
+import com.googlecode.totallylazy.predicates.BetweenPredicate;
+import com.googlecode.totallylazy.predicates.CountTo;
+import com.googlecode.totallylazy.predicates.EqualsPredicate;
+import com.googlecode.totallylazy.predicates.GreaterThanOrEqualToPredicate;
+import com.googlecode.totallylazy.predicates.GreaterThanPredicate;
+import com.googlecode.totallylazy.predicates.InPredicate;
+import com.googlecode.totallylazy.predicates.InstanceOf;
+import com.googlecode.totallylazy.predicates.LessThanOrEqualToPredicate;
+import com.googlecode.totallylazy.predicates.LessThanPredicate;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.Not;
+import com.googlecode.totallylazy.predicates.Null;
+import com.googlecode.totallylazy.predicates.OnlyOnce;
+import com.googlecode.totallylazy.predicates.OrPredicate;
+import com.googlecode.totallylazy.predicates.WherePredicate;
+import com.googlecode.totallylazy.predicates.WhileTrue;
 
 import java.util.Collection;
+
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Predicates {
     public static <T> LogicalPredicate<T> always(Class<T> aClass) {
@@ -110,12 +127,20 @@ public class Predicates {
         return new WhileTrue<T>(t);
     }
 
-    public static <T> LogicalPredicate<T> notNull(final Class<T> aClass) {
-        return not(aNull(aClass));
+    public static <T> LogicalPredicate<T> nullValue() {
+        return new Null<T>();
     }
 
-    public static <T> LogicalPredicate<T> aNull(final Class<T> aClass) {
-        return new Null<T>();
+    public static <T> LogicalPredicate<T> nullValue(final Class<T> type) {
+        return nullValue();
+    }
+
+    public static <T> LogicalPredicate<T> notNullValue() {
+        return not(nullValue());
+    }
+
+    public static <T> LogicalPredicate<T> notNullValue(final Class<T> aClass) {
+        return notNullValue();
     }
 
     public static <T> LogicalPredicate<Option<T>> some(final Class<T> aClass) {

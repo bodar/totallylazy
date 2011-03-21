@@ -17,7 +17,7 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.notNull;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
@@ -172,7 +172,7 @@ public class SequenceTest {
 
     @Test
     public void canFilterNull() throws Exception {
-        final Sequence<Integer> numbers = sequence(1, null, 3).filter(notNull(Number.class));
+        final Sequence<Integer> numbers = sequence(1, null, 3).filter(notNullValue());
         assertThat(numbers, hasExactly(1, 3));
     }
 
