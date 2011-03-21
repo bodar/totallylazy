@@ -27,6 +27,15 @@ public class Files {
         };
     }
 
+
+    public static Callable1<? super File, String> path() {
+        return new Callable1<File, String>() {
+            public String call(File file) throws Exception {
+                return file.getPath();
+            }
+        };
+    }
+
     public static Callable1<? super File, File> parent() {
         return new Callable1<File, File>() {
             public File call(File file) throws Exception {
