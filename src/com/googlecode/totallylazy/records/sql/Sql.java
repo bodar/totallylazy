@@ -65,12 +65,12 @@ public class Sql {
     }
 
 
-    public <T> String toSql(Comparator<? super Record> comparator) {
+    public String toSql(Comparator<? super Record> comparator) {
         if (comparator instanceof AscendingComparator) {
-            return toSql(((AscendingComparator<? super Record>) comparator).callable()).first() + " asc ";
+            return toSql(((AscendingComparator<? super Record, ?>) comparator).callable()).first() + " asc ";
         }
         if (comparator instanceof DescendingComparator) {
-            return toSql(((DescendingComparator<? super Record>) comparator).callable()).first() + " desc ";
+            return toSql(((DescendingComparator<? super Record, ?>) comparator).callable()).first() + " desc ";
         }
         throw new UnsupportedOperationException("Unsupported comparator " + comparator);
     }

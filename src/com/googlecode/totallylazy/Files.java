@@ -36,7 +36,11 @@ public class Files {
     }
 
     public static File temporaryDirectory() {
-        File directory = new File(TEMP_DIR, randomFilename());
+        return temporaryDirectory(randomFilename());
+    }
+
+    public static File temporaryDirectory(String name) {
+        File directory = new File(TEMP_DIR, name);
         directory.deleteOnExit();
         directory.mkdirs();
         return directory;
@@ -63,6 +67,19 @@ public class Files {
 
     public static Sequence<File> files(File directory) {
         return Sequences.sequence(directory.listFiles());
+    }
+
+    public static Sequence<File> recursiveFiles(final File directory){
+        Partition<File> partition = files(directory).partition(isDirectory());
+        return partition.unmatched().join(partition.matched().flatMap(recursiveFiles()));
+    }
+
+    public static Callable1<File, Iterable<File>> recursiveFiles() {
+        return new Callable1<File, Iterable<File>>() {
+            public Iterable<File> call(File file) throws Exception {
+                return recursiveFiles(file);
+            }
+        };
     }
 
     public static File write(byte[] bytes, File file) throws IOException {

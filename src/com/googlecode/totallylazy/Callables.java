@@ -52,12 +52,12 @@ public final class Callables {
         };
     }
 
-    public static <T> Comparator<T> ascending(final Callable1<T, ? extends Comparable> callable) {
-        return new AscendingComparator<T>(callable);
+    public static <T, R extends Comparable<R>> Comparator<T> ascending(final Callable1<T, R> callable) {
+        return new AscendingComparator<T, R>(callable);
     }
 
-    public static <T> Comparator<T> descending(final Callable1<T, ? extends Comparable> callable) {
-        return new DescendingComparator<T>(callable);
+    public static <T, R extends Comparable<R>> Comparator<T> descending(final Callable1<T, R> callable) {
+        return new DescendingComparator<T, R>(callable);
     }
 
     public static <T> Callable1<T, Integer> length() {

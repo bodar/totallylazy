@@ -6,10 +6,10 @@ import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Callers.call;
 
-public class DescendingComparator<T> implements Comparator<T> {
-    private final Callable1<T, ? extends Comparable> callable;
+public class DescendingComparator<T, R extends Comparable<R>> implements Comparator<T> {
+    private final Callable1<T, R> callable;
 
-    public DescendingComparator(Callable1<T, ? extends Comparable> callable) {
+    public DescendingComparator(Callable1<T, R> callable) {
         this.callable = callable;
     }
 
@@ -17,7 +17,7 @@ public class DescendingComparator<T> implements Comparator<T> {
         return call(callable, second).compareTo(call(callable, first));
     }
 
-    public Callable1<T, ? extends Comparable> callable() {
+    public Callable1<T, R> callable() {
         return callable;
     }
 }
