@@ -52,8 +52,10 @@ public abstract class AbstractRecordsTests {
     }
 
     @Test
-    public void supportsDrop() throws Exception {
-        assertThat(records.get(user).drop(2).size(), NumberMatcher.is(1));
+    public void supportsSet() throws Exception {
+        records.add(user, record().set(firstName, "chris").set(lastName, "bodart").set(age, 13).set(dob, date(1974, 1, 10)));
+        assertThat(records.get(user).filter(where(lastName, startsWith("bod"))).map(select(lastName)).toSet(), hasExactly(record().set(lastName, "bodart")));
+        records.remove(user, where(firstName, is("chris")));
     }
 
     @Test
