@@ -11,6 +11,14 @@ import static java.util.UUID.randomUUID;
 public class Files {
     public static final File TEMP_DIR = new File(getProperty("java.io.tmpdir"));
 
+    public static Predicate<? super File> isFile() {
+        return new Predicate<File>() {
+            public boolean matches(File file) {
+                return file.isFile();
+            }
+        };
+    }
+
     public static Predicate<? super File> isDirectory() {
         return new Predicate<File>() {
             public boolean matches(File file) {
@@ -26,7 +34,6 @@ public class Files {
             }
         };
     }
-
 
     public static Callable1<? super File, String> path() {
         return new Callable1<File, String>() {
@@ -68,6 +75,10 @@ public class Files {
         } catch (IOException e) {
             throw new LazyException(e);
         }
+    }
+
+    public static File workingDirectory() {
+        return new File(".");
     }
 
     public static String randomFilename() {
