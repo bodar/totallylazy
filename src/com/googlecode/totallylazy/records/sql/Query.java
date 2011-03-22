@@ -14,20 +14,20 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Query {
-    private final boolean distinct;
-    private final Keyword table;
+    private final SetQuantifier setQuantifier;
     private final Sequence<Keyword> select;
     private final String selectFunction;
+    private final Keyword table;
     private final Sequence<Predicate<? super Record>> where;
     private final Option<Comparator<? super Record>> comparator;
 
-    private Query(Keyword table, Sequence<Keyword> select, String selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, boolean distinct) {
-        this.table = table;
+    private Query(SetQuantifier setQuantifier, Sequence<Keyword> select, String selectFunction, Keyword table, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
+        this.setQuantifier = setQuantifier;
         this.select = select;
         this.selectFunction = selectFunction;
+        this.table = table;
         this.where = where;
         this.comparator = comparator;
-        this.distinct = distinct;
     }
 
     @Override
@@ -42,27 +42,24 @@ public class Query {
 
     public Pair<String, Sequence<Object>> expressionAndParameters() {
         final Pair<String, Sequence<Object>> whereClause = sql().whereClause(where);
-        return pair(String.format("select %s from %s %s %s", selectClause(), table, whereClause.first(), sql().orderByClause(comparator)), whereClause.second());
+        String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause(), table, whereClause.first(), sql().orderByClause(comparator));
+        return pair(sql, whereClause.second());
     }
 
     private Object selectClause() {
-        return applyFunction(formatDistinct(select.isEmpty() ? "*" : sequence(select).toString(table.toString() + ".", ",", "")));
-    }
-
-    private String formatDistinct(String inner) {
-        return distinct ? "distinct " + inner : inner;
+        return applyFunction(select.isEmpty() ? "*" : sequence(select).toString(table.toString() + ".", ",", ""));
     }
 
     private Object applyFunction(String columns) {
         return selectFunction == null ? columns : String.format(selectFunction, columns);
     }
 
-    public static Query query(Keyword table, Sequence<Keyword> select, String selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, final boolean distinct) {
-        return new Query(table, select, selectFunction, where, comparator, distinct);
+    public static Query query(Keyword table, Sequence<Keyword> select, String selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, final SetQuantifier setQuantifier) {
+        return new Query(setQuantifier, select, selectFunction, table, where, comparator);
     }
 
     public static Query query(Keyword table) {
-        return query(table, Sequences.<Keyword>empty(), null, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none(), false);
+        return query(table, Sequences.<Keyword>empty(), null, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none(), SetQuantifier.All);
     }
 
     public Query select(Keyword... columns) {
@@ -70,22 +67,22 @@ public class Query {
     }
 
     public Query select(Sequence<Keyword> columns) {
-        return query(table, columns, selectFunction, where, comparator, distinct);
+        return query(table, columns, selectFunction, where, comparator, setQuantifier);
     }
 
     public Query where(Predicate<? super Record> predicate) {
-        return query(table, select, selectFunction, where.add(predicate), comparator, distinct);
+        return query(table, select, selectFunction, where.add(predicate), comparator, setQuantifier);
     }
 
     public Query orderBy(Comparator<? super Record> comparator) {
-        return query(table, select, selectFunction, where, Option.<Comparator<? super Record>>some(comparator), distinct);
+        return query(table, select, selectFunction, where, Option.<Comparator<? super Record>>some(comparator), setQuantifier);
     }
 
     public Query count() {
-        return query(table, select, "count(%s)", where, comparator, distinct);
+        return query(table, select, " count(%s) ", where, comparator, setQuantifier);
     }
 
     public Query distinct() {
-        return query(table, select, selectFunction, where, comparator, true);
+        return query(table, select, selectFunction, where, comparator, SetQuantifier.Distinct);
     }
 }
