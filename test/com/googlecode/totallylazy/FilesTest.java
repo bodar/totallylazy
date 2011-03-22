@@ -29,7 +29,12 @@ public class FilesTest {
 
     @Test
     public void supportsRecursiveSequenceOfFiles() {
-        assertThat(recursiveFiles(workingDirectory()).find(where(path(), endsWith("FilesTest.java"))), notNullValue());
+        assertThat(recursiveFiles(workingDirectory()).find(where(path(), endsWith("FilesTest.java"))).get(), notNullValue());
+    }
+
+    @Test
+    public void handlesDirectoriesThatReturnANullArray() {
+        assertThat(recursiveFiles(new File("doesNotExist")).find(where(name(), is("FilesTest.java"))), CoreMatchers.is((Option<File>) none(File.class)));
     }
 
     @Test
