@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.lang.System.getProperty;
 import static java.util.UUID.randomUUID;
 
@@ -90,14 +91,13 @@ public class Files {
     }
 
     public static Sequence<File> recursiveFiles(final File directory){
-        Partition<File> partition = files(directory).partition(isDirectory());
-        return partition.unmatched().join(partition.matched().flatMap(recursiveFiles()));
+        return files(directory).flatMap(recursiveFiles());
     }
 
     public static Callable1<File, Iterable<File>> recursiveFiles() {
         return new Callable1<File, Iterable<File>>() {
             public Iterable<File> call(File file) throws Exception {
-                return recursiveFiles(file);
+                return file.isDirectory() ? sequence(file).join(recursiveFiles(file)) : sequence(file);
             }
         };
     }
