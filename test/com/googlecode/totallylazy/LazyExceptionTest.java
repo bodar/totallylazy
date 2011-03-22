@@ -3,12 +3,23 @@ package com.googlecode.totallylazy;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LazyExceptionTest {
+    @Test
+    public void neverContainsInvocationTargetException() throws Exception {
+        final ParseException expected = new ParseException("blah blah", 1);
+        
+        final InvocationTargetException invocationTargetException = new InvocationTargetException(expected);
+        final LazyException lazyException = new LazyException(new LazyException(new LazyException(invocationTargetException)));
+
+        checkException(lazyException, ParseException.class, expected);
+    }
+
     @Test
     public void neverContainsItSelf() throws Exception {
         final ParseException expected = new ParseException("blah blah", 1);

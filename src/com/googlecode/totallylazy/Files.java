@@ -87,7 +87,7 @@ public class Files {
     }
 
     public static Sequence<File> files(File directory) {
-        return Sequences.sequence(directory.listFiles());
+        return sequence(directory.listFiles());
     }
 
     public static Sequence<File> recursiveFiles(final File directory){
