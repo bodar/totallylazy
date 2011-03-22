@@ -33,7 +33,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     }
 
     private Iterator<Record> execute(final Query query) {
-        return queryable.query(query.expressionAndParameters());
+        return queryable.query(query);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public Number size() {
-        Record record = queryable.query(query.count().expressionAndParameters()).next();
+        Record record = queryable.query(query.count()).next();
         return (Number) record.fields().head().second();
     }
 

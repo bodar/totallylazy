@@ -125,7 +125,8 @@ public class SqlRecords extends AbstractRecords implements Queryable {
 
     }
 
-    public RecordIterator query(Pair<String, Sequence<Object>> pair) {
+    public RecordIterator query(Query query) {
+        Pair<String, Sequence<Object>> pair = query.expressionAndParameters();
         return query(pair.first(), pair.second());
     }
 
@@ -133,8 +134,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         try {
             final PreparedStatement statement = connection.prepareStatement(expression);
             addValues(statement, parameters);
-            String message = format("SQL:'%s' VALUES:'%s'", expression, parameters);
-            logger.println(format(message));
+            logger.println(format(format("SQL:'%s' VALUES:'%s'", expression, parameters)));
             return new RecordIterator(statement);
         } catch (SQLException e) {
             throw new LazyException(e);
