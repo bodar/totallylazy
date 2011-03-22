@@ -1,14 +1,18 @@
 package com.googlecode.totallylazy;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.io.File;
 
 import static com.googlecode.totallylazy.Files.*;
+import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
@@ -23,4 +27,13 @@ public class FilesTest {
         assertThat(files.filter(where(name(), is(equalTo(aFile.getName())))), hasExactly(aFile));
     }
 
+    @Test
+    public void supportsRecursiveSequenceOfFiles() {
+        assertThat(recursiveFiles(workingDirectory()).find(where(path(), endsWith("FilesTest.java"))), notNullValue());
+    }
+
+    @Test
+    public void shouldNotFindAFileThatDoesNotExist() {
+        assertThat(recursiveFiles(workingDirectory()).find(where(name(), endsWith("doesNotExist"))), CoreMatchers.is((Option<File>) none(File.class)));
+    }
 }
