@@ -20,7 +20,7 @@ class SingleValueSequence<S> extends Sequence<S> implements QuerySequence{
     }
 
     public Iterator<S> iterator() {
-        return Iterators.map(queryable.query(query.expressionAndParameters()), callable);
+        return Iterators.map(queryable.query(query), callable);
     }
 
     public Query query() {
