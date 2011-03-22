@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -11,6 +12,14 @@ import static com.googlecode.totallylazy.Exceptions.handleException;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 
 public class Methods {
+    public static <T extends Annotation> Callable1<? super Method, T> annotation(final Class<T> annotationClass) {
+        return new Callable1<Method, T>() {
+            public T call(Method method) throws Exception {
+                return method.getAnnotation(annotationClass);
+            }
+        };
+    }
+
     public static Callable1<? super Method, Type> genericReturnType() {
         return new Callable1<Method, Type>() {
             public Type call(Method method) throws Exception {
