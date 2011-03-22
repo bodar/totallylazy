@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Callables.doThen;
+import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.lang.System.getProperty;
@@ -103,11 +107,9 @@ public class Files {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public static File write(byte[] bytes, File file) throws IOException {
-        OutputStream outputStream = new FileOutputStream(file);
-        outputStream.write(bytes);
-        outputStream.close();
-        return file;
+        return using(new FileOutputStream(file), doThen(Runnables.write(bytes), returns(file)));
     }
 
     public static Callable1<? super File, Boolean> delete() {
