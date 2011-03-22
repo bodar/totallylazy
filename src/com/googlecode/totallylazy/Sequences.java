@@ -40,6 +40,9 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> sequence(final T... items) {
+        if(items == null){
+            return empty();
+        }
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return new ArrayIterator<T>(items);
