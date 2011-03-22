@@ -26,9 +26,8 @@ import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.SelectCallable;
 
+import java.io.PrintWriter;
 import java.util.Comparator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -37,8 +36,6 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Sql {
-    static final Logger LOGGER = Logger.getLogger(Sql.class.getName());
-
     private final Keyword table;
 
     public Sql(Keyword table) {
@@ -75,13 +72,11 @@ public class Sql {
         throw new UnsupportedOperationException("Unsupported comparator " + comparator);
     }
 
-
     public boolean isSupported(Predicate<? super Record> predicate) {
         try {
             toSql(predicate);
             return true;
         } catch (UnsupportedOperationException e) {
-            Sql.LOGGER.log(Level.WARNING, String.format("Warning: %s dropping down to client side sequence functionality", e.getMessage()));
             return false;
         }
     }
@@ -181,7 +176,6 @@ public class Sql {
             toSql(comparator);
             return true;
         } catch (UnsupportedOperationException e) {
-            Sql.LOGGER.log(Level.WARNING, String.format("Warning: %s dropping down to client side sequence functionality", e.getMessage()));
             return false;
         }
     }
