@@ -1,9 +1,6 @@
 package com.googlecode.totallylazy.records.sql;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sets;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
@@ -15,6 +12,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.ascending;
+import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static java.lang.String.format;
 
 public class RecordSequence extends Sequence<Record> implements QuerySequence {
@@ -45,7 +43,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
         if (callable instanceof SelectCallable) {
             return (Sequence<S>) new RecordSequence(queryable, query.select(((SelectCallable) callable).keywords()), logger);
         }
-        logger.println(format("Warning: unsupported callables %s dropping down to client side sequence functionality", callable));
+        logger.println(format("Warning: Unsupported Callable1 %s dropping down to client side sequence functionality", callable));
         return super.map(callable);
     }
 
@@ -54,7 +52,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
         if (query.sql().isSupported(predicate)) {
             return new RecordSequence(queryable, query.where(predicate), logger);
         }
-        logger.println(format("Warning: Unsupported predicate %s dropping down to client side sequence functionality", predicate));
+        logger.println(format("Warning: Unsupported Predicate %s dropping down to client side sequence functionality", predicate));
         return super.filter(predicate);
     }
 
@@ -68,14 +66,22 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
         if (query.sql().isSupported(comparator)) {
             return new RecordSequence(queryable, query.orderBy(comparator), logger);
         }
-        logger.println(format("Warning: unsupported comparator %s dropping down to client side sequence functionality", comparator));
+        logger.println(format("Warning: Unsupported Comparator %s dropping down to client side sequence functionality", comparator));
         return super.sortBy(comparator);
     }
 
     @Override
+    public <S> S reduce(Callable2<? super S, ? super Record, S> callable) {
+        if(query().sql().isSupported(callable)){
+            return (S) queryable.query(query.reduce(callable)).next().fields().head().second();
+        }
+        logger.println(format("Warning: Unsupported Callable2 %s dropping down to client side sequence functionality", callable));
+        return super.reduce(callable);
+    }
+
+    @Override
     public Number size() {
-        Record record = queryable.query(query.count()).next();
-        return (Number) record.fields().head().second();
+        return reduce(count());
     }
 
     @Override

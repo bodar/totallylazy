@@ -61,11 +61,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.foldLeft(this, seed, callable);
     }
 
-    public T reduce(final Callable2<? super T, ? super T, T> callable) {
+    public <S> S reduce(final Callable2<? super S, ? super T, S> callable) {
         return Sequences.reduce(this, callable);
     }
 
-    public T reduceLeft(final Callable2<? super T, ? super T, T> callable) {
+    public <S> S reduceLeft(final Callable2<? super S, ? super T, S> callable) {
         return Sequences.reduceLeft(this, callable);
     }
 

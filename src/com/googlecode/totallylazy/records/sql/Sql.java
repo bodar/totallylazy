@@ -1,11 +1,6 @@
 package com.googlecode.totallylazy.records.sql;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Value;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
 import com.googlecode.totallylazy.predicates.AndPredicate;
@@ -22,9 +17,7 @@ import com.googlecode.totallylazy.predicates.Not;
 import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
-import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.SelectCallable;
+import com.googlecode.totallylazy.records.*;
 
 import java.io.PrintWriter;
 import java.util.Comparator;
@@ -178,5 +171,27 @@ public class Sql {
         } catch (UnsupportedOperationException e) {
             return false;
         }
+    }
+
+    public boolean isSupported(Callable2<?, ? super Record, ?> callable) {
+        try{
+            toSql(callable, "");
+            return true;
+        } catch (UnsupportedOperationException e) {
+            return false;
+        }
+    }
+
+    public String toSql(Callable2<?, ? super Record, ?> callable, String columns) {
+        if(callable instanceof CountNotNull){
+            return String.format("count(%s)", columns);
+        }
+        if(callable instanceof Min){
+            return String.format("min(%s)", columns);
+        }
+        if(callable instanceof Max){
+            return String.format("max(%s)", columns);
+        }
+        throw new UnsupportedOperationException();
     }
 }

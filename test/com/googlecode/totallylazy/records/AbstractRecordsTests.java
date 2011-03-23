@@ -25,9 +25,11 @@ import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
+import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.totallylazy.records.Max.max;
+import static com.googlecode.totallylazy.records.Min.min;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -56,7 +58,14 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsReduce() throws Exception {
         assertThat(records.get(user).map(age).reduce(max(Integer.class)), CoreMatchers.is(12));
+        assertThat(records.get(user).map(age).reduce(min(Integer.class)), CoreMatchers.is(10));
+        assertThat(records.get(user).reduce(count()), NumberMatcher.is(3));
+
+        records.add(user, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
+        assertThat(records.get(user).map(age).reduce(count()), NumberMatcher.is(3));
+        records.remove(user, where(firstName, is("null age")));
     }
+
 
     @Test
     public void supportsSet() throws Exception {
