@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.records;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.util.Date;
@@ -26,6 +27,7 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
+import static com.googlecode.totallylazy.records.Max.max;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -49,6 +51,11 @@ public abstract class AbstractRecordsTests {
                 record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)),
                 record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 1, 10)),
                 record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 1, 10)));
+    }
+
+    @Test
+    public void supportsReduce() throws Exception {
+        assertThat(records.get(user).map(age).reduce(max(Integer.class)), CoreMatchers.is(12));
     }
 
     @Test
