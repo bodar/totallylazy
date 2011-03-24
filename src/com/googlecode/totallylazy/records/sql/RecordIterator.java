@@ -64,6 +64,9 @@ public class RecordIterator extends StatefulIterator<Record> {
             if(aClass.equals(Timestamp.class)){
                 return resultSet.getTimestamp(name);
             }
+            if(aClass.equals(String.class)){
+                return resultSet.getString(name);
+            }
         }
         return resultSet.getObject(columnIndex);
     }
