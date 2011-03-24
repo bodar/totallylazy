@@ -57,11 +57,6 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     }
 
     @Override
-    public Sequence<Record> sortBy(Callable1<? super Record, ? extends Comparable> callable) {
-        return sortBy(ascending(callable));
-    }
-
-    @Override
     public Sequence<Record> sortBy(Comparator<? super Record> comparator) {
         if (query.sql().isSupported(comparator)) {
             return new RecordSequence(queryable, query.orderBy(comparator), logger);
@@ -87,11 +82,6 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     @Override
     public <S extends Set<Record>> S toSet(S set) {
         return Sets.set(set, execute(query.distinct()));
-    }
-
-    @Override
-    public Set<Record> toSet() {
-        return Sets.set(execute(query.distinct()));
     }
 
     @Override

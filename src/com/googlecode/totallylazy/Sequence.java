@@ -4,8 +4,11 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.reflect.Array;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static com.googlecode.totallylazy.Callables.ascending;
 
 
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
@@ -97,7 +100,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sets.set(set, this);
     }
     public Set<T> toSet() {
-        return Sets.set(this);
+        return toSet(new HashSet<T>());
     }
 
     public boolean isEmpty() {
@@ -193,7 +196,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Sequence<T> sortBy(final Callable1<? super T, ? extends Comparable> callable) {
-        return Sequences.sortBy(this, callable);
+        return sortBy(ascending(callable));
     }
 
     public Sequence<T> sortBy(final Comparator<? super T> comparator) {
