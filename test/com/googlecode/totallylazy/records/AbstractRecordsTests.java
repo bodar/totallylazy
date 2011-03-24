@@ -11,18 +11,9 @@ import java.util.Date;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Dates.date;
-import static com.googlecode.totallylazy.Predicates.between;
-import static com.googlecode.totallylazy.Predicates.greaterThan;
-import static com.googlecode.totallylazy.Predicates.greaterThanOrEqualTo;
-import static com.googlecode.totallylazy.Predicates.in;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.lessThan;
-import static com.googlecode.totallylazy.Predicates.lessThanOrEqualTo;
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Strings.contains;
-import static com.googlecode.totallylazy.Strings.endsWith;
-import static com.googlecode.totallylazy.Strings.startsWith;
+import static com.googlecode.totallylazy.Strings.*;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
 import static com.googlecode.totallylazy.records.CountNotNull.count;
@@ -201,7 +192,7 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsBetween() throws Exception {
         Sequence<Record> users = records.get(user);
-        assertThat(users.filter(where(age, is(between(10,11)))).map(firstName), containsInAnyOrder("dan", "bob"));
+        assertThat(users.filter(where(age, is(between(10, 11)))).map(firstName), containsInAnyOrder("dan", "bob"));
     }
 
     @Test
