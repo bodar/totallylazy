@@ -2,7 +2,10 @@ package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.matchers.IterableMatcher;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import com.googlecode.totallylazy.records.sql.RecordSequence;
+import com.googlecode.totallylazy.records.sql.SqlRecords;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
@@ -26,7 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public abstract class AbstractRecordsTests {
-    private static final Keyword user = keyword("user");
+    private static final Keyword user = keyword("users");
     private static final Keyword<Integer> age = keyword("age", Integer.class);
     private static final Keyword<Date> dob = keyword("dob", Date.class);
     private static final Keyword<String> firstName = keyword("firstName", String.class);

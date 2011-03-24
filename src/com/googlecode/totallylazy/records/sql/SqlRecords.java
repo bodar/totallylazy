@@ -8,10 +8,7 @@ import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 
 import java.io.PrintStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,8 +52,9 @@ public class SqlRecords extends AbstractRecords implements Queryable {
             final String sql = format("create table %s (%s)", recordName, sequence(fields).map(asColumn()));
             using(connection.createStatement(), executeUpdate(sql));
             logger.println(format("SQL:'%s'", sql));
+            using(connection.createStatement(), executeUpdate(sql));
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new LazyException(e);
         }
     }
 
@@ -153,7 +151,14 @@ public class SqlRecords extends AbstractRecords implements Queryable {
 
     static void addValues(PreparedStatement statement, Sequence<?> values) throws SQLException {
         for (Pair<Integer, ?> numberAndValue : iterate(increment(), 1).safeCast(Integer.class).zip(values)) {
-            statement.setObject(numberAndValue.first(), numberAndValue.second());
+            Integer index = numberAndValue.first();
+            Object value = numberAndValue.second();
+            if(value instanceof Date){
+                Date date = (Date) value;
+                statement.setTimestamp(index, new Timestamp(date.getTime()));
+            } else {
+                statement.setObject(index, value);
+            }
         }
     }
 }
