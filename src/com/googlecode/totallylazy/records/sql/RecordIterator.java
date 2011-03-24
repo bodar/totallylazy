@@ -9,10 +9,7 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
@@ -62,7 +59,10 @@ public class RecordIterator extends StatefulIterator<Record> {
             Keyword keyword = option.get();
             Class aClass = keyword.forClass();
             if(aClass.equals(Date.class)){
-                return resultSet.getDate(name);
+                return new Date(resultSet.getTimestamp(name).getTime());
+            }
+            if(aClass.equals(Timestamp.class)){
+                return resultSet.getTimestamp(name);
             }
         }
         return resultSet.getObject(columnIndex);
