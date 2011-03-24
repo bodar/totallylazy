@@ -62,6 +62,7 @@ public class Methods {
     
     public static <T, R> R invoke(Method method, T instance, Object... arguments) {
         try {
+            method.setAccessible(true);
             return (R) method.invoke(instance, arguments);
         } catch (IllegalAccessException e) {
             throw new LazyException(e);
