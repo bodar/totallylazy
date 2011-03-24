@@ -9,5 +9,4 @@ import java.util.Iterator;
 
 public interface Queryable {
     Iterator<Record> query(Query query);
-    Iterator<Record> query(String expression, Sequence<?> parameters);
 }

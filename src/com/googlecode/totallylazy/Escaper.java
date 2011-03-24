@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Predicates.is;
@@ -20,7 +22,7 @@ public class Escaper {
         return withRule(is(appliesTo), returns(returns));
     }
 
-    public Escaper withRule(Predicate<Character> appliesTo, Callable1<Character, String> action) {
+    public Escaper withRule(Predicate<? super Character> appliesTo, Callable1<? super Character, String> action) {
         escapeRules.add(new Rule(appliesTo, action));
         return this;
     }
@@ -51,11 +53,11 @@ public class Escaper {
 
     private static class Rule implements Predicate<Character>, Callable1<Character, String> {
 
-        Predicate<Character> condition;
+        Predicate<? super Character> condition;
 
-        Callable1<Character, String> escape;
+        Callable1<? super Character, String> escape;
 
-        private Rule(Predicate<Character> condition, Callable1<Character, String> escape) {
+        private Rule(Predicate<? super Character> condition, Callable1<? super Character, String> escape) {
             this.condition = condition;
             this.escape = escape;
         }

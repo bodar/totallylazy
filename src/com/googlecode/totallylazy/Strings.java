@@ -112,7 +112,7 @@ public class Strings {
         };
     }
 
-    public static Predicate<Character> unicodeControlOrUndefinedCharacter() {
+    public static Predicate<? super Character> unicodeControlOrUndefinedCharacter() {
         return new Predicate<Character>() {
             public boolean matches(Character character) {
                 return character > 0x7F;
