@@ -29,7 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public abstract class AbstractRecordsTests {
-    private static final Keyword user = keyword("users");
+    private static final Keyword user = keyword("people");
     private static final Keyword<Integer> age = keyword("age", Integer.class);
     private static final Keyword<Date> dob = keyword("dob", Date.class);
     private static final Keyword<String> firstName = keyword("firstName", String.class);
