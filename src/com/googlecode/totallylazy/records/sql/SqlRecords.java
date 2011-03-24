@@ -52,7 +52,6 @@ public class SqlRecords extends AbstractRecords implements Queryable {
             final String sql = format("create table %s (%s)", recordName, sequence(fields).map(asColumn()));
             using(connection.createStatement(), executeUpdate(sql));
             logger.println(format("SQL:'%s'", sql));
-            using(connection.createStatement(), executeUpdate(sql));
         } catch (SQLException e) {
             throw new LazyException(e);
         }
