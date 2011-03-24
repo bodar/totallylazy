@@ -58,7 +58,7 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsReduce() throws Exception {
         assertThat(records.get(user).map(age).reduce(max(Integer.class)), CoreMatchers.is(12));
-        assertThat(records.get(user).map(age).reduce(min(Integer.class)), CoreMatchers.is(10));
+        assertThat(records.get(user).map(dob).reduce(min(Date.class)), CoreMatchers.is(date(1975, 1, 10)));
         assertThat(records.get(user).reduce(count()), NumberMatcher.is(3));
 
         records.add(user, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));

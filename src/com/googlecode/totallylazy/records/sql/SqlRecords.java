@@ -14,12 +14,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Closeables.using;
-import static com.googlecode.totallylazy.Sequences.iterate;
-import static com.googlecode.totallylazy.Sequences.repeat;
-import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Sequences.*;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
@@ -125,20 +126,18 @@ public class SqlRecords extends AbstractRecords implements Queryable {
 
     }
 
-    public RecordIterator query(Query query) {
-        Pair<String, Sequence<Object>> pair = query.expressionAndParameters();
-        return query(pair.first(), pair.second());
-    }
-
-    public RecordIterator query(String expression, Sequence<?> parameters) {
-        try {
-            final PreparedStatement statement = connection.prepareStatement(expression);
-            addValues(statement, parameters);
-            logger.println(format(format("SQL:'%s' VALUES:'%s'", expression, parameters)));
-            return new RecordIterator(statement);
-        } catch (SQLException e) {
-            throw new LazyException(e);
-        }
+    public RecordIterator query(final Query query) {
+        return new RecordIterator(query, new Callable<PreparedStatement>() {
+            public PreparedStatement call() throws Exception {
+                Pair<String, Sequence<Object>> pair = query.expressionAndParameters();
+                String expression = pair.first();
+                Sequence<?> parameters = pair.second();
+                final PreparedStatement statement = connection.prepareStatement(expression);
+                addValues(statement, parameters);
+                logger.println(format(format("SQL:'%s' VALUES:'%s'", expression, parameters)));
+                return statement;
+            }
+        });
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {

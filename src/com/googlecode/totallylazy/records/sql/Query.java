@@ -37,6 +37,14 @@ public class Query {
         return Sql.sql(table);
     }
 
+    public Keyword table() {
+        return table;
+    }
+
+    public Sequence<Keyword> select() {
+        return select;
+    }
+
     public Pair<String, Sequence<Object>> expressionAndParameters() {
         final Pair<String, Sequence<Object>> whereClause = sql().whereClause(where);
         String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause(), table, whereClause.first(), sql().orderByClause(comparator));
@@ -84,6 +92,6 @@ public class Query {
     }
 
     public <S> Query reduce(Callable2<? super S, ? super Record, S> callable) {
-        return query(table,select, callable, where, comparator, setQuantifier);
+        return query(table, select, callable, where, comparator, setQuantifier);
     }
 }

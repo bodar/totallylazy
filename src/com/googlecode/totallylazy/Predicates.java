@@ -23,11 +23,11 @@ import java.util.Collection;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Predicates {
-    public static <T> LogicalPredicate<T> always(Class<T> aClass) {
+    public static <T> LogicalPredicate<? super T> always(Class<T> aClass) {
         return always();
     }
 
-    public static <T> LogicalPredicate<T> always() {
+    public static <T> LogicalPredicate<? super T> always() {
         return new LogicalPredicate<T>() {
             public boolean matches(T instance) {
                 return true;
@@ -35,11 +35,11 @@ public class Predicates {
         };
     }
 
-    public static <T> LogicalPredicate<T> never(Class<T> aClass) {
+    public static <T> LogicalPredicate<? super T> never(Class<T> aClass) {
         return never();
     }
 
-    public static <T> LogicalPredicate<T> never() {
+    public static <T> LogicalPredicate<? super T> never() {
         return not(always());
     }
 
@@ -59,11 +59,11 @@ public class Predicates {
         };
     }
 
-    public static <T> LogicalPredicate<T> in(final T... values) {
+    public static <T> LogicalPredicate<? super T> in(final T... values) {
         return in(sequence(values));
     }
 
-    public static <T> LogicalPredicate<T> in(final Sequence<T> values) {
+    public static <T> LogicalPredicate<? super T> in(final Sequence<T> values) {
         return new InPredicate<T>(values);
     }
 
@@ -87,15 +87,15 @@ public class Predicates {
         return new OnlyOnce<T>(predicate);
     }
 
-    public static <T> LogicalPredicate<T> instanceOf(final Class t) {
+    public static <T> LogicalPredicate<? super T> instanceOf(final Class t) {
         return new InstanceOf<T>(t);
     }
 
-    public static <T> LogicalPredicate<T> equalTo(final T t) {
+    public static <T> LogicalPredicate<? super T> equalTo(final T t) {
         return new EqualsPredicate<T>(t);
     }
 
-    public static <T> LogicalPredicate<T> is(final T t) {
+    public static <T> LogicalPredicate<? super T> is(final T t) {
         return equalTo(t);
     }
 
@@ -103,43 +103,43 @@ public class Predicates {
         return t;
     }
 
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T>... predicates) {
+    public static <T> LogicalPredicate<? super T> and(final Predicate<? super T>... predicates) {
         return new AndPredicate<T>(predicates);
     }
 
-    public static <T> LogicalPredicate<T> or(final Predicate<? super T>... predicates) {
+    public static <T> LogicalPredicate<? super T> or(final Predicate<? super T>... predicates) {
         return new OrPredicate<T>(predicates);
     }
 
-    public static <T> LogicalPredicate<T> not(final T t) {
+    public static <T> LogicalPredicate<? super T> not(final T t) {
         return new Not<T>(is(t));
     }
 
-    public static <T> LogicalPredicate<T> not(final Predicate<? super T> t) {
+    public static <T> LogicalPredicate<? super T> not(final Predicate<? super T> t) {
         return new Not<T>(t);
     }
 
-    public static <T> LogicalPredicate<T> countTo(final int count) {
+    public static <T> LogicalPredicate<? super T> countTo(final int count) {
         return new CountTo<T>(count);
     }
 
-    public static <T> LogicalPredicate<T> whileTrue(final Predicate<? super T> t) {
+    public static <T> LogicalPredicate<? super T> whileTrue(final Predicate<? super T> t) {
         return new WhileTrue<T>(t);
     }
 
-    public static <T> LogicalPredicate<T> nullValue() {
+    public static <T> LogicalPredicate<? super T> nullValue() {
         return new Null<T>();
     }
 
-    public static <T> LogicalPredicate<T> nullValue(final Class<T> type) {
+    public static <T> LogicalPredicate<? super T> nullValue(final Class<T> type) {
         return nullValue();
     }
 
-    public static <T> LogicalPredicate<T> notNullValue() {
+    public static <T> LogicalPredicate<? super T> notNullValue() {
         return not(nullValue());
     }
 
-    public static <T> LogicalPredicate<T> notNullValue(final Class<T> aClass) {
+    public static <T> LogicalPredicate<? super T> notNullValue(final Class<T> aClass) {
         return notNullValue();
     }
 
@@ -176,11 +176,11 @@ public class Predicates {
         return aClass.isAssignableFrom(o.getClass());
     }
 
-    public static <T, R> LogicalPredicate<T> where(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> LogicalPredicate<? super T> where(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
         return new WherePredicate<T, R>(callable, predicate);
     }
 
-    public static <T, R> LogicalPredicate<T> by(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> LogicalPredicate<? super T> by(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
         return where(callable, predicate);
     }
 
@@ -192,23 +192,23 @@ public class Predicates {
         };
     }
 
-    public static <T extends Comparable<T>> LogicalPredicate<T> greaterThan(final T comparable) {
+    public static <T extends Comparable<T>> LogicalPredicate<? super T> greaterThan(final T comparable) {
         return new GreaterThanPredicate<T>(comparable);
     }
 
-    public static <T extends Comparable<T>> LogicalPredicate<T> greaterThanOrEqualTo(final T comparable) {
+    public static <T extends Comparable<T>> LogicalPredicate<? super T> greaterThanOrEqualTo(final T comparable) {
         return new GreaterThanOrEqualToPredicate<T>(comparable);
     }
 
-    public static <T extends Comparable<T>> LogicalPredicate<T> lessThan(final T comparable) {
+    public static <T extends Comparable<T>> LogicalPredicate<? super T> lessThan(final T comparable) {
         return new LessThanPredicate<T>(comparable);
     }
 
-    public static <T extends Comparable<T>> LogicalPredicate<T> lessThanOrEqualTo(final T comparable) {
+    public static <T extends Comparable<T>> LogicalPredicate<? super T> lessThanOrEqualTo(final T comparable) {
         return new LessThanOrEqualToPredicate<T>(comparable);
     }
 
-    public static <T extends Comparable<T>> LogicalPredicate<T> between(final T lower, final T upper) {
+    public static <T extends Comparable<T>> LogicalPredicate<? super T> between(final T lower, final T upper) {
         return new BetweenPredicate<T>(lower, upper);
     }
 
