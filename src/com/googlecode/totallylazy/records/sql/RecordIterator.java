@@ -59,13 +59,25 @@ public class RecordIterator extends StatefulIterator<Record> {
             Keyword keyword = option.get();
             Class aClass = keyword.forClass();
             if(aClass.equals(Date.class)){
-                return new Date(resultSet.getTimestamp(name).getTime());
+                return new Date(resultSet.getTimestamp(columnIndex).getTime());
             }
             if(aClass.equals(Timestamp.class)){
-                return resultSet.getTimestamp(name);
+                return resultSet.getTimestamp(columnIndex);
             }
             if(aClass.equals(String.class)){
-                return resultSet.getString(name);
+                return resultSet.getString(columnIndex);
+            }
+            if(aClass.equals(Integer.class)){
+                if(resultSet.getObject(columnIndex) == null){
+                    return null;
+                }
+                return resultSet.getInt(columnIndex);
+            }
+            if(aClass.equals(Long.class)){
+                if(resultSet.getObject(columnIndex) == null){
+                    return null;
+                }
+                return resultSet.getLong(columnIndex);
             }
         }
         return resultSet.getObject(columnIndex);
