@@ -38,6 +38,7 @@ public abstract class AbstractRecordsTests {
 
     public static void addRecords(Records records) {
         AbstractRecordsTests.records = records;
+        records.remove(user);
         records.define(user, age, dob, firstName, lastName);
         addUsers(records);
     }

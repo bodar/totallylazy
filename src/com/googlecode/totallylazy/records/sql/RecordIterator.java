@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Keywords;
 import com.googlecode.totallylazy.records.Record;
 
 import java.sql.*;
@@ -15,10 +16,14 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
+import static com.googlecode.totallylazy.records.Keywords.name;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 
 public class RecordIterator extends StatefulIterator<Record> {
@@ -54,7 +59,7 @@ public class RecordIterator extends StatefulIterator<Record> {
 
     private Object getValue(ResultSet resultSet, Integer columnIndex, String name) throws SQLException {
         Sequence<Keyword> keywords = query.select();
-        Option<Keyword> option = keywords.find(Predicates.<Keyword>equalTo(keyword(name)));
+        Option<Keyword> option = keywords.find(where(name(), equalIgnoringCase(name)));
         if(!option.isEmpty()){
             Keyword keyword = option.get();
             Class aClass = keyword.forClass();

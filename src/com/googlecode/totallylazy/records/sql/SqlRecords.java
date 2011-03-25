@@ -17,7 +17,10 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Closeables.using;
-import static com.googlecode.totallylazy.Sequences.*;
+import static com.googlecode.totallylazy.Runnables.doNothing;
+import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.negate;
@@ -48,12 +51,24 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }};
 
     public void define(Keyword recordName, Keyword<?>... fields) {
+        if (exists(recordName)) {
+            return;
+        }
         try {
             final String sql = format("create table %s (%s)", recordName, sequence(fields).map(asColumn()));
             using(connection.createStatement(), executeUpdate(sql));
             logger.println(format("SQL:'%s'", sql));
         } catch (SQLException e) {
             throw new LazyException(e);
+        }
+    }
+
+    private boolean exists(Keyword recordName) {
+        try {
+            using(connection.prepareStatement("select 1 from " + recordName), doNothing());
+            return true;
+        } catch (SQLException e) {
+            return false;
         }
     }
 
@@ -145,6 +160,9 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public Number remove(Keyword recordName) {
+        if(!exists(recordName)){
+            return 0;
+        }
         return update(format("delete from %s", recordName));
     }
 
@@ -152,7 +170,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         for (Pair<Integer, ?> numberAndValue : iterate(increment(), 1).safeCast(Integer.class).zip(values)) {
             Integer index = numberAndValue.first();
             Object value = numberAndValue.second();
-            if(value instanceof Date){
+            if (value instanceof Date) {
                 Date date = (Date) value;
                 statement.setTimestamp(index, new Timestamp(date.getTime()));
             } else {
