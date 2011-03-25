@@ -20,8 +20,8 @@ import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Sequences.*;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static com.googlecode.totallylazy.numbers.Numbers.negate;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
-import static com.googlecode.totallylazy.records.sql.Sql.sql;
 import static java.lang.String.format;
 
 public class SqlRecords extends AbstractRecords implements Queryable {
@@ -97,7 +97,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        Pair<String, Sequence<Object>> where = sql(recordName).toSql(predicate);
+        Pair<String, Sequence<Object>> where = new Sql().toSql(predicate);
         final String sql = format("update %s set %s where %s",
                 recordName, fields.toString("", "=?,", "=?"), where.first());
         return update(sql, record.getValuesFor(fields).join(where.second()));
@@ -138,7 +138,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        Pair<String, Sequence<Object>> where = sql(recordName).toSql(predicate);
+        Pair<String, Sequence<Object>> where = new Sql().toSql(predicate);
         final String sql = format("delete from %s where %s",
                 recordName, where.first());
         return update(sql, where.second());

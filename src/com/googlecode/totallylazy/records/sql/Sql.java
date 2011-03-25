@@ -29,16 +29,6 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Sql {
-    private final Keyword table;
-
-    public Sql(Keyword table) {
-        this.table = table;
-    }
-
-    public static Sql sql(Keyword table) {
-        return new Sql(table);
-    }
-
     @SuppressWarnings("unchecked")
     public Pair<String, Sequence<Object>> whereClause(Sequence<Predicate<? super Record>> where) {
         if (where.isEmpty()) return pair("", empty());
@@ -76,10 +66,10 @@ public class Sql {
 
     public <T> Pair<String, Sequence<Object>> toSql(Callable1<? super Record, T> callable) {
         if (callable instanceof Keyword) {
-            return pair(table.toString() + "." + callable.toString(), empty());
+            return pair(callable.toString(), empty());
         }
         if (callable instanceof SelectCallable) {
-            return pair(sequence(((SelectCallable) callable).keywords()).toString(table.toString() + ".", ",", ""), empty());
+            return pair(sequence(((SelectCallable) callable).keywords()).toString("", ",", ""), empty());
         }
         throw new UnsupportedOperationException("Unsupported callable " + callable);
     }
@@ -164,7 +154,7 @@ public class Sql {
         };
     }
 
-    public <T> boolean isSupported(Comparator<? super Record> comparator) {
+    public boolean isSupported(Comparator<? super Record> comparator) {
         try {
             toSql(comparator);
             return true;

@@ -34,7 +34,7 @@ public class Query {
     }
 
     public Sql sql() {
-        return Sql.sql(table);
+        return new Sql();
     }
 
     public Keyword table() {
@@ -52,7 +52,7 @@ public class Query {
     }
 
     private Object selectClause() {
-        return applyFunction(select.isEmpty() ? "*" : sequence(select).toString(table.toString() + ".", ",", ""));
+        return applyFunction(select.isEmpty() ? "*" : sequence(select).toString("", ",", ""));
     }
 
     private Object applyFunction(String columns) {
