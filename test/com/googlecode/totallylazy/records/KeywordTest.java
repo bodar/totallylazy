@@ -17,8 +17,9 @@ public class KeywordTest {
 
     @Test
     public void equalityIsBasedOnTheNameOnly() throws Exception {
-        assertThat(keyword("USER.foo").name(), is(equalTo(keyword("foo").name())));
-        assertThat(keyword("USER.TABLE.foo").name(), is(equalTo(keyword("foo").name())));
-        assertThat(keyword("USER.TABLE.foo").name(), is(equalTo(keyword("USER.foo").name())));
+        assertThat(keyword("USER.foo"), is(equalTo(keyword("foo"))));
+        assertThat(keyword("USER.TABLE.foo"), is(equalTo(keyword("foo"))));
+        assertThat(keyword("USER.TABLE.foo"), is(equalTo(keyword("USER.foo"))));
+        assertThat(keyword("FOO"), is(equalTo(keyword("foo"))));
     }
 }
