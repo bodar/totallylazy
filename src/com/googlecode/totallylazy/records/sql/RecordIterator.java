@@ -1,13 +1,9 @@
 package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.Keywords;
 import com.googlecode.totallylazy.records.Record;
 
 import java.sql.*;
@@ -49,7 +45,7 @@ public class RecordIterator extends StatefulIterator<Record> {
         final ResultSetMetaData metaData = resultSet.getMetaData();
         for (Integer columnIndex : iterate(increment(), 1).take(metaData.getColumnCount()).safeCast(Integer.class)) {
             final String name = metaData.getColumnName(columnIndex);
-            final Object value = getValue(resultSet, columnIndex, name);
+            final Object value = getValue(resultSet, name);
             final Keyword keyword = keyword(name, value == null ? Object.class : value.getClass());
             record.set(keyword, value);
         }
@@ -57,34 +53,34 @@ public class RecordIterator extends StatefulIterator<Record> {
         return some(record);
     }
 
-    private Object getValue(ResultSet resultSet, Integer columnIndex, String name) throws SQLException {
+    private Object getValue(ResultSet resultSet, String name) throws SQLException {
         Option<Keyword> option = keywords.find(where(name(), equalIgnoringCase(name)));
         if(!option.isEmpty()){
             Keyword keyword = option.get();
             Class aClass = keyword.forClass();
             if(aClass.equals(Date.class)){
-                return new Date(resultSet.getTimestamp(columnIndex).getTime());
+                return new Date(resultSet.getTimestamp(name).getTime());
             }
             if(aClass.equals(Timestamp.class)){
-                return resultSet.getTimestamp(columnIndex);
+                return resultSet.getTimestamp(name);
             }
             if(aClass.equals(String.class)){
-                return resultSet.getString(columnIndex);
+                return resultSet.getString(name);
             }
             if(aClass.equals(Integer.class)){
-                if(resultSet.getObject(columnIndex) == null){
+                if(resultSet.getObject(name) == null){
                     return null;
                 }
-                return resultSet.getInt(columnIndex);
+                return resultSet.getInt(name);
             }
             if(aClass.equals(Long.class)){
-                if(resultSet.getObject(columnIndex) == null){
+                if(resultSet.getObject(name) == null){
                     return null;
                 }
-                return resultSet.getLong(columnIndex);
+                return resultSet.getLong(name);
             }
         }
-        return resultSet.getObject(columnIndex);
+        return resultSet.getObject(name);
     }
 
     public PreparedStatement preparedStatement() throws Exception {
