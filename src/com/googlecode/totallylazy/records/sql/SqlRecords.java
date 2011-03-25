@@ -139,7 +139,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public RecordIterator query(final Query query) {
-        return new RecordIterator(query, new Callable<PreparedStatement>() {
+        return new RecordIterator(query.select(), new Callable<PreparedStatement>() {
             public PreparedStatement call() throws Exception {
                 Pair<String, Sequence<Object>> pair = query.expressionAndParameters();
                 String expression = pair.first();

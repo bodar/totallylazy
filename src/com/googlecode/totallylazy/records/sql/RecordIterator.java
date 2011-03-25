@@ -28,11 +28,11 @@ import static com.googlecode.totallylazy.records.MapRecord.record;
 
 public class RecordIterator extends StatefulIterator<Record> {
     private final Callable<PreparedStatement> preparedStatement;
-    private final Query query;
+    private final Sequence<Keyword> keywords;
     private ResultSet resultSet;
 
-    public RecordIterator(final Query query, final Callable<PreparedStatement> preparedStatement) {
-        this.query = query;
+    public RecordIterator(final Sequence<Keyword> keywords, final Callable<PreparedStatement> preparedStatement) {
+        this.keywords = keywords;
         this.preparedStatement = lazy(preparedStatement);
     }
 
@@ -58,7 +58,6 @@ public class RecordIterator extends StatefulIterator<Record> {
     }
 
     private Object getValue(ResultSet resultSet, Integer columnIndex, String name) throws SQLException {
-        Sequence<Keyword> keywords = query.select();
         Option<Keyword> option = keywords.find(where(name(), equalIgnoringCase(name)));
         if(!option.isEmpty()){
             Keyword keyword = option.get();
