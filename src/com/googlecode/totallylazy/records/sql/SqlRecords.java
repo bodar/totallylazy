@@ -11,19 +11,15 @@ import java.io.PrintStream;
 import java.sql.*;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Runnables.doNothing;
-import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static com.googlecode.totallylazy.numbers.Numbers.negate;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static java.lang.String.format;
 
@@ -98,7 +94,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
             Number rowCount = using(connection.prepareStatement(sql), new Callable1<PreparedStatement, Number>() {
                 public Number call(PreparedStatement statement) throws Exception {
                     for (Record record : records) {
-                        addValues(statement, record.getValuesFor(fields));
+                        BasicTypeMap.addValues(statement, record.getValuesFor(fields));
                         statement.addBatch();
                     }
                     return numbers(statement.executeBatch()).reduce(Numbers.add());
@@ -122,11 +118,11 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         return update(expression, sequence(parameters));
     }
 
-    public Number update(String expression, final Sequence<?> parameters) {
+    public Number update(String expression, final Sequence<Object> parameters) {
         try {
             Number rowCount = using(connection.prepareStatement(expression), new Callable1<PreparedStatement, Number>() {
                 public Number call(PreparedStatement statement) throws Exception {
-                    addValues(statement, parameters);
+                    BasicTypeMap.addValues(statement, parameters);
                     return statement.executeUpdate();
                 }
             });
@@ -143,9 +139,9 @@ public class SqlRecords extends AbstractRecords implements Queryable {
             public PreparedStatement call() throws Exception {
                 Pair<String, Sequence<Object>> pair = query.expressionAndParameters();
                 String expression = pair.first();
-                Sequence<?> parameters = pair.second();
+                Sequence<Object> parameters = pair.second();
                 final PreparedStatement statement = connection.prepareStatement(expression);
-                addValues(statement, parameters);
+                BasicTypeMap.addValues(statement, parameters);
                 logger.println(format(format("SQL:'%s' VALUES:'%s'", expression, parameters)));
                 return statement;
             }
@@ -166,16 +162,4 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         return update(format("delete from %s", recordName));
     }
 
-    static void addValues(PreparedStatement statement, Sequence<?> values) throws SQLException {
-        for (Pair<Integer, ?> numberAndValue : iterate(increment(), 1).safeCast(Integer.class).zip(values)) {
-            Integer index = numberAndValue.first();
-            Object value = numberAndValue.second();
-            if (value instanceof Date) {
-                Date date = (Date) value;
-                statement.setTimestamp(index, new Timestamp(date.getTime()));
-            } else {
-                statement.setObject(index, value);
-            }
-        }
-    }
 }
