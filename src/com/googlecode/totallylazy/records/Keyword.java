@@ -44,7 +44,7 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
         return value;
     }
 
-    public Class forClass() {
+    public Class<T> forClass() {
         return aClass;
     }
 
