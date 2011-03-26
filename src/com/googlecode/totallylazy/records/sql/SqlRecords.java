@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
 import java.io.PrintStream;
 import java.sql.*;
@@ -26,14 +27,16 @@ import static java.lang.String.format;
 public class SqlRecords extends AbstractRecords implements Queryable {
     private final Connection connection;
     private final PrintStream logger;
+    private final Mappings mappings;
 
-    public SqlRecords(Connection connection, PrintStream logger) {
+    public SqlRecords(Connection connection, Mappings mappings, PrintStream logger) {
         this.connection = connection;
+        this.mappings = mappings;
         this.logger = logger;
     }
 
     public SqlRecords(Connection connection) {
-        this(connection, new PrintStream(nullOutputStream()));
+        this(connection, new Mappings(), new PrintStream(nullOutputStream()));
     }
 
     public RecordSequence get(Keyword recordName) {
@@ -94,7 +97,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
             Number rowCount = using(connection.prepareStatement(sql), new Callable1<PreparedStatement, Number>() {
                 public Number call(PreparedStatement statement) throws Exception {
                     for (Record record : records) {
-                        BasicTypeMap.addValues(statement, record.getValuesFor(fields));
+                        mappings.addValues(statement, record.getValuesFor(fields));
                         statement.addBatch();
                     }
                     return numbers(statement.executeBatch()).reduce(Numbers.add());
@@ -122,7 +125,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         try {
             Number rowCount = using(connection.prepareStatement(expression), new Callable1<PreparedStatement, Number>() {
                 public Number call(PreparedStatement statement) throws Exception {
-                    BasicTypeMap.addValues(statement, parameters);
+                    mappings.addValues(statement, parameters);
                     return statement.executeUpdate();
                 }
             });
@@ -135,13 +138,13 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public RecordIterator query(final Query query) {
-        return new RecordIterator(query.select(), new Callable<PreparedStatement>() {
+        return new RecordIterator(query.select(), mappings, new Callable<PreparedStatement>() {
             public PreparedStatement call() throws Exception {
                 Pair<String, Sequence<Object>> pair = query.expressionAndParameters();
                 String expression = pair.first();
                 Sequence<Object> parameters = pair.second();
                 final PreparedStatement statement = connection.prepareStatement(expression);
-                BasicTypeMap.addValues(statement, parameters);
+                mappings.addValues(statement, parameters);
                 logger.println(format(format("SQL:'%s' VALUES:'%s'", expression, parameters)));
                 return statement;
             }
