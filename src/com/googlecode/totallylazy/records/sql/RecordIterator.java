@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
 import java.sql.*;
 import java.util.concurrent.Callable;
@@ -14,21 +15,21 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
-import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.Keywords.name;
 import static com.googlecode.totallylazy.records.MapRecord.record;
-import static com.googlecode.totallylazy.records.sql.BasicTypeMap.getValue;
 
 public class RecordIterator extends StatefulIterator<Record> {
-    private final Callable<PreparedStatement> preparedStatement;
     private final Sequence<Keyword> keywords;
+    private final Mappings mappings;
+    private final Callable<PreparedStatement> preparedStatement;
     private ResultSet resultSet;
 
-    public RecordIterator(final Sequence<Keyword> keywords, final Callable<PreparedStatement> preparedStatement) {
+    public RecordIterator(final Sequence<Keyword> keywords, final Mappings mappings, final Callable<PreparedStatement> preparedStatement) {
         this.keywords = keywords;
-        this.preparedStatement = lazy(preparedStatement);
+        this.mappings = mappings;
+        this.preparedStatement = preparedStatement;
     }
 
     @Override
@@ -45,7 +46,7 @@ public class RecordIterator extends StatefulIterator<Record> {
         for (Integer columnIndex : iterate(increment(), 1).take(metaData.getColumnCount()).safeCast(Integer.class)) {
             final String name = metaData.getColumnName(columnIndex);
             Keyword keyword = keywords.find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
-            record.set(keyword, getValue(resultSet, keyword));
+            record.set(keyword, mappings.getValue(resultSet, keyword));
         }
 
         return some(record);
