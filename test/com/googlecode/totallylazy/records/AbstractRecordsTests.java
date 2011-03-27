@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.records.sql.RecordSequence;
 import com.googlecode.totallylazy.records.sql.SqlRecords;
 import org.hamcrest.CoreMatchers;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
@@ -34,16 +35,19 @@ public abstract class AbstractRecordsTests {
     private static final Keyword<Date> dob = keyword("dob", Date.class);
     private static final Keyword<String> firstName = keyword("firstName", String.class);
     private static final Keyword<String> lastName = keyword("lastName", String.class);
-    protected static Records records;
+    protected Records records;
 
-    public static void addRecords(Records records) {
-        AbstractRecordsTests.records = records;
+    protected abstract Records createRecords() throws Exception;
+
+    @Before
+    public void addRecords() throws Exception {
+        this.records = createRecords();
         records.remove(user);
         records.define(user, age, dob, firstName, lastName);
         addUsers(records);
     }
 
-    private static void addUsers(Records records) {
+    private void addUsers(Records records) {
         records.add(user,
                 record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)),
                 record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 1, 10)),
@@ -58,7 +62,6 @@ public abstract class AbstractRecordsTests {
 
         records.add(user, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
         assertThat(records.get(user).map(age).reduce(count()), NumberMatcher.is(3));
-        records.remove(user, where(firstName, is("null age")));
     }
 
 
@@ -66,7 +69,6 @@ public abstract class AbstractRecordsTests {
     public void supportsSet() throws Exception {
         records.add(user, record().set(firstName, "chris").set(lastName, "bodart").set(age, 13).set(dob, date(1974, 1, 10)));
         assertThat(records.get(user).filter(where(lastName, startsWith("bod"))).map(select(lastName)).toSet(), hasExactly(record().set(lastName, "bodart")));
-        records.remove(user, where(firstName, is("chris")));
     }
 
     @Test
@@ -74,7 +76,6 @@ public abstract class AbstractRecordsTests {
         Number count = records.set(user, where(firstName, is("dan")).and(where(age, is(10))), record().set(lastName, "bod"));
         assertThat(count, NumberMatcher.is(1));
         assertThat(records.get(user).filter(where(firstName, is("dan"))).map(lastName), hasExactly("bod"));
-        records.set(user, where(firstName, is("dan")), record().set(lastName, "bodart"));
     }
 
     @Test
@@ -238,9 +239,7 @@ public abstract class AbstractRecordsTests {
         assertThat(records.get(user).size(), equalTo(1));
 
         assertThat(records.remove(user), equalTo(1));
-        Sequence<Record> recordSequence = records.get(user);
-        assertThat(recordSequence.size(), equalTo(0));
-        addUsers(records);
+        assertThat(records.get(user).size(), equalTo(0));
     }
 
     @Test
