@@ -3,6 +3,8 @@ package com.googlecode.totallylazy.records.sql;
 import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
+import com.googlecode.totallylazy.numbers.Add;
+import com.googlecode.totallylazy.numbers.Average;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.Between;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
@@ -19,7 +21,6 @@ import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.records.*;
 
-import java.io.PrintWriter;
 import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Callables.first;
@@ -176,10 +177,16 @@ public class Sql {
         if(callable instanceof CountNotNull){
             return String.format("count(%s)", columns);
         }
-        if(callable instanceof Min){
+        if(callable instanceof Average){
+            return String.format("avg(%s) as %1$s", columns);
+        }
+        if(callable instanceof Add){
+            return String.format("sum(%s) as %1$s", columns);
+        }
+        if(callable instanceof Minimum){
             return String.format("min(%s) as %1$s", columns);
         }
-        if(callable instanceof Max){
+        if(callable instanceof Maximum){
             return String.format("max(%s) as %1$s", columns);
         }
         throw new UnsupportedOperationException();

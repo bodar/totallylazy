@@ -284,7 +284,7 @@ public class Numbers {
         };
     }
 
-    public static Callable1<Iterable<Number>, Number> sum() {
+    public static Callable1<Iterable<Number>, Number> sumIterable() {
         return new Callable1<Iterable<Number>, Number>() {
             public Number call(Iterable<Number> numbers) throws Exception {
                 return Sequences.reduceLeft(numbers, add());
@@ -292,12 +292,12 @@ public class Numbers {
         };
     }
 
+    public static <T extends Number> Callable2<T, T, Number> average() {
+        return new Average<T>();
+    }
+
     public static <T extends Number> Callable2<T, T, Number> add() {
-        return new Callable2<T, T, Number>() {
-            public Number call(T a, T b) {
-                return Numbers.add(a, b);
-            }
-        };
+        return new Add<T>();
     }
 
     public static Callable1<Number, Number> add(final Number amount) {
@@ -380,4 +380,5 @@ public class Numbers {
             }
         };
     }
+
 }

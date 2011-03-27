@@ -2,10 +2,7 @@ package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.matchers.IterableMatcher;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
-import com.googlecode.totallylazy.records.sql.RecordSequence;
-import com.googlecode.totallylazy.records.sql.SqlRecords;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,11 +17,12 @@ import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.*;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
+import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
-import static com.googlecode.totallylazy.records.Max.max;
-import static com.googlecode.totallylazy.records.Min.min;
+import static com.googlecode.totallylazy.records.Minimum.minimum;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -56,8 +54,10 @@ public abstract class AbstractRecordsTests {
 
     @Test
     public void supportsReduce() throws Exception {
-        assertThat(records.get(user).map(age).reduce(max(Integer.class)), CoreMatchers.is(12));
-        assertThat(records.get(user).map(dob).reduce(min(Date.class)), CoreMatchers.is(date(1975, 1, 10)));
+        assertThat(records.get(user).map(age).reduce(Maximum.maximum(Integer.class)), CoreMatchers.is(12));
+        assertThat(records.get(user).map(dob).reduce(minimum(Date.class)), CoreMatchers.is(date(1975, 1, 10)));
+        assertThat(records.get(user).map(age).reduce(add()), NumberMatcher.is(33));
+        assertThat(records.get(user).map(age).reduce(average()), NumberMatcher.is(11));
         assertThat(records.get(user).reduce(count()), NumberMatcher.is(3));
 
         records.add(user, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
