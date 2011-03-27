@@ -8,6 +8,8 @@ import com.googlecode.totallylazy.records.Keyword;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import com.googlecode.totallylazy.records.Records;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -15,9 +17,8 @@ public class MemoryRecordsTest extends AbstractRecordsTests {
     private static final Keyword<Object> TREES = keyword("some_table");
     private static final Keyword<String> LEAFINESS = keyword("some_field", String.class);
 
-    @BeforeClass
-    public static void createRecords() {
-        addRecords(new MemoryRecords());
+    public Records createRecords() {
+        return new MemoryRecords();
     }
 
     @Test
