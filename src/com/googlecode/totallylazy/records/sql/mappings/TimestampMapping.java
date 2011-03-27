@@ -7,8 +7,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class TimestampMapping implements Mapping<Timestamp>{
-    public Timestamp getValue(ResultSet resultSet, String name) throws SQLException {
-        return resultSet.getTimestamp(name);
+    public Timestamp getValue(ResultSet resultSet, Integer index) throws SQLException {
+        return resultSet.getTimestamp(index);
     }
 
     public void setValue(PreparedStatement statement, Integer index, Timestamp timestamp) throws SQLException {

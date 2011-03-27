@@ -163,7 +163,7 @@ public class Sql {
         }
     }
 
-    public boolean isSupported(Callable2<?, ? super Record, ?> callable) {
+    public boolean isSupported(Callable2<?, ?, ?> callable) {
         try{
             toSql(callable, "");
             return true;
@@ -172,15 +172,15 @@ public class Sql {
         }
     }
 
-    public String toSql(Callable2<?, ? super Record, ?> callable, String columns) {
+    public String toSql(Callable2<?, ?, ?> callable, String columns) {
         if(callable instanceof CountNotNull){
             return String.format("count(%s)", columns);
         }
         if(callable instanceof Min){
-            return String.format("min(%s)", columns);
+            return String.format("min(%s) as %1$s", columns);
         }
         if(callable instanceof Max){
-            return String.format("max(%s)", columns);
+            return String.format("max(%s) as %1$s", columns);
         }
         throw new UnsupportedOperationException();
     }

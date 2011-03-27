@@ -43,10 +43,10 @@ public class RecordIterator extends StatefulIterator<Record> {
 
         final Record record = record();
         final ResultSetMetaData metaData = resultSet.getMetaData();
-        for (Integer columnIndex : iterate(increment(), 1).take(metaData.getColumnCount()).safeCast(Integer.class)) {
-            final String name = metaData.getColumnName(columnIndex);
+        for (Integer index : iterate(increment(), 1).take(metaData.getColumnCount()).safeCast(Integer.class)) {
+            final String name = metaData.getColumnName(index);
             Keyword keyword = keywords.find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
-            record.set(keyword, mappings.getValue(resultSet, keyword));
+            record.set(keyword, mappings.getValue(resultSet, index, keyword.forClass()));
         }
 
         return some(record);

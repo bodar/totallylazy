@@ -11,14 +11,15 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Query {
+    private static final Keyword All  = Keyword.keyword("*", Integer.class);
     private final SetQuantifier setQuantifier;
     private final Sequence<Keyword> select;
-    private final Callable2<?, ? super Record, ?> setFunction;
+    private final Callable2<?, ?, ?> setFunction;
     private final Keyword table;
     private final Sequence<Predicate<? super Record>> where;
     private final Option<Comparator<? super Record>> comparator;
 
-    private Query(SetQuantifier setQuantifier, Sequence<Keyword> select, Callable2<?, ? super Record, ?> setFunction, Keyword table, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
+    private Query(SetQuantifier setQuantifier, Sequence<Keyword> select, Callable2<?, ?, ?> setFunction, Keyword table, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
         this.setQuantifier = setQuantifier;
         this.select = select;
         this.setFunction = setFunction;
@@ -59,12 +60,12 @@ public class Query {
         return setFunction == null ? columns : sql().toSql(setFunction, columns);
     }
 
-    public static Query query(Keyword table, Sequence<Keyword> select, Callable2<?, ? super Record, ?> selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, final SetQuantifier setQuantifier) {
+    public static Query query(Keyword table, Sequence<Keyword> select, Callable2<?, ?, ?> selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, final SetQuantifier setQuantifier) {
         return new Query(setQuantifier, select, selectFunction, table, where, comparator);
     }
 
     public static Query query(Keyword table) {
-        return query(table, Sequences.<Keyword>empty(), null, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none(), SetQuantifier.All);
+        return query(table, sequence(All), null, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none(), SetQuantifier.All);
     }
 
     public Query select(Keyword... columns) {
@@ -91,7 +92,7 @@ public class Query {
         return query(table, select, setFunction, where, comparator, SetQuantifier.Distinct);
     }
 
-    public <S> Query reduce(Callable2<? super S, ? super Record, S> callable) {
+    public <S> Query reduce(Callable2<? super S, ?, S> callable) {
         return query(table, select, callable, where, comparator, setQuantifier);
     }
 }

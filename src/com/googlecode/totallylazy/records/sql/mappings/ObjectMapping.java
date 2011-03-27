@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ObjectMapping implements Mapping<Object>{
-    public Object getValue(ResultSet resultSet, String name) throws SQLException {
-        return resultSet.getObject(name);
+    public Object getValue(ResultSet resultSet, Integer index) throws SQLException {
+        return resultSet.getObject(index);
     }
 
     public void setValue(PreparedStatement statement, Integer index, Object value) throws SQLException {
