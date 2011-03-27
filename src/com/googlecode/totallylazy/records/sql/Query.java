@@ -11,7 +11,7 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Query {
-    private static final Keyword All  = Keyword.keyword("*", Integer.class);
+    private static final Keyword All  = Keyword.keyword("*");
     private final SetQuantifier setQuantifier;
     private final Sequence<Keyword> select;
     private final Callable2<?, ?, ?> setFunction;
@@ -53,7 +53,7 @@ public class Query {
     }
 
     private Object selectClause() {
-        return applyFunction(select.isEmpty() ? "*" : sequence(select).toString("", ",", ""));
+        return applyFunction(sequence(select).toString("", ",", ""));
     }
 
     private Object applyFunction(String columns) {
