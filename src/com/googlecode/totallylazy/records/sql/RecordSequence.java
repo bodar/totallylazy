@@ -38,7 +38,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     @SuppressWarnings("unchecked")
     public <S> Sequence<S> map(final Callable1<? super Record, S> callable) {
         if (callable instanceof Keyword) {
-            return new SingleValueSequence<S>(queryable, query.select((Keyword) callable), callable);
+            return new SingleValueSequence<S>(queryable, query.select((Keyword) callable), callable, logger);
         }
         if (callable instanceof SelectCallable) {
             return (Sequence<S>) new RecordSequence(queryable, query.select(((SelectCallable) callable).keywords()), logger);

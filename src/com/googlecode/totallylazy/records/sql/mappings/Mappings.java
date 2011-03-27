@@ -31,13 +31,11 @@ public class Mappings {
         map.put(type, (Mapping<Object>) mapping);
     }
 
-    public Object getValue(final ResultSet resultSet, final Keyword keyword) throws SQLException {
-        String name = keyword.name();
-        Class aClass = keyword.forClass();
+    public Object getValue(final ResultSet resultSet, Integer index, final Class aClass) throws SQLException {
         if (map.containsKey(aClass)) {
-            return map.get(aClass).getValue(resultSet, name);
+            return map.get(aClass).getValue(resultSet, index);
         }
-        return map.get(Object.class).getValue(resultSet, name);
+        return map.get(Object.class).getValue(resultSet, index);
     }
 
     public void addValues(PreparedStatement statement, Sequence<Object> values) throws SQLException {

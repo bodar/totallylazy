@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class IntegerMapping implements Mapping<Integer> {
-    public Integer getValue(ResultSet resultSet, String name) throws SQLException {
-        int result = resultSet.getInt(name);
+    public Integer getValue(ResultSet resultSet, Integer index) throws SQLException {
+        int result = resultSet.getInt(index);
         if (resultSet.wasNull()) {
             return null;
         }

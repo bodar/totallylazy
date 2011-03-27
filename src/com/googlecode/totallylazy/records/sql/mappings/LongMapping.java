@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LongMapping implements Mapping<Long> {
-    public Long getValue(ResultSet resultSet, String name) throws SQLException {
-        long result = resultSet.getLong(name);
+    public Long getValue(ResultSet resultSet, Integer index) throws SQLException {
+        long result = resultSet.getLong(index);
         if (resultSet.wasNull()) {
             return null;
         }
