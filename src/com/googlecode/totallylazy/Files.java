@@ -1,9 +1,6 @@
 package com.googlecode.totallylazy;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.doThen;
@@ -108,8 +105,12 @@ public class Files {
     }
 
     @SuppressWarnings("unchecked")
-    public static File write(byte[] bytes, File file) throws IOException {
-        return using(new FileOutputStream(file), doThen(Runnables.write(bytes), returns(file)));
+    public static File write(byte[] bytes, File file) {
+        try {
+            return using(new FileOutputStream(file), doThen(Runnables.write(bytes), returns(file)));
+        } catch (FileNotFoundException e) {
+            throw new LazyException(e);
+        }
     }
 
     public static Callable1<? super File, Boolean> delete() {
