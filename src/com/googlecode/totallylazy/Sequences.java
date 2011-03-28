@@ -1,18 +1,21 @@
 package com.googlecode.totallylazy;
 
-import static com.googlecode.totallylazy.Callables.ascending;
+import com.googlecode.totallylazy.iterators.ArrayIterator;
+import com.googlecode.totallylazy.iterators.CharacterIterator;
+import com.googlecode.totallylazy.iterators.EmptyIterator;
+import com.googlecode.totallylazy.iterators.EnumerationIterator;
+import com.googlecode.totallylazy.iterators.ZipIterator;
 
-import com.googlecode.totallylazy.iterators.*;
-
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
-import com.googlecode.totallylazy.numbers.Numbers;
-
-import static java.nio.CharBuffer.wrap;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.Callable;
+
+import static com.googlecode.totallylazy.Callables.ascending;
+import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
+import static java.nio.CharBuffer.wrap;
 
 public class Sequences {
     public static <T> Sequence<T> empty(Class<T> aClass) {
@@ -78,7 +81,7 @@ public class Sequences {
         return new ForwardOnlySequence<T>(iterator);
     }
 
-    public static <T> ForwardOnlySequence<T> forwardOnly(Iterable<T> iterable) {
+    public static <T> ForwardOnlySequence<T> forwardOnly(final Iterable<T> iterable) {
         return forwardOnly(iterable.iterator());
     }
 
@@ -103,7 +106,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Partition<T> partition(final Iterable<T> iterable, Predicate<? super T> predicate) {
+    public static <T> Partition<T> partition(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return new Partition<T>(iterable, predicate);
     }
 
@@ -155,7 +158,7 @@ public class Sequences {
         return head(iterable);
     }
 
-    public static <T> T last(Iterable<T> iterable) {
+    public static <T> T last(final Iterable<T> iterable) {
         return head(reverse(iterable));
     }
 
@@ -360,7 +363,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> reverse(final Iterable<T> iterable) {
-        List<T> result = sequence(iterable).toList();
+        final List<T> result = sequence(iterable).toList();
         Collections.reverse(result);
         return sequence(result);
     }

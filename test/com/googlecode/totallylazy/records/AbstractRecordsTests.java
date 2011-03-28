@@ -23,6 +23,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
+import static com.googlecode.totallylazy.records.Maximum.maximum;
 import static com.googlecode.totallylazy.records.Minimum.minimum;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -62,7 +63,7 @@ public abstract class AbstractRecordsTests {
 
     @Test
     public void supportsReduce() throws Exception {
-        assertThat(records.get(user).map(age).reduce(Maximum.maximum(Integer.class)), CoreMatchers.is(12));
+        assertThat(records.get(user).map(age).reduce(maximum(Integer.class)), CoreMatchers.is(12));
         assertThat(records.get(user).map(dob).reduce(minimum(Date.class)), CoreMatchers.is(date(1975, 1, 10)));
         assertThat(records.get(user).map(age).reduce(add()), NumberMatcher.is(33));
         assertThat(records.get(user).map(age).reduce(average()), NumberMatcher.is(11));
