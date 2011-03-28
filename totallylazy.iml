@@ -11,11 +11,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="build" level="project" />
-    <orderEntry type="library" name="runtime" level="project" />
     <orderEntry type="library" name="optional" level="project" />
     <orderEntry type="library" name="manual" level="project" />
+    <orderEntry type="library" name="runtime" level="project" />
   </component>
 </module>
 

@@ -12,7 +12,8 @@ import com.googlecode.totallylazy.predicates.LessThanOrEqualToPredicate;
 import com.googlecode.totallylazy.predicates.LessThanPredicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.Not;
-import com.googlecode.totallylazy.predicates.Null;
+import com.googlecode.totallylazy.predicates.NotNullPredicate;
+import com.googlecode.totallylazy.predicates.NullPredicate;
 import com.googlecode.totallylazy.predicates.OnlyOnce;
 import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
@@ -128,7 +129,7 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> nullValue() {
-        return new Null<T>();
+        return new NullPredicate<T>();
     }
 
     public static <T> LogicalPredicate<T> nullValue(final Class<T> type) {
@@ -136,7 +137,7 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> notNullValue() {
-        return not(nullValue());
+        return new NotNullPredicate<T>();
     }
 
     public static <T> LogicalPredicate<T> notNullValue(final Class<T> aClass) {

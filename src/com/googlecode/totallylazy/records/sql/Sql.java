@@ -16,6 +16,8 @@ import com.googlecode.totallylazy.predicates.InPredicate;
 import com.googlecode.totallylazy.predicates.LessThan;
 import com.googlecode.totallylazy.predicates.LessThanOrEqualTo;
 import com.googlecode.totallylazy.predicates.Not;
+import com.googlecode.totallylazy.predicates.NotNullPredicate;
+import com.googlecode.totallylazy.predicates.NullPredicate;
 import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
@@ -91,6 +93,12 @@ public class Sql {
             OrPredicate andPredicate = (OrPredicate) predicate;
             final Sequence<Pair<String, Sequence<Object>>> pairs = sequence(andPredicate.predicates()).map(toSql());
             return pair("( " + pairs.map(first(String.class)).toString("or ") + " ) ", pairs.flatMap(values()));
+        }
+        if (predicate instanceof NullPredicate) {
+            return pair(" is null ", Sequences.<Object>empty());
+        }
+        if (predicate instanceof NotNullPredicate) {
+            return pair(" is not null ", Sequences.<Object>empty());
         }
         if (predicate instanceof EqualsPredicate) {
             return pair("= ? ", getValue(predicate));

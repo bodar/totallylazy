@@ -9,6 +9,8 @@ import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.records.sql.SetQuantifier.ALL;
+import static com.googlecode.totallylazy.records.sql.SetQuantifier.DISTINCT;
 
 public class Query {
     private static final Keyword All  = Keyword.keyword("*");
@@ -65,7 +67,7 @@ public class Query {
     }
 
     public static Query query(Keyword table) {
-        return query(table, sequence(All), null, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none(), SetQuantifier.All);
+        return query(table, sequence(All), null, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none(), ALL);
     }
 
     public Query select(Keyword... columns) {
@@ -89,7 +91,7 @@ public class Query {
     }
 
     public Query distinct() {
-        return query(table, select, setFunction, where, comparator, SetQuantifier.Distinct);
+        return query(table, select, setFunction, where, comparator, DISTINCT);
     }
 
     public <S> Query reduce(Callable2<? super S, ?, S> callable) {

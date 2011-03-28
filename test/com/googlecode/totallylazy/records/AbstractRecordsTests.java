@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.records;
 
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
@@ -50,6 +51,13 @@ public abstract class AbstractRecordsTests {
                 record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)),
                 record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 1, 10)),
                 record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 1, 10)));
+    }
+
+    @Test
+    public void supportsIsNullAndNotNull() throws Exception {
+        records.add(user, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
+        assertThat(records.get(user).filter(where(age, is(nullValue()))).toList().size(), NumberMatcher.is(1));
+        assertThat(records.get(user).filter(where(age, is(notNullValue()))).toList().size(), NumberMatcher.is(3));
     }
 
     @Test
