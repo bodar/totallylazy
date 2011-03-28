@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="manual">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/runtime/optional/manual" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/runtime/optional/manual" recursive="false" />
+  </library>
+</component>

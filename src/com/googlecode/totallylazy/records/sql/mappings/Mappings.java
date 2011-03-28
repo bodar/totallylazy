@@ -44,8 +44,9 @@ public class Mappings {
             Object value = pair.second();
             if (value != null && map.containsKey(value.getClass())) {
                 map.get(value.getClass()).setValue(statement, index, value);
+            } else {
+                map.get(Object.class).setValue(statement, index, value);
             }
-            map.get(Object.class).setValue(statement, index, value);
         }
     }
 

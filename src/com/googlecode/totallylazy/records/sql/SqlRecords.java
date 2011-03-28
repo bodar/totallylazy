@@ -64,11 +64,19 @@ public class SqlRecords extends AbstractRecords implements Queryable {
 
     private boolean exists(Keyword recordName) {
         try {
-            using(connection.prepareStatement("select 1 from " + recordName), doNothing());
+            using(connection.createStatement(), executeQuery("select 1 from " + recordName));
             return true;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             return false;
         }
+    }
+
+    public static Callable1<? super Statement, ResultSet> executeQuery(final String sql) {
+        return new Callable1<Statement, ResultSet>() {
+            public ResultSet call(Statement statement) throws Exception {
+                return statement.executeQuery(sql);
+            }
+        };
     }
 
     public static Callable1<? super Statement, Integer> executeUpdate(final String sql) {
