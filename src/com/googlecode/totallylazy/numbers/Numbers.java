@@ -71,8 +71,12 @@ public class Numbers {
         return Sequences.sequence(numbers);
     }
 
-    public static Sequence<Number> numbers(int[] numbers) {
-        return Sequences.forwardOnly(new IntIterator(numbers));
+    public static Sequence<Number> numbers(final int[] numbers) {
+        return new Sequence<Number>() {
+            public Iterator<Number> iterator() {
+                return new IntIterator(numbers);
+            }
+        };
     }
 
     // TODO: Try to convert to lazy sequence again!
@@ -143,7 +147,7 @@ public class Numbers {
         return new RemainderIs(divisor, remainder);
     }
 
-    private static final MemorisedSequence<Number> primes = Sequences.<Number>sequence(2).join(iterate(Numbers.add(2), 3).filter(prime())).memorise();
+    private static final MemorisedSequence<Number> primes = Sequences.<Number>sequence(2).join(iterate(add(2), 3).filter(prime())).memorise();
 
     public static MemorisedSequence<Number> primes() {
         return primes;
