@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 import java.io.*;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Sequences.repeat;
 
@@ -33,7 +34,7 @@ public class Strings {
         return new Callable<String>() {
             public String call() throws Exception {
                 String result = reader.readLine();
-                if(result == null){
+                if (result == null) {
                     reader.close();
                 }
                 return result;
@@ -137,7 +138,7 @@ public class Strings {
 
     public static String toString(File file) {
         try {
-            return toString(new FileReader(file));
+            return toString(new FileInputStream(file));
         } catch (FileNotFoundException e) {
             throw new LazyException(e);
         }
@@ -149,17 +150,17 @@ public class Strings {
     }
 
     public static String toString(Reader reader) {
-        try {
-            StringBuilder builder = new StringBuilder();
-            char[] buffer = new char[512];
-            int read = reader.read(buffer);
-            while (read > 0) {
-                builder.append(buffer, 0, read);
-                read = reader.read(buffer);
+        return using(reader, new Callable1<Reader, String>() {
+            public String call(Reader reader) throws Exception {
+                StringBuilder builder = new StringBuilder();
+                char[] buffer = new char[512];
+                int read = reader.read(buffer);
+                while (read > 0) {
+                    builder.append(buffer, 0, read);
+                    read = reader.read(buffer);
+                }
+                return builder.toString();
             }
-            return builder.toString();
-        } catch (IOException e) {
-            throw new LazyException(e);
-        }
+        });
     }
 }
