@@ -9,6 +9,13 @@ import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Exceptions {
+    public static Exception toException(Throwable throwable) throws Exception {
+        if (throwable instanceof Error) {
+            throw (Error) throwable;
+        }
+        return (Exception) throwable;
+    }
+
     public static <T extends Throwable> Option<T> find(final Throwable throwable, final Class<T> aClass) {
         return causes(throwable).
                 safeCast(aClass).
@@ -28,17 +35,17 @@ public class Exceptions {
         };
     }
 
-    public static <T,S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Predicate<? super Exception>... exceptionClasses) {
+    public static <T, S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Predicate<? super Exception>... exceptionClasses) {
         return handleException(callable, sequence(exceptionClasses));
     }
 
-    public static <T,S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Iterable<? extends Predicate<? super Exception>> predicates) {
+    public static <T, S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Iterable<? extends Predicate<? super Exception>> predicates) {
         return new Callable1<T, Option<S>>() {
             public Option<S> call(T t) throws Exception {
                 try {
                     return Option.some(callable.call(t));
                 } catch (Exception e) {
-                    if(sequence(predicates).exists(Predicates.<Exception>matches(e))){
+                    if (sequence(predicates).exists(Predicates.<Exception>matches(e))) {
                         return none();
                     }
                     throw e;
