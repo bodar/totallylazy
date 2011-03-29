@@ -17,12 +17,22 @@ import static org.hamcrest.Matchers.is;
 
 public class StringsTest {
     @Test
+    public void supportsToString() throws Exception {
+        File file = temporaryFile();
+        String input = "1\r\n2";
+        write(input.getBytes("UTF-8"), file);
+        String output = Strings.toString(file);
+        assertThat(output, is(input));
+    }
+
+    @Test
     public void parsesLines() throws Exception {
         File file = temporaryFile();
         write("1\r\n2".getBytes("UTF-8"), file);
         Sequence<String> lines = lines(file);
         assertThat(lines, hasExactly("1", "2"));
     }
+
     @Test
     public void canMapToStringFunctions() throws Exception {
         assertThat(sequence("Dan").map(toLowerCase()), hasExactly("dan"));
