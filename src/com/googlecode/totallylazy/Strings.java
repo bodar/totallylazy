@@ -4,15 +4,7 @@ import com.googlecode.totallylazy.predicates.ContainsPredicate;
 import com.googlecode.totallylazy.predicates.EndsWithPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Predicates.notNullValue;
@@ -23,10 +15,14 @@ public class Strings {
 
     public static Sequence<String> lines(File file) {
         try {
-            return lines(new FileReader(file));
+            return lines(new FileInputStream(file));
         } catch (FileNotFoundException e) {
             throw new LazyException(e);
         }
+    }
+
+    public static Sequence<String> lines(InputStream stream) {
+        return lines(new InputStreamReader(stream));
     }
 
     public static Sequence<String> lines(Reader reader) {
@@ -36,7 +32,11 @@ public class Strings {
     public static Callable<String> readLine(final BufferedReader reader) {
         return new Callable<String>() {
             public String call() throws Exception {
-                return reader.readLine();
+                String result = reader.readLine();
+                if(result == null){
+                    reader.close();
+                }
+                return result;
             }
         };
     }
