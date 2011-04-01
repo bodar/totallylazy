@@ -7,6 +7,8 @@ import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.*;
 import java.util.concurrent.Callable;
 
@@ -20,7 +22,7 @@ import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.Keywords.name;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 
-public class RecordIterator extends StatefulIterator<Record> {
+public class RecordIterator extends StatefulIterator<Record> implements Closeable {
     private final Sequence<Keyword> keywords;
     private final Mappings mappings;
     private final Callable<PreparedStatement> preparedStatement;
@@ -37,7 +39,7 @@ public class RecordIterator extends StatefulIterator<Record> {
         ResultSet resultSet = getResultSet();
         boolean hasNext = resultSet.next();
         if (!hasNext) {
-            preparedStatement().close();
+            close();
             return none();
         }
 
@@ -61,5 +63,16 @@ public class RecordIterator extends StatefulIterator<Record> {
             resultSet = preparedStatement().executeQuery();
         }
         return resultSet;
+    }
+
+    public void close() throws IOException {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            preparedStatement().close();
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
     }
 }

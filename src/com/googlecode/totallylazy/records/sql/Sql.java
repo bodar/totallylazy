@@ -126,8 +126,8 @@ public class Sql {
             InPredicate inPredicate = (InPredicate) predicate;
             Sequence sequence = inPredicate.values();
             if (sequence instanceof QuerySequence) {
-                Pair<String, Sequence<Object>> pair = ((QuerySequence) sequence).query().expressionAndParameters();
-                return pair("in ( " + pair.first() + ")", pair.second());
+                ParameterisedExpression pair = ((QuerySequence) sequence).query().parameterisedExpression();
+                return pair("in ( " + pair.expression() + ")", pair.parameters());
             }
             return pair(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) sequence);
         }

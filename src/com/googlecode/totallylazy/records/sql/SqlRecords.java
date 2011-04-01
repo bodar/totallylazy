@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.ParameterisedExpression;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
@@ -40,7 +41,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public RecordSequence get(Keyword recordName) {
-        return new RecordSequence(this, Query.query(recordName), logger);
+        return new RecordSequence(this, SqlQuery.query(recordName), logger);
     }
 
     private static final Map<Class, String> typeMap = new HashMap<Class, String>() {{
@@ -145,15 +146,12 @@ public class SqlRecords extends AbstractRecords implements Queryable {
 
     }
 
-    public RecordIterator query(final Query query) {
-        return new RecordIterator(query.select(), mappings, new Callable<PreparedStatement>() {
+    public RecordIterator query(final ParameterisedExpression value) {
+        return new RecordIterator(value.keywords(), mappings, new Callable<PreparedStatement>() {
             public PreparedStatement call() throws Exception {
-                Pair<String, Sequence<Object>> pair = query.expressionAndParameters();
-                String expression = pair.first();
-                Sequence<Object> parameters = pair.second();
-                final PreparedStatement statement = connection.prepareStatement(expression);
-                mappings.addValues(statement, parameters);
-                logger.println(format(format("SQL:'%s' VALUES:'%s'", expression, parameters)));
+                final PreparedStatement statement = connection.prepareStatement(value.expression());
+                mappings.addValues(statement, value.parameters());
+                logger.println(format(format("SQL:'%s' VALUES:'%s'", value, value.parameters())));
                 return statement;
             }
         });

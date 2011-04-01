@@ -2,6 +2,8 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.HashSet;
