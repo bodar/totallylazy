@@ -16,27 +16,27 @@ class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
     private final Callable1<? super Record, T> callable;
     private final PrintStream logger;
     private final Queryable queryable;
-    private final Query query;
+    private final SqlQuery sqlQuery;
 
-    public SingleValueSequence(final Queryable queryable, final Query query, final Callable1<? super Record, T> callable, final PrintStream logger) {
+    public SingleValueSequence(final Queryable queryable, final SqlQuery sqlQuery, final Callable1<? super Record, T> callable, final PrintStream logger) {
         this.queryable = queryable;
-        this.query = query;
+        this.sqlQuery = sqlQuery;
         this.callable = callable;
         this.logger = logger;
     }
 
     public Iterator<T> iterator() {
-        return Iterators.map(queryable.query(query), callable);
+        return Iterators.map(queryable.query(sqlQuery.parameterisedExpression()), callable);
     }
 
-    public Query query() {
-        return query;
+    public SqlQuery query() {
+        return sqlQuery;
     }
 
     @Override
     public <S> S reduce(Callable2<? super S, ? super T, S> callable) {
         if(query().sql().isSupported(callable)){
-            return (S) queryable.query(query.reduce(callable)).next().fields().head().second();
+            return (S) queryable.query(sqlQuery.reduce(callable).parameterisedExpression()).next().fields().head().second();
         }
         logger.println(format("Warning: Unsupported Callable2 %s dropping down to client side sequence functionality", callable));
         return super.reduce(callable);

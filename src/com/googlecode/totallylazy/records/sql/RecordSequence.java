@@ -11,37 +11,36 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static java.lang.String.format;
 
 public class RecordSequence extends Sequence<Record> implements QuerySequence {
     private final Queryable queryable;
-    private final Query query;
+    private final SqlQuery sqlQuery;
     private final PrintStream logger;
 
-    public RecordSequence(final Queryable queryable, final Query query, final PrintStream logger) {
+    public RecordSequence(final Queryable queryable, final SqlQuery sqlQuery, final PrintStream logger) {
         this.queryable = queryable;
-        this.query = query;
+        this.sqlQuery = sqlQuery;
         this.logger = logger;
     }
 
     public Iterator<Record> iterator() {
-        return execute(query);
+        return execute(sqlQuery);
     }
 
-    private Iterator<Record> execute(final Query query) {
-        return queryable.query(query);
+    private Iterator<Record> execute(final SqlQuery sqlQuery) {
+        return queryable.query(sqlQuery.parameterisedExpression());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <S> Sequence<S> map(final Callable1<? super Record, S> callable) {
         if (callable instanceof Keyword) {
-            return new SingleValueSequence<S>(queryable, query.select((Keyword) callable), callable, logger);
+            return new SingleValueSequence<S>(queryable, sqlQuery.select((Keyword) callable), callable, logger);
         }
         if (callable instanceof SelectCallable) {
-            return (Sequence<S>) new RecordSequence(queryable, query.select(((SelectCallable) callable).keywords()), logger);
+            return (Sequence<S>) new RecordSequence(queryable, sqlQuery.select(((SelectCallable) callable).keywords()), logger);
         }
         logger.println(format("Warning: Unsupported Callable1 %s dropping down to client side sequence functionality", callable));
         return super.map(callable);
@@ -49,8 +48,8 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public Sequence<Record> filter(Predicate<? super Record> predicate) {
-        if (query.sql().isSupported(predicate)) {
-            return new RecordSequence(queryable, query.where(predicate), logger);
+        if (sqlQuery.sql().isSupported(predicate)) {
+            return new RecordSequence(queryable, sqlQuery.where(predicate), logger);
         }
         logger.println(format("Warning: Unsupported Predicate %s dropping down to client side sequence functionality", predicate));
         return super.filter(predicate);
@@ -58,8 +57,8 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public Sequence<Record> sortBy(Comparator<? super Record> comparator) {
-        if (query.sql().isSupported(comparator)) {
-            return new RecordSequence(queryable, query.orderBy(comparator), logger);
+        if (sqlQuery.sql().isSupported(comparator)) {
+            return new RecordSequence(queryable, sqlQuery.orderBy(comparator), logger);
         }
         logger.println(format("Warning: Unsupported Comparator %s dropping down to client side sequence functionality", comparator));
         return super.sortBy(comparator);
@@ -68,7 +67,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     @Override
     public <S> S reduce(Callable2<? super S, ? super Record, S> callable) {
         if(query().sql().isSupported(callable)){
-            return (S) queryable.query(query.reduce(callable)).next().fields().head().second();
+            return (S) queryable.query(sqlQuery.reduce(callable).parameterisedExpression()).next().fields().head().second();
         }
         logger.println(format("Warning: Unsupported Callable2 %s dropping down to client side sequence functionality", callable));
         return super.reduce(callable);
@@ -81,15 +80,15 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public <S extends Set<Record>> S toSet(S set) {
-        return Sets.set(set, execute(query.distinct()));
+        return Sets.set(set, execute(sqlQuery.distinct()));
     }
 
     @Override
     public String toString() {
-        return query.toString();
+        return sqlQuery.toString();
     }
 
-    public Query query() {
-        return query;
+    public SqlQuery query() {
+        return sqlQuery;
     }
 }
