@@ -4,11 +4,13 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sets;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 
 import java.io.PrintStream;
 import java.util.Iterator;
+import java.util.Set;
 
 import static java.lang.String.format;
 
@@ -26,6 +28,10 @@ class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
     }
 
     public Iterator<T> iterator() {
+        return execute(sqlQuery);
+    }
+
+    private Iterator<T> execute(final SqlQuery sqlQuery) {
         return Iterators.map(queryable.query(sqlQuery.parameterisedExpression()), callable);
     }
 
@@ -42,4 +48,8 @@ class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
         return super.reduce(callable);
     }
 
+    @Override
+    public <S extends Set<T>> S toSet(S set) {
+        return Sets.set(set, execute(sqlQuery.distinct()));
+    }
 }

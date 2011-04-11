@@ -24,4 +24,9 @@ public class ParameterisedExpression {
     public Sequence<Object> parameters() {
         return parameters;
     }
+
+    @Override
+    public String toString() {
+        return expression + " " + parameters.toString("(", ",", ")");
+    }
 }
