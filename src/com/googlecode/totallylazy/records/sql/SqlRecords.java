@@ -21,6 +21,7 @@ import static com.googlecode.totallylazy.Runnables.doNothing;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
+import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static java.lang.String.format;
@@ -151,7 +152,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
             public PreparedStatement call() throws Exception {
                 final PreparedStatement statement = connection.prepareStatement(value.expression());
                 mappings.addValues(statement, value.parameters());
-                logger.println(format(format("SQL:'%s' VALUES:'%s'", value, value.parameters())));
+                logger.println(format(format("SQL:'%s' VALUES:'%s'", value.expression(), value.parameters())));
                 return statement;
             }
         });
