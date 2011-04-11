@@ -17,6 +17,7 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
+import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.Keywords.name;
@@ -31,7 +32,7 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
     public RecordIterator(final Sequence<Keyword> keywords, final Mappings mappings, final Callable<PreparedStatement> preparedStatement) {
         this.keywords = keywords;
         this.mappings = mappings;
-        this.preparedStatement = preparedStatement;
+        this.preparedStatement = lazy(preparedStatement);
     }
 
     @Override
