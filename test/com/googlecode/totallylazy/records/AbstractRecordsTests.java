@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -78,6 +79,7 @@ public abstract class AbstractRecordsTests {
     public void supportsSet() throws Exception {
         records.add(user, record().set(firstName, "chris").set(lastName, "bodart").set(age, 13).set(dob, date(1974, 1, 10)));
         assertThat(records.get(user).filter(where(lastName, startsWith("bod"))).map(select(lastName)).toSet(), hasExactly(record().set(lastName, "bodart")));
+        assertThat(records.get(user).map(lastName).toSet(), containsInAnyOrder("bodart", "savage", "martin"));
     }
 
     @Test
