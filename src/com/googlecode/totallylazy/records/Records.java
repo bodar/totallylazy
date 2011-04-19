@@ -8,6 +8,8 @@ public interface Records {
 
     void define(Keyword recordName, Keyword<?>... fields);
 
+    boolean exists(Keyword recordName);
+
     Number add(Keyword recordName, Record... records);
 
     Number add(Keyword recordName, Sequence<Record> records);

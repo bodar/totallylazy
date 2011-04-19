@@ -64,7 +64,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         }
     }
 
-    private boolean exists(Keyword recordName) {
+    public boolean exists(Keyword recordName) {
         try {
             using(connection.createStatement(), executeQuery("select 1 from " + recordName));
             return true;
