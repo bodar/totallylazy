@@ -1,13 +1,14 @@
 package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.Callable1;
+import sun.java2d.SunGraphicsEnvironment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Invocation implements Callable1 {
+public class Invocation<T, R> implements Callable1<T, R> {
     private final Object proxy;
     private final Method method;
     private final Object[] arguments;
@@ -35,7 +36,8 @@ public class Invocation implements Callable1 {
         return method.getName() + sequence(arguments).toString("(", ",", ")");
     }
 
-    public Object call(Object instance) throws InvocationTargetException, IllegalAccessException {
-        return method.invoke(instance, arguments);
+    @SuppressWarnings("unchecked")
+    public R call(T instance) throws InvocationTargetException, IllegalAccessException {
+        return (R) method.invoke(instance, arguments);
     }
 }

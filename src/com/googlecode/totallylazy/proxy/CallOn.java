@@ -25,4 +25,8 @@ public abstract class CallOn<T, S> implements Callable1<T,S>, InvocationHandler 
     public S call(T t) throws Exception {
         return (S) invocation.call(t);
     }
+
+    public Invocation invocation() {
+        return invocation;
+    }
 }

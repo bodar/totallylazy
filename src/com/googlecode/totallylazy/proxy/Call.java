@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Callable1;
 import net.sf.cglib.proxy.InvocationHandler;
 
 import java.lang.reflect.Method;
@@ -21,7 +20,7 @@ public class Call implements InvocationHandler{
         return null;
     }
 
-    public static <T, S> Callable1<T,S> method(S value){
+    public static <T, S> Invocation<T, S> method(S value){
         return invocation.get();
     }
 }
