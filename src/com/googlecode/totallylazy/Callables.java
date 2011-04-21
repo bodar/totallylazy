@@ -4,17 +4,22 @@ import com.googlecode.totallylazy.callables.AscendingComparator;
 import com.googlecode.totallylazy.callables.DescendingComparator;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-import static com.googlecode.totallylazy.Pair.pair;
-
 public final class Callables {
+    public static <T, R> Callable1<? super T,R> doThen(final Callable1<? super T,Void> runnable, final Callable<R> callable) {
+        return new Callable1<T, R>() {
+            public R call(T t) throws Exception {
+                runnable.call(t);
+                return callable.call();
+            }
+        };
+    }
+
     public static <T, R> Callable1<T, R> asCallable1(final Callable<? extends R> callable) {
         return new Callable1<T, R>() {
             public R call(T t) throws Exception {
@@ -56,12 +61,12 @@ public final class Callables {
         };
     }
 
-    public static <T> Comparator<T> ascending(final Callable1<T, ? extends Comparable> callable) {
-        return new AscendingComparator<T>(callable);
+    public static <T, R extends Comparable<R>> Comparator<T> ascending(final Callable1<T, R> callable) {
+        return new AscendingComparator<T, R>(callable);
     }
 
-    public static <T> Comparator<T> descending(final Callable1<T, ? extends Comparable> callable) {
-        return new DescendingComparator<T>(callable);
+    public static <T, R extends Comparable<R>> Comparator<T> descending(final Callable1<T, R> callable) {
+        return new DescendingComparator<T, R>(callable);
     }
 
     public static <T> Callable1<T, Integer> length() {
@@ -153,18 +158,18 @@ public final class Callables {
     }
 
 
-    public static <T>  Callable1<? super Iterable<? extends T>, Iterator<? extends T>> asIterator() {
-        return new Callable1<Iterable<? extends T>, Iterator<? extends T>>() {
-            public Iterator<? extends T> call(Iterable<? extends T> iterable) throws Exception {
+    public static <T>  Callable1<? super Iterable<T>, Iterator<T>> asIterator() {
+        return new Callable1<Iterable<T>, Iterator<T>>() {
+            public Iterator<T> call(Iterable<T> iterable) throws Exception {
                 return iterable.iterator();
             }
         };
     }
 
-    public static <T> Callable1<? super Iterator<? extends T>, Iterable<? extends T>> asIterable() {
-        return new Callable1<Iterator<? extends T>, Iterable<? extends T>>() {
-            public final Iterable<? extends T> call(final Iterator<? extends T> iterator) throws Exception {
-                return Sequences.sequence(iterator);
+    public static <T> Callable1<? super Iterator<T>, Iterable<T>> asIterable() {
+        return new Callable1<Iterator<T>, Iterable<T>>() {
+            public final Iterable<T> call(final Iterator<T> iterator) throws Exception {
+                return Sequences.forwardOnly(iterator);
             }
         };
     }

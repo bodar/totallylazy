@@ -1,13 +1,20 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+
+import java.io.Closeable;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.googlecode.totallylazy.Callables.ascending;
+
 
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
-    public void forEach(final Runnable1<T> runnable) {
+    public void forEach(final Callable1<T,Void> runnable) {
         Sequences.forEach(this, runnable);
     }
 
@@ -15,16 +22,24 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.map(this, callable);
     }
 
+    public <T> Partition<T> partition(final Predicate<? super T> predicate) {
+        return Sequences.partition((Iterable<T>) this, predicate);
+    }
+
     public Sequence<T> filter(final Predicate<? super T> predicate) {
         return Sequences.filter(this, predicate);
     }
 
-    public <S> Sequence<S> flatMap(final Callable1<? super T, Iterable<? extends S>> callable) {
+    public <S> Sequence<S> flatMap(final Callable1<? super T, Iterable<S>> callable) {
         return Sequences.flatMap(this, callable);
     }
 
     public T first() {
         return Sequences.first(this);
+    }
+
+    public T last() {
+        return Sequences.last(this);
     }
 
     public T second() {
@@ -51,11 +66,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.foldLeft(this, seed, callable);
     }
 
-    public T reduce(final Callable2<? super T, ? super T, T> callable) {
+    public <S> S reduce(final Callable2<? super S, ? super T, S> callable) {
         return Sequences.reduce(this, callable);
     }
 
-    public T reduceLeft(final Callable2<? super T, ? super T, T> callable) {
+    public <S> S reduceLeft(final Callable2<? super S, ? super T, S> callable) {
         return Sequences.reduceLeft(this, callable);
     }
 
@@ -87,7 +102,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sets.set(set, this);
     }
     public Set<T> toSet() {
-        return Sets.set(this);
+        return toSet(new HashSet<T>());
     }
 
     public boolean isEmpty() {
@@ -170,6 +185,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.memorise(this);
     }
 
+    public ForwardOnlySequence<T> forwardOnly(){
+        return Sequences.forwardOnly(this);
+    }
+
     public <T2> Sequence<Pair<T, T2>> zip(final Iterable<T2> iterable) {
         return Sequences.zip(this, iterable);
     }
@@ -179,7 +198,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Sequence<T> sortBy(final Callable1<? super T, ? extends Comparable> callable) {
-        return Sequences.sortBy(this, callable);
+        return sortBy(ascending(callable));
     }
 
     public Sequence<T> sortBy(final Comparator<? super T> comparator) {
@@ -196,5 +215,9 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     public Sequence<T> reverse() {
         return Sequences.reverse(this);
+    }
+
+    public Sequence<T> cycle() {
+        return Sequences.cycle(this);
     }
 }

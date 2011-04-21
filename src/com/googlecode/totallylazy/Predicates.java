@@ -12,14 +12,12 @@ import com.googlecode.totallylazy.predicates.LessThanOrEqualToPredicate;
 import com.googlecode.totallylazy.predicates.LessThanPredicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.Not;
-import com.googlecode.totallylazy.predicates.Null;
+import com.googlecode.totallylazy.predicates.NotNullPredicate;
+import com.googlecode.totallylazy.predicates.NullPredicate;
 import com.googlecode.totallylazy.predicates.OnlyOnce;
 import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.predicates.WhileTrue;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Collection;
 
@@ -86,29 +84,7 @@ public class Predicates {
         };
     }
 
-    public static <T> LogicalPredicate<T> predicate(final Matcher<T> matcher) {
-        return new LogicalPredicate<T>() {
-            public final boolean matches(T other) {
-                return matcher.matches(other);
-            }
-        };
-    }
-
-    public static <T> Matcher<T> matcher(final Predicate<T> predicate) {
-        return new TypeSafeMatcher<T>() {
-            @Override
-            protected boolean matchesSafely(T t) {
-                return predicate.matches(t);
-            }
-
-            public void describeTo(Description description) {
-                description.appendText(predicate.toString());
-            }
-        };
-    }
-
-
-    public static <T> LogicalPredicate<? super T> onlyOnce(final Predicate<? super T> predicate) {
+    public static <T> LogicalPredicate<T> onlyOnce(final Predicate<? super T> predicate) {
         return new OnlyOnce<T>(predicate);
     }
 
@@ -152,12 +128,24 @@ public class Predicates {
         return new WhileTrue<T>(t);
     }
 
-    public static <T> LogicalPredicate<T> notNull(final Class<T> aClass) {
-        return not(aNull(aClass));
+    public static <T> LogicalPredicate<T> nullValue() {
+        return new NullPredicate<T>();
     }
 
-    public static <T> LogicalPredicate<T> aNull(final Class<T> aClass) {
-        return new Null<T>();
+    public static <T> LogicalPredicate<T> nullValue(final Class<T> type) {
+        return nullValue();
+    }
+
+    public static <T> LogicalPredicate<T> notNullValue() {
+        return new NotNullPredicate<T>();
+    }
+
+    public static <T> LogicalPredicate<T> notNullValue(final Class<T> aClass) {
+        return notNullValue();
+    }
+
+    public static <T> LogicalPredicate<Option<T>> some(final Class<T> aClass) {
+        return some();
     }
 
     public static <T> LogicalPredicate<Option<T>> some() {
@@ -167,13 +155,26 @@ public class Predicates {
             }
         };
     }
-    
-    public static LogicalPredicate<Object> assignableTo(final Class aClass) {
-        return new LogicalPredicate<Object>() {
-            public boolean matches(Object other) {
-                return aClass.isAssignableFrom(other.getClass());
+
+    public static LogicalPredicate<Class> assignableTo(final Object o) {
+        return new LogicalPredicate<Class>() {
+            public boolean matches(Class aClass) {
+                return isAssignableTo(o, aClass);
             }
         };
+    }
+
+    public static LogicalPredicate<Object> assignableTo(final Class aClass) {
+        return new LogicalPredicate<Object>() {
+            public boolean matches(Object o) {
+                return isAssignableTo(o, aClass);
+            }
+        };
+    }
+
+    public static boolean isAssignableTo(Object o, Class aClass) {
+        if (o == null) return false;
+        return aClass.isAssignableFrom(o.getClass());
     }
 
     public static <T, R> LogicalPredicate<T> where(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
@@ -184,9 +185,9 @@ public class Predicates {
         return where(callable, predicate);
     }
 
-    public static <T> LogicalPredicate<? super Predicate<T>> matches(final T instance) {
-        return new LogicalPredicate<Predicate<T>>() {
-            public boolean matches(Predicate<T> predicate) {
+    public static <T> LogicalPredicate<? super Predicate<? super T>> matches(final T instance) {
+        return new LogicalPredicate<Predicate<? super T>>() {
+            public boolean matches(Predicate<? super T> predicate) {
                 return predicate.matches(instance);
             }
         };

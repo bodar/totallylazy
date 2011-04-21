@@ -4,4 +4,6 @@ out
 build/artifacts
 .idea/workspace.xml
 *.orig
-.DS_Store
+lib/build
+lib/runtime
+lib/optional

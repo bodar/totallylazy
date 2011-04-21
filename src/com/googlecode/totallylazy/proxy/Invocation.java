@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.Callable1;
-import sun.java2d.SunGraphicsEnvironment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -5,8 +5,44 @@ import com.googlecode.totallylazy.predicates.EndsWithPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 
 import java.io.*;
+import java.util.concurrent.Callable;
+
+import static com.googlecode.totallylazy.Closeables.using;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.Sequences.repeat;
 
 public class Strings {
+    public static final String EMPTY = "";
+
+    public static Sequence<String> lines(File file) {
+        try {
+            return lines(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            throw new LazyException(e);
+        }
+    }
+
+    public static Sequence<String> lines(InputStream stream) {
+        return lines(new InputStreamReader(stream));
+    }
+
+    public static Sequence<String> lines(Reader reader) {
+        return repeat(readLine(new BufferedReader(reader))).takeWhile(notNullValue(String.class)).memorise();
+    }
+
+    public static Callable<String> readLine(final BufferedReader reader) {
+        return new Callable<String>() {
+            public String call() throws Exception {
+                String result = reader.readLine();
+                if (result == null) {
+                    reader.close();
+                }
+                return result;
+            }
+        };
+    }
+
+
     public static Callable1<String, String> toLowerCase() {
         return new Callable1<String, String>() {
             public String call(String value) throws Exception {
@@ -51,6 +87,14 @@ public class Strings {
         };
     }
 
+    public static Predicate<? super String> empty() {
+        return new Predicate<String>() {
+            public boolean matches(String value) {
+                return value == null || value.equals(EMPTY);
+            }
+        };
+    }
+
     public static String escapeXml(String value) {
         return new Escaper().
                 withRule('&', "&amp;").
@@ -69,7 +113,7 @@ public class Strings {
         };
     }
 
-    public static Predicate<Character> unicodeControlOrUndefinedCharacter() {
+    public static Predicate<? super Character> unicodeControlOrUndefinedCharacter() {
         return new Predicate<Character>() {
             public boolean matches(Character character) {
                 return character > 0x7F;
@@ -87,36 +131,44 @@ public class Strings {
                 .append(value.substring(1))
                 .toString();
     }
-    
+
     public static String toString(byte[] bytes) {
         return toString(new ByteArrayInputStream(bytes));
     }
 
     public static String toString(File file) {
         try {
-            return toString(new FileReader(file));
+            return toString(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new LazyException(e);
         }
     }
 
     public static String toString(InputStream stream) {
-        if (stream == null) return "";
+        if (stream == null) return EMPTY;
         return toString(new InputStreamReader(stream));
     }
 
     public static String toString(Reader reader) {
-        try {
-            StringBuilder builder = new StringBuilder();
-            char[] buffer = new char[512];
-            int read = reader.read(buffer);
-            while (read > 0) {
-                builder.append(buffer, 0, read);
-                read = reader.read(buffer);
+        return using(reader, new Callable1<Reader, String>() {
+            public String call(Reader reader) throws Exception {
+                StringBuilder builder = new StringBuilder();
+                char[] buffer = new char[512];
+                int read = reader.read(buffer);
+                while (read > 0) {
+                    builder.append(buffer, 0, read);
+                    read = reader.read(buffer);
+                }
+                return builder.toString();
             }
-            return builder.toString();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        });
+    }
+
+    public static Callable1<String, String> format(final String format) {
+        return new Callable1<String, String>() {
+            public String call(String string) throws Exception {
+                return String.format(format, string);
+            }
+        };
     }
 }
