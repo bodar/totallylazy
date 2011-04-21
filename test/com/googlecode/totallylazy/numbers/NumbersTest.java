@@ -1,24 +1,28 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.callables.TimeCallable.time;
-import static com.googlecode.totallylazy.numbers.BigIntegerOperators.bigInteger;
-import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static com.googlecode.totallylazy.numbers.BigIntegerOperators.bigInteger;
+import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
 
 public class NumbersTest {
+    @Test
+    public void supportsRange() throws Exception {
+        assertThat(range(5), hasExactly(0, 1, 2, 3, 4));
+        assertThat(range(0, 5), hasExactly(0, 1, 2, 3, 4));
+        assertThat(range(0, 5, 2), hasExactly(0, 2, 4));
+    }
+
     @Test
     public void supportsSorting() throws Exception {
         assertThat(numbers(5d, 1, 4L, bigInteger(2), 3f).sortBy(descending()), hasExactly(5d, 4L, 3f, bigInteger(2), 1));
@@ -27,9 +31,9 @@ public class NumbersTest {
     @Test
     public void shouldBePrettyFast() throws Exception {
         TimeReport report = new TimeReport();
-        repeat(time(sum(), iterate(increment(), 0).take(10000), report)).take(100).realise();
+        repeat(time(sumIterable(), iterate(increment(), 0).take(10000), report)).take(100).realise();
         System.out.println(report);
-        assertThat(report.average(), is(lessThan(10.0)));
+        assertThat(report.average(), is(lessThan(20.0)));
     }
 
     @Test

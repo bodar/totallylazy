@@ -15,24 +15,37 @@ import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.notNull;
-import static com.googlecode.totallylazy.Sequences.cons;
-import static com.googlecode.totallylazy.Sequences.iterate;
-import static com.googlecode.totallylazy.Sequences.range;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sequences.sort;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
-import static com.googlecode.totallylazy.numbers.Numbers.add;
-import static com.googlecode.totallylazy.numbers.Numbers.even;
-import static com.googlecode.totallylazy.numbers.Numbers.numbers;
-import static com.googlecode.totallylazy.numbers.Numbers.odd;
+import static com.googlecode.totallylazy.Sequences.*;
+import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SequenceTest {
+    @Test
+    public void supportsPartition() throws Exception {
+        Partition<Integer> result = sequence(1, 2, 3, 4).partition(even());
+        assertThat(result.matched().realise(), hasExactly(2, 4));
+        assertThat(result.unmatched().realise(), hasExactly(1, 3));
+    }
+
+    @Test
+    public void supportsPartitionOnForwardOnlySequence() throws Exception {
+        Partition<Integer> result = sequence(1, 2, 3, 4).forwardOnly().partition(even());
+        assertThat(result.matched().realise(), hasExactly(2, 4));
+        assertThat(result.unmatched().realise(), hasExactly(1, 3));
+    }
+
+    @Test
+    public void supportsLast() throws Exception {
+        assertThat(sequence(1,2,3).last(), is(3));
+    }
+
     @Test
     public void supportsReverse() throws Exception {
         assertThat(sequence(1,2,3).reverse(), hasExactly(3,2,1));
@@ -159,7 +172,7 @@ public class SequenceTest {
 
     @Test
     public void canFilterNull() throws Exception {
-        final Sequence<Integer> numbers = sequence(1, null, 3).filter(notNull(Number.class));
+        final Sequence<Integer> numbers = sequence(1, null, 3).filter(notNullValue());
         assertThat(numbers, hasExactly(1, 3));
     }
 
@@ -228,9 +241,11 @@ public class SequenceTest {
     @Test
     public void supportsForEach() throws Exception {
         final int[] sum = {0};
-        sequence(1, 2).forEach(new Runnable1<Integer>() {
-            public void run(Integer value) {
+        sequence(1, 2).forEach(new Callable1<Integer, Void>() {
+            public Void call(Integer value) {
                 sum[0] += value;
+                return Runnables.VOID;
+
             }
         });
         assertThat(sum[0], is(3));
@@ -265,7 +280,7 @@ public class SequenceTest {
 
     @Test
     public void supportsFlatMap() throws Exception {
-        Iterable<Integer> result = sequence(1, 2, 3).flatMap(new Callable1<Integer, Iterable<? extends Integer>>() {
+        Iterable<Integer> result = sequence(1, 2, 3).flatMap(new Callable1<Integer, Iterable<Integer>>() {
             public Iterable<Integer> call(Integer value) throws Exception {
                 return sequence(value, value * 3);
             }
@@ -317,5 +332,14 @@ public class SequenceTest {
     @Test
     public void supportsZipWithIndex() {
         assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(), hasExactly(pair((Number)0, "Dan"), pair((Number)1, "Matt"), pair((Number)2, "Bob")));
+    }
+
+
+    @Test
+    public void supportsForwardOnly() throws Exception {
+        Sequence<Integer> sequence = sequence(1, 2, 3, 4).forwardOnly();
+
+        assertThat(sequence.headOption(), is(option(1)));
+        assertThat(sequence.headOption(), is(option(2)));
     }
 }

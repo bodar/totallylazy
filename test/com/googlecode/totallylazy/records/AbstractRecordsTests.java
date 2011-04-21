@@ -1,8 +1,12 @@
 package com.googlecode.totallylazy.records;
 
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
@@ -10,41 +14,41 @@ import java.util.Date;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Dates.date;
-import static com.googlecode.totallylazy.Predicates.between;
-import static com.googlecode.totallylazy.Predicates.greaterThan;
-import static com.googlecode.totallylazy.Predicates.greaterThanOrEqualTo;
-import static com.googlecode.totallylazy.Predicates.in;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.lessThan;
-import static com.googlecode.totallylazy.Predicates.lessThanOrEqualTo;
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Strings.contains;
-import static com.googlecode.totallylazy.Strings.endsWith;
-import static com.googlecode.totallylazy.Strings.startsWith;
+import static com.googlecode.totallylazy.Strings.*;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
+import static com.googlecode.totallylazy.numbers.Numbers.average;
+import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
+import static com.googlecode.totallylazy.records.Maximum.maximum;
+import static com.googlecode.totallylazy.records.Minimum.minimum;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public abstract class AbstractRecordsTests {
-    private static final Keyword user = keyword("user");
+    private static final Keyword user = keyword("people");
     private static final Keyword<Integer> age = keyword("age", Integer.class);
     private static final Keyword<Date> dob = keyword("dob", Date.class);
     private static final Keyword<String> firstName = keyword("firstName", String.class);
     private static final Keyword<String> lastName = keyword("lastName", String.class);
-    protected static Records records;
+    protected Records records;
 
-    public static void addRecords(Records records) {
-        AbstractRecordsTests.records = records;
+    protected abstract Records createRecords() throws Exception;
+
+    @Before
+    public void addRecords() throws Exception {
+        this.records = createRecords();
+        records.remove(user);
         records.define(user, age, dob, firstName, lastName);
         addUsers(records);
     }
 
-    private static void addUsers(Records records) {
+    private void addUsers(Records records) {
         records.add(user,
                 record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)),
                 record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 1, 10)),
@@ -52,8 +56,30 @@ public abstract class AbstractRecordsTests {
     }
 
     @Test
-    public void supportsDrop() throws Exception {
-        assertThat(records.get(user).drop(2).size(), NumberMatcher.is(1));
+    public void supportsIsNullAndNotNull() throws Exception {
+        records.add(user, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
+        assertThat(records.get(user).filter(where(age, is(nullValue()))).toList().size(), NumberMatcher.is(1));
+        assertThat(records.get(user).filter(where(age, is(notNullValue()))).toList().size(), NumberMatcher.is(3));
+    }
+
+    @Test
+    public void supportsReduce() throws Exception {
+        assertThat(records.get(user).map(age).reduce(maximum(Integer.class)), CoreMatchers.is(12));
+        assertThat(records.get(user).map(dob).reduce(minimum(Date.class)), CoreMatchers.is(date(1975, 1, 10)));
+        assertThat(records.get(user).map(age).reduce(add()), NumberMatcher.is(33));
+        assertThat(records.get(user).map(age).reduce(average()), NumberMatcher.is(11));
+        assertThat(records.get(user).reduce(count()), NumberMatcher.is(3));
+
+        records.add(user, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
+        assertThat(records.get(user).map(age).reduce(count()), NumberMatcher.is(3));
+    }
+
+
+    @Test
+    public void supportsSet() throws Exception {
+        records.add(user, record().set(firstName, "chris").set(lastName, "bodart").set(age, 13).set(dob, date(1974, 1, 10)));
+        assertThat(records.get(user).filter(where(lastName, startsWith("bod"))).map(select(lastName)).toSet(), hasExactly(record().set(lastName, "bodart")));
+        assertThat(records.get(user).map(lastName).toSet(), containsInAnyOrder("bodart", "savage", "martin"));
     }
 
     @Test
@@ -61,7 +87,6 @@ public abstract class AbstractRecordsTests {
         Number count = records.set(user, where(firstName, is("dan")).and(where(age, is(10))), record().set(lastName, "bod"));
         assertThat(count, NumberMatcher.is(1));
         assertThat(records.get(user).filter(where(firstName, is("dan"))).map(lastName), hasExactly("bod"));
-        records.set(user, where(firstName, is("dan")), record().set(lastName, "bodart"));
     }
 
     @Test
@@ -183,7 +208,7 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsBetween() throws Exception {
         Sequence<Record> users = records.get(user);
-        assertThat(users.filter(where(age, is(between(10,11)))).map(firstName), containsInAnyOrder("dan", "bob"));
+        assertThat(users.filter(where(age, is(between(10, 11)))).map(firstName), containsInAnyOrder("dan", "bob"));
     }
 
     @Test
@@ -225,9 +250,7 @@ public abstract class AbstractRecordsTests {
         assertThat(records.get(user).size(), equalTo(1));
 
         assertThat(records.remove(user), equalTo(1));
-        Sequence<Record> recordSequence = records.get(user);
-        assertThat(recordSequence.size(), equalTo(0));
-        addUsers(records);
+        assertThat(records.get(user).size(), equalTo(0));
     }
 
     @Test

@@ -1,41 +1,53 @@
 package com.googlecode.totallylazy;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Vector;
 
 import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.totallylazy.Predicates.notNull;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.join;
-import static com.googlecode.totallylazy.Sequences.range;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.odd;
+import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
     @Test
+    public void supportsCycle() throws Exception {
+        assertThat(range(1, 4).cycle(), startsWith(1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3));
+    }
+
+    @Test
     public void supportsAddingToAnEmptyList() throws Exception {
-        assertThat(sequence().add(1).add(2).add(3), hasExactly(1,2,3));
+        assertThat(sequence().add(1).add(2).add(3), hasExactly(1, 2, 3));
     }
 
     @Test
     public void joinWorksEvenWhenFirstIterableIsEmpty() throws Exception {
-        final List<Integer> emptyList = Collections.<Integer>emptyList();
-        assertThat(join(emptyList, asList(1, 2, 3)), hasExactly(1,2,3));
-        assertThat(join(emptyList, asList(1, 2, 3), emptyList, asList(4, 5, 6)), hasExactly(1,2,3,4,5,6));
+        final Sequence<Integer> empty = Sequences.<Integer>empty();
+        assertThat(empty.add(1).join(sequence(2, 3)).add(4), hasExactly(1, 2, 3, 4));
+        assertThat(join(empty, sequence(1, 2, 3), empty, asList(4, 5, 6)), hasExactly(1, 2, 3, 4, 5, 6));
+    }
+
+    @Test
+    public void supportsJoiningSubTypes() throws Exception {
+        final Sequence<Number> numbers = numbers(2, 3.0D);
+        Sequence<Integer> integers = sequence(2, 3);
+        Sequence<Long> longs = sequence(2L, 3L);
+        assertThat(numbers.join(integers).join(longs), hasExactly(2, 3.0D, 2, 3, 2L, 3L));
+        assertThat(join(sequence(1L, 2.0D, 3), numbers, asList(4, 5, 6), integers), hasExactly(1L, 2.0D, 3, 2, 3.0D, 4, 5, 6, 2, 3));
     }
 
     @Test
@@ -62,13 +74,6 @@ public class SequencesTest {
     }
 
     @Test
-    public void supportsRange() throws Exception {
-        assertThat(range(5), hasExactly(0, 1, 2, 3, 4));
-        assertThat(range(0, 5), hasExactly(0, 1, 2, 3, 4));
-        assertThat(range(0, 5, 2), hasExactly(0, 2, 4));
-    }
-
-    @Test
     public void supportsIterate() throws Exception {
         assertThat(iterate(increment(), 1), startsWith(1, 2, 3, 4, 5));
     }
@@ -77,13 +82,12 @@ public class SequencesTest {
     public void supportsIteratingEvenWhenCallableReturnNull() throws Exception {
         final Sequence<Integer> sequence = iterate(new Callable1<Integer, Integer>() {
             public Integer call(Integer integer) throws Exception {
-                assertThat("Should never see a null value", integer, is(notNullValue()));
+                assertThat("Should never see a null value", integer, is(Matchers.notNullValue()));
                 return null;
             }
-        }, 1).takeWhile(notNull(Integer.class));
+        }, 1).takeWhile(Predicates.notNullValue());
         assertThat(sequence, hasExactly(1));
     }
-
 
 
     @Test

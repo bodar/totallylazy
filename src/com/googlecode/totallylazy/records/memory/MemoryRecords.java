@@ -30,13 +30,17 @@ public class MemoryRecords extends AbstractRecords {
     }
 
     private List<Record> recordsFor(Keyword recordName) {
-        if (!memory.containsKey(recordName)) {
+        if (!exists(recordName)) {
             memory.put(recordName, new ArrayList<Record >());
         }
         return memory.get(recordName);
     }
 
     public void define(Keyword recordName, Keyword<?>... fields) {
+    }
+
+    public boolean exists(Keyword recordName) {
+        return memory.containsKey(recordName);
     }
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {

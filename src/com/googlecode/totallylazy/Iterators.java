@@ -1,14 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.DelegatingIterator;
-import com.googlecode.totallylazy.iterators.FilterIterator;
-import com.googlecode.totallylazy.iterators.FlatMapIterator;
-import com.googlecode.totallylazy.iterators.IterateIterator;
-import com.googlecode.totallylazy.iterators.MapIterator;
-import com.googlecode.totallylazy.iterators.RangerIterator;
-import com.googlecode.totallylazy.iterators.RepeatIterator;
-import com.googlecode.totallylazy.iterators.TakeWhileIterator;
-import com.googlecode.totallylazy.numbers.Numbers;
+import com.googlecode.totallylazy.iterators.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,9 +25,9 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 
 public class Iterators {
-    public static <T> void forEach(final Iterator<T> iterator, final Runnable1<T> runnable) {
+    public static <T> void forEach(final Iterator<T> iterator, final Callable1<? super T,Void> runnable) {
         while (iterator.hasNext()) {
-            runnable.run(iterator.next());
+            Callers.call(runnable, iterator.next());
         }
     }
 
@@ -43,7 +35,7 @@ public class Iterators {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> Iterator<S> flatMap(final Iterator<? extends T> iterator, final Callable1<? super T, Iterable<? extends S>> callable) {
+    public static <T, S> Iterator<S> flatMap(final Iterator<T> iterator, final Callable1<? super T, Iterable<S>> callable) {
         return new FlatMapIterator<T, S>(iterator, callable);
     }
 
@@ -69,7 +61,7 @@ public class Iterators {
     public static <T> Iterator<T> tail(final Iterator<T> iterator) {
         if (iterator.hasNext()) {
             iterator.next();
-            return new DelegatingIterator<T>(iterator);
+            return new PeekingIterator<T>(iterator);
         }
         throw new NoSuchElementException();
     }
@@ -86,12 +78,12 @@ public class Iterators {
         return accumulator;
     }
 
-    public static <T,R> T reduce(final Iterator<T> iterator, final Callable2<? super T, ? super T, T> callable) {
+    public static <T,S> S reduce(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
         return reduceLeft(iterator, callable);
     }
 
-    public static <T,R> T reduceLeft(final Iterator<T> iterator, final Callable2<? super T, ? super T, T> callable) {
-        return foldLeft(iterator, iterator.next(), callable);
+    public static <T,S> S reduceLeft(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
+        return foldLeft(iterator, (S) iterator.next(), callable);
     }
 
     public static String toString(final Iterator iterator) {
@@ -224,12 +216,12 @@ public class Iterators {
         return join(iterator, sequence(t).iterator());
     }
 
-    public static <T> Iterator<T> join(final Iterator<? extends T>... iterators) {
-        return new FlatMapIterator<Iterator<? extends T>,T>(sequence(iterators).iterator(), Callables.<T>asIterable());
+    public static <T> Iterator<T> join(final Iterator<T>... iterators) {
+        return join(sequence(iterators));
     }
 
-    public static <T> Iterator<T> join(final Iterable<Iterator<? extends T>> iterators) {
-        return new FlatMapIterator<Iterator<? extends T>, T>(sequence(iterators).iterator(), Callables.<T>asIterable());
+    public static <T> Iterator<T> join(final Iterable<Iterator<T>> iterable) {
+        return new FlatMapIterator<Iterator<T>,T>(iterable.iterator(), Callables.<T>asIterable());
     }
 
     public static <T> Iterator<T> cons(final T t, final Iterator<T> iterator) {

@@ -12,6 +12,8 @@ import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.callables.SleepyCallable.sleepy;
+import static com.googlecode.totallylazy.Runnables.doNothing;
+
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -69,8 +71,8 @@ public class MemoriseTest {
     public void memorisingForEach() throws InterruptedException {
         CountingCallable<Integer> counting = counting();
         Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
-        sequence.forEach(this.<Integer>doNothing());
-        sequence.forEach(this.<Integer>doNothing());
+        sequence.forEach(doNothing(Integer.class));
+        sequence.forEach(doNothing(Integer.class));
 
         assertThat(counting.count(), is(1));
     }
@@ -83,12 +85,5 @@ public class MemoriseTest {
         sequence.size();
 
         assertThat(counting.count(), is(1));
-    }
-
-    private <T> Runnable1<T> doNothing() {
-        return new Runnable1<T>() {
-            public void run(T ignore) {
-            }
-        };
     }
 }

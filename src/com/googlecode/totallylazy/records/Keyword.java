@@ -3,6 +3,8 @@ package com.googlecode.totallylazy.records;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.GenericType;
 
+import java.util.concurrent.Callable;
+
 public class Keyword<T> implements Callable1<Record, T>, GenericType {
     private final String value;
     private final Class<T> aClass;
@@ -25,12 +27,12 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof Keyword && value.equalsIgnoreCase(((Keyword) other).value);
+        return other instanceof Keyword && name().equalsIgnoreCase(((Keyword) other).name());
     }
 
     @Override
     public int hashCode() {
-        return value.toLowerCase().hashCode();
+        return name().toLowerCase().hashCode();
     }
 
     public T call(Record record) throws Exception {
@@ -42,7 +44,13 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
         return value;
     }
 
-    public Class forClass() {
+    public Class<T> forClass() {
         return aClass;
     }
+
+    public String name() {
+        String[] parts = value.split("\\.");
+        return parts[parts.length - 1];
+    }
+
 }
