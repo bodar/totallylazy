@@ -11,6 +11,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 public final class Callables {
+    public static <T> Callable1<? super Value<T>, T> value() {
+        return new Callable1<Value<T>, T>() {
+            public T call(Value<T> value) throws Exception {
+                return value.value();
+            }
+        };
+    }
+
     public static <T, R> Callable1<? super T,R> doThen(final Callable1<? super T,Void> runnable, final Callable<R> callable) {
         return new Callable1<T, R>() {
             public R call(T t) throws Exception {
