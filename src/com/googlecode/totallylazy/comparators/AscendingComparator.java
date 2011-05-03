@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.callables;
+package com.googlecode.totallylazy.comparators;
 
 import com.googlecode.totallylazy.Callable1;
 

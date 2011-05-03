@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.AscendingComparator;
-import com.googlecode.totallylazy.callables.DescendingComparator;
+import com.googlecode.totallylazy.comparators.AscendingComparator;
+import com.googlecode.totallylazy.comparators.DescendingComparator;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
