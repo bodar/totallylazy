@@ -4,7 +4,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.call;
 
-public abstract class Option<T> implements Iterable<T> {
+public abstract class Option<T> implements Iterable<T>, Value<T> {
     public static <T> Option<T> option(T t) {
         if (t == null) {
             return none();
@@ -27,6 +27,10 @@ public abstract class Option<T> implements Iterable<T> {
     public abstract T get();
 
     public abstract boolean isEmpty();
+
+    public T value() {
+        return get();
+    }
 
     public final T getOrElse(T other){
         return isEmpty() ? other : get();
