@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.*;
-import com.googlecode.totallylazy.callables.AscendingComparator;
-import com.googlecode.totallylazy.callables.DescendingComparator;
+import com.googlecode.totallylazy.comparators.AscendingComparator;
+import com.googlecode.totallylazy.comparators.DescendingComparator;
 import com.googlecode.totallylazy.numbers.Add;
 import com.googlecode.totallylazy.numbers.Average;
 import com.googlecode.totallylazy.predicates.AndPredicate;
