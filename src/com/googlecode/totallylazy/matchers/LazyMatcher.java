@@ -36,8 +36,8 @@ public final class LazyMatcher<A, E> extends TypeSafeMatcher<A> {
         return new LazyMatcher<A, E>(lazyEqualTo(descriptionText, expected), actualMapper);
     }
 
-    public static <A, E> LazyMatcher<A, E> matchesLazily(Callable<? extends Matcher<? super E>> expectedMatcher, Callable1<A, E> actualMapper) {
-        return new LazyMatcher<A, E>(expectedMatcher, actualMapper);
+    public static <A, E> LazyMatcher<A, E> matchesLazily(Matcher<? super E> expectedMatcher, Callable1<A, E> actualMapper) {
+        return new LazyMatcher<A, E>(returns(expectedMatcher), actualMapper);
     }
 
     private static <E> Callable<? extends Matcher<E>> lazyEqualTo(final String descriptionText, final Callable<E> expected) {
