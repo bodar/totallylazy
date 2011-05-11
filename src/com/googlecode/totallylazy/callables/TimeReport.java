@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Runnables;
+import com.googlecode.totallylazy.numbers.Numbers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class TimeReport implements Callable1<Double, Void> {
 
     @Override
     public String toString() {
-        return String.format("Elapsed msecs for %s runs:\tAvg:%s\tMin:%s\tMax:%s", runs(), average(), minimum(), maximum());
+        return String.format("Elapsed msecs for %s runs:\tAvg:%s\tMin:%s\tMax:%s\tTotal:%s", runs(), average(), minimum(), maximum(), total());
     }
 
     public double minimum() {
@@ -44,8 +45,12 @@ public class TimeReport implements Callable1<Double, Void> {
     }
 
     public double average() {
-        List<Number> excludeTopAndBottom = sequence(times).sortBy(ascending()).drop(tenPercent()).reverse().drop(tenPercent()).toList();
-        return divide(reduceLeft(excludeTopAndBottom, add()), excludeTopAndBottom.size()).doubleValue();
+        return sequence(times).
+                sortBy(ascending()).
+                drop(tenPercent()).
+                reverse().
+                drop(tenPercent()).
+                reduce(Numbers.average()).doubleValue();
     }
 
     private int tenPercent() {
@@ -54,5 +59,9 @@ public class TimeReport implements Callable1<Double, Void> {
 
     private int runs() {
         return times.size();
+    }
+
+    public Number total() {
+        return sequence(times).reduce(add());
     }
 }

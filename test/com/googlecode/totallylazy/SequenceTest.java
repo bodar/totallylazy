@@ -1,24 +1,22 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.callables.SleepyCallable;
+import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import org.junit.Test;
 
 import java.util.List;
 
-import static com.googlecode.totallylazy.Callables.asString;
-import static com.googlecode.totallylazy.Callables.ascending;
-import static com.googlecode.totallylazy.Callables.call;
-import static com.googlecode.totallylazy.Callables.callThrows;
-import static com.googlecode.totallylazy.Callables.descending;
-import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callables.*;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.callables.SleepyCallable1.sleepy;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Sequences.*;
@@ -254,6 +252,12 @@ public class SequenceTest {
     @Test
     public void supportsMap() throws Exception {
         Iterable<String> strings = sequence(1, 2).map(asString());
+        assertThat(strings, hasExactly("1", "2"));
+    }
+
+    @Test
+    public void supportsConcurrentMap() throws Exception {
+        Iterable<String> strings = sequence(1, 2).mapConcurrently(asString());
         assertThat(strings, hasExactly("1", "2"));
     }
 

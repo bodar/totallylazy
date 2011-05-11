@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.ascending;
+import static com.googlecode.totallylazy.Callables.curry;
+import static com.googlecode.totallylazy.Callables.bounce;
+import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
 import static java.nio.CharBuffer.wrap;
 
@@ -371,4 +374,9 @@ public class Sequences {
     public static <T> Sequence<T> cycle(Iterable<T> iterable) {
         return repeat(sequence(iterable).memorise()).flatMap(Callables.<Iterable<T>>returnArgument());
     }
+
+    public static <T,S> Sequence<S> mapConcurrently(Iterable<T> iterable, final Callable1<? super T, S> callable) {
+        return callConcurrently(sequence(iterable).map(bounce(callable)));
+    }
+
 }

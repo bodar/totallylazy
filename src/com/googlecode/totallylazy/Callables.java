@@ -258,6 +258,14 @@ public final class Callables {
         };
     }
 
+    public static <T, S> Callable1<T, Callable<S>> bounce(final Callable1<? super T, S> callable) {
+        return new Callable1<T, Callable<S>>() {
+            public Callable<S> call(T t) throws Exception {
+                return Callables.curry(callable, t);
+            }
+        };
+    }
+
     public static <T, R, S> Callable2<T, R, S> unCurry(final Callable1<T, Callable1<R,S>> callable) {
         return new Callable2<T, R, S>() {
             public final S call(final T t, final R r) throws Exception {
