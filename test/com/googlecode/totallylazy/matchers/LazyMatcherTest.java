@@ -54,18 +54,18 @@ public class LazyMatcherTest {
 
     @Test
     public void shouldMatchExpectedMatcher() {
-        assertThat(ACTUAL, matchesLazily(returns(is(EXPECTED)), returnArgument(String.class)));
+        assertThat(ACTUAL, matchesLazily(is(EXPECTED), returnArgument(String.class)));
     }
 
     @Test
     public void shouldNotMatchExpectedMatcher() {
-        assertThat(DIFFERENT_ACTUAL, not(matchesLazily(returns(is(EXPECTED)), returnArgument(String.class))));
+        assertThat(DIFFERENT_ACTUAL, not(matchesLazily(is(EXPECTED), returnArgument(String.class))));
     }
 
     @Test
     public void shouldDescribeExpectedMatcher() {
         Description description = new StringDescription();
-        matchesLazily(returns(is(EXPECTED)), returnArgument(String.class)).describeTo(description);
+        matchesLazily(is(EXPECTED), returnArgument(String.class)).describeTo(description);
         assertThat(description.toString(), containsString(EXPECTED));
     }
 }
