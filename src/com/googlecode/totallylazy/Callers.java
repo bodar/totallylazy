@@ -10,22 +10,26 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Arrays.asList;
 
 public final class Callers {
-    public static <T> Sequence<T> callConcurrently(final Iterable<Callable<T>> callables) throws InterruptedException {
+    public static <T> Sequence<T> callConcurrently(final Iterable<Callable<T>> callables) {
         return callConcurrently(sequence(callables).toList());
     }
 
-    public static <T> Sequence<T> callConcurrently(final Callable<T>... callables) throws InterruptedException {
+    public static <T> Sequence<T> callConcurrently(final Callable<T>... callables) {
         return callConcurrently(asList(callables));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Collection<Callable<T>> callables) throws InterruptedException {
-        if(callables.size() == 0){
-            return Sequences.empty();
+    public static <T> Sequence<T> callConcurrently(final Collection<Callable<T>> callables) {
+        try {
+            if(callables.isEmpty()){
+                return Sequences.empty();
+            }
+            ExecutorService service = Executors.newFixedThreadPool(callables.size());
+            Sequence<Future<T>> result = sequence(service.invokeAll(callables));
+            service.shutdown();
+            return result.map(Callables.<T>realiseFuture());
+        } catch (InterruptedException e) {
+            throw new LazyException(e);
         }
-        ExecutorService service = Executors.newFixedThreadPool(callables.size());
-        Sequence<Future<T>> result = sequence(service.invokeAll(callables));
-        service.shutdown();
-        return result.map(Callables.<T>realiseFuture());
     }
 
     public static <T> T call(final Callable<T> callable) {

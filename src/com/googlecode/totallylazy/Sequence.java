@@ -18,6 +18,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         Sequences.forEach(this, runnable);
     }
 
+    public <S> Sequence<S> mapConcurrently(final Callable1<? super T, S> callable) {
+        return Sequences.mapConcurrently(this, callable);
+    }
+
     public <S> Sequence<S> map(final Callable1<? super T, S> callable) {
         return Sequences.map(this, callable);
     }
