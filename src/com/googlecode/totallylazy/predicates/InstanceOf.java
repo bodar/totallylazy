@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.predicates;
 
+import java.lang.annotation.Annotation;
+
 public class InstanceOf<T> extends LogicalPredicate<T> {
     private final Class aClass;
 
@@ -11,6 +13,9 @@ public class InstanceOf<T> extends LogicalPredicate<T> {
         if(other == null) {
             return false;
         }
-        return aClass.isAssignableFrom(other.getClass());
+        if(other instanceof Annotation){
+            return ((Annotation) other).annotationType().equals(aClass);
+        }
+        return aClass.isInstance(other);
     }
 }
