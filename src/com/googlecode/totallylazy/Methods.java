@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Exceptions.handleException;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Methods {
     public static <T extends Annotation> Callable1<? super Method, T> annotation(final Class<T> annotationClass) {
@@ -59,7 +60,23 @@ public class Methods {
     public static Option<Method> getMethod(Class aClass, String name, final Class<?>... parameters) {
         return call(handleException(getMethod(name, parameters), instanceOf(NoSuchMethodException.class)), aClass);
     }
-    
+
+    public final Callable1<Class<?>, Iterable<Method>> methods() {
+        return new Callable1<Class<?>, Iterable<Method>>() {
+            public Iterable<Method> call(Class<?> aClass) throws Exception {
+                return sequence(aClass.getMethods());
+            }
+        };
+    }
+
+    public final LogicalPredicate<Class<?>> isInstance(final Object instance) {
+        return new LogicalPredicate<Class<?>>() {
+            public boolean matches(Class<?> aClass) {
+                return aClass.isInstance(instance);
+            }
+        };
+    }
+
     public static <T, R> R invoke(Method method, T instance, Object... arguments) {
         try {
             method.setAccessible(true);
