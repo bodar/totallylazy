@@ -69,14 +69,6 @@ public class Methods {
         };
     }
 
-    public final LogicalPredicate<Class<?>> isInstance(final Object instance) {
-        return new LogicalPredicate<Class<?>>() {
-            public boolean matches(Class<?> aClass) {
-                return aClass.isInstance(instance);
-            }
-        };
-    }
-
     public static <T, R> R invoke(Method method, T instance, Object... arguments) {
         try {
             method.setAccessible(true);
