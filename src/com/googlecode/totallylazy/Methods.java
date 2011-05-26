@@ -61,7 +61,7 @@ public class Methods {
         return call(handleException(getMethod(name, parameters), instanceOf(NoSuchMethodException.class)), aClass);
     }
 
-    public final Callable1<Class<?>, Iterable<Method>> methods() {
+    public static Callable1<Class<?>, Iterable<Method>> methods() {
         return new Callable1<Class<?>, Iterable<Method>>() {
             public Iterable<Method> call(Class<?> aClass) throws Exception {
                 return sequence(aClass.getMethods());
