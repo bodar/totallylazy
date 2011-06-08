@@ -1,12 +1,8 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 
 import java.util.Iterator;
-
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 
 public final class TakeWhileIterator<T> extends StatefulIterator<T> {
     private final Iterator<T> iterator;
@@ -18,13 +14,13 @@ public final class TakeWhileIterator<T> extends StatefulIterator<T> {
     }
 
     @Override
-    public final Option<T> getNext() {
+    public final T getNext() {
         if(iterator.hasNext()){
             T item = iterator.next();
             if(predicate.matches(item)){
-                return some(item);
+                return item;
             }
         }
-        return none();
+        return finished();
     }
 }

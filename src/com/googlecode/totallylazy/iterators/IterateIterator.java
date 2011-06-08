@@ -1,10 +1,8 @@
 package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Option;
 
 import static com.googlecode.totallylazy.Callers.call;
-import static com.googlecode.totallylazy.Option.some;
 
 public final class IterateIterator<T> extends ReadOnlyIterator<T> {
     private final Callable1<? super T, T> callable;
