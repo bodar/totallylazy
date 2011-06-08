@@ -1,54 +1,54 @@
 package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Peekable;
 
 import java.util.NoSuchElementException;
 
-import static com.googlecode.totallylazy.Option.none;
-
 public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements Peekable<T> {
-    private Option<T> state = none();
-    private boolean finished = false;
 
-    protected abstract Option<T> getNext() throws Exception;
+    private State state = State.Ready;
+    private T current;
+
+
+    protected abstract T getNext() throws Exception;
+
+    protected T finished() {
+        state = State.Finished;
+        return null;
+    }
 
     public final boolean hasNext() {
-        if(finished){
-            return false;
-        }
-
-        if (state.isEmpty()) {
-            try {
-                state = getNext();
-            } catch (Exception e) {
-                throw new LazyException(e);
+        try {
+            if (state.equals(State.Ready)) {
+                current = getNext();
+                if(state.equals(State.Finished)){
+                    return false;
+                }
+                state = State.Loaded;
             }
-            if (state.isEmpty()) {
-                finished = true;
-                return false;
-            }
+            return !state.equals(State.Finished);
+        } catch (Exception e) {
+            throw new LazyException(e);
         }
-        return true;
     }
 
     public final T next() {
         if (hasNext()) {
-            return pop(state);
+            return pop();
         }
         throw new NoSuchElementException();
     }
 
     public final T peek() {
         if (hasNext()) {
-            return state.get();
+            return current;
         }
         throw new NoSuchElementException();
     }
 
-    private T pop(Option<T> value) {
-        state = none();
-        return value.get();
+    private T pop() {
+        state = State.Ready;
+        return current;
     }
 }

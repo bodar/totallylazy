@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.regex;
 
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 
 import java.util.regex.MatchResult;
@@ -17,10 +16,10 @@ public class MatchIterator extends StatefulIterator<MatchResult> {
         this.matcher.reset();
     }
 
-    public Option<MatchResult> getNext() {
+    public MatchResult getNext() {
             if (matcher.find()) {
-                return some(matcher.toMatchResult());
+                return matcher.toMatchResult();
             }
-        return none();
+        return finished();
     }
 }

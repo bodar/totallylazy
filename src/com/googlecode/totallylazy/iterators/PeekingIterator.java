@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.Option;
-
 import java.util.Iterator;
 
 public class PeekingIterator<T> extends StatefulIterator<T> {
@@ -12,10 +10,10 @@ public class PeekingIterator<T> extends StatefulIterator<T> {
     }
 
     @Override
-    protected Option<T> getNext() throws Exception {
+    protected T getNext() throws Exception {
         if (iterator.hasNext()) {
-            return Option.some(iterator.next());
+            return iterator.next();
         }
-        return Option.none();
+        return finished();
     }
 }

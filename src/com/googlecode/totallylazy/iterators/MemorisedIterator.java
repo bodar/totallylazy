@@ -1,12 +1,7 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.Option;
-
 import java.util.Iterator;
 import java.util.List;
-
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 
 public final class MemorisedIterator<T> extends StatefulIterator<T> {
     private final Iterator<T> iterator;
@@ -18,20 +13,20 @@ public final class MemorisedIterator<T> extends StatefulIterator<T> {
         this.memory = memory;
     }
 
-    public final Option<T> getNext() {
+    public final T getNext() {
         synchronized (memory) {
             int currentPosition = position++;
             if (haveCachedAnswer(currentPosition)) {
-                return some(getCachedAnswer(currentPosition));
+                return getCachedAnswer(currentPosition);
             }
 
             if (iterator.hasNext()) {
                 T t = iterator.next();
                 memory.add(t);
-                return some(t);
+                return t;
             }
 
-            return none();
+            return finished();
         }
     }
 

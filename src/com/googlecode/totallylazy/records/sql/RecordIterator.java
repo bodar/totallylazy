@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.records.sql;
 
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.records.Keyword;
@@ -36,12 +35,12 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
     }
 
     @Override
-    protected Option<Record> getNext() throws Exception {
+    protected Record getNext() throws Exception {
         ResultSet resultSet = getResultSet();
         boolean hasNext = resultSet.next();
         if (!hasNext) {
             close();
-            return none();
+            return finished();
         }
 
         final Record record = record();
@@ -52,7 +51,7 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
             record.set(keyword, mappings.getValue(resultSet, index, keyword.forClass()));
         }
 
-        return some(record);
+        return record;
     }
 
     public PreparedStatement preparedStatement() throws Exception {

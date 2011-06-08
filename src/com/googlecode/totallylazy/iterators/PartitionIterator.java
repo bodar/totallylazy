@@ -1,9 +1,6 @@
 package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Option;
-import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Option.none;
 
 import java.util.Iterator;
 import java.util.Queue;
@@ -21,16 +18,16 @@ public class PartitionIterator<T> extends StatefulIterator<T> {
         this.unmatched = unmatched;
     }
 
-    protected Option<T> getNext() throws Exception {
+    protected T getNext() throws Exception {
         if (!matched.isEmpty()) {
-            return some(matched.remove());
+            return matched.remove();
         }
         if (!underlyingIterator.hasNext()) {
-            return none();
+            return finished();
         }
         T t = underlyingIterator.next();
         if (predicate.matches(t)) {
-            return some(t);
+            return t;
         }
         unmatched.add(t);
         return getNext();
