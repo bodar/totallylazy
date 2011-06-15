@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public abstract class Option<T> implements Iterable<T>, Value<T> {
     public static <T> Option<T> option(T t) {
@@ -50,5 +51,9 @@ public abstract class Option<T> implements Iterable<T>, Value<T> {
 
     public <S> S fold(final S seed, final Callable2<? super S, ? super T, S> callable) {
         return isEmpty() ? seed : Callers.call(callable, seed, get());
+    }
+
+    public Sequence<T> toSequence() {
+        return sequence(this);
     }
 }
