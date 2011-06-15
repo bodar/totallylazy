@@ -6,10 +6,8 @@ import com.googlecode.totallylazy.Peekable;
 import java.util.NoSuchElementException;
 
 public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements Peekable<T> {
-
     private State state = State.Ready;
     private T current;
-
 
     protected abstract T getNext() throws Exception;
 
