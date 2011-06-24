@@ -291,13 +291,17 @@ public class Numbers {
     public static Callable1<Iterable<Number>, Number> sumIterable() {
         return new Callable1<Iterable<Number>, Number>() {
             public Number call(Iterable<Number> numbers) throws Exception {
-                return Sequences.reduceLeft(numbers, add());
+                return Sequences.reduceLeft(numbers, sum());
             }
         };
     }
 
     public static <T extends Number> Callable2<T, T, Number> average() {
         return new Average<T>();
+    }
+
+    public static <T extends Number> Callable2<T, T, Number> sum() {
+        return new Add<T>();
     }
 
     public static <T extends Number> Callable2<T, T, Number> add() {
@@ -332,12 +336,12 @@ public class Numbers {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
+    public static <T extends Number> Callable2<T, T, Number> product() {
+        return new Multiply<T>();
+    }
+
     public static <T extends Number> Callable2<T, T, Number> multiply() {
-        return new Callable2<T, T, Number>() {
-            public Number call(T multiplicand, T multiplier) throws Exception {
-                return Numbers.multiply(multiplicand, multiplier);
-            }
-        };
+        return new Multiply<T>();
     }
 
     public static <T extends Number> Callable1<T, Number> multiply(final T multiplicand) {
@@ -385,4 +389,9 @@ public class Numbers {
         };
     }
 
+    private static class Multiply<T extends Number> implements Callable2<T, T, Number> {
+        public Number call(T multiplicand, T multiplier) throws Exception {
+            return multiply(multiplicand, multiplier);
+        }
+    }
 }

@@ -1,11 +1,14 @@
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.callables.TimeReport;
+import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
@@ -26,6 +29,11 @@ public class NumbersTest {
     @Test
     public void supportsSorting() throws Exception {
         assertThat(numbers(5d, 1, 4L, bigInteger(2), 3f).sortBy(descending()), hasExactly(5d, 4L, 3f, bigInteger(2), 1));
+    }
+
+    @Test
+    public void supportsProduct() throws Exception {
+        assertThat(sequence(1,2,3).reduce(product()), NumberMatcher.is(6));
     }
 
     @Test
