@@ -4,11 +4,16 @@ import com.googlecode.totallylazy.comparators.AscendingComparator;
 import com.googlecode.totallylazy.comparators.DescendingComparator;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+
+import static com.googlecode.totallylazy.Methods.invokeOn;
+import static com.googlecode.totallylazy.Methods.method;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callables {
     public static <T> Callable1<? super Value<T>, T> value() {
@@ -88,13 +93,12 @@ public final class Callables {
                 if (aClass.isArray()) {
                     return Array.getLength(instance);
                 }
-                if(instance instanceof Collection){
-                    return ((Collection) instance).size();
-                }
-                if(instance instanceof CharSequence){
-                    return ((CharSequence) instance).length();
-                }
-                throw new UnsupportedOperationException("Does not support methods or fields yet");
+                return sequence(method(instance, "size"), method(instance, "length")).
+                        filter(Predicates.<Method>some()).
+                        map(Callables.<Method>value()).
+                        headOption().
+                        map(Methods.<Integer>invokeOn(instance)).
+                        getOrElse(Callables.<Integer>callThrows(new UnsupportedOperationException("Does not support fields yet")));
             }
         };
     }

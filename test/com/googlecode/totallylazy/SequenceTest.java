@@ -104,13 +104,14 @@ public class SequenceTest {
 
     @Test
     public void supportsSortBySizeAndLength() throws Exception {
-        List<Integer> small = list(1);
+        int[] small = {1};
         String medium = "123";
         List<Integer> large = list(1, 2, 3, 4, 5, 6);
-        Sequence<Object> unsorted = sequence(large, small, medium);
-        assertThat(unsorted.sortBy(size()), hasExactly(small, medium, large));
-        assertThat(unsorted.sortBy(ascending(size())), hasExactly(small, medium, large));
-        assertThat(unsorted.sortBy(descending(length())), hasExactly(large, medium, small));
+        Sequence<Integer> veryLarge = sequence(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        Sequence<Object> unsorted = sequence(large, small, veryLarge, medium);
+        assertThat(unsorted.sortBy(size()), hasExactly(small, medium, large, veryLarge));
+        assertThat(unsorted.sortBy(ascending(size())), hasExactly(small, medium, large, veryLarge));
+        assertThat(unsorted.sortBy(descending(length())), hasExactly(veryLarge, large, medium, small));
     }
 
     @Test
