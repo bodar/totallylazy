@@ -8,6 +8,8 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Callables.*;
@@ -273,6 +275,14 @@ public class SequenceTest {
     public void supportsConcurrentMap() throws Exception {
         Iterable<String> strings = sequence(1, 2).mapConcurrently(asString());
         assertThat(strings, hasExactly("1", "2"));
+    }
+
+    @Test
+    public void supportsConcurrentMapWithCustomExecutor() throws Exception {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        Iterable<String> strings = sequence(1, 2).mapConcurrently(asString(), executorService);
+        assertThat(strings, hasExactly("1", "2"));
+        executorService.shutdown();
     }
 
     @Test

@@ -43,11 +43,11 @@ public class MemoriseTest {
         CountingCallable<Integer> counting = counting();
         final Sequence<Integer> number = sequence(sleepy(counting, 10)).map(call(Integer.class)).memorise();
 
-        Sequence<Integer> result = callConcurrently(callHead(number), callHead(number));
+        Sequence<Integer> result = callConcurrently(sleepy(callHead(number), 10), sleepy(callHead(number), 10));
 
-        assertThat(counting.count(), is(1));
         assertThat(result.first(), is(0));
         assertThat(result.second(), is(0));
+        assertThat(counting.count(), is(1));
     }
 
     private Callable<Integer> callHead(final Sequence<Integer> number) {
