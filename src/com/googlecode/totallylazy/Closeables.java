@@ -44,7 +44,7 @@ public class Closeables {
     public static <T> Callable1<T, Void> reflectiveClose() {
         return new Callable1<T, Void>() {
             public Void call(T instanceWithCloseMethod) throws Exception {
-                final Option<Method> close = Methods.getMethod(instanceWithCloseMethod, "close");
+                final Option<Method> close = Methods.method(instanceWithCloseMethod, "close");
                 if (close.isEmpty()) {
                     throw new IllegalArgumentException("Instance T must have a 'close()' method");
                 }
