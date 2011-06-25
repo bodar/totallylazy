@@ -371,11 +371,11 @@ public class Sequences {
         return sequence(result);
     }
 
-    public static <T> Sequence<T> cycle(Iterable<T> iterable) {
+    public static <T> Sequence<T> cycle(final Iterable<T> iterable) {
         return repeat(sequence(iterable).memorise()).flatMap(Callables.<Iterable<T>>returnArgument());
     }
 
-    public static <T,S> Sequence<S> mapConcurrently(Iterable<T> iterable, final Callable1<? super T, S> callable) {
+    public static <T,S> Sequence<S> mapConcurrently(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
         return callConcurrently(sequence(iterable).map(bounce(callable)));
     }
 

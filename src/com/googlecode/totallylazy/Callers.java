@@ -20,7 +20,7 @@ public final class Callers {
 
     public static <T> Sequence<T> callConcurrently(final Collection<Callable<T>> callables) {
         try {
-            if(callables.isEmpty()){
+            if (callables.isEmpty()) {
                 return Sequences.empty();
             }
             ExecutorService service = Executors.newFixedThreadPool(callables.size());

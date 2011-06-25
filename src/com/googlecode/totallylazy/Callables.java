@@ -77,25 +77,25 @@ public final class Callables {
         return new DescendingComparator<T, R>(callable);
     }
 
-    public static <T> Callable1<T, Integer> length() {
-        return new Callable1<T, Integer>() {
-            public final Integer call(final Object object) throws Exception {
-                Class aClass = object.getClass();
+    public static Callable1<Object, Integer> size() {
+        return length();
+    }
+
+    public static Callable1<Object, Integer> length() {
+        return new Callable1<Object, Integer>() {
+            public final Integer call(final Object instance) throws Exception {
+                Class aClass = instance.getClass();
                 if (aClass.isArray()) {
-                    return Array.getLength(object);
+                    return Array.getLength(instance);
                 }
-                throw new UnsupportedOperationException("Dont support methods or fields yet");
+                if(instance instanceof Collection){
+                    return ((Collection) instance).size();
+                }
+                throw new UnsupportedOperationException("Does not support methods or fields yet");
             }
         };
     }
 
-    public static <T> Callable1<Collection<? extends T>, ? extends Comparable> size() {
-        return new Callable1<Collection<? extends T>, Comparable>() {
-            public Comparable call(Collection<? extends T> set) throws Exception {
-                return set.size();
-            }
-        };
-    }
 
     public static <T> Callable1<Sequence<T>, Sequence<T>> realise() {
         return new Callable1<Sequence<T>, Sequence<T>>() {
