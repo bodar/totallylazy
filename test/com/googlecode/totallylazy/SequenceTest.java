@@ -9,7 +9,9 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Callables.*;
+import static com.googlecode.totallylazy.Callables.length;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Option.option;
@@ -95,9 +97,20 @@ public class SequenceTest {
         int[] medium = {1, 2, 3};
         int[] large = {1, 2, 3, 4, 5, 6};
         Sequence<int[]> unsorted = sequence(large, small, medium);
-        assertThat(unsorted.sortBy(Callables.<int[]>length()), hasExactly(small, medium, large));
-        assertThat(unsorted.sortBy(ascending(Callables.<int[]>length())), hasExactly(small, medium, large));
-        assertThat(unsorted.sortBy(descending(Callables.<int[]>length())), hasExactly(large, medium, small));
+        assertThat(unsorted.sortBy(length()), hasExactly(small, medium, large));
+        assertThat(unsorted.sortBy(ascending(length())), hasExactly(small, medium, large));
+        assertThat(unsorted.sortBy(descending(length())), hasExactly(large, medium, small));
+    }
+
+    @Test
+    public void supportsSortBySizeAndLength() throws Exception {
+        List<Integer> small = list(1);
+        int[] medium = {1, 2, 3};
+        List<Integer> large = list(1, 2, 3, 4, 5, 6);
+        Sequence<Object> unsorted = sequence(large, small, medium);
+        assertThat(unsorted.sortBy(size()), hasExactly(small, medium, large));
+        assertThat(unsorted.sortBy(ascending(size())), hasExactly(small, medium, large));
+        assertThat(unsorted.sortBy(descending(length())), hasExactly(large, medium, small));
     }
 
     @Test
