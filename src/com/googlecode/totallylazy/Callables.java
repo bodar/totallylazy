@@ -91,6 +91,9 @@ public final class Callables {
                 if(instance instanceof Collection){
                     return ((Collection) instance).size();
                 }
+                if(instance instanceof CharSequence){
+                    return ((CharSequence) instance).length();
+                }
                 throw new UnsupportedOperationException("Does not support methods or fields yet");
             }
         };

@@ -105,7 +105,7 @@ public class SequenceTest {
     @Test
     public void supportsSortBySizeAndLength() throws Exception {
         List<Integer> small = list(1);
-        int[] medium = {1, 2, 3};
+        String medium = "123";
         List<Integer> large = list(1, 2, 3, 4, 5, 6);
         Sequence<Object> unsorted = sequence(large, small, medium);
         assertThat(unsorted.sortBy(size()), hasExactly(small, medium, large));
