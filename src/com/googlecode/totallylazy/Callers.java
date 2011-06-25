@@ -1,10 +1,9 @@
 package com.googlecode.totallylazy;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.List;
+import java.util.concurrent.*;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Arrays.asList;
@@ -14,22 +13,31 @@ public final class Callers {
         return callConcurrently(sequence(callables).toList());
     }
 
+    public static <T> Sequence<T> callConcurrently(final Iterable<Callable<T>> callables, final Executor executor) {
+        return callConcurrently(sequence(callables).toList(), executor);
+    }
+
     public static <T> Sequence<T> callConcurrently(final Callable<T>... callables) {
         return callConcurrently(asList(callables));
     }
 
     public static <T> Sequence<T> callConcurrently(final Collection<Callable<T>> callables) {
+        ExecutorService service = Executors.newCachedThreadPool();
         try {
-            if (callables.isEmpty()) {
-                return Sequences.empty();
-            }
-            ExecutorService service = Executors.newFixedThreadPool(callables.size());
-            Sequence<Future<T>> result = sequence(service.invokeAll(callables));
+            return callConcurrently(callables, service);
+        } finally {
             service.shutdown();
-            return result.map(Callables.<T>realiseFuture());
-        } catch (InterruptedException e) {
-            throw new LazyException(e);
         }
+    }
+
+    private static <T> Sequence<T> callConcurrently(final Collection<Callable<T>> callables, final Executor service) {
+        List<Future<T>> futures = new ArrayList<Future<T>>();
+        for (Callable<T> callable : callables) {
+            FutureTask<T> future = new FutureTask<T>(callable);
+            futures.add(future);
+            service.execute(future);
+        }
+        return sequence(futures).map(Callables.<T>realiseFuture());
     }
 
     public static <T> T call(final Callable<T> callable) {

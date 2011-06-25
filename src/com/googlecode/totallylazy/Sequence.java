@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 
@@ -20,6 +21,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     public <S> Sequence<S> mapConcurrently(final Callable1<? super T, S> callable) {
         return Sequences.mapConcurrently(this, callable);
+    }
+
+    public <S> Sequence<S> mapConcurrently(final Callable1<? super T, S> callable, final Executor executor) {
+        return Sequences.mapConcurrently(this, callable, executor);
     }
 
     public <S> Sequence<S> map(final Callable1<? super T, S> callable) {
