@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import com.googlecode.totallylazy.numbers.Numbers;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -21,6 +22,8 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.average;
+import static com.googlecode.totallylazy.numbers.Numbers.product;
+import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
@@ -66,14 +69,13 @@ public abstract class AbstractRecordsTests {
     public void supportsReduce() throws Exception {
         assertThat(records.get(user).map(age).reduce(maximum(Integer.class)), CoreMatchers.is(12));
         assertThat(records.get(user).map(dob).reduce(minimum(Date.class)), CoreMatchers.is(date(1975, 1, 10)));
-        assertThat(records.get(user).map(age).reduce(add()), NumberMatcher.is(33));
+        assertThat(records.get(user).map(age).reduce(sum()), NumberMatcher.is(33));
         assertThat(records.get(user).map(age).reduce(average()), NumberMatcher.is(11));
-        assertThat(records.get(user).reduce(count()), NumberMatcher.is(3));
+        assertThat(records.get(user).fold(0, count()), NumberMatcher.is(3));
 
         records.add(user, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
-        assertThat(records.get(user).map(age).reduce(count()), NumberMatcher.is(3));
+        assertThat(records.get(user).map(age).fold(0, count()), NumberMatcher.is(3));
     }
-
 
     @Test
     public void supportsSet() throws Exception {

@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
@@ -14,6 +15,7 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.BigIntegerOperators.bigInteger;
 import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
@@ -34,6 +36,14 @@ public class NumbersTest {
     @Test
     public void supportsProduct() throws Exception {
         assertThat(sequence(1,2,3).reduce(product()), NumberMatcher.is(6));
+    }
+
+    @Test
+    public void supportsAverage() throws Exception {
+        assertThat(numbers(1,2,3).reduce(average()), NumberMatcher.is(2));
+        assertThat(numbers(1,2).reduce(average()), NumberMatcher.is(1.5));
+        assertThat(numbers(1).reduce(average()), NumberMatcher.is(1));
+        assertThat(numbers().fold(0, average()), NumberMatcher.is(0)); // You can't reduce an empty list
     }
 
     @Test
