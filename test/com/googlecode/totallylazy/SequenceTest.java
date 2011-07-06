@@ -25,6 +25,7 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Sequences.*;
 import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -227,6 +228,14 @@ public class SequenceTest {
     public void supportsReduceLeft() throws Exception {
         Number sum = numbers(1, 2, 3).reduceLeft(add());
         assertThat(sum, NumberMatcher.is(6));
+    }
+
+    @Test
+    public void supportsFoldToACount() throws Exception {
+        assertThat(sequence("Dan", "Matt", "Bob").fold(0, count()), NumberMatcher.is(3));
+        assertThat(sequence("Dan", "Matt").fold(0, count()), NumberMatcher.is(2));
+        assertThat(sequence("Dan").fold(0, count()), NumberMatcher.is(1));
+        assertThat(empty().fold(0, count()), NumberMatcher.is(0));
     }
 
     @Test
