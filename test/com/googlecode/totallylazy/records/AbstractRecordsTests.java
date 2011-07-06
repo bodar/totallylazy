@@ -1,12 +1,11 @@
 package com.googlecode.totallylazy.records;
 
-import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,20 +14,30 @@ import java.util.Date;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Dates.date;
-import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.Predicates.between;
+import static com.googlecode.totallylazy.Predicates.greaterThan;
+import static com.googlecode.totallylazy.Predicates.greaterThanOrEqualTo;
+import static com.googlecode.totallylazy.Predicates.in;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.lessThan;
+import static com.googlecode.totallylazy.Predicates.lessThanOrEqualTo;
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.Predicates.nullValue;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Strings.contains;
-import static com.googlecode.totallylazy.Strings.*;
+import static com.googlecode.totallylazy.Strings.endsWith;
+import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
-import static com.googlecode.totallylazy.numbers.Numbers.add;
-import static com.googlecode.totallylazy.numbers.Numbers.average;
-import static com.googlecode.totallylazy.numbers.Numbers.product;
-import static com.googlecode.totallylazy.numbers.Numbers.sum;
+import static com.googlecode.totallylazy.records.Aggregate.average;
+import static com.googlecode.totallylazy.records.Aggregate.maximum;
+import static com.googlecode.totallylazy.records.Aggregate.minimum;
+import static com.googlecode.totallylazy.records.Aggregate.sum;
+import static com.googlecode.totallylazy.records.Aggregates.to;
 import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
-import static com.googlecode.totallylazy.records.Maximum.maximum;
-import static com.googlecode.totallylazy.records.Minimum.minimum;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -67,15 +76,23 @@ public abstract class AbstractRecordsTests {
 
     @Test
     public void supportsReduce() throws Exception {
-        assertThat(records.get(user).map(age).reduce(maximum(Integer.class)), CoreMatchers.is(12));
-        assertThat(records.get(user).map(dob).reduce(minimum(Date.class)), CoreMatchers.is(date(1975, 1, 10)));
-        assertThat(records.get(user).map(age).reduce(sum()), NumberMatcher.is(33));
-        assertThat(records.get(user).map(age).reduce(average()), NumberMatcher.is(11));
+        assertThat(records.get(user).map(age).reduce(Maximum.<Integer>maximum()), CoreMatchers.is(12));
+        assertThat(records.get(user).map(dob).reduce(Minimum.<Date>minimum()), CoreMatchers.is(date(1975, 1, 10)));
+        assertThat(records.get(user).map(age).reduce(Numbers.sum()), NumberMatcher.is(33));
+        assertThat(records.get(user).map(age).reduce(Numbers.average()), NumberMatcher.is(11));
         assertThat(records.get(user).fold(0, count()), NumberMatcher.is(3));
 
         records.add(user, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
         assertThat(records.get(user).map(age).fold(0, count()), NumberMatcher.is(3));
     }
+
+    @Test
+    public void supportsReducingMultipleValuesAtTheSameTime() throws Exception {
+        Record result = records.get(user).reduce(to(maximum(age), minimum(dob)));
+        assertThat(result.get(maximum(age)), NumberMatcher.is(12));
+        assertThat(result.get(minimum(dob)).getTime(), CoreMatchers.is(date(1975, 1, 10).getTime())); // TODO: Fix mappings
+    }
+
 
     @Test
     public void supportsSet() throws Exception {

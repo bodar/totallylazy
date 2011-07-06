@@ -23,7 +23,7 @@ public class NumberMatcher extends TypeSafeMatcher<Number> {
         return Numbers.equalTo(number, other);
     }
 
-    public static Matcher<? super Number>  is(final Number other) {
+    public static Matcher<? super Number> is(final Number other) {
         return new NumberMatcher(other);
     }
 
