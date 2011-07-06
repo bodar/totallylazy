@@ -9,7 +9,7 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
     private final String value;
     private final Class<T> aClass;
 
-    private Keyword(String value, Class<T> aClass) {
+    public Keyword(String value, Class<T> aClass) {
         this.value = value;
         this.aClass = aClass;
     }

@@ -14,4 +14,8 @@ public class Maximum<T extends Comparable<T>>  implements Callable2<T, T, T> {
     public static <T extends Comparable<T>>  Callable2<? super T, ? super T, T> maximum(Class<T> aClass) {
         return new Maximum<T>();
     }
+
+    public static <T extends Comparable<T>>  Callable2<? super T, ? super T, T> maximum() {
+        return new Maximum<T>();
+    }
 }

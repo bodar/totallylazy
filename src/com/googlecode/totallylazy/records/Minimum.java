@@ -14,4 +14,8 @@ public class Minimum<T extends Comparable<T>>  implements Callable2<T, T, T> {
     public static <T extends Comparable<T>>  Callable2<? super T, ? super T, T> minimum(Class<T> aClass) {
         return new Minimum<T>();
     }
+
+    public static <T extends Comparable<T>>  Callable2<? super T, ? super T, T> minimum() {
+        return new Minimum<T>();
+    }
 }
