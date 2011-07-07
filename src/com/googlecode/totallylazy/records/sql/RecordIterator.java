@@ -8,11 +8,11 @@ import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
