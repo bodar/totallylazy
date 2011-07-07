@@ -15,9 +15,17 @@ public class Aggregates implements Callable2<Record, Record, Record>, Value<Iter
     public Record call(final Record accumulator, final Record nextRecord) throws Exception {
         Record result = new MapRecord();
         for (Aggregate aggregate : aggregates) {
-            result.set(aggregate, aggregate.call(accumulator.get(aggregate), nextRecord.get(aggregate)));
+            result.set(aggregate, aggregate.call(accumulatorValue(accumulator, aggregate), nextRecord.get(aggregate.source())));
         }
         return result;
+    }
+
+    private Object accumulatorValue(Record record, Aggregate aggregate) {
+        Object value = record.get(aggregate.source());
+        if(value == null) {
+            return record.get(aggregate);
+        }
+        return value;
     }
 
     public Iterable<Aggregate> value() {
