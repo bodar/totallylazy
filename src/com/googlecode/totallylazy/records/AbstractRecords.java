@@ -3,10 +3,24 @@ package com.googlecode.totallylazy.records;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
-import static com.googlecode.totallylazy.Callables.first;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public abstract class AbstractRecords implements Records{
+    private final Map<Keyword, List<Keyword<?>>> definitions = new HashMap<Keyword, List<Keyword<?>>>();
+
+    public void define(Keyword recordName, Keyword<?>... fields) {
+        definitions.put(recordName, list(fields));
+    }
+
+    public List<Keyword> definitions(Keyword recordName) {
+        return (List) definitions.get(recordName);
+    }
+
     public Number add(Keyword recordName, Record... records) {
         return add(recordName, sequence(records));
     }

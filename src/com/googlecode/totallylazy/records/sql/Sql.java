@@ -172,31 +172,46 @@ public class Sql {
         }
     }
 
+    public String toSql(Aggregates aggregates) {
+        return sequence(aggregates.value()).map(new Callable1<Aggregate, String>() {
+            public String call(Aggregate aggregate) throws Exception {
+                return asSql(aggregate);
+            }
+        }).toString();
+    }
+
+    public String asSql(Aggregate aggregate) {
+        return toSql(aggregate.callable(), aggregate.source().name()) + " as " + aggregate.name();
+    }
+
     public boolean isSupported(Callable2<?, ?, ?> callable) {
         try{
-            toSql(callable, "");
+            if(callable instanceof Aggregates){
+                asSql((Aggregate) callable);
+            }
             return true;
         } catch (UnsupportedOperationException e) {
             return false;
         }
     }
 
-    public String toSql(Callable2<?, ?, ?> callable, String columns) {
+    private String toSql(Callable2<?, ?, ?> callable, String column) {
         if(callable instanceof CountNotNull){
-            return String.format("count(%s)", columns);
+            return String.format("count(%s)", column);
         }
         if(callable instanceof Average){
-            return String.format("avg(%s) as %1$s", columns);
+            return String.format("avg(%s)", column);
         }
         if(callable instanceof Add){
-            return String.format("sum(%s) as %1$s", columns);
+            return String.format("sum(%s)", column);
         }
         if(callable instanceof Minimum){
-            return String.format("min(%s) as %1$s", columns);
+            return String.format("min(%s)", column);
         }
         if(callable instanceof Maximum){
-            return String.format("max(%s) as %1$s", columns);
+            return String.format("max(%s)", column);
         }
         throw new UnsupportedOperationException();
     }
+
 }
