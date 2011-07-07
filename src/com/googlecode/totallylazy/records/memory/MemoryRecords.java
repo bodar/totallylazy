@@ -36,9 +36,6 @@ public class MemoryRecords extends AbstractRecords {
         return memory.get(recordName);
     }
 
-    public void define(Keyword recordName, Keyword<?>... fields) {
-    }
-
     public boolean exists(Keyword recordName) {
         return memory.containsKey(recordName);
     }

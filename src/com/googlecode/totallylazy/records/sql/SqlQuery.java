@@ -1,7 +1,14 @@
 package com.googlecode.totallylazy.records.sql;
 
-import com.googlecode.totallylazy.*;
-import com.googlecode.totallylazy.records.CountNotNull;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.records.Aggregate;
+import com.googlecode.totallylazy.records.Aggregates;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.ParameterisedExpression;
 import com.googlecode.totallylazy.records.Record;
@@ -13,18 +20,15 @@ import static com.googlecode.totallylazy.records.sql.SetQuantifier.ALL;
 import static com.googlecode.totallylazy.records.sql.SetQuantifier.DISTINCT;
 
 public class SqlQuery {
-    private static final Keyword All  = Keyword.keyword("*");
     private final SetQuantifier setQuantifier;
     private final Sequence<Keyword> select;
-    private final Callable2<?, ?, ?> setFunction;
     private final Keyword table;
     private final Sequence<Predicate<? super Record>> where;
     private final Option<Comparator<? super Record>> comparator;
 
-    private SqlQuery(SetQuantifier setQuantifier, Sequence<Keyword> select, Callable2<?, ?, ?> setFunction, Keyword table, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
+    private SqlQuery(SetQuantifier setQuantifier, Sequence<Keyword> select, Keyword table, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
         this.setQuantifier = setQuantifier;
         this.select = select;
-        this.setFunction = setFunction;
         this.table = table;
         this.where = where;
         this.comparator = comparator;
@@ -50,20 +54,27 @@ public class SqlQuery {
         return new ParameterisedExpression(select, sql, whereClause.second());
     }
 
-    private Object selectClause() {
-        return applyFunction(sequence(select).toString("", ",", ""));
+    private String selectClause() {
+        return select.map(toSql()).toString(", ");
     }
 
-    private Object applyFunction(String columns) {
-        return setFunction == null ? columns : sql().toSql(setFunction, columns);
+    private Callable1<Keyword, String> toSql() {
+        return new Callable1<Keyword, String>() {
+            public String call(Keyword keyword) throws Exception {
+                if(keyword instanceof Aggregate){
+                    return sql().asSql((Aggregate) keyword);
+                }
+                return keyword.name();
+            }
+        };
     }
 
-    public static SqlQuery query(Keyword table, Sequence<Keyword> select, Callable2<?, ?, ?> selectFunction, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, final SetQuantifier setQuantifier) {
-        return new SqlQuery(setQuantifier, select, selectFunction, table, where, comparator);
+    public static SqlQuery query(Keyword table, Sequence<Keyword> select, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, final SetQuantifier setQuantifier) {
+        return new SqlQuery(setQuantifier, select, table, where, comparator);
     }
 
-    public static SqlQuery query(Keyword table) {
-        return query(table, sequence(All), null, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none(), ALL);
+    public static SqlQuery query(Keyword table, Sequence<Keyword> fields) {
+        return query(table, fields, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none(), ALL);
     }
 
     public SqlQuery select(Keyword... columns) {
@@ -71,26 +82,37 @@ public class SqlQuery {
     }
 
     public SqlQuery select(Sequence<Keyword> columns) {
-        return query(table, columns, setFunction, where, comparator, setQuantifier);
+        return query(table, columns, where, comparator, setQuantifier);
     }
 
     public SqlQuery where(Predicate<? super Record> predicate) {
-        return query(table, select, setFunction, where.add(predicate), comparator, setQuantifier);
+        return query(table, select, where.add(predicate), comparator, setQuantifier);
     }
 
     public SqlQuery orderBy(Comparator<? super Record> comparator) {
-        return query(table, select, setFunction, where, Option.<Comparator<? super Record>>some(comparator), setQuantifier);
+        return query(table, select, where, Option.<Comparator<? super Record>>some(comparator), setQuantifier);
     }
 
     public SqlQuery count() {
-        return query(table, select, CountNotNull.count(), where, comparator, setQuantifier);
+        return query(table, select, where, comparator, setQuantifier);
     }
 
     public SqlQuery distinct() {
-        return query(table, select, setFunction, where, comparator, DISTINCT);
+        return query(table, select, where, comparator, DISTINCT);
     }
 
-    public <S> SqlQuery reduce(Callable2<? super S, ?, S> callable) {
-        return query(table, select, callable, where, comparator, setQuantifier);
+    public <S> SqlQuery reduce(Callable2 callable) {
+        if(callable instanceof Aggregates){
+            return query(table, extract(((Aggregates) callable).value()), where, comparator, setQuantifier);
+        }
+        return query(table, select, where, comparator, setQuantifier);
+    }
+
+    private Sequence<Keyword> extract(Iterable<Aggregate> value) {
+        return sequence(value).map(new Callable1<Aggregate, Keyword>() {
+            public Keyword call(Aggregate aggregate) throws Exception {
+                return aggregate.source();
+            }
+        });
     }
 }

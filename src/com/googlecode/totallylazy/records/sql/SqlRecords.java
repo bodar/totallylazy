@@ -21,7 +21,6 @@ import static com.googlecode.totallylazy.Runnables.doNothing;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
-import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static java.lang.String.format;
@@ -42,7 +41,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public RecordSequence get(Keyword recordName) {
-        return new RecordSequence(this, SqlQuery.query(recordName), logger);
+        return new RecordSequence(this, SqlQuery.query(recordName, sequence(definitions(recordName))), logger);
     }
 
     private static final Map<Class, String> typeMap = new HashMap<Class, String>() {{
@@ -52,6 +51,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }};
 
     public void define(Keyword recordName, Keyword<?>... fields) {
+        super.define(recordName, fields);
         if (exists(recordName)) {
             return;
         }
