@@ -7,7 +7,7 @@
 
         <sequential>
             <mkdir dir="@{directory}"/>
-            <get src="http://shavenmaven.googlecode.com/files/shavenmaven-nodep-@{version}.jar"
+            <get src="http://shavenmaven.googlecode.com/files/shavenmaven-@{version}.jar"
                  dest="@{directory}/shavenmaven.jar" usetimestamp="true"/>
         </sequential>
     </macrodef>

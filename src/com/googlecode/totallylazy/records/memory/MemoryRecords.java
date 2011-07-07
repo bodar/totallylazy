@@ -86,7 +86,7 @@ public class MemoryRecords extends AbstractRecords {
     }
 
     @SuppressWarnings({"unchecked"})
-    private Callable2<? super Record, ? super Pair<Keyword, Object>, Record> updateValues() {
+    public static Callable2<? super Record, ? super Pair<Keyword, Object>, Record> updateValues() {
         return new Callable2<Record, Pair<Keyword, Object>, Record>() {
             public Record call(Record record, Pair<Keyword, Object> field) throws Exception {
                 return record.set(field.first(), field.second());
