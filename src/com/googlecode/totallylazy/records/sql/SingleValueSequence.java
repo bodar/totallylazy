@@ -39,14 +39,14 @@ class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
         return sqlQuery;
     }
 
-//    @Override
-//    public <S> S reduce(Callable2<? super S, ? super T, S> callable) {
-//        if(query().sql().isSupported(callable)){
-//            return (S) queryable.query(sqlQuery.reduce(callable).parameterisedExpression()).next().fields().head().second();
-//        }
-//        logger.println(format("Warning: Unsupported Callable2 %s dropping down to client side sequence functionality", callable));
-//        return super.reduce(callable);
-//    }
+    @Override
+    public <S> S reduce(Callable2<? super S, ? super T, S> callable) {
+        if(query().sql().isSupported(callable)){
+            return (S) queryable.query(sqlQuery.reduce(callable).parameterisedExpression()).next().fields().head().second();
+        }
+        logger.println(format("Warning: Unsupported Callable2 %s dropping down to client side sequence functionality", callable));
+        return super.reduce(callable);
+    }
 
     @Override
     public <S extends Set<T>> S toSet(S set) {
