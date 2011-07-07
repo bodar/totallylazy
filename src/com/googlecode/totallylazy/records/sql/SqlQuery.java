@@ -98,7 +98,7 @@ public class SqlQuery {
 
     public SqlQuery count() {
         Callable2 count = CountNotNull.<Number>count();
-        Sequence<Keyword> sequence = Sequences.<Keyword>sequence(aggregate(count, keyword("*")));
+        Sequence<Keyword> sequence = Sequences.<Keyword>sequence(aggregate(count, keyword("*")).as(keyword("record_count")));
         return query(table, sequence, where, comparator, setQuantifier);
     }
 

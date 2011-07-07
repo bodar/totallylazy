@@ -150,9 +150,9 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     public RecordIterator query(final ParameterisedExpression value) {
         return new RecordIterator(value.keywords(), mappings, new Callable<PreparedStatement>() {
             public PreparedStatement call() throws Exception {
+                logger.println(format(format("SQL:'%s' VALUES:'%s'", value.expression(), value.parameters())));
                 final PreparedStatement statement = connection.prepareStatement(value.expression());
                 mappings.addValues(statement, value.parameters());
-                logger.println(format(format("SQL:'%s' VALUES:'%s'", value.expression(), value.parameters())));
                 return statement;
             }
         });

@@ -18,6 +18,9 @@ public abstract class AbstractRecords implements Records{
     }
 
     public List<Keyword> definitions(Keyword recordName) {
+        if(!definitions.containsKey(recordName)){
+            return list();
+        }
         return (List) definitions.get(recordName);
     }
 
