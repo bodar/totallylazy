@@ -2,11 +2,13 @@ package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Arrays.empty;
 import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -17,11 +19,11 @@ public abstract class AbstractRecords implements Records{
         definitions.put(recordName, list(fields));
     }
 
-    public List<Keyword> definitions(Keyword recordName) {
+    public Sequence<Keyword> definitions(Keyword recordName) {
         if(!definitions.containsKey(recordName)){
-            return list();
+            return Sequences.empty();
         }
-        return (List) definitions.get(recordName);
+        return sequence((List) definitions.get(recordName));
     }
 
     public Number add(Keyword recordName, Record... records) {

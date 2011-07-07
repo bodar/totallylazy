@@ -1,17 +1,18 @@
 package com.googlecode.totallylazy.records.lucene.mappings;
 
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.records.Keyword;
+import org.apache.lucene.document.DateTools;
+import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Fieldable;
+import org.apache.lucene.document.NumericField;
 
 import java.util.Date;
 
 public class DateMapping implements Mapping<Date> {
-    public Pair<Keyword, Object> toPair(Fieldable fieldable) {
-        throw new UnsupportedOperationException();
+    public Fieldable toField(String name, Object value) {
+        return new NumericField(name, Field.Store.YES, true).setLongValue(((Date) value).getTime());
     }
 
-    public Fieldable toField(Pair<Keyword, Object> pair) {
-        throw new UnsupportedOperationException();
+    public Date toValue(Fieldable fieldable) {
+        return new Date(((NumericField) fieldable).getNumericValue().longValue());
     }
 }

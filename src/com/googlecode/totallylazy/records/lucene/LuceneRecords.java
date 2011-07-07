@@ -20,7 +20,6 @@ import java.util.Iterator;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static com.googlecode.totallylazy.records.lucene.Lucene.RECORD_KEY;
-import static com.googlecode.totallylazy.records.lucene.Lucene.asDocument;
 
 public class LuceneRecords extends AbstractRecords {
     private final Directory directory;
@@ -33,15 +32,12 @@ public class LuceneRecords extends AbstractRecords {
         this.mappings = mappings;
     }
 
-    public Sequence<Record> get(Keyword recordName) {
+    public Sequence<Record> get(final Keyword recordName) {
         return new Sequence<Record>() {
             public Iterator<Record> iterator() {
-                return new DocumentIterator(directory, mappings);
+                return new DocumentIterator(directory, mappings, definitions(recordName));
             }
         };
-    }
-
-    public void define(Keyword recordName, Keyword... fields) {
     }
 
     public boolean exists(Keyword recordName) {
@@ -51,7 +47,7 @@ public class LuceneRecords extends AbstractRecords {
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
         try {
             Number count = 0;
-            for (Document document : records.map(select(fields)).map(asDocument(recordName))) {
+            for (Document document : records.map(select(fields)).map(mappings.asDocument(recordName, definitions(recordName)))) {
                 writer.addDocument(document);
                 count = increment(count);
             }
@@ -61,7 +57,6 @@ public class LuceneRecords extends AbstractRecords {
             throw new LazyException(e);
         }
     }
-
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
         throw new UnsupportedOperationException();
@@ -73,7 +68,7 @@ public class LuceneRecords extends AbstractRecords {
 
     public Number remove(Keyword recordName) {
         try {
-            writer.deleteDocuments(new TermQuery(new Term(RECORD_KEY.name())));
+            writer.deleteDocuments(new TermQuery(new Term(RECORD_KEY.toString())));
             return -1;
         } catch (IOException e) {
             throw new LazyException(e);
