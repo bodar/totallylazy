@@ -3,16 +3,32 @@ package com.googlecode.totallylazy.records;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.numbers.Numbers;
 
+import static java.lang.String.format;
+
 public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
     private final Callable2<? super T, ? super T, R> callable;
+    private final Keyword<T> source;
 
     public Aggregate(Callable2<? super T, ? super T, R> callable, Keyword<T> keyword) {
-        super(keyword.name(), keyword.forClass());
+        super(generateName(callable, keyword), keyword.forClass());
         this.callable = callable;
+        source = keyword;
+    }
+
+    private static <T, R> String generateName(Callable2<? super T, ? super T, R> callable, Keyword<T> keyword) {
+        return format("%s_%s", callable.getClass().getSimpleName(), keyword.name()).toLowerCase();
     }
 
     public R call(T accumulator, T next) throws Exception {
         return callable.call(accumulator, next);
+    }
+
+    public Callable2<? super T, ? super T, R> callable() {
+        return callable;
+    }
+
+    public Keyword<T> source() {
+        return source;
     }
 
     public static <T, R> Aggregate<T, R> aggregate(Callable2<? super T, ? super T, R> callable, Keyword<T> keyword) {
