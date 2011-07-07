@@ -1,15 +1,15 @@
 package com.googlecode.totallylazy.records.lucene.mappings;
 
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.records.Keyword;
+import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Fieldable;
+import org.apache.lucene.document.NumericField;
 
 public class IntegerMapping implements Mapping<Integer> {
-    public Pair<Keyword, Object> toPair(Fieldable fieldable) {
-        throw new UnsupportedOperationException();
+    public Fieldable toField(String name, Object value) {
+        return new NumericField(name, Field.Store.YES, true).setIntValue((Integer) value);
     }
 
-    public Fieldable toField(Pair<Keyword, Object> pair) {
-        throw new UnsupportedOperationException();
+    public Integer toValue(Fieldable fieldable) {
+        return ((NumericField) fieldable).getNumericValue().intValue();
     }
 }

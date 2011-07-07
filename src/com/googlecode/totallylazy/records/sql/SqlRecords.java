@@ -41,7 +41,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public RecordSequence get(Keyword recordName) {
-        return new RecordSequence(this, SqlQuery.query(recordName, sequence(definitions(recordName))), logger);
+        return new RecordSequence(this, SqlQuery.query(recordName, definitions(recordName)), logger);
     }
 
     private static final Map<Class, String> typeMap = new HashMap<Class, String>() {{

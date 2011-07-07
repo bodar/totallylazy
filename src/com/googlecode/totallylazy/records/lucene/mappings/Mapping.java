@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface Mapping<T> {
-    Pair<Keyword, Object> toPair(Fieldable fieldable);
+    Fieldable toField(String name, Object value);
 
-    Fieldable toField(Pair<Keyword, Object> pair);
+    T toValue(Fieldable fieldable);
 }
