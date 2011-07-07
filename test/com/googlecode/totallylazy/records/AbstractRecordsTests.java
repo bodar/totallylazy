@@ -88,12 +88,11 @@ public abstract class AbstractRecordsTests {
 
     @Test
     public void supportsReducingMultipleValuesAtTheSameTime() throws Exception {
-        Record result = records.get(user).reduce(to(minimum(dob)));
-//        Record result = records.get(user).reduce(to(maximum(age), minimum(dob), sum(age), average(age)));
-//        assertThat(result.get(maximum(age)), NumberMatcher.is(12));
+        Record result = records.get(user).reduce(to(maximum(age), minimum(dob), sum(age), average(age)));
+        assertThat(result.get(maximum(age)), NumberMatcher.is(12));
         assertThat(result.get(minimum(dob)), CoreMatchers.is(date(1975, 1, 10))); // TODO: Fix mappings
-//        assertThat(result.get(sum(age)), NumberMatcher.is(33));
-//        assertThat(result.get(average(age)), NumberMatcher.is(11));
+        assertThat(result.get(sum(age)), NumberMatcher.is(33));
+        assertThat(result.get(average(age)), NumberMatcher.is(11));
     }
 
     @Test

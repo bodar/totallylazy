@@ -111,7 +111,7 @@ public class SqlQuery {
     private Sequence<Keyword> extract(Iterable<Aggregate> value) {
         return sequence(value).map(new Callable1<Aggregate, Keyword>() {
             public Keyword call(Aggregate aggregate) throws Exception {
-                return aggregate.source();
+                return aggregate;
             }
         });
     }
