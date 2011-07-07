@@ -75,7 +75,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public Number size() {
-        return fold(0, count());
+        return (Number) queryable.query(sqlQuery.count().parameterisedExpression()).next().fields().head().second();
     }
 
     @Override

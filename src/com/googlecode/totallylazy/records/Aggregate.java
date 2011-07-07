@@ -20,7 +20,11 @@ public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
     }
 
     private static <T, R> String generateName(final Callable2<? super T, ? super T, R> callable, final Keyword<T> keyword) {
-        return format("%s_%s", callable.getClass().getSimpleName(), keyword.name()).toLowerCase();
+        return format("%s_%s", callable.getClass().getSimpleName(), replaceIllegalCharacters(keyword.name())).toLowerCase();
+    }
+
+    private static String replaceIllegalCharacters(String name) {
+        return name.replace("*", "star");
     }
 
     public R call(final T accumulator, final T next) throws Exception {
