@@ -9,17 +9,21 @@ public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
     private final Callable2<? super T, ? super T, R> callable;
     private final Keyword<T> source;
 
-    public Aggregate(Callable2<? super T, ? super T, R> callable, Keyword<T> keyword) {
-        super(generateName(callable, keyword), keyword.forClass());
+    public Aggregate(final Callable2<? super T, ? super T, R> callable, final Keyword<T> keyword, final String name) {
+        super(name, keyword.forClass());
         this.callable = callable;
         source = keyword;
     }
 
-    private static <T, R> String generateName(Callable2<? super T, ? super T, R> callable, Keyword<T> keyword) {
+    public Aggregate(final Callable2<? super T, ? super T, R> callable, final Keyword<T> keyword) {
+        this(callable, keyword, generateName(callable, keyword));
+    }
+
+    private static <T, R> String generateName(final Callable2<? super T, ? super T, R> callable, final Keyword<T> keyword) {
         return format("%s_%s", callable.getClass().getSimpleName(), keyword.name()).toLowerCase();
     }
 
-    public R call(T accumulator, T next) throws Exception {
+    public R call(final T accumulator, final T next) throws Exception {
         return callable.call(accumulator, next);
     }
 
@@ -51,4 +55,7 @@ public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
         return aggregate(Numbers.<T>average(), keyword);
     }
 
+    public Aggregate<T, R> as(Keyword<?> keyword) {
+        return new Aggregate<T,R>(callable, source, keyword.name());
+    }
 }

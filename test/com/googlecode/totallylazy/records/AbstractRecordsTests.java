@@ -95,6 +95,11 @@ public abstract class AbstractRecordsTests {
         assertThat(result.get(average(age)), NumberMatcher.is(11));
     }
 
+    @Test
+    public void supportsAliasingAnAggregate() throws Exception {
+        Record result = records.get(user).reduce(to(maximum(age).as(age)));
+        assertThat(result.get(age), NumberMatcher.is(12));
+    }
 
     @Test
     public void supportsSet() throws Exception {
