@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.records.sql;
 import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.comparators.AscendingComparator;
 import com.googlecode.totallylazy.comparators.DescendingComparator;
-import com.googlecode.totallylazy.numbers.Add;
+import com.googlecode.totallylazy.numbers.Sum;
 import com.googlecode.totallylazy.numbers.Average;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.Between;
@@ -172,7 +172,7 @@ public class Sql {
         }
     }
 
-    public String toSql(Aggregates aggregates) {
+    public String asSql(Aggregates aggregates) {
         return sequence(aggregates.value()).map(new Callable1<Aggregate, String>() {
             public String call(Aggregate aggregate) throws Exception {
                 return asSql(aggregate);
@@ -187,9 +187,10 @@ public class Sql {
     public boolean isSupported(Callable2<?, ?, ?> callable) {
         try{
             if(callable instanceof Aggregates){
-                asSql((Aggregate) callable);
+                asSql((Aggregates) callable);
+                return true;
             }
-            return true;
+            return false;
         } catch (UnsupportedOperationException e) {
             return false;
         }
@@ -202,7 +203,7 @@ public class Sql {
         if(callable instanceof Average){
             return String.format("avg(%s)", column);
         }
-        if(callable instanceof Add){
+        if(callable instanceof Sum){
             return String.format("sum(%s)", column);
         }
         if(callable instanceof Minimum){

@@ -301,11 +301,11 @@ public class Numbers {
     }
 
     public static <T extends Number> Callable2<T, T, Number> sum() {
-        return new Add<T>();
+        return new Sum<T>();
     }
 
     public static <T extends Number> Callable2<T, T, Number> add() {
-        return new Add<T>();
+        return new Sum<T>();
     }
 
     public static Callable1<Number, Number> add(final Number amount) {
