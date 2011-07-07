@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.records.Aggregate;
 import com.googlecode.totallylazy.records.Aggregates;
+import com.googlecode.totallylazy.records.CountNotNull;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.ParameterisedExpression;
 import com.googlecode.totallylazy.records.Record;
@@ -16,6 +17,8 @@ import com.googlecode.totallylazy.records.Record;
 import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.records.Aggregate.aggregate;
+import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.sql.SetQuantifier.ALL;
 import static com.googlecode.totallylazy.records.sql.SetQuantifier.DISTINCT;
 
@@ -94,7 +97,9 @@ public class SqlQuery {
     }
 
     public SqlQuery count() {
-        return query(table, select, where, comparator, setQuantifier);
+        Callable2 count = CountNotNull.<Number>count();
+        Sequence<Keyword> sequence = Sequences.<Keyword>sequence(aggregate(count, keyword("*")));
+        return query(table, sequence, where, comparator, setQuantifier);
     }
 
     public SqlQuery distinct() {
