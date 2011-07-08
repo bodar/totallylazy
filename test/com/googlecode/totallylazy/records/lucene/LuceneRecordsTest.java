@@ -12,7 +12,6 @@ import org.junit.Ignore;
 
 import static com.googlecode.totallylazy.Files.temporaryDirectory;
 
-@Ignore("Work in progress")
 public class LuceneRecordsTest extends AbstractRecordsTests {
     @Override
     protected Records createRecords() throws Exception {
@@ -20,5 +19,13 @@ public class LuceneRecordsTest extends AbstractRecordsTests {
         final NIOFSDirectory directory = new NIOFSDirectory(temporaryDirectory());
         IndexWriter writer = new IndexWriter(directory, new IndexWriterConfig(version, new StandardAnalyzer(version)));
         return new LuceneRecords(directory, writer, new Mappings());
+    }
+
+    @Override @Ignore("NOT currently not supported")
+    public void supportsIsNullAndNotNull() throws Exception {
+    }
+
+    @Override @Ignore("NOT currently not supported")
+    public void supportsFilteringWithNot() throws Exception {
     }
 }

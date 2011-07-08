@@ -50,7 +50,8 @@ public class DocumentIterator extends ReadOnlyIterator<Record>{
 
     public Record next() {
         try {
-            List<Fieldable> fields = searcher.doc(scoreDocs[index++].doc).getFields();
+            int docID = scoreDocs[index++].doc;
+            List<Fieldable> fields = searcher.doc(docID).getFields();
             return sequence(fields).
                     map(mappings.asPair(definitions)).
                     filter(where(first(Keyword.class), is(not(Lucene.RECORD_KEY)))).

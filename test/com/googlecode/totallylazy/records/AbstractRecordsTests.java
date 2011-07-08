@@ -70,8 +70,8 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsIsNullAndNotNull() throws Exception {
         records.add(user, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
-        assertThat(records.get(user).filter(where(age, is(nullValue()))).toList().size(), NumberMatcher.is(1));
         assertThat(records.get(user).filter(where(age, is(notNullValue()))).toList().size(), NumberMatcher.is(3));
+        assertThat(records.get(user).filter(where(age, is(nullValue()))).toList().size(), NumberMatcher.is(1));
     }
 
     @Test
@@ -270,7 +270,7 @@ public abstract class AbstractRecordsTests {
 
     @Test
     public void supportsRemove() throws Exception {
-        records.remove(user, where(age, is(greaterThan(10))));
+        assertThat(records.remove(user, where(age, is(greaterThan(10)))), equalTo(2));
         assertThat(records.get(user).size(), equalTo(1));
         assertThat(records.remove(user, where(age, is(greaterThan(10)))), equalTo(0));
 

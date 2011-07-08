@@ -15,6 +15,8 @@ import com.googlecode.totallylazy.predicates.InPredicate;
 import com.googlecode.totallylazy.predicates.LessThan;
 import com.googlecode.totallylazy.predicates.LessThanOrEqualTo;
 import com.googlecode.totallylazy.predicates.Not;
+import com.googlecode.totallylazy.predicates.NotNullPredicate;
+import com.googlecode.totallylazy.predicates.NullPredicate;
 import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
@@ -123,6 +125,7 @@ public class Lucene {
             if (aClass.equals(String.class)) {
                 return new TermRangeQuery(keyword.toString(), (String) value, null, false, true);
             }
+            throw new UnsupportedOperationException();
         }
         if (predicate instanceof GreaterThanOrEqualTo) {
             Object value = ((GreaterThanOrEqualTo) predicate).value();
@@ -138,6 +141,7 @@ public class Lucene {
             if (aClass.equals(String.class)) {
                 return new TermRangeQuery(keyword.toString(), (String) value, null, true, true);
             }
+            throw new UnsupportedOperationException();
         }
         if (predicate instanceof LessThan) {
             Object value = ((LessThan) predicate).value();
@@ -153,7 +157,7 @@ public class Lucene {
             if (aClass.equals(String.class)) {
                 return new TermRangeQuery(keyword.toString(), null, (String) value, true, false);
             }
-
+            throw new UnsupportedOperationException();
         }
         if (predicate instanceof LessThanOrEqualTo) {
             Object value = ((LessThanOrEqualTo) predicate).value();
@@ -169,6 +173,7 @@ public class Lucene {
             if (aClass.equals(String.class)) {
                 return new TermRangeQuery(keyword.toString(), null, (String) value, true, true);
             }
+            throw new UnsupportedOperationException();
         }
         if (predicate instanceof Between) {
             Object lower = ((Between) predicate).lower();
@@ -185,6 +190,7 @@ public class Lucene {
             if (aClass.equals(String.class)) {
                 return new TermRangeQuery(keyword.toString(), (String) lower, (String) upper, true, true);
             }
+            throw new UnsupportedOperationException();
         }
         if (predicate instanceof Not) {
             Predicate p = ((Not) predicate).predicate();
@@ -205,6 +211,28 @@ public class Lucene {
         if(predicate instanceof EndsWithPredicate){
             String value = ((EndsWithPredicate) predicate).value();
             return new WildcardQuery(new Term(keyword.toString(), "*" + value));
+        }
+        if(predicate instanceof NotNullPredicate){
+            return notNull(keyword, aClass);
+        }
+        if(predicate instanceof NullPredicate){
+            return not(notNull(keyword, aClass));
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    private static Query notNull(Keyword keyword, Class aClass) {
+        if (aClass.equals(Integer.class)) {
+            return NumericRangeQuery.newIntRange(keyword.toString(), null, null, true, true);
+        }
+        if (aClass.equals(Long.class)) {
+            return NumericRangeQuery.newLongRange(keyword.toString(), null, null, true, true);
+        }
+        if (aClass.equals(Date.class)) {
+            return new TermRangeQuery(keyword.toString(), null, null, true, true);
+        }
+        if (aClass.equals(String.class)) {
+            return new TermRangeQuery(keyword.toString(), null, null, true, true);
         }
         throw new UnsupportedOperationException();
     }
