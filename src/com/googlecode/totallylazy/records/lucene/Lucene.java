@@ -70,6 +70,14 @@ public class Lucene {
     private static Callable2<? super BooleanQuery, ? super Query, BooleanQuery> add(final BooleanClause.Occur occur) {
         return new Callable2<BooleanQuery, Query, BooleanQuery>() {
             public BooleanQuery call(BooleanQuery booleanQuery, Query query) throws Exception {
+                // FIX Lucene issue where it does not understand nested boolean negatives
+                if(query instanceof BooleanQuery && occur.equals(BooleanClause.Occur.MUST)){
+                    BooleanClause[] clauses = ((BooleanQuery) query).getClauses();
+                    if(clauses.length == 1 && clauses[0].getOccur().equals(BooleanClause.Occur.MUST_NOT)){
+                        booleanQuery.add(clauses[0]);
+                        return booleanQuery;
+                    }
+                }
                 booleanQuery.add(query, occur);
                 return booleanQuery;
             }
