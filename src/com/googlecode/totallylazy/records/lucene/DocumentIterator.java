@@ -10,6 +10,10 @@ import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 
 import java.io.IOException;
@@ -22,29 +26,31 @@ import static com.googlecode.totallylazy.records.memory.MemoryRecords.updateValu
 
 public class DocumentIterator extends ReadOnlyIterator<Record>{
     private int index = 0;
-    private final IndexReader reader;
+    private final IndexSearcher searcher;
     private final Mappings mappings;
     private final Sequence<Keyword> definitions;
+    private final ScoreDoc[] scoreDocs;
 
-    public DocumentIterator(final Directory directory, final Mappings mappings, final Sequence<Keyword> definitions) {
+    public DocumentIterator(final Directory directory, final Mappings mappings, final Sequence<Keyword> definitions, Query query) {
         this.mappings = mappings;
         this.definitions = definitions;
         try {
-            this.reader = IndexReader.open(directory);
+            this.searcher = new IndexSearcher(directory);
+            System.out.println("query = " + query);
+            TopDocs results = searcher.search(query, Integer.MAX_VALUE);
+            scoreDocs = results.scoreDocs;
         } catch (IOException e) {
             throw new LazyException(e);
         }
     }
 
     public boolean hasNext() {
-        return index < reader.maxDoc();
+        return index < scoreDocs.length;
     }
 
     public Record next() {
         try {
-            Document document = reader.document(index);
-            index++;
-            List<Fieldable> fields = document.getFields();
+            List<Fieldable> fields = searcher.doc(scoreDocs[index++].doc).getFields();
             return sequence(fields).
                     map(mappings.asPair(definitions)).
                     filter(where(first(Keyword.class), is(not(Lucene.RECORD_KEY)))).

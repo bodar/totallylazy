@@ -11,7 +11,7 @@ public class ContainsPredicate extends LogicalPredicate<String> {
         return other.contains(value);
     }
 
-    public CharSequence value() {
+    public String value() {
         return value;
     }
 }

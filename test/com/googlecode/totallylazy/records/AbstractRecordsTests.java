@@ -158,9 +158,9 @@ public abstract class AbstractRecordsTests {
     public void supportsFilteringWithLogicalOrCombineWithAnd() throws Exception {
         Sequence<Record> users = records.get(user);
         Sequence<String> names = users.filter(where(age, is(12)).and(where(lastName, is("savage"))).
-                or(where(firstName, is("dan")).
-                        or(where(lastName, is("martin"))))).map(firstName);
-        assertThat(names, containsInAnyOrder("dan", "matt", "bob"));
+                or(where(firstName, is("dan"))
+                        )).map(firstName);
+        assertThat(names, containsInAnyOrder("dan", "matt"));
     }
 
     @Test
@@ -174,7 +174,7 @@ public abstract class AbstractRecordsTests {
     public void supportsFilteringWithGreaterThan() throws Exception {
         Sequence<Record> users = records.get(user);
         Sequence<String> names = users.filter(where(age, is(greaterThan(11)))).map(firstName);
-        assertThat(names, containsInAnyOrder("matt"));
+        assertThat(names, hasExactly("matt"));
     }
 
     @Test
@@ -253,7 +253,7 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsStartsWith() throws Exception {
         Sequence<Record> users = records.get(user);
-        assertThat(users.filter(where(firstName, startsWith("d"))).map(firstName), containsInAnyOrder("dan"));
+        assertThat(users.filter(where(firstName, startsWith("d"))).map(firstName), hasExactly("dan"));
     }
 
     @Test
@@ -265,12 +265,13 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsEndsWith() throws Exception {
         Sequence<Record> users = records.get(user);
-        assertThat(users.filter(where(firstName, endsWith("b"))).map(firstName), containsInAnyOrder("bob"));
+        assertThat(users.filter(where(firstName, endsWith("n"))).map(firstName), hasExactly("dan"));
     }
 
     @Test
     public void supportsRemove() throws Exception {
-        assertThat(records.remove(user, where(age, is(greaterThan(10)))), equalTo(2));
+        records.remove(user, where(age, is(greaterThan(10))));
+        assertThat(records.get(user).size(), equalTo(1));
         assertThat(records.remove(user, where(age, is(greaterThan(10)))), equalTo(0));
 
         assertThat(records.get(user).size(), equalTo(1));
