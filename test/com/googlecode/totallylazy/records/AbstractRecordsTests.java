@@ -166,7 +166,7 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsFilteringWithNot() throws Exception {
         Sequence<Record> users = records.get(user);
-        Sequence<String> names = users.filter(where(age, is(not(11)))).map(firstName);
+        Sequence<String> names = users.filter(where(firstName, is(not("bob")))).map(firstName);
         assertThat(names, containsInAnyOrder("dan", "matt"));
     }
 
