@@ -3,6 +3,8 @@ package com.googlecode.totallylazy.records.lucene;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.predicates.EqualsPredicate;
+import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
@@ -10,8 +12,7 @@ import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.MatchAllDocsQuery;
-import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 
 import java.io.IOException;
@@ -63,12 +64,44 @@ public class LuceneRecords extends AbstractRecords {
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
+        return remove(and(record(recordName), query(predicate)));
+    }
+
+    private Query and(Query... queries) {
+        BooleanQuery booleanQuery = new BooleanQuery();
+        for (Query query : queries) {
+            booleanQuery.add(query, BooleanClause.Occur.MUST);
+        }
+        return booleanQuery;
+    }
+
+    private Query query(Predicate<? super Record> predicate) {
+        if(predicate instanceof WherePredicate){
+            return where((WherePredicate) predicate);
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    private Query where(WherePredicate where) {
+        Keyword keyword = (Keyword) where.callable();
+        Predicate predicate = where.predicate();
+        if(predicate instanceof EqualsPredicate){
+            return new TermQuery(new Term(keyword.toString(), ((EqualsPredicate) predicate).value().toString()));
+        }
         throw new UnsupportedOperationException();
     }
 
     public Number remove(Keyword recordName) {
+        return remove(record(recordName));
+    }
+
+    private TermQuery record(Keyword recordName) {
+        return new TermQuery(new Term(RECORD_KEY.toString(), recordName.toString()));
+    }
+
+    private Number remove(Query query) {
         try {
-            writer.deleteDocuments(new TermQuery(new Term(RECORD_KEY.toString())));
+            writer.deleteDocuments(query);
             return -1;
         } catch (IOException e) {
             throw new LazyException(e);
