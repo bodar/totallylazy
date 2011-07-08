@@ -12,7 +12,7 @@ import org.junit.Ignore;
 
 import static com.googlecode.totallylazy.Files.temporaryDirectory;
 
-@Ignore
+@Ignore("Work in progress")
 public class LuceneRecordsTest extends AbstractRecordsTests {
     @Override
     protected Records createRecords() throws Exception {
