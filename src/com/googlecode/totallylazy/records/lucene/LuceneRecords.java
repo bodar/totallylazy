@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.records.lucene;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.LazyException;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.AbstractRecords;
@@ -19,6 +21,7 @@ import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static com.googlecode.totallylazy.records.lucene.Lucene.and;
 import static com.googlecode.totallylazy.records.lucene.Lucene.query;
 import static com.googlecode.totallylazy.records.lucene.Lucene.record;
+import static com.googlecode.totallylazy.records.memory.MemoryRecords.updateValues;
 
 public class LuceneRecords extends AbstractRecords {
     private final Directory directory;
@@ -54,7 +57,18 @@ public class LuceneRecords extends AbstractRecords {
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        throw new UnsupportedOperationException();
+        Sequence<Record> updated = get(recordName).filter(predicate).map(updateWithFieldsIn(record)).realise();
+        Number count = remove(recordName, predicate);
+        add(recordName, updated);
+        return count;
+    }
+
+    private Callable1<? super Record, Record> updateWithFieldsIn(final Record record) {
+        return new Callable1<Record, Record>() {
+            public Record call(Record recordToUpdate) throws Exception {
+                return record.fields().fold(recordToUpdate, updateValues());
+            }
+        };
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
@@ -67,10 +81,20 @@ public class LuceneRecords extends AbstractRecords {
 
     private Number remove(Query query) {
         try {
+            int result = count(query);
             writer.deleteDocuments(query);
-            return -1;
+            writer.commit();
+            return result;
         } catch (IOException e) {
             throw new LazyException(e);
+        }
+    }
+
+    private int count(Query query) {
+        try {
+            return new IndexSearcher(directory).search(query, Integer.MAX_VALUE).totalHits;
+        } catch (IOException e) {
+            return 0;
         }
     }
 
