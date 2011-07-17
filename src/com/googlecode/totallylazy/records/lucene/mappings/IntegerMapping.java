@@ -3,13 +3,19 @@ package com.googlecode.totallylazy.records.lucene.mappings;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.document.NumericField;
+import org.apache.lucene.search.NumericRangeQuery;
+import org.apache.lucene.search.Query;
 
 public class IntegerMapping implements Mapping<Integer> {
-    public Fieldable toField(String name, Object value) {
-        return new NumericField(name, Field.Store.YES, true).setIntValue((Integer) value);
+    public Fieldable toField(String name, Integer value) {
+        return new NumericField(name, Field.Store.YES, true).setIntValue(value);
     }
 
     public Integer toValue(Fieldable fieldable) {
         return ((NumericField) fieldable).getNumericValue().intValue();
+    }
+
+    public Query equalTo(String name, Integer value) {
+        return NumericRangeQuery.newIntRange(name, value, value, true, true);
     }
 }

@@ -22,6 +22,7 @@ import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
@@ -42,6 +43,9 @@ import static org.apache.lucene.document.DateTools.dateToString;
 public class Lucene {
     public static final Keyword RECORD_KEY = keyword("type");
 
+    public static TermQuery record(Keyword recordName) {
+        return new TermQuery(new Term(RECORD_KEY.toString(), recordName.toString()));
+    }
 
     public static Query and(Query... queries) {
         return and(sequence(queries));
@@ -84,7 +88,13 @@ public class Lucene {
         };
     }
 
-    public static Query query(Predicate<? super Record> predicate) {
+    private final Mappings mappings;
+
+    public Lucene(Mappings mappings) {
+        this.mappings = mappings;
+    }
+
+    public Query query(Predicate<? super Record> predicate) {
         if (predicate instanceof WherePredicate) {
             return where((WherePredicate) predicate);
         }
@@ -98,7 +108,7 @@ public class Lucene {
     }
 
 
-    private static Callable1<? super Predicate, Query> asQuery() {
+    private Callable1<? super Predicate, Query> asQuery() {
         return new Callable1<Predicate, Query>() {
             public Query call(Predicate predicate) throws Exception {
                 return query(predicate);
@@ -106,13 +116,13 @@ public class Lucene {
         };
     }
 
-    public static Query where(WherePredicate where) {
+    public Query where(WherePredicate where) {
         Keyword keyword = (Keyword) where.callable();
         Predicate predicate = where.predicate();
         return query(keyword, predicate);
     }
 
-    private static Query query(Keyword keyword, Predicate predicate) {
+    private Query query(Keyword keyword, Predicate predicate) {
         Class aClass = keyword.forClass();
 
         if (predicate instanceof EqualsPredicate) {
@@ -229,7 +239,11 @@ public class Lucene {
         throw new UnsupportedOperationException();
     }
 
-    private static Query notNull(Keyword keyword, Class aClass) {
+    private Query equalTo(Keyword keyword, Object value) {
+        return mappings.get(keyword.forClass()).equalTo(keyword.toString(), value);
+    }
+
+    private Query notNull(Keyword keyword, Class aClass) {
         if (aClass.equals(Integer.class)) {
             return NumericRangeQuery.newIntRange(keyword.toString(), null, null, true, true);
         }
@@ -245,33 +259,12 @@ public class Lucene {
         throw new UnsupportedOperationException();
     }
 
-    private static Query equalTo(Keyword keyword, Object value) {
-        Class aClass = keyword.forClass();
-        if (aClass.equals(Integer.class)) {
-            return NumericRangeQuery.newIntRange(keyword.toString(), (Integer) value, (Integer) value, true, true);
-        }
-        if (aClass.equals(Long.class)) {
-            return NumericRangeQuery.newLongRange(keyword.toString(), (Long) value, (Long) value, true, true);
-        }
-        if (aClass.equals(Date.class)) {
-            return new TermQuery(new Term(keyword.toString(), dateToString(((Date) value), DateTools.Resolution.MILLISECOND)));
-        }
-        if (aClass.equals(String.class)) {
-            return new TermQuery(new Term(keyword.toString(), (String) value));
-        }
-        throw new UnsupportedOperationException();
-    }
-
-    private static Callable1<Object, Query> asQuery(final Keyword keyword) {
+    private Callable1<Object, Query> asQuery(final Keyword keyword) {
         return new Callable1<Object, Query>() {
             public Query call(Object o) throws Exception {
                 return equalTo(keyword, o);
             }
         };
-    }
-
-    public static TermQuery record(Keyword recordName) {
-        return new TermQuery(new Term(RECORD_KEY.toString(), recordName.toString()));
     }
 
 
