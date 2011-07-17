@@ -8,7 +8,6 @@ import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.lucene.Lucene;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Fieldable;
 
 import java.util.Date;
@@ -30,7 +29,6 @@ public class Mappings {
         add(Date.class, new DateMapping());
         add(Integer.class, new IntegerMapping());
         add(Long.class, new LongMapping());
-        add(String.class, new StringMapping());
         add(Object.class, new ObjectMapping());
     }
 
@@ -43,9 +41,16 @@ public class Mappings {
             public Pair<Keyword, Object> call(Fieldable fieldable) throws Exception {
                 String name = fieldable.name();
                 Keyword keyword = getKeyword(name, definitions);
-                return pair(keyword, map.get(keyword.forClass()).toValue(fieldable));
+                return pair(keyword, get(keyword.forClass()).toValue(fieldable));
             }
         };
+    }
+
+    private Mapping<Object> get(final Class aClass) {
+        if(!map.containsKey(aClass)) {
+            return map.get(Object.class);
+        }
+        return map.get(aClass);
     }
 
     private Keyword getKeyword(String name, Sequence<Keyword> definitions) {
@@ -61,7 +66,7 @@ public class Mappings {
 
                 String name = pair.first().toString();
                 Keyword keyword = getKeyword(name, definitions);
-                return map.get(keyword.forClass()).toField(name, pair.second());
+                return get(keyword.forClass()).toField(name, pair.second());
             }
         };
     }
