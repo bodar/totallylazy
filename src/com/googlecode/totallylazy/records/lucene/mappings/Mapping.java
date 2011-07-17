@@ -1,13 +1,7 @@
 package com.googlecode.totallylazy.records.lucene.mappings;
 
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.records.Keyword;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.search.Query;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public interface Mapping<T> {
     Fieldable toField(String name, T value);
@@ -16,5 +10,15 @@ public interface Mapping<T> {
 
     Query equalTo(String name, T value);
 
+    Query notNull(String name);
+
     Query greaterThan(String name, T value);
+
+    Query greaterThanOrEqual(String name, T value);
+
+    Query lessThan(String name, T value);
+
+    Query lessThanOrEqual(String name, T value);
+
+    Query between(String name, T lower, T upper);
 }
