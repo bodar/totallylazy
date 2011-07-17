@@ -6,7 +6,7 @@ import org.apache.lucene.document.NumericField;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 
-public class LongMapping implements Mapping<Long> {
+public class LongMapping extends AbstractMapping<Long> {
     public Fieldable toField(String name, Long value) {
         return new NumericField(name, Field.Store.YES, true).setLongValue(value);
     }
@@ -15,11 +15,8 @@ public class LongMapping implements Mapping<Long> {
         return ((NumericField) fieldable).getNumericValue().longValue();
     }
 
-    public Query equalTo(String name, Long value) {
-        return NumericRangeQuery.newLongRange(name, value, value, true, true);
-    }
-
-    public Query greaterThan(String name, Long value) {
-        return NumericRangeQuery.newLongRange(name, value, null, false, true);
+    @Override
+    protected Query newRange(String name, Long lower, Long upper, boolean minInclusive, boolean maxInclusive) throws Exception {
+        return NumericRangeQuery.newLongRange(name, lower, upper, minInclusive, minInclusive);
     }
 }

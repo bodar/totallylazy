@@ -6,7 +6,7 @@ import org.apache.lucene.document.NumericField;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 
-public class IntegerMapping implements Mapping<Integer> {
+public class IntegerMapping extends AbstractMapping<Integer> {
     public Fieldable toField(String name, Integer value) {
         return new NumericField(name, Field.Store.YES, true).setIntValue(value);
     }
@@ -15,11 +15,8 @@ public class IntegerMapping implements Mapping<Integer> {
         return ((NumericField) fieldable).getNumericValue().intValue();
     }
 
-    public Query equalTo(String name, Integer value) {
-        return NumericRangeQuery.newIntRange(name, value, value, true, true);
-    }
-
-    public Query greaterThan(String name, Integer value) {
-        return NumericRangeQuery.newIntRange(name, value, null, false, true);
+    @Override
+    protected NumericRangeQuery<Integer> newRange(final String name, final Integer lower, final Integer upper, final boolean minInclusive, final boolean maxInclusive) {
+        return NumericRangeQuery.newIntRange(name, lower, upper, minInclusive, maxInclusive);
     }
 }
