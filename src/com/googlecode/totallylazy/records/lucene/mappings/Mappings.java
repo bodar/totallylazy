@@ -46,7 +46,7 @@ public class Mappings {
         };
     }
 
-    private Mapping<Object> get(final Class aClass) {
+    public Mapping<Object> get(final Class aClass) {
         if(!map.containsKey(aClass)) {
             return map.get(Object.class);
         }

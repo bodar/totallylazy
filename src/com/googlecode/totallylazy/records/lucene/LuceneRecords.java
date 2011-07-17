@@ -19,7 +19,6 @@ import java.io.IOException;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static com.googlecode.totallylazy.records.lucene.Lucene.and;
-import static com.googlecode.totallylazy.records.lucene.Lucene.query;
 import static com.googlecode.totallylazy.records.lucene.Lucene.record;
 import static com.googlecode.totallylazy.records.memory.MemoryRecords.updateValues;
 
@@ -27,11 +26,13 @@ public class LuceneRecords extends AbstractRecords {
     private final Directory directory;
     private final IndexWriter writer;
     private final Mappings mappings;
+    private final Lucene lucene;
 
     public LuceneRecords(final Directory directory, final IndexWriter writer, final Mappings mappings) throws IOException {
         this.directory = directory;
         this.writer = writer;
         this.mappings = mappings;
+        lucene = new Lucene(this.mappings);
     }
 
     public Sequence<Record> get(final Keyword recordName) {
@@ -72,7 +73,7 @@ public class LuceneRecords extends AbstractRecords {
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        return remove(and(record(recordName), query(predicate)));
+        return remove(and(record(recordName), lucene.query(predicate)));
     }
 
     public Number remove(Keyword recordName) {
