@@ -18,4 +18,8 @@ public class IntegerMapping implements Mapping<Integer> {
     public Query equalTo(String name, Integer value) {
         return NumericRangeQuery.newIntRange(name, value, value, true, true);
     }
+
+    public Query greaterThan(String name, Integer value) {
+        return NumericRangeQuery.newIntRange(name, value, null, false, true);
+    }
 }
