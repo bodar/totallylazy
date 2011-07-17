@@ -130,21 +130,9 @@ public class Lucene {
         }
 
         if (predicate instanceof GreaterThan) {
-            Object value = ((GreaterThan) predicate).value();
-            if (aClass.equals(Integer.class)) {
-                return NumericRangeQuery.newIntRange(keyword.toString(), (Integer) value, null, false, true);
-            }
-            if (aClass.equals(Long.class)) {
-                return NumericRangeQuery.newLongRange(keyword.toString(), (Long) value, null, false, true);
-            }
-            if (aClass.equals(Date.class)) {
-                return new TermRangeQuery(keyword.toString(), dateToString(((Date) value), DateTools.Resolution.MILLISECOND), null, false, true);
-            }
-            if (aClass.equals(String.class)) {
-                return new TermRangeQuery(keyword.toString(), (String) value, null, false, true);
-            }
-            throw new UnsupportedOperationException();
+            return greaterThan(keyword, ((GreaterThan) predicate).value());
         }
+
         if (predicate instanceof GreaterThanOrEqualTo) {
             Object value = ((GreaterThanOrEqualTo) predicate).value();
             if (aClass.equals(Integer.class)) {
@@ -241,6 +229,10 @@ public class Lucene {
 
     private Query equalTo(Keyword keyword, Object value) {
         return mappings.get(keyword.forClass()).equalTo(keyword.toString(), value);
+    }
+
+    private Query greaterThan(Keyword keyword, Object value) {
+        return mappings.get(keyword.forClass()).greaterThan(keyword.toString(), value);
     }
 
     private Query notNull(Keyword keyword, Class aClass) {

@@ -15,4 +15,6 @@ public interface Mapping<T> {
     T toValue(Fieldable fieldable);
 
     Query equalTo(String name, T value);
+
+    Query greaterThan(String name, T value);
 }

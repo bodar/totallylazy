@@ -7,6 +7,7 @@ import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TermRangeQuery;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -14,20 +15,14 @@ import java.util.Date;
 import static org.apache.lucene.document.DateTools.dateToString;
 import static org.apache.lucene.document.DateTools.stringToDate;
 
-public class DateMapping implements Mapping<Date> {
-    public Fieldable toField(String name, Date value) {
-        return new Field(name, dateToString(((Date) value), DateTools.Resolution.MILLISECOND), Field.Store.YES, Field.Index.NOT_ANALYZED);
+public class DateMapping extends StringMapping<Date> {
+    @Override
+    protected String toString(Date value) {
+        return dateToString(value, DateTools.Resolution.MILLISECOND);
     }
 
-    public Date toValue(Fieldable fieldable) {
-        try {
-            return stringToDate(fieldable.stringValue());
-        } catch (ParseException e) {
-            throw new LazyException(e);
-        }
-    }
-
-    public Query equalTo(String name, Date value) {
-        return new TermQuery(new Term(name, dateToString(value, DateTools.Resolution.MILLISECOND)));
+    @Override
+    protected Date fromString(String value) throws ParseException {
+            return stringToDate(value);
     }
 }

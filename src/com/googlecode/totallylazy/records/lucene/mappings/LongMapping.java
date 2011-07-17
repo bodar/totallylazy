@@ -18,4 +18,8 @@ public class LongMapping implements Mapping<Long> {
     public Query equalTo(String name, Long value) {
         return NumericRangeQuery.newLongRange(name, value, value, true, true);
     }
+
+    public Query greaterThan(String name, Long value) {
+        return NumericRangeQuery.newLongRange(name, value, null, false, true);
+    }
 }
