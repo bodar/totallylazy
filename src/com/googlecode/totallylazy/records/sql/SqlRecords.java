@@ -14,7 +14,6 @@ import java.sql.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Runnables.doNothing;
@@ -148,14 +147,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public RecordIterator query(final ParameterisedExpression value) {
-        return new RecordIterator(value.keywords(), mappings, new Callable<PreparedStatement>() {
-            public PreparedStatement call() throws Exception {
-                logger.println(format(format("SQL:'%s' VALUES:'%s'", value.expression(), value.parameters())));
-                final PreparedStatement statement = connection.prepareStatement(value.expression());
-                mappings.addValues(statement, value.parameters());
-                return statement;
-            }
-        });
+        return new RecordIterator(connection, mappings, value, logger);
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
