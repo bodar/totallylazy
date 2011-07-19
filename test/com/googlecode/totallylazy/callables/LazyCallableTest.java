@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
 
 import java.util.concurrent.Callable;
@@ -15,6 +14,7 @@ import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.between;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+
 public class LazyCallableTest {
     @Test
     public void instancesDoNotInteract() throws Exception {
@@ -35,10 +35,10 @@ public class LazyCallableTest {
 
     @Test
     public void isThreadSafe() throws Exception {
-        CountingCallable callable = counting();
+        CountingCallable<Integer> callable = counting();
         Callable<Integer> lazyCallable = lazy(sleepy(callable, 10));
 
-        Sequence<Integer> result = callConcurrently(lazyCallable, lazyCallable);
+        Sequence<Integer> result = callConcurrently(lazyCallable, lazyCallable).realise();
 
         assertThat(callable.count(), is(1));
         assertThat(result.first(), is(0));
@@ -47,7 +47,7 @@ public class LazyCallableTest {
 
     @Test
     public void onlyCallsUnderlyingCallableOnce() throws Exception {
-        CountingCallable callable = counting();
+        CountingCallable<Integer> callable = counting();
         Callable<Integer> lazyCallable = lazy(callable);
 
         assertThat(lazyCallable.call(), is(0));
