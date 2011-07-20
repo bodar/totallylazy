@@ -3,17 +3,23 @@ package com.googlecode.totallylazy.records.lucene;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Iterators;
+import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.MapRecord;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
+import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.store.Directory;
+import org.hsqldb.index.Index;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.List;
@@ -43,14 +49,32 @@ public class RecordSequence extends Sequence<Record> {
     }
 
     public Iterator<Record> iterator() {
-        return Iterators.map(new DocumentIterator(directory, query, printStream), asRecord(mappings, definitions));
+        try {
+            final IndexSearcher searcher = new IndexSearcher(directory);
+            Iterator<Document> documentIterator = Iterators.map(new ArrayIterator<ScoreDoc>(scoreDocs(searcher)), asDocument(searcher));
+            return Iterators.map(documentIterator, asRecord(mappings, definitions));
+        } catch (IOException e) {
+            throw new UnsupportedOperationException(e);
+        }
+    }
+
+    private ScoreDoc[] scoreDocs(final IndexSearcher searcher) throws IOException {
+        printStream.println("LUCENE = " + query);
+        return searcher.search(query, Integer.MAX_VALUE).scoreDocs;
+    }
+
+    public static Callable1<ScoreDoc, Document> asDocument(final IndexSearcher searcher) {
+        return new Callable1<ScoreDoc, Document>() {
+            public Document call(ScoreDoc scoreDoc) throws Exception {
+                return searcher.doc(scoreDoc.doc);
+            }
+        };
     }
 
     public static Callable1<? super Document, Record> asRecord(final Mappings mappings, final Sequence<Keyword> definitions) {
         return new Callable1<Document, Record>() {
             public Record call(Document document) throws Exception {
-                List<Fieldable> fields = document.getFields();
-                return sequence(fields).
+                return sequence(document.getFields()).
                         map(mappings.asPair(definitions)).
                         filter(where(Callables.first(Keyword.class), is(not(Lucene.RECORD_KEY)))).
                         fold(new MapRecord(), updateValues());
