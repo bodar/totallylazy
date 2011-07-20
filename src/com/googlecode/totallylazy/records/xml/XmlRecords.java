@@ -9,11 +9,8 @@ import com.googlecode.totallylazy.records.xml.mappings.Mappings;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import static com.googlecode.totallylazy.records.xml.Xml.xpath;
 
@@ -32,12 +29,8 @@ public class XmlRecords extends AbstractRecords {
     }
 
     public Sequence<Record> get(Keyword recordName) {
-        try {
-            NodeList nodes = (NodeList) xpath.evaluate(recordName.toString(), document, XPathConstants.NODESET);
-            return new XmlSequence(nodes, mappings, definitions(recordName));
-        } catch (XPathExpressionException e) {
-            throw new LazyException(e);
-        }
+        Sequence<Node> nodes = Xml.selectNodes(document, recordName.toString());
+        return new XmlSequence(nodes, mappings, definitions(recordName));
     }
 
     public boolean exists(Keyword recordName) {
