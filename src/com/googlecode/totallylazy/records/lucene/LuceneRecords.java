@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.records.lucene;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.AbstractRecords;
@@ -39,7 +38,7 @@ public class LuceneRecords extends AbstractRecords {
     }
 
     public Sequence<Record> get(final Keyword recordName) {
-        return new RecordSequence(directory, mappings, definitions(recordName), record(recordName), printStream);
+        return new RecordSequence(lucene, directory, record(recordName), mappings.asRecord(definitions(recordName)), printStream);
     }
 
     public boolean exists(Keyword recordName) {
