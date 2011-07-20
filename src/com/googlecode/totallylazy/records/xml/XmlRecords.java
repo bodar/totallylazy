@@ -35,7 +35,7 @@ public class XmlRecords extends AbstractRecords {
     public Sequence<Record> get(Keyword recordName) {
         try {
             NodeList nodes = (NodeList) xpath.evaluate(recordName.toString(), document, XPathConstants.NODESET);
-            return new XmlSequence(nodes);
+            return new XmlSequence(nodes, definitions(recordName));
         } catch (XPathExpressionException e) {
             throw new LazyException(e);
         }
