@@ -43,7 +43,7 @@ public class LuceneRecords extends AbstractRecords {
     }
 
     public boolean exists(Keyword recordName) {
-        throw new UnsupportedOperationException();
+        return true;
     }
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
