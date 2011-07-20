@@ -1,35 +1,24 @@
 package com.googlecode.totallylazy.records.lucene;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Iterators;
-import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.MapRecord;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.store.Directory;
-import org.hsqldb.index.Index;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
-import java.util.List;
 
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.lucene.Lucene.and;
-import static com.googlecode.totallylazy.records.memory.MemoryRecords.updateValues;
 
 public class RecordSequence extends Sequence<Record> {
     private final Directory directory;
@@ -52,7 +41,7 @@ public class RecordSequence extends Sequence<Record> {
         try {
             final IndexSearcher searcher = new IndexSearcher(directory);
             Iterator<Document> documentIterator = Iterators.map(new ArrayIterator<ScoreDoc>(scoreDocs(searcher)), asDocument(searcher));
-            return Iterators.map(documentIterator, asRecord(mappings, definitions));
+            return Iterators.map(documentIterator, mappings.asRecord(definitions));
         } catch (IOException e) {
             throw new UnsupportedOperationException(e);
         }
@@ -67,17 +56,6 @@ public class RecordSequence extends Sequence<Record> {
         return new Callable1<ScoreDoc, Document>() {
             public Document call(ScoreDoc scoreDoc) throws Exception {
                 return searcher.doc(scoreDoc.doc);
-            }
-        };
-    }
-
-    public static Callable1<? super Document, Record> asRecord(final Mappings mappings, final Sequence<Keyword> definitions) {
-        return new Callable1<Document, Record>() {
-            public Record call(Document document) throws Exception {
-                return sequence(document.getFields()).
-                        map(mappings.asPair(definitions)).
-                        filter(where(Callables.first(Keyword.class), is(not(Lucene.RECORD_KEY)))).
-                        fold(new MapRecord(), updateValues());
             }
         };
     }

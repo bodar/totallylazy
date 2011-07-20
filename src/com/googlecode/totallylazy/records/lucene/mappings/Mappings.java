@@ -2,9 +2,11 @@ package com.googlecode.totallylazy.records.lucene.mappings;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.MapRecord;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.lucene.Lucene;
 import org.apache.lucene.document.Document;
@@ -15,12 +17,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.Keywords.name;
+import static com.googlecode.totallylazy.records.memory.MemoryRecords.updateValues;
 
 public class Mappings {
     private final Map<Class, Mapping<Object>> map = new HashMap<Class, Mapping<Object>>();
@@ -34,6 +40,17 @@ public class Mappings {
 
     public <T> void add(final Class<T> type, final Mapping<T> mapping) {
         map.put(type, (Mapping<Object>) mapping);
+    }
+
+    public Callable1<? super Document, Record> asRecord(final Sequence<Keyword> definitions) {
+        return new Callable1<Document, Record>() {
+            public Record call(Document document) throws Exception {
+                return sequence(document.getFields()).
+                        map(asPair(definitions)).
+                        filter(where(Callables.first(Keyword.class), is(not(Lucene.RECORD_KEY)))).
+                        fold(new MapRecord(), updateValues());
+            }
+        };
     }
 
     public Callable1<? super Fieldable, Pair<Keyword, Object>> asPair(final Sequence<Keyword> definitions) {
