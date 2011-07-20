@@ -14,18 +14,18 @@ import org.w3c.dom.NodeList;
 import java.util.Iterator;
 
 public class XmlSequence extends Sequence<Record> {
-    private final NodeList nodes;
+    private final Sequence<Node> nodes;
     private final Mappings mappings;
     private final Sequence<Keyword> definitions;
 
-    public XmlSequence(NodeList nodes, Mappings mappings, Sequence<Keyword> definitions) {
+    public XmlSequence(Sequence<Node> nodes, Mappings mappings, Sequence<Keyword> definitions) {
         this.nodes = nodes;
         this.mappings = mappings;
         this.definitions = definitions;
     }
 
     public Iterator<Record> iterator() {
-        return Iterators.map(new NodeIterator(nodes), asRecord());
+        return nodes.map(asRecord()).iterator();
     }
 
     private Callable1<? super Node, Record> asRecord() {
