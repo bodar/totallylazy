@@ -5,15 +5,17 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 import org.junit.Test;
 
-import java.io.StringReader;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class XmlRecordsTest {
+public class StarterXmlRecordsTest {
+    private static final Keyword<Object> entries = Keyword.keyword("/feed/entry");
+    private static final Keyword<String> link = Keyword.keyword("link/@href", String.class);
+    private static final Keyword<String> content = Keyword.keyword("content", String.class);
+
     @Test
     public void canGetElements() throws Exception {
-        Records records = new XmlRecords(new StringReader(XML));
+        Records records = new XmlRecords(XML);
         Record record = records.get(entries).head();
         assertThat(record.get(link), is(LINK));
         assertThat(record.get(content), is(CONTENT));
@@ -41,9 +43,6 @@ public class XmlRecordsTest {
             "  </entry>" +
             "</feed>";
 
-    private static final Keyword<Object> entries = Keyword.keyword("//entry");
-    private static final Keyword<String> link = Keyword.keyword("link/@href", String.class);
-    private static final Keyword<String> content = Keyword.keyword("content", String.class);
 
 
 }

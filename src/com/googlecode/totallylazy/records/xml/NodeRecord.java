@@ -7,27 +7,19 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-
-import static com.googlecode.totallylazy.records.xml.Xml.asString;
 
 public class NodeRecord implements Record {
     private final Node node;
-    private final XPath xpath;
 
     public NodeRecord(Node node) {
         this.node = node;
-        this.xpath = Xml.xpath();
     }
 
     public <T> T get(Keyword<T> keyword) {
         try {
-            NodeList nodes = (NodeList) xpath.evaluate(keyword.toString(), node, XPathConstants.NODESET);
-            return (T) asString(nodes);
+            return (T) Xml.select(node, keyword.toString());
         } catch (XPathExpressionException e) {
             throw new LazyException(e);
         }

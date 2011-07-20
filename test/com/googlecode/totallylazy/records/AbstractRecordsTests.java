@@ -43,11 +43,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public abstract class AbstractRecordsTests {
-    private static final Keyword user = keyword("people");
-    private static final Keyword<Integer> age = keyword("age", Integer.class);
-    private static final Keyword<Date> dob = keyword("dob", Date.class);
-    private static final Keyword<String> firstName = keyword("firstName", String.class);
-    private static final Keyword<String> lastName = keyword("lastName", String.class);
+    protected static Keyword user = keyword("people");
+    protected static Keyword<Integer> age = keyword("age", Integer.class);
+    protected static Keyword<Date> dob = keyword("dob", Date.class);
+    protected static Keyword<String> firstName = keyword("firstName", String.class);
+    protected static Keyword<String> lastName = keyword("lastName", String.class);
     protected Records records;
 
     protected abstract Records createRecords() throws Exception;

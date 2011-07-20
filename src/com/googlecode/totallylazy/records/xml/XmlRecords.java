@@ -6,26 +6,31 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
+import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.Reader;
+
+import static com.googlecode.totallylazy.records.xml.Xml.load;
+import static com.googlecode.totallylazy.records.xml.Xml.xpath;
 
 public class XmlRecords implements Records {
-    private final Reader reader;
-    private final XPath xpath;
+    private final XPath xpath = xpath();
+    private final Document document;
 
-    public XmlRecords(Reader reader) {
-        xpath = Xml.xpath();
-        this.reader = reader;
+    public XmlRecords(String xml) {
+        document = load(xml);
+    }
+
+    public XmlRecords(Document document) {
+        this.document = document;
     }
 
     public Sequence<Record> get(Keyword recordName) {
         try {
-            NodeList nodes = (NodeList) xpath.evaluate(recordName.toString(), new InputSource(reader), XPathConstants.NODESET);
+            NodeList nodes = (NodeList) xpath.evaluate(recordName.toString(), document, XPathConstants.NODESET);
             return new XmlSequence(nodes);
         } catch (XPathExpressionException e) {
             throw new LazyException(e);
