@@ -5,6 +5,9 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 import org.junit.Test;
 
+import java.util.Date;
+
+import static com.googlecode.totallylazy.Dates.date;
 import static com.googlecode.totallylazy.records.xml.Xml.load;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -14,15 +17,17 @@ public class StarterXmlRecordsTest {
     private static final Keyword<String> id = Keyword.keyword("id", String.class);
     private static final Keyword<String> link = Keyword.keyword("link/@href", String.class);
     private static final Keyword<String> content = Keyword.keyword("content", String.class);
+    private static final Keyword<Date> updated = Keyword.keyword("updated", Date.class);
 
     @Test
     public void canGetElements() throws Exception {
         Records records = new XmlRecords(load(XML));
-        records.define(entries, id, link, content);
+        records.define(entries, id, link, content, updated);
         Record record = records.get(entries).head();
         assertThat(record.get(id), is(ID));
         assertThat(record.get(link), is(LINK));
         assertThat(record.get(content), is(CONTENT));
+        assertThat(record.get(updated), is(date(2011, 7, 19, 12, 43, 26)));
     }
 
     public static final String ID = "urn:uuid:1234";

@@ -5,9 +5,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 public interface Mapping<T> {
-    Sequence<Node> to(Document document, String expression, T value);
+    Sequence<Node> to(Document document, String expression, T value) throws Exception;
 
-    T from(Sequence<Node> nodes);
+    T from(Sequence<Node> nodes) throws Exception;
 
 
 }
