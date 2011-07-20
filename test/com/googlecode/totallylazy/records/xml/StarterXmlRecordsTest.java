@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.is;
 
 public class StarterXmlRecordsTest {
     private static final Keyword<Object> entries = Keyword.keyword("/feed/entry");
+    private static final Keyword<String> id = Keyword.keyword("id", String.class);
     private static final Keyword<String> link = Keyword.keyword("link/@href", String.class);
     private static final Keyword<String> content = Keyword.keyword("content", String.class);
 
@@ -17,9 +18,12 @@ public class StarterXmlRecordsTest {
     public void canGetElements() throws Exception {
         Records records = new XmlRecords(XML);
         Record record = records.get(entries).head();
+        assertThat(record.get(id), is(ID));
         assertThat(record.get(link), is(LINK));
         assertThat(record.get(content), is(CONTENT));
     }
+
+    public static final String ID = "urn:uuid:1234";
 
     private static final String CONTENT = "<event>" +
             "<source>blah</source>" +
@@ -34,7 +38,7 @@ public class StarterXmlRecordsTest {
             "  <entry>" +
             "    <title>Some entry</title>" +
             "    <link href=\"" + LINK + "\" />" +
-            "    <id>urn:uuid:1234</id>" +
+            "    <id>" + ID + "</id>" +
             "<content type=\"text/xml\">" +
             CONTENT +
             "</content>" +
