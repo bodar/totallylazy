@@ -12,7 +12,6 @@ import org.xml.sax.InputSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 import java.io.Reader;
 
 public class XmlRecords implements Records {
@@ -20,14 +19,14 @@ public class XmlRecords implements Records {
     private final XPath xpath;
 
     public XmlRecords(Reader reader) {
-        xpath = XPathFactory.newInstance().newXPath();
+        xpath = Xml.xpath();
         this.reader = reader;
     }
 
     public Sequence<Record> get(Keyword recordName) {
         try {
             NodeList nodes = (NodeList) xpath.evaluate(recordName.toString(), new InputSource(reader), XPathConstants.NODESET);
-            return new XmlSequence(nodes, xpath);
+            return new XmlSequence(nodes);
         } catch (XPathExpressionException e) {
             throw new LazyException(e);
         }

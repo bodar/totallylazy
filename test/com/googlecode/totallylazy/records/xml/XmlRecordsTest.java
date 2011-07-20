@@ -16,7 +16,7 @@ public class XmlRecordsTest {
         Records records = new XmlRecords(new StringReader(XML));
         Record record = records.get(entries).head();
         assertThat(record.get(link), is(LINK));
-//        assertThat(record.get(content), is(CONTENT));
+        assertThat(record.get(content), is(CONTENT));
     }
 
     private static final String CONTENT = "<event>" +
