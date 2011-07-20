@@ -1,12 +1,16 @@
 package com.googlecode.totallylazy.records.xml;
 
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.Records;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPath;
@@ -16,7 +20,7 @@ import javax.xml.xpath.XPathExpressionException;
 import static com.googlecode.totallylazy.records.xml.Xml.load;
 import static com.googlecode.totallylazy.records.xml.Xml.xpath;
 
-public class XmlRecords implements Records {
+public class XmlRecords extends AbstractRecords {
     private final XPath xpath = xpath();
     private final Document document;
 
@@ -37,28 +41,45 @@ public class XmlRecords implements Records {
         }
     }
 
-    public void define(Keyword recordName, Keyword<?>... fields) {
-        throw new UnsupportedOperationException();
-    }
-
     public boolean exists(Keyword recordName) {
         throw new UnsupportedOperationException();
     }
 
-    public Number add(Keyword recordName, Record... records) {
-        throw new UnsupportedOperationException();
-    }
-
-    public Number add(Keyword recordName, Sequence<Record> records) {
-        throw new UnsupportedOperationException();
-    }
-
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
-        throw new UnsupportedOperationException();
+        for (Record record : records) {
+            Element newElement = fields.fold(document.createElement(toTagName(recordName)), addNodes(record));
+            Node parent = Xml.selectNodes(document, toParent(recordName)).head();
+            parent.appendChild(newElement);
+        }
+        return records.size();
     }
 
-    public Number set(Keyword recordName, Predicate<? super Record> predicate, Record record) {
-        throw new UnsupportedOperationException();
+    private String toParent(Keyword recordName) {
+        String xpath = recordName.toString();
+        String[] parts = xpath.split("/");
+        return Sequences.sequence(parts).take(parts.length - 1).toString("/");
+    }
+
+    private Callable2<? super Element, ? super Keyword, Element> addNodes(final Record record) {
+        return new Callable2<Element, Keyword, Element>() {
+            public Element call(Element container, Keyword field) throws Exception {
+                Element element = document.createElement(toTagName(field));
+                Object value = record.get(field);
+                if (value != null) {
+                    String stringValue = value.toString();
+                    element.appendChild(document.createTextNode(stringValue));
+                }
+                container.appendChild(element);
+                return container;
+            }
+        };
+    }
+
+    private String toTagName(Keyword recordName) {
+        String xpath = recordName.toString();
+        String[] parts = xpath.split("/");
+
+        return parts[parts.length - 1];
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
@@ -70,6 +91,6 @@ public class XmlRecords implements Records {
     }
 
     public Number remove(Keyword recordName) {
-        throw new UnsupportedOperationException();
+        return Xml.remove(document, recordName.toString()).size();
     }
 }
