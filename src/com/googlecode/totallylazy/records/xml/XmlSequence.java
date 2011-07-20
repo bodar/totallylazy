@@ -31,14 +31,14 @@ public class XmlSequence extends Sequence<Record> {
     private Callable1<? super Node, Record> asRecord() {
         return new Callable1<Node, Record>() {
             public Record call(final Node node) throws Exception {
-                return definitions.fold(new MapRecord(), new Callable2<Record, Keyword, Record>() {
-                    public Record call(Record record, Keyword keyword) throws Exception {
+                return definitions.fold(new NodeRecord(node), new Callable2<Record, Keyword, Record>() {
+                    public Record call(Record nodeRecord, Keyword keyword) throws Exception {
                         Sequence<Node> nodes = Xml.selectNodes(node, keyword.toString());
                         if (nodes.isEmpty()) {
-                            return record;
+                            return nodeRecord;
                         }
                         Object value = mappings.get(keyword.forClass()).from(nodes);
-                        return record.set(keyword, value);
+                        return nodeRecord.set(keyword, value);
                     }
                 });
             }

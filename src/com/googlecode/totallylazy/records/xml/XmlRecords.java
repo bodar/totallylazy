@@ -80,12 +80,17 @@ public class XmlRecords extends AbstractRecords {
         return parts[parts.length - 1];
     }
 
-    public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        throw new UnsupportedOperationException();
+    public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
+        Sequence<Node> map = get(recordName).filter(predicate).map(asNode());
+        return Xml.remove(map).size();
     }
 
-    public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        throw new UnsupportedOperationException();
+    private Callable1<? super Record, Node> asNode() {
+        return new Callable1<Record, Node>() {
+            public Node call(Record record) throws Exception {
+                return ((NodeRecord) record).node();
+            }
+        };
     }
 
     public Number remove(Keyword recordName) {
