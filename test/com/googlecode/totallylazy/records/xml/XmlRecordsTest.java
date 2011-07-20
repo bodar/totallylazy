@@ -18,14 +18,6 @@ public class XmlRecordsTest extends AbstractRecordsTests{
     }
 
     @Override @Ignore
-    public void supportsIsNullAndNotNull() throws Exception {
-    }
-
-    @Override @Ignore
-    public void supportsReduce() throws Exception {
-    }
-
-    @Override @Ignore
     public void supportsUpdating() throws Exception {
     }
 

@@ -63,10 +63,12 @@ public class XmlRecords extends AbstractRecords {
         return new Callable2<Element, Keyword, Element>() {
             public Element call(Element container, Keyword field) throws Exception {
                 Object value = record.get(field);
-                Mapping<Object> objectMapping = mappings.get(field.forClass());
-                Sequence<Node> nodes = objectMapping.to(document, field.toString(), value);
-                for (Node node : nodes) {
-                    container.appendChild(node);
+                if (value != null) {
+                    Mapping<Object> objectMapping = mappings.get(field.forClass());
+                    Sequence<Node> nodes = objectMapping.to(document, field.toString(), value);
+                    for (Node node : nodes) {
+                        container.appendChild(node);
+                    }
                 }
                 return container;
             }
