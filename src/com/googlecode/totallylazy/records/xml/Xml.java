@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.records.xml;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.ForwardOnlySequence;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Sequence;
 import org.w3c.dom.Attr;
@@ -13,11 +12,9 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -27,25 +24,31 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
-
-import static com.googlecode.totallylazy.Sequences.forwardOnly;
+import java.util.Iterator;
 
 public class Xml {
+    public static String selectContents(final Node node, final String expression)  {
+        return contents(selectNodes(node, expression));
+    }
 
-    public static String select(final Node node, final String expression) throws XPathExpressionException {
-        return contents((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
+    public static Sequence<Node> selectNodes(Node node, String expression)  {
+        try {
+            return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
+        } catch (XPathExpressionException e) {
+            throw new LazyException(e);
+        }
     }
 
     public static XPath xpath() {
         return XPathFactory.newInstance().newXPath();
     }
 
-    public static ForwardOnlySequence<Node> sequence(NodeList nodes) {
-        return forwardOnly(new NodeIterator(nodes));
-    }
-
-    public static String contents(NodeList nodes) {
-        return contents(sequence(nodes));
+    public static Sequence<Node> sequence(final NodeList nodes) {
+        return new Sequence<Node>() {
+            public Iterator<Node> iterator() {
+                return new NodeIterator(nodes);
+            }
+        };
     }
 
     public static String contents(Sequence<Node> nodes) {
@@ -93,7 +96,7 @@ public class Xml {
 
     }
 
-    public static String asString(Element element) throws TransformerException {
+    public static String asString(Element element) throws Exception {
         Transformer transformer = transformer();
         StringWriter writer = new StringWriter();
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
@@ -114,5 +117,19 @@ public class Xml {
         } catch (Exception e) {
             throw new LazyException(e);
         }
+    }
+
+    public static Sequence<Node> remove(final Node root, final String expression) {
+        Sequence<Node> nodes = selectNodes(root, expression);
+        return nodes.map(remove()).realise();
+
+    }
+
+    private static Callable1<Node, Node> remove() {
+        return new Callable1<Node, Node>() {
+            public Node call(Node node) throws Exception {
+                return node.getParentNode().removeChild(node);
+            }
+        };
     }
 }

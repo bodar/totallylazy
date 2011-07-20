@@ -26,20 +26,16 @@ import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.memory.MemoryRecords.updateValues;
 
-public class DocumentIterator extends ReadOnlyIterator<Record> implements Closeable {
+public class DocumentIterator extends ReadOnlyIterator<Document> implements Closeable {
     private int index = 0;
     private final Directory directory;
-    private final Mappings mappings;
-    private final Sequence<Keyword> definitions;
     private final Query query;
     private final PrintStream printStream;
     private ScoreDoc[] scoreDocs;
     private IndexSearcher searcher;
 
-    public DocumentIterator(final Directory directory, final Mappings mappings, final Sequence<Keyword> definitions, final Query query, final PrintStream printStream) {
+    public DocumentIterator(final Directory directory, final Query query, final PrintStream printStream) {
         this.directory = directory;
-        this.mappings = mappings;
-        this.definitions = definitions;
         this.query = query;
         this.printStream = printStream;
     }
@@ -48,31 +44,24 @@ public class DocumentIterator extends ReadOnlyIterator<Record> implements Closea
         return index < scoreDocs().length;
     }
 
-    public Record next() {
+    public Document next() {
         try {
-            int docID = scoreDocs()[index++].doc;
-            List<Fieldable> fields = searcher().doc(docID).getFields();
-            return sequence(fields).
-                    map(mappings.asPair(definitions)).
-                    filter(where(first(Keyword.class), is(not(Lucene.RECORD_KEY)))).
-                    fold(new MapRecord(), updateValues());
+            return searcher().doc(scoreDocs()[index++].doc);
         } catch (IOException e) {
             throw new LazyException(e);
         }
     }
 
     private ScoreDoc[] scoreDocs() {
-        if (scoreDocs == null) {
-            printStream.println("LUCENE = " + query);
-            TopDocs results = null;
-            try {
-                results = searcher().search(query, Integer.MAX_VALUE);
-            } catch (IOException e) {
-                throw new LazyException(e);
+        try {
+            if (scoreDocs == null) {
+                printStream.println("LUCENE = " + query);
+                scoreDocs = searcher().search(query, Integer.MAX_VALUE).scoreDocs;
             }
-            scoreDocs = results.scoreDocs;
+            return scoreDocs;
+        } catch (IOException e) {
+            throw new LazyException(e);
         }
-        return scoreDocs;
     }
 
     private IndexSearcher searcher() {
@@ -87,7 +76,7 @@ public class DocumentIterator extends ReadOnlyIterator<Record> implements Closea
     }
 
     public void close() throws IOException {
-        if(searcher != null){
+        if (searcher != null) {
             searcher.close();
         }
     }

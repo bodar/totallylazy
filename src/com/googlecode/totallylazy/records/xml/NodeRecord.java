@@ -1,14 +1,11 @@
 package com.googlecode.totallylazy.records.xml;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import org.w3c.dom.Node;
-
-import javax.xml.xpath.XPathExpressionException;
 
 public class NodeRecord implements Record {
     private final Node node;
@@ -18,11 +15,7 @@ public class NodeRecord implements Record {
     }
 
     public <T> T get(Keyword<T> keyword) {
-        try {
-            return (T) Xml.select(node, keyword.toString());
-        } catch (XPathExpressionException e) {
-            throw new LazyException(e);
-        }
+        return (T) Xml.selectContents(node, keyword.toString());
     }
 
     public <T> Record set(Keyword<T> name, T value) {
