@@ -1,41 +1,36 @@
 package com.googlecode.totallylazy.records.xml;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSSerializer;
+import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
+import static com.googlecode.totallylazy.records.xml.Xml.asString;
+
 public class NodeRecord implements Record {
     private final Node node;
     private final XPath xpath;
 
-    public NodeRecord(Node node, XPath xpath) {
+    public NodeRecord(Node node) {
         this.node = node;
-        this.xpath = xpath;
+        this.xpath = Xml.xpath();
     }
 
     public <T> T get(Keyword<T> keyword) {
         try {
-            return (T) xpath.evaluate(keyword.toString(), node, XPathConstants.STRING);
+            NodeList nodes = (NodeList) xpath.evaluate(keyword.toString(), node, XPathConstants.NODESET);
+            return (T) asString(nodes);
         } catch (XPathExpressionException e) {
             throw new LazyException(e);
         }
-    }
-
-    private String toString(Node node) {
-        Document document = node.getOwnerDocument();
-        DOMImplementationLS domImplLS = (DOMImplementationLS) document.getImplementation();
-        LSSerializer serializer = domImplLS.createLSSerializer();
-        return serializer.writeToString(node);
     }
 
     public <T> Record set(Keyword<T> name, T value) {
@@ -53,4 +48,13 @@ public class NodeRecord implements Record {
     public Sequence<Object> getValuesFor(Sequence<Keyword> keywords) {
         throw new UnsupportedOperationException();
     }
+
+    public static Callable1<Node, Record> asRecord() {
+        return new Callable1<Node, Record>() {
+            public Record call(Node node) throws Exception {
+                return new NodeRecord(node);
+            }
+        };
+    }
+
 }
