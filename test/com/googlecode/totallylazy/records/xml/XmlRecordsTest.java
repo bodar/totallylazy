@@ -16,12 +16,4 @@ public class XmlRecordsTest extends AbstractRecordsTests{
     protected Records createRecords() throws Exception {
         return new XmlRecords(load("<users/>"));
     }
-
-    @Override @Ignore
-    public void supportsUpdating() throws Exception {
-    }
-
-    @Override @Ignore
-    public void supportsRemove() throws Exception {
-    }
 }

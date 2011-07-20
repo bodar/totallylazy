@@ -59,21 +59,6 @@ public class LuceneRecords extends AbstractRecords {
         }
     }
 
-    public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        Sequence<Record> updated = get(recordName).filter(predicate).map(updateWithFieldsIn(record)).realise();
-        Number count = remove(recordName, predicate);
-        add(recordName, updated);
-        return count;
-    }
-
-    private Callable1<? super Record, Record> updateWithFieldsIn(final Record record) {
-        return new Callable1<Record, Record>() {
-            public Record call(Record recordToUpdate) throws Exception {
-                return record.fields().fold(recordToUpdate, updateValues());
-            }
-        };
-    }
-
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
         return remove(and(record(recordName), lucene.query(predicate)));
     }

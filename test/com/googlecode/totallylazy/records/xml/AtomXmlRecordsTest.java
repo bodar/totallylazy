@@ -12,7 +12,7 @@ import static com.googlecode.totallylazy.records.xml.Xml.load;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class StarterXmlRecordsTest {
+public class AtomXmlRecordsTest {
     private static final Keyword<Object> entries = Keyword.keyword("/feed/entry");
     private static final Keyword<String> id = Keyword.keyword("id", String.class);
     private static final Keyword<String> link = Keyword.keyword("link/@href", String.class);
@@ -53,7 +53,4 @@ public class StarterXmlRecordsTest {
             "    <summary type=\"text\">Summary</summary>" +
             "  </entry>" +
             "</feed>";
-
-
-
 }
