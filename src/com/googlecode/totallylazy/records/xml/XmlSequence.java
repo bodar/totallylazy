@@ -7,7 +7,6 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.MapRecord;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.xml.mappings.Mapping;
 import com.googlecode.totallylazy.records.xml.mappings.Mappings;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -34,8 +33,12 @@ public class XmlSequence extends Sequence<Record> {
             public Record call(final Node node) throws Exception {
                 return definitions.fold(new MapRecord(), new Callable2<Record, Keyword, Record>() {
                     public Record call(Record record, Keyword keyword) throws Exception {
-                        Object value = mappings.get(keyword.forClass()).from(Xml.selectNodes(node, keyword.toString()));
-                        return record.set(keyword, value );
+                        Sequence<Node> nodes = Xml.selectNodes(node, keyword.toString());
+                        if (nodes.isEmpty()) {
+                            return record;
+                        }
+                        Object value = mappings.get(keyword.forClass()).from(nodes);
+                        return record.set(keyword, value);
                     }
                 });
             }
