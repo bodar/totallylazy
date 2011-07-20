@@ -17,6 +17,7 @@ public class StarterXmlRecordsTest {
     @Test
     public void canGetElements() throws Exception {
         Records records = new XmlRecords(XML);
+        records.define(entries, id, link, content);
         Record record = records.get(entries).head();
         assertThat(record.get(id), is(ID));
         assertThat(record.get(link), is(LINK));

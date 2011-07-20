@@ -1,22 +1,39 @@
 package com.googlecode.totallylazy.records.xml;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.MapRecord;
 import com.googlecode.totallylazy.records.Record;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.Iterator;
 
-import static com.googlecode.totallylazy.records.xml.NodeRecord.asRecord;
-
 public class XmlSequence extends Sequence<Record> {
     private final NodeList nodes;
+    private final Sequence<Keyword> definitions;
 
-    public XmlSequence(NodeList nodes) {
+    public XmlSequence(NodeList nodes, Sequence<Keyword> definitions) {
         this.nodes = nodes;
+        this.definitions = definitions;
     }
 
     public Iterator<Record> iterator() {
         return Iterators.map(new NodeIterator(nodes), asRecord());
+    }
+
+    private Callable1<? super Node, Record> asRecord() {
+        return new Callable1<Node, Record>() {
+            public Record call(final Node node) throws Exception {
+                return definitions.fold(new MapRecord(), new Callable2<Record, Keyword, Record>() {
+                    public Record call(Record record, Keyword keyword) throws Exception {
+                        return record.set(keyword, Xml.selectContents(node, keyword.toString()));
+                    }
+                });
+            }
+        };
     }
 }
