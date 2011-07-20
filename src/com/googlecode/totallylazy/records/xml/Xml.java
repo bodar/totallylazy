@@ -120,9 +120,12 @@ public class Xml {
     }
 
     public static Sequence<Node> remove(final Node root, final String expression) {
-        Sequence<Node> nodes = selectNodes(root, expression);
-        return nodes.map(remove()).realise();
+        return remove(selectNodes(root, expression));
 
+    }
+
+    public static Sequence<Node> remove(final Sequence<Node> nodes) {
+        return nodes.map(remove()).realise();
     }
 
     private static Callable1<Node, Node> remove() {

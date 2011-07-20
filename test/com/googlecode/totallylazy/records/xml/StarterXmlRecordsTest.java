@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 import org.junit.Test;
 
+import static com.googlecode.totallylazy.records.xml.Xml.load;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -16,7 +17,7 @@ public class StarterXmlRecordsTest {
 
     @Test
     public void canGetElements() throws Exception {
-        Records records = new XmlRecords(XML);
+        Records records = new XmlRecords(load(XML));
         records.define(entries, id, link, content);
         Record record = records.get(entries).head();
         assertThat(record.get(id), is(ID));

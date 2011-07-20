@@ -7,6 +7,8 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.MapRecord;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.xml.mappings.Mapping;
+import com.googlecode.totallylazy.records.xml.mappings.Mappings;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -14,10 +16,12 @@ import java.util.Iterator;
 
 public class XmlSequence extends Sequence<Record> {
     private final NodeList nodes;
+    private final Mappings mappings;
     private final Sequence<Keyword> definitions;
 
-    public XmlSequence(NodeList nodes, Sequence<Keyword> definitions) {
+    public XmlSequence(NodeList nodes, Mappings mappings, Sequence<Keyword> definitions) {
         this.nodes = nodes;
+        this.mappings = mappings;
         this.definitions = definitions;
     }
 
@@ -30,7 +34,8 @@ public class XmlSequence extends Sequence<Record> {
             public Record call(final Node node) throws Exception {
                 return definitions.fold(new MapRecord(), new Callable2<Record, Keyword, Record>() {
                     public Record call(Record record, Keyword keyword) throws Exception {
-                        return record.set(keyword, Xml.selectContents(node, keyword.toString()));
+                        Object value = mappings.get(keyword.forClass()).from(Xml.selectNodes(node, keyword.toString()));
+                        return record.set(keyword, value );
                     }
                 });
             }

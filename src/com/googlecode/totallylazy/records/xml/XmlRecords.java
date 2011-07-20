@@ -1,13 +1,11 @@
 package com.googlecode.totallylazy.records.xml;
 
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.xml.mappings.Mapping;
+import com.googlecode.totallylazy.records.xml.mappings.Mappings;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,25 +15,26 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import static com.googlecode.totallylazy.records.xml.Xml.load;
 import static com.googlecode.totallylazy.records.xml.Xml.xpath;
 
 public class XmlRecords extends AbstractRecords {
     private final XPath xpath = xpath();
     private final Document document;
+    private final Mappings mappings;
 
-    public XmlRecords(String xml) {
-        document = load(xml);
+    public XmlRecords(Document document, Mappings mappings) {
+        this.document = document;
+        this.mappings = mappings;
     }
 
     public XmlRecords(Document document) {
-        this.document = document;
+        this(document, new Mappings());
     }
 
     public Sequence<Record> get(Keyword recordName) {
         try {
             NodeList nodes = (NodeList) xpath.evaluate(recordName.toString(), document, XPathConstants.NODESET);
-            return new XmlSequence(nodes, definitions(recordName));
+            return new XmlSequence(nodes, mappings, definitions(recordName));
         } catch (XPathExpressionException e) {
             throw new LazyException(e);
         }
@@ -47,7 +46,7 @@ public class XmlRecords extends AbstractRecords {
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
         for (Record record : records) {
-            Element newElement = fields.fold(document.createElement(toTagName(recordName)), addNodes(record));
+            Element newElement = fields.fold(document.createElement(toTagName(recordName.toString())), addNodes(record));
             Node parent = Xml.selectNodes(document, toParent(recordName)).head();
             parent.appendChild(newElement);
         }
@@ -63,22 +62,19 @@ public class XmlRecords extends AbstractRecords {
     private Callable2<? super Element, ? super Keyword, Element> addNodes(final Record record) {
         return new Callable2<Element, Keyword, Element>() {
             public Element call(Element container, Keyword field) throws Exception {
-                Element element = document.createElement(toTagName(field));
                 Object value = record.get(field);
-                if (value != null) {
-                    String stringValue = value.toString();
-                    element.appendChild(document.createTextNode(stringValue));
+                Mapping<Object> objectMapping = mappings.get(field.forClass());
+                Sequence<Node> nodes = objectMapping.to(document, field.toString(), value);
+                for (Node node : nodes) {
+                    container.appendChild(node);
                 }
-                container.appendChild(element);
                 return container;
             }
         };
     }
 
-    private String toTagName(Keyword recordName) {
-        String xpath = recordName.toString();
-        String[] parts = xpath.split("/");
-
+    public static String toTagName(final String expression) {
+        String[] parts = expression.split("/");
         return parts[parts.length - 1];
     }
 
