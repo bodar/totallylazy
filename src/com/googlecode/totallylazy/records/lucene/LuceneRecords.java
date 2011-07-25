@@ -16,6 +16,7 @@ import org.apache.lucene.store.Directory;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
@@ -39,6 +40,10 @@ public class LuceneRecords extends AbstractRecords {
 
     public LuceneRecords(final Directory directory, final IndexWriter writer) throws IOException {
         this(directory, writer, new Mappings(), new PrintStream(nullOutputStream()));
+    }
+
+    public Sequence<Record> query(final Query query, final Keyword... definitions){
+        return new RecordSequence(lucene, directory, query, mappings.asRecord(sequence(definitions)), printStream);
     }
 
     public Sequence<Record> get(final Keyword recordName) {
