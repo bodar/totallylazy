@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.records.lucene;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
@@ -10,17 +9,18 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 
 import java.io.IOException;
 import java.io.PrintStream;
 
+import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static com.googlecode.totallylazy.records.lucene.Lucene.and;
 import static com.googlecode.totallylazy.records.lucene.Lucene.record;
-import static com.googlecode.totallylazy.records.memory.MemoryRecords.updateValues;
 
 public class LuceneRecords extends AbstractRecords {
     private final Directory directory;
@@ -35,6 +35,10 @@ public class LuceneRecords extends AbstractRecords {
         this.mappings = mappings;
         this.printStream = printStream;
         lucene = new Lucene(this.mappings);
+    }
+
+    public LuceneRecords(final Directory directory, final IndexWriter writer) throws IOException {
+        this(directory, writer, new Mappings(), new PrintStream(nullOutputStream()));
     }
 
     public Sequence<Record> get(final Keyword recordName) {

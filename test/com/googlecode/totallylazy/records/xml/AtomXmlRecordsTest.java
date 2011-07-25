@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.is;
 
 public class AtomXmlRecordsTest {
     private static final Keyword<Object> entries = Keyword.keyword("/feed/entry");
-    private static final Keyword<String> id = Keyword.keyword("id", String.class);
+    private static final Keyword<Integer> id = Keyword.keyword("id", Integer.class);
     private static final Keyword<String> link = Keyword.keyword("link/@href", String.class);
     private static final Keyword<String> content = Keyword.keyword("content", String.class);
     private static final Keyword<Date> updated = Keyword.keyword("updated", Date.class);
@@ -30,7 +30,7 @@ public class AtomXmlRecordsTest {
         assertThat(record.get(updated), is(date(2011, 7, 19, 12, 43, 26)));
     }
 
-    public static final String ID = "urn:uuid:1234";
+    public static final Integer ID = 1234;
 
     private static final String CONTENT = "<event>" +
             "<source>blah</source>" +
