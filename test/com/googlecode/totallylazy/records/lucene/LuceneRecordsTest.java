@@ -29,10 +29,11 @@ public class LuceneRecordsTest extends AbstractRecordsTests {
     public static final Analyzer ANALYZER = new StandardAnalyzer(VERSION);
     private Directory directory;
     private IndexWriter writer;
+    private File path;
 
     @Override
     protected Records createRecords() throws Exception {
-        File path = temporaryDirectory();
+        path = temporaryDirectory();
         System.out.println("path = " + path);
         directory = new NIOFSDirectory(path);
         writer = new IndexWriter(directory, new IndexWriterConfig(VERSION, ANALYZER));
@@ -43,6 +44,7 @@ public class LuceneRecordsTest extends AbstractRecordsTests {
     public void cleanUp() throws IOException {
         writer.close();
         directory.close();
+        path.delete();
     }
 
     @Test
