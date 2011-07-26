@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.records.xml;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.LazyException;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
@@ -27,11 +28,11 @@ import java.io.StringWriter;
 import java.util.Iterator;
 
 public class Xml {
-    public static String selectContents(final Node node, final String expression)  {
+    public static String selectContents(final Node node, final String expression) {
         return contents(selectNodes(node, expression));
     }
 
-    public static Sequence<Node> selectNodes(Node node, String expression)  {
+    public static Sequence<Node> selectNodes(Node node, String expression) {
         try {
             return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
         } catch (XPathExpressionException e) {
@@ -104,8 +105,12 @@ public class Xml {
         return writer.toString();
     }
 
-    public static Transformer transformer() throws TransformerConfigurationException {
-        return TransformerFactory.newInstance().newTransformer();
+    public static Transformer transformer(Pair<String, Object>... attributes) throws TransformerConfigurationException {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        for (Pair<String, Object> attribute : attributes) {
+            transformerFactory.setAttribute(attribute.first(), attribute.second());
+        }
+        return transformerFactory.newTransformer();
     }
 
 
@@ -134,5 +139,13 @@ public class Xml {
                 return node.getParentNode().removeChild(node);
             }
         };
+    }
+
+    public static String format(Node node) throws Exception {
+        Transformer transformer = transformer(Pair.<String, Object>pair("indent-number", 4));
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        StringWriter writer = new StringWriter();
+        transformer.transform(new DOMSource(node), new StreamResult(writer));
+        return writer.toString();
     }
 }

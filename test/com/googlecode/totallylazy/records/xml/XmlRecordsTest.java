@@ -25,6 +25,6 @@ public class XmlRecordsTest extends AbstractRecordsTests{
 
     @Test
     public void showGeneratedXml() throws Exception {
-        System.out.println(" = " + Xml.contents(document.getDocumentElement()));
+        System.out.println(Xml.format(document.getDocumentElement()));
     }
 }
