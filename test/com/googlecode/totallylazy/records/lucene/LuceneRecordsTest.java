@@ -11,10 +11,13 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.Version;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 import static com.googlecode.totallylazy.Files.temporaryDirectory;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
@@ -24,14 +27,22 @@ public class LuceneRecordsTest extends AbstractRecordsTests {
 
     public static final Version VERSION = Version.LUCENE_33;
     public static final Analyzer ANALYZER = new StandardAnalyzer(VERSION);
+    private Directory directory;
+    private IndexWriter writer;
 
     @Override
     protected Records createRecords() throws Exception {
         File path = temporaryDirectory();
         System.out.println("path = " + path);
-        final Directory directory = new NIOFSDirectory(path);
-        IndexWriter writer = new IndexWriter(directory, new IndexWriterConfig(VERSION, ANALYZER));
+        directory = new NIOFSDirectory(path);
+        writer = new IndexWriter(directory, new IndexWriterConfig(VERSION, ANALYZER));
         return new LuceneRecords(directory, writer, new Mappings(), System.out);
+    }
+
+    @After
+    public void cleanUp() throws IOException {
+        writer.close();
+        directory.close();
     }
 
     @Test
@@ -43,6 +54,10 @@ public class LuceneRecordsTest extends AbstractRecordsTests {
     @Override
     @Ignore("Not working yet")
     public void supportsUri() throws Exception {
+    }
 
+    @Override
+    @Ignore("Not working yet")
+    public void supportsJoin() throws Exception {
     }
 }

@@ -9,10 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Arrays.empty;
 import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.records.memory.MemoryRecords.updateValues;
+import static com.googlecode.totallylazy.records.RecordCallables.updateValues;
 
 public abstract class AbstractRecords implements Records{
     private final Map<Keyword, List<Keyword<?>>> definitions = new HashMap<Keyword, List<Keyword<?>>>();
