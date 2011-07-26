@@ -8,6 +8,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.URI;
 import java.util.Date;
 
 import static com.googlecode.totallylazy.Callables.ascending;
@@ -27,6 +28,7 @@ import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
+import static com.googlecode.totallylazy.URLs.uri;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
 import static com.googlecode.totallylazy.records.Aggregate.average;
@@ -47,6 +49,9 @@ public abstract class AbstractRecordsTests {
     protected static Keyword<Date> dob = keyword("dob", Date.class);
     protected static Keyword<String> firstName = keyword("firstName", String.class);
     protected static Keyword<String> lastName = keyword("lastName", String.class);
+    protected static Keyword<URI> isbn = keyword("isbn", URI.class);
+    public static final URI zenIsbn = uri("urn:isbn:0099322617");
+
     protected Records records;
 
     protected abstract Records createRecords() throws Exception;
@@ -55,15 +60,22 @@ public abstract class AbstractRecordsTests {
     public void addRecords() throws Exception {
         this.records = createRecords();
         records.remove(user);
-        records.define(user, age, dob, firstName, lastName);
+        records.define(user, age, dob, firstName, lastName, isbn);
         addUsers(records);
     }
 
     private void addUsers(Records records) {
         records.add(user,
-                record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)),
-                record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 1, 10)),
-                record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 1, 10)));
+                record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)).set(isbn, zenIsbn),
+                record().set(firstName, "matt").set(lastName, "savage").set(age, 12).set(dob, date(1975, 1, 10)).set(isbn, uri("urn:isbn:0140289208")),
+                record().set(firstName, "bob").set(lastName, "martin").set(age, 11).set(dob, date(1976, 1, 10)).set(isbn, uri("urn:isbn:0132350882")));
+    }
+    
+    @Test
+    public void supportsUri() throws Exception {
+        Sequence<Record> results = records.get(user).filter(where(isbn, is(zenIsbn))).realise();
+        System.out.println("results = " + results);
+        assertThat(results.map(firstName), hasExactly("dan"));
     }
 
     @Test
@@ -116,7 +128,7 @@ public abstract class AbstractRecordsTests {
 
     @Test
     public void supportsSelectingAllKeywords() throws Exception {
-        assertThat(records.get(user).first().fields().size(), NumberMatcher.is(4));
+        assertThat(records.get(user).first().fields().size(), NumberMatcher.is(5));
     }
 
     @Test
@@ -158,7 +170,7 @@ public abstract class AbstractRecordsTests {
         Sequence<Record> users = records.get(user);
         Sequence<String> names = users.filter(where(age, is(12)).and(where(lastName, is("savage"))).
                 or(where(firstName, is("dan"))
-                        )).map(firstName);
+                )).map(firstName);
         assertThat(names, containsInAnyOrder("dan", "matt"));
     }
 

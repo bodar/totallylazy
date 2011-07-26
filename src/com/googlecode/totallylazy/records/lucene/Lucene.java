@@ -4,12 +4,33 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.predicates.*;
+import com.googlecode.totallylazy.Value;
+import com.googlecode.totallylazy.predicates.AndPredicate;
+import com.googlecode.totallylazy.predicates.Between;
+import com.googlecode.totallylazy.predicates.ContainsPredicate;
+import com.googlecode.totallylazy.predicates.EndsWithPredicate;
+import com.googlecode.totallylazy.predicates.EqualsPredicate;
+import com.googlecode.totallylazy.predicates.GreaterThan;
+import com.googlecode.totallylazy.predicates.GreaterThanOrEqualTo;
+import com.googlecode.totallylazy.predicates.InPredicate;
+import com.googlecode.totallylazy.predicates.LessThan;
+import com.googlecode.totallylazy.predicates.LessThanOrEqualTo;
+import com.googlecode.totallylazy.predicates.Not;
+import com.googlecode.totallylazy.predicates.NotNullPredicate;
+import com.googlecode.totallylazy.predicates.NullPredicate;
+import com.googlecode.totallylazy.predicates.OrPredicate;
+import com.googlecode.totallylazy.predicates.StartsWithPredicate;
+import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.PrefixQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.WildcardQuery;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
@@ -100,23 +121,23 @@ public class Lucene {
         Class aClass = keyword.forClass();
 
         if (predicate instanceof EqualsPredicate) {
-            return equalTo(keyword, ((EqualsPredicate) predicate).value());
+            return equalTo(keyword, ((Value) predicate).value());
         }
 
         if (predicate instanceof GreaterThan) {
-            return greaterThan(keyword, ((GreaterThan) predicate).value());
+            return greaterThan(keyword, ((Value) predicate).value());
         }
 
         if (predicate instanceof GreaterThanOrEqualTo) {
-            return greaterThanOrEqual(keyword, ((GreaterThanOrEqualTo) predicate).value());
+            return greaterThanOrEqual(keyword, ((Value) predicate).value());
         }
 
         if (predicate instanceof LessThan) {
-            return lessThan(keyword, ((LessThan) predicate).value());
+            return lessThan(keyword, ((Value) predicate).value());
         }
 
         if (predicate instanceof LessThanOrEqualTo) {
-            return lessThanOrEqual(keyword, ((LessThanOrEqualTo) predicate).value());
+            return lessThanOrEqual(keyword, ((Value) predicate).value());
         }
         if (predicate instanceof Between) {
             Object lower = ((Between) predicate).lower();

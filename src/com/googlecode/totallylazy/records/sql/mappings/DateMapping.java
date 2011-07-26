@@ -14,4 +14,8 @@ public class DateMapping implements Mapping<Date>{
     public void setValue(PreparedStatement statement, Integer index, Date date) throws SQLException {
         statement.setTimestamp(index, new Timestamp(date.getTime()));
     }
+
+    public String type() {
+        return "timestamp";
+    }
 }

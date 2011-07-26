@@ -16,4 +16,8 @@ public class IntegerMapping implements Mapping<Integer> {
     public void setValue(PreparedStatement statement, Integer index, Integer value) throws SQLException {
         statement.setInt(index, value);
     }
+
+    public String type() {
+        return "integer";
+    }
 }

@@ -47,7 +47,7 @@ public class LuceneRecords extends AbstractRecords {
     }
 
     public Sequence<Record> get(final Keyword recordName) {
-        return new RecordSequence(lucene, directory, record(recordName), mappings.asRecord(definitions(recordName)), printStream);
+        return query(record(recordName), definitions(recordName).toArray(Keyword.class));
     }
 
     public boolean exists(Keyword recordName) {

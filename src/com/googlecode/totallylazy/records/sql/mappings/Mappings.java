@@ -2,8 +2,8 @@ package com.googlecode.totallylazy.records.sql.mappings;
 
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.records.Keyword;
 
+import java.net.URI;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,6 +24,7 @@ public class Mappings {
         add(Integer.class, new IntegerMapping());
         add(Long.class, new LongMapping());
         add(String.class, new StringMapping());
+        add(URI.class, new UriMapping());
         add(Object.class, new ObjectMapping());
     }
 
@@ -50,4 +51,10 @@ public class Mappings {
         }
     }
 
+    public String getType(Class<?> aClass) {
+        if (map.containsKey(aClass)) {
+            return map.get(aClass).type();
+        }
+        return map.get(Object.class).type();
+    }
 }

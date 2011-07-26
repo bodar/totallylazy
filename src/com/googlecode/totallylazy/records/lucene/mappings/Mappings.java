@@ -12,6 +12,7 @@ import com.googlecode.totallylazy.records.lucene.Lucene;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,8 @@ public class Mappings {
         add(Date.class, new DateMapping());
         add(Integer.class, new IntegerMapping());
         add(Long.class, new LongMapping());
+        add(String.class, new StringMapping());
+        add(URI.class, new UriMapping());
         add(Object.class, new ObjectMapping());
     }
 

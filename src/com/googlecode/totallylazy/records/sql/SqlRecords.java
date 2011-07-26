@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy.records.sql;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.LazyException;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
@@ -10,17 +14,16 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
 import java.io.PrintStream;
-import java.sql.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import static com.googlecode.totallylazy.Closeables.using;
-import static com.googlecode.totallylazy.Runnables.doNothing;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static java.lang.String.format;
 
@@ -42,12 +45,6 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     public RecordSequence get(Keyword recordName) {
         return new RecordSequence(this, SqlQuery.query(recordName, definitions(recordName)), logger);
     }
-
-    private static final Map<Class, String> typeMap = new HashMap<Class, String>() {{
-        put(String.class, "varchar(256)");
-        put(Date.class, "timestamp");
-        put(Integer.class, "integer");
-    }};
 
     public void define(Keyword recordName, Keyword<?>... fields) {
         super.define(recordName, fields);
@@ -88,10 +85,10 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         };
     }
 
-    private static Callable1<? super Keyword<?>, String> asColumn() {
+    private Callable1<? super Keyword<?>, String> asColumn() {
         return new Callable1<Keyword<?>, String>() {
             public String call(Keyword<?> keyword) throws Exception {
-                return format("%s %s", keyword, typeMap.get(keyword.forClass()));
+                return format("%s %s", keyword, mappings.getType(keyword.forClass()));
             }
         };
     }

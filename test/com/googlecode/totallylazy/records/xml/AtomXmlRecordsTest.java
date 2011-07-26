@@ -5,9 +5,11 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 import org.junit.Test;
 
+import java.net.URI;
 import java.util.Date;
 
 import static com.googlecode.totallylazy.Dates.date;
+import static com.googlecode.totallylazy.URLs.uri;
 import static com.googlecode.totallylazy.records.xml.Xml.load;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -15,7 +17,7 @@ import static org.hamcrest.Matchers.is;
 public class AtomXmlRecordsTest {
     private static final Keyword<Object> entries = Keyword.keyword("/feed/entry");
     private static final Keyword<Integer> id = Keyword.keyword("id", Integer.class);
-    private static final Keyword<String> link = Keyword.keyword("link/@href", String.class);
+    private static final Keyword<URI> link = Keyword.keyword("link/@href", URI.class);
     private static final Keyword<String> content = Keyword.keyword("content", String.class);
     private static final Keyword<Date> updated = Keyword.keyword("updated", Date.class);
 
@@ -37,7 +39,7 @@ public class AtomXmlRecordsTest {
             "<payload>foo</payload>" +
             "</event>";
 
-    private static final String LINK = "http://localhost:10010/somePath";
+    private static final URI LINK = uri("http://localhost:10010/somePath");
 
     private static final String XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
             "<feed>" +

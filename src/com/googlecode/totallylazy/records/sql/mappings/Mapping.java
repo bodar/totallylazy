@@ -8,4 +8,6 @@ public interface Mapping<T> {
     T getValue(ResultSet resultSet, Integer index) throws SQLException;
 
     void setValue(PreparedStatement statement, Integer index, T instance) throws SQLException;
+
+    String type();
 }
