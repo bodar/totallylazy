@@ -132,6 +132,14 @@ public final class Callables {
         };
     }
 
+    public static <F, S, R> Callable1<? super Pair<F, S>,Pair<R, S>> first(final Callable1<F, R> firstCallable) {
+        return new Callable1<Pair<F, S>, Pair<R, S>>() {
+            public Pair<R, S> call(Pair<F, S> pair) throws Exception {
+                return Pair.pair(firstCallable.call(pair.first()), pair.second());
+            }
+        };
+    }
+
     public static <T> Callable1<? super Second<T>, T> second(Class<T> aClass) {
         return second();
     }
@@ -140,6 +148,14 @@ public final class Callables {
         return new Callable1<Second<T>, T>() {
             public final T call(final Second<T> second) throws Exception {
                 return second.second();
+            }
+        };
+    }
+
+    public static <F, S, R> Callable1<? super Pair<F, S>,Pair<F, R>> second(final Callable1<S, R> secondCallable) {
+        return new Callable1<Pair<F, S>, Pair<F, R>>() {
+            public Pair<F, R> call(Pair<F, S> pair) throws Exception {
+                return Pair.pair(pair.first(), secondCallable.call(pair.second()));
             }
         };
     }
