@@ -13,12 +13,13 @@ public class XmlRecordsTest extends AbstractRecordsTests{
     private Document document;
 
     public XmlRecordsTest() {
-        user = Keyword.keyword("/users/user");
+        people = Keyword.keyword("/data/user");
+        books = Keyword.keyword("/data/book");
     }
 
     @Override
     protected Records createRecords() throws Exception {
-        document = load("<users/>");
+        document = load("<data/>");
         return new XmlRecords(document);
     }
 

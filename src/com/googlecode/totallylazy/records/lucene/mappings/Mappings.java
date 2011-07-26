@@ -26,7 +26,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.Keywords.name;
-import static com.googlecode.totallylazy.records.memory.MemoryRecords.updateValues;
+import static com.googlecode.totallylazy.records.RecordCallables.updateValues;
 
 public class Mappings {
     private final Map<Class, Mapping<Object>> map = new HashMap<Class, Mapping<Object>>();

@@ -1,13 +1,12 @@
 package com.googlecode.totallylazy.records.memory;
 
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.RecordCallables;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +19,7 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static com.googlecode.totallylazy.records.RecordCallables.updateValues;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 
 public class MemoryRecords extends AbstractRecords {
@@ -85,12 +85,4 @@ public class MemoryRecords extends AbstractRecords {
         return count;
     }
 
-    @SuppressWarnings({"unchecked"})
-    public static Callable2<? super Record, ? super Pair<Keyword, Object>, Record> updateValues() {
-        return new Callable2<Record, Pair<Keyword, Object>, Record>() {
-            public Record call(Record record, Pair<Keyword, Object> field) throws Exception {
-                return record.set(field.first(), field.second());
-            }
-        };
-    }
 }
