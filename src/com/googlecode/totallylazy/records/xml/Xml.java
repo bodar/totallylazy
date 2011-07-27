@@ -126,7 +126,6 @@ public class Xml {
 
     public static Sequence<Node> remove(final Node root, final String expression) {
         return remove(selectNodes(root, expression));
-
     }
 
     public static Sequence<Node> remove(final Sequence<Node> nodes) {

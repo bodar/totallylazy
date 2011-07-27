@@ -37,6 +37,6 @@ public abstract class AbstractStringMapping<T> extends AbstractMapping<T> {
 
     @Override
     protected Query newRange(String name, T lower, T upper, boolean minInclusive, boolean maxInclusive) throws Exception {
-        return new TermRangeQuery(name, lower == null ? null : escape(toString(lower)), upper == null ? null : escape(toString(upper)), maxInclusive, maxInclusive);
+        return new TermRangeQuery(name, lower == null ? null : toString(lower), upper == null ? null : toString(upper), maxInclusive, maxInclusive);
     }
 }
