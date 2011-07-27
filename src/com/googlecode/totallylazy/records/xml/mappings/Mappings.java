@@ -35,9 +35,4 @@ public class Mappings {
         }
         return map.get(aClass);
     }
-
-    private Keyword getKeyword(String name, Sequence<Keyword> definitions) {
-        return definitions.find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
-    }
-
 }

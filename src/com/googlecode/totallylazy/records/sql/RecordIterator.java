@@ -4,6 +4,8 @@ import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.ParameterisedExpression;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.RecordCallables;
+import com.googlecode.totallylazy.records.Records;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
 import java.io.Closeable;
@@ -22,6 +24,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
 import static com.googlecode.totallylazy.records.Keywords.name;
 import static com.googlecode.totallylazy.records.MapRecord.record;
+import static com.googlecode.totallylazy.records.RecordCallables.getKeyword;
 import static java.lang.String.format;
 
 public class RecordIterator extends StatefulIterator<Record> implements Closeable {
@@ -52,7 +55,7 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
         final ResultSetMetaData metaData = resultSet.getMetaData();
         for (Integer index : iterate(increment(), 1).take(metaData.getColumnCount()).safeCast(Integer.class)) {
             final String name = metaData.getColumnName(index);
-            Keyword keyword = sql.keywords().find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
+            Keyword keyword = getKeyword(name, sql.keywords());
             record.set(keyword, mappings.getValue(resultSet, index, keyword.forClass()));
         }
 

@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.MapRecord;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.RecordCallables;
 import com.googlecode.totallylazy.records.lucene.Lucene;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
@@ -25,7 +26,6 @@ import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
 import static com.googlecode.totallylazy.records.Keyword.keyword;
-import static com.googlecode.totallylazy.records.Keywords.name;
 import static com.googlecode.totallylazy.records.RecordCallables.updateValues;
 
 public class Mappings {
@@ -44,6 +44,13 @@ public class Mappings {
         map.put(type, (Mapping<Object>) mapping);
     }
 
+    public Mapping<Object> get(final Class aClass) {
+        if(!map.containsKey(aClass)) {
+            return map.get(Object.class);
+        }
+        return map.get(aClass);
+    }
+
     public Callable1<? super Document, Record> asRecord(final Sequence<Keyword> definitions) {
         return new Callable1<Document, Record>() {
             public Record call(Document document) throws Exception {
@@ -59,21 +66,10 @@ public class Mappings {
         return new Callable1<Fieldable, Pair<Keyword, Object>>() {
             public Pair<Keyword, Object> call(Fieldable fieldable) throws Exception {
                 String name = fieldable.name();
-                Keyword keyword = getKeyword(name, definitions);
+                Keyword keyword = RecordCallables.getKeyword(name, definitions);
                 return pair(keyword, get(keyword.forClass()).toValue(fieldable));
             }
         };
-    }
-
-    public Mapping<Object> get(final Class aClass) {
-        if(!map.containsKey(aClass)) {
-            return map.get(Object.class);
-        }
-        return map.get(aClass);
-    }
-
-    private Keyword getKeyword(String name, Sequence<Keyword> definitions) {
-        return definitions.find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
     }
 
     public Callable1<? super Pair<Keyword, Object>, Fieldable> asField(final Sequence<Keyword> definitions) {
@@ -84,7 +80,7 @@ public class Mappings {
                 }
 
                 String name = pair.first().toString();
-                Keyword keyword = getKeyword(name, definitions);
+                Keyword keyword = RecordCallables.getKeyword(name, definitions);
                 return get(keyword.forClass()).toField(name, pair.second());
             }
         };

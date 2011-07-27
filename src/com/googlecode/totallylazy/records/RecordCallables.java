@@ -3,6 +3,12 @@ package com.googlecode.totallylazy.records;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
+
+import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
+import static com.googlecode.totallylazy.records.Keyword.keyword;
+import static com.googlecode.totallylazy.records.Keywords.name;
 
 public class RecordCallables {
     @SuppressWarnings({"unchecked"})
@@ -20,5 +26,9 @@ public class RecordCallables {
                 return other.fields().fold(record, updateValues());
             }
         };
+    }
+
+    public static Keyword getKeyword(String name, Sequence<Keyword> definitions) {
+        return definitions.find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
     }
 }
