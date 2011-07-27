@@ -50,6 +50,5 @@ public class Join implements Callable1<Record, Iterable<Record>> {
                 }
             };
         }
-
     }
 }
