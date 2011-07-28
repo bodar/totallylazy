@@ -50,10 +50,6 @@ public class LuceneRecords extends AbstractRecords {
         return query(record(recordName), definitions(recordName).toArray(Keyword.class));
     }
 
-    public boolean exists(Keyword recordName) {
-        return true;
-    }
-
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
         try {
             Number count = 0;

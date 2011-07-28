@@ -3,8 +3,6 @@ package com.googlecode.totallylazy.records;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.GenericType;
 
-import java.util.concurrent.Callable;
-
 public class Keyword<T> implements Callable1<Record, T>, GenericType {
     private final String value;
     private final Class<T> aClass;
@@ -13,7 +11,7 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
         this.value = value;
         this.aClass = aClass;
     }
-    
+
     public static Keyword<Object> keyword(String value) {
         return new Keyword<Object>(value, Object.class);
     }
@@ -53,4 +51,7 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
         return parts[parts.length - 1];
     }
 
+    public Keyword<T> asAlias(Keyword<T> keyword) {
+        throw new UnsupportedOperationException();
+    }
 }

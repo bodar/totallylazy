@@ -98,9 +98,7 @@ public abstract class AbstractRecordsTests {
 
     @Test
     public void supportsUri() throws Exception {
-        Sequence<Record> results = records.get(people).filter(where(isbn, is(zenIsbn))).realise();
-        System.out.println("results = " + results);
-        assertThat(results.map(firstName), hasExactly("dan"));
+        assertThat(records.get(people).filter(where(isbn, is(zenIsbn))).realise().map(firstName), hasExactly("dan"));
     }
 
     @Test

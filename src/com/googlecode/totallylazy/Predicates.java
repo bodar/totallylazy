@@ -24,6 +24,14 @@ import java.util.Collection;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Predicates {
+    public static <T> LogicalPredicate<T> all() {
+        return all();
+    }
+
+    public static <T> LogicalPredicate<T> all(Class<T> aClass) {
+        return always();
+    }
+
     public static <T> LogicalPredicate<T> always(Class<T> aClass) {
         return always();
     }
