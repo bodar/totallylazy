@@ -46,6 +46,10 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         return new RecordSequence(this, SqlQuery.query(recordName, definitions(recordName)), logger);
     }
 
+    public RecordIterator query(final ParameterisedExpression value, final Sequence<Keyword> definitions) {
+        return new RecordIterator(connection, mappings, value, definitions, logger);
+    }
+
     public void define(Keyword recordName, Keyword<?>... fields) {
         super.define(recordName, fields);
         if (exists(recordName)) {
@@ -141,10 +145,6 @@ public class SqlRecords extends AbstractRecords implements Queryable {
             throw new LazyException(e);
         }
 
-    }
-
-    public RecordIterator query(final ParameterisedExpression value) {
-        return new RecordIterator(connection, mappings, value, logger);
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {

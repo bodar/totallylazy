@@ -43,6 +43,10 @@ public class SqlQuery {
         return String.format(String.format("SQL:'%s' VALUES:'%s'", pair.expression(), pair.parameters()));
     }
 
+    public Sequence<Keyword> select() {
+        return select;
+    }
+
     public Keyword table() {
         return table;
     }
@@ -50,7 +54,7 @@ public class SqlQuery {
     public ParameterisedExpression parameterisedExpression() {
         final Pair<String, Sequence<Object>> whereClause = Sql.whereClause(where);
         String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause(), table, whereClause.first(), Sql.orderByClause(comparator));
-        return new ParameterisedExpression(select, sql, whereClause.second());
+        return new ParameterisedExpression(sql, whereClause.second());
     }
 
     private String selectClause() {

@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sets;
@@ -11,8 +10,6 @@ import com.googlecode.totallylazy.records.Record;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Set;
-
-import static java.lang.String.format;
 
 class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
     private final Callable1<? super Record, T> callable;
@@ -32,7 +29,7 @@ class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
     }
 
     private Iterator<T> execute(final SqlQuery sqlQuery) {
-        return Iterators.map(queryable.query(sqlQuery.parameterisedExpression()), callable);
+        return Iterators.map(queryable.query(sqlQuery.parameterisedExpression(), sqlQuery.select()), callable);
     }
 
     public SqlQuery query() {
