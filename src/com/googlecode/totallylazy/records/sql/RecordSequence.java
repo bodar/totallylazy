@@ -33,7 +33,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     }
 
     private Iterator<Record> execute(final SqlQuery sqlQuery) {
-        return queryable.query(sqlQuery.parameterisedExpression(), sqlQuery.select());
+        return queryable.query(sqlQuery.expression(), sqlQuery.select());
     }
 
     @Override
@@ -73,7 +73,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     public <S> S reduce(Callable2<? super S, ? super Record, S> callable) {
         try {
             SqlQuery query = sqlQuery.reduce(callable);
-            return (S) queryable.query(query.parameterisedExpression(), query.select()).next();
+            return (S) queryable.query(query.expression(), query.select()).next();
         } catch (UnsupportedOperationException ex) {
             logger.println(format("Warning: Unsupported Callable2 %s dropping down to client side sequence functionality", callable));
             return super.reduce(callable);
@@ -83,7 +83,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
     @Override
     public Number size() {
         SqlQuery count = sqlQuery.count();
-        return (Number) queryable.query(count.parameterisedExpression(), count.select()).next().fields().head().second();
+        return (Number) queryable.query(count.expression(), count.select()).next().fields().head().second();
     }
 
     @Override

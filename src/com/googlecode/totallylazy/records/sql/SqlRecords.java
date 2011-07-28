@@ -23,6 +23,8 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
+import static com.googlecode.totallylazy.records.sql.Expression.expression;
+import static com.googlecode.totallylazy.records.sql.Sql.toSql;
 import static java.lang.String.format;
 
 public class SqlRecords extends AbstractRecords implements Queryable {
@@ -119,21 +121,16 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        Expression where = Sql.toSql(predicate);
-        final String sql = format("update %s set %s where %s",
-                recordName, fields.toString("", "=?,", "=?"), where.first());
-        return update(sql, record.getValuesFor(fields).join(where.second()));
+        Expression where = toSql(predicate);
+        String sql = format("update %s set %s where %s", recordName, fields.toString("", "=?,", "=?"), where.first());
+        return update(expression(sql, record.getValuesFor(fields).join(where.second())));
     }
 
-    public Number update(String expression, Object... parameters) {
-        return update(expression, sequence(parameters));
-    }
-
-    public Number update(String expression, final Sequence<Object> parameters) {
+    public Number update(final Expression expression) {
         try {
-            Number rowCount = using(connection.prepareStatement(expression), new Callable1<PreparedStatement, Number>() {
+            Number rowCount = using(connection.prepareStatement(expression.expression()), new Callable1<PreparedStatement, Number>() {
                 public Number call(PreparedStatement statement) throws Exception {
-                    mappings.addValues(statement, parameters);
+                    mappings.addValues(statement, expression.parameters());
                     return statement.executeUpdate();
                 }
             });
@@ -142,21 +139,19 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         } catch (SQLException e) {
             throw new LazyException(e);
         }
-
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        Expression where = Sql.toSql(predicate);
-        final String sql = format("delete from %s where %s",
-                recordName, where.first());
-        return update(sql, where.second());
+        Expression where = toSql(predicate);
+        final String sql = format("delete from %s where %s", recordName, where.first());
+        return update(expression(sql, where.second()));
     }
 
     public Number remove(Keyword recordName) {
-        if(!exists(recordName)){
+        if (!exists(recordName)) {
             return 0;
         }
-        return update(format("delete from %s", recordName));
+        return update(expression(format("delete from %s", recordName)));
     }
 
 }

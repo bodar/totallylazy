@@ -13,8 +13,8 @@ public class Expression extends Pair<String, Sequence<Object>> {
         super(expression, parameters);
     }
 
-    public static Expression expression(String expression){
-        return new Expression(expression, Sequences.<Object>empty());
+    public static Expression expression(String expression, Object... parameters){
+        return new Expression(expression, sequence(parameters));
     }
 
     public static Expression expression(String expression, Sequence<Object> parameters){

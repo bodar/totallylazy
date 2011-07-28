@@ -37,8 +37,8 @@ public class SqlQuery {
 
     @Override
     public String toString() {
-        final Expression pair = parameterisedExpression();
-        return String.format(String.format("SQL:'%s' VALUES:'%s'", pair.expression(), pair.parameters()));
+        final Expression expression = expression();
+        return String.format(String.format("SQL:'%s' VALUES:'%s'", expression.expression(), expression.parameters()));
     }
 
     public Sequence<Keyword> select() {
@@ -49,7 +49,7 @@ public class SqlQuery {
         return table;
     }
 
-    public Expression parameterisedExpression() {
+    public Expression expression() {
         return Sql.toSql(setQuantifier, select, table, where, comparator);
     }
 
