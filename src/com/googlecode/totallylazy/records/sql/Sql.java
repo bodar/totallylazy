@@ -29,6 +29,8 @@ import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.ParameterisedExpression.expression;
+import static com.googlecode.totallylazy.records.ParameterisedExpression.join;
+import static java.lang.String.format;
 
 public class Sql {
     private Sql() {
@@ -65,10 +67,10 @@ public class Sql {
 
     public static <T> ParameterisedExpression toSql(Callable1<? super Record, T> callable) {
         if (callable instanceof Keyword) {
-            return expression(callable.toString(), Sequences.empty());
+            return expression(callable.toString());
         }
         if (callable instanceof SelectCallable) {
-            return expression(sequence(((SelectCallable) callable).keywords()).toString("", ",", ""), Sequences.empty());
+            return expression(sequence(((SelectCallable) callable).keywords()).toString("", ",", ""));
         }
         throw new UnsupportedOperationException("Unsupported callable " + callable);
     }
@@ -91,10 +93,10 @@ public class Sql {
             return expression("( " + pairs.map(first(String.class)).toString("or ") + " ) ", pairs.flatMap(values()));
         }
         if (predicate instanceof NullPredicate) {
-            return expression(" is null ", Sequences.<Object>empty());
+            return expression(" is null ");
         }
         if (predicate instanceof NotNullPredicate) {
-            return expression(" is not null ", Sequences.<Object>empty());
+            return expression(" is not null ");
         }
         if (predicate instanceof EqualsPredicate) {
             return expression("= ? ", getValue(predicate));
@@ -159,57 +161,58 @@ public class Sql {
         };
     }
 
-    public static String asSql(Aggregates aggregates) {
-        return sequence(aggregates.value()).map(new Callable1<Aggregate, String>() {
-            public String call(Aggregate aggregate) throws Exception {
-                return asSql(aggregate);
-            }
-        }).toString();
+    public static ParameterisedExpression asSql(Aggregate aggregate) {
+        return toSql(aggregate.callable(), aggregate.source().name()).join(expression(" as " + aggregate.name()));
     }
 
-    public static String asSql(Aggregate aggregate) {
-        return toSql(aggregate.callable(), aggregate.source().name()) + " as " + aggregate.name();
-    }
-
-    private static String toSql(Callable2<?, ?, ?> callable, String column) {
+    private static ParameterisedExpression toSql(Callable2<?, ?, ?> callable, String column) {
         if(callable instanceof CountNotNull){
-            return String.format("count(%s)", column);
+            return expression(format("count(%s)", column));
         }
         if(callable instanceof Average){
-            return String.format("avg(%s)", column);
+            return expression(format("avg(%s)", column));
         }
         if(callable instanceof Sum){
-            return String.format("sum(%s)", column);
+            return expression(format("sum(%s)", column));
         }
         if(callable instanceof Minimum){
-            return String.format("min(%s)", column);
+            return expression(format("min(%s)", column));
         }
         if(callable instanceof Maximum){
-            return String.format("max(%s)", column);
+            return expression(format("max(%s)", column));
         }
         throw new UnsupportedOperationException();
     }
 
-    public static ParameterisedExpression selectClause(final Sequence<Keyword> select) {
-        return expression(select.map(keywordToSql()).toString(", "));
+    public static ParameterisedExpression selectList(final Sequence<Keyword> select) {
+        Sequence<ParameterisedExpression> expressions = select.map(keywordToExpression());
+        return expression(expressions.map(Callables.<String>first()).toString(", "), expressions.flatMap(values()));
     }
 
-    public static Callable1<Keyword, String> keywordToSql() {
-        return new Callable1<Keyword, String>() {
-            public String call(Keyword keyword) throws Exception {
+    public static Callable1<Keyword, ParameterisedExpression> keywordToExpression() {
+        return new Callable1<Keyword, ParameterisedExpression>() {
+            public ParameterisedExpression call(Keyword keyword) throws Exception {
                 if(keyword instanceof Aggregate){
                     return asSql((Aggregate) keyword);
                 }
-                return keyword.name();
+                return toSql(keyword);
             }
         };
     }
 
     public static ParameterisedExpression toSql(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Sequence<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
-        final ParameterisedExpression selectClause = selectClause(select);
-        final ParameterisedExpression whereClause = whereClause(where);
-        final ParameterisedExpression orderByClause = orderByClause(sort);
-        String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause.first(), table, whereClause.first(), orderByClause.first());
-        return new ParameterisedExpression(sql, Sequences.join(selectClause.second(), whereClause.second(), orderByClause.second()));
+        return join(
+                querySpecification(setQuantifier, select),
+                fromClause(table),
+                whereClause(where),
+                orderByClause(sort));
+    }
+
+    public static ParameterisedExpression querySpecification(SetQuantifier setQuantifier, final Sequence<Keyword> select) {
+        return expression(format("select %s", setQuantifier)).join(selectList(select));
+    }
+
+    public static ParameterisedExpression fromClause(Keyword table) {
+        return expression(format("from %s", table));
     }
 }
