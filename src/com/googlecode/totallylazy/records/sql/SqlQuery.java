@@ -52,8 +52,9 @@ public class SqlQuery {
 
     public ParameterisedExpression parameterisedExpression() {
         final ParameterisedExpression whereClause = Sql.whereClause(where);
-        String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause(), table, whereClause.first(), Sql.orderByClause(comparator));
-        return new ParameterisedExpression(sql, whereClause.second());
+        ParameterisedExpression orderByClause = Sql.orderByClause(comparator);
+        String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause(), table, whereClause.first(), orderByClause.first());
+        return new ParameterisedExpression(sql, whereClause.second().join(orderByClause.second()));
     }
 
     private String selectClause() {

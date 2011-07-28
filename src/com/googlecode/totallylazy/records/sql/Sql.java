@@ -41,14 +41,17 @@ public class Sql {
         return expression("where " + sqlAndValues.map(first(String.class)).toString(" "), sqlAndValues.flatMap(values()));
     }
 
-    public static String orderByClause(Option<Comparator<? super Record>> comparator) {
-        return comparator.map(new Callable1<Comparator<? super Record>, String>() {
-            public String call(Comparator<? super Record> comparator) throws Exception {
-                return "order by " + toSql(comparator);
+    public static ParameterisedExpression orderByClause(Option<Comparator<? super Record>> comparator) {
+        return comparator.map(new Callable1<Comparator<? super Record>, ParameterisedExpression>() {
+            public ParameterisedExpression call(Comparator<? super Record> comparator) throws Exception {
+                return orderByClause(comparator);
             }
-        }).getOrElse("");
+        }).getOrElse(ParameterisedExpression.empty());
     }
 
+    public static ParameterisedExpression orderByClause(Comparator<? super Record> comparator) {
+        return expression("order by " + toSql(comparator));
+    }
 
     public static String toSql(Comparator<? super Record> comparator) {
         if (comparator instanceof AscendingComparator) {
