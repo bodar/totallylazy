@@ -21,9 +21,13 @@ public class RecordCallables {
     }
 
     public static Callable1<? super Record, Record> merge(final Record other) {
+        return merge(other.fields());
+    }
+
+    public static Callable1<? super Record, Record> merge(final Sequence<Pair<Keyword, Object>> fields) {
         return new Callable1<Record, Record>() {
             public Record call(Record record) throws Exception {
-                return other.fields().fold(record, updateValues());
+                return fields.fold(record, updateValues());
             }
         };
     }
