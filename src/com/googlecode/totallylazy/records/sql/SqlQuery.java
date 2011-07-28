@@ -10,7 +10,6 @@ import com.googlecode.totallylazy.records.Aggregate;
 import com.googlecode.totallylazy.records.Aggregates;
 import com.googlecode.totallylazy.records.CountNotNull;
 import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.ParameterisedExpression;
 import com.googlecode.totallylazy.records.Record;
 
 import java.util.Comparator;
@@ -38,7 +37,7 @@ public class SqlQuery {
 
     @Override
     public String toString() {
-        final ParameterisedExpression pair = parameterisedExpression();
+        final Expression pair = parameterisedExpression();
         return String.format(String.format("SQL:'%s' VALUES:'%s'", pair.expression(), pair.parameters()));
     }
 
@@ -50,7 +49,7 @@ public class SqlQuery {
         return table;
     }
 
-    public ParameterisedExpression parameterisedExpression() {
+    public Expression parameterisedExpression() {
         return Sql.toSql(setQuantifier, select, table, where, comparator);
     }
 

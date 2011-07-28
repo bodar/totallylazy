@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.records.sql;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.ParameterisedExpression;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
@@ -25,13 +24,13 @@ import static java.lang.String.format;
 public class RecordIterator extends StatefulIterator<Record> implements Closeable {
     private final Connection connection;
     private final Mappings mappings;
-    private final ParameterisedExpression sql;
+    private final Expression sql;
     private final Sequence<Keyword> definitions;
     private final PrintStream logger;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
-    public RecordIterator(final Connection connection, final Mappings mappings, final ParameterisedExpression sql, final Sequence<Keyword> definitions, final PrintStream logger) {
+    public RecordIterator(final Connection connection, final Mappings mappings, final Expression sql, final Sequence<Keyword> definitions, final PrintStream logger) {
         this.definitions = definitions;
         this.logger = logger;
         this.connection = connection;

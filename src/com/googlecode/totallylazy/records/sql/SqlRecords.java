@@ -7,7 +7,6 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.ParameterisedExpression;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
@@ -45,7 +44,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         return new RecordSequence(this, SqlQuery.query(recordName, definitions(recordName)), logger);
     }
 
-    public RecordIterator query(final ParameterisedExpression value, final Sequence<Keyword> definitions) {
+    public RecordIterator query(final Expression value, final Sequence<Keyword> definitions) {
         return new RecordIterator(connection, mappings, value, definitions, logger);
     }
 
@@ -120,7 +119,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        ParameterisedExpression where = Sql.toSql(predicate);
+        Expression where = Sql.toSql(predicate);
         final String sql = format("update %s set %s where %s",
                 recordName, fields.toString("", "=?,", "=?"), where.first());
         return update(sql, record.getValuesFor(fields).join(where.second()));
@@ -147,7 +146,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        ParameterisedExpression where = Sql.toSql(predicate);
+        Expression where = Sql.toSql(predicate);
         final String sql = format("delete from %s where %s",
                 recordName, where.first());
         return update(sql, where.second());
