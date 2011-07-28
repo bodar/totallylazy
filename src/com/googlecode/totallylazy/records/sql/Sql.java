@@ -50,15 +50,15 @@ public class Sql {
     }
 
     public static ParameterisedExpression orderByClause(Comparator<? super Record> comparator) {
-        return expression("order by " + toSql(comparator));
+        return expression("order by ").join(toSql(comparator));
     }
 
-    public static String toSql(Comparator<? super Record> comparator) {
+    public static ParameterisedExpression toSql(Comparator<? super Record> comparator) {
         if (comparator instanceof AscendingComparator) {
-            return toSql(((AscendingComparator<? super Record, ?>) comparator).callable()).first() + " asc ";
+            return toSql(((AscendingComparator<? super Record, ?>) comparator).callable()).join(expression(" asc "));
         }
         if (comparator instanceof DescendingComparator) {
-            return toSql(((DescendingComparator<? super Record, ?>) comparator).callable()).first() + " desc ";
+            return toSql(((DescendingComparator<? super Record, ?>) comparator).callable()).join(expression(" desc "));
         }
         throw new UnsupportedOperationException("Unsupported comparator " + comparator);
     }
@@ -233,5 +233,13 @@ public class Sql {
                 return keyword.name();
             }
         };
+    }
+
+    public static ParameterisedExpression toSql(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Sequence<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
+        final ParameterisedExpression selectClause = selectClause(select);
+        final ParameterisedExpression whereClause = whereClause(where);
+        final ParameterisedExpression orderByClause = orderByClause(sort);
+        String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause.first(), table, whereClause.first(), orderByClause.first());
+        return new ParameterisedExpression(sql, Sequences.join(selectClause.second(), whereClause.second(), orderByClause.second()));
     }
 }
