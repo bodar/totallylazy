@@ -43,17 +43,13 @@ public class SqlQuery {
         return String.format(String.format("SQL:'%s' VALUES:'%s'", pair.expression(), pair.parameters()));
     }
 
-    public Sql sql() {
-        return new Sql();
-    }
-
     public Keyword table() {
         return table;
     }
 
     public ParameterisedExpression parameterisedExpression() {
-        final Pair<String, Sequence<Object>> whereClause = sql().whereClause(where);
-        String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause(), table, whereClause.first(), sql().orderByClause(comparator));
+        final Pair<String, Sequence<Object>> whereClause = Sql.whereClause(where);
+        String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause(), table, whereClause.first(), Sql.orderByClause(comparator));
         return new ParameterisedExpression(select, sql, whereClause.second());
     }
 
@@ -65,7 +61,7 @@ public class SqlQuery {
         return new Callable1<Keyword, String>() {
             public String call(Keyword keyword) throws Exception {
                 if(keyword instanceof Aggregate){
-                    return sql().asSql((Aggregate) keyword);
+                    return Sql.asSql((Aggregate) keyword);
                 }
                 return keyword.name();
             }

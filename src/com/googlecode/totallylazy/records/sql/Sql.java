@@ -32,14 +32,17 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Sql {
+    private Sql() {
+    }
+
     @SuppressWarnings("unchecked")
-    public Pair<String, Sequence<Object>> whereClause(Sequence<Predicate<? super Record>> where) {
+    public static Pair<String, Sequence<Object>> whereClause(Sequence<Predicate<? super Record>> where) {
         if (where.isEmpty()) return pair("", empty());
         final Sequence<Pair<String, Sequence<Object>>> sqlAndValues = where.map(toSql());
         return pair("where " + sqlAndValues.map(first(String.class)).toString(" "), sqlAndValues.flatMap(values()));
     }
 
-    public String orderByClause(Option<Comparator<? super Record>> comparator) {
+    public static String orderByClause(Option<Comparator<? super Record>> comparator) {
         return comparator.map(new Callable1<Comparator<? super Record>, String>() {
             public String call(Comparator<? super Record> comparator) throws Exception {
                 return "order by " + toSql(comparator);
@@ -48,7 +51,7 @@ public class Sql {
     }
 
 
-    public String toSql(Comparator<? super Record> comparator) {
+    public static String toSql(Comparator<? super Record> comparator) {
         if (comparator instanceof AscendingComparator) {
             return toSql(((AscendingComparator<? super Record, ?>) comparator).callable()).first() + " asc ";
         }
@@ -58,7 +61,7 @@ public class Sql {
         throw new UnsupportedOperationException("Unsupported comparator " + comparator);
     }
 
-    public boolean isSupported(Predicate<? super Record> predicate) {
+    public static boolean isSupported(Predicate<? super Record> predicate) {
         try {
             toSql(predicate);
             return true;
@@ -67,7 +70,7 @@ public class Sql {
         }
     }
 
-    public <T> Pair<String, Sequence<Object>> toSql(Callable1<? super Record, T> callable) {
+    public static <T> Pair<String, Sequence<Object>> toSql(Callable1<? super Record, T> callable) {
         if (callable instanceof Keyword) {
             return pair(callable.toString(), empty());
         }
@@ -78,7 +81,7 @@ public class Sql {
     }
 
     @SuppressWarnings("unchecked")
-    public Pair<String, Sequence<Object>> toSql(Predicate predicate) {
+    public static Pair<String, Sequence<Object>> toSql(Predicate predicate) {
         if (predicate instanceof WherePredicate) {
             WherePredicate wherePredicate = (WherePredicate) predicate;
             final Pair<String, Sequence<Object>> pair = toSql(wherePredicate.predicate());
@@ -143,11 +146,11 @@ public class Sql {
         throw new UnsupportedOperationException("Unsupported predicate " + predicate);
     }
 
-    private Sequence<Object> getValue(Predicate predicate) {
+    private static Sequence<Object> getValue(Predicate predicate) {
         return sequence(((Value) predicate).value());
     }
 
-    public Callable1<? super Pair<String, Sequence<Object>>, Iterable<Object>> values() {
+    public static Callable1<? super Pair<String, Sequence<Object>>, Iterable<Object>> values() {
         return new Callable1<Pair<String, Sequence<Object>>, Iterable<Object>>() {
             public Iterable<Object> call(Pair<String, Sequence<Object>> pair) throws Exception {
                 return pair.second();
@@ -155,7 +158,7 @@ public class Sql {
         };
     }
 
-    public Callable1<? super Predicate, Pair<String, Sequence<Object>>> toSql() {
+    public static Callable1<? super Predicate, Pair<String, Sequence<Object>>> toSql() {
         return new Callable1<Predicate, Pair<String, Sequence<Object>>>() {
             public Pair<String, Sequence<Object>> call(Predicate predicate) throws Exception {
                 return toSql(predicate);
@@ -163,7 +166,7 @@ public class Sql {
         };
     }
 
-    public boolean isSupported(Comparator<? super Record> comparator) {
+    public static boolean isSupported(Comparator<? super Record> comparator) {
         try {
             toSql(comparator);
             return true;
@@ -172,7 +175,7 @@ public class Sql {
         }
     }
 
-    public String asSql(Aggregates aggregates) {
+    public static String asSql(Aggregates aggregates) {
         return sequence(aggregates.value()).map(new Callable1<Aggregate, String>() {
             public String call(Aggregate aggregate) throws Exception {
                 return asSql(aggregate);
@@ -180,11 +183,11 @@ public class Sql {
         }).toString();
     }
 
-    public String asSql(Aggregate aggregate) {
+    public static String asSql(Aggregate aggregate) {
         return toSql(aggregate.callable(), aggregate.source().name()) + " as " + aggregate.name();
     }
 
-    public boolean isSupported(Callable2<?, ?, ?> callable) {
+    public static boolean isSupported(Callable2<?, ?, ?> callable) {
         try{
             if(callable instanceof Aggregates){
                 asSql((Aggregates) callable);
@@ -196,7 +199,7 @@ public class Sql {
         }
     }
 
-    private String toSql(Callable2<?, ?, ?> callable, String column) {
+    private static String toSql(Callable2<?, ?, ?> callable, String column) {
         if(callable instanceof CountNotNull){
             return String.format("count(%s)", column);
         }

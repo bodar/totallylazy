@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy.records.sql;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sets;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
@@ -11,7 +15,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static java.lang.String.format;
 
 public class RecordSequence extends Sequence<Record> implements QuerySequence {
@@ -48,7 +51,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public Sequence<Record> filter(Predicate<? super Record> predicate) {
-        if (sqlQuery.sql().isSupported(predicate)) {
+        if (Sql.isSupported(predicate)) {
             return new RecordSequence(queryable, sqlQuery.where(predicate), logger);
         }
         logger.println(format("Warning: Unsupported Predicate %s dropping down to client side sequence functionality", predicate));
@@ -57,7 +60,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public Sequence<Record> sortBy(Comparator<? super Record> comparator) {
-        if (sqlQuery.sql().isSupported(comparator)) {
+        if (Sql.isSupported(comparator)) {
             return new RecordSequence(queryable, sqlQuery.orderBy(comparator), logger);
         }
         logger.println(format("Warning: Unsupported Comparator %s dropping down to client side sequence functionality", comparator));
@@ -66,7 +69,7 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public <S> S reduce(Callable2<? super S, ? super Record, S> callable) {
-        if(query().sql().isSupported(callable)){
+        if(Sql.isSupported(callable)){
             return (S) queryable.query(sqlQuery.reduce(callable).parameterisedExpression()).next();
         }
         logger.println(format("Warning: Unsupported Callable2 %s dropping down to client side sequence functionality", callable));
