@@ -52,24 +52,10 @@ public class SqlQuery {
 
     public ParameterisedExpression parameterisedExpression() {
         final ParameterisedExpression whereClause = Sql.whereClause(where);
-        ParameterisedExpression orderByClause = Sql.orderByClause(comparator);
-        String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause(), table, whereClause.first(), orderByClause.first());
-        return new ParameterisedExpression(sql, whereClause.second().join(orderByClause.second()));
-    }
-
-    private String selectClause() {
-        return select.map(toSql()).toString(", ");
-    }
-
-    private Callable1<Keyword, String> toSql() {
-        return new Callable1<Keyword, String>() {
-            public String call(Keyword keyword) throws Exception {
-                if(keyword instanceof Aggregate){
-                    return Sql.asSql((Aggregate) keyword);
-                }
-                return keyword.name();
-            }
-        };
+        final ParameterisedExpression selectClause = Sql.selectClause(select);
+        final ParameterisedExpression orderByClause = Sql.orderByClause(comparator);
+        String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause.first(), table, whereClause.first(), orderByClause.first());
+        return new ParameterisedExpression(sql, Sequences.join(selectClause.second(), whereClause.second(), orderByClause.second()));
     }
 
     public static SqlQuery query(Keyword table, Sequence<Keyword> select, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, final SetQuantifier setQuantifier) {
