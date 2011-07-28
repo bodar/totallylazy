@@ -10,6 +10,10 @@ public class ParameterisedExpression extends Pair<String, Sequence<Object>> {
         super(expression, parameters);
     }
 
+    public static ParameterisedExpression expression(String expression){
+        return new ParameterisedExpression(expression, Sequences.<Object>empty());
+    }
+
     public static ParameterisedExpression expression(String expression, Sequence<Object> parameters){
         return new ParameterisedExpression(expression, parameters);
     }
