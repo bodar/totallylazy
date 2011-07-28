@@ -28,8 +28,8 @@ import java.util.Comparator;
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.records.ParameterisedExpression.expression;
-import static com.googlecode.totallylazy.records.ParameterisedExpression.join;
+import static com.googlecode.totallylazy.records.sql.Expression.expression;
+import static com.googlecode.totallylazy.records.sql.Expression.join;
 import static java.lang.String.format;
 
 public class Sql {
@@ -37,25 +37,25 @@ public class Sql {
     }
 
     @SuppressWarnings("unchecked")
-    public static ParameterisedExpression whereClause(Sequence<Predicate<? super Record>> where) {
-        if (where.isEmpty()) return ParameterisedExpression.empty();
-        final Sequence<ParameterisedExpression> sqlAndValues = where.map(toSql());
+    public static Expression whereClause(Sequence<Predicate<? super Record>> where) {
+        if (where.isEmpty()) return Expression.empty();
+        final Sequence<Expression> sqlAndValues = where.map(toSql());
         return expression("where " + sqlAndValues.map(first(String.class)).toString(" "), sqlAndValues.flatMap(values()));
     }
 
-    public static ParameterisedExpression orderByClause(Option<Comparator<? super Record>> comparator) {
-        return comparator.map(new Callable1<Comparator<? super Record>, ParameterisedExpression>() {
-            public ParameterisedExpression call(Comparator<? super Record> comparator) throws Exception {
+    public static Expression orderByClause(Option<Comparator<? super Record>> comparator) {
+        return comparator.map(new Callable1<Comparator<? super Record>, Expression>() {
+            public Expression call(Comparator<? super Record> comparator) throws Exception {
                 return orderByClause(comparator);
             }
-        }).getOrElse(ParameterisedExpression.empty());
+        }).getOrElse(Expression.empty());
     }
 
-    public static ParameterisedExpression orderByClause(Comparator<? super Record> comparator) {
+    public static Expression orderByClause(Comparator<? super Record> comparator) {
         return expression("order by ").join(toSql(comparator));
     }
 
-    public static ParameterisedExpression toSql(Comparator<? super Record> comparator) {
+    public static Expression toSql(Comparator<? super Record> comparator) {
         if (comparator instanceof AscendingComparator) {
             return toSql(((AscendingComparator<? super Record, ?>) comparator).callable()).join(expression(" asc "));
         }
@@ -65,7 +65,7 @@ public class Sql {
         throw new UnsupportedOperationException("Unsupported comparator " + comparator);
     }
 
-    public static <T> ParameterisedExpression toSql(Callable1<? super Record, T> callable) {
+    public static <T> Expression toSql(Callable1<? super Record, T> callable) {
         if (callable instanceof Keyword) {
             return expression(callable.toString());
         }
@@ -76,20 +76,20 @@ public class Sql {
     }
 
     @SuppressWarnings("unchecked")
-    public static ParameterisedExpression toSql(Predicate predicate) {
+    public static Expression toSql(Predicate predicate) {
         if (predicate instanceof WherePredicate) {
             WherePredicate wherePredicate = (WherePredicate) predicate;
-            final ParameterisedExpression pair = toSql(wherePredicate.predicate());
+            final Expression pair = toSql(wherePredicate.predicate());
             return expression(toSql(wherePredicate.callable()).first() + " " + pair.first(), pair.second());
         }
         if (predicate instanceof AndPredicate) {
             AndPredicate andPredicate = (AndPredicate) predicate;
-            final Sequence<ParameterisedExpression> pairs = sequence(andPredicate.predicates()).map(toSql());
+            final Sequence<Expression> pairs = sequence(andPredicate.predicates()).map(toSql());
             return expression("( " + pairs.map(first(String.class)).toString("and ") + " ) ", pairs.flatMap(values()));
         }
         if (predicate instanceof OrPredicate) {
             OrPredicate andPredicate = (OrPredicate) predicate;
-            final Sequence<ParameterisedExpression> pairs = sequence(andPredicate.predicates()).map(toSql());
+            final Sequence<Expression> pairs = sequence(andPredicate.predicates()).map(toSql());
             return expression("( " + pairs.map(first(String.class)).toString("or ") + " ) ", pairs.flatMap(values()));
         }
         if (predicate instanceof NullPredicate) {
@@ -124,7 +124,7 @@ public class Sql {
             InPredicate inPredicate = (InPredicate) predicate;
             Sequence sequence = inPredicate.values();
             if (sequence instanceof QuerySequence) {
-                ParameterisedExpression pair = ((QuerySequence) sequence).query().parameterisedExpression();
+                Expression pair = ((QuerySequence) sequence).query().parameterisedExpression();
                 return expression("in ( " + pair.expression() + ")", pair.parameters());
             }
             return expression(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) sequence);
@@ -145,27 +145,27 @@ public class Sql {
         return sequence(((Value) predicate).value());
     }
 
-    public static Callable1<? super ParameterisedExpression, Iterable<Object>> values() {
-        return new Callable1<ParameterisedExpression, Iterable<Object>>() {
-            public Iterable<Object> call(ParameterisedExpression pair) throws Exception {
+    public static Callable1<? super Expression, Iterable<Object>> values() {
+        return new Callable1<Expression, Iterable<Object>>() {
+            public Iterable<Object> call(Expression pair) throws Exception {
                 return pair.second();
             }
         };
     }
 
-    public static Callable1<? super Predicate, ParameterisedExpression> toSql() {
-        return new Callable1<Predicate, ParameterisedExpression>() {
-            public ParameterisedExpression call(Predicate predicate) throws Exception {
+    public static Callable1<? super Predicate, Expression> toSql() {
+        return new Callable1<Predicate, Expression>() {
+            public Expression call(Predicate predicate) throws Exception {
                 return toSql(predicate);
             }
         };
     }
 
-    public static ParameterisedExpression asSql(Aggregate aggregate) {
+    public static Expression asSql(Aggregate aggregate) {
         return toSql(aggregate.callable(), aggregate.source().name()).join(expression(" as " + aggregate.name()));
     }
 
-    private static ParameterisedExpression toSql(Callable2<?, ?, ?> callable, String column) {
+    private static Expression toSql(Callable2<?, ?, ?> callable, String column) {
         if(callable instanceof CountNotNull){
             return expression(format("count(%s)", column));
         }
@@ -184,14 +184,14 @@ public class Sql {
         throw new UnsupportedOperationException();
     }
 
-    public static ParameterisedExpression selectList(final Sequence<Keyword> select) {
-        Sequence<ParameterisedExpression> expressions = select.map(keywordToExpression());
+    public static Expression selectList(final Sequence<Keyword> select) {
+        Sequence<Expression> expressions = select.map(keywordToExpression());
         return expression(expressions.map(Callables.<String>first()).toString(", "), expressions.flatMap(values()));
     }
 
-    public static Callable1<Keyword, ParameterisedExpression> keywordToExpression() {
-        return new Callable1<Keyword, ParameterisedExpression>() {
-            public ParameterisedExpression call(Keyword keyword) throws Exception {
+    public static Callable1<Keyword, Expression> keywordToExpression() {
+        return new Callable1<Keyword, Expression>() {
+            public Expression call(Keyword keyword) throws Exception {
                 if(keyword instanceof Aggregate){
                     return asSql((Aggregate) keyword);
                 }
@@ -200,7 +200,7 @@ public class Sql {
         };
     }
 
-    public static ParameterisedExpression toSql(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Sequence<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
+    public static Expression toSql(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Sequence<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
         return join(
                 querySpecification(setQuantifier, select),
                 fromClause(table),
@@ -208,11 +208,11 @@ public class Sql {
                 orderByClause(sort));
     }
 
-    public static ParameterisedExpression querySpecification(SetQuantifier setQuantifier, final Sequence<Keyword> select) {
+    public static Expression querySpecification(SetQuantifier setQuantifier, final Sequence<Keyword> select) {
         return expression(format("select %s", setQuantifier)).join(selectList(select));
     }
 
-    public static ParameterisedExpression fromClause(Keyword table) {
+    public static Expression fromClause(Keyword table) {
         return expression(format("from %s", table));
     }
 }
