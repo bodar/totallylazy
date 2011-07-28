@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
@@ -121,7 +120,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        Pair<String, Sequence<Object>> where = Sql.toSql(predicate);
+        ParameterisedExpression where = Sql.toSql(predicate);
         final String sql = format("update %s set %s where %s",
                 recordName, fields.toString("", "=?,", "=?"), where.first());
         return update(sql, record.getValuesFor(fields).join(where.second()));
@@ -148,7 +147,7 @@ public class SqlRecords extends AbstractRecords implements Queryable {
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        Pair<String, Sequence<Object>> where = Sql.toSql(predicate);
+        ParameterisedExpression where = Sql.toSql(predicate);
         final String sql = format("delete from %s where %s",
                 recordName, where.first());
         return update(sql, where.second());

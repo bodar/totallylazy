@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.records.sql;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
@@ -52,7 +51,7 @@ public class SqlQuery {
     }
 
     public ParameterisedExpression parameterisedExpression() {
-        final Pair<String, Sequence<Object>> whereClause = Sql.whereClause(where);
+        final ParameterisedExpression whereClause = Sql.whereClause(where);
         String sql = String.format("select %s %s from %s %s %s", setQuantifier, selectClause(), table, whereClause.first(), Sql.orderByClause(comparator));
         return new ParameterisedExpression(sql, whereClause.second());
     }
