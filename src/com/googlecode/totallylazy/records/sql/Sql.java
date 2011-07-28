@@ -220,4 +220,18 @@ public class Sql {
         throw new UnsupportedOperationException();
     }
 
+    public static ParameterisedExpression selectClause(final Sequence<Keyword> select) {
+        return expression(select.map(keywordToSql()).toString(", "));
+    }
+
+    public static Callable1<Keyword, String> keywordToSql() {
+        return new Callable1<Keyword, String>() {
+            public String call(Keyword keyword) throws Exception {
+                if(keyword instanceof Aggregate){
+                    return asSql((Aggregate) keyword);
+                }
+                return keyword.name();
+            }
+        };
+    }
 }
