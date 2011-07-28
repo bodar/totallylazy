@@ -51,30 +51,33 @@ public class RecordSequence extends Sequence<Record> implements QuerySequence {
 
     @Override
     public Sequence<Record> filter(Predicate<? super Record> predicate) {
-        if (Sql.isSupported(predicate)) {
+        try {
             return new RecordSequence(queryable, sqlQuery.where(predicate), logger);
+        } catch (UnsupportedOperationException ex) {
+            logger.println(format("Warning: Unsupported Predicate %s dropping down to client side sequence functionality", predicate));
+            return super.filter(predicate);
         }
-        logger.println(format("Warning: Unsupported Predicate %s dropping down to client side sequence functionality", predicate));
-        return super.filter(predicate);
     }
 
     @Override
     public Sequence<Record> sortBy(Comparator<? super Record> comparator) {
-        if (Sql.isSupported(comparator)) {
+        try {
             return new RecordSequence(queryable, sqlQuery.orderBy(comparator), logger);
+        } catch (UnsupportedOperationException ex) {
+            logger.println(format("Warning: Unsupported Comparator %s dropping down to client side sequence functionality", comparator));
+            return super.sortBy(comparator);
         }
-        logger.println(format("Warning: Unsupported Comparator %s dropping down to client side sequence functionality", comparator));
-        return super.sortBy(comparator);
     }
 
     @Override
     public <S> S reduce(Callable2<? super S, ? super Record, S> callable) {
-        if(Sql.isSupported(callable)){
+        try {
             SqlQuery query = sqlQuery.reduce(callable);
             return (S) queryable.query(query.parameterisedExpression(), query.select()).next();
+        } catch (UnsupportedOperationException ex) {
+            logger.println(format("Warning: Unsupported Callable2 %s dropping down to client side sequence functionality", callable));
+            return super.reduce(callable);
         }
-        logger.println(format("Warning: Unsupported Callable2 %s dropping down to client side sequence functionality", callable));
-        return super.reduce(callable);
     }
 
     @Override

@@ -63,15 +63,6 @@ public class Sql {
         throw new UnsupportedOperationException("Unsupported comparator " + comparator);
     }
 
-    public static boolean isSupported(Predicate<? super Record> predicate) {
-        try {
-            toSql(predicate);
-            return true;
-        } catch (UnsupportedOperationException e) {
-            return false;
-        }
-    }
-
     public static <T> ParameterisedExpression toSql(Callable1<? super Record, T> callable) {
         if (callable instanceof Keyword) {
             return expression(callable.toString(), Sequences.empty());
@@ -168,15 +159,6 @@ public class Sql {
         };
     }
 
-    public static boolean isSupported(Comparator<? super Record> comparator) {
-        try {
-            toSql(comparator);
-            return true;
-        } catch (UnsupportedOperationException e) {
-            return false;
-        }
-    }
-
     public static String asSql(Aggregates aggregates) {
         return sequence(aggregates.value()).map(new Callable1<Aggregate, String>() {
             public String call(Aggregate aggregate) throws Exception {
@@ -187,18 +169,6 @@ public class Sql {
 
     public static String asSql(Aggregate aggregate) {
         return toSql(aggregate.callable(), aggregate.source().name()) + " as " + aggregate.name();
-    }
-
-    public static boolean isSupported(Callable2<?, ?, ?> callable) {
-        try{
-            if(callable instanceof Aggregates){
-                asSql((Aggregates) callable);
-                return true;
-            }
-            return false;
-        } catch (UnsupportedOperationException e) {
-            return false;
-        }
     }
 
     private static String toSql(Callable2<?, ?, ?> callable, String column) {
