@@ -1,11 +1,10 @@
 package com.googlecode.totallylazy.records.sql;
 
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.ParameterisedExpression;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.RecordCallables;
-import com.googlecode.totallylazy.records.Records;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
 import java.io.Closeable;
@@ -17,12 +16,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.iterate;
-import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static com.googlecode.totallylazy.records.Keyword.keyword;
-import static com.googlecode.totallylazy.records.Keywords.name;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.totallylazy.records.RecordCallables.getKeyword;
 import static java.lang.String.format;
@@ -31,11 +26,13 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
     private final Connection connection;
     private final Mappings mappings;
     private final ParameterisedExpression sql;
+    private final Sequence<Keyword> definitions;
     private final PrintStream logger;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
-    public RecordIterator(final Connection connection, final Mappings mappings, final ParameterisedExpression sql, final PrintStream logger) {
+    public RecordIterator(final Connection connection, final Mappings mappings, final ParameterisedExpression sql, final Sequence<Keyword> definitions, final PrintStream logger) {
+        this.definitions = definitions;
         this.logger = logger;
         this.connection = connection;
         this.sql = sql;
@@ -55,7 +52,7 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
         final ResultSetMetaData metaData = resultSet.getMetaData();
         for (Integer index : iterate(increment(), 1).take(metaData.getColumnCount()).safeCast(Integer.class)) {
             final String name = metaData.getColumnName(index);
-            Keyword keyword = getKeyword(name, sql.keywords());
+            Keyword keyword = getKeyword(name, definitions);
             record.set(keyword, mappings.getValue(resultSet, index, keyword.forClass()));
         }
 
