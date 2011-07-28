@@ -29,7 +29,7 @@ class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
     }
 
     private Iterator<T> execute(final SqlQuery sqlQuery) {
-        return Iterators.map(queryable.query(sqlQuery.parameterisedExpression(), sqlQuery.select()), callable);
+        return Iterators.map(queryable.query(sqlQuery.expression(), sqlQuery.select()), callable);
     }
 
     public SqlQuery query() {
