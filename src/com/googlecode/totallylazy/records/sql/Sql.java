@@ -26,20 +26,19 @@ import com.googlecode.totallylazy.records.*;
 import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Callables.first;
-import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.records.ParameterisedExpression.expression;
 
 public class Sql {
     private Sql() {
     }
 
     @SuppressWarnings("unchecked")
-    public static Pair<String, Sequence<Object>> whereClause(Sequence<Predicate<? super Record>> where) {
-        if (where.isEmpty()) return pair("", empty());
-        final Sequence<Pair<String, Sequence<Object>>> sqlAndValues = where.map(toSql());
-        return pair("where " + sqlAndValues.map(first(String.class)).toString(" "), sqlAndValues.flatMap(values()));
+    public static ParameterisedExpression whereClause(Sequence<Predicate<? super Record>> where) {
+        if (where.isEmpty()) return ParameterisedExpression.empty();
+        final Sequence<ParameterisedExpression> sqlAndValues = where.map(toSql());
+        return expression("where " + sqlAndValues.map(first(String.class)).toString(" "), sqlAndValues.flatMap(values()));
     }
 
     public static String orderByClause(Option<Comparator<? super Record>> comparator) {
@@ -70,78 +69,78 @@ public class Sql {
         }
     }
 
-    public static <T> Pair<String, Sequence<Object>> toSql(Callable1<? super Record, T> callable) {
+    public static <T> ParameterisedExpression toSql(Callable1<? super Record, T> callable) {
         if (callable instanceof Keyword) {
-            return pair(callable.toString(), empty());
+            return expression(callable.toString(), Sequences.empty());
         }
         if (callable instanceof SelectCallable) {
-            return pair(sequence(((SelectCallable) callable).keywords()).toString("", ",", ""), empty());
+            return expression(sequence(((SelectCallable) callable).keywords()).toString("", ",", ""), Sequences.empty());
         }
         throw new UnsupportedOperationException("Unsupported callable " + callable);
     }
 
     @SuppressWarnings("unchecked")
-    public static Pair<String, Sequence<Object>> toSql(Predicate predicate) {
+    public static ParameterisedExpression toSql(Predicate predicate) {
         if (predicate instanceof WherePredicate) {
             WherePredicate wherePredicate = (WherePredicate) predicate;
-            final Pair<String, Sequence<Object>> pair = toSql(wherePredicate.predicate());
-            return pair(toSql(wherePredicate.callable()).first() + " " + pair.first(), pair.second());
+            final ParameterisedExpression pair = toSql(wherePredicate.predicate());
+            return expression(toSql(wherePredicate.callable()).first() + " " + pair.first(), pair.second());
         }
         if (predicate instanceof AndPredicate) {
             AndPredicate andPredicate = (AndPredicate) predicate;
-            final Sequence<Pair<String, Sequence<Object>>> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return pair("( " + pairs.map(first(String.class)).toString("and ") + " ) ", pairs.flatMap(values()));
+            final Sequence<ParameterisedExpression> pairs = sequence(andPredicate.predicates()).map(toSql());
+            return expression("( " + pairs.map(first(String.class)).toString("and ") + " ) ", pairs.flatMap(values()));
         }
         if (predicate instanceof OrPredicate) {
             OrPredicate andPredicate = (OrPredicate) predicate;
-            final Sequence<Pair<String, Sequence<Object>>> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return pair("( " + pairs.map(first(String.class)).toString("or ") + " ) ", pairs.flatMap(values()));
+            final Sequence<ParameterisedExpression> pairs = sequence(andPredicate.predicates()).map(toSql());
+            return expression("( " + pairs.map(first(String.class)).toString("or ") + " ) ", pairs.flatMap(values()));
         }
         if (predicate instanceof NullPredicate) {
-            return pair(" is null ", Sequences.<Object>empty());
+            return expression(" is null ", Sequences.<Object>empty());
         }
         if (predicate instanceof NotNullPredicate) {
-            return pair(" is not null ", Sequences.<Object>empty());
+            return expression(" is not null ", Sequences.<Object>empty());
         }
         if (predicate instanceof EqualsPredicate) {
-            return pair("= ? ", getValue(predicate));
+            return expression("= ? ", getValue(predicate));
         }
         if (predicate instanceof Not) {
-            return pair("<> ? ", sequence(toSql(((Not) predicate).predicate()).second()));
+            return expression("<> ? ", sequence(toSql(((Not) predicate).predicate()).second()));
         }
         if (predicate instanceof GreaterThan) {
-            return pair("> ? ", getValue(predicate));
+            return expression("> ? ", getValue(predicate));
         }
         if (predicate instanceof GreaterThanOrEqualTo) {
-            return pair(">= ? ", getValue(predicate));
+            return expression(">= ? ", getValue(predicate));
         }
         if (predicate instanceof LessThan) {
-            return pair("< ? ", getValue(predicate));
+            return expression("< ? ", getValue(predicate));
         }
         if (predicate instanceof LessThanOrEqualTo) {
-            return pair("<= ? ", getValue(predicate));
+            return expression("<= ? ", getValue(predicate));
         }
         if (predicate instanceof Between) {
             Between between = (Between) predicate;
-            return pair("between ? and ? ", sequence(between.lower(), between.upper()));
+            return expression("between ? and ? ", sequence(between.lower(), between.upper()));
         }
         if (predicate instanceof InPredicate) {
             InPredicate inPredicate = (InPredicate) predicate;
             Sequence sequence = inPredicate.values();
             if (sequence instanceof QuerySequence) {
                 ParameterisedExpression pair = ((QuerySequence) sequence).query().parameterisedExpression();
-                return pair("in ( " + pair.expression() + ")", pair.parameters());
+                return expression("in ( " + pair.expression() + ")", pair.parameters());
             }
-            return pair(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) sequence);
+            return expression(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) sequence);
         }
         if (predicate instanceof StartsWithPredicate) {
-            return pair("like ? ", sequence((Object) (((StartsWithPredicate) predicate).value() + "%%")));
+            return expression("like ? ", sequence((Object) (((StartsWithPredicate) predicate).value() + "%%")));
         }
         if (predicate instanceof EndsWithPredicate) {
-            return pair("like ? ", sequence((Object) ("%%" + ((EndsWithPredicate) predicate).value())));
+            return expression("like ? ", sequence((Object) ("%%" + ((EndsWithPredicate) predicate).value())));
         }
         if (predicate instanceof ContainsPredicate) {
-            return pair("like ? ", sequence((Object) ("%%" + ((ContainsPredicate) predicate).value() + "%%")));
+            return expression("like ? ", sequence((Object) ("%%" + ((ContainsPredicate) predicate).value() + "%%")));
         }
         throw new UnsupportedOperationException("Unsupported predicate " + predicate);
     }
@@ -150,17 +149,17 @@ public class Sql {
         return sequence(((Value) predicate).value());
     }
 
-    public static Callable1<? super Pair<String, Sequence<Object>>, Iterable<Object>> values() {
-        return new Callable1<Pair<String, Sequence<Object>>, Iterable<Object>>() {
-            public Iterable<Object> call(Pair<String, Sequence<Object>> pair) throws Exception {
+    public static Callable1<? super ParameterisedExpression, Iterable<Object>> values() {
+        return new Callable1<ParameterisedExpression, Iterable<Object>>() {
+            public Iterable<Object> call(ParameterisedExpression pair) throws Exception {
                 return pair.second();
             }
         };
     }
 
-    public static Callable1<? super Predicate, Pair<String, Sequence<Object>>> toSql() {
-        return new Callable1<Predicate, Pair<String, Sequence<Object>>>() {
-            public Pair<String, Sequence<Object>> call(Predicate predicate) throws Exception {
+    public static Callable1<? super Predicate, ParameterisedExpression> toSql() {
+        return new Callable1<Predicate, ParameterisedExpression>() {
+            public ParameterisedExpression call(Predicate predicate) throws Exception {
                 return toSql(predicate);
             }
         };
