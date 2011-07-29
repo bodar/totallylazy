@@ -29,7 +29,7 @@ public class SelectExpression {
 
     public static Expression selectList(final Sequence<Keyword> select) {
         Sequence<Expression> expressions = select.map(keywordToExpression());
-        return expression(expressions.map(expression(String.class)).toString(", "), expressions.flatMap(Expressions.values()));
+        return expression(expressions.map(Expressions.text()).toString(", "), expressions.flatMap(Expressions.parameters()));
     }
 
     public static Expression querySpecification(SetQuantifier setQuantifier, final Sequence<Keyword> select) {

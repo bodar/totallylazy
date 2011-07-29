@@ -52,12 +52,12 @@ public class WhereClause {
         if (predicate instanceof AndPredicate) {
             AndPredicate andPredicate = (AndPredicate) predicate;
             final Sequence<Expression> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return expression("( " + pairs.map(expression(String.class)).toString("and ") + " ) ", pairs.flatMap(Expressions.values()));
+            return expression("( " + pairs.map(Expressions.text()).toString("and ") + " ) ", pairs.flatMap(Expressions.parameters()));
         }
         if (predicate instanceof OrPredicate) {
             OrPredicate andPredicate = (OrPredicate) predicate;
             final Sequence<Expression> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return expression("( " + pairs.map(expression(String.class)).toString("or ") + " ) ", pairs.flatMap(Expressions.values()));
+            return expression("( " + pairs.map(Expressions.text()).toString("or ") + " ) ", pairs.flatMap(Expressions.parameters()));
         }
         if (predicate instanceof NullPredicate) {
             return expression(" is null ");
