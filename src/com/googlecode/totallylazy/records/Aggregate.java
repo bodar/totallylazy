@@ -10,7 +10,7 @@ public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
     private final Keyword<T> source;
 
     public Aggregate(final Callable2<? super T, ? super T, R> callable, final Keyword<T> keyword, final String name) {
-        super(name, keyword.forClass());
+        super(keyword.fullyQualifiedName(), name, keyword.forClass());
         this.callable = callable;
         source = keyword;
     }

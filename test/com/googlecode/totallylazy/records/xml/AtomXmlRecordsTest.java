@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.records.xml;
 
 import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Keywords;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 import org.junit.Test;
@@ -15,11 +16,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class AtomXmlRecordsTest {
-    private static final Keyword<Object> entries = Keyword.keyword("/feed/entry");
-    private static final Keyword<Integer> id = Keyword.keyword("id", Integer.class);
-    private static final Keyword<URI> link = Keyword.keyword("link/@href", URI.class);
-    private static final Keyword<String> content = Keyword.keyword("content", String.class);
-    private static final Keyword<Date> updated = Keyword.keyword("updated", Date.class);
+    private static final Keyword<Object> entries = Keywords.keyword("/feed/entry");
+    private static final Keyword<Integer> id = Keywords.keyword("id", Integer.class);
+    private static final Keyword<URI> link = Keywords.keyword("link/@href", URI.class);
+    private static final Keyword<String> content = Keywords.keyword("content", String.class);
+    private static final Keyword<Date> updated = Keywords.keyword("updated", Date.class);
 
     @Test
     public void canGetElements() throws Exception {

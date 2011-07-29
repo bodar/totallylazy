@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.records.xml;
 
 import com.googlecode.totallylazy.records.AbstractRecordsTests;
-import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Keywords;
 import com.googlecode.totallylazy.records.Records;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -13,8 +13,8 @@ public class XmlRecordsTest extends AbstractRecordsTests{
     private Document document;
 
     public XmlRecordsTest() {
-        people = Keyword.keyword("/data/user");
-        books = Keyword.keyword("/data/book");
+        people = Keywords.keyword("/data/user");
+        books = Keywords.keyword("/data/book");
     }
 
     @Override

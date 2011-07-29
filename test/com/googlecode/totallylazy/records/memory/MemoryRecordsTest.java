@@ -5,12 +5,11 @@ import static com.googlecode.totallylazy.Predicates.where;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.records.AbstractRecordsTests;
 import com.googlecode.totallylazy.records.Keyword;
-import static com.googlecode.totallylazy.records.Keyword.keyword;
+import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.googlecode.totallylazy.records.Records;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class MemoryRecordsTest extends AbstractRecordsTests {

@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.records.Keyword.keyword;
+import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static java.lang.System.getenv;
 import static java.sql.DriverManager.getConnection;
 import static org.hamcrest.CoreMatchers.is;

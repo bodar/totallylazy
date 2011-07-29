@@ -4,23 +4,20 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.GenericType;
 
 public class Keyword<T> implements Callable1<Record, T>, GenericType {
-    private final String value;
+    private final String fullyQualifiedName;
+    private final String name;
     private final Class<T> aClass;
 
-    public Keyword(String value, Class<T> aClass) {
-        this.value = value;
-        this.aClass = aClass;
-    }
-
-    public static Keyword<Object> keyword(String value) {
-        return new Keyword<Object>(value, Object.class);
-    }
-
-    public static <T> Keyword<T> keyword(String value, Class<T> aClass) {
-        if(value == null){
-            throw new IllegalArgumentException("value");
+    public Keyword(String fullyQualifiedName, String name, Class<T> aClass) {
+        if(fullyQualifiedName == null){
+            throw new IllegalArgumentException("fullyQualifiedName");
         }
-        return new Keyword<T>(value, aClass);
+        if(name == null){
+            throw new IllegalArgumentException("name");
+        }
+        this.fullyQualifiedName = fullyQualifiedName;
+        this.name = name;
+        this.aClass = aClass;
     }
 
     @Override
@@ -39,19 +36,23 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
 
     @Override
     public String toString() {
-        return value;
+        return fullyQualifiedName;
     }
 
     public Class<T> forClass() {
         return aClass;
     }
 
-    public String name() {
-        String[] parts = value.split("\\.");
-        return parts[parts.length - 1];
+    public String fullyQualifiedName() {
+        return fullyQualifiedName;
     }
 
-    public Keyword<T> asAlias(Keyword<T> keyword) {
-        throw new UnsupportedOperationException();
+    public String name() {
+        return name;
+    }
+
+    public Keyword<T> alias(Keyword<T> keyword) {
+        return new Keyword(fullyQualifiedName, keyword.name(), aClass);
+
     }
 }
