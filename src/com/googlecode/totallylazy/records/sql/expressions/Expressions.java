@@ -30,6 +30,9 @@ public class Expressions {
     }
 
     public static Expression expression(String expression, Sequence<Object> parameters){
+        if(parameters.isEmpty()) {
+            return new TextOnlyExpression(expression);
+        }
         return new TextAndParametersExpression(expression, parameters);
     }
 

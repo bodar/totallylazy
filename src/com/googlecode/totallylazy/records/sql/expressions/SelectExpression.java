@@ -18,13 +18,18 @@ import static com.googlecode.totallylazy.records.sql.expressions.OrderByClause.o
 import static com.googlecode.totallylazy.records.sql.expressions.WhereClause.whereClause;
 import static java.lang.String.format;
 
-public class SelectExpression {
-    public static Expression toSql(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Option<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
-        return Expressions.join(
+public class SelectExpression extends CompoundExpression {
+    private SelectExpression(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Option<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
+        super(
                 querySpecification(setQuantifier, select),
                 fromClause(table),
                 whereClause(where),
-                orderByClause(sort));
+                orderByClause(sort)
+        );
+    }
+
+    public static SelectExpression toSql(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Option<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
+        return new SelectExpression(setQuantifier, select, table, where, sort);
     }
 
     public static Expression selectList(final Sequence<Keyword> select) {
