@@ -77,7 +77,7 @@ public class Mappings {
                     return null;
                 }
 
-                String name = pair.first().toString();
+                String name = pair.first().name();
                 Keyword keyword = RecordCallables.getKeyword(name, definitions);
                 return get(keyword.forClass()).toField(name, pair.second());
             }
