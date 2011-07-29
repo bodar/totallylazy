@@ -51,7 +51,7 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
         final Record record = record();
         final ResultSetMetaData metaData = resultSet.getMetaData();
         for (Integer index : iterate(increment(), 1).take(metaData.getColumnCount()).safeCast(Integer.class)) {
-            final String name = metaData.getColumnName(index);
+            final String name = metaData.getColumnLabel(index);
             Keyword keyword = getKeyword(name, definitions);
             record.set(keyword, mappings.getValue(resultSet, index, keyword.forClass()));
         }
