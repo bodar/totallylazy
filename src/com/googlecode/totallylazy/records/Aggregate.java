@@ -59,7 +59,7 @@ public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
         return aggregate(Numbers.<T>average(), keyword);
     }
 
-    public Aggregate<T, R> as(Keyword<?> keyword) {
-        return new Aggregate<T,R>(callable, source, keyword.name());
+    public Aggregate<T, R> as(Keyword<T> keyword) {
+        return new Aggregate<T, R>(callable, source, keyword.name());
     }
 }

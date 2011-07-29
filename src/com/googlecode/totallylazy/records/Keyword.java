@@ -51,6 +51,7 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
         return name;
     }
 
+    // TODO Rename to 'as' somehow
     public Keyword<T> alias(Keyword<T> keyword) {
         return new Keyword(fullyQualifiedName, keyword.name(), aClass);
 

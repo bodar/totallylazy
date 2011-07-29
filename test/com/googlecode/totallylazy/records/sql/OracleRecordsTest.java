@@ -23,7 +23,7 @@ public class OracleRecordsTest extends AbstractRecordsTests {
 
     @Test
     public void supportsDBSequences() throws Exception {
-        Integer integer = records.get(keyword("dual")).map(keyword("foo.nextval", Integer.class)).head();
+        Integer integer = records.get(keyword("dual")).map(SqlKeywords.keyword("foo.nextval", Integer.class)).head();
         assertThat(integer, is(notNullValue()));
     }
 }

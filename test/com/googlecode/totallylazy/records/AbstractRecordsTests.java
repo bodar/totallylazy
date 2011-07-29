@@ -161,6 +161,13 @@ public abstract class AbstractRecordsTests {
     }
 
     @Test
+    public void supportsAliasingAKeyword() throws Exception {
+        Keyword<String> bob = keyword("bob", String.class);
+        Sequence<Keyword> fields = records.get(people).map(select(firstName.alias(bob))).head().keywords();
+        assertThat(fields, hasExactly(bob));
+    }
+
+    @Test
     public void supportsSelectingMultipleKeywords() throws Exception {
         Sequence<Record> users = records.get(people);
         Sequence<Record> fullNames = users.map(select(firstName, lastName));

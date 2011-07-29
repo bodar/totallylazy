@@ -7,7 +7,6 @@ import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.SelectCallable;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
 import static com.googlecode.totallylazy.records.sql.expressions.SetFunctionType.setFunctionType;
 
@@ -36,15 +35,24 @@ public class SelectList extends CompoundExpression{
     public static <T> Expression derivedColumn(Callable1<? super Record, T> callable) {
         if(callable instanceof Aggregate){
             Aggregate aggregate = (Aggregate) callable;
-            return setFunctionType(aggregate.callable(), aggregate.source().name()).join(expression(" as " + aggregate.name()));
+            return setFunctionType(aggregate.callable(), aggregate.source().name()).join(asClause(aggregate));
         }
         if (callable instanceof Keyword) {
-            return expression(callable.toString());
+            Keyword keyword = (Keyword) callable;
+            if(!keyword.fullyQualifiedName().equals(keyword.name())){
+                return expression(keyword.fullyQualifiedName()).join(asClause(keyword));
+            }
+            return expression(keyword.fullyQualifiedName());
         }
         if (callable instanceof SelectCallable) {
-            return expression(sequence(((SelectCallable) callable).keywords()).toString("", ",", ""));
+            Sequence<Keyword> keywords = ((SelectCallable) callable).keywords();
+            return selectList(keywords);
         }
         throw new UnsupportedOperationException("Unsupported callable " + callable);
+    }
+
+    public static Expression asClause(Keyword keyword) {
+        return expression("as " + keyword.name());
     }
 
 
