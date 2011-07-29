@@ -26,4 +26,8 @@ public class Keywords {
     public static <T> Keyword<T> keyword(String fullyQualifiedName, String name, Class<T> aClass) {
         return new ImmutableKeyword<T>(name, aClass);
     }
+
+    public static boolean equalto(Keyword keyword, Keyword other) {
+        return keyword.value().equalsIgnoreCase(other.value());
+    }
 }
