@@ -14,7 +14,7 @@ public class ImmutableKeyword<T> implements Keyword<T>{
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof ImmutableKeyword && value().equalsIgnoreCase(((Keyword<T>) other).value());
+        return other instanceof Keyword && Keywords.equalto(this, (Keyword) other);
     }
 
     @Override
