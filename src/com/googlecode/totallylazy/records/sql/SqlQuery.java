@@ -24,10 +24,10 @@ public class SqlQuery {
     private final SetQuantifier setQuantifier;
     private final Sequence<Keyword> select;
     private final Keyword table;
-    private final Sequence<Predicate<? super Record>> where;
+    private final Option<Predicate<? super Record>> where;
     private final Option<Comparator<? super Record>> comparator;
 
-    private SqlQuery(SetQuantifier setQuantifier, Sequence<Keyword> select, Keyword table, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
+    private SqlQuery(SetQuantifier setQuantifier, Sequence<Keyword> select, Keyword table, Option<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
         this.setQuantifier = setQuantifier;
         this.select = select;
         this.table = table;
@@ -53,12 +53,12 @@ public class SqlQuery {
         return Sql.toSql(setQuantifier, select, table, where, comparator);
     }
 
-    public static SqlQuery query(Keyword table, Sequence<Keyword> select, Sequence<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, final SetQuantifier setQuantifier) {
+    public static SqlQuery query(Keyword table, Sequence<Keyword> select, Option<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, final SetQuantifier setQuantifier) {
         return new SqlQuery(setQuantifier, select, table, where, comparator);
     }
 
     public static SqlQuery query(Keyword table, Sequence<Keyword> fields) {
-        return query(table, fields, Sequences.<Predicate<? super Record>>empty(), Option.<Comparator<? super Record>>none(), ALL);
+        return query(table, fields, Option.<Predicate<? super Record>>none(), Option.<Comparator<? super Record>>none(), ALL);
     }
 
     public SqlQuery select(Keyword... columns) {
@@ -70,7 +70,7 @@ public class SqlQuery {
     }
 
     public SqlQuery where(Predicate<? super Record> predicate) {
-        return query(table, select, where.add(predicate), comparator, setQuantifier);
+        return query(table, select, Option.<Predicate<? super Record>>some(predicate), comparator, setQuantifier);
     }
 
     public SqlQuery orderBy(Comparator<? super Record> comparator) {

@@ -36,11 +36,17 @@ public class Sql {
     private Sql() {
     }
 
-    @SuppressWarnings("unchecked")
-    public static Expression whereClause(Sequence<Predicate<? super Record>> where) {
-        if (where.isEmpty()) return Expression.empty();
-        final Sequence<Expression> sqlAndValues = where.map(toSql());
-        return expression("where " + sqlAndValues.map(first(String.class)).toString(" "), sqlAndValues.flatMap(values()));
+    public static Expression whereClause(Option<Predicate<? super Record>> predicate) {
+        return predicate.map(new Callable1<Predicate<? super Record>, Expression>() {
+            public Expression call(Predicate<? super Record> predicate) throws Exception {
+                return whereClause(predicate);
+            }
+        }).getOrElse(Expression.empty());
+    }
+
+    public static Expression whereClause(Predicate<? super Record> predicate) {
+        final Expression sqlAndValues = toSql(predicate);
+        return expression("where ").join(sqlAndValues);
     }
 
     public static Expression orderByClause(Option<Comparator<? super Record>> comparator) {
@@ -200,7 +206,7 @@ public class Sql {
         };
     }
 
-    public static Expression toSql(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Sequence<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
+    public static Expression toSql(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Option<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
         return join(
                 querySpecification(setQuantifier, select),
                 fromClause(table),
