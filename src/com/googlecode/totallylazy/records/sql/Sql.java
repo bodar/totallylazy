@@ -1,17 +1,24 @@
 package com.googlecode.totallylazy.records.sql;
 
-import com.googlecode.totallylazy.*;
-import com.googlecode.totallylazy.comparators.AscendingComparator;
-import com.googlecode.totallylazy.comparators.DescendingComparator;
-import com.googlecode.totallylazy.numbers.Sum;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Average;
-import com.googlecode.totallylazy.records.*;
-import com.googlecode.totallylazy.records.sql.expressions.WhereClause;
+import com.googlecode.totallylazy.numbers.Sum;
+import com.googlecode.totallylazy.records.Aggregate;
+import com.googlecode.totallylazy.records.CountNotNull;
+import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Maximum;
+import com.googlecode.totallylazy.records.Minimum;
+import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.SelectCallable;
+import com.googlecode.totallylazy.records.sql.expressions.OrderByClause;
 
 import java.util.Comparator;
 
-import static com.googlecode.totallylazy.Callables.first;
-import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.sql.Expression.expression;
 import static com.googlecode.totallylazy.records.sql.Expression.join;
@@ -20,28 +27,6 @@ import static java.lang.String.format;
 
 public class Sql {
     private Sql() {
-    }
-
-    public static Expression orderByClause(Option<Comparator<? super Record>> comparator) {
-        return comparator.map(new Callable1<Comparator<? super Record>, Expression>() {
-            public Expression call(Comparator<? super Record> comparator) throws Exception {
-                return orderByClause(comparator);
-            }
-        }).getOrElse(Expression.empty());
-    }
-
-    public static Expression orderByClause(Comparator<? super Record> comparator) {
-        return expression("order by ").join(toSql(comparator));
-    }
-
-    public static Expression toSql(Comparator<? super Record> comparator) {
-        if (comparator instanceof AscendingComparator) {
-            return toSql(((AscendingComparator<? super Record, ?>) comparator).callable()).join(expression(" asc "));
-        }
-        if (comparator instanceof DescendingComparator) {
-            return toSql(((DescendingComparator<? super Record, ?>) comparator).callable()).join(expression(" desc "));
-        }
-        throw new UnsupportedOperationException("Unsupported comparator " + comparator);
     }
 
     public static <T> Expression toSql(Callable1<? super Record, T> callable) {
@@ -106,7 +91,7 @@ public class Sql {
                 querySpecification(setQuantifier, select),
                 fromClause(table),
                 whereClause(where),
-                orderByClause(sort));
+                OrderByClause.orderByClause(sort));
     }
 
     public static Expression querySpecification(SetQuantifier setQuantifier, final Sequence<Keyword> select) {
