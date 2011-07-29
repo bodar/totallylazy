@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.sql.expressions.WhereClause;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
 import java.io.PrintStream;
@@ -131,7 +132,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        Expression where = toSql(predicate);
+        Expression where = WhereClause.toSql(predicate);
         String sql = format("update %s set %s where %s", recordName, fields.toString("", "=?,", "=?"), where.first());
         return update(expression(sql, record.getValuesFor(fields).join(where.second())));
     }
@@ -152,7 +153,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        Expression where = toSql(predicate);
+        Expression where = WhereClause.toSql(predicate);
         final String sql = format("delete from %s where %s", recordName, where.first());
         return update(expression(sql, where.second()));
     }
