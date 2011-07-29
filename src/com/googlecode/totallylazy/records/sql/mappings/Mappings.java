@@ -52,9 +52,6 @@ public class Mappings {
     }
 
     public String getType(Class<?> aClass) {
-        if (map.containsKey(aClass)) {
-            return map.get(aClass).type();
-        }
-        return map.get(Object.class).type();
+        return get(aClass).type();
     }
 }
