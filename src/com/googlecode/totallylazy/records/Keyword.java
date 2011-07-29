@@ -36,7 +36,7 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
 
     @Override
     public String toString() {
-        return fullyQualifiedName;
+        return name;
     }
 
     public Class<T> forClass() {
