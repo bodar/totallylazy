@@ -29,17 +29,21 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.empty;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
 
-public class WhereClause {
+public class WhereClause extends CompoundExpression{
+    public WhereClause(Predicate<? super Record> predicate) {
+        super(new TextOnlyExpression("where"), toSql(predicate));
+    }
+
+    public static WhereClause whereClause(Predicate<? super Record> predicate) {
+        return new WhereClause(predicate);
+    }
+
     public static Expression whereClause(Option<Predicate<? super Record>> predicate) {
         return predicate.map(new Callable1<Predicate<? super Record>, Expression>() {
             public Expression call(Predicate<? super Record> predicate) throws Exception {
                 return whereClause(predicate);
             }
         }).getOrElse(empty());
-    }
-
-    public static Expression whereClause(Predicate<? super Record> predicate) {
-        return Expressions.expression("where ").join(toSql(predicate));
     }
 
     @SuppressWarnings("unchecked")
