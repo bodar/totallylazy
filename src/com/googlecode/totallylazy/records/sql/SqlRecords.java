@@ -4,14 +4,13 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.expressions.Expression;
 import com.googlecode.totallylazy.records.sql.expressions.ExpressionBuilder;
-import com.googlecode.totallylazy.records.sql.expressions.Expressions;
+import com.googlecode.totallylazy.records.sql.expressions.UpdateStatement;
 import com.googlecode.totallylazy.records.sql.expressions.WhereClause;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
@@ -28,6 +27,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
+import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
 import static java.lang.String.format;
 
@@ -123,10 +123,10 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
                         mappings.addValues(statement, record.getValuesFor(fields));
                         statement.addBatch();
                     }
-                    return numbers(statement.executeBatch()).reduce(Numbers.add());
+                    return numbers(statement.executeBatch()).reduce(sum());
                 }
             });
-            logger.println(format("SQL:'%s' Row Count: %s", sql, rowCount));
+            logger.println(format("SQL:%s Count: %s", sql, rowCount));
             return rowCount;
         } catch (SQLException e) {
             throw new LazyException(e);
@@ -134,20 +134,19 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        Expression where = WhereClause.toSql(predicate);
-        String sql = format("update %s set %s where %s", recordName, fields.toString("", "=?,", "=?"), where.text());
-        return update(Expressions.expression(sql, record.getValuesFor(fields).join(where.parameters())));
+        return update(UpdateStatement.updateStatement(recordName, predicate, fields, record));
     }
 
     public Number update(final Expression expression) {
         try {
+            logger.print(format("SQL:%s", expression));
             Number rowCount = using(connection.prepareStatement(expression.text()), new Callable1<PreparedStatement, Number>() {
                 public Number call(PreparedStatement statement) throws Exception {
                     mappings.addValues(statement, expression.parameters());
                     return statement.executeUpdate();
                 }
             });
-            logger.println(format("SQL:'%s' Row Count: %s", expression, rowCount));
+            logger.println(format(" Count:%s", rowCount));
             return rowCount;
         } catch (SQLException e) {
             throw new LazyException(e);

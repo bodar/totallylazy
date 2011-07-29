@@ -21,15 +21,15 @@ public class OrderByClause {
     }
 
     public static Expression orderByClause(Comparator<? super Record> comparator) {
-        return expression("order by ").join(toSql(comparator));
+        return expression("order by").join(toSql(comparator));
     }
 
     public static Expression toSql(Comparator<? super Record> comparator) {
         if (comparator instanceof AscendingComparator) {
-            return Sql.toSql(((AscendingComparator<? super Record, ?>) comparator).callable()).join(expression(" asc "));
+            return Sql.toSql(((AscendingComparator<? super Record, ?>) comparator).callable()).join(expression("asc"));
         }
         if (comparator instanceof DescendingComparator) {
-            return Sql.toSql(((DescendingComparator<? super Record, ?>) comparator).callable()).join(expression(" desc "));
+            return Sql.toSql(((DescendingComparator<? super Record, ?>) comparator).callable()).join(expression("desc"));
         }
         throw new UnsupportedOperationException("Unsupported comparator " + comparator);
     }
