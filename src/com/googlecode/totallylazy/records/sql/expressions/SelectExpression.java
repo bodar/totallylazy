@@ -34,7 +34,7 @@ public class SelectExpression extends CompoundExpression {
 
     public static Expression selectList(final Sequence<Keyword> select) {
         Sequence<Expression> expressions = select.map(keywordToExpression());
-        return expression(expressions.map(Expressions.text()).toString(", "), expressions.flatMap(Expressions.parameters()));
+        return expression(expressions.map(Expressions.text()).toString(), expressions.flatMap(Expressions.parameters()));
     }
 
     public static Expression querySpecification(SetQuantifier setQuantifier, final Sequence<Keyword> select) {
