@@ -118,8 +118,6 @@ public class Lucene {
     }
 
     private Query query(Keyword keyword, Predicate predicate) {
-        Class aClass = keyword.forClass();
-
         if (predicate instanceof EqualsPredicate) {
             return equalTo(keyword, ((Value) predicate).value());
         }

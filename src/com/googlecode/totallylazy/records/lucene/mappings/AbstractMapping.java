@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.records.lucene.mappings;
 
 import com.googlecode.totallylazy.LazyException;
-import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 
 public abstract class AbstractMapping<T> implements Mapping<T> {
