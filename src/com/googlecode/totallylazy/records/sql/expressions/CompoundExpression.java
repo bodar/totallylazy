@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class CompoundExpression extends AbstractExpression {
-    private final Sequence<Expression> expressions;
+    protected final Sequence<Expression> expressions;
 
     public CompoundExpression(Expression... expressions) {
         this.expressions = sequence(expressions);

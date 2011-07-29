@@ -5,7 +5,6 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.comparators.AscendingComparator;
 import com.googlecode.totallylazy.comparators.DescendingComparator;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.sql.Sql;
 
 import java.util.Comparator;
 
@@ -26,10 +25,10 @@ public class OrderByClause {
 
     public static Expression toSql(Comparator<? super Record> comparator) {
         if (comparator instanceof AscendingComparator) {
-            return Sql.toSql(((AscendingComparator<? super Record, ?>) comparator).callable()).join(expression("asc"));
+            return SelectList.derivedColumn(((AscendingComparator<? super Record, ?>) comparator).callable()).join(expression("asc"));
         }
         if (comparator instanceof DescendingComparator) {
-            return Sql.toSql(((DescendingComparator<? super Record, ?>) comparator).callable()).join(expression("desc"));
+            return SelectList.derivedColumn(((DescendingComparator<? super Record, ?>) comparator).callable()).join(expression("desc"));
         }
         throw new UnsupportedOperationException("Unsupported comparator " + comparator);
     }

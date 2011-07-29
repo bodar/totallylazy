@@ -22,7 +22,6 @@ import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.sql.Sql;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -51,7 +50,7 @@ public class WhereClause extends CompoundExpression{
         if (predicate instanceof WherePredicate) {
             WherePredicate wherePredicate = (WherePredicate) predicate;
             final Expression pair = toSql(wherePredicate.predicate());
-            return expression(Sql.toSql(wherePredicate.callable()).text() + " " + pair.text(), pair.parameters());
+            return expression(SelectList.derivedColumn(wherePredicate.callable()).text() + " " + pair.text(), pair.parameters());
         }
         if (predicate instanceof AndPredicate) {
             AndPredicate andPredicate = (AndPredicate) predicate;

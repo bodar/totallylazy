@@ -10,7 +10,6 @@ import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.expressions.Expression;
 import com.googlecode.totallylazy.records.sql.expressions.ExpressionBuilder;
-import com.googlecode.totallylazy.records.sql.expressions.UpdateStatement;
 import com.googlecode.totallylazy.records.sql.expressions.WhereClause;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
@@ -29,6 +28,7 @@ import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
+import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
 import static java.lang.String.format;
 
 public class SqlRecords extends AbstractRecords implements Queryable<Expression> {
@@ -134,7 +134,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        return update(UpdateStatement.updateStatement(recordName, predicate, fields, record));
+        return update(updateStatement(recordName, predicate, fields, record));
     }
 
     public Number update(final Expression expression) {
