@@ -39,7 +39,7 @@ import static com.googlecode.totallylazy.records.Aggregates.to;
 import static com.googlecode.totallylazy.records.CountNotNull.count;
 import static com.googlecode.totallylazy.records.Join.join;
 import static com.googlecode.totallylazy.records.Join.using;
-import static com.googlecode.totallylazy.records.Keyword.keyword;
+import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;

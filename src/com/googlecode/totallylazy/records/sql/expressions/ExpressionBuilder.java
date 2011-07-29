@@ -11,16 +11,15 @@ import com.googlecode.totallylazy.records.Aggregates;
 import com.googlecode.totallylazy.records.CountNotNull;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.sql.SetQuantifier;
 
 import java.util.Comparator;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.Aggregate.aggregate;
-import static com.googlecode.totallylazy.records.Keyword.keyword;
-import static com.googlecode.totallylazy.records.sql.SetQuantifier.ALL;
-import static com.googlecode.totallylazy.records.sql.SetQuantifier.DISTINCT;
+import static com.googlecode.totallylazy.records.Keywords.keyword;
+import static com.googlecode.totallylazy.records.sql.expressions.SetQuantifier.ALL;
+import static com.googlecode.totallylazy.records.sql.expressions.SetQuantifier.DISTINCT;
 
 public class ExpressionBuilder implements Expressible, Callable<Expression> {
     private final SetQuantifier setQuantifier;

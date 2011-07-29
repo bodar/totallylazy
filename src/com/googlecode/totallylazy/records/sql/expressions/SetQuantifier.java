@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.records.sql;
+package com.googlecode.totallylazy.records.sql.expressions;
 
 public enum SetQuantifier {
     DISTINCT,

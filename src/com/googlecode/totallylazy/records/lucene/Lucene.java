@@ -33,7 +33,7 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.records.Keyword.keyword;
+import static com.googlecode.totallylazy.records.Keywords.keyword;
 
 public class Lucene {
     public static final Keyword RECORD_KEY = keyword("type");

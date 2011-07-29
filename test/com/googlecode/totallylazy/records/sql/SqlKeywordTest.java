@@ -1,13 +1,13 @@
-package com.googlecode.totallylazy.records;
+package com.googlecode.totallylazy.records.sql;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.records.Keyword.keyword;
+import static com.googlecode.totallylazy.records.sql.SqlKeywords.keyword;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class KeywordTest {
+public class SqlKeywordTest {
     @Test
     public void nameReturnsLastPartOfKeyword() throws Exception {
         assertThat(keyword("USER.foo").name(), is("foo"));
