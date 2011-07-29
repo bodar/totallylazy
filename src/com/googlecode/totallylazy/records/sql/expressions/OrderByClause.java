@@ -5,12 +5,11 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.comparators.AscendingComparator;
 import com.googlecode.totallylazy.comparators.DescendingComparator;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.sql.Expression;
 import com.googlecode.totallylazy.records.sql.Sql;
 
 import java.util.Comparator;
 
-import static com.googlecode.totallylazy.records.sql.Expression.expression;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
 
 public class OrderByClause {
     public static Expression orderByClause(Option<Comparator<? super Record>> comparator) {
@@ -18,7 +17,7 @@ public class OrderByClause {
             public Expression call(Comparator<? super Record> comparator) throws Exception {
                 return orderByClause(comparator);
             }
-        }).getOrElse(Expression.empty());
+        }).getOrElse(Expressions.empty());
     }
 
     public static Expression orderByClause(Comparator<? super Record> comparator) {

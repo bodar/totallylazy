@@ -1,16 +1,28 @@
-package com.googlecode.totallylazy.records.sql;
+package com.googlecode.totallylazy.records.sql.expressions;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Strings;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Expression extends Pair<String, Sequence<Object>> {
-    public Expression(String expression, Sequence<Object> parameters) {
-        super(expression, parameters);
+public class Expressions {
+    public static Callable1<? super Expression, Iterable<Object>> values() {
+        return new Callable1<Expression, Iterable<Object>>() {
+            public Iterable<Object> call(Expression expression) throws Exception {
+                return expression.parameters();
+            }
+        };
+    }
+
+    public static Callable1<? super Expression, String> expression(Class<?> aClass) {
+        return new Callable1<Expression, String>() {
+            public String call(Expression expression) throws Exception {
+                return expression.expression();
+            }
+        };
     }
 
     public static Expression expression(String expression, Object... parameters){
@@ -23,18 +35,6 @@ public class Expression extends Pair<String, Sequence<Object>> {
 
     public static Expression empty() {
         return expression(Strings.EMPTY, Sequences.empty());
-    }
-
-    public String expression() {
-        return first();
-    }
-
-    public Sequence<Object> parameters() {
-        return second();
-    }
-
-    public Expression join(Expression other){
-        return expression(expression() + " " + other.expression(), parameters().join(other.parameters()));
     }
 
     public static Expression join(final Expression... expressions) {
@@ -51,10 +51,5 @@ public class Expression extends Pair<String, Sequence<Object>> {
                 return original.join(next);
             }
         };
-    }
-
-    @Override
-    public String toString() {
-        return expression() + " " + parameters().toString("(", ",", ")");
     }
 }

@@ -22,14 +22,13 @@ import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.sql.Expression;
 import com.googlecode.totallylazy.records.sql.QuerySequence;
 import com.googlecode.totallylazy.records.sql.Sql;
 
-import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.records.sql.Expression.expression;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.empty;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
 
 public class WhereClause {
     public static Expression whereClause(Option<Predicate<? super Record>> predicate) {
@@ -37,12 +36,11 @@ public class WhereClause {
             public Expression call(Predicate<? super Record> predicate) throws Exception {
                 return whereClause(predicate);
             }
-        }).getOrElse(Expression.empty());
+        }).getOrElse(empty());
     }
 
     public static Expression whereClause(Predicate<? super Record> predicate) {
-        final Expression sqlAndValues = toSql(predicate);
-        return expression("where ").join(sqlAndValues);
+        return Expressions.expression("where ").join(toSql(predicate));
     }
 
     @SuppressWarnings("unchecked")
@@ -50,17 +48,17 @@ public class WhereClause {
         if (predicate instanceof WherePredicate) {
             WherePredicate wherePredicate = (WherePredicate) predicate;
             final Expression pair = toSql(wherePredicate.predicate());
-            return expression(Sql.toSql(wherePredicate.callable()).first() + " " + pair.first(), pair.second());
+            return expression(Sql.toSql(wherePredicate.callable()).expression() + " " + pair.expression(), pair.parameters());
         }
         if (predicate instanceof AndPredicate) {
             AndPredicate andPredicate = (AndPredicate) predicate;
             final Sequence<Expression> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return expression("( " + pairs.map(first(String.class)).toString("and ") + " ) ", pairs.flatMap(Sql.values()));
+            return expression("( " + pairs.map(expression(String.class)).toString("and ") + " ) ", pairs.flatMap(Expressions.values()));
         }
         if (predicate instanceof OrPredicate) {
             OrPredicate andPredicate = (OrPredicate) predicate;
             final Sequence<Expression> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return expression("( " + pairs.map(first(String.class)).toString("or ") + " ) ", pairs.flatMap(Sql.values()));
+            return expression("( " + pairs.map(expression(String.class)).toString("or ") + " ) ", pairs.flatMap(Expressions.values()));
         }
         if (predicate instanceof NullPredicate) {
             return expression(" is null ");
@@ -69,22 +67,22 @@ public class WhereClause {
             return expression(" is not null ");
         }
         if (predicate instanceof EqualsPredicate) {
-            return Expression.expression("= ? ", getValue(predicate));
+            return expression("= ? ", getValue(predicate));
         }
         if (predicate instanceof Not) {
-            return expression("<> ? ", sequence(toSql(((Not) predicate).predicate()).second()));
+            return expression("<> ? ", sequence(toSql(((Not) predicate).predicate()).parameters()));
         }
         if (predicate instanceof GreaterThan) {
-            return Expression.expression("> ? ", getValue(predicate));
+            return expression("> ? ", getValue(predicate));
         }
         if (predicate instanceof GreaterThanOrEqualTo) {
-            return Expression.expression(">= ? ", getValue(predicate));
+            return expression(">= ? ", getValue(predicate));
         }
         if (predicate instanceof LessThan) {
-            return Expression.expression("< ? ", getValue(predicate));
+            return expression("< ? ", getValue(predicate));
         }
         if (predicate instanceof LessThanOrEqualTo) {
-            return Expression.expression("<= ? ", getValue(predicate));
+            return expression("<= ? ", getValue(predicate));
         }
         if (predicate instanceof Between) {
             Between between = (Between) predicate;

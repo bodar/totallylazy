@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.sql.expressions.Expression;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
 import java.io.Closeable;
