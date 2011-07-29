@@ -135,13 +135,13 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
         Expression where = WhereClause.toSql(predicate);
-        String sql = format("update %s set %s where %s", recordName, fields.toString("", "=?,", "=?"), where.expression());
+        String sql = format("update %s set %s where %s", recordName, fields.toString("", "=?,", "=?"), where.text());
         return update(Expressions.expression(sql, record.getValuesFor(fields).join(where.parameters())));
     }
 
     public Number update(final Expression expression) {
         try {
-            Number rowCount = using(connection.prepareStatement(expression.expression()), new Callable1<PreparedStatement, Number>() {
+            Number rowCount = using(connection.prepareStatement(expression.text()), new Callable1<PreparedStatement, Number>() {
                 public Number call(PreparedStatement statement) throws Exception {
                     mappings.addValues(statement, expression.parameters());
                     return statement.executeUpdate();
@@ -156,7 +156,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
         Expression where = WhereClause.toSql(predicate);
-        final String sql = format("delete from %s where %s", recordName, where.expression());
+        final String sql = format("delete from %s where %s", recordName, where.text());
         return update(expression(sql, where.parameters()));
     }
 

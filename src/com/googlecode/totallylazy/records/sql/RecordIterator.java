@@ -68,8 +68,8 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
 
     private PreparedStatement prepareStatement() throws SQLException {
         if (preparedStatement == null) {
-            logger.println(format("SQL:'%s' VALUES:'%s'", sql.expression(), sql.parameters()));
-            preparedStatement = connection.prepareStatement(sql.expression());
+            logger.println(format("SQL:'%s' VALUES:'%s'", sql.text(), sql.parameters()));
+            preparedStatement = connection.prepareStatement(sql.text());
             mappings.addValues(preparedStatement, sql.parameters());
         }
         return preparedStatement;

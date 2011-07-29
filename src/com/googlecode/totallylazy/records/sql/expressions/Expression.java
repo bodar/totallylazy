@@ -3,16 +3,16 @@ package com.googlecode.totallylazy.records.sql.expressions;
 import com.googlecode.totallylazy.Sequence;
 
 public class Expression {
-    private final String expression;
+    private final String text;
     private final Sequence<Object> parameters;
 
-    public Expression(String expression, Sequence<Object> parameters) {
-        this.expression = expression;
+    public Expression(String text, Sequence<Object> parameters) {
+        this.text = text;
         this.parameters = parameters;
     }
 
-    public String expression() {
-        return expression;
+    public String text() {
+        return text;
     }
 
     public Sequence<Object> parameters() {
@@ -20,11 +20,11 @@ public class Expression {
     }
 
     public Expression join(Expression other){
-        return Expressions.expression(expression() + " " + other.expression(), parameters().join(other.parameters()));
+        return Expressions.expression(text() + " " + other.text(), parameters().join(other.parameters()));
     }
 
     @Override
     public String toString() {
-        return expression() + " " + parameters().toString("(", ",", ")");
+        return text() + " " + parameters().toString("(", ",", ")");
     }
 }

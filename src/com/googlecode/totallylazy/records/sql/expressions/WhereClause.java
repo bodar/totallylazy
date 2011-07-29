@@ -47,7 +47,7 @@ public class WhereClause {
         if (predicate instanceof WherePredicate) {
             WherePredicate wherePredicate = (WherePredicate) predicate;
             final Expression pair = toSql(wherePredicate.predicate());
-            return expression(Sql.toSql(wherePredicate.callable()).expression() + " " + pair.expression(), pair.parameters());
+            return expression(Sql.toSql(wherePredicate.callable()).text() + " " + pair.text(), pair.parameters());
         }
         if (predicate instanceof AndPredicate) {
             AndPredicate andPredicate = (AndPredicate) predicate;
@@ -92,7 +92,7 @@ public class WhereClause {
             Sequence sequence = inPredicate.values();
             if (sequence instanceof Expressible) {
                 Expression pair = ((Expressible) sequence).express();
-                return expression("in ( " + pair.expression() + ")", pair.parameters());
+                return expression("in ( " + pair.text() + ")", pair.parameters());
             }
             return expression(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) sequence);
         }

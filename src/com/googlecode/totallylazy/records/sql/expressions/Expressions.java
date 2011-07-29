@@ -20,7 +20,7 @@ public class Expressions {
     public static Callable1<? super Expression, String> expression(Class<?> aClass) {
         return new Callable1<Expression, String>() {
             public String call(Expression expression) throws Exception {
-                return expression.expression();
+                return expression.text();
             }
         };
     }
