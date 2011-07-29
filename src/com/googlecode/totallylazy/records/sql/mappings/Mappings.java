@@ -32,22 +32,22 @@ public class Mappings {
         map.put(type, (Mapping<Object>) mapping);
     }
 
-    public Object getValue(final ResultSet resultSet, Integer index, final Class aClass) throws SQLException {
-        if (map.containsKey(aClass)) {
-            return map.get(aClass).getValue(resultSet, index);
+    public Mapping<Object> get(final Class aClass) {
+        if (!map.containsKey(aClass)) {
+            return map.get(Object.class);
         }
-        return map.get(Object.class).getValue(resultSet, index);
+        return map.get(aClass);
+    }
+
+    public Object getValue(final ResultSet resultSet, Integer index, final Class aClass) throws SQLException {
+        return get(aClass).getValue(resultSet, index);
     }
 
     public void addValues(PreparedStatement statement, Sequence<Object> values) throws SQLException {
         for (Pair<Integer, Object> pair : iterate(increment(), 1).safeCast(Integer.class).zip(values)) {
             Integer index = pair.first();
             Object value = pair.second();
-            if (value != null && map.containsKey(value.getClass())) {
-                map.get(value.getClass()).setValue(statement, index, value);
-            } else {
-                map.get(Object.class).setValue(statement, index, value);
-            }
+            get(value == null ? Object.class : value.getClass()).setValue(statement, index, value);
         }
     }
 
