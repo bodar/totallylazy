@@ -14,11 +14,11 @@ import java.util.Set;
 class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
     private final Callable1<? super Record, T> callable;
     private final PrintStream logger;
-    private final Queryable queryable;
+    private final SqlRecords sqlRecords;
     private final SqlQuery sqlQuery;
 
-    public SingleValueSequence(final Queryable queryable, final SqlQuery sqlQuery, final Callable1<? super Record, T> callable, final PrintStream logger) {
-        this.queryable = queryable;
+    public SingleValueSequence(final SqlRecords sqlRecords, final SqlQuery sqlQuery, final Callable1<? super Record, T> callable, final PrintStream logger) {
+        this.sqlRecords = sqlRecords;
         this.sqlQuery = sqlQuery;
         this.callable = callable;
         this.logger = logger;
@@ -29,7 +29,7 @@ class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
     }
 
     private Iterator<T> execute(final SqlQuery sqlQuery) {
-        return Iterators.map(queryable.query(sqlQuery.expression(), sqlQuery.select()), callable);
+        return Iterators.map(sqlRecords.iterator(sqlQuery.expression(), sqlQuery.select()), callable);
     }
 
     public SqlQuery query() {

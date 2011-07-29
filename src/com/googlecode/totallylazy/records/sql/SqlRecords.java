@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Sequences.repeat;
@@ -27,7 +28,7 @@ import static com.googlecode.totallylazy.records.sql.Expression.expression;
 import static com.googlecode.totallylazy.records.sql.Sql.toSql;
 import static java.lang.String.format;
 
-public class SqlRecords extends AbstractRecords implements Queryable {
+public class SqlRecords extends AbstractRecords implements Queryable<Expression> {
     private final Connection connection;
     private final PrintStream logger;
     private final Mappings mappings;
@@ -46,8 +47,17 @@ public class SqlRecords extends AbstractRecords implements Queryable {
         return new RecordSequence(this, SqlQuery.query(recordName, definitions(recordName)), logger);
     }
 
-    public RecordIterator query(final Expression value, final Sequence<Keyword> definitions) {
-        return new RecordIterator(connection, mappings, value, definitions, logger);
+
+    public Sequence<Record> query(final Expression expression, final Sequence<Keyword> definitions) {
+        return new Sequence<Record>() {
+            public Iterator<Record> iterator() {
+                return SqlRecords.this.iterator(expression, definitions);
+            }
+        };
+    }
+
+    public RecordIterator iterator(Expression expression, Sequence<Keyword> definitions) {
+        return new RecordIterator(connection, mappings, expression, definitions, logger);
     }
 
     public void define(Keyword recordName, Keyword<?>... fields) {

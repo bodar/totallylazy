@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.document.Document;
@@ -23,7 +24,7 @@ import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static com.googlecode.totallylazy.records.lucene.Lucene.and;
 import static com.googlecode.totallylazy.records.lucene.Lucene.record;
 
-public class LuceneRecords extends AbstractRecords {
+public class LuceneRecords extends AbstractRecords implements Queryable<Query>{
     private final Directory directory;
     private final IndexWriter writer;
     private final Mappings mappings;
@@ -42,12 +43,12 @@ public class LuceneRecords extends AbstractRecords {
         this(directory, writer, new Mappings(), new PrintStream(nullOutputStream()));
     }
 
-    public Sequence<Record> query(final Query query, final Keyword... definitions){
-        return new RecordSequence(lucene, directory, query, mappings.asRecord(sequence(definitions)), printStream);
+    public Sequence<Record> query(final Query query, final Sequence<Keyword> definitions) {
+        return new RecordSequence(lucene, directory, query, mappings.asRecord(definitions), printStream);
     }
 
     public Sequence<Record> get(final Keyword recordName) {
-        return query(record(recordName), definitions(recordName).toArray(Keyword.class));
+        return query(record(recordName), definitions(recordName));
     }
 
     public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
@@ -90,5 +91,4 @@ public class LuceneRecords extends AbstractRecords {
             return 0;
         }
     }
-
 }
