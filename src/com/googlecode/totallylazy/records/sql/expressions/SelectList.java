@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.records.sql.expressions;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Aggregate;
+import com.googlecode.totallylazy.records.AliasedKeyword;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.SelectCallable;
@@ -37,12 +38,13 @@ public class SelectList extends CompoundExpression{
             Aggregate aggregate = (Aggregate) callable;
             return setFunctionType(aggregate.callable(), aggregate.source().value()).join(asClause(aggregate));
         }
+        if (callable instanceof AliasedKeyword) {
+            AliasedKeyword aliasedKeyword = (AliasedKeyword) callable;
+            return expression(aliasedKeyword.source().value()).join(asClause(aliasedKeyword));
+        }
         if (callable instanceof Keyword) {
             Keyword keyword = (Keyword) callable;
-            if(!keyword.fullyQualifiedName().equals(keyword.value())){
-                return expression(keyword.fullyQualifiedName()).join(asClause(keyword));
-            }
-            return expression(keyword.fullyQualifiedName());
+            return expression(keyword.value());
         }
         if (callable instanceof SelectCallable) {
             Sequence<Keyword> keywords = ((SelectCallable) callable).keywords();

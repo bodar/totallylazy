@@ -5,14 +5,12 @@ import com.googlecode.totallylazy.numbers.Numbers;
 
 import static java.lang.String.format;
 
-public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
+public class Aggregate<T, R> extends AliasedKeyword<T> implements Callable2<T, T, R> {
     private final Callable2<? super T, ? super T, R> callable;
-    private final Keyword<T> source;
 
     public Aggregate(final Callable2<? super T, ? super T, R> callable, final Keyword<T> keyword, final String name) {
-        super(keyword.fullyQualifiedName(), name, keyword.forClass());
+        super(keyword, name);
         this.callable = callable;
-        source = keyword;
     }
 
     public Aggregate(final Callable2<? super T, ? super T, R> callable, final Keyword<T> keyword) {
@@ -33,10 +31,6 @@ public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
 
     public Callable2<? super T, ? super T, R> callable() {
         return callable;
-    }
-
-    public Keyword<T> source() {
-        return source;
     }
 
     public static <T, R> Aggregate<T, R> aggregate(Callable2<? super T, ? super T, R> callable, Keyword<T> keyword) {
@@ -60,6 +54,6 @@ public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
     }
 
     public Aggregate<T, R> as(Keyword<T> keyword) {
-        return new Aggregate<T, R>(callable, source, keyword.value());
+        return new Aggregate<T, R>(callable, source(), keyword.value());
     }
 }
