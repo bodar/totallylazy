@@ -6,9 +6,9 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.callables.CountNotNull;
 import com.googlecode.totallylazy.records.Aggregate;
 import com.googlecode.totallylazy.records.Aggregates;
-import com.googlecode.totallylazy.records.CountNotNull;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 

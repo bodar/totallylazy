@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy.records.sql.expressions;
 
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.callables.CountNotNull;
 import com.googlecode.totallylazy.numbers.Average;
 import com.googlecode.totallylazy.numbers.Sum;
-import com.googlecode.totallylazy.records.CountNotNull;
 import com.googlecode.totallylazy.records.Maximum;
 import com.googlecode.totallylazy.records.Minimum;
 

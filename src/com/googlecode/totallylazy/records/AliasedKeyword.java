@@ -1,14 +1,14 @@
 package com.googlecode.totallylazy.records;
 
 public class AliasedKeyword<T> extends ImmutableKeyword<T>{
-    private final Keyword<T> source;
+    private final Keyword source;
 
-    public AliasedKeyword(Keyword<T> source, String name) {
+    public AliasedKeyword(Keyword source, String name) {
         super(name, source.forClass());
         this.source = source;
     }
 
-    public Keyword<T> source() {
+    public Keyword source() {
         return source;
     }
 }
