@@ -10,6 +10,7 @@ import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.expressions.Expression;
+import com.googlecode.totallylazy.records.sql.expressions.ExpressionBuilder;
 import com.googlecode.totallylazy.records.sql.expressions.Expressions;
 import com.googlecode.totallylazy.records.sql.expressions.WhereClause;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
@@ -46,7 +47,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     public RecordSequence get(Keyword recordName) {
-        return new RecordSequence(this, SqlQuery.query(recordName, definitions(recordName)), logger);
+        return new RecordSequence(this, ExpressionBuilder.query(recordName, definitions(recordName)), logger);
     }
 
 

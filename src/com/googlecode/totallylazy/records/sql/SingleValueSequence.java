@@ -4,36 +4,38 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sets;
-import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.sql.expressions.Expressible;
+import com.googlecode.totallylazy.records.sql.expressions.Expression;
+import com.googlecode.totallylazy.records.sql.expressions.ExpressionBuilder;
 
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Set;
 
-class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
+class SingleValueSequence<T> extends Sequence<T> implements Expressible {
     private final Callable1<? super Record, T> callable;
     private final PrintStream logger;
     private final SqlRecords sqlRecords;
-    private final SqlQuery sqlQuery;
+    private final ExpressionBuilder builder;
 
-    public SingleValueSequence(final SqlRecords sqlRecords, final SqlQuery sqlQuery, final Callable1<? super Record, T> callable, final PrintStream logger) {
+    public SingleValueSequence(final SqlRecords sqlRecords, final ExpressionBuilder builder, final Callable1<? super Record, T> callable, final PrintStream logger) {
         this.sqlRecords = sqlRecords;
-        this.sqlQuery = sqlQuery;
+        this.builder = builder;
         this.callable = callable;
         this.logger = logger;
     }
 
     public Iterator<T> iterator() {
-        return execute(sqlQuery);
+        return execute(builder);
     }
 
-    private Iterator<T> execute(final SqlQuery sqlQuery) {
-        return Iterators.map(sqlRecords.iterator(sqlQuery.expression(), sqlQuery.select()), callable);
+    private Iterator<T> execute(final ExpressionBuilder builder) {
+        return Iterators.map(sqlRecords.iterator(builder.build(), builder.select()), callable);
     }
 
-    public SqlQuery query() {
-        return sqlQuery;
+    public Expression express() {
+        return builder.express();
     }
 
 //    @Override
@@ -48,6 +50,6 @@ class SingleValueSequence<T> extends Sequence<T> implements QuerySequence{
 
     @Override
     public <S extends Set<T>> S toSet(S set) {
-        return Sets.set(set, execute(sqlQuery.distinct()));
+        return Sets.set(set, execute(builder.distinct()));
     }
 }
