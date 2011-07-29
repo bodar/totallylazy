@@ -12,10 +12,10 @@ public class SelectCallable implements Callable1<Record, Record> {
         this.keywords = keywords;
     }
 
-    public Record call(Record record) throws Exception {
+    public Record call(Record source) throws Exception {
         Record result = new MapRecord();
         for (Keyword keyword : keywords) {
-            result.set(keyword, record.get(keyword));
+            result.set(keyword, source.get(keyword));
         }
         return result;
     }

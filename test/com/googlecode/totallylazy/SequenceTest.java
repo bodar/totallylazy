@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
-import com.googlecode.totallylazy.callables.SleepyCallable;
-import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import org.junit.Test;
@@ -20,12 +18,11 @@ import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
-import static com.googlecode.totallylazy.callables.SleepyCallable1.sleepy;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.Sequences.*;
 import static com.googlecode.totallylazy.numbers.Numbers.*;
-import static com.googlecode.totallylazy.records.CountNotNull.count;
+import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 

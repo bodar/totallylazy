@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.records;
+package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callable2;
 

@@ -5,11 +5,11 @@ import com.googlecode.totallylazy.records.Keywords;
 
 public class SqlKeywords {
     public static Keyword<Object> keyword(String value) {
-        return Keywords.keyword(value, extractName(value));
+        return Keywords.keyword(extractName(value));
     }
 
     public static <T> Keyword<T> keyword(String value, Class<T> aClass) {
-        return Keywords.keyword(value, extractName(value), aClass);
+        return Keywords.keyword(extractName(value), aClass);
     }
 
     private static String extractName(String value) {

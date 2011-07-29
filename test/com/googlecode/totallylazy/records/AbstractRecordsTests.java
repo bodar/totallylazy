@@ -36,7 +36,7 @@ import static com.googlecode.totallylazy.records.Aggregate.maximum;
 import static com.googlecode.totallylazy.records.Aggregate.minimum;
 import static com.googlecode.totallylazy.records.Aggregate.sum;
 import static com.googlecode.totallylazy.records.Aggregates.to;
-import static com.googlecode.totallylazy.records.CountNotNull.count;
+import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.records.Join.join;
 import static com.googlecode.totallylazy.records.Join.using;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
