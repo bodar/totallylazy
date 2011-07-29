@@ -11,6 +11,7 @@ import com.googlecode.totallylazy.records.Aggregates;
 import com.googlecode.totallylazy.records.CountNotNull;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.sql.expressions.SelectExpression;
 
 import java.util.Comparator;
 
@@ -50,7 +51,7 @@ public class SqlQuery {
     }
 
     public Expression expression() {
-        return Sql.toSql(setQuantifier, select, table, where, comparator);
+        return SelectExpression.toSql(setQuantifier, select, table, where, comparator);
     }
 
     public static SqlQuery query(Keyword table, Sequence<Keyword> select, Option<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator, final SetQuantifier setQuantifier) {

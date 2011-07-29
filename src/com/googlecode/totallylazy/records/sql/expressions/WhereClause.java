@@ -5,8 +5,6 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Value;
-import com.googlecode.totallylazy.comparators.AscendingComparator;
-import com.googlecode.totallylazy.comparators.DescendingComparator;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.Between;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
@@ -27,8 +25,6 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.Expression;
 import com.googlecode.totallylazy.records.sql.QuerySequence;
 import com.googlecode.totallylazy.records.sql.Sql;
-
-import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Sequences.repeat;
