@@ -2,15 +2,15 @@ package com.googlecode.totallylazy;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Pair<F, S> implements First<F>, Second<S> {
+public final class Pair<F, S> implements First<F>, Second<S> {
     private final F first;
     private final S second;
 
-    public static <F, S> Pair<F, S> pair(F first, S second) {
+    public static <F, S> Pair<F, S> pair(final F first, final S second) {
         return new Pair<F, S>(first, second);
     }
 
-    public Pair(F first, S second) {
+    public Pair(final F first, final S second) {
         this.first = first;
         this.second = second;
     }
@@ -24,20 +24,20 @@ public class Pair<F, S> implements First<F>, Second<S> {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return toString("[", ",", "]");
     }
 
-    public String toString(String separator) {
+    public final String toString(String separator) {
         return toString("", separator, "");
     }
 
-    public String toString(String start, String separator, String end){
+    public final String toString(String start, String separator, String end){
         return sequence(first, second).toString(start, separator, end);
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public final boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -50,7 +50,7 @@ public class Pair<F, S> implements First<F>, Second<S> {
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         int result = first != null ? first.hashCode() : 0;
         result = 31 * result + (second != null ? second.hashCode() : 0);
         return result;
