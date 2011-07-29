@@ -2,11 +2,11 @@ package com.googlecode.totallylazy.records.sql.expressions;
 
 import com.googlecode.totallylazy.Sequence;
 
-public class SingleExpression extends AbstractExpression {
+public class TextAndParametersExpression extends AbstractExpression {
     private final String text;
     private final Sequence<Object> parameters;
 
-    public SingleExpression(String text, Sequence<Object> parameters) {
+    public TextAndParametersExpression(String text, Sequence<Object> parameters) {
         this.text = text;
         this.parameters = parameters;
     }

@@ -6,6 +6,6 @@ public abstract class AbstractExpression implements Expression {
     }
 
     public String toString() {
-        return text() + " " + parameters().toString("(", ",", ")");
+        return String.format(text().replace("?", "'%s'"), parameters().toArray(Object.class));
     }
 }

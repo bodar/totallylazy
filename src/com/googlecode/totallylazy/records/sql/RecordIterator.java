@@ -25,17 +25,17 @@ import static java.lang.String.format;
 public class RecordIterator extends StatefulIterator<Record> implements Closeable {
     private final Connection connection;
     private final Mappings mappings;
-    private final Expression sql;
+    private final Expression expression;
     private final Sequence<Keyword> definitions;
     private final PrintStream logger;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
-    public RecordIterator(final Connection connection, final Mappings mappings, final Expression sql, final Sequence<Keyword> definitions, final PrintStream logger) {
+    public RecordIterator(final Connection connection, final Mappings mappings, final Expression expression, final Sequence<Keyword> definitions, final PrintStream logger) {
         this.definitions = definitions;
         this.logger = logger;
         this.connection = connection;
-        this.sql = sql;
+        this.expression = expression;
         this.mappings = mappings;
     }
 
@@ -68,9 +68,9 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
 
     private PreparedStatement prepareStatement() throws SQLException {
         if (preparedStatement == null) {
-            logger.println(format("SQL:'%s' VALUES:'%s'", sql.text(), sql.parameters()));
-            preparedStatement = connection.prepareStatement(sql.text());
-            mappings.addValues(preparedStatement, sql.parameters());
+            logger.println(format("SQL: %s", expression));
+            preparedStatement = connection.prepareStatement(expression.text());
+            mappings.addValues(preparedStatement, expression.parameters());
         }
         return preparedStatement;
     }

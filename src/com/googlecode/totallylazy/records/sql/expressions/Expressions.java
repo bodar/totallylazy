@@ -23,11 +23,14 @@ public class Expressions {
     }
 
     public static Expression expression(String expression, Object... parameters){
-        return new SingleExpression(expression, sequence(parameters));
+        if(parameters.length == 0) {
+            return new TextOnlyExpression(expression);
+        }
+        return new TextAndParametersExpression(expression, sequence(parameters));
     }
 
     public static Expression expression(String expression, Sequence<Object> parameters){
-        return new SingleExpression(expression, parameters);
+        return new TextAndParametersExpression(expression, parameters);
     }
 
     public static EmptyExpression empty() {
