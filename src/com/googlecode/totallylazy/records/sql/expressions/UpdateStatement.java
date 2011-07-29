@@ -19,7 +19,6 @@ public class UpdateStatement extends CompoundExpression {
     }
 
     public static Expression updateStatement(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-
         return new UpdateStatement(recordName, predicate, fields, record);
     }
 }
