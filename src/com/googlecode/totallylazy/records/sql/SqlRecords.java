@@ -9,6 +9,8 @@ import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.sql.expressions.Expression;
+import com.googlecode.totallylazy.records.sql.expressions.Expressions;
 import com.googlecode.totallylazy.records.sql.expressions.WhereClause;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
@@ -25,8 +27,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
-import static com.googlecode.totallylazy.records.sql.Expression.expression;
-import static com.googlecode.totallylazy.records.sql.Sql.toSql;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
 import static java.lang.String.format;
 
 public class SqlRecords extends AbstractRecords implements Queryable<Expression> {
@@ -133,8 +134,8 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
         Expression where = WhereClause.toSql(predicate);
-        String sql = format("update %s set %s where %s", recordName, fields.toString("", "=?,", "=?"), where.first());
-        return update(expression(sql, record.getValuesFor(fields).join(where.second())));
+        String sql = format("update %s set %s where %s", recordName, fields.toString("", "=?,", "=?"), where.expression());
+        return update(Expressions.expression(sql, record.getValuesFor(fields).join(where.parameters())));
     }
 
     public Number update(final Expression expression) {
@@ -154,8 +155,8 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
         Expression where = WhereClause.toSql(predicate);
-        final String sql = format("delete from %s where %s", recordName, where.first());
-        return update(expression(sql, where.second()));
+        final String sql = format("delete from %s where %s", recordName, where.expression());
+        return update(expression(sql, where.parameters()));
     }
 
     public Number remove(Keyword recordName) {

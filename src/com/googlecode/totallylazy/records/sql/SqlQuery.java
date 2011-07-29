@@ -11,6 +11,7 @@ import com.googlecode.totallylazy.records.Aggregates;
 import com.googlecode.totallylazy.records.CountNotNull;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.sql.expressions.Expression;
 import com.googlecode.totallylazy.records.sql.expressions.SelectExpression;
 
 import java.util.Comparator;

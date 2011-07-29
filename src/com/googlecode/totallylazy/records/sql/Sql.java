@@ -11,9 +11,10 @@ import com.googlecode.totallylazy.records.Maximum;
 import com.googlecode.totallylazy.records.Minimum;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.SelectCallable;
+import com.googlecode.totallylazy.records.sql.expressions.Expression;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.records.sql.Expression.expression;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
 import static java.lang.String.format;
 
 public class Sql {
@@ -28,14 +29,6 @@ public class Sql {
             return expression(sequence(((SelectCallable) callable).keywords()).toString("", ",", ""));
         }
         throw new UnsupportedOperationException("Unsupported callable " + callable);
-    }
-
-    public static Callable1<? super Expression, Iterable<Object>> values() {
-        return new Callable1<Expression, Iterable<Object>>() {
-            public Iterable<Object> call(Expression pair) throws Exception {
-                return pair.second();
-            }
-        };
     }
 
     public static Expression asSql(Aggregate aggregate) {
