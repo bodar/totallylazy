@@ -51,8 +51,7 @@ public class ExpressionBuilder implements Expressible, Callable<Expression> {
 
     @Override
     public String toString() {
-        final Expression expression = build();
-        return String.format(String.format("SQL:'%s' VALUES:'%s'", expression.text(), expression.parameters()));
+        return build().toString();
     }
 
     public Sequence<Keyword> select() {
