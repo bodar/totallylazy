@@ -22,7 +22,6 @@ import com.googlecode.totallylazy.predicates.OrPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.sql.QuerySequence;
 import com.googlecode.totallylazy.records.sql.Sql;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
@@ -91,8 +90,8 @@ public class WhereClause {
         if (predicate instanceof InPredicate) {
             InPredicate inPredicate = (InPredicate) predicate;
             Sequence sequence = inPredicate.values();
-            if (sequence instanceof QuerySequence) {
-                Expression pair = ((QuerySequence) sequence).query().expression();
+            if (sequence instanceof Expressible) {
+                Expression pair = ((Expressible) sequence).express();
                 return expression("in ( " + pair.expression() + ")", pair.parameters());
             }
             return expression(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) sequence);
