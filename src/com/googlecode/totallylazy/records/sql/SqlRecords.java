@@ -70,8 +70,8 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         }
         try {
             final String sql = format("create table %s (%s)", recordName, sequence(fields).map(asColumn()));
+            logger.println(format("SQL: %s", sql));
             using(connection.createStatement(), executeUpdate(sql));
-            logger.println(format("SQL:'%s'", sql));
         } catch (SQLException e) {
             throw new LazyException(e);
         }
@@ -117,6 +117,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         try {
             final String sql = format("insert into %s (%s) values (%s)",
                     recordName, fields, repeat("?").take((Integer) fields.size()));
+            logger.print(format("SQL: %s", sql));
             Number rowCount = using(connection.prepareStatement(sql), new Callable1<PreparedStatement, Number>() {
                 public Number call(PreparedStatement statement) throws Exception {
                     for (Record record : records) {
@@ -126,7 +127,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
                     return numbers(statement.executeBatch()).reduce(sum());
                 }
             });
-            logger.println(format("SQL:%s Count: %s", sql, rowCount));
+            logger.println(format(" Count:%s", rowCount));
             return rowCount;
         } catch (SQLException e) {
             throw new LazyException(e);
@@ -139,7 +140,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
 
     public Number update(final Expression expression) {
         try {
-            logger.print(format("SQL:%s", expression));
+            logger.print(format("SQL: %s", expression));
             Number rowCount = using(connection.prepareStatement(expression.text()), new Callable1<PreparedStatement, Number>() {
                 public Number call(PreparedStatement statement) throws Exception {
                     mappings.addValues(statement, expression.parameters());
