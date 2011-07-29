@@ -14,7 +14,7 @@ import static java.util.Collections.synchronizedMap;
 
 public final class LazyCallable1<T, R> implements Callable1<T,R> {
     private final Callable1<T,R> callable;
-    private Map<T,R> state = synchronizedMap(new HashMap<T, R>());
+    private final Map<T,R> state = synchronizedMap(new HashMap<T, R>());
 
     private LazyCallable1(Callable1<T,R> callable) {
         this.callable = callable;
