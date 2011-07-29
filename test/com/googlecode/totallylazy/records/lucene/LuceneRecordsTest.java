@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy.records.lucene;
 
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.records.AbstractRecordsTests;
+import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.analysis.Analyzer;
@@ -18,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.googlecode.totallylazy.Files.temporaryDirectory;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -46,6 +51,7 @@ public class LuceneRecordsTest extends AbstractRecordsTests {
     @Test
     public void canQueryIndexDirectly() throws Exception {
         QueryParser parser = new QueryParser(VERSION, null, ANALYZER);
-        assertThat(((LuceneRecords) records).query(parser.parse("type:people +firstName:da*")).map(lastName), hasExactly("bodart"));
+        Sequence<Record> results = ((LuceneRecords) records).query(parser.parse("type:people +firstName:da*"), Sequences.<Keyword>sequence(lastName));
+        assertThat(results.map(lastName), hasExactly("bodart"));
     }
 }
