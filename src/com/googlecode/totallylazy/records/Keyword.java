@@ -2,8 +2,9 @@ package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.GenericType;
+import com.googlecode.totallylazy.Value;
 
-public class Keyword<T> implements Callable1<Record, T>, GenericType {
+public class Keyword<T> implements Callable1<Record, T>, GenericType<T>, Value<String> {
     private final String fullyQualifiedName;
     private final String name;
     private final Class<T> aClass;
@@ -22,12 +23,12 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof Keyword && name().equalsIgnoreCase(((Keyword) other).name());
+        return other instanceof Keyword && value().equalsIgnoreCase(((Keyword) other).value());
     }
 
     @Override
     public int hashCode() {
-        return name().toLowerCase().hashCode();
+        return value().toLowerCase().hashCode();
     }
 
     public T call(Record record) throws Exception {
@@ -47,13 +48,13 @@ public class Keyword<T> implements Callable1<Record, T>, GenericType {
         return fullyQualifiedName;
     }
 
-    public String name() {
+    public String value() {
         return name;
     }
 
     // TODO Rename to 'as' somehow
     public Keyword<T> alias(Keyword<T> keyword) {
-        return new Keyword(fullyQualifiedName, keyword.name(), aClass);
+        return new Keyword(fullyQualifiedName, keyword.value(), aClass);
 
     }
 }

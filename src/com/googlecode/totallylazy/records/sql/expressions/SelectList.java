@@ -35,11 +35,11 @@ public class SelectList extends CompoundExpression{
     public static <T> Expression derivedColumn(Callable1<? super Record, T> callable) {
         if(callable instanceof Aggregate){
             Aggregate aggregate = (Aggregate) callable;
-            return setFunctionType(aggregate.callable(), aggregate.source().name()).join(asClause(aggregate));
+            return setFunctionType(aggregate.callable(), aggregate.source().value()).join(asClause(aggregate));
         }
         if (callable instanceof Keyword) {
             Keyword keyword = (Keyword) callable;
-            if(!keyword.fullyQualifiedName().equals(keyword.name())){
+            if(!keyword.fullyQualifiedName().equals(keyword.value())){
                 return expression(keyword.fullyQualifiedName()).join(asClause(keyword));
             }
             return expression(keyword.fullyQualifiedName());
@@ -52,7 +52,7 @@ public class SelectList extends CompoundExpression{
     }
 
     public static Expression asClause(Keyword keyword) {
-        return expression("as " + keyword.name());
+        return expression("as " + keyword.value());
     }
 
 

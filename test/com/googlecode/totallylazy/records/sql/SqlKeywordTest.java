@@ -10,9 +10,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class SqlKeywordTest {
     @Test
     public void nameReturnsLastPartOfKeyword() throws Exception {
-        assertThat(keyword("USER.foo").name(), is("foo"));
-        assertThat(keyword("USER.TABLE.foo").name(), is("foo"));
-        assertThat(keyword("foo").name(), is("foo"));
+        assertThat(keyword("USER.foo").value(), is("foo"));
+        assertThat(keyword("USER.TABLE.foo").value(), is("foo"));
+        assertThat(keyword("foo").value(), is("foo"));
     }
 
     @Test

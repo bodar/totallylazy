@@ -20,7 +20,7 @@ public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
     }
 
     private static <T, R> String generateName(final Callable2<? super T, ? super T, R> callable, final Keyword<T> keyword) {
-        return format("%s_%s", callable.getClass().getSimpleName(), replaceIllegalCharacters(keyword.name())).toLowerCase();
+        return format("%s_%s", callable.getClass().getSimpleName(), replaceIllegalCharacters(keyword.value())).toLowerCase();
     }
 
     private static String replaceIllegalCharacters(String name) {
@@ -60,6 +60,6 @@ public class Aggregate<T, R> extends Keyword<T> implements Callable2<T, T, R> {
     }
 
     public Aggregate<T, R> as(Keyword<T> keyword) {
-        return new Aggregate<T, R>(callable, source, keyword.name());
+        return new Aggregate<T, R>(callable, source, keyword.value());
     }
 }
