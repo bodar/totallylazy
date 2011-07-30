@@ -1,15 +1,19 @@
 package com.googlecode.totallylazy.records.sql;
 
+import com.googlecode.totallylazy.records.AliasedKeyword;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Keywords;
 
 public class SqlKeywords {
     public static Keyword<Object> keyword(String value) {
-        return Keywords.keyword(extractName(value));
+        return keyword(value, Object.class);
     }
 
     public static <T> Keyword<T> keyword(String value, Class<T> aClass) {
-        return Keywords.keyword(extractName(value), aClass);
+        if(value.contains(".")){
+            return Keywords.keyword(value, aClass).alias(Keywords.keyword(extractName(value), aClass));
+        }
+        return Keywords.keyword(value, aClass);
     }
 
     private static String extractName(String value) {
