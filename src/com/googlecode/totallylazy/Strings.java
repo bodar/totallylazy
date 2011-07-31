@@ -164,10 +164,10 @@ public class Strings {
         });
     }
 
-    public static Callable1<String, String> format(final String format) {
-        return new Callable1<String, String>() {
-            public String call(String string) throws Exception {
-                return String.format(format, string);
+    public static Callable1<Object, String> format(final String format) {
+        return new Callable1<Object, String>() {
+            public String call(Object value) throws Exception {
+                return String.format(format, value);
             }
         };
     }
