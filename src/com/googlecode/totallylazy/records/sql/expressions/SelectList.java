@@ -36,15 +36,15 @@ public class SelectList extends CompoundExpression{
     public static <T> Expression derivedColumn(Callable1<? super Record, T> callable) {
         if(callable instanceof Aggregate){
             Aggregate aggregate = (Aggregate) callable;
-            return setFunctionType(aggregate.callable(), aggregate.source().value()).join(asClause(aggregate));
+            return setFunctionType(aggregate.callable(), aggregate.source().name()).join(asClause(aggregate));
         }
         if (callable instanceof AliasedKeyword) {
             AliasedKeyword aliasedKeyword = (AliasedKeyword) callable;
-            return expression(aliasedKeyword.source().value()).join(asClause(aliasedKeyword));
+            return expression(aliasedKeyword.source().name()).join(asClause(aliasedKeyword));
         }
         if (callable instanceof Keyword) {
             Keyword keyword = (Keyword) callable;
-            return expression(keyword.value());
+            return expression(keyword.name());
         }
         if (callable instanceof SelectCallable) {
             Sequence<Keyword> keywords = ((SelectCallable) callable).keywords();
@@ -54,7 +54,7 @@ public class SelectList extends CompoundExpression{
     }
 
     public static Expression asClause(Keyword keyword) {
-        return expression("as " + keyword.value());
+        return expression("as " + keyword.name());
     }
 
 

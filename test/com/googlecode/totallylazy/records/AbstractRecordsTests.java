@@ -49,7 +49,7 @@ public abstract class AbstractRecordsTests {
     protected static Keyword people = keyword("people");
     protected static Keyword<Integer> age = keyword("age", Integer.class);
     protected static Keyword<Date> dob = keyword("dob", Date.class);
-    protected static Keyword<String> firstName = keyword("firstName", String.class);
+    protected static ImmutableKeyword<String> firstName = keyword("firstName", String.class);
     protected static Keyword<String> lastName = keyword("lastName", String.class);
 
     protected static Keyword books = keyword("books");
@@ -163,7 +163,7 @@ public abstract class AbstractRecordsTests {
     @Test
     public void supportsAliasingAKeyword() throws Exception {
         Keyword<String> bob = keyword("bob", String.class);
-        Sequence<Keyword> fields = records.get(people).map(select(firstName.alias(bob))).head().keywords();
+        Sequence<Keyword> fields = records.get(people).map(select(firstName.as(bob))).head().keywords();
         assertThat(fields, hasExactly(bob));
     }
 
