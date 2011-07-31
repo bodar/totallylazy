@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.records.AliasedKeyword;
-import com.googlecode.totallylazy.records.Keyword;
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.records.sql.SqlKeywords.keyword;
@@ -19,11 +17,11 @@ public class SqlKeywordTest {
 
     @Test
     public void nameReturnsLastPartOfKeyword() throws Exception {
-        assertThat(keyword("USER.foo").value(), is("foo"));
-        assertThat(((AliasedKeyword<Object>) keyword("USER.foo")).source().value(), is("USER.foo"));
-        assertThat(keyword("USER.TABLE.foo").value(), is("foo"));
-        assertThat(((AliasedKeyword<Object>) keyword("USER.TABLE.foo")).source().value(), is("USER.TABLE.foo"));
-        assertThat(keyword("foo").value(), is("foo"));
+        assertThat(keyword("USER.foo").name(), is("foo"));
+        assertThat(((AliasedKeyword<Object>) keyword("USER.foo")).source().name(), is("USER.foo"));
+        assertThat(keyword("USER.TABLE.foo").name(), is("foo"));
+        assertThat(((AliasedKeyword<Object>) keyword("USER.TABLE.foo")).source().name(), is("USER.TABLE.foo"));
+        assertThat(keyword("foo").name(), is("foo"));
     }
 
     @Test
