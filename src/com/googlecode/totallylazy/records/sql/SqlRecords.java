@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.sql.expressions.DeleteStatement;
 import com.googlecode.totallylazy.records.sql.expressions.Expression;
 import com.googlecode.totallylazy.records.sql.expressions.ExpressionBuilder;
 import com.googlecode.totallylazy.records.sql.expressions.WhereClause;
@@ -27,6 +28,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
+import static com.googlecode.totallylazy.records.sql.expressions.DeleteStatement.deleteStatement;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
 import static java.lang.String.format;
@@ -155,16 +157,14 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        Expression where = WhereClause.toSql(predicate);
-        final String sql = format("delete from %s where %s", recordName, where.text());
-        return update(expression(sql, where.parameters()));
+        return update(deleteStatement(recordName, predicate));
     }
 
     public Number remove(Keyword recordName) {
         if (!exists(recordName)) {
             return 0;
         }
-        return update(expression(format("delete from %s", recordName)));
+        return update(deleteStatement(recordName));
     }
 
 }
