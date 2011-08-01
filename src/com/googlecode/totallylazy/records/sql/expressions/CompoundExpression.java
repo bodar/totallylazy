@@ -2,6 +2,8 @@ package com.googlecode.totallylazy.records.sql.expressions;
 
 import com.googlecode.totallylazy.Sequence;
 
+import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class CompoundExpression extends AbstractExpression {
@@ -26,7 +28,7 @@ public class CompoundExpression extends AbstractExpression {
     }
 
     public String text() {
-        return expressions.map(Expressions.text()).toString(start, separator, end, Integer.MAX_VALUE).trim();
+        return expressions.filter(not(instanceOf(EmptyExpression.class))).map(Expressions.text()).toString(start, separator, end, Integer.MAX_VALUE).trim();
     }
 
     public Sequence<Object> parameters() {

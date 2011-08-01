@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.records.Record;
 
 import java.util.Comparator;
 
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.empty;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
 import static com.googlecode.totallylazy.records.sql.expressions.FromClause.fromClause;
 import static com.googlecode.totallylazy.records.sql.expressions.OrderByClause.orderByClause;
@@ -33,6 +34,9 @@ public class SelectExpression extends CompoundExpression {
     }
 
     public static Expression setQuantifier(SetQuantifier setQuantifier) {
+        if(setQuantifier.equals(SetQuantifier.ALL)){
+            return empty();
+        }
         return textOnly(setQuantifier);
     }
 }
