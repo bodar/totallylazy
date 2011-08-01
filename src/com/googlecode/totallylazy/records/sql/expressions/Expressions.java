@@ -24,14 +24,18 @@ public class Expressions {
 
     public static Expression expression(String expression, Object... parameters){
         if(parameters.length == 0) {
-            return new TextOnlyExpression(expression);
+            return textOnly(expression);
         }
         return new TextAndParametersExpression(expression, sequence(parameters));
     }
 
+    public static TextOnlyExpression textOnly(Object expression) {
+        return new TextOnlyExpression(expression.toString());
+    }
+
     public static Expression expression(String expression, Sequence<Object> parameters){
         if(parameters.isEmpty()) {
-            return new TextOnlyExpression(expression);
+            return textOnly(expression);
         }
         return new TextAndParametersExpression(expression, parameters);
     }

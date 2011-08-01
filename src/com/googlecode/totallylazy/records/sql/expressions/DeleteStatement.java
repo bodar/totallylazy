@@ -2,19 +2,17 @@ package com.googlecode.totallylazy.records.sql.expressions;
 
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 
-import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
 import static com.googlecode.totallylazy.records.sql.expressions.FromClause.fromClause;
 import static com.googlecode.totallylazy.records.sql.expressions.WhereClause.whereClause;
-import static java.lang.String.format;
 
 public class DeleteStatement extends CompoundExpression {
     public DeleteStatement(Keyword recordName, Option<Predicate<? super Record>> predicate) {
         super(
-                expression("delete"),
+                textOnly("delete"),
                 fromClause(recordName),
                 whereClause(predicate)
                 );
