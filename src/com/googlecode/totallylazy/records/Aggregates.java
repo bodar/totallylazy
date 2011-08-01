@@ -1,14 +1,15 @@
 package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Value;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Aggregates implements Callable2<Record, Record, Record>, Value<Iterable<Aggregate>> {
-    private final Iterable<Aggregate> aggregates;
+public class Aggregates implements Callable2<Record, Record, Record>, Value<Sequence<Aggregate>> {
+    private final Sequence<Aggregate> aggregates;
 
-    public Aggregates(final Iterable<Aggregate> aggregates) {
+    public Aggregates(final Sequence<Aggregate> aggregates) {
         this.aggregates = aggregates;
     }
 
@@ -28,7 +29,7 @@ public class Aggregates implements Callable2<Record, Record, Record>, Value<Iter
         return value;
     }
 
-    public Iterable<Aggregate> value() {
+    public Sequence<Aggregate> value() {
         return aggregates;
     }
 
@@ -37,7 +38,7 @@ public class Aggregates implements Callable2<Record, Record, Record>, Value<Iter
         return aggregates(sequence(aggregates));
     }
 
-    public static Aggregates aggregates(final Iterable<Aggregate> sequence) {
+    public static Aggregates aggregates(final Sequence<Aggregate> sequence) {
         return new Aggregates(sequence);
     }
 
