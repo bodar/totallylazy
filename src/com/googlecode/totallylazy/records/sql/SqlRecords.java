@@ -26,7 +26,9 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
+import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.sql.expressions.DeleteStatement.deleteStatement;
+import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
 import static java.lang.String.format;
 
@@ -76,9 +78,11 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         }
     }
 
+
+    private static final Keyword<Integer> one = keyword("1", Integer.class);
     public boolean exists(Keyword recordName) {
         try {
-            using(connection.createStatement(), executeQuery("select 1 from " + recordName));
+            using(connection.createStatement(), executeQuery(from(recordName).select(one).build().text()));
             return true;
         } catch (Exception e) {
             return false;

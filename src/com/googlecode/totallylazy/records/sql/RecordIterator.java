@@ -61,18 +61,18 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
 
     private ResultSet getResultSet() throws Exception {
         if (resultSet == null) {
-            resultSet = prepareStatement().executeQuery();
+            resultSet = prepareStatement();
         }
         return resultSet;
     }
 
-    private PreparedStatement prepareStatement() throws SQLException {
+    private ResultSet prepareStatement() throws SQLException {
         if (preparedStatement == null) {
             logger.println(format("SQL: %s", expression));
             preparedStatement = connection.prepareStatement(expression.text());
             mappings.addValues(preparedStatement, expression.parameters());
         }
-        return preparedStatement;
+        return preparedStatement.executeQuery();
     }
 
     public void close() throws IOException {
