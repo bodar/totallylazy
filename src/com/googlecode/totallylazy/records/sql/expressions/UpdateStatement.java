@@ -7,14 +7,14 @@ import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
 import static com.googlecode.totallylazy.records.sql.expressions.WhereClause.whereClause;
-import static java.lang.String.format;
 
 public class UpdateStatement extends CompoundExpression {
     public UpdateStatement(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
         super(
-                expression(format("update %s", recordName)),
-                expression(format("set %s", fields.map(Strings.format("%s=?"))), record.getValuesFor(fields)),
+                textOnly("update").join(textOnly(recordName)),
+                textOnly("set").join(expression(fields.map(Strings.format("%s=?")).toString(), record.getValuesFor(fields))),
                 whereClause(predicate)
                 );
     }

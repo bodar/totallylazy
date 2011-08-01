@@ -16,7 +16,7 @@ public class CompoundExpression extends AbstractExpression {
     }
 
     public String text() {
-        return expressions.map(Expressions.text()).toString(" ");
+        return expressions.map(Expressions.text()).toString("", " ", "", Integer.MAX_VALUE);
     }
 
     public Sequence<Object> parameters() {

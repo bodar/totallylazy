@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.SelectCallable;
 
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
 import static com.googlecode.totallylazy.records.sql.expressions.SetFunctionType.setFunctionType;
 
 public class SelectList extends CompoundExpression{
@@ -36,15 +37,15 @@ public class SelectList extends CompoundExpression{
     public static <T> Expression derivedColumn(Callable1<? super Record, T> callable) {
         if(callable instanceof Aggregate){
             Aggregate aggregate = (Aggregate) callable;
-            return setFunctionType(aggregate.callable(), aggregate.source().name()).join(asClause(aggregate));
+            return setFunctionType(aggregate.callable(), aggregate.source()).join(asClause(aggregate));
         }
         if (callable instanceof AliasedKeyword) {
             AliasedKeyword aliasedKeyword = (AliasedKeyword) callable;
-            return expression(aliasedKeyword.source().name()).join(asClause(aliasedKeyword));
+            return textOnly(aliasedKeyword.source()).join(asClause(aliasedKeyword));
         }
         if (callable instanceof Keyword) {
             Keyword keyword = (Keyword) callable;
-            return expression(keyword.name());
+            return textOnly(keyword);
         }
         if (callable instanceof SelectCallable) {
             Sequence<Keyword> keywords = ((SelectCallable) callable).keywords();
