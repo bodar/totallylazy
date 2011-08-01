@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.MapRecord.record;
-import static com.googlecode.totallylazy.records.RecordCallables.getKeyword;
+import static com.googlecode.totallylazy.records.RecordMethods.getKeyword;
 import static java.lang.String.format;
 
 public class RecordIterator extends StatefulIterator<Record> implements Closeable {

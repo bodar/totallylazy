@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.numbers.Numbers;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.numbers.Numbers.equalTo;
 
 public class MapRecord implements Record {
     private final Map<Keyword, Object> fields = new LinkedHashMap<Keyword, Object>();
@@ -50,9 +52,9 @@ public class MapRecord implements Record {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof MapRecord) {
-            MapRecord otherRecord = (MapRecord) other;
-            if (fields.size() != otherRecord.fields.size()) {
+        if (other instanceof Record) {
+            Record otherRecord = (Record) other;
+            if (!equalTo(fields().size(), otherRecord.fields().size())) {
                 return false;
             }
             for (Pair<Keyword, Object> entry : fields()) {

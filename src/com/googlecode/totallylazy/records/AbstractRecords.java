@@ -16,7 +16,7 @@ import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.records.RecordCallables.merge;
+import static com.googlecode.totallylazy.records.RecordMethods.merge;
 
 public abstract class AbstractRecords implements Records{
     private final Map<Keyword, List<Keyword<?>>> definitions = new HashMap<Keyword, List<Keyword<?>>>();

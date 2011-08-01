@@ -4,13 +4,15 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
-import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Callables.first;
+import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.Keywords.name;
 
-public class RecordCallables {
+public class RecordMethods {
     @SuppressWarnings({"unchecked"})
     public static Callable2<? super Record, ? super Pair<Keyword, Object>, Record> updateValues() {
         return new Callable2<Record, Pair<Keyword, Object>, Record>() {
@@ -42,5 +44,21 @@ public class RecordCallables {
                 return record.getValuesFor(fields);
             }
         };
+    }
+
+    public static Record filter(Record original, Keyword... fields) {
+        return filter(original, Sequences.sequence(fields));
+    }
+
+    public static Record filter(Record original, Sequence<Keyword> fields) {
+        return record(original.fields().filter(where(first(Keyword.class), is(in(fields)))));
+    }
+
+    public static Record record(final Pair<Keyword, Object>... fields) {
+        return Sequences.sequence(fields).fold(new MapRecord(), updateValues());
+    }
+
+    public static Record record(final Sequence<Pair<Keyword, Object>> fields) {
+        return fields.fold(new MapRecord(), updateValues());
     }
 }
