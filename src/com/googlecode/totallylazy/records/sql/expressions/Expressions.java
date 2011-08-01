@@ -22,7 +22,7 @@ public class Expressions {
         };
     }
 
-    public static Expression expression(String expression, Object... parameters){
+    public static AbstractExpression expression(String expression, Object... parameters){
         if(parameters.length == 0) {
             return textOnly(expression);
         }
@@ -33,7 +33,7 @@ public class Expressions {
         return new TextOnlyExpression(expression.toString());
     }
 
-    public static Expression expression(String expression, Sequence<Object> parameters){
+    public static AbstractExpression expression(String expression, Sequence<Object> parameters){
         if(parameters.isEmpty()) {
             return textOnly(expression);
         }

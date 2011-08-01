@@ -6,8 +6,4 @@ public interface Expression {
     String text();
 
     Sequence<Object> parameters();
-
-    AbstractExpression join(Expression other);
-
-    String toString();
 }

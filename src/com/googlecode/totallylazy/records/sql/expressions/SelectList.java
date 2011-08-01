@@ -34,7 +34,7 @@ public class SelectList extends CompoundExpression{
         };
     }
 
-    public static <T> Expression derivedColumn(Callable1<? super Record, T> callable) {
+    public static <T> AbstractExpression derivedColumn(Callable1<? super Record, T> callable) {
         if(callable instanceof Aggregate){
             Aggregate aggregate = (Aggregate) callable;
             return setFunctionType(aggregate.callable(), aggregate.source()).join(asClause(aggregate));
