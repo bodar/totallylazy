@@ -33,9 +33,9 @@ public class XmlRecords extends AbstractRecords {
         return new XmlSequence(nodes, mappings, definitions(recordName));
     }
 
-    public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
+    public Number add(Keyword recordName, Sequence<Record> records) {
         for (Record record : records) {
-            Element newElement = fields.fold(document.createElement(toTagName(recordName.toString())), addNodes(record));
+            Element newElement = record.keywords().fold(document.createElement(toTagName(recordName.toString())), addNodes(record));
             Node parent = Xml.selectNodes(document, toParent(recordName)).head();
             parent.appendChild(newElement);
         }

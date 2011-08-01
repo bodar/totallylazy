@@ -78,15 +78,15 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         }
     }
 
-    public Number add(final Keyword recordName, final Sequence<Keyword> fields, final Sequence<Record> records) {
+    public Number add(final Keyword recordName, final Sequence<Record> records) {
         if (records.isEmpty()) {
             return 0;
         }
-        return update(records.map(InsertStatement.toInsertStatement(recordName, fields)));
+        return update(records.map(InsertStatement.toInsertStatement(recordName)));
     }
 
-    public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        return update(updateStatement(recordName, predicate, fields, record.getValuesFor(fields)));
+    public Number set(Keyword recordName, Predicate<? super Record> predicate, Record record) {
+        return update(updateStatement(recordName, predicate, record));
     }
 
     public Number update(final Expression... expressions) {
