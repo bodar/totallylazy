@@ -10,7 +10,7 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.SelectCallable;
 import com.googlecode.totallylazy.records.sql.expressions.Expressible;
 import com.googlecode.totallylazy.records.sql.expressions.Expression;
-import com.googlecode.totallylazy.records.sql.expressions.ExpressionBuilder;
+import com.googlecode.totallylazy.records.sql.expressions.SelectBuilder;
 
 import java.io.PrintStream;
 import java.util.Comparator;
@@ -21,10 +21,10 @@ import static java.lang.String.format;
 
 public class RecordSequence extends Sequence<Record> implements Expressible {
     private final SqlRecords sqlRecords;
-    private final ExpressionBuilder builder;
+    private final SelectBuilder builder;
     private final PrintStream logger;
 
-    public RecordSequence(final SqlRecords records, final ExpressionBuilder builder, final PrintStream logger) {
+    public RecordSequence(final SqlRecords records, final SelectBuilder builder, final PrintStream logger) {
         this.sqlRecords = records;
         this.builder = builder;
         this.logger = logger;
@@ -34,7 +34,7 @@ public class RecordSequence extends Sequence<Record> implements Expressible {
         return execute(builder);
     }
 
-    private Iterator<Record> execute(final ExpressionBuilder builder) {
+    private Iterator<Record> execute(final SelectBuilder builder) {
         return sqlRecords.iterator(builder.build(), builder.select());
     }
 
@@ -74,7 +74,7 @@ public class RecordSequence extends Sequence<Record> implements Expressible {
     @Override
     public <S> S reduce(Callable2<? super S, ? super Record, S> callable) {
         try {
-            ExpressionBuilder query = builder.reduce(callable);
+            SelectBuilder query = builder.reduce(callable);
             return (S) sqlRecords.query(query.build(), query.select()).head();
         } catch (UnsupportedOperationException ex) {
             logger.println(format("Warning: Unsupported Callable2 %s dropping down to client side sequence functionality", callable));
@@ -84,7 +84,7 @@ public class RecordSequence extends Sequence<Record> implements Expressible {
 
     @Override
     public Number size() {
-        ExpressionBuilder count = builder.count();
+        SelectBuilder count = builder.count();
         return (Number) sqlRecords.query(count.build(), count.select()).head().fields().head().second();
     }
 

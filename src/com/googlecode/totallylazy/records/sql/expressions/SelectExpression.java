@@ -8,12 +8,11 @@ import com.googlecode.totallylazy.records.Record;
 
 import java.util.Comparator;
 
-import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
 import static com.googlecode.totallylazy.records.sql.expressions.FromClause.fromClause;
 import static com.googlecode.totallylazy.records.sql.expressions.OrderByClause.orderByClause;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectList.selectList;
 import static com.googlecode.totallylazy.records.sql.expressions.WhereClause.whereClause;
-import static java.lang.String.format;
 
 public class SelectExpression extends CompoundExpression {
     private SelectExpression(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Option<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
@@ -25,11 +24,15 @@ public class SelectExpression extends CompoundExpression {
         );
     }
 
-    public static SelectExpression toSql(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Option<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
+    public static SelectExpression selectExpression(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Option<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
         return new SelectExpression(setQuantifier, select, table, where, sort);
     }
 
     public static Expression querySpecification(SetQuantifier setQuantifier, final Sequence<Keyword> select) {
-        return expression(format("select %s", setQuantifier)).join(selectList(select));
+        return Expressions.join(textOnly("select"), setQuantifier(setQuantifier), selectList(select));
+    }
+
+    public static Expression setQuantifier(SetQuantifier setQuantifier) {
+        return textOnly(setQuantifier);
     }
 }

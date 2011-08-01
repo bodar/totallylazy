@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.Sets;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.expressions.Expressible;
 import com.googlecode.totallylazy.records.sql.expressions.Expression;
-import com.googlecode.totallylazy.records.sql.expressions.ExpressionBuilder;
+import com.googlecode.totallylazy.records.sql.expressions.SelectBuilder;
 
 import java.io.PrintStream;
 import java.util.Iterator;
@@ -17,9 +17,9 @@ class SingleValueSequence<T> extends Sequence<T> implements Expressible {
     private final Callable1<? super Record, T> callable;
     private final PrintStream logger;
     private final SqlRecords sqlRecords;
-    private final ExpressionBuilder builder;
+    private final SelectBuilder builder;
 
-    public SingleValueSequence(final SqlRecords sqlRecords, final ExpressionBuilder builder, final Callable1<? super Record, T> callable, final PrintStream logger) {
+    public SingleValueSequence(final SqlRecords sqlRecords, final SelectBuilder builder, final Callable1<? super Record, T> callable, final PrintStream logger) {
         this.sqlRecords = sqlRecords;
         this.builder = builder;
         this.callable = callable;
@@ -30,7 +30,7 @@ class SingleValueSequence<T> extends Sequence<T> implements Expressible {
         return execute(builder);
     }
 
-    private Iterator<T> execute(final ExpressionBuilder builder) {
+    private Iterator<T> execute(final SelectBuilder builder) {
         return Iterators.map(sqlRecords.iterator(builder.build(), builder.select()), callable);
     }
 
