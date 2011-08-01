@@ -1,16 +1,19 @@
 package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Group;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.RecordCallables;
 import com.googlecode.totallylazy.records.sql.expressions.Expression;
+import com.googlecode.totallylazy.records.sql.expressions.Expressions;
 import com.googlecode.totallylazy.records.sql.expressions.SelectExpression;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
@@ -22,6 +25,7 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
@@ -98,11 +102,11 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         }
     }
 
-    private Callable1<PreparedStatement, Number> addAllValues(final Sequence<Sequence<Object>> allValues) {
+    private Callable1<PreparedStatement, Number> addAllValues(final Sequence<? extends Iterable<Object>> allValues) {
         return new Callable1<PreparedStatement, Number>() {
             public Number call(PreparedStatement statement) throws Exception {
-                for (Sequence<Object> values : allValues) {
-                    mappings.addValues(statement, values);
+                for (Iterable<Object> values : allValues) {
+                    mappings.addValues(statement, sequence(values));
                     statement.addBatch();
                 }
                 return numbers(statement.executeBatch()).reduce(sum());
@@ -114,16 +118,20 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         return update(updateStatement(recordName, predicate, fields, record));
     }
 
-    public Number update(final Expression expression) {
-        try {
-            logger.print(format("SQL: %s", expression));
-            Number rowCount = using(connection.prepareStatement(expression.text()),
-                    addAllValues(Sequences.<Sequence<Object>>sequence(expression.parameters())));
-            logger.println(format(" Count:%s", rowCount));
-            return rowCount;
-        } catch (SQLException e) {
-            throw new LazyException(e);
-        }
+    public Number update(final Expression... expressions) {
+        return update(sequence(expressions));
+    }
+
+    public Number update(final Sequence<Expression> expressions) {
+        return expressions.groupBy(Expressions.text()).map(new Callable1<Group<String, Expression>, Number>() {
+            public Number call(Group<String, Expression> group) throws Exception {
+                logger.print(format("SQL: %s", group.key()));
+                Number rowCount = using(connection.prepareStatement(group.key()),
+                        addAllValues(group.map(Expressions.parameters())));
+                logger.println(format(" Count:%s", rowCount));
+                return rowCount;
+            }
+        }).reduce(Numbers.<Number>sum());
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
