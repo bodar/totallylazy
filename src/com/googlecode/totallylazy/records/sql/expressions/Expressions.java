@@ -52,4 +52,8 @@ public class Expressions {
         return new CompoundExpression(expressions);
     }
 
+    public static CompoundExpression join(final Sequence<Expression> expressions, final String start, final String separator, final String end) {
+        return new CompoundExpression(expressions, start, separator, end);
+    }
+
 }

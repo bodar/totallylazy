@@ -27,6 +27,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.empty;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectList.derivedColumn;
 
 public class WhereClause extends CompoundExpression{
@@ -54,19 +55,17 @@ public class WhereClause extends CompoundExpression{
         }
         if (predicate instanceof AndPredicate) {
             AndPredicate andPredicate = (AndPredicate) predicate;
-            final Sequence<Expression> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return expression("( " + pairs.map(Expressions.text()).toString(" and ") + " )", pairs.flatMap(Expressions.parameters()));
+            return Expressions.join(toExpressions(andPredicate.predicates()), "(", " and ", ")");
         }
         if (predicate instanceof OrPredicate) {
             OrPredicate andPredicate = (OrPredicate) predicate;
-            final Sequence<Expression> pairs = sequence(andPredicate.predicates()).map(toSql());
-            return expression("( " + pairs.map(Expressions.text()).toString(" or ") + " )", pairs.flatMap(Expressions.parameters()));
+            return Expressions.join(toExpressions(andPredicate.predicates()), "(", " or ", ")");
         }
         if (predicate instanceof NullPredicate) {
-            return expression("is null");
+            return textOnly("is null");
         }
         if (predicate instanceof NotNullPredicate) {
-            return expression("is not null");
+            return textOnly("is not null");
         }
         if (predicate instanceof EqualsPredicate) {
             return expression("= ?", getValue(predicate));
@@ -109,6 +108,10 @@ public class WhereClause extends CompoundExpression{
             return expression("like ?", sequence((Object) ("%%" + ((ContainsPredicate) predicate).value() + "%%")));
         }
         throw new UnsupportedOperationException("Unsupported predicate " + predicate);
+    }
+
+    private static Sequence<Expression> toExpressions(Predicate[] predicates) {
+        return sequence(predicates).map(toSql());
     }
 
     private static Sequence<Object> getValue(Predicate predicate) {
