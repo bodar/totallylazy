@@ -11,11 +11,11 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.Callables.ascending;
-import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callables.bounce;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
@@ -384,4 +384,7 @@ public class Sequences {
         return callConcurrently(sequence(iterable).map(bounce(callable)), executor);
     }
 
+    public static <T, Key> Map<Key,List<T>> groupBy(final Iterable<T> iterable, final Callable1<? super T,Key> callable) {
+        return Iterators.groupBy(iterable.iterator(), callable);
+    }
 }

@@ -1,13 +1,10 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
-
-import java.io.Closeable;
-import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
@@ -100,18 +97,23 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Set<T> union(final Iterable<? extends T> other) {
-        return Sets.union(this.toSet(), Sets.set(other));
+        return Sets.union(toSet(), Sets.set(other));
     }
 
     public Set<T> intersection(final Iterable<? extends T> other) {
-        return Sets.intersection(this.toSet(), Sets.set(other));
+        return Sets.intersection(toSet(), Sets.set(other));
     }
 
     public <S extends Set<T>> S toSet(S set) {
         return Sets.set(set, this);
     }
+
     public Set<T> toSet() {
         return toSet(new HashSet<T>());
+    }
+
+    public Sequence<T> toSetSequence() {
+        return Sequences.sequence(toSet());
     }
 
     public boolean isEmpty() {
@@ -228,5 +230,9 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     public Sequence<T> cycle() {
         return Sequences.cycle(this);
+    }
+
+    public <Key> Map<Key,List<T>> groupBy(final Callable1<? super T,Key> callable) {
+        return Sequences.groupBy(this, callable);
     }
 }

@@ -6,27 +6,49 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static com.googlecode.totallylazy.Arrays.list;
-import static com.googlecode.totallylazy.Callables.*;
+import static com.googlecode.totallylazy.Callables.asString;
+import static com.googlecode.totallylazy.Callables.ascending;
+import static com.googlecode.totallylazy.Callables.call;
+import static com.googlecode.totallylazy.Callables.callThrows;
+import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.length;
+import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Option.option;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.Sequences.cons;
+import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Sequences.sort;
+import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
-import static com.googlecode.totallylazy.Sequences.*;
-import static com.googlecode.totallylazy.numbers.Numbers.*;
-import static com.googlecode.totallylazy.callables.CountNotNull.count;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
+import static com.googlecode.totallylazy.numbers.Numbers.even;
+import static com.googlecode.totallylazy.numbers.Numbers.numbers;
+import static com.googlecode.totallylazy.numbers.Numbers.odd;
+import static com.googlecode.totallylazy.numbers.Numbers.range;
+import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SequenceTest {
+    @Test
+    public void supportsGroupBy() throws Exception {
+        Map<Number, List<Integer>> groups = sequence(1, 2, 3, 4).groupBy(remainder(2));
+        assertThat(groups.get(0), hasExactly(2, 4));
+        assertThat(groups.get(1), hasExactly(1, 3));
+    }
+
     @Test
     public void supportsPartition() throws Exception {
         Partition<Integer> result = sequence(1, 2, 3, 4).partition(even());

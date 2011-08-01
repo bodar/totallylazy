@@ -17,7 +17,15 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Iterators;
+import com.googlecode.totallylazy.MemorisedSequence;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
@@ -30,7 +38,6 @@ import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
-import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -362,9 +369,9 @@ public class Numbers {
         return reduce(operatorsFor(x, y).quotient(x, y));
     }
 
-    public static <X extends Number, Y extends Number> Number remainder(X x, Y y) {
-        throwIfZero(y);
-        return reduce(operatorsFor(x, y).remainder(x, y));
+    public static <X extends Number, Y extends Number> Number remainder(X dividend, Y divisor) {
+        throwIfZero(divisor);
+        return reduce(operatorsFor(dividend, divisor).remainder(dividend, divisor));
     }
 
     private static <T extends Number> void throwIfZero(T value) {
@@ -385,6 +392,14 @@ public class Numbers {
         return new Callable1<Number, Character>() {
             public Character call(Number number) throws Exception {
                 return (char) number.shortValue();
+            }
+        };
+    }
+
+    public static Callable1<Number, Number> remainder(final Number divisor) {
+        return new Callable1<Number, Number>() {
+            public Number call(Number dividend) throws Exception {
+                return remainder(dividend, divisor);
             }
         };
     }
