@@ -50,8 +50,4 @@ public class Mappings {
             get(value == null ? Object.class : value.getClass()).setValue(statement, index, value);
         }
     }
-
-    public String getType(Class<?> aClass) {
-        return get(aClass).type();
-    }
 }

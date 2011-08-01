@@ -12,8 +12,4 @@ public class ObjectMapping implements Mapping<Object>{
     public void setValue(PreparedStatement statement, Integer index, Object value) throws SQLException {
         statement.setObject(index, value);
     }
-
-    public String type() {
-        throw new UnsupportedOperationException();
-    }
 }

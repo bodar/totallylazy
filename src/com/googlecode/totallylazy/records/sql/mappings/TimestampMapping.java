@@ -13,8 +13,4 @@ public class TimestampMapping implements Mapping<Timestamp>{
     public void setValue(PreparedStatement statement, Integer index, Timestamp timestamp) throws SQLException {
         statement.setTimestamp(index, timestamp);
     }
-
-    public String type() {
-        return "timestamp";
-    }
 }
