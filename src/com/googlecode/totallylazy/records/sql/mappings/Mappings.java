@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.records.sql.mappings;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 
@@ -13,7 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static com.googlecode.totallylazy.numbers.Numbers.numbers;
+import static com.googlecode.totallylazy.numbers.Numbers.sum;
 
 public class Mappings {
     private final Map<Class, Mapping<Object>> map = new HashMap<Class, Mapping<Object>>();
@@ -50,4 +54,18 @@ public class Mappings {
             get(value == null ? Object.class : value.getClass()).setValue(statement, index, value);
         }
     }
+
+    public Callable1<PreparedStatement, Number> addValuesInBatch(final Sequence<? extends Iterable<Object>> allValues) {
+        return new Callable1<PreparedStatement, Number>() {
+            public Number call(PreparedStatement statement) throws Exception {
+                for (Iterable<Object> values : allValues) {
+                    addValues(statement, sequence(values));
+                    statement.addBatch();
+                }
+                return numbers(statement.executeBatch()).reduce(sum());
+            }
+        };
+    }
+
+
 }
