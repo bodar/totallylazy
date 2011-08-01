@@ -44,7 +44,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class SequenceTest {
     @Test
     public void supportsGroupBy() throws Exception {
-        Map<Number, List<Integer>> groups = sequence(1, 2, 3, 4).groupBy(remainder(2));
+        Sequence<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(remainder(2));
+        assertThat(groups.first().key(), NumberMatcher.is(0));
+        assertThat(groups.first(), hasExactly(2, 4));
+        assertThat(groups.second().key(), NumberMatcher.is(1));
+        assertThat(groups.second(), hasExactly(1, 3));
+    }
+
+    @Test
+    public void supportsToMap() throws Exception {
+        Map<Number, List<Integer>> groups = sequence(1, 2, 3, 4).toMap(remainder(2));
         assertThat(groups.get(0), hasExactly(2, 4));
         assertThat(groups.get(1), hasExactly(1, 3));
     }
