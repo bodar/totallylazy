@@ -1,22 +1,21 @@
 package com.googlecode.totallylazy.records.memory;
 
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.where;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.records.AbstractRecordsTests;
 import com.googlecode.totallylazy.records.Keyword;
+import org.junit.Test;
+
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import com.googlecode.totallylazy.records.Records;
-import org.junit.Test;
-
-public class MemoryRecordsTest extends AbstractRecordsTests {
+public class MemoryRecordsTest extends AbstractRecordsTests<MemoryRecords> {
     private static final Keyword<Object> TREES = keyword("some_table");
     private static final Keyword<String> LEAFINESS = keyword("some_field", String.class);
 
-    public Records createRecords() {
+    public MemoryRecords createRecords() {
         return new MemoryRecords();
     }
 

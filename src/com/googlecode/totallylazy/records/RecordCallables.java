@@ -35,4 +35,12 @@ public class RecordCallables {
     public static Keyword getKeyword(String name, Sequence<Keyword> definitions) {
         return definitions.find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
     }
+
+    public static Callable1<? super Record, Sequence<Object>> getValuesFor(final Sequence<Keyword> fields) {
+        return new Callable1<Record, Sequence<Object>>() {
+            public Sequence<Object> call(Record record) throws Exception {
+                return record.getValuesFor(fields);
+            }
+        };
+    }
 }
