@@ -1,12 +1,17 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.*;
+import com.googlecode.totallylazy.iterators.FilterIterator;
+import com.googlecode.totallylazy.iterators.FlatMapIterator;
+import com.googlecode.totallylazy.iterators.IterateIterator;
+import com.googlecode.totallylazy.iterators.MapIterator;
+import com.googlecode.totallylazy.iterators.PeekingIterator;
+import com.googlecode.totallylazy.iterators.RangerIterator;
+import com.googlecode.totallylazy.iterators.RepeatIterator;
+import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
@@ -241,18 +246,5 @@ public class Iterators {
             count = increment(count);
         }
         return count;
-    }
-
-    public static <T, Key> Map<Key, List<T>> groupBy(Iterator<T> iterator, Callable1<? super T, Key> callable) {
-        Map<Key, List<T>> result = new HashMap<Key, List<T>>();
-        while (iterator.hasNext()) {
-            T next = iterator.next();
-            Key key = Callers.call(callable, next);
-            if(!result.containsKey(key)){
-                result.put(key, new ArrayList<T>());
-            }
-            result.get(key).add(next);
-        }
-        return result;
     }
 }

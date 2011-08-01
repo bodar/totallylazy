@@ -384,7 +384,11 @@ public class Sequences {
         return callConcurrently(sequence(iterable).map(bounce(callable)), executor);
     }
 
-    public static <T, Key> Map<Key,List<T>> groupBy(final Iterable<T> iterable, final Callable1<? super T,Key> callable) {
-        return Iterators.groupBy(iterable.iterator(), callable);
+    public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
+        return sequence(Maps.toMap(iterable.iterator(), callable).entrySet()).map(new Callable1<Map.Entry<Key, List<T>>, Group<Key, T>>() {
+            public Group<Key, T> call(Map.Entry<Key, List<T>> entry) throws Exception {
+                return new Group<Key, T>(entry.getKey(), entry.getValue());
+            }
+        });
     }
 }

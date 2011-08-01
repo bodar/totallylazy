@@ -232,7 +232,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.cycle(this);
     }
 
-    public <Key> Map<Key,List<T>> groupBy(final Callable1<? super T,Key> callable) {
+    public <Key> Map<Key,List<T>> toMap(final Callable1<? super T,Key> callable) {
+        return Maps.toMap(this, callable);
+    }
+
+    public  <Key> Sequence<Group<Key, T>> groupBy(final Callable1<? super T, Key> callable) {
         return Sequences.groupBy(this, callable);
     }
 }

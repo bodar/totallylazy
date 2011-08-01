@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +72,23 @@ public class Maps {
 
     public static <K, V> Callable1<Map.Entry<K, V>, Pair<K, V>> entryToPair(final Class<K> keyClass, final Class<V> valueClass) {
         return entryToPair();
+    }
+
+    public static <T, Key> Map<Key, List<T>> toMap(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+        final Map<Key, List<T>> result = new HashMap<Key, List<T>>();
+        while (iterator.hasNext()) {
+            final T next = iterator.next();
+            final Key key = Callers.call(callable, next);
+            if(!result.containsKey(key)){
+                result.put(key, new ArrayList<T>());
+            }
+            result.get(key).add(next);
+        }
+        return result;
+    }
+
+    public static <T, Key> Map<Key,List<T>> toMap(final Iterable<T> iterable, final Callable1<? super T,Key> callable) {
+        return toMap(iterable.iterator(), callable);
     }
 
     private static class PairEntry<K, V> implements Map.Entry<K, V> {
