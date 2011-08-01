@@ -16,8 +16,4 @@ public class LongMapping implements Mapping<Long> {
     public void setValue(PreparedStatement statement, Integer index, Long value) throws SQLException {
         statement.setLong(index, value);
     }
-
-    public String type() {
-        return "bigint";
-    }
 }

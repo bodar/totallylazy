@@ -17,8 +17,4 @@ public class UriMapping implements Mapping<URI>{
     public void setValue(PreparedStatement statement, Integer index, URI value) throws SQLException {
         mapping.setValue(statement, index, value == null ? null : value.toString());
     }
-
-    public String type() {
-        return mapping.type();
-    }
 }

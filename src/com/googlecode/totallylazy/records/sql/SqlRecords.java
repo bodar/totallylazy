@@ -22,14 +22,13 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Sequences.repeat;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.sql.expressions.DeleteStatement.deleteStatement;
-import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
+import static com.googlecode.totallylazy.records.sql.expressions.TableDefinition.tableDefinition;
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
 import static java.lang.String.format;
 
@@ -70,7 +69,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         if (exists(recordName)) {
             return;
         }
-        update(textOnly(format("create table %s (%s)", recordName, sequence(fields).map(asColumn()))));
+        update(tableDefinition(recordName, fields));
     }
 
 
@@ -88,14 +87,6 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         return new Callable1<Statement, ResultSet>() {
             public ResultSet call(Statement statement) throws Exception {
                 return statement.executeQuery(sql);
-            }
-        };
-    }
-
-    private Callable1<? super Keyword<?>, String> asColumn() {
-        return new Callable1<Keyword<?>, String>() {
-            public String call(Keyword<?> keyword) throws Exception {
-                return format("%s %s", keyword, mappings.getType(keyword.forClass()));
             }
         };
     }
