@@ -8,7 +8,7 @@ import com.googlecode.totallylazy.Sequences;
 import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.records.RecordCallables.merge;
+import static com.googlecode.totallylazy.records.RecordMethods.merge;
 
 public class Join implements Callable1<Record, Iterable<Record>> {
     private final Sequence<Record> records;

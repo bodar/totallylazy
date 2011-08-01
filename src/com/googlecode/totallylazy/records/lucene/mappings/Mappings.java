@@ -8,7 +8,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.MapRecord;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.RecordCallables;
+import com.googlecode.totallylazy.records.RecordMethods;
 import com.googlecode.totallylazy.records.lucene.Lucene;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
@@ -24,7 +24,7 @@ import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.records.RecordCallables.updateValues;
+import static com.googlecode.totallylazy.records.RecordMethods.updateValues;
 
 public class Mappings {
     private final Map<Class, Mapping<Object>> map = new HashMap<Class, Mapping<Object>>();
@@ -64,7 +64,7 @@ public class Mappings {
         return new Callable1<Fieldable, Pair<Keyword, Object>>() {
             public Pair<Keyword, Object> call(Fieldable fieldable) throws Exception {
                 String name = fieldable.name();
-                Keyword keyword = RecordCallables.getKeyword(name, definitions);
+                Keyword keyword = RecordMethods.getKeyword(name, definitions);
                 return pair(keyword, get(keyword.forClass()).toValue(fieldable));
             }
         };
@@ -78,7 +78,7 @@ public class Mappings {
                 }
 
                 String name = pair.first().name();
-                Keyword keyword = RecordCallables.getKeyword(name, definitions);
+                Keyword keyword = RecordMethods.getKeyword(name, definitions);
                 return get(keyword.forClass()).toField(name, pair.second());
             }
         };
