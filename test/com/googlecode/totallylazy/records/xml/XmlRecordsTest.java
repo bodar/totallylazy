@@ -2,14 +2,12 @@ package com.googlecode.totallylazy.records.xml;
 
 import com.googlecode.totallylazy.records.AbstractRecordsTests;
 import com.googlecode.totallylazy.records.Keywords;
-import com.googlecode.totallylazy.records.Records;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
 import static com.googlecode.totallylazy.records.xml.Xml.load;
 
-public class XmlRecordsTest extends AbstractRecordsTests{
-
+public class XmlRecordsTest extends AbstractRecordsTests<XmlRecords>{
     private Document document;
 
     public XmlRecordsTest() {
@@ -18,7 +16,7 @@ public class XmlRecordsTest extends AbstractRecordsTests{
     }
 
     @Override
-    protected Records createRecords() throws Exception {
+    protected XmlRecords createRecords() throws Exception {
         document = load("<data/>");
         return new XmlRecords(document);
     }

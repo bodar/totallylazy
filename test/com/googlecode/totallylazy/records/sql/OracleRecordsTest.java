@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.records.AbstractRecordsTests;
-import com.googlecode.totallylazy.records.Records;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,8 +13,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @Ignore
-public class OracleRecordsTest extends AbstractRecordsTests {
-    public Records createRecords() throws Exception {
+public class OracleRecordsTest extends AbstractRecordsTests<SqlRecords> {
+    public SqlRecords createRecords() throws Exception {
         Class.forName("oracle.jdbc.driver.OracleDriver");
 
         return new SqlRecords(getConnection(getenv("JDBC_URL"), getenv("JDBC_USERNAME"), getenv("JDBC_PASSWORD")), new Mappings(), System.out);

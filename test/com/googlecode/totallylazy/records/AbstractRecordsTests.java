@@ -45,7 +45,7 @@ import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
-public abstract class AbstractRecordsTests {
+public abstract class AbstractRecordsTests<T extends Records> {
     protected static Keyword people = keyword("people");
     protected static Keyword<Integer> age = keyword("age", Integer.class);
     protected static Keyword<Date> dob = keyword("dob", Date.class);
@@ -60,9 +60,9 @@ public abstract class AbstractRecordsTests {
     public static final URI godelEsherBach = uri("urn:isbn:0140289208");
     public static final URI cleanCode = uri("urn:isbn:0132350882");
 
-    protected Records records;
+    protected T records;
 
-    protected abstract Records createRecords() throws Exception;
+    protected abstract T createRecords() throws Exception;
 
     @Before
     public void addRecords() throws Exception {
