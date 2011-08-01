@@ -8,10 +8,8 @@ import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.sql.expressions.DeleteStatement;
 import com.googlecode.totallylazy.records.sql.expressions.Expression;
-import com.googlecode.totallylazy.records.sql.expressions.ExpressionBuilder;
-import com.googlecode.totallylazy.records.sql.expressions.WhereClause;
+import com.googlecode.totallylazy.records.sql.expressions.SelectBuilder;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
 import java.io.PrintStream;
@@ -29,7 +27,6 @@ import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.records.sql.expressions.DeleteStatement.deleteStatement;
-import static com.googlecode.totallylazy.records.sql.expressions.Expressions.expression;
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
 import static java.lang.String.format;
 
@@ -49,7 +46,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     public RecordSequence get(Keyword recordName) {
-        return new RecordSequence(this, ExpressionBuilder.query(recordName, definitions(recordName)), logger);
+        return new RecordSequence(this, SelectBuilder.from(recordName).select(definitions(recordName)), logger);
     }
 
 
