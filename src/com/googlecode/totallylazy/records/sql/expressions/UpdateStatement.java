@@ -11,15 +11,15 @@ import static com.googlecode.totallylazy.records.sql.expressions.Expressions.tex
 import static com.googlecode.totallylazy.records.sql.expressions.WhereClause.whereClause;
 
 public class UpdateStatement extends CompoundExpression {
-    public UpdateStatement(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
+    public UpdateStatement(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, final Sequence<Object> values) {
         super(
                 textOnly("update").join(textOnly(recordName)),
-                textOnly("set").join(expression(fields.map(Strings.format("%s=?")).toString(), record.getValuesFor(fields))),
+                textOnly("set").join(expression(fields.map(Strings.format("%s=?")).toString(), values)),
                 whereClause(predicate)
                 );
     }
 
-    public static Expression updateStatement(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        return new UpdateStatement(recordName, predicate, fields, record);
+    public static Expression updateStatement(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, final Sequence<Object> values) {
+        return new UpdateStatement(recordName, predicate, fields, values);
     }
 }

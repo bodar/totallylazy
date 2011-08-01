@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Group;
-import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
@@ -11,7 +10,6 @@ import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.RecordCallables;
 import com.googlecode.totallylazy.records.sql.expressions.Expression;
 import com.googlecode.totallylazy.records.sql.expressions.Expressions;
 import com.googlecode.totallylazy.records.sql.expressions.SelectExpression;
@@ -20,17 +18,16 @@ import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Closeables.using;
-import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.sql.expressions.DeleteStatement.deleteStatement;
+import static com.googlecode.totallylazy.records.sql.expressions.InsertStatement.insertStatement;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
 import static com.googlecode.totallylazy.records.sql.expressions.TableDefinition.tableDefinition;
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
@@ -86,23 +83,14 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         }
     }
 
-    public Number add(Keyword recordName, final Sequence<Keyword> fields, final Sequence<Record> records) {
+    public Number add(final Keyword recordName, final Sequence<Keyword> fields, final Sequence<Record> records) {
         if (records.isEmpty()) {
             return 0;
         }
-        try {
-            final String sql = format("insert into %s (%s) values (%s)",
-                    recordName, fields, repeat("?").take((Integer) fields.size()));
-            logger.print(format("SQL: %s", sql));
-            Number rowCount = using(connection.prepareStatement(sql), addAllValues(records.map(RecordCallables.getValuesFor(fields))));
-            logger.println(format(" Count:%s", rowCount));
-            return rowCount;
-        } catch (SQLException e) {
-            throw new LazyException(e);
-        }
+        return update(records.map(insertStatement(recordName, fields)));
     }
 
-    private Callable1<PreparedStatement, Number> addAllValues(final Sequence<? extends Iterable<Object>> allValues) {
+    private Callable1<PreparedStatement, Number> addValuesInBatch(final Sequence<? extends Iterable<Object>> allValues) {
         return new Callable1<PreparedStatement, Number>() {
             public Number call(PreparedStatement statement) throws Exception {
                 for (Iterable<Object> values : allValues) {
@@ -115,7 +103,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        return update(updateStatement(recordName, predicate, fields, record));
+        return update(updateStatement(recordName, predicate, fields, record.getValuesFor(fields)));
     }
 
     public Number update(final Expression... expressions) {
@@ -127,7 +115,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
             public Number call(Group<String, Expression> group) throws Exception {
                 logger.print(format("SQL: %s", group.key()));
                 Number rowCount = using(connection.prepareStatement(group.key()),
-                        addAllValues(group.map(Expressions.parameters())));
+                        addValuesInBatch(group.map(Expressions.parameters())));
                 logger.println(format(" Count:%s", rowCount));
                 return rowCount;
             }
