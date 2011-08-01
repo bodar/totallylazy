@@ -29,14 +29,14 @@ public class MemoryRecords extends AbstractRecords {
         return memory.get(recordName);
     }
 
-    public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
+    public Number add(Keyword recordName, Sequence<Record> records) {
         if (records.isEmpty()) {
             return 0;
         }
 
         List<Record> list = recordsFor(recordName);
         Number count = 0;
-        for (Record record : records.map(select(fields))) {
+        for (Record record : records) {
             list.add(record);
             count = increment(count);
         }

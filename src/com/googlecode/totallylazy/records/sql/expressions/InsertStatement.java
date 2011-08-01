@@ -9,22 +9,22 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static java.lang.String.format;
 
 public class InsertStatement extends TextAndParametersExpression {
-    public InsertStatement(final Keyword recordName, final Sequence<Keyword> fields, final Sequence<Object> values) {
+    public InsertStatement(final Keyword recordName, final Record record) {
         super(
-                format("insert into %s (%s) values (%s)", recordName, fields, repeat("?").take((Integer) fields.size())),
-                values
+                format("insert into %s (%s) values (%s)", recordName, record.keywords(), repeat("?").take((Integer) record.fields().size())),
+                record.getValuesFor(record.keywords())
         );
     }
 
-    public static Callable1<Record, Expression> toInsertStatement(final Keyword recordName, final Sequence<Keyword> fields) {
+    public static Callable1<Record, Expression> toInsertStatement(final Keyword recordName) {
         return new Callable1<Record, Expression>() {
             public Expression call(Record record) throws Exception {
-                return insertStatement(recordName, fields, record.getValuesFor(fields));
+                return insertStatement(recordName, record);
             }
         };
     }
 
-    public static InsertStatement insertStatement(final Keyword recordName, final Sequence<Keyword> fields, final Sequence<Object> values) {
-        return new InsertStatement(recordName, fields, values);
+    public static InsertStatement insertStatement(final Keyword recordName, final Record record) {
+        return new InsertStatement(recordName, record);
     }
 }

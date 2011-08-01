@@ -51,10 +51,10 @@ public class LuceneRecords extends AbstractRecords implements Queryable<Query>{
         return query(record(recordName), definitions(recordName));
     }
 
-    public Number add(Keyword recordName, Sequence<Keyword> fields, Sequence<Record> records) {
+    public Number add(Keyword recordName, Sequence<Record> records) {
         try {
             Number count = 0;
-            for (Document document : records.map(select(fields)).map(mappings.asDocument(recordName, definitions(recordName)))) {
+            for (Document document : records.map(mappings.asDocument(recordName, definitions(recordName)))) {
                 writer.addDocument(document);
                 count = increment(count);
             }

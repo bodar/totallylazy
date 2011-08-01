@@ -325,7 +325,6 @@ public abstract class AbstractRecordsTests<T extends Records> {
     public void willNotFailIfAskedToAddAnEmptySequenceOfRecords() throws Exception {
         assertThat(records.add(people, new Record[0]), equalTo(0));
         assertThat(records.add(people, Sequences.<Record>sequence()), equalTo(0));
-        assertThat(records.add(people, Sequences.<Keyword>sequence(), Sequences.<Record>sequence()), equalTo(0));
     }
 
 }

@@ -14,7 +14,6 @@ import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Predicates.all;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.RecordMethods.merge;
 
@@ -38,20 +37,12 @@ public abstract class AbstractRecords implements Records{
     }
 
     public Number add(Keyword recordName, Record... records) {
+        if(records.length == 0) return 0;
         return add(recordName, sequence(records));
     }
 
-    public Number add(Keyword recordName, Sequence<Record> records) {
-        if(records.isEmpty()) return 0;
-        return add(recordName, records.first().keywords(), records);
-    }
-
     public Number set(Keyword recordName, Predicate<? super Record> predicate, Record record) {
-        return set(recordName, predicate, record.keywords(), record);
-    }
-
-    public Number set(Keyword recordName, Predicate<? super Record> predicate, Sequence<Keyword> fields, Record record) {
-        Sequence<Pair<Keyword,Object>> valuesToUpdate = record.fields().filter(where(first(Keyword.class), is(in(fields))));
+        Sequence<Pair<Keyword,Object>> valuesToUpdate = record.fields();
         Sequence<Record> updated = get(recordName).filter(predicate).map(merge(valuesToUpdate)).realise();
         Number count = remove(recordName, predicate);
         add(recordName, updated);
