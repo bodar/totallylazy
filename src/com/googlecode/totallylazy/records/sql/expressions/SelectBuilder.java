@@ -1,13 +1,11 @@
 package com.googlecode.totallylazy.records.sql.expressions;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.callables.CountNotNull;
-import com.googlecode.totallylazy.records.Aggregate;
 import com.googlecode.totallylazy.records.Aggregates;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
@@ -29,9 +27,9 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
     private final Option<Predicate<? super Record>> where;
     private final Option<Comparator<? super Record>> comparator;
 
-    private SelectBuilder(SetQuantifier setQuantifier, Sequence<Keyword> select, Keyword table, Option<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
+    private SelectBuilder(SetQuantifier setQuantifier, Sequence<? extends Keyword> select, Keyword table, Option<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
         this.setQuantifier = setQuantifier;
-        this.select = select;
+        this.select = (Sequence<Keyword>) select;
         this.table = table;
         this.where = where;
         this.comparator = comparator;
@@ -90,16 +88,8 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
 
     public <S> SelectBuilder reduce(Callable2 callable) {
         if(callable instanceof Aggregates){
-            return new SelectBuilder(setQuantifier, extract(((Aggregates) callable).value()), table, where, comparator);
+            return new SelectBuilder(setQuantifier, ((Aggregates) callable).value(), table, where, comparator);
         }
-        return new SelectBuilder(setQuantifier, select, table, where, comparator);
-    }
-
-    private Sequence<Keyword> extract(Iterable<Aggregate> value) {
-        return sequence(value).map(new Callable1<Aggregate, Keyword>() {
-            public Keyword call(Aggregate aggregate) throws Exception {
-                return aggregate;
-            }
-        });
+        throw new UnsupportedOperationException();
     }
 }

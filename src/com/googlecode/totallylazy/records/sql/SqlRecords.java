@@ -28,6 +28,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.sql.expressions.DeleteStatement.deleteStatement;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
 import static java.lang.String.format;
@@ -69,13 +70,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         if (exists(recordName)) {
             return;
         }
-        try {
-            final String sql = format("create table %s (%s)", recordName, sequence(fields).map(asColumn()));
-            logger.println(format("SQL: %s", sql));
-            using(connection.createStatement(), executeUpdate(sql));
-        } catch (SQLException e) {
-            throw new LazyException(e);
-        }
+        update(textOnly(format("create table %s (%s)", recordName, sequence(fields).map(asColumn()))));
     }
 
 
@@ -93,14 +88,6 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         return new Callable1<Statement, ResultSet>() {
             public ResultSet call(Statement statement) throws Exception {
                 return statement.executeQuery(sql);
-            }
-        };
-    }
-
-    public static Callable1<? super Statement, Integer> executeUpdate(final String sql) {
-        return new Callable1<Statement, Integer>() {
-            public Integer call(Statement statement) throws Exception {
-                return statement.executeUpdate(sql);
             }
         };
     }
