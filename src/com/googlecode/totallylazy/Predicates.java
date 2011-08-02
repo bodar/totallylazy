@@ -221,4 +221,11 @@ public class Predicates {
         return new BetweenPredicate<T>(lower, upper);
     }
 
+    public static Predicate<Pair> equalTo() {
+        return new Predicate<Pair>() {
+            public boolean matches(Pair pair) {
+                return pair.first().equals(pair.second());
+            }
+        };
+    }
 }
