@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.records.sql.expressions;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 

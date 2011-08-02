@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.callables.CountNotNull;
+import com.googlecode.totallylazy.records.Aggregate;
 import com.googlecode.totallylazy.records.Aggregates;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
@@ -90,6 +91,6 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
         if(callable instanceof Aggregates){
             return new SelectBuilder(setQuantifier, ((Aggregates) callable).value(), table, where, comparator);
         }
-        throw new UnsupportedOperationException();
+        return new SelectBuilder(setQuantifier, sequence(Aggregate.aggregate(callable, select().head())), table, where, comparator);
     }
 }

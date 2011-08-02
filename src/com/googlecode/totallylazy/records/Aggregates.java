@@ -34,7 +34,7 @@ public class Aggregates implements Callable2<Record, Record, Record>, Value<Sequ
     }
 
     @SuppressWarnings("unchecked")
-    public static Callable2<? super Record, ? super Record, Record> to(final Aggregate... aggregates) {
+    public static Aggregates to(final Aggregate... aggregates) {
         return aggregates(sequence(aggregates));
     }
 
