@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Group;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
@@ -85,8 +86,13 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         return update(records.map(InsertStatement.toInsertStatement(recordName)));
     }
 
-    public Number set(Keyword recordName, Predicate<? super Record> predicate, Record record) {
-        return update(updateStatement(recordName, predicate, record));
+    @Override
+    public Number set(final Keyword recordName, Pair<? extends Predicate<? super Record>, Record>... records) {
+        return update(sequence(records).map(new Callable1<Pair<? extends Predicate<? super Record>, Record>, Expression>() {
+            public Expression call(Pair<? extends Predicate<? super Record>, Record> recordPair) throws Exception {
+                return updateStatement(recordName, recordPair.first(), recordPair.second());
+            }
+        }));
     }
 
     public Number update(final Expression... expressions) {

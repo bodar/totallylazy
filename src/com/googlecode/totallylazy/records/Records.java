@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.records;
 
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
@@ -14,7 +15,9 @@ public interface Records {
 
     Number add(Keyword recordName, Sequence<Record> records);
 
-    Number set(Keyword recordName, Predicate<? super Record> predicate, Record record);
+    Number set(Keyword recordName, Pair<? extends Predicate<? super Record>, Record>... records);
+
+    Number set(Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records);
 
     Number remove(Keyword recordName, Predicate<? super Record> predicate);
 
