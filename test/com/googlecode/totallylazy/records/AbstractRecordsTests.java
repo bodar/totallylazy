@@ -39,7 +39,7 @@ import static com.googlecode.totallylazy.records.Aggregate.minimum;
 import static com.googlecode.totallylazy.records.Aggregate.sum;
 import static com.googlecode.totallylazy.records.Aggregates.to;
 import static com.googlecode.totallylazy.records.Join.join;
-import static com.googlecode.totallylazy.records.Join.using;
+import static com.googlecode.totallylazy.records.Using.using;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.totallylazy.records.RecordMethods.update;

@@ -23,9 +23,4 @@ public class Join implements Callable1<Record, Iterable<Record>> {
                                                                   final Callable1<Record, Predicate<? super Record>> using) {
         return new Join(records, using);
     }
-
-    public static Using using(Keyword<?>... keyword) {
-        return new Using(keyword);
-    }
-
 }
