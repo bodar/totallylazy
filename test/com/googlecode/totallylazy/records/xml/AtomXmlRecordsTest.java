@@ -4,6 +4,8 @@ import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Keywords;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
+import com.googlecode.totallylazy.records.xml.mappings.DateMapping;
+import com.googlecode.totallylazy.records.xml.mappings.Mappings;
 import org.junit.Test;
 
 import java.net.URI;
@@ -24,7 +26,7 @@ public class AtomXmlRecordsTest {
 
     @Test
     public void canGetElements() throws Exception {
-        Records records = new XmlRecords(load(XML));
+        Records records = new XmlRecords(load(XML), new Mappings().add(Date.class, DateMapping.atomDateFormat()));
         records.define(entries, id, link, content, updated);
         Record record = records.get(entries).head();
         assertThat(record.get(id), is(ID));

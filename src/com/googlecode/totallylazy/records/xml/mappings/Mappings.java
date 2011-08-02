@@ -1,23 +1,15 @@
 package com.googlecode.totallylazy.records.xml.mappings;
 
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.records.Keyword;
-
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
-import static com.googlecode.totallylazy.records.Keywords.keyword;
-import static com.googlecode.totallylazy.records.Keywords.name;
-
 public class Mappings {
     private final Map<Class, Mapping<Object>> map = new HashMap<Class, Mapping<Object>>();
 
     public Mappings() {
-        add(Date.class, new DateMapping());
+        add(Date.class, DateMapping.defaultFormat());
         add(Integer.class, new IntegerMapping());
         add(Long.class, new LongMapping());
         add(String.class, new StringMapping());
@@ -25,8 +17,9 @@ public class Mappings {
         add(Object.class, new ObjectMapping());
     }
 
-    public <T> void add(final Class<T> type, final Mapping<T> mapping) {
+    public <T> Mappings add(final Class<T> type, final Mapping<T> mapping) {
         map.put(type, (Mapping<Object>) mapping);
+        return this;
     }
 
     public Mapping<Object> get(final Class aClass) {
