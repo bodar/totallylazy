@@ -3,11 +3,13 @@ package com.googlecode.totallylazy.records;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.equalIgnoringCase;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.Keywords.name;
@@ -60,5 +62,21 @@ public class RecordMethods {
 
     public static Record record(final Sequence<Pair<Keyword, Object>> fields) {
         return fields.fold(new MapRecord(), updateValues());
+    }
+
+    public static Sequence<Pair<? extends Predicate<? super Record>, Record>> update(final Callable1<Record, Predicate<? super Record>> callable, final Record... records) {
+        return update(callable, sequence(records));
+    }
+
+    private static Sequence<Pair<? extends Predicate<? super Record>, Record>> update(final Callable1<Record, Predicate<? super Record>> callable, final Sequence<Record> records) {
+        return records.map(toPair(callable));
+    }
+
+    public static Callable1<Record, Pair<? extends Predicate<? super Record>, Record>> toPair(final Callable1<Record, Predicate<? super Record>> callable) {
+        return new Callable1<Record, Pair<? extends Predicate<? super Record>, Record>>() {
+            public Pair<? extends Predicate<? super Record>, Record> call(Record record) throws Exception {
+                return Pair.pair(callable.call(record), record);
+            }
+        };
     }
 }
