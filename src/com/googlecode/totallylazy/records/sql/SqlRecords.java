@@ -13,7 +13,6 @@ import com.googlecode.totallylazy.records.Queryable;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.sql.expressions.Expression;
 import com.googlecode.totallylazy.records.sql.expressions.Expressions;
-import com.googlecode.totallylazy.records.sql.expressions.InsertStatement;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
 import java.io.PrintStream;
@@ -25,6 +24,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.sql.expressions.DeleteStatement.deleteStatement;
+import static com.googlecode.totallylazy.records.sql.expressions.InsertStatement.insertStatement;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
 import static com.googlecode.totallylazy.records.sql.expressions.TableDefinition.tableDefinition;
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
@@ -70,6 +70,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     private static final Keyword<Integer> one = keyword("1", Integer.class);
+
     public boolean exists(Keyword recordName) {
         try {
             query(from(recordName).select(one).build(), Sequences.<Keyword>empty()).realise();
@@ -83,16 +84,12 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         if (records.isEmpty()) {
             return 0;
         }
-        return update(records.map(InsertStatement.toInsertStatement(recordName)));
+        return update(records.map(insertStatement(recordName)));
     }
 
     @Override
-    public Number set(final Keyword recordName, Pair<? extends Predicate<? super Record>, Record>... records) {
-        return update(sequence(records).map(new Callable1<Pair<? extends Predicate<? super Record>, Record>, Expression>() {
-            public Expression call(Pair<? extends Predicate<? super Record>, Record> recordPair) throws Exception {
-                return updateStatement(recordName, recordPair.first(), recordPair.second());
-            }
-        }));
+    public Number set(Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records) {
+        return update(records.map(updateStatement(recordName)));
     }
 
     public Number update(final Expression... expressions) {

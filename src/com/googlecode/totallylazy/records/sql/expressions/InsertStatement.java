@@ -15,7 +15,7 @@ public class InsertStatement extends TextAndParametersExpression {
         );
     }
 
-    public static Callable1<Record, Expression> toInsertStatement(final Keyword recordName) {
+    public static Callable1<Record, Expression> insertStatement(final Keyword recordName) {
         return new Callable1<Record, Expression>() {
             public Expression call(Record record) throws Exception {
                 return insertStatement(recordName, record);
