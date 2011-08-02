@@ -33,7 +33,7 @@ public class LuceneRecordsTest extends AbstractRecordsTests<LuceneRecords> {
 
     @Override
     protected LuceneRecords createRecords() throws Exception {
-        path = temporaryDirectory();
+        path = temporaryDirectory(LuceneRecordsTest.class.getName());
         directory = new NIOFSDirectory(path);
         writer = new IndexWriter(directory, new IndexWriterConfig(VERSION, ANALYZER));
         return new LuceneRecords(directory, writer, new Mappings(), System.out);
