@@ -14,6 +14,7 @@ import java.util.Date;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Dates.date;
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.between;
 import static com.googlecode.totallylazy.Predicates.greaterThan;
 import static com.googlecode.totallylazy.Predicates.greaterThanOrEqualTo;
@@ -29,6 +30,7 @@ import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.URLs.uri;
+import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
 import static com.googlecode.totallylazy.records.Aggregate.average;
@@ -36,7 +38,6 @@ import static com.googlecode.totallylazy.records.Aggregate.maximum;
 import static com.googlecode.totallylazy.records.Aggregate.minimum;
 import static com.googlecode.totallylazy.records.Aggregate.sum;
 import static com.googlecode.totallylazy.records.Aggregates.to;
-import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.records.Join.join;
 import static com.googlecode.totallylazy.records.Join.using;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
@@ -144,9 +145,20 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     @Test
     public void supportsUpdating() throws Exception {
-        Number count = records.set(people, where(firstName, is("dan")).and(where(age, is(10))), record().set(lastName, "bod"));
+        Number count = records.set(people, pair(where(firstName, is("dan")).and(where(age, is(10))), record().set(lastName, "bod")));
         assertThat(count, NumberMatcher.is(1));
         assertThat(records.get(people).filter(where(firstName, is("dan"))).map(lastName), hasExactly("bod"));
+    }
+
+    @Test
+    public void supportsBatchUpdating() throws Exception {
+        Number count = records.set(people,
+                pair(where(age, is(12)), record().set(isbn, zenIsbn)),
+                pair(where(age, is(11)), record().set(isbn, zenIsbn))
+        );
+        assertThat(count, NumberMatcher.is(2));
+        assertThat(records.get(people).filter(where(age, is(12))).map(isbn), hasExactly(zenIsbn));
+        assertThat(records.get(people).filter(where(age, is(11))).map(isbn), hasExactly(zenIsbn));
     }
 
     @Test
