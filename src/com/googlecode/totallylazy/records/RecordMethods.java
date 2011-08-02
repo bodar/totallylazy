@@ -68,7 +68,7 @@ public class RecordMethods {
         return update(callable, sequence(records));
     }
 
-    private static Sequence<Pair<? extends Predicate<? super Record>, Record>> update(final Callable1<Record, Predicate<? super Record>> callable, final Sequence<Record> records) {
+    public static Sequence<Pair<? extends Predicate<? super Record>, Record>> update(final Callable1<Record, Predicate<? super Record>> callable, final Sequence<Record> records) {
         return records.map(toPair(callable));
     }
 
