@@ -62,13 +62,10 @@ public abstract class AbstractRecords implements Records {
                 Predicate<? super Record> predicate = pair.first();
                 Sequence<Record> matched = get(recordName).filter(predicate).realise();
                 if (add && matched.isEmpty()) {
-                    add(recordName, pair.second());
-                    return 1;
+                    return add(recordName, pair.second());
                 }
-                Sequence<Record> updated = matched.map(merge(pair.second()));
-                Number count = remove(recordName, predicate);
-                add(recordName, updated);
-                return count;
+                remove(recordName, predicate);
+                return add(recordName, matched.map(merge(pair.second())));
             }
         };
     }
