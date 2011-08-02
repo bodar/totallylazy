@@ -42,6 +42,7 @@ import static com.googlecode.totallylazy.records.Join.join;
 import static com.googlecode.totallylazy.records.Join.using;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
+import static com.googlecode.totallylazy.records.RecordMethods.update;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -160,9 +161,10 @@ public abstract class AbstractRecordsTests<T extends Records> {
         String updatedTitle = "Zen And The Art Of Motorcycle Maintenance: 25th Anniversary Edition: An Inquiry into Values";
         String newTitle = "The Emperor's New Mind: Concerning Computers, Minds, and the Laws of Physics";
         Number count = records.put(books,
-                pair(where(isbn, is(zenIsbn)), record().set(isbn, zenIsbn).set(title, updatedTitle)),
-                pair(where(isbn, is(newIsbn)), record().set(isbn, newIsbn).set(title, newTitle))
-                );
+                update(using(isbn),
+                        record().set(isbn, zenIsbn).set(title, updatedTitle),
+                        record().set(isbn, newIsbn).set(title, newTitle))
+        );
         assertThat(count, NumberMatcher.is(2));
         assertThat(records.get(books).filter(where(isbn, is(zenIsbn))).map(title), hasExactly(updatedTitle));
         assertThat(records.get(books).filter(where(isbn, is(newIsbn))).map(title), hasExactly(newTitle));
