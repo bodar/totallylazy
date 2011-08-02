@@ -145,13 +145,6 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     @Test
     public void supportsUpdating() throws Exception {
-        Number count = records.set(people, pair(where(firstName, is("dan")).and(where(age, is(10))), record().set(lastName, "bod")));
-        assertThat(count, NumberMatcher.is(1));
-        assertThat(records.get(people).filter(where(firstName, is("dan"))).map(lastName), hasExactly("bod"));
-    }
-
-    @Test
-    public void supportsBatchUpdating() throws Exception {
         Number count = records.set(people,
                 pair(where(age, is(12)), record().set(isbn, zenIsbn)),
                 pair(where(age, is(11)), record().set(isbn, zenIsbn))
@@ -159,6 +152,20 @@ public abstract class AbstractRecordsTests<T extends Records> {
         assertThat(count, NumberMatcher.is(2));
         assertThat(records.get(people).filter(where(age, is(12))).map(isbn), hasExactly(zenIsbn));
         assertThat(records.get(people).filter(where(age, is(11))).map(isbn), hasExactly(zenIsbn));
+    }
+
+    @Test
+    public void supportsInsertOrUpdate() throws Exception {
+        URI newIsbn = uri("urn:isbn:0192861980");
+        String updatedTitle = "Zen And The Art Of Motorcycle Maintenance: 25th Anniversary Edition: An Inquiry into Values";
+        String newTitle = "The Emperor's New Mind: Concerning Computers, Minds, and the Laws of Physics";
+        Number count = records.put(books,
+                pair(where(isbn, is(zenIsbn)), record().set(isbn, zenIsbn).set(title, updatedTitle)),
+                pair(where(isbn, is(newIsbn)), record().set(isbn, newIsbn).set(title, newTitle))
+                );
+        assertThat(count, NumberMatcher.is(2));
+        assertThat(records.get(books).filter(where(isbn, is(zenIsbn))).map(title), hasExactly(updatedTitle));
+        assertThat(records.get(books).filter(where(isbn, is(newIsbn))).map(title), hasExactly(newTitle));
     }
 
     @Test

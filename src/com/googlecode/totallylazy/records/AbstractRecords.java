@@ -45,15 +45,32 @@ public abstract class AbstractRecords implements Records {
     }
 
     public Number set(final Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records) {
-        return records.map(new Callable1<Pair<? extends Predicate<? super Record>, Record>, Number>() {
+        return records.map(update(recordName, false)).reduce(sum());
+    }
+
+    public Number put(final Keyword recordName, Pair<? extends Predicate<? super Record>, Record>... records) {
+        return put(recordName, sequence(records));
+    }
+
+    public Number put(final Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records) {
+        return records.map(update(recordName, true)).reduce(sum());
+    }
+
+    private Callable1<Pair<? extends Predicate<? super Record>, Record>, Number> update(final Keyword recordName, final boolean add) {
+        return new Callable1<Pair<? extends Predicate<? super Record>, Record>, Number>() {
             public Number call(Pair<? extends Predicate<? super Record>, Record> pair) throws Exception {
                 Predicate<? super Record> predicate = pair.first();
-                Sequence<Record> updated = get(recordName).filter(predicate).map(merge(pair.second())).realise();
+                Sequence<Record> matched = get(recordName).filter(predicate).realise();
+                if (add && matched.isEmpty()) {
+                    add(recordName, pair.second());
+                    return 1;
+                }
+                Sequence<Record> updated = matched.map(merge(pair.second()));
                 Number count = remove(recordName, predicate);
                 add(recordName, updated);
                 return count;
             }
-        }).reduce(sum());
+        };
     }
 
     public Number remove(Keyword recordName) {
