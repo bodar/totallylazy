@@ -7,11 +7,14 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.join;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
@@ -24,6 +27,30 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
+    @Test
+    public void supportsUnzip() {
+        Pair<Sequence<Integer>, Sequence<Integer>> pair = Sequences.unzip(sequence(pair(1, 2), pair(3, 4), pair(5, 6)));
+        assertThat(pair.first(), hasExactly(1, 3, 5));
+        assertThat(pair.second(), hasExactly(2, 4, 6));
+    }
+
+    @Test
+    public void supportsUnzippingTriples() {
+        Triple<Sequence<Integer>, Sequence<Integer>, Sequence<String>> triple = Sequences.unzip(sequence(triple(1, 2, "car"), triple(3, 4, "cat")));
+        assertThat(triple.first(), hasExactly(1, 3));
+        assertThat(triple.second(), hasExactly(2, 4));
+        assertThat(triple.third(), hasExactly("car", "cat"));
+    }
+
+    @Test
+    public void supportsUnzippingQuadruples() {
+        Quadruple<Sequence<Integer>, Sequence<Integer>, Sequence<String>, Sequence<Character>> quadruple = Sequences.unzip(sequence(quadruple(1, 2, "car", 'C'), quadruple(3, 4, "cat", 'D')));
+        assertThat(quadruple.first(), hasExactly(1, 3));
+        assertThat(quadruple.second(), hasExactly(2, 4));
+        assertThat(quadruple.third(), hasExactly("car", "cat"));
+        assertThat(quadruple.fourth(), hasExactly('C', 'D'));
+    }
+
     @Test
     public void supportsCycle() throws Exception {
         assertThat(range(1, 4).cycle(), startsWith(1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3));
