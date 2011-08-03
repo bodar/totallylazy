@@ -32,6 +32,15 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 
 public class Iterators {
+    public static boolean equalsTo(Iterator a, Iterator b){
+        while(a.hasNext() && b.hasNext()){
+            if(!a.next().equals(b.next())){
+                return false;
+            }
+        }
+        return !(a.hasNext() || b.hasNext());
+    }
+
     public static <T> void forEach(final Iterator<T> iterator, final Callable1<? super T,Void> runnable) {
         while (iterator.hasNext()) {
             Callers.call(runnable, iterator.next());
