@@ -391,4 +391,8 @@ public class Sequences {
             }
         });
     }
+
+    public static boolean equalTo(Iterable iterable, Iterable other) {
+        return Iterators.equalsTo(iterable.iterator(), other.iterator());
+    }
 }

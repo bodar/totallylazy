@@ -8,10 +8,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
+import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.ascending;
 
 
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Sequence && Sequences.equalTo(this, (Iterable) obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return fold(31, asHashCode());
+    }
+
     public void forEach(final Callable1<T,Void> runnable) {
         Sequences.forEach(this, runnable);
     }

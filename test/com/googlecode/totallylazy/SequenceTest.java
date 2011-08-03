@@ -11,37 +11,44 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static com.googlecode.totallylazy.Arrays.list;
-import static com.googlecode.totallylazy.Callables.asString;
+import static com.googlecode.totallylazy.Callables.*;
 import static com.googlecode.totallylazy.Callables.ascending;
-import static com.googlecode.totallylazy.Callables.call;
-import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.descending;
-import static com.googlecode.totallylazy.Callables.length;
-import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callables.size;
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.option;
-import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Option.*;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
-import static com.googlecode.totallylazy.Sequences.cons;
-import static com.googlecode.totallylazy.Sequences.empty;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sequences.sort;
+import static com.googlecode.totallylazy.Sequences.*;
 import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
-import static com.googlecode.totallylazy.numbers.Numbers.even;
-import static com.googlecode.totallylazy.numbers.Numbers.numbers;
-import static com.googlecode.totallylazy.numbers.Numbers.odd;
-import static com.googlecode.totallylazy.numbers.Numbers.range;
-import static com.googlecode.totallylazy.numbers.Numbers.remainder;
+import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SequenceTest {
+    @Test
+    public void supportsEquality() throws Exception {
+        assertThat(sequence(1, 2, 3).equals(sequence(1, 2, 3)), is(true));
+        assertThat(sequence(1, 2, 3).equals(sequence(3, 2, 1)), is(false));
+        assertThat(sequence(1, 2, 3).equals(sequence("1", "2", "3")), is(false));
+        assertThat(sequence(1, 2).equals(sequence(1, 2, 3)), is(false));
+        assertThat(sequence(1, 2, 3).equals(sequence(1, 2)), is(false));
+        assertThat(sequence(1, 2, 3).equals(list(1, 2, 3)), is(false));
+    }
+
+    @Test
+    public void supportsHashCodes() throws Exception {
+        assertThat(sequence(1, 2, 3).hashCode() == sequence(1, 2, 3).hashCode(), is(true));
+        assertThat(sequence(1, 2, 3).hashCode() == sequence(3, 2, 1).hashCode(), is(true)); // could we make this false easily?
+        assertThat(sequence(1, 2, 3).hashCode() == sequence("1", "2", "3").hashCode(), is(false));
+        assertThat(sequence(1, 2).hashCode() == sequence(1, 2, 3).hashCode(), is(false));
+        assertThat(sequence(1, 2, 3).hashCode() == sequence(1, 2).hashCode(), is(false));
+        assertThat(sequence(1, 2, 3).hashCode() == list(1, 2, 3).hashCode(), is(false));
+    }
+
     @Test
     public void supportsGroupBy() throws Exception {
         Sequence<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(remainder(2));
@@ -74,12 +81,12 @@ public class SequenceTest {
 
     @Test
     public void supportsLast() throws Exception {
-        assertThat(sequence(1,2,3).last(), is(3));
+        assertThat(sequence(1, 2, 3).last(), is(3));
     }
 
     @Test
     public void supportsReverse() throws Exception {
-        assertThat(sequence(1,2,3).reverse(), hasExactly(3,2,1));
+        assertThat(sequence(1, 2, 3).reverse(), hasExactly(3, 2, 1));
     }
 
     @Test
@@ -110,11 +117,14 @@ public class SequenceTest {
         assertThat(dogs, hasExactly(buster));
     }
 
-    public static interface Animal {}
+    public static interface Animal {
+    }
 
-    public static class Cat implements Animal {}
+    public static class Cat implements Animal {
+    }
 
-    public static class Dog implements Animal {}
+    public static class Dog implements Animal {
+    }
 
     @Test
     public void supportsSort() throws Exception {
@@ -178,11 +188,11 @@ public class SequenceTest {
 
     Callable1<Integer, Option<String>> someVeryExpensiveOperation = new Callable1<Integer, Option<String>>() {
         public Option<String> call(Integer number) throws Exception {
-            if(Numbers.equalTo(number, 1)) {
+            if (Numbers.equalTo(number, 1)) {
                 return none(); // the conversion didn't work
             }
-            if(Numbers.equalTo(number, 2)) {
-                    return some("converted"); // the conversion worked so don't do any more
+            if (Numbers.equalTo(number, 2)) {
+                return some("converted"); // the conversion worked so don't do any more
             }
             throw new AssertionError("should never get here");
         }
@@ -396,7 +406,7 @@ public class SequenceTest {
 
     @Test
     public void supportsZipWithIndex() {
-        assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(), hasExactly(pair((Number)0, "Dan"), pair((Number)1, "Matt"), pair((Number)2, "Bob")));
+        assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(), hasExactly(pair((Number) 0, "Dan"), pair((Number) 1, "Matt"), pair((Number) 2, "Bob")));
     }
 
 
