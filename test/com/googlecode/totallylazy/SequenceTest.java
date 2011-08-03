@@ -434,6 +434,15 @@ public class SequenceTest {
         assertThat(triple.third(), hasExactly("car", "cat"));
     }
 
+    @Test
+    public void supportsUnzippingQuadruples() {
+        Quadruple<Sequence<Integer>, Sequence<Integer>, Sequence<String>, Sequence<Character>> quadruple = Sequences.unzip(sequence(quadruple(1, 2, "car", 'C'), quadruple(3, 4, "cat", 'D')));
+        assertThat(quadruple.first(), hasExactly(1, 3));
+        assertThat(quadruple.second(), hasExactly(2, 4));
+        assertThat(quadruple.third(), hasExactly("car", "cat"));
+        assertThat(quadruple.fourth(), hasExactly('C', 'D'));
+    }
+
     
     @Test
     public void supportsZipWithIndex() {
