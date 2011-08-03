@@ -16,6 +16,8 @@ import static com.googlecode.totallylazy.records.sql.expressions.SelectList.sele
 import static com.googlecode.totallylazy.records.sql.expressions.WhereClause.whereClause;
 
 public class SelectExpression extends CompoundExpression {
+    public static final TextOnlyExpression SELECT = textOnly("select");
+
     private SelectExpression(final SetQuantifier setQuantifier, final Sequence<Keyword> select, final Keyword table, final Option<Predicate<? super Record>> where, final Option<Comparator<? super Record>> sort) {
         super(
                 querySpecification(setQuantifier, select),
@@ -30,7 +32,7 @@ public class SelectExpression extends CompoundExpression {
     }
 
     public static Expression querySpecification(SetQuantifier setQuantifier, final Sequence<Keyword> select) {
-        return Expressions.join(textOnly("select"), setQuantifier(setQuantifier), selectList(select));
+        return Expressions.join(SELECT, setQuantifier(setQuantifier), selectList(select));
     }
 
     public static Expression setQuantifier(SetQuantifier setQuantifier) {
