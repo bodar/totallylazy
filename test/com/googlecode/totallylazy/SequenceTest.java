@@ -420,31 +420,6 @@ public class SequenceTest {
     }
 
     @Test
-    public void supportsUnzip() {
-        Pair<Sequence<Integer>, Sequence<Integer>> pair = Sequences.unzip(sequence(pair(1, 2), pair(3, 4), pair(5, 6)));
-        assertThat(pair.first(), hasExactly(1, 3, 5));
-        assertThat(pair.second(), hasExactly(2, 4, 6));
-    }
-
-    @Test
-    public void supportsUnzippingTriples() {
-        Triple<Sequence<Integer>, Sequence<Integer>, Sequence<String>> triple = Sequences.unzip(sequence(triple(1, 2, "car"), triple(3, 4, "cat")));
-        assertThat(triple.first(), hasExactly(1, 3));
-        assertThat(triple.second(), hasExactly(2, 4));
-        assertThat(triple.third(), hasExactly("car", "cat"));
-    }
-
-    @Test
-    public void supportsUnzippingQuadruples() {
-        Quadruple<Sequence<Integer>, Sequence<Integer>, Sequence<String>, Sequence<Character>> quadruple = Sequences.unzip(sequence(quadruple(1, 2, "car", 'C'), quadruple(3, 4, "cat", 'D')));
-        assertThat(quadruple.first(), hasExactly(1, 3));
-        assertThat(quadruple.second(), hasExactly(2, 4));
-        assertThat(quadruple.third(), hasExactly("car", "cat"));
-        assertThat(quadruple.fourth(), hasExactly('C', 'D'));
-    }
-
-    
-    @Test
     public void supportsZipWithIndex() {
         assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(), hasExactly(pair((Number) 0, "Dan"), pair((Number) 1, "Matt"), pair((Number) 2, "Bob")));
     }
