@@ -51,7 +51,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> sequence(final T... items) {
-        if(items == null){
+        if (items == null) {
             return empty();
         }
         return new Sequence<T>() {
@@ -158,7 +158,7 @@ public class Sequences {
         };
     }
 
-    public static <T> void forEach(final Iterable<T> iterable, final Callable1<T,Void> runnable) {
+    public static <T> void forEach(final Iterable<T> iterable, final Callable1<T, Void> runnable) {
         Iterators.forEach(iterable.iterator(), runnable);
     }
 
@@ -349,7 +349,7 @@ public class Sequences {
     public static <F, S, T, Fo> Sequence<Quadruple<F, S, T, Fo>> zip(final Iterable<F> first, final Iterable<S> second, final Iterable<T> third, final Iterable<Fo> forth) {
         return new Sequence<Quadruple<F, S, T, Fo>>() {
             public final Iterator<Quadruple<F, S, T, Fo>> iterator() {
-                return new QuadrupleIterator<F, S, T, Fo>(first.iterator(), second.iterator(), third.iterator(),forth.iterator());
+                return new QuadrupleIterator<F, S, T, Fo>(first.iterator(), second.iterator(), third.iterator(), forth.iterator());
             }
         };
     }
@@ -363,6 +363,13 @@ public class Sequences {
         return triple(sequence(triples).map(Callables.<F>first()),
                 sequence(triples).map(Callables.<S>second()),
                 sequence(triples).map(Callables.<T>third()));
+    }
+
+    public static <F, S, T, Fo> Quadruple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>> unzip(final Iterable<Quadruple<F, S, T, Fo>> quadruples) {
+        return Quadruple.quadruple(sequence(quadruples).map(Callables.<F>first()),
+                sequence(quadruples).map(Callables.<S>second()),
+                sequence(quadruples).map(Callables.<T>third()),
+                sequence(quadruples).map(Callables.<Fo>fourth()));
     }
 
 
@@ -408,11 +415,11 @@ public class Sequences {
         return repeat(sequence(iterable).memorise()).flatMap(Callables.<Iterable<T>>returnArgument());
     }
 
-    public static <T,S> Sequence<S> mapConcurrently(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
+    public static <T, S> Sequence<S> mapConcurrently(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
         return callConcurrently(sequence(iterable).map(bounce(callable)));
     }
 
-    public static <T,S> Sequence<S> mapConcurrently(final Iterable<T> iterable, final Callable1<? super T, S> callable, final Executor executor) {
+    public static <T, S> Sequence<S> mapConcurrently(final Iterable<T> iterable, final Callable1<? super T, S> callable, final Executor executor) {
         return callConcurrently(sequence(iterable).map(bounce(callable)), executor);
     }
 
