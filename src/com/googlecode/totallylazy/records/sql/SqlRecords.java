@@ -25,6 +25,7 @@ import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.sql.expressions.DeleteStatement.deleteStatement;
 import static com.googlecode.totallylazy.records.sql.expressions.InsertStatement.insertStatement;
+import static com.googlecode.totallylazy.records.sql.expressions.MergeStatement.mergeStatement;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
 import static com.googlecode.totallylazy.records.sql.expressions.TableDefinition.tableDefinition;
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
@@ -91,6 +92,11 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     public Number set(Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records) {
         return update(records.map(updateStatement(recordName)));
     }
+
+//    @Override
+//    public Number put(Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records) {
+//        return update(records.map(mergeStatement(recordName)));
+//    }
 
     public Number update(final Expression... expressions) {
         return update(sequence(expressions));
