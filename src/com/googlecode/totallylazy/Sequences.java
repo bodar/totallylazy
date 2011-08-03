@@ -4,8 +4,9 @@ import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
 import com.googlecode.totallylazy.iterators.EmptyIterator;
 import com.googlecode.totallylazy.iterators.EnumerationIterator;
+import com.googlecode.totallylazy.iterators.PairIterator;
+import com.googlecode.totallylazy.iterators.QuadrupleIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
-import com.googlecode.totallylazy.iterators.ZipIterator;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -327,10 +328,10 @@ public class Sequences {
         return new MemorisedSequence<T>(iterable);
     }
 
-    public static <T1, T2> Sequence<Pair<T1, T2>> zip(final Iterable<T1> left, final Iterable<T2> right) {
-        return new Sequence<Pair<T1, T2>>() {
-            public final Iterator<Pair<T1, T2>> iterator() {
-                return new ZipIterator<T1, T2>(left.iterator(), right.iterator());
+    public static <F, S> Sequence<Pair<F, S>> zip(final Iterable<F> first, final Iterable<S> second) {
+        return new Sequence<Pair<F, S>>() {
+            public final Iterator<Pair<F, S>> iterator() {
+                return new PairIterator<F, S>(first.iterator(), second.iterator());
             }
         };
     }
@@ -339,6 +340,14 @@ public class Sequences {
         return new Sequence<Triple<F, S, T>>() {
             public final Iterator<Triple<F, S, T>> iterator() {
                 return new TripleIterator<F, S, T>(first.iterator(), second.iterator(), third.iterator());
+            }
+        };
+    }
+
+    public static <F, S, T, Fo> Sequence<Quadruple<F, S, T, Fo>> zip(final Iterable<F> first, final Iterable<S> second, final Iterable<T> third, final Iterable<Fo> forth) {
+        return new Sequence<Quadruple<F, S, T, Fo>>() {
+            public final Iterator<Quadruple<F, S, T, Fo>> iterator() {
+                return new QuadrupleIterator<F, S, T, Fo>(first.iterator(), second.iterator(), third.iterator(),forth.iterator());
             }
         };
     }

@@ -211,12 +211,16 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.forwardOnly(this);
     }
 
-    public <T2> Sequence<Pair<T, T2>> zip(final Iterable<T2> iterable) {
-        return Sequences.zip(this, iterable);
+    public <S> Sequence<Pair<T, S>> zip(final Iterable<S> second) {
+        return Sequences.zip(this, second);
     }
 
     public <S, Th> Sequence<Triple<T, S, Th>> zip(final Iterable<S> second, final Iterable<Th> third) {
         return Sequences.zip(this, second, third);
+    }
+
+    public <S, Th, Fo> Sequence<Quadruple<T, S, Th, Fo>> zip(final Iterable<S> second, final Iterable<Th> third, final Iterable<Fo> fourth) {
+        return Sequences.zip(this, second, third, fourth);
     }
 
     public Sequence<Pair<Number, T>> zipWithIndex() {
