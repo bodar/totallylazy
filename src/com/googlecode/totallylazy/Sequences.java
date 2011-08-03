@@ -20,6 +20,8 @@ import java.util.concurrent.Executor;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.bounce;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
+import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
 import static java.nio.CharBuffer.wrap;
 
@@ -351,6 +353,18 @@ public class Sequences {
             }
         };
     }
+
+    public static <F, S> Pair<Sequence<F>, Sequence<S>> unzip(final Iterable<Pair<F, S>> pairs) {
+        return pair(sequence(pairs).map(Callables.<F>first()),
+                sequence(pairs).map(Callables.<S>second()));
+    }
+
+    public static <F, S, T> Triple<Sequence<F>, Sequence<S>, Sequence<T>> unzip(final Iterable<Triple<F, S, T>> triples) {
+        return triple(sequence(triples).map(Callables.<F>first()),
+                sequence(triples).map(Callables.<S>second()),
+                sequence(triples).map(Callables.<T>third()));
+    }
+
 
     public static <T> Sequence<Pair<Number, T>> zipWithIndex(final Iterable<T> iterable) {
         return zip(integersStartingFrom(0), iterable);
