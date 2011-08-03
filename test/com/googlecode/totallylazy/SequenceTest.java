@@ -19,6 +19,7 @@ import static com.googlecode.totallylazy.Option.*;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Sequences.*;
+import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
@@ -402,6 +403,12 @@ public class SequenceTest {
         assertThat(sequence.zip(sequence(2, 4, 6, 8)), hasExactly(pair(1, 2), pair(3, 4), pair(5, 6)));
         assertThat(sequence.zip(sequence(2, 4, 6)), hasExactly(pair(1, 2), pair(3, 4), pair(5, 6)));
         assertThat(sequence.zip(sequence(2, 4)), hasExactly(pair(1, 2), pair(3, 4)));
+    }
+
+    @Test
+    public void supportsZipToTriple() {
+        assertThat(Sequences.zip(sequence(1, 3, 5), sequence(2, 4, 6, 8), sequence("car", "cat")), hasExactly(triple(1, 2, "car"), triple(3, 4, "cat")));
+        assertThat(sequence(1, 3, 5).zip(sequence(2, 4, 6, 8), sequence("car", "cat")), hasExactly(triple(1, 2, "car"), triple(3, 4, "cat")));
     }
 
     @Test

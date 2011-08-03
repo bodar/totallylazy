@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
 import com.googlecode.totallylazy.iterators.EmptyIterator;
 import com.googlecode.totallylazy.iterators.EnumerationIterator;
+import com.googlecode.totallylazy.iterators.TripleIterator;
 import com.googlecode.totallylazy.iterators.ZipIterator;
 
 import java.util.Collections;
@@ -330,6 +331,14 @@ public class Sequences {
         return new Sequence<Pair<T1, T2>>() {
             public final Iterator<Pair<T1, T2>> iterator() {
                 return new ZipIterator<T1, T2>(left.iterator(), right.iterator());
+            }
+        };
+    }
+
+    public static <F, S, T> Sequence<Triple<F, S, T>> zip(final Iterable<F> first, final Iterable<S> second, final Iterable<T> third) {
+        return new Sequence<Triple<F, S, T>>() {
+            public final Iterator<Triple<F, S, T>> iterator() {
+                return new TripleIterator<F, S, T>(first.iterator(), second.iterator(), third.iterator());
             }
         };
     }
