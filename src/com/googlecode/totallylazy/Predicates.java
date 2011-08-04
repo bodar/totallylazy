@@ -25,7 +25,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Predicates {
     public static <T> LogicalPredicate<T> all() {
-        return all();
+        return always();
     }
 
     public static <T> LogicalPredicate<T> all(Class<T> aClass) {
