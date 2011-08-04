@@ -92,11 +92,6 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
         return update(records.map(updateStatement(recordName)));
     }
 
-//    @Override
-//    public Number put(Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records) {
-//        return update(records.map(mergeStatement(recordName)));
-//    }
-
     public Number update(final Expression... expressions) {
         return update(sequence(expressions));
     }
