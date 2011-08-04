@@ -25,7 +25,6 @@ import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.sql.expressions.DeleteStatement.deleteStatement;
 import static com.googlecode.totallylazy.records.sql.expressions.InsertStatement.insertStatement;
-import static com.googlecode.totallylazy.records.sql.expressions.MergeStatement.mergeStatement;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
 import static com.googlecode.totallylazy.records.sql.expressions.TableDefinition.tableDefinition;
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
