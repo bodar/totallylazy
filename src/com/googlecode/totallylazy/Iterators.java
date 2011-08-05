@@ -51,7 +51,7 @@ public class Iterators {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> Iterator<S> flatMap(final Iterator<T> iterator, final Callable1<? super T, Iterable<S>> callable) {
+    public static <T, S> Iterator<S> flatMap(final Iterator<T> iterator, final Callable1<? super T, ? extends Iterable<S>> callable) {
         return new FlatMapIterator<T, S>(iterator, callable);
     }
 

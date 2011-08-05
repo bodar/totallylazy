@@ -127,7 +127,7 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, Iterable<S>> callable) {
+    public static <T, S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, ? extends Iterable<S>> callable) {
         return new Sequence<S>() {
             public final Iterator<S> iterator() {
                 return Iterators.flatMap(iterable.iterator(), callable);

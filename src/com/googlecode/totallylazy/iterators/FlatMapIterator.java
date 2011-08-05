@@ -8,10 +8,10 @@ import static com.googlecode.totallylazy.Callers.call;
 
 public class FlatMapIterator<T, S> extends StatefulIterator<S> {
     private final Iterator<T> iterator;
-    private final Callable1<? super T, Iterable<S>> callable;
+    private final Callable1<? super T, ? extends Iterable<S>> callable;
     private Iterator<? extends S> currentIterator = new EmptyIterator<S>();
 
-    public FlatMapIterator(Iterator<T> iterator, Callable1<? super T, Iterable<S>> callable) {
+    public FlatMapIterator(Iterator<T> iterator, Callable1<? super T, ? extends Iterable<S>> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }
