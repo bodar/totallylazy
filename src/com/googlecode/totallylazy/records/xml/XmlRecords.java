@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.SourceRecord;
 import com.googlecode.totallylazy.records.xml.mappings.Mapping;
 import com.googlecode.totallylazy.records.xml.mappings.Mappings;
 import org.w3c.dom.Document;
@@ -77,7 +78,7 @@ public class XmlRecords extends AbstractRecords {
     private Callable1<? super Record, Node> asNode() {
         return new Callable1<Record, Node>() {
             public Node call(Record record) throws Exception {
-                return ((NodeRecord) record).node();
+                return ((SourceRecord<Node>) record).value();
             }
         };
     }
