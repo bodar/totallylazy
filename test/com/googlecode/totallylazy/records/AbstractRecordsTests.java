@@ -74,7 +74,7 @@ public abstract class AbstractRecordsTests<T extends Records> {
     }
 
     private void setupPeople() {
-        records.remove(people);
+        records.undefine(people);
         records.define(people, age, dob, firstName, lastName, isbn);
         records.add(people,
                 record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)).set(isbn, zenIsbn),
@@ -83,7 +83,7 @@ public abstract class AbstractRecordsTests<T extends Records> {
     }
 
     private void setupBooks() {
-        records.remove(books);
+        records.undefine(books);
         records.define(books, isbn, title);
         records.add(books,
                 record().set(isbn, zenIsbn).set(title, "Zen And The Art Of Motorcycle Maintenance"),

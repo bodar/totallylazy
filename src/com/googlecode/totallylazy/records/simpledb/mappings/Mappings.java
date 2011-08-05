@@ -6,7 +6,6 @@ import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
 import com.amazonaws.services.simpledb.model.ReplaceableItem;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
@@ -54,7 +53,7 @@ public class Mappings {
         try {
             return value == null ? null : get(aClass).toString(value);
         } catch (Exception e) {
-            throw new LazyException(e);
+            return value.toString(); // TODO: Fix once we have proper select statements
         }
     }
 
@@ -62,7 +61,7 @@ public class Mappings {
         try {
             return value == null ? null : (T) get(aClass).toValue(value);
         } catch (Exception e) {
-            throw new LazyException(e);
+            return (T) value;  // TODO: Fix once we have proper select statements
         }
     }
 
