@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
 import com.googlecode.totallylazy.iterators.EmptyIterator;
@@ -392,8 +393,12 @@ public class Sequences {
     }
 
     public static <T extends Comparable<? super T>> Sequence<T> sort(final Iterable<T> iterable) {
+        return sort(iterable, Comparators.<T>ascending());
+    }
+
+    public static <T extends Comparable<? super T>> Sequence<T> sort(final Iterable<T> iterable, Comparator<? super T> comparator) {
         List<T> result = sequence(iterable).toList();
-        Collections.sort(result);
+        Collections.sort(result, comparator);
         return sequence(result);
     }
 

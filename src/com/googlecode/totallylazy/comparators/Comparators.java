@@ -14,4 +14,20 @@ public class Comparators {
             }
         };
     }
+
+    public static <T extends Comparable<? super T>> Comparator<? super T> ascending() {
+        return new Comparator<T>() {
+            public int compare(T a, T b) {
+                return a.compareTo(b);
+            }
+        };
+    }
+
+    public static <T extends Comparable<? super T>> Comparator<? super T> descending() {
+        return new Comparator<T>() {
+            public int compare(T a, T b) {
+                return b.compareTo(a);
+            }
+        };
+    }
 }
