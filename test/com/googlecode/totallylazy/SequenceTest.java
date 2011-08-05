@@ -88,6 +88,12 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsLastOrOption() throws Exception {
+        assertThat(sequence(1, 2, 3).lastOption(), is((Option<Integer>) Option.<Integer>some(3)));
+        assertThat(Sequences.<Number>sequence().lastOption(), is((Option<Number>) Option.<Number>none()));
+    }
+
+    @Test
     public void supportsReverse() throws Exception {
         assertThat(sequence(1, 2, 3).reverse(), hasExactly(3, 2, 1));
     }

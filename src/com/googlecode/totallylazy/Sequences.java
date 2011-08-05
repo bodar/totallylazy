@@ -170,6 +170,10 @@ public class Sequences {
         return head(reverse(iterable));
     }
 
+    public static <T> Option<T>  lastOption(final Iterable<T> iterable) {
+        return headOption(reverse(iterable));
+    }
+
     public static <T> T second(final Iterable<T> iterable) {
         return tail(iterable).head();
     }

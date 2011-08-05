@@ -59,6 +59,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.last(this);
     }
 
+    public Option<T> lastOption() {
+        return Sequences.lastOption(this);
+    }
+
     public T second() {
         return Sequences.second(this);
     }
