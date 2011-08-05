@@ -1,9 +1,6 @@
 package com.googlecode.totallylazy.records.simpledb;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.simpledb.AmazonSimpleDB;
-import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
 import com.amazonaws.services.simpledb.model.BatchDeleteAttributesRequest;
 import com.amazonaws.services.simpledb.model.BatchPutAttributesRequest;
 import com.amazonaws.services.simpledb.model.CreateDomainRequest;
@@ -20,25 +17,32 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.SourceRecord;
 import com.googlecode.totallylazy.records.simpledb.mappings.Mappings;
 
+import java.util.List;
+
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class SimpleDBRecords extends AbstractRecords {
     private final AmazonSimpleDB sdb;
     private final Mappings mappings;
 
-    public SimpleDBRecords(final AWSCredentials awsCredentials, final Mappings mappings) {
+    public SimpleDBRecords(final AmazonSimpleDB sdb, final Mappings mappings) {
         this.mappings = mappings;
-        sdb = new AmazonSimpleDBClient(awsCredentials, new ClientConfiguration());
+        this.sdb = sdb;
     }
 
-    public SimpleDBRecords(final AWSCredentials awsCredentials) {
-        this(awsCredentials, new Mappings());
+    public SimpleDBRecords(final AmazonSimpleDB sdb) {
+        this(sdb, new Mappings());
     }
 
     @Override
     public void define(Keyword recordName, Keyword<?>... fields) {
         super.define(recordName, fields);
         sdb.createDomain(new CreateDomainRequest(recordName.name()));
+    }
+
+    @Override
+    public boolean exists(Keyword recordName) {
+        return sdb.listDomains().withDomainNames(recordName.name()).getDomainNames().size() > 0;
     }
 
     public Sequence<Record> get(Keyword recordName) {
@@ -55,6 +59,9 @@ public class SimpleDBRecords extends AbstractRecords {
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
+        if(!exists(recordName)){
+            return 0;
+        }
         Sequence<Record> items = get(recordName).filter(predicate).realise();
         if (items.isEmpty()) {
             return 0;
@@ -64,11 +71,11 @@ public class SimpleDBRecords extends AbstractRecords {
     }
 
     @Override
-    public Number remove(Keyword recordName) {
+    public List<Keyword<?>> undefine(Keyword recordName){
         sdb.deleteDomain(new DeleteDomainRequest(recordName.name()));
-        return -1;
+        return super.undefine(recordName);
     }
-
+    
     private Callable1<? super Record, DeletableItem> asItem() {
         return new Callable1<Record, DeletableItem>() {
             public DeletableItem call(Record record) throws Exception {
