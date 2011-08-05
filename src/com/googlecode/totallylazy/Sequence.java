@@ -127,7 +127,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return toSet(new HashSet<T>());
     }
 
-    public Sequence<T> toSetSequence() {
+    public Sequence<T> unique() {
         return Sequences.sequence(toSet());
     }
 

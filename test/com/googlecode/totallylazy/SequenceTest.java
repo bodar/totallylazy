@@ -44,6 +44,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class SequenceTest {
     @Test
@@ -150,6 +151,12 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsUnique() throws Exception {
+        assertThat(sequence(1, 2, 1, 3, 4, 2).unique(), hasExactly(1, 2, 3, 4));
+        assertThat(sequence("Matt", "Dan", "Matt", "Bob").unique(), containsInAnyOrder("Matt", "Dan", "Bob"));
+    }
+
+    @Test
     public void supportsSort() throws Exception {
         assertThat(sort(sequence(5, 6, 1, 3, 4, 2)), hasExactly(1, 2, 3, 4, 5, 6));
         assertThat(sort(sequence("Matt", "Dan", "Bob")), hasExactly("Bob", "Dan", "Matt"));
@@ -159,8 +166,8 @@ public class SequenceTest {
     public void supportsSortDescending() throws Exception {
         assertThat(sort(sequence(5, 6, 1, 3, 4, 2), Comparators.<Integer>descending()), hasExactly(6,5,4,3,2,1));
         assertThat(sequence(5, 6, 1, 3, 4, 2).sortBy(Comparators.<Integer>descending()), hasExactly(6,5,4,3,2,1));
-        assertThat(sort(sequence("Matt", "Dan", "Bob"), Comparators.<String>descending()), hasExactly("Matt", "Dan", "Bob"));
-        assertThat(sequence("Matt", "Dan", "Bob").sortBy(Comparators.<String>descending()), hasExactly("Matt", "Dan", "Bob"));
+        assertThat(sort(sequence("Bob", "Dan", "Matt"), Comparators.<String>descending()), hasExactly("Matt", "Dan", "Bob"));
+        assertThat(sequence("Bob", "Dan", "Matt").sortBy(Comparators.<String>descending()), hasExactly("Matt", "Dan", "Bob"));
     }
 
     @Test
