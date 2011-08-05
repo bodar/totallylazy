@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.SourceRecord;
 import com.googlecode.totallylazy.records.xml.mappings.Mappings;
 import org.w3c.dom.Node;
 
@@ -28,7 +29,7 @@ public class XmlSequence extends Sequence<Record> {
     private Callable1<? super Node, Record> asRecord() {
         return new Callable1<Node, Record>() {
             public Record call(final Node node) throws Exception {
-                return definitions.fold(new NodeRecord(node), new Callable2<Record, Keyword, Record>() {
+                return definitions.fold(new SourceRecord(node), new Callable2<Record, Keyword, Record>() {
                     public Record call(Record nodeRecord, Keyword keyword) throws Exception {
                         Sequence<Node> nodes = Xml.selectNodes(node, keyword.name());
                         if (nodes.isEmpty()) {

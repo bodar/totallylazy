@@ -105,9 +105,10 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     @Test
     public void supportsIsNullAndNotNull() throws Exception {
-        records.add(people, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
+        assertThat(records.add(people, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10))), NumberMatcher.is(1));
         assertThat(records.get(people).filter(where(age, is(notNullValue()))).toList().size(), NumberMatcher.is(3));
-        assertThat(records.get(people).filter(where(age, is(nullValue()))).toList().size(), NumberMatcher.is(1));
+        Sequence<Record> recordSequence = records.get(people);
+        assertThat(recordSequence.filter(where(age, is(nullValue()))).toList().size(), NumberMatcher.is(1));
     }
 
     @Test
