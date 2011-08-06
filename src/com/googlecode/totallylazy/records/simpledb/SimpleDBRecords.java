@@ -61,20 +61,19 @@ public class SimpleDBRecords extends AbstractRecords {
             return 0;
         }
         Sequence<Record> items = get(recordName).filter(predicate).realise();
-        return remove(recordName, items);
-    }
-
-    @Override
-    public Number remove(Keyword recordName) {
-        return remove(recordName, get(recordName).realise());
-    }
-
-    private Number remove(Keyword recordName, Sequence<Record> items) {
         if (items.isEmpty()) {
             return 0;
         }
         sdb.batchDeleteAttributes(new BatchDeleteAttributesRequest(recordName.name(), items.map(asItem()).toList()));
         return items.size();
+    }
+
+    @Override
+    public Number remove(Keyword recordName) {
+        Number result = get(recordName).size();
+        List<Keyword<?>> undefine = undefine(recordName);
+        define(recordName, undefine.toArray(new Keyword[0]));
+        return result;
     }
 
     @Override

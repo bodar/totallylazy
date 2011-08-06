@@ -8,6 +8,7 @@ import org.junit.Ignore;
 
 import static java.lang.System.getenv;
 
+@Ignore
 public class SimpleDBRecordsTest extends AbstractRecordsTests<SimpleDBRecords>{
     @Override
     protected SimpleDBRecords createRecords() throws Exception {
