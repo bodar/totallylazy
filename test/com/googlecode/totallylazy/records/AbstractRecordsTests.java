@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.records;
 
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
@@ -282,7 +283,7 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     @Test
     public void supportsSorting() throws Exception {
-        Sequence<Record> users = records.get(people);
+        Sequence<Record> users = records.get(people).filter(where(age, is(notNullValue())));
         assertThat(users.sortBy(age).map(firstName), containsInAnyOrder("dan", "bob", "matt"));
         assertThat(users.sortBy(ascending(age)).map(firstName), containsInAnyOrder("dan", "bob", "matt"));
         assertThat(users.sortBy(descending(age)).map(firstName), containsInAnyOrder("matt", "bob", "dan"));

@@ -7,7 +7,6 @@ import com.amazonaws.services.simpledb.model.CreateDomainRequest;
 import com.amazonaws.services.simpledb.model.DeletableItem;
 import com.amazonaws.services.simpledb.model.DeleteDomainRequest;
 import com.amazonaws.services.simpledb.model.Item;
-import com.amazonaws.services.simpledb.model.SelectRequest;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
@@ -19,7 +18,7 @@ import com.googlecode.totallylazy.records.simpledb.mappings.Mappings;
 
 import java.util.List;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
 
 public class SimpleDBRecords extends AbstractRecords {
     private final AmazonSimpleDB sdb;
@@ -46,8 +45,7 @@ public class SimpleDBRecords extends AbstractRecords {
     }
 
     public Sequence<Record> get(Keyword recordName) {
-        Sequence<Item> result = sequence(sdb.select(new SelectRequest("select * from `" + recordName.name() + "`", true)).getItems());
-        return result.map(mappings.asRecord(definitions(recordName)));
+        return new SimpleDBSequence(sdb, from(recordName).select(definitions(recordName)), mappings, mappings.asRecord(definitions(recordName)));
     }
 
     public Number add(Keyword recordName, Sequence<Record> records) {
@@ -59,10 +57,19 @@ public class SimpleDBRecords extends AbstractRecords {
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
-        if(!exists(recordName)){
+        if (!exists(recordName)) {
             return 0;
         }
         Sequence<Record> items = get(recordName).filter(predicate).realise();
+        return remove(recordName, items);
+    }
+
+    @Override
+    public Number remove(Keyword recordName) {
+        return remove(recordName, get(recordName).realise());
+    }
+
+    private Number remove(Keyword recordName, Sequence<Record> items) {
         if (items.isEmpty()) {
             return 0;
         }
@@ -71,11 +78,11 @@ public class SimpleDBRecords extends AbstractRecords {
     }
 
     @Override
-    public List<Keyword<?>> undefine(Keyword recordName){
+    public List<Keyword<?>> undefine(Keyword recordName) {
         sdb.deleteDomain(new DeleteDomainRequest(recordName.name()));
         return super.undefine(recordName);
     }
-    
+
     private Callable1<? super Record, DeletableItem> asItem() {
         return new Callable1<Record, DeletableItem>() {
             public DeletableItem call(Record record) throws Exception {
