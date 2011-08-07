@@ -5,16 +5,15 @@ import com.amazonaws.services.simpledb.model.Item;
 import com.amazonaws.services.simpledb.model.SelectRequest;
 import com.amazonaws.services.simpledb.model.SelectResult;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.SelectCallable;
 import com.googlecode.totallylazy.records.simpledb.mappings.Mappings;
 import com.googlecode.totallylazy.records.sql.expressions.AbstractExpression;
 import com.googlecode.totallylazy.records.sql.expressions.SelectBuilder;
-import com.googlecode.totallylazy.records.sql.expressions.SelectExpression;
 
 import java.io.PrintStream;
 import java.util.Comparator;
@@ -44,15 +43,27 @@ public class SimpleDBSequence<T> extends Sequence<T> {
     }
 
     private Iterator<T> iterator(final AbstractExpression expression) {
-        String selectExpression = expression.toString(new Callable1<Object, Object>() {
+        String selectExpression = expression.toString(value());
+        logger.println("SimpleDB: " + selectExpression);
+        return iterator(new SelectRequest(selectExpression, true)).map(itemToRecord).iterator();
+    }
+
+    private Callable1<Object, Object> value() {
+        return new Callable1<Object, Object>() {
             public Object call(Object value) throws Exception {
                 return mappings.toString(value.getClass(), value);
             }
-        });
-        logger.println("SimpleDB: " + selectExpression);
-        SelectResult result = sdb.select(new SelectRequest(selectExpression, true));
-        logger.println("NextToken: " + result.getNextToken());
-        return Iterators.map(result.getItems().iterator(), itemToRecord);
+        };
+    }
+
+    private Sequence<Item> iterator(final SelectRequest selectRequest) {
+        SelectResult result = sdb.select(selectRequest);
+        Sequence<Item> items = Sequences.sequence(result.getItems());
+        String nextToken = result.getNextToken();
+        if(nextToken != null){
+            return items.join(iterator(selectRequest.withNextToken(nextToken)));
+        }
+        return items;
     }
 
     @Override

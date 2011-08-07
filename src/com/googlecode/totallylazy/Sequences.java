@@ -442,16 +442,25 @@ public class Sequences {
         return Pair.<Sequence<T>,Sequence<T>>pair(partition.first().memorise(), partition.second().memorise());
     }
 
-    public static <T> Sequence<Sequence<T>> recursivelySplitAt(final Iterable<T> records, final Number index) {
-        return iterate(Sequences.<T>splitAt(index), sequence(records).splitAt(index)).
+    public static <T> Sequence<Sequence<T>> recursive(final Iterable<T> iterable,
+                                                      final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
+        return iterate(apply(callable), Callers.call(callable, sequence(iterable))).
                 map(Callables.<Sequence<T>>first()).
                 takeWhile(not(Predicates.<T>empty()));
     }
 
-    public static <T> Callable1<? super Pair<Sequence<T>, Sequence<T>>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index) {
+    public static <T> Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index){
+        return new Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
+            public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
+                return sequence.splitAt(index);
+            }
+        };
+    }
+
+    public static <T> Callable1<? super Pair<Sequence<T>, Sequence<T>>, Pair<Sequence<T>, Sequence<T>>> apply(final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
         return new Callable1<Pair<Sequence<T>, Sequence<T>>, Pair<Sequence<T>, Sequence<T>>>() {
             public Pair<Sequence<T>, Sequence<T>> call(Pair<Sequence<T>, Sequence<T>> pair) throws Exception {
-                return pair.second().splitAt(index);
+                return callable.call(pair.second());
             }
         };
     }

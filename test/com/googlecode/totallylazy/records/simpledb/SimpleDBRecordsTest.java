@@ -31,7 +31,7 @@ public class SimpleDBRecordsTest extends AbstractRecordsTests<SimpleDBRecords>{
 
     @Test
     public void canAddMoreThat25RecordsAtATimeAndReceiveMoreThanAHundred() throws Exception {
-        records.add(books, repeat(record().set(isbn, zenIsbn)).take(50));
-        assertThat(records.get(books).size(), is(53));
+        records.add(books, repeat(record().set(isbn, zenIsbn)).take(100));
+        assertThat(records.get(books).size(), is(103));
     }
 }
