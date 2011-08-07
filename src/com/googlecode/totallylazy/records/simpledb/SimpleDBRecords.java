@@ -8,8 +8,13 @@ import com.amazonaws.services.simpledb.model.DeletableItem;
 import com.amazonaws.services.simpledb.model.DeleteDomainRequest;
 import com.amazonaws.services.simpledb.model.Item;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
@@ -19,21 +24,28 @@ import com.googlecode.totallylazy.records.SelectCallable;
 import com.googlecode.totallylazy.records.SourceRecord;
 import com.googlecode.totallylazy.records.simpledb.mappings.Mappings;
 
+import java.io.PrintStream;
 import java.util.List;
 
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Sequences.recursivelySplitAt;
+import static com.googlecode.totallylazy.Streams.nullPrintStream;
+import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
 
 public class SimpleDBRecords extends AbstractRecords {
     private final AmazonSimpleDB sdb;
     private final Mappings mappings;
+    private final PrintStream logger;
 
-    public SimpleDBRecords(final AmazonSimpleDB sdb, final Mappings mappings) {
+    public SimpleDBRecords(final AmazonSimpleDB sdb, final Mappings mappings, final PrintStream logger) {
         this.mappings = mappings;
         this.sdb = sdb;
+        this.logger = logger;
     }
 
     public SimpleDBRecords(final AmazonSimpleDB sdb) {
-        this(sdb, new Mappings());
+        this(sdb, new Mappings(), nullPrintStream());
     }
 
     @Override
@@ -48,15 +60,24 @@ public class SimpleDBRecords extends AbstractRecords {
     }
 
     public Sequence<Record> get(Keyword recordName) {
-        return new SimpleDBSequence<Record>(sdb, from(recordName).select(definitions(recordName)), mappings, mappings.asRecord(definitions(recordName)));
+        return new SimpleDBSequence<Record>(sdb, from(recordName).select(definitions(recordName)), mappings, mappings.asRecord(definitions(recordName)), logger);
     }
 
-    public Number add(Keyword recordName, Sequence<Record> records) {
+    public Number add(final Keyword recordName, Sequence<Record> records) {
         if (records.isEmpty()) {
             return 0;
         }
-        sdb.batchPutAttributes(new BatchPutAttributesRequest(recordName.name(), records.map(mappings.toReplaceableItem()).toList()));
-        return records.size();
+
+        return recursivelySplitAt(records, 25).mapConcurrently(put(recordName)).reduce(sum());
+    }
+
+    private Callable1<Sequence<Record>, Number> put(final Keyword recordName) {
+        return new Callable1<Sequence<Record>, Number>() {
+            public Number call(Sequence<Record> chunk) throws Exception {
+                sdb.batchPutAttributes(new BatchPutAttributesRequest(recordName.name(), chunk.map(mappings.toReplaceableItem()).toList()));
+                return chunk.size();
+            }
+        };
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {

@@ -163,7 +163,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> take(final Iterator<T> iterator, final int count) {
-        return takeWhile(iterator, Predicates.<T>countTo(count));
+        return takeWhile(iterator, Predicates.countTo(count));
     }
 
     public static <T> Iterator<T> takeWhile(final Iterator<T> iterator, final Predicate<? super T> predicate) {
@@ -171,7 +171,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> drop(final Iterator<T> iterator, final int count) {
-        return dropWhile(iterator, Predicates.<T>countTo(count));
+        return dropWhile(iterator, Predicates.countTo(count));
     }
 
     public static <T> Iterator<T> dropWhile(final Iterator<T> iterator, final Predicate<? super T> predicate) {

@@ -39,8 +39,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.map(this, callable);
     }
 
-    public <T> Partition<T> partition(final Predicate<? super T> predicate) {
-        return Sequences.partition((Iterable<T>) this, predicate);
+    public Partition<T> partition(final Predicate<? super T> predicate) {
+        return Sequences.partition(this, predicate);
     }
 
     public Sequence<T> filter(final Predicate<? super T> predicate) {
@@ -257,5 +257,9 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     public  <Key> Sequence<Group<Key, T>> groupBy(final Callable1<? super T, Key> callable) {
         return Sequences.groupBy(this, callable);
+    }
+
+    public Pair<Sequence<T>,Sequence<T>> splitAt(final Number index) {
+        return Sequences.splitAt(this, index);
     }
 }
