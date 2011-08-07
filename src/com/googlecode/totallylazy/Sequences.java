@@ -7,7 +7,6 @@ import com.googlecode.totallylazy.iterators.EnumerationIterator;
 import com.googlecode.totallylazy.iterators.PairIterator;
 import com.googlecode.totallylazy.iterators.QuadrupleIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
-import com.googlecode.totallylazy.records.Record;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -442,13 +441,6 @@ public class Sequences {
         return Pair.<Sequence<T>,Sequence<T>>pair(partition.first().memorise(), partition.second().memorise());
     }
 
-    public static <T> Sequence<Sequence<T>> recursive(final Iterable<T> iterable,
-                                                      final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
-        return iterate(apply(callable), Callers.call(callable, sequence(iterable))).
-                map(Callables.<Sequence<T>>first()).
-                takeWhile(not(Predicates.<T>empty()));
-    }
-
     public static <T> Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index){
         return new Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
             public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
@@ -457,9 +449,22 @@ public class Sequences {
         };
     }
 
-    public static <T> Callable1<? super Pair<Sequence<T>, Sequence<T>>, Pair<Sequence<T>, Sequence<T>>> apply(final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
-        return new Callable1<Pair<Sequence<T>, Sequence<T>>, Pair<Sequence<T>, Sequence<T>>>() {
-            public Pair<Sequence<T>, Sequence<T>> call(Pair<Sequence<T>, Sequence<T>> pair) throws Exception {
+    public static <T> Sequence<Sequence<T>> recursive(final Iterable<T> iterable,
+                                                      final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
+        return recursive(sequence(iterable), callable, not(Predicates.<T>empty()));
+    }
+
+    public static <T> Sequence<T> recursive(final T instance,
+                                             final Callable1<T, Pair<T, T>> callable,
+                                             final Predicate<T> predicate) {
+        return iterate(applyToSecond(callable), Callers.call(callable, instance)).
+                map(Callables.<T>first()).
+                takeWhile(predicate);
+    }
+
+    public static <T> Callable1<? super Pair<T, T>, Pair<T, T>> applyToSecond(final Callable1<T, Pair<T, T>> callable) {
+        return new Callable1<Pair<T, T>, Pair<T, T>>() {
+            public Pair<T, T> call(Pair<T, T> pair) throws Exception {
                 return callable.call(pair.second());
             }
         };
