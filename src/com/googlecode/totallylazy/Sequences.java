@@ -436,12 +436,12 @@ public class Sequences {
         return Iterators.equalsTo(iterable.iterator(), other.iterator());
     }
 
-    public static <T> Pair<Sequence<T>,Sequence<T>> splitAt(final Iterable<T> iterable, final Number index) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterable<T> iterable, final Number index) {
         Partition<T> partition = sequence(iterable).partition(Predicates.countTo(index));
-        return Pair.<Sequence<T>,Sequence<T>>pair(partition.first().memorise(), partition.second().memorise());
+        return Pair.<Sequence<T>, Sequence<T>>pair(partition.first().memorise(), partition.second().memorise());
     }
 
-    public static <T> Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index){
+    public static <T> Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index) {
         return new Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
             public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
                 return sequence.splitAt(index);
@@ -451,20 +451,17 @@ public class Sequences {
 
     public static <T> Sequence<Sequence<T>> recursive(final Iterable<T> iterable,
                                                       final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
-        return recursive(sequence(iterable), callable, not(Predicates.<T>empty()));
+        return iteratePair(callable, sequence(iterable)).takeWhile(not(Predicates.<T>empty()));
     }
 
-    public static <T> Sequence<T> recursive(final T instance,
-                                             final Callable1<T, Pair<T, T>> callable,
-                                             final Predicate<T> predicate) {
+    public static <F, S> Sequence<F> iteratePair(final Callable1<S, Pair<F, S>> callable, final S instance){
         return iterate(applyToSecond(callable), Callers.call(callable, instance)).
-                map(Callables.<T>first()).
-                takeWhile(predicate);
+                map(Callables.<F>first());
     }
 
-    public static <T> Callable1<? super Pair<T, T>, Pair<T, T>> applyToSecond(final Callable1<T, Pair<T, T>> callable) {
-        return new Callable1<Pair<T, T>, Pair<T, T>>() {
-            public Pair<T, T> call(Pair<T, T> pair) throws Exception {
+    public static <F, S> Callable1<? super Pair<F, S>, Pair<F, S>> applyToSecond(final Callable1<S, Pair<F, S>> callable) {
+        return new Callable1<Pair<F, S>, Pair<F, S>>() {
+            public Pair<F, S> call(Pair<F, S> pair) throws Exception {
                 return callable.call(pair.second());
             }
         };
