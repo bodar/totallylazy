@@ -262,4 +262,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     public Pair<Sequence<T>,Sequence<T>> splitAt(final Number index) {
         return Sequences.splitAt(this, index);
     }
+
+    public Sequence<Sequence<T>> recursive(final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable){
+        return Sequences.recursive(this, callable);
+    }
 }

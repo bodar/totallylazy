@@ -8,11 +8,7 @@ import com.amazonaws.services.simpledb.model.DeletableItem;
 import com.amazonaws.services.simpledb.model.DeleteDomainRequest;
 import com.amazonaws.services.simpledb.model.Item;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.numbers.Numbers;
@@ -27,8 +23,7 @@ import com.googlecode.totallylazy.records.simpledb.mappings.Mappings;
 import java.io.PrintStream;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Sequences.recursivelySplitAt;
+import static com.googlecode.totallylazy.Sequences.splitAt;
 import static com.googlecode.totallylazy.Streams.nullPrintStream;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
@@ -68,16 +63,9 @@ public class SimpleDBRecords extends AbstractRecords {
             return 0;
         }
 
-        return recursivelySplitAt(records, 25).mapConcurrently(put(recordName)).reduce(sum());
-    }
-
-    private Callable1<Sequence<Record>, Number> put(final Keyword recordName) {
-        return new Callable1<Sequence<Record>, Number>() {
-            public Number call(Sequence<Record> chunk) throws Exception {
-                sdb.batchPutAttributes(new BatchPutAttributesRequest(recordName.name(), chunk.map(mappings.toReplaceableItem()).toList()));
-                return chunk.size();
-            }
-        };
+        return records.recursive(Sequences.<Record>splitAt(25)).
+                mapConcurrently(putAttributes(recordName)).
+                reduce(sum());
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
@@ -88,8 +76,10 @@ public class SimpleDBRecords extends AbstractRecords {
         if (items.isEmpty()) {
             return 0;
         }
-        sdb.batchDeleteAttributes(new BatchDeleteAttributesRequest(recordName.name(), items.map(asItem()).toList()));
-        return items.size();
+
+        return items.recursive(Sequences.<Record>splitAt(25)).
+                mapConcurrently(deleteAttributes(recordName)).
+                reduce(sum());
     }
 
     @Override
@@ -115,4 +105,24 @@ public class SimpleDBRecords extends AbstractRecords {
             }
         };
     }
+
+    private Callable1<Sequence<Record>, Number> putAttributes(final Keyword recordName) {
+        return new Callable1<Sequence<Record>, Number>() {
+            public Number call(Sequence<Record> batch) throws Exception {
+                sdb.batchPutAttributes(new BatchPutAttributesRequest(recordName.name(), batch.map(mappings.toReplaceableItem()).toList()));
+                return batch.size();
+            }
+        };
+    }
+
+    private Callable1<Sequence<Record>, Number> deleteAttributes(final Keyword recordName) {
+        return new Callable1<Sequence<Record>, Number>() {
+            public Number call(Sequence<Record> batch) throws Exception {
+                sdb.batchDeleteAttributes(new BatchDeleteAttributesRequest(recordName.name(), batch.map(asItem()).toList()));
+                return batch.size();
+            }
+        };
+    }
+
+
 }
