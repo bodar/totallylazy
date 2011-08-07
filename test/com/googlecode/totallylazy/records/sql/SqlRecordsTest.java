@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.is;
 
 public class SqlRecordsTest extends AbstractRecordsTests<SqlRecords> {
     public SqlRecords createRecords() throws Exception {
-        return new SqlRecords(getConnection("jdbc:hsqldb:mem:totallylazy", "SA", ""), new Mappings(), System.out);
+        return new SqlRecords(getConnection("jdbc:hsqldb:mem:totallylazy", "SA", ""), new Mappings(), logger);
     }
 
     @Test

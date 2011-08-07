@@ -9,6 +9,10 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.util.Date;
 
@@ -27,6 +31,7 @@ import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Streams.streams;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
@@ -65,13 +70,23 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     protected T records;
 
+    protected PrintStream logger;
+    private ByteArrayOutputStream stream;
+
+
     protected abstract T createRecords() throws Exception;
 
     @Before
     public void addRecords() throws Exception {
+        stream = new ByteArrayOutputStream();
+        logger = new PrintStream(streams(System.out, stream));
         this.records = createRecords();
         setupPeople();
         setupBooks();
+    }
+
+    public String log(){
+        return stream.toString();
     }
 
     private void setupPeople() {

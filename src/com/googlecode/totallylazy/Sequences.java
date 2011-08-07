@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.iterators.EnumerationIterator;
 import com.googlecode.totallylazy.iterators.PairIterator;
 import com.googlecode.totallylazy.iterators.QuadrupleIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
+import com.googlecode.totallylazy.records.Record;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,6 +22,7 @@ import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.bounce;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
 import static java.nio.CharBuffer.wrap;
@@ -434,4 +436,25 @@ public class Sequences {
     public static boolean equalTo(Iterable iterable, Iterable other) {
         return Iterators.equalsTo(iterable.iterator(), other.iterator());
     }
+
+    public static <T> Pair<Sequence<T>,Sequence<T>> splitAt(final Iterable<T> iterable, final Number index) {
+        Partition<T> partition = sequence(iterable).partition(Predicates.countTo(index));
+        return Pair.<Sequence<T>,Sequence<T>>pair(partition.first().memorise(), partition.second().memorise());
+    }
+
+    public static <T> Sequence<Sequence<T>> recursivelySplitAt(final Iterable<T> records, final Number index) {
+        return iterate(Sequences.<T>splitAt(index), sequence(records).splitAt(index)).
+                map(Callables.<Sequence<T>>first()).
+                takeWhile(not(Predicates.<T>empty()));
+    }
+
+    public static <T> Callable1<? super Pair<Sequence<T>, Sequence<T>>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index) {
+        return new Callable1<Pair<Sequence<T>, Sequence<T>>, Pair<Sequence<T>, Sequence<T>>>() {
+            public Pair<Sequence<T>, Sequence<T>> call(Pair<Sequence<T>, Sequence<T>> pair) throws Exception {
+                return pair.second().splitAt(index);
+            }
+        };
+    }
+
+
 }
