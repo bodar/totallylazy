@@ -10,9 +10,12 @@ import com.amazonaws.services.simpledb.model.Item;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Keywords;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.SelectCallable;
 import com.googlecode.totallylazy.records.SourceRecord;
 import com.googlecode.totallylazy.records.simpledb.mappings.Mappings;
 
@@ -45,7 +48,7 @@ public class SimpleDBRecords extends AbstractRecords {
     }
 
     public Sequence<Record> get(Keyword recordName) {
-        return new SimpleDBSequence(sdb, from(recordName).select(definitions(recordName)), mappings, mappings.asRecord(definitions(recordName)));
+        return new SimpleDBSequence<Record>(sdb, from(recordName).select(definitions(recordName)), mappings, mappings.asRecord(definitions(recordName)));
     }
 
     public Number add(Keyword recordName, Sequence<Record> records) {
@@ -70,7 +73,8 @@ public class SimpleDBRecords extends AbstractRecords {
 
     @Override
     public Number remove(Keyword recordName) {
-        Number result = get(recordName).size();
+        Record head = get(recordName).map(SelectCallable.select(Keywords.keyword("count(*)", String.class))).head();
+        Number result = Numbers.valueOf(head.get(Keywords.keyword("Count", String.class)));
         List<Keyword<?>> undefine = undefine(recordName);
         define(recordName, undefine.toArray(new Keyword[0]));
         return result;

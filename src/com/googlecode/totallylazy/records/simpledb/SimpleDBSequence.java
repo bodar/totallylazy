@@ -88,10 +88,10 @@ public class SimpleDBSequence<T> extends Sequence<T> {
         }
     }
 
-    @Override
-    public Number size() {
-        SelectBuilder count = builder.select(keyword("count(*)"));
-        Record next = (Record) iterator(count.express()).next();
-        return Numbers.valueOf(next.get(keyword("Count", String.class)));
-    }
+//    @Override
+//    public Number size() {
+//        SelectBuilder count = builder.select(keyword("count(*)"));
+//        Record next = (Record) iterator(count.express()).next();
+//        return Numbers.valueOf(next.get(keyword("Count", String.class)));
+//    }
 }
