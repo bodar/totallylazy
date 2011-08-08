@@ -26,6 +26,7 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
+import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -47,6 +48,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class SequenceTest {
+    @Test
+    public void supportsSplitAt() throws Exception {
+        Sequence<String> data = sequence("Cat", "Dog", "Mouse", "Rabbit", "Monkey");
+        assertThat(data.splitAt(2), is(pair(sequence("Cat", "Dog"), sequence("Mouse", "Rabbit", "Monkey"))));
+        assertThat(characters("Hello World!").splitAt(6).first().toString(""), is("Hello "));
+        assertThat(characters("Hello World!").splitAt(6).second().toString(""), is("World!"));
+    }
+
+    @Test
+    public void supportsRecursiveSplitAt() throws Exception {
+        Sequence<String> data = sequence("Cat", "Dog", "Mouse", "Rabbit", "Monkey");
+        assertThat(data.recursive(Sequences.<String>splitAt(2)), is(sequence(sequence("Cat", "Dog"), sequence("Mouse", "Rabbit"), sequence("Monkey"))));
+    }
+
     @Test
     public void supportsEquality() throws Exception {
         assertThat(sequence(1, 2, 3).equals(sequence(1, 2, 3)), is(true));
