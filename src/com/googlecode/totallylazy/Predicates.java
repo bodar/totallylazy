@@ -236,4 +236,8 @@ public class Predicates {
             }
         };
     }
+
+    public static <T> LogicalPredicate<Sequence<T>> empty(Class<T> aClass) {
+        return empty();
+    }
 }

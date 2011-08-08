@@ -22,7 +22,7 @@ import static com.googlecode.totallylazy.Callables.bounce;
 import static com.googlecode.totallylazy.Callables.flip;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
 import static java.nio.CharBuffer.wrap;
@@ -494,14 +494,14 @@ public class Sequences {
         return Iterators.breakOn(iterable.iterator(), predicate);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Sequence<Sequence<T>> recursive(final Iterable<T> iterable,
                                                       final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
-        return iteratePair(callable, sequence(iterable)).takeWhile(not(Predicates.<T>empty()));
-    }
-
-    public static <F, S> Sequence<F> iteratePair(final Callable1<S, Pair<F, S>> callable, final S instance){
-        return iterate(applyToSecond(callable), Callers.call(callable, instance)).
-                map(Callables.<F>first());
+        return iterate(applyToSecond(callable), Callers.call(callable, sequence(iterable))).
+                takeWhile(Predicates.<Pair<Sequence<T>, Sequence<T>>>or(
+                        where(Callables.<Sequence<T>>first(), Predicates.not(Predicates.<T>empty())),
+                        where(Callables.<Sequence<T>>second(), Predicates.not(Predicates.<T>empty())))).
+                        map(Callables.<Sequence<T>>first());
     }
 
     public static <F, S> Callable1<? super Pair<F, S>, Pair<F, S>> applyToSecond(final Callable1<S, Pair<F, S>> callable) {
