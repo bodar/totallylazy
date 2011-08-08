@@ -108,6 +108,13 @@ public abstract class AbstractRecordsTests<T extends Records> {
     }
 
     @Test
+    public void supportsCorrectlySortingNumbers() throws Exception {
+        records.add(people,
+                record().set(firstName, "great").set(lastName, "grandfather").set(age, 100).set(dob, date(1877, 1, 10)).set(isbn, zenIsbn));
+        assertThat(records.get(people).filter(where(age, is(notNullValue(Integer.class)))).sortBy(descending(age)).map(age), hasExactly(100, 12, 11, 10));
+    }
+
+    @Test
     public void supportsJoin() throws Exception {
         assertThat(records.get(people).filter(where(age, is(lessThan(12)))).
                 flatMap(join(records.get(books), using(isbn))).

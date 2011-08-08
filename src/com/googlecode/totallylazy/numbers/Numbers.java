@@ -38,8 +38,7 @@ import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
-import static com.googlecode.totallylazy.Sequences.iterate;
-import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Sequences.*;
 
 public class Numbers {
     public static Sequence<Number> range(final Number end) {
@@ -402,6 +401,16 @@ public class Numbers {
                 return remainder(dividend, divisor);
             }
         };
+    }
+
+    public static String toLexicalString(Number value, final Number minValue, final Number maxValue) {
+        String offset = add(value, negate(minValue)).toString();
+        int maxSize = add(maxValue, negate(minValue)).toString().length();
+        return repeat('0').take(maxSize - offset.length()).join(characters(offset)).toString("", "", "", Integer.MAX_VALUE);
+    }
+
+    public static Number parseLexicalString(String value, final Number minValue) {
+        return add(valueOf(value), minValue);
     }
 
     private static class Multiply<T extends Number> implements Callable2<T, T, Number> {
