@@ -5,13 +5,11 @@ import com.googlecode.totallylazy.comparators.DescendingComparator;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-import static com.googlecode.totallylazy.Methods.invokeOn;
 import static com.googlecode.totallylazy.Methods.method;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -361,4 +359,11 @@ public final class Callables {
         };
     }
 
+    public static <T, S> Callable2<? super S, ? super T, S> flip(final Callable2<? super T, ? super S, S> callable) {
+        return new Callable2<S, T, S>() {
+            public S call(S s, T t) throws Exception {
+                return callable.call(t, s);
+            }
+        };
+    }
 }

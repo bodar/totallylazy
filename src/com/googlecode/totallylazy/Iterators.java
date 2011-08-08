@@ -94,6 +94,8 @@ public class Iterators {
         return accumulator;
     }
 
+
+
     public static <T,S> S reduce(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
         return reduceLeft(iterator, callable);
     }

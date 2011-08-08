@@ -20,6 +20,7 @@ import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.bounce;
+import static com.googlecode.totallylazy.Callables.flip;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.not;
@@ -203,6 +204,10 @@ public class Sequences {
 
     public static <T, S> S foldLeft(final Iterable<T> iterable, S seed, final Callable2<? super S, ? super T, S> callable) {
         return Iterators.foldLeft(iterable.iterator(), seed, callable);
+    }
+
+    public static <T, S> S foldRight(final Iterable<T> iterable, S seed, final Callable2<? super T, ? super S, S> callable) {
+        return foldLeft(sequence(iterable).reverse(), seed, flip(callable));
     }
 
     public static <T, S> S reduce(final Iterable<T> iterable, final Callable2<? super S, ? super T, S> callable) {
