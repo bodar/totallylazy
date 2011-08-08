@@ -50,6 +50,11 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class SequenceTest {
     @Test
+    public void supportsFoldRight() throws Exception {
+        assertThat(sequence(1, 2, 3).foldRight(0, add()), NumberMatcher.is(6));
+    }
+
+    @Test
     public void supportsBreak() throws Exception {
         assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).breakOn(Predicates.greaterThan(3)), is(pair(sequence(1,2, 3), sequence(4, 1, 2, 3, 4))));
         assertThat(sequence(1, 2, 3).breakOn(lessThan(9)), is(pair(Sequences.<Integer>empty(), sequence(1, 2, 3))));
