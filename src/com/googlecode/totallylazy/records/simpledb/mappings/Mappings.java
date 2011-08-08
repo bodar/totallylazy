@@ -53,7 +53,7 @@ public class Mappings {
         try {
             return value == null ? null : get(aClass).toString(value);
         } catch (Exception e) {
-            return value.toString(); // TODO: Fix once we have proper select statements
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -61,7 +61,7 @@ public class Mappings {
         try {
             return value == null ? null : (T) get(aClass).toValue(value);
         } catch (Exception e) {
-            return (T) value;  // TODO: Fix once we have proper select statements
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -77,7 +77,7 @@ public class Mappings {
         return new Callable2<Record, Attribute, Record>() {
             public Record call(Record mapRecord, Attribute attribute) throws Exception {
                 Keyword keyword = RecordMethods.getKeyword(attribute.getName(), definitions);
-                return mapRecord.set(Keywords.keyword(attribute.getName()), toValue(keyword.forClass(), attribute.getValue()));
+                return mapRecord.set(keyword, toValue(keyword.forClass(), attribute.getValue()));
             }
         };
     }

@@ -7,3 +7,4 @@ build/artifacts
 lib/build
 lib/runtime
 lib/optional
+test/com/googlecode/totallylazy/records/simpledb/AwsCredentials.properties
