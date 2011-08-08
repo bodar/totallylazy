@@ -23,7 +23,6 @@ import com.googlecode.totallylazy.records.simpledb.mappings.Mappings;
 import java.io.PrintStream;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Sequences.splitAt;
 import static com.googlecode.totallylazy.Streams.nullPrintStream;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
@@ -32,15 +31,17 @@ public class SimpleDBRecords extends AbstractRecords {
     private final AmazonSimpleDB sdb;
     private final Mappings mappings;
     private final PrintStream logger;
+    private final boolean consistentRead;
 
-    public SimpleDBRecords(final AmazonSimpleDB sdb, final Mappings mappings, final PrintStream logger) {
+    public SimpleDBRecords(final AmazonSimpleDB sdb, boolean consistentRead, final Mappings mappings, final PrintStream logger) {
+        this.consistentRead = consistentRead;
         this.mappings = mappings;
         this.sdb = sdb;
         this.logger = logger;
     }
 
-    public SimpleDBRecords(final AmazonSimpleDB sdb) {
-        this(sdb, new Mappings(), nullPrintStream());
+    public SimpleDBRecords(final AmazonSimpleDB sdb, boolean consistentRead) {
+        this(sdb, consistentRead, new Mappings(), nullPrintStream());
     }
 
     @Override
@@ -55,7 +56,7 @@ public class SimpleDBRecords extends AbstractRecords {
     }
 
     public Sequence<Record> get(Keyword recordName) {
-        return new SimpleDBSequence<Record>(sdb, from(recordName).select(definitions(recordName)), mappings, mappings.asRecord(definitions(recordName)), logger);
+        return new SimpleDBSequence<Record>(sdb, from(recordName).select(definitions(recordName)), mappings, mappings.asRecord(definitions(recordName)), logger, consistentRead);
     }
 
     public Number add(final Keyword recordName, Sequence<Record> records) {
