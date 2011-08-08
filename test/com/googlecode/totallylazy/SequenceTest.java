@@ -24,6 +24,7 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.lessThan;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Sequences.characters;
@@ -48,6 +49,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class SequenceTest {
+    @Test
+    public void supportsBreak() throws Exception {
+        assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).breakOn(Predicates.greaterThan(3)), is(pair(sequence(1,2, 3), sequence(4, 1, 2, 3, 4))));
+        assertThat(sequence(1, 2, 3).breakOn(lessThan(9)), is(pair(Sequences.<Integer>empty(), sequence(1, 2, 3))));
+        assertThat(sequence(1, 2, 3).breakOn(Predicates.greaterThan(9)), is(pair(sequence(1, 2, 3), Sequences.<Integer>empty())));
+    }
+
+    @Test
+    public void supportsSpan() throws Exception {
+        assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).span(lessThan(3)), is(pair(sequence(1,2), sequence(3, 4, 1, 2, 3, 4))));
+        assertThat(sequence(1, 2, 3).span(lessThan(9)), is(pair(sequence(1, 2, 3), Sequences.<Integer>empty())));
+        assertThat(sequence(1, 2, 3).span(lessThan(0)), is(pair(Sequences.<Integer>empty(), sequence(1, 2, 3))));
+    }
+
     @Test
     public void supportsSplitAt() throws Exception {
         Sequence<String> data = sequence("Cat", "Dog", "Mouse", "Rabbit", "Monkey");
