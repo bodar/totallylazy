@@ -278,6 +278,10 @@ public class Iterators {
         return Pair.pair(partition.first(), partition.second().isEmpty() ? Sequences.<T>empty() : partition.second().tail());
     }
 
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitOn(final Iterator<T> iterator, final T instance) {
+        return splitWhen(iterator, is(instance));
+    }
+
     public static <T> Pair<Sequence<T>, Sequence<T>> span(Iterator<T> iterator, Predicate<? super T> predicate) {
         return partition(iterator, whileTrue(predicate));
     }

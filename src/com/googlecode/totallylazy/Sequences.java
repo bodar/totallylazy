@@ -474,6 +474,18 @@ public class Sequences {
         };
     }
 
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitOn(final Iterable<T> iterable, final T instance) {
+        return Iterators.splitOn(iterable.iterator(), instance);
+    }
+
+    public static <T> Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitOn(final T instance) {
+        return new Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
+            public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
+                return sequence.splitOn(instance);
+            }
+        };
+    }
+
     public static <T> Pair<Sequence<T>, Sequence<T>> span(final Iterable<T> iterable, final Predicate<? super T> predicate) {
         return Iterators.span(iterable.iterator(), predicate);
     }
