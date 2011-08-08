@@ -364,13 +364,13 @@ public class Sequences {
                 sequence(pairs).map(Callables.<S>second()));
     }
 
-    public static <F, S, T> Triple<Sequence<F>, Sequence<S>, Sequence<T>> unzip(final Iterable<Triple<F, S, T>> triples) {
+    public static <F, S, T> Triple<Sequence<F>, Sequence<S>, Sequence<T>> unzip3(final Iterable<Triple<F, S, T>> triples) {
         return triple(sequence(triples).map(Callables.<F>first()),
                 sequence(triples).map(Callables.<S>second()),
                 sequence(triples).map(Callables.<T>third()));
     }
 
-    public static <F, S, T, Fo> Quadruple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>> unzip(final Iterable<Quadruple<F, S, T, Fo>> quadruples) {
+    public static <F, S, T, Fo> Quadruple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>> unzip4(final Iterable<Quadruple<F, S, T, Fo>> quadruples) {
         return Quadruple.quadruple(sequence(quadruples).map(Callables.<F>first()),
                 sequence(quadruples).map(Callables.<S>second()),
                 sequence(quadruples).map(Callables.<T>third()),
