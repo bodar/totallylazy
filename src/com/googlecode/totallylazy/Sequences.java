@@ -22,6 +22,7 @@ import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.bounce;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
 import static java.nio.CharBuffer.wrap;
@@ -443,4 +444,37 @@ public class Sequences {
     public static boolean equalTo(Iterable iterable, Iterable other) {
         return Iterators.equalsTo(iterable.iterator(), other.iterator());
     }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterable<T> iterable, final Number index) {
+        Partition<T> partition = sequence(iterable).partition(Predicates.countTo(index));
+        return Pair.<Sequence<T>, Sequence<T>>pair(partition.first().memorise(), partition.second().memorise());
+    }
+
+    public static <T> Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index) {
+        return new Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
+            public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
+                return sequence.splitAt(index);
+            }
+        };
+    }
+
+    public static <T> Sequence<Sequence<T>> recursive(final Iterable<T> iterable,
+                                                      final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
+        return iteratePair(callable, sequence(iterable)).takeWhile(not(Predicates.<T>empty()));
+    }
+
+    public static <F, S> Sequence<F> iteratePair(final Callable1<S, Pair<F, S>> callable, final S instance){
+        return iterate(applyToSecond(callable), Callers.call(callable, instance)).
+                map(Callables.<F>first());
+    }
+
+    public static <F, S> Callable1<? super Pair<F, S>, Pair<F, S>> applyToSecond(final Callable1<S, Pair<F, S>> callable) {
+        return new Callable1<Pair<F, S>, Pair<F, S>>() {
+            public Pair<F, S> call(Pair<F, S> pair) throws Exception {
+                return callable.call(pair.second());
+            }
+        };
+    }
+
+
 }

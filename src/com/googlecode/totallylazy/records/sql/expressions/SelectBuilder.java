@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.callables.CountNotNull;
 import com.googlecode.totallylazy.records.Aggregate;
 import com.googlecode.totallylazy.records.Aggregates;
+import com.googlecode.totallylazy.records.ImmutableKeyword;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 
@@ -22,6 +23,7 @@ import static com.googlecode.totallylazy.records.sql.expressions.SetQuantifier.A
 import static com.googlecode.totallylazy.records.sql.expressions.SetQuantifier.DISTINCT;
 
 public class SelectBuilder implements Expressible, Callable<Expression> {
+    public static final ImmutableKeyword<Object> STAR = keyword("*");
     private final SetQuantifier setQuantifier;
     private final Sequence<Keyword> select;
     private final Keyword table;
@@ -58,7 +60,7 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
     }
 
     public static SelectBuilder from(Keyword table) {
-        return new SelectBuilder(ALL, Sequences.<Keyword>empty(), table, Option.<Predicate<? super Record>>none(), Option.<Comparator<? super Record>>none());
+        return new SelectBuilder(ALL, Sequences.sequence(STAR), table, Option.<Predicate<? super Record>>none(), Option.<Comparator<? super Record>>none());
     }
 
     public SelectBuilder select(Keyword... columns) {
@@ -79,7 +81,7 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
 
     public SelectBuilder count() {
         Callable2 count = CountNotNull.<Number>count();
-        Sequence<Keyword> sequence = Sequences.<Keyword>sequence(aggregate(count, keyword("*")).as(keyword("record_count")));
+        Sequence<Keyword> sequence = Sequences.<Keyword>sequence(aggregate(count, STAR).as(keyword("record_count")));
         return new SelectBuilder(setQuantifier, sequence, table, where, comparator);
     }
 

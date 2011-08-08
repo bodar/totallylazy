@@ -18,6 +18,7 @@ import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -26,6 +27,7 @@ import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.sql.expressions.DeleteStatement.deleteStatement;
 import static com.googlecode.totallylazy.records.sql.expressions.InsertStatement.insertStatement;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
+import static com.googlecode.totallylazy.records.sql.expressions.TableDefinition.dropTable;
 import static com.googlecode.totallylazy.records.sql.expressions.TableDefinition.tableDefinition;
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
 import static java.lang.String.format;
@@ -67,6 +69,14 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
             return;
         }
         update(tableDefinition(recordName, fields));
+    }
+
+    @Override
+    public List<Keyword<?>> undefine(Keyword recordName) {
+        if(exists(recordName)){
+            update(dropTable(recordName));
+        }
+        return super.undefine(recordName);
     }
 
     private static final Keyword<Integer> one = keyword("1", Integer.class);

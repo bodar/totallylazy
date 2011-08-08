@@ -128,8 +128,8 @@ public class Predicates {
         return new Not<T>(t);
     }
 
-    public static <T> LogicalPredicate<T> countTo(final int count) {
-        return new CountTo<T>(count);
+    public static LogicalPredicate<Object> countTo(final Number count) {
+        return new CountTo(count);
     }
 
     public static <T> LogicalPredicate<T> whileTrue(final Predicate<? super T> t) {
@@ -225,6 +225,14 @@ public class Predicates {
         return new Predicate<Pair>() {
             public boolean matches(Pair pair) {
                 return pair.first().equals(pair.second());
+            }
+        };
+    }
+
+    public static <T> LogicalPredicate<Sequence<T>> empty() {
+        return new LogicalPredicate<Sequence<T>>() {
+            public boolean matches(Sequence<T> other) {
+                return other.isEmpty();
             }
         };
     }

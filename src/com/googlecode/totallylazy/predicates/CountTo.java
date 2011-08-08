@@ -1,16 +1,19 @@
 package com.googlecode.totallylazy.predicates;
 
 
-public class CountTo<T> extends LogicalPredicate<T> {
-    private int count;
+import static com.googlecode.totallylazy.numbers.Numbers.decrement;
+import static com.googlecode.totallylazy.numbers.Numbers.isPositive;
 
-    public CountTo(int count) {
+public class CountTo extends LogicalPredicate<Object> {
+    private Number count;
+
+    public CountTo(Number count) {
         this.count = count;
     }
 
-    public boolean matches(T other) {
-        if(count > 0){
-            count--;
+    public boolean matches(Object other) {
+        if(isPositive(count)){
+            count = decrement(count);
             return true;
         }
         return false;

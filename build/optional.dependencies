@@ -4,3 +4,9 @@ mvn:org.hsqldb:hsqldb:jar:2.0.0
 mvn:org.apache.lucene:lucene-core:jar|sources:3.3.0
 
 
+mvn:com.amazonaws:aws-java-sdk:jar|sources:1.2.5
+mvn:commons-logging:commons-logging:jar:1.1
+mvn:org.apache.httpcomponents:httpclient:jar:4.1
+mvn:org.apache.httpcomponents:httpcore:jar:4.1
+mvn:commons-codec:commons-codec:jar:1.3
+

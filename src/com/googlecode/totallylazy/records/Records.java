@@ -4,6 +4,8 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
+import java.util.List;
+
 public interface Records {
     Sequence<Record> get(Keyword recordName);
 
@@ -26,4 +28,6 @@ public interface Records {
     Number remove(Keyword recordName, Predicate<? super Record> predicate);
 
     Number remove(Keyword recordName);
+
+    List<Keyword<?>> undefine(Keyword recordName);
 }

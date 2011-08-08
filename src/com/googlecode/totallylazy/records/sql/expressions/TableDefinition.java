@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
 import static java.lang.String.format;
 
 public class TableDefinition extends TextOnlyExpression{
@@ -36,5 +37,9 @@ public class TableDefinition extends TextOnlyExpression{
                 return format("%s %s", keyword, mappings.get(keyword.forClass()));
             }
         };
+    }
+
+    public static CompoundExpression dropTable(Keyword recordName){
+        return textOnly("drop table").join(textOnly(recordName));
     }
 }
