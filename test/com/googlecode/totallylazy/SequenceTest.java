@@ -100,16 +100,16 @@ public class SequenceTest {
 
     @Test
     public void supportsPartition() throws Exception {
-        Partition<Integer> result = sequence(1, 2, 3, 4).partition(even());
-        assertThat(result.matched().realise(), hasExactly(2, 4));
-        assertThat(result.unmatched().realise(), hasExactly(1, 3));
+        Pair<Sequence<Integer>, Sequence<Integer>> result = sequence(1, 2, 3, 4).partition(even());
+        assertThat(result.first(), hasExactly(2, 4));
+        assertThat(result.second(), hasExactly(1, 3));
     }
 
     @Test
     public void supportsPartitionOnForwardOnlySequence() throws Exception {
-        Partition<Integer> result = sequence(1, 2, 3, 4).forwardOnly().partition(even());
-        assertThat(result.matched().realise(), hasExactly(2, 4));
-        assertThat(result.unmatched().realise(), hasExactly(1, 3));
+        Pair<Sequence<Integer>, Sequence<Integer>> result = sequence(1, 2, 3, 4).forwardOnly().partition(even());
+        assertThat(result.first(), hasExactly(2, 4));
+        assertThat(result.second(), hasExactly(1, 3));
     }
 
     @Test
