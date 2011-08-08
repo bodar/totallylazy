@@ -36,7 +36,7 @@ public class SequencesTest {
 
     @Test
     public void supportsUnzippingTriples() {
-        Triple<Sequence<Integer>, Sequence<Integer>, Sequence<String>> triple = Sequences.unzip(sequence(triple(1, 2, "car"), triple(3, 4, "cat")));
+        Triple<Sequence<Integer>, Sequence<Integer>, Sequence<String>> triple = Sequences.unzip3(sequence(triple(1, 2, "car"), triple(3, 4, "cat")));
         assertThat(triple.first(), hasExactly(1, 3));
         assertThat(triple.second(), hasExactly(2, 4));
         assertThat(triple.third(), hasExactly("car", "cat"));
@@ -44,7 +44,7 @@ public class SequencesTest {
 
     @Test
     public void supportsUnzippingQuadruples() {
-        Quadruple<Sequence<Integer>, Sequence<Integer>, Sequence<String>, Sequence<Character>> quadruple = Sequences.unzip(sequence(quadruple(1, 2, "car", 'C'), quadruple(3, 4, "cat", 'D')));
+        Quadruple<Sequence<Integer>, Sequence<Integer>, Sequence<String>, Sequence<Character>> quadruple = Sequences.unzip4(sequence(quadruple(1, 2, "car", 'C'), quadruple(3, 4, "cat", 'D')));
         assertThat(quadruple.first(), hasExactly(1, 3));
         assertThat(quadruple.second(), hasExactly(2, 4));
         assertThat(quadruple.third(), hasExactly("car", "cat"));

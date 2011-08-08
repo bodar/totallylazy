@@ -10,7 +10,7 @@
 
         <sequential>
             <mkdir dir="@{classes}"/>
-            <javac srcdir="@{src}" destdir="@{classes}" classpathref="@{classpathref}" target="1.5" debug="true"
+            <javac srcdir="@{src}" destdir="@{classes}" classpathref="@{classpathref}" bootclasspath="${java.home}/lib/rt.jar" target="1.5" source="1.5" debug="true"
                    includeantruntime="false"/>
             <copy todir="@{classes}">
                 <fileset dir="@{src}">
