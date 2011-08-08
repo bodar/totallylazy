@@ -50,6 +50,11 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class SequenceTest {
     @Test
+    public void supportsReduceRight() throws Exception {
+        assertThat(numbers(1, 2, 3).reduceRight(add()), NumberMatcher.is(6));
+    }
+
+    @Test
     public void supportsFoldRight() throws Exception {
         assertThat(sequence(1, 2, 3).foldRight(0, add()), NumberMatcher.is(6));
     }
@@ -337,8 +342,7 @@ public class SequenceTest {
 
     @Test
     public void supportsReduceLeft() throws Exception {
-        Number sum = numbers(1, 2, 3).reduceLeft(add());
-        assertThat(sum, NumberMatcher.is(6));
+        assertThat(numbers(1, 2, 3).reduceLeft(add()), NumberMatcher.is(6));
     }
 
     @Test

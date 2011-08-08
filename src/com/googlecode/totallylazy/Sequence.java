@@ -99,6 +99,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.reduceLeft(this, callable);
     }
 
+    public <S> S reduceRight(final Callable2<? super T, ? super S, S> callable) {
+        return Sequences.reduceRight(this, callable);
+    }
+
     public String toString() {
         return Sequences.toString(this);
     }
