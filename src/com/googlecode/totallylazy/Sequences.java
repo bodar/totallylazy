@@ -23,6 +23,7 @@ import static com.googlecode.totallylazy.Callables.bounce;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
 import static java.nio.CharBuffer.wrap;
@@ -447,6 +448,14 @@ public class Sequences {
 
     public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterable<T> iterable, final Number index) {
         return sequence(iterable).partition(Predicates.countTo(index));
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> span(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+        return sequence(iterable).partition(whileTrue(predicate));
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> breakOn(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+        return sequence(iterable).partition(whileTrue(Predicates.<T>not(predicate)));
     }
 
     public static <T> Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index) {

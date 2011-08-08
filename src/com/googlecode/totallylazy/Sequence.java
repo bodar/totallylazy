@@ -263,11 +263,20 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.groupBy(this, callable);
     }
 
+    public Sequence<Sequence<T>> recursive(final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable){
+        return Sequences.recursive(this, callable);
+    }
+
     public Pair<Sequence<T>,Sequence<T>> splitAt(final Number index) {
         return Sequences.splitAt(this, index);
     }
 
-    public Sequence<Sequence<T>> recursive(final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable){
-        return Sequences.recursive(this, callable);
+    public Pair<Sequence<T>,Sequence<T>> span(final Predicate<? super T> predicate) {
+        return Sequences.span(this, predicate);
     }
+
+    public Pair<Sequence<T>,Sequence<T>> breakOn(final Predicate<? super T> predicate) {
+        return Sequences.breakOn(this, predicate);
+    }
+
 }
