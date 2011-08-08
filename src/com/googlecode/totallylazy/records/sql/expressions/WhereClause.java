@@ -71,7 +71,7 @@ public class WhereClause extends CompoundExpression{
             return expression("= ?", getValue(predicate));
         }
         if (predicate instanceof Not) {
-            return expression("<> ?", sequence(toSql(((Not) predicate).predicate()).parameters()));
+            return expression("!= ?", sequence(toSql(((Not) predicate).predicate()).parameters()));
         }
         if (predicate instanceof GreaterThan) {
             return expression("> ?", getValue(predicate));
@@ -99,13 +99,13 @@ public class WhereClause extends CompoundExpression{
             return expression(repeat("?").take((Integer) inPredicate.values().size()).toString("in (", ",", ")"), (Sequence<Object>) sequence);
         }
         if (predicate instanceof StartsWithPredicate) {
-            return expression("like ?", sequence((Object) (((StartsWithPredicate) predicate).value() + "%%")));
+            return expression("like ?", sequence((Object) (((StartsWithPredicate) predicate).value() + "%")));
         }
         if (predicate instanceof EndsWithPredicate) {
-            return expression("like ?", sequence((Object) ("%%" + ((EndsWithPredicate) predicate).value())));
+            return expression("like ?", sequence((Object) ("%" + ((EndsWithPredicate) predicate).value())));
         }
         if (predicate instanceof ContainsPredicate) {
-            return expression("like ?", sequence((Object) ("%%" + ((ContainsPredicate) predicate).value() + "%%")));
+            return expression("like ?", sequence((Object) ("%" + ((ContainsPredicate) predicate).value() + "%")));
         }
         throw new UnsupportedOperationException("Unsupported predicate " + predicate);
     }

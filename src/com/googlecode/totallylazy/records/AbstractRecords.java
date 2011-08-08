@@ -23,6 +23,10 @@ public abstract class AbstractRecords implements Records {
         definitions.put(recordName, list(fields));
     }
 
+    public List<Keyword<?>> undefine(Keyword recordName){
+        return definitions.remove(recordName);
+    }
+
     public Sequence<Keyword> definitions(Keyword recordName) {
         if (!definitions.containsKey(recordName)) {
             return Sequences.empty();

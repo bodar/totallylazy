@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.records;
 
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
@@ -8,6 +9,10 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.util.Date;
 
@@ -26,6 +31,7 @@ import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Streams.streams;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.Strings.startsWith;
@@ -64,17 +70,27 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     protected T records;
 
+    protected PrintStream logger;
+    private ByteArrayOutputStream stream;
+
+
     protected abstract T createRecords() throws Exception;
 
     @Before
     public void addRecords() throws Exception {
+        stream = new ByteArrayOutputStream();
+        logger = new PrintStream(streams(System.out, stream));
         this.records = createRecords();
         setupPeople();
         setupBooks();
     }
 
+    public String log(){
+        return stream.toString();
+    }
+
     private void setupPeople() {
-        records.remove(people);
+        records.undefine(people);
         records.define(people, age, dob, firstName, lastName, isbn);
         records.add(people,
                 record().set(firstName, "dan").set(lastName, "bodart").set(age, 10).set(dob, date(1977, 1, 10)).set(isbn, zenIsbn),
@@ -83,7 +99,7 @@ public abstract class AbstractRecordsTests<T extends Records> {
     }
 
     private void setupBooks() {
-        records.remove(books);
+        records.undefine(books);
         records.define(books, isbn, title);
         records.add(books,
                 record().set(isbn, zenIsbn).set(title, "Zen And The Art Of Motorcycle Maintenance"),
@@ -105,9 +121,10 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     @Test
     public void supportsIsNullAndNotNull() throws Exception {
-        records.add(people, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10)));
+        assertThat(records.add(people, record().set(firstName, "null age").set(lastName, "").set(age, null).set(dob, date(1974, 1, 10))), NumberMatcher.is(1));
         assertThat(records.get(people).filter(where(age, is(notNullValue()))).toList().size(), NumberMatcher.is(3));
-        assertThat(records.get(people).filter(where(age, is(nullValue()))).toList().size(), NumberMatcher.is(1));
+        Sequence<Record> recordSequence = records.get(people);
+        assertThat(recordSequence.filter(where(age, is(nullValue()))).toList().size(), NumberMatcher.is(1));
     }
 
     @Test
@@ -281,7 +298,7 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     @Test
     public void supportsSorting() throws Exception {
-        Sequence<Record> users = records.get(people);
+        Sequence<Record> users = records.get(people).filter(where(age, is(notNullValue())));
         assertThat(users.sortBy(age).map(firstName), containsInAnyOrder("dan", "bob", "matt"));
         assertThat(users.sortBy(ascending(age)).map(firstName), containsInAnyOrder("dan", "bob", "matt"));
         assertThat(users.sortBy(descending(age)).map(firstName), containsInAnyOrder("matt", "bob", "dan"));
