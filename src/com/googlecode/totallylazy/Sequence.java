@@ -39,7 +39,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.map(this, callable);
     }
 
-    public Partition<T> partition(final Predicate<? super T> predicate) {
+    public Pair<Sequence<T>, Sequence<T>> partition(final Predicate<? super T> predicate) {
         return Sequences.partition(this, predicate);
     }
 

@@ -116,8 +116,8 @@ public class Sequences {
         };
     }
 
-    public static <T> Partition<T> partition(final Iterable<T> iterable, final Predicate<? super T> predicate) {
-        return new Partition<T>(iterable, predicate);
+    public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+        return Partition.partition(iterable, predicate);
     }
 
     public static <T> Sequence<T> filter(final Iterable<T> iterable, final Predicate<? super T> predicate) {
@@ -446,8 +446,7 @@ public class Sequences {
     }
 
     public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterable<T> iterable, final Number index) {
-        Partition<T> partition = sequence(iterable).partition(Predicates.countTo(index));
-        return Pair.<Sequence<T>, Sequence<T>>pair(partition.first().memorise(), partition.second().memorise());
+        return sequence(iterable).partition(Predicates.countTo(index));
     }
 
     public static <T> Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index) {
