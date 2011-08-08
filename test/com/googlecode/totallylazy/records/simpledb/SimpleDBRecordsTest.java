@@ -20,7 +20,7 @@ public class SimpleDBRecordsTest extends AbstractRecordsTests<SimpleDBRecords>{
     protected SimpleDBRecords createRecords() throws Exception {
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
         final BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(getenv("AMAZON_ACCESS_KEY"), getenv("AMAZON_SECRET_KEY"));
-        return new SimpleDBRecords(new AmazonSimpleDBClient(basicAWSCredentials, new ClientConfiguration().withMaxErrorRetry(5)), new Mappings(), logger);
+        return new SimpleDBRecords(new AmazonSimpleDBClient(basicAWSCredentials, new ClientConfiguration().withMaxErrorRetry(5)), true, new Mappings(), logger);
     }
 
     @Override
