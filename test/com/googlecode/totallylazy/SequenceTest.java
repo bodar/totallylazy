@@ -4,10 +4,12 @@ import com.googlecode.totallylazy.callables.CountingCallable;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -47,8 +49,20 @@ import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.Assert.fail;
 
 public class SequenceTest {
+    @Test
+    public void supportsRecursiveSplitWhen() throws Exception {
+        assertThat(numbers(1, 3, -4, 5, 7, -9, 0, 2).recursive(Sequences.<Number>splitWhen(Numbers.lessThan(0))),
+                is(sequence(numbers(1, 3), numbers(5, 7), numbers(0, 2))));
+    }
+
+    @Test
+    public void supportsSplitWhen() throws Exception {
+        assertThat(numbers(1, 3, -4, 5, 7, -9, 0, 2).splitWhen(Numbers.lessThan(0)), is(pair(numbers(1, 3), numbers(5, 7, -9, 0, 2))));
+    }
+
     @Test
     public void supportsReduceRight() throws Exception {
         assertThat(numbers(1, 2, 3).reduceRight(add()), NumberMatcher.is(6));
@@ -61,14 +75,14 @@ public class SequenceTest {
 
     @Test
     public void supportsBreak() throws Exception {
-        assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).breakOn(Predicates.greaterThan(3)), is(pair(sequence(1,2, 3), sequence(4, 1, 2, 3, 4))));
+        assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).breakOn(Predicates.greaterThan(3)), is(pair(sequence(1, 2, 3), sequence(4, 1, 2, 3, 4))));
         assertThat(sequence(1, 2, 3).breakOn(lessThan(9)), is(pair(Sequences.<Integer>empty(), sequence(1, 2, 3))));
         assertThat(sequence(1, 2, 3).breakOn(Predicates.greaterThan(9)), is(pair(sequence(1, 2, 3), Sequences.<Integer>empty())));
     }
 
     @Test
     public void supportsSpan() throws Exception {
-        assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).span(lessThan(3)), is(pair(sequence(1,2), sequence(3, 4, 1, 2, 3, 4))));
+        assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).span(lessThan(3)), is(pair(sequence(1, 2), sequence(3, 4, 1, 2, 3, 4))));
         assertThat(sequence(1, 2, 3).span(lessThan(9)), is(pair(sequence(1, 2, 3), Sequences.<Integer>empty())));
         assertThat(sequence(1, 2, 3).span(lessThan(0)), is(pair(Sequences.<Integer>empty(), sequence(1, 2, 3))));
     }
@@ -204,8 +218,8 @@ public class SequenceTest {
 
     @Test
     public void supportsSortDescending() throws Exception {
-        assertThat(sort(sequence(5, 6, 1, 3, 4, 2), Comparators.<Integer>descending()), hasExactly(6,5,4,3,2,1));
-        assertThat(sequence(5, 6, 1, 3, 4, 2).sortBy(Comparators.<Integer>descending()), hasExactly(6,5,4,3,2,1));
+        assertThat(sort(sequence(5, 6, 1, 3, 4, 2), Comparators.<Integer>descending()), hasExactly(6, 5, 4, 3, 2, 1));
+        assertThat(sequence(5, 6, 1, 3, 4, 2).sortBy(Comparators.<Integer>descending()), hasExactly(6, 5, 4, 3, 2, 1));
         assertThat(sort(sequence("Bob", "Dan", "Matt"), Comparators.<String>descending()), hasExactly("Matt", "Dan", "Bob"));
         assertThat(sequence("Bob", "Dan", "Matt").sortBy(Comparators.<String>descending()), hasExactly("Matt", "Dan", "Bob"));
     }
@@ -362,6 +376,13 @@ public class SequenceTest {
     @Test
     public void supportsTail() throws Exception {
         assertThat(sequence(1, 2, 3).tail(), hasExactly(2, 3));
+        assertThat(sequence(1).tail().isEmpty(), Matchers.is(true));
+        try {
+            Sequences.<Object>empty().tail().isEmpty();
+            fail("Should have thrown NoSuchElementException");
+        } catch (NoSuchElementException e) {
+            // all good
+        }
     }
 
     @Test

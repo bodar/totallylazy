@@ -14,7 +14,6 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
@@ -24,7 +23,6 @@ import static com.googlecode.totallylazy.Callables.flip;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
 import static java.nio.CharBuffer.wrap;
@@ -445,11 +443,7 @@ public class Sequences {
     }
 
     public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
-        return sequence(Maps.toMap(iterable.iterator(), callable).entrySet()).map(new Callable1<Map.Entry<Key, List<T>>, Group<Key, T>>() {
-            public Group<Key, T> call(Map.Entry<Key, List<T>> entry) throws Exception {
-                return new Group<Key, T>(entry.getKey(), entry.getValue());
-            }
-        });
+        return Iterators.groupBy(iterable.iterator(), callable);
     }
 
     public static boolean equalTo(Iterable iterable, Iterable other) {
@@ -457,15 +451,7 @@ public class Sequences {
     }
 
     public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterable<T> iterable, final Number index) {
-        return sequence(iterable).partition(Predicates.countTo(index));
-    }
-
-    public static <T> Pair<Sequence<T>, Sequence<T>> span(final Iterable<T> iterable, final Predicate<? super T> predicate) {
-        return sequence(iterable).partition(whileTrue(predicate));
-    }
-
-    public static <T> Pair<Sequence<T>, Sequence<T>> breakOn(final Iterable<T> iterable, final Predicate<? super T> predicate) {
-        return sequence(iterable).partition(whileTrue(Predicates.<T>not(predicate)));
+        return Iterators.splitAt(iterable.iterator(), index);
     }
 
     public static <T> Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index) {
@@ -474,6 +460,26 @@ public class Sequences {
                 return sequence.splitAt(index);
             }
         };
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitWhen(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+        return Iterators.splitWhen(iterable.iterator(), predicate);
+    }
+
+    public static <T> Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitWhen(final Predicate<? super T> predicate) {
+        return new Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
+            public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
+                return sequence.splitWhen(predicate);
+            }
+        };
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> span(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+        return Iterators.span(iterable.iterator(), predicate);
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> breakOn(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+        return Iterators.breakOn(iterable.iterator(), predicate);
     }
 
     public static <T> Sequence<Sequence<T>> recursive(final Iterable<T> iterable,

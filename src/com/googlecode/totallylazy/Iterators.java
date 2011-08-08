@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.concurrent.Callable;
@@ -266,5 +267,30 @@ public class Iterators {
         final Queue<T> unmatchedUnmatched = new LinkedList<T>();
         return Pair.pair(memorise(new PartitionIterator<T>(iterator, predicate, matchedQueue, unmatchedUnmatched)),
                 memorise(new PartitionIterator<T>(iterator, Predicates.<T>not(predicate), unmatchedUnmatched, matchedQueue)));
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterator<T> iterator, final Number index) {
+        return partition(iterator, Predicates.countTo(index));
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitWhen(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+        Pair<Sequence<T>, Sequence<T>> partition = breakOn(iterator, predicate);
+        return Pair.pair(partition.first(), partition.second().isEmpty() ? Sequences.<T>empty() : partition.second().tail());
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> span(Iterator<T> iterator, Predicate<? super T> predicate) {
+        return partition(iterator, whileTrue(predicate));
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> breakOn(Iterator<T> iterator, Predicate<? super T> predicate) {
+        return partition(iterator, whileTrue(Predicates.<T>not(predicate)));
+    }
+
+    public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+        return sequence(Maps.toMap(iterator, callable).entrySet()).map(new Callable1<Map.Entry<Key, List<T>>, Group<Key, T>>() {
+            public Group<Key, T> call(Map.Entry<Key, List<T>> entry) throws Exception {
+                return new Group<Key, T>(entry.getKey(), entry.getValue());
+            }
+        });
     }
 }
