@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.iterators.FilterIterator;
 import com.googlecode.totallylazy.iterators.FlatMapIterator;
 import com.googlecode.totallylazy.iterators.IterateIterator;
 import com.googlecode.totallylazy.iterators.MapIterator;
+import com.googlecode.totallylazy.iterators.PartitionIterator;
 import com.googlecode.totallylazy.iterators.PeekingIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
@@ -11,8 +12,10 @@ import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.cast;
@@ -26,6 +29,7 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
+import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.equalTo;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
@@ -255,5 +259,12 @@ public class Iterators {
             count = increment(count);
         }
         return count;
+    }
+
+    public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+        final Queue<T> matchedQueue = new LinkedList<T>();
+        final Queue<T> unmatchedUnmatched = new LinkedList<T>();
+        return Pair.pair(memorise(new PartitionIterator<T>(iterator, predicate, matchedQueue, unmatchedUnmatched)),
+                memorise(new PartitionIterator<T>(iterator, Predicates.<T>not(predicate), unmatchedUnmatched, matchedQueue)));
     }
 }
