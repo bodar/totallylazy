@@ -53,6 +53,12 @@ import static org.junit.Assert.fail;
 
 public class SequenceTest {
     @Test
+    public void recursiveCallOnlyEndsWhenThereIsNoRemainder() throws Exception {
+        assertThat(numbers(1, 3, 0, 0, 2).recursive(Sequences.<Number>splitOn(0)),
+                is(sequence(numbers(1, 3), Sequences.<Number>empty(), numbers(2))));
+    }
+
+    @Test
     public void supportsRecursiveSplitOn() throws Exception {
         assertThat(numbers(1, 3, -4, 0, 7, -9, 0, 2).recursive(Sequences.<Number>splitOn(0)),
                 is(sequence(numbers(1, 3, -4), numbers(7, -9), numbers(2))));
