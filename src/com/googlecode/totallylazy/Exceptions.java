@@ -2,8 +2,10 @@ package com.googlecode.totallylazy;
 
 import java.io.PrintWriter;
 
+import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -49,6 +51,18 @@ public class Exceptions {
                         return none();
                     }
                     throw e;
+                }
+            }
+        };
+    }
+
+    public static <T, S> Callable1<T, Either<S, Throwable>> captureException(final Callable1<? super T, S> callable) {
+        return new Callable1<T, Either<S, Throwable>>() {
+            public Either<S, Throwable> call(T input) throws Exception {
+                try {
+                    return left(callable.call(input));
+                } catch (Throwable e) {
+                    return right(e);
                 }
             }
         };
