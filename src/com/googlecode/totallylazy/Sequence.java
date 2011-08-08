@@ -279,6 +279,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.splitAt(this, index);
     }
 
+    public Pair<Sequence<T>,Sequence<T>> splitWhen(final Predicate<? super T> predicate) {
+        return Sequences.splitWhen(this, predicate);
+    }
+
     public Pair<Sequence<T>,Sequence<T>> span(final Predicate<? super T> predicate) {
         return Sequences.span(this, predicate);
     }
@@ -286,5 +290,4 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     public Pair<Sequence<T>,Sequence<T>> breakOn(final Predicate<? super T> predicate) {
         return Sequences.breakOn(this, predicate);
     }
-
 }
