@@ -119,7 +119,7 @@ public class Sequences {
     }
 
     public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterable<T> iterable, final Predicate<? super T> predicate) {
-        return Partition.partition(iterable, predicate);
+        return Iterators.partition(iterable.iterator(), predicate);
     }
 
     public static <T> Sequence<T> filter(final Iterable<T> iterable, final Predicate<? super T> predicate) {
