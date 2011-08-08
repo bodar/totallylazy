@@ -498,9 +498,9 @@ public class Sequences {
     public static <T> Sequence<Sequence<T>> recursive(final Iterable<T> iterable,
                                                       final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
         return iterate(applyToSecond(callable), Callers.call(callable, sequence(iterable))).
-                takeWhile(Predicates.<Pair<Sequence<T>, Sequence<T>>>or(
-                        where(Callables.<Sequence<T>>first(), Predicates.not(Predicates.<T>empty())),
-                        where(Callables.<Sequence<T>>second(), Predicates.not(Predicates.<T>empty())))).
+                takeWhile(Predicates.not(Predicates.<Pair<Sequence<T>, Sequence<T>>>and(
+                        where(Callables.<Sequence<T>>first(), Predicates.<T>empty()),
+                        where(Callables.<Sequence<T>>second(), Predicates.<T>empty())))).
                         map(Callables.<Sequence<T>>first());
     }
 
