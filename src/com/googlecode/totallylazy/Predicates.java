@@ -68,12 +68,28 @@ public class Predicates {
         };
     }
 
+    public static <T> LogicalPredicate<Iterable<T>> subsetOf(final Iterable<T> superset) {
+        return new LogicalPredicate<Iterable<T>>() {
+            public boolean matches(Iterable<T> subset) {
+                return sequence(subset).forAll(in(superset));
+            }
+        };
+    }
+
+    public static <T> LogicalPredicate<Iterable<T>> supersetOf(final Iterable<T> subset) {
+        return new LogicalPredicate<Iterable<T>>() {
+            public boolean matches(Iterable<T> superset) {
+                return sequence(subset).forAll(in(superset));
+            }
+        };
+    }
+
     public static <T> LogicalPredicate<T> in(final T... values) {
         return in(sequence(values));
     }
 
-    public static <T> LogicalPredicate<T> in(final Sequence<T> values) {
-        return new InPredicate<T>(values);
+    public static <T> LogicalPredicate<T> in(final Iterable<T> values) {
+        return new InPredicate<T>(sequence(values));
     }
 
     public static LogicalPredicate<? super Either> isLeft() {
