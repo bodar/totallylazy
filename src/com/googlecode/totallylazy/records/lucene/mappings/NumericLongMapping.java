@@ -6,7 +6,7 @@ import org.apache.lucene.document.NumericField;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 
-public class LongMapping extends AbstractMapping<Long> {
+public class NumericLongMapping extends AbstractMapping<Long> {
     public Fieldable toField(String name, Long value) {
         return new NumericField(name, Field.Store.YES, true).setLongValue(value);
     }

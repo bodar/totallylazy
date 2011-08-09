@@ -6,9 +6,9 @@ import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.MapRecord;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.RecordMethods;
+import com.googlecode.totallylazy.records.SourceRecord;
 import com.googlecode.totallylazy.records.lucene.Lucene;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
@@ -31,8 +31,8 @@ public class Mappings {
 
     public Mappings() {
         add(Date.class, new DateMapping());
-        add(Integer.class, new IntegerMapping());
-        add(Long.class, new LongMapping());
+        add(Integer.class, new NumericIntegerMapping());
+        add(Long.class, new NumericLongMapping());
         add(String.class, new StringMapping());
         add(URI.class, new UriMapping());
         add(Object.class, new ObjectMapping());
@@ -55,7 +55,7 @@ public class Mappings {
                 return sequence(document.getFields()).
                         map(asPair(definitions)).
                         filter(where(Callables.first(Keyword.class), is(not(Lucene.RECORD_KEY)))).
-                        fold(new MapRecord(), updateValues());
+                        fold(new SourceRecord<Document>(document), updateValues());
             }
         };
     }

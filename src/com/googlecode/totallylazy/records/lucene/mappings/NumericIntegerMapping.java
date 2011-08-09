@@ -4,9 +4,8 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.document.NumericField;
 import org.apache.lucene.search.NumericRangeQuery;
-import org.apache.lucene.search.Query;
 
-public class IntegerMapping extends AbstractMapping<Integer> {
+public class NumericIntegerMapping extends AbstractMapping<Integer> {
     public Fieldable toField(String name, Integer value) {
         return new NumericField(name, Field.Store.YES, true).setIntValue(value);
     }
