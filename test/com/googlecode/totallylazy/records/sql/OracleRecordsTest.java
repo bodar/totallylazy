@@ -17,7 +17,7 @@ public class OracleRecordsTest extends AbstractRecordsTests<SqlRecords> {
     public SqlRecords createRecords() throws Exception {
         Class.forName("oracle.jdbc.driver.OracleDriver");
 
-        return new SqlRecords(getConnection(getenv("JDBC_URL"), getenv("JDBC_USERNAME"), getenv("JDBC_PASSWORD")), new Mappings(), System.out);
+        return new SqlRecords(getConnection(getenv("JDBC_URL"), getenv("JDBC_USERNAME"), getenv("JDBC_PASSWORD")), CreateTable.Enabled, new Mappings(), System.out);
     }
 
     @Test

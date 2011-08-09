@@ -36,15 +36,17 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     private final Connection connection;
     private final PrintStream logger;
     private final Mappings mappings;
+    private final CreateTable createTable;
 
-    public SqlRecords(Connection connection, Mappings mappings, PrintStream logger) {
+    public SqlRecords(final Connection connection, CreateTable createTable, Mappings mappings, PrintStream logger) {
         this.connection = connection;
+        this.createTable = createTable;
         this.mappings = mappings;
         this.logger = logger;
     }
 
-    public SqlRecords(Connection connection) {
-        this(connection, new Mappings(), new PrintStream(nullOutputStream()));
+    public SqlRecords(final Connection connection) {
+        this(connection, CreateTable.Enabled, new Mappings(), new PrintStream(nullOutputStream()));
     }
 
     public RecordSequence get(Keyword recordName) {
@@ -65,6 +67,9 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
 
     public void define(Keyword recordName, Keyword<?>... fields) {
         super.define(recordName, fields);
+        if(createTable.equals(CreateTable.Disabled)){
+            return;
+        }
         if (exists(recordName)) {
             return;
         }
