@@ -24,6 +24,7 @@ import static com.googlecode.totallylazy.records.sql.expressions.SetQuantifier.D
 
 public class SelectBuilder implements Expressible, Callable<Expression> {
     public static final ImmutableKeyword<Object> STAR = keyword("*");
+    public static final Sequence<Keyword> ALL_COLUMNS = Sequences.<Keyword>sequence(STAR);
     private final SetQuantifier setQuantifier;
     private final Sequence<Keyword> select;
     private final Keyword table;
@@ -32,7 +33,7 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
 
     private SelectBuilder(SetQuantifier setQuantifier, Sequence<? extends Keyword> select, Keyword table, Option<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
         this.setQuantifier = setQuantifier;
-        this.select = (Sequence<Keyword>) select;
+        this.select = select.isEmpty() ? ALL_COLUMNS : (Sequence < Keyword >) select;
         this.table = table;
         this.where = where;
         this.comparator = comparator;
@@ -60,7 +61,7 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
     }
 
     public static SelectBuilder from(Keyword table) {
-        return new SelectBuilder(ALL, Sequences.sequence(STAR), table, Option.<Predicate<? super Record>>none(), Option.<Comparator<? super Record>>none());
+        return new SelectBuilder(ALL, ALL_COLUMNS, table, Option.<Predicate<? super Record>>none(), Option.<Comparator<? super Record>>none());
     }
 
     public SelectBuilder select(Keyword... columns) {

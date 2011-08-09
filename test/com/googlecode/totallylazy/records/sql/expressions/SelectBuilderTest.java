@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.records.sql.expressions;
 
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.records.Keyword;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.records.Keywords.keyword;
@@ -13,6 +15,12 @@ public class SelectBuilderTest {
     private final Keyword<String> make = keyword("make", String.class);
     private final Keyword<String> model = keyword("model", String.class);
     private final Keyword<Integer> one = keyword("1", Integer.class);
+
+    @Test
+    public void ifColumnsSelectedIsEmptyUseStar() throws Exception {
+        SelectExpression build = from(cars).select(Sequences.<Keyword>empty()).build();
+        assertThat(build.text(), is("select * from cars"));
+    }
 
     @Test
     public void selectASingleColumn() throws Exception {
