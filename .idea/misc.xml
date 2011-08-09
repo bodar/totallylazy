@@ -66,5 +66,6 @@
     <option name="createTestIfMissing" value="true" />
     <option name="deletePackageOccurrences" value="true" />
   </component>
+  <component name="WebServicesPlugin" addRequiredLibraries="true" />
 </project>
 
