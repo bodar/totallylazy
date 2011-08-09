@@ -35,6 +35,7 @@ import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
 import static com.googlecode.totallylazy.Sequences.zip;
+import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
@@ -46,6 +47,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.remainder;
+import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -373,7 +375,8 @@ public class SequenceTest {
 
     @Test
     public void supportsReduceLeft() throws Exception {
-        assertThat(numbers(1, 2, 3).reduceLeft(add()), NumberMatcher.is(6));
+        assertThat(numbers(1, 2, 3).reduce(sum()), NumberMatcher.is(6));
+        assertThat(numbers(1, 2, 3).reduceLeft(sum()), NumberMatcher.is(6));
     }
 
     @Test
@@ -386,8 +389,8 @@ public class SequenceTest {
 
     @Test
     public void supportsFoldLeft() throws Exception {
-        Number sum = sequence(1, 2, 3).foldLeft(0, add());
-        assertThat(sum, NumberMatcher.is(6));
+        assertThat(sequence(1, 2, 3).fold(0, sum()), NumberMatcher.is(6));
+        assertThat(sequence(1, 2, 3).foldLeft(0, sum()), NumberMatcher.is(6));
     }
 
     @Test
@@ -429,7 +432,7 @@ public class SequenceTest {
 
     @Test
     public void supportsMap() throws Exception {
-        Iterable<String> strings = sequence(1, 2).map(asString());
+        Sequence<String> strings = sequence(1, 2).map(asString());
         assertThat(strings, hasExactly("1", "2"));
     }
 
@@ -456,7 +459,7 @@ public class SequenceTest {
 
     @Test
     public void supportsFilter() throws Exception {
-        Iterable<Integer> result = sequence(1, 2, 3, 4).filter(even());
+        Sequence<Integer> result = sequence(1, 2, 3, 4).filter(even());
         assertThat(result, hasExactly(2, 4));
     }
 
@@ -470,12 +473,8 @@ public class SequenceTest {
 
     @Test
     public void supportsFlatMap() throws Exception {
-        Iterable<Integer> result = sequence(1, 2, 3).flatMap(new Callable1<Integer, Sequence<Integer>>() {
-            public Sequence<Integer> call(Integer value) throws Exception {
-                return sequence(value, value * 3);
-            }
-        });
-        assertThat(result, hasExactly(1, 3, 2, 6, 3, 9));
+        Sequence<Character> characters = sequence("Hello").flatMap(toCharacters());
+        assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
     }
 
     @Test

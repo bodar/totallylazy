@@ -338,8 +338,7 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     @Test
     public void supportsStartsWith() throws Exception {
-        Sequence<Record> users = records.get(people);
-        assertThat(users.filter(where(firstName, startsWith("d"))).map(firstName), hasExactly("dan"));
+        assertThat(records.get(people).filter(where(firstName, startsWith("d"))).map(firstName), hasExactly("dan"));
     }
 
     @Test
