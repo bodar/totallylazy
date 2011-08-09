@@ -160,7 +160,7 @@ public class Numbers {
     }
 
     public static Sequence<Number> fibonacci() {
-        return iterate(reduceAndShift(add()), Sequences.<Number>sequence(0, 1)).map(Callables.<Number>first());
+        return iterate(reduceAndShift(sum()), numbers(0, 1)).map(Callables.first(Number.class));
     }
 
     public static Sequence<Number> powersOf(Number amount) {

@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.repeat;
 
 public class Strings {
@@ -168,6 +169,14 @@ public class Strings {
         return new Callable1<Object, String>() {
             public String call(Object value) throws Exception {
                 return String.format(format, value);
+            }
+        };
+    }
+
+    public static Callable1<? super CharSequence, Sequence<Character>> toCharacters() {
+        return new Callable1<CharSequence, Sequence<Character>>() {
+            public Sequence<Character> call(CharSequence value) throws Exception {
+                return characters(value);
             }
         };
     }
