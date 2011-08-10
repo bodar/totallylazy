@@ -1,11 +1,6 @@
 package com.googlecode.totallylazy.records.sql;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Group;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
@@ -21,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Closeables.using;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
@@ -88,7 +85,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
 
     public boolean exists(Keyword recordName) {
         try {
-            query(from(recordName).select(one).build(), Sequences.<Keyword>empty()).realise();
+            query(from(recordName).select(one).where(Predicates.where(one, is(2))).build(), Sequences.<Keyword>empty()).realise();
             return true;
         } catch (Exception e) {
             return false;
