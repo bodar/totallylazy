@@ -138,6 +138,16 @@ public class SequenceTest {
         assertThat(sequence(1, 2).hashCode() == sequence(1, 2, 3).hashCode(), is(false));
         assertThat(sequence(1, 2, 3).hashCode() == sequence(1, 2).hashCode(), is(false));
         assertThat(sequence(1, 2, 3).hashCode() == list(1, 2, 3).hashCode(), is(false));
+        assertThat(sequence(1, null, 3, objectWithHashCodeOf(0)).hashCode() != 0, is(true));
+    }
+
+    private Object objectWithHashCodeOf(final int value) {
+        return new Object() {
+            @Override
+            public int hashCode() {
+                return value;
+            }
+        };
     }
 
     @Test

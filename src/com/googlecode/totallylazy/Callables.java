@@ -221,7 +221,7 @@ public final class Callables {
     public static Callable2<Integer, Object, Integer> asHashCode() {
         return new Callable2<Integer, Object, Integer>() {
             public Integer call(Integer hash, Object value) throws Exception {
-                return hash * (value == null ? 0 :value.hashCode());
+                return hash * (value == null ? 19 : value.hashCode() == 0 ? 19 : value.hashCode());
             }
         };
     }
