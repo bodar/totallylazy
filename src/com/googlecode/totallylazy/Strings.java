@@ -15,6 +15,14 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 public class Strings {
     public static final String EMPTY = "";
 
+    public static Callable1<? super String, Boolean> asBoolean() {
+        return new Callable1<String, Boolean>() {
+            public Boolean call(String value) throws Exception {
+                return Boolean.parseBoolean(value);
+            }
+        };
+    }
+
     public static Sequence<String> lines(File file) {
         try {
             return lines(new FileInputStream(file));
