@@ -4,8 +4,8 @@ import com.googlecode.totallylazy.Callable1;
 
 public class Keywords {
 
-    public static final Keyword UNIQUE = Keywords.keyword("unique", Boolean.class);
-    public static final Keyword INDEXED = Keywords.keyword("indexed", Boolean.class);
+    public static final Keyword<Boolean> UNIQUE = Keywords.keyword("unique", Boolean.class);
+    public static final Keyword<Boolean> INDEXED = Keywords.keyword("indexed", Boolean.class);
 
     public static Callable1<Keyword, String> name() {
         return new Callable1<Keyword, String>() {
@@ -26,4 +26,13 @@ public class Keywords {
     public static boolean equalto(Keyword keyword, Keyword other) {
         return keyword.name().equalsIgnoreCase(other.name());
     }
+
+    public static <T> Callable1<? super Keyword, T> metadata(final Keyword<T> metadataKey) {
+        return new Callable1<Keyword, T>() {
+            public T call(Keyword keyword) throws Exception {
+                return keyword.metadata().get(metadataKey);
+            }
+        };
+    }
+
 }
