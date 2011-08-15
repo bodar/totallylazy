@@ -21,4 +21,14 @@ public class AliasedKeyword<T> extends AbstractKeyword<T>{
         return source.forClass();
     }
 
+    @Override
+    public Record metadata() {
+        return source.metadata();
+    }
+
+    @Override
+    public Keyword<T> metadata(Record metadata) {
+        source.metadata(metadata);
+        return this;
+    }
 }
