@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.records;
 
 public abstract class AbstractKeyword<T> implements Keyword<T> {
-    private final Record metadata = MapRecord.record();
+    private Record metadata = MapRecord.record();
 
     @Override
     public boolean equals(Object other) {
@@ -24,5 +24,10 @@ public abstract class AbstractKeyword<T> implements Keyword<T> {
 
     public Record metadata() {
         return metadata;
+    }
+
+    public Keyword<T> metadata(Record metadata) {
+        this.metadata  = metadata;
+        return this;
     }
 }
