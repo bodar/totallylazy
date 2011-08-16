@@ -2,15 +2,14 @@ package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.numbers.Numbers;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Callables.asHashCode;
-import static com.googlecode.totallylazy.Maps.entryToPair;
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Callables.second;
+import static com.googlecode.totallylazy.Maps.entryToPair;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;

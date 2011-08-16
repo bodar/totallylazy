@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.records;
 
-import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
@@ -10,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.URI;
 import java.util.Date;
@@ -45,11 +42,11 @@ import static com.googlecode.totallylazy.records.Aggregate.minimum;
 import static com.googlecode.totallylazy.records.Aggregate.sum;
 import static com.googlecode.totallylazy.records.Aggregates.to;
 import static com.googlecode.totallylazy.records.Join.join;
-import static com.googlecode.totallylazy.records.Using.using;
 import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.totallylazy.records.RecordMethods.update;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
+import static com.googlecode.totallylazy.records.Using.using;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
@@ -63,6 +60,7 @@ public abstract class AbstractRecordsTests<T extends Records> {
     protected static Keyword books = keyword("books");
     protected static Keyword<URI> isbn = keyword("isbn", URI.class);
     protected static Keyword<String> title = keyword("title", String.class);
+    protected static Keyword<Boolean> inPrint = keyword("inPrint", Boolean.class);
 
     public static final URI zenIsbn = uri("urn:isbn:0099322617");
     public static final URI godelEsherBach = uri("urn:isbn:0140289208");
@@ -100,11 +98,11 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     private void setupBooks() {
         records.undefine(books);
-        records.define(books, isbn, title);
+        records.define(books, isbn, title, inPrint);
         records.add(books,
-                record().set(isbn, zenIsbn).set(title, "Zen And The Art Of Motorcycle Maintenance"),
-                record().set(isbn, godelEsherBach).set(title, "Godel, Escher, Bach: An Eternal Golden Braid"),
-                record().set(isbn, cleanCode).set(title, "Clean Code: A Handbook of Agile Software Craftsmanship"));
+                record().set(isbn, zenIsbn).set(title, "Zen And The Art Of Motorcycle Maintenance").set(inPrint, true),
+                record().set(isbn, godelEsherBach).set(title, "Godel, Escher, Bach: An Eternal Golden Braid").set(inPrint, false),
+                record().set(isbn, cleanCode).set(title, "Clean Code: A Handbook of Agile Software Craftsmanship").set(inPrint, true));
     }
 
     @Test
@@ -122,8 +120,17 @@ public abstract class AbstractRecordsTests<T extends Records> {
     }
 
     @Test
+    public void supportsBoolean() throws Exception {
+        Record record = records.get(books).filter(where(inPrint, is(false))).head();
+        assertThat(record.get(isbn), CoreMatchers.is(godelEsherBach));
+        assertThat(record.get(inPrint), CoreMatchers.is(false));
+    }
+
+    @Test
     public void supportsUri() throws Exception {
-        assertThat(records.get(people).filter(where(isbn, is(zenIsbn))).realise().map(firstName), hasExactly("dan"));
+        Record record = records.get(people).filter(where(isbn, is(zenIsbn))).head();
+        assertThat(record.get(firstName), CoreMatchers.is("dan"));
+        assertThat(record.get(isbn), CoreMatchers.is(zenIsbn));
     }
 
     @Test

@@ -13,7 +13,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
 import static java.lang.String.format;
 
-public class TableDefinition extends TextOnlyExpression{
+public class TableDefinition extends TextOnlyExpression {
     public TableDefinition(Keyword recordName, Keyword<?>[] fields) {
         super(format("create table %s (%s)", recordName, sequence(fields).map(asColumn())));
     }
@@ -22,24 +22,29 @@ public class TableDefinition extends TextOnlyExpression{
         return new TableDefinition(recordName, fields);
     }
 
-    private static final Map<Class, String> mappings = new HashMap<Class, String>() {{
+    public static final Map<Class, String> mappings = new HashMap<Class, String>() {{
         put(Date.class, "timestamp");
         put(Integer.class, "integer");
         put(Long.class, "bigint");
         put(String.class, "varchar(4000)");
         put(Timestamp.class, "timestamp");
         put(URI.class, "varchar(4000)");
+        put(Boolean.class, "bit");
     }};
 
     public static Callable1<? super Keyword<?>, String> asColumn() {
         return new Callable1<Keyword<?>, String>() {
             public String call(Keyword<?> keyword) throws Exception {
-                return format("%s %s", keyword, mappings.get(keyword.forClass()));
+                Class<?> aClass = keyword.forClass();
+                if (!mappings.containsKey(aClass)) {
+                    throw new UnsupportedOperationException("Unsupported SQL data type" + aClass.getName());
+                }
+                return format("%s %s", keyword, mappings.get(aClass));
             }
         };
     }
 
-    public static CompoundExpression dropTable(Keyword recordName){
+    public static CompoundExpression dropTable(Keyword recordName) {
         return textOnly("drop table").join(textOnly(recordName));
     }
 }

@@ -9,7 +9,6 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.Keywords;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.RecordMethods;
 
@@ -34,6 +33,7 @@ public class Mappings {
         add(Integer.class, new IntegerMapping());
         add(Long.class, new LongMapping());
         add(URI.class, new UriMapping());
+        add(Boolean.class, new BooleanMapping());
         add(Object.class, new ObjectMapping());
     }
 
