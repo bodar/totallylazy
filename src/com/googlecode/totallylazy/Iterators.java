@@ -37,16 +37,26 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 
 public class Iterators {
-    public static boolean equalsTo(Iterator a, Iterator b){
-        while(a.hasNext() && b.hasNext()){
-            if(!a.next().equals(b.next())){
+    public static boolean equalsTo(Iterator a, Iterator b) {
+        while (a.hasNext() && b.hasNext()) {
+            Object aValue = a.next();
+            Object bValue = b.next();
+
+            if (aValue == null) {
+                if (bValue == null) {
+                    continue;
+                }
+                return false;
+            }
+
+            if (!aValue.equals(bValue)) {
                 return false;
             }
         }
         return !(a.hasNext() || b.hasNext());
     }
 
-    public static <T> void forEach(final Iterator<T> iterator, final Callable1<? super T,Void> runnable) {
+    public static <T> void forEach(final Iterator<T> iterator, final Callable1<? super T, Void> runnable) {
         while (iterator.hasNext()) {
             Callers.call(runnable, iterator.next());
         }
@@ -99,11 +109,11 @@ public class Iterators {
         return accumulator;
     }
 
-    public static <T,S> S reduce(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S reduce(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
         return reduceLeft(iterator, callable);
     }
 
-    public static <T,S> S reduceLeft(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S reduceLeft(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
         return foldLeft(iterator, (S) iterator.next(), callable);
     }
 
@@ -116,7 +126,7 @@ public class Iterators {
     }
 
     public static String toString(final Iterator iterator, final String start, final String separator, final String end) {
-        return toString(iterator,start, separator, end, 100);
+        return toString(iterator, start, separator, end, 100);
     }
 
     public static String toString(final Iterator iterator, final String start, final String separator, final String end, final Number limit) {
@@ -130,7 +140,7 @@ public class Iterators {
             builder.append(separator);
             builder.append(iterator.next());
         }
-        if(equalTo(count, limit)) builder.append("...");
+        if (equalTo(count, limit)) builder.append("...");
         builder.append(end);
         return builder.toString();
     }
@@ -184,9 +194,9 @@ public class Iterators {
     }
 
     public static <T> boolean forAll(final Iterator<T> iterator, final Predicate<? super T> predicate) {
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             boolean result = predicate.matches(iterator.next());
-            if(!result){
+            if (!result) {
                 return false;
             }
         }
@@ -198,9 +208,9 @@ public class Iterators {
     }
 
     public static <T> boolean exists(final Iterator<T> iterator, final Predicate<? super T> predicate) {
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             boolean result = predicate.matches(iterator.next());
-            if(result){
+            if (result) {
                 return true;
             }
         }
@@ -208,28 +218,28 @@ public class Iterators {
     }
 
     public static <T> Option<T> find(final Iterator<T> iterator, final Predicate<? super T> predicate) {
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             T item = iterator.next();
             boolean result = predicate.matches(item);
-            if(result){
+            if (result) {
                 return some(item);
             }
         }
         return none();
     }
 
-    public static <T,S> Option<S> tryPick(final Iterator<T> iterator, final Callable1<T, Option<S>> callable) {
-        while(iterator.hasNext()){
+    public static <T, S> Option<S> tryPick(final Iterator<T> iterator, final Callable1<T, Option<S>> callable) {
+        while (iterator.hasNext()) {
             T item = iterator.next();
             Option<S> result = call(callable, item);
-            if(!result.isEmpty()){
+            if (!result.isEmpty()) {
                 return result;
             }
         }
         return none();
     }
 
-    public static <T,S> S pick(final Iterator<T> iterator, final Callable1<T, Option<S>> callable) {
+    public static <T, S> S pick(final Iterator<T> iterator, final Callable1<T, Option<S>> callable) {
         return tryPick(iterator, callable).get();
     }
 
@@ -242,7 +252,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> join(final Iterable<Iterator<T>> iterable) {
-        return new FlatMapIterator<Iterator<T>,T>(iterable.iterator(), Callables.<T>asIterable());
+        return new FlatMapIterator<Iterator<T>, T>(iterable.iterator(), Callables.<T>asIterable());
     }
 
     public static <T> Iterator<T> cons(final T t, final Iterator<T> iterator) {
