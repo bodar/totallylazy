@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Sequence;
 
 public class Keywords {
 
@@ -35,4 +36,15 @@ public class Keywords {
         };
     }
 
+    public static Sequence<Keyword> keywords(Sequence<Record> results) {
+        return results.flatMap(keywords()).unique();
+    }
+
+    public static Callable1<? super Record, Sequence<Keyword>> keywords() {
+        return new Callable1<Record, Sequence<Keyword>>() {
+            public Sequence<Keyword> call(Record record) throws Exception {
+                return record.keywords();
+            }
+        };
+    }
 }

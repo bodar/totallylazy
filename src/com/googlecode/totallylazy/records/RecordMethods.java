@@ -7,6 +7,9 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
@@ -78,6 +81,27 @@ public class RecordMethods {
         return new Callable1<Record, Pair<? extends Predicate<? super Record>, Record>>() {
             public Pair<? extends Predicate<? super Record>, Record> call(Record record) throws Exception {
                 return Pair.pair(callable.call(record), record);
+            }
+        };
+    }
+
+    public static Callable1<? super Record, Map<String, Object>> asMap() {
+        return new Callable1<Record, Map<String, Object>>() {
+            public Map<String, Object> call(Record record) throws Exception {
+                return toMap(record);
+            }
+        };
+    }
+
+    public static Map<String, Object> toMap(Record record) {
+        return record.fields().fold(new HashMap<String, Object>(), intoMap());
+    }
+
+    public static Callable2<? super Map<String, Object>, ? super Pair<Keyword, Object>, Map<String, Object>> intoMap() {
+        return new Callable2<Map<String, Object>, Pair<Keyword, Object>, Map<String, Object>>() {
+            public Map<String, Object> call(Map<String, Object> map, Pair<Keyword, Object> pair) throws Exception {
+                map.put(pair.first().toString(), pair.second());
+                return map;
             }
         };
     }
