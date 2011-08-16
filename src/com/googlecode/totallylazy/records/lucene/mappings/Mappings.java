@@ -35,6 +35,7 @@ public class Mappings {
         add(Long.class, new NumericLongMapping());
         add(String.class, new StringMapping());
         add(URI.class, new UriMapping());
+        add(Boolean.class, new BooleanMapping());
         add(Object.class, new ObjectMapping());
     }
 

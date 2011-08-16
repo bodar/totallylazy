@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.records.sql.expressions;
 
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.records.Keyword;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.records.Keywords.keyword;

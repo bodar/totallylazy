@@ -29,6 +29,7 @@ public class Mappings {
         add(Long.class, new LongMapping());
         add(String.class, new StringMapping());
         add(URI.class, new UriMapping());
+        add(Boolean.class, new BooleanMapping());
         add(Object.class, new ObjectMapping());
     }
 

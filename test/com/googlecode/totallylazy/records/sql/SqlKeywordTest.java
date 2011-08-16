@@ -4,7 +4,10 @@ import com.googlecode.totallylazy.records.AliasedKeyword;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.records.sql.SqlKeywords.keyword;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SqlKeywordTest {

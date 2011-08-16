@@ -13,7 +13,6 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static com.googlecode.totallylazy.records.SelectCallable.select;
 
 public class MemoryRecords extends AbstractRecords {
     private final Map<Keyword, List<Record>> memory = new HashMap<Keyword, List<Record>>();

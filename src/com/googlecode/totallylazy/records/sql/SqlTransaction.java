@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.records.sql;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.records.Transaction;
 
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
