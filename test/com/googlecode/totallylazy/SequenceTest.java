@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -128,6 +129,12 @@ public class SequenceTest {
         assertThat(sequence(1, 2).equals(sequence(1, 2, 3)), is(false));
         assertThat(sequence(1, 2, 3).equals(sequence(1, 2)), is(false));
         assertThat(sequence(1, 2, 3).equals(list(1, 2, 3)), is(false));
+        assertThat(sequence(Dates.date(2000, 1, 1), 1).equals(sequence(Dates.date(2000, 1, 1), 1)), is(true));
+        assertThat(sequence(Dates.date(2000, 1, 1), 1).equals(sequence(null, 1)), is(false));
+        assertThat(sequence(null, 1).equals(sequence(Dates.date(2000, 1, 1), 1)), is(false));
+        assertThat(sequence(1, null, 3).equals(sequence(1, 2, 3)), is(false));
+        assertThat(sequence(1, 2, 3).equals(sequence(1, null, 3)), is(false));
+        assertThat(sequence(1, null, 3).equals(sequence(1, null, 3)), is(true));
     }
 
     @Test

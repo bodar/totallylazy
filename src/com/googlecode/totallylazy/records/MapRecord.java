@@ -50,24 +50,12 @@ public class MapRecord implements Record {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (other instanceof Record) {
-            Record otherRecord = (Record) other;
-            if (!equalTo(fields().size(), otherRecord.fields().size())) {
-                return false;
-            }
-            for (Pair<Keyword, Object> entry : fields()) {
-                if (!otherRecord.fields().contains(entry)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
+    public final boolean equals(final Object o) {
+        return o instanceof MapRecord && fields().equals(((MapRecord) o).fields());
     }
 
     @Override
-    public int hashCode() {
-        return fields().foldLeft(31, asHashCode());
+    public final int hashCode() {
+        return fields().hashCode();
     }
 }
