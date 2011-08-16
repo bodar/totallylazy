@@ -42,14 +42,11 @@ public class Iterators {
             Object aValue = a.next();
             Object bValue = b.next();
 
-            if (aValue == null) {
-                if (bValue == null) {
-                    continue;
-                }
-                return false;
+            if(aValue == bValue){
+                continue;
             }
 
-            if (!aValue.equals(bValue)) {
+            if (aValue == null || !aValue.equals(bValue)) {
                 return false;
             }
         }
