@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.iterators.EmptyIterator;
 import com.googlecode.totallylazy.iterators.EnumerationIterator;
 import com.googlecode.totallylazy.iterators.PairIterator;
 import com.googlecode.totallylazy.iterators.QuadrupleIterator;
+import com.googlecode.totallylazy.iterators.TransposeIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
 
 import java.util.Collections;
@@ -367,6 +368,19 @@ public class Sequences {
                 return new QuadrupleIterator<F, S, T, Fo>(first.iterator(), second.iterator(), third.iterator(), forth.iterator());
             }
         };
+    }
+
+    public static <T> Sequence<Sequence<T>> transpose(final Sequence<? extends Iterable<T>> iterables) {
+        return new Sequence<Sequence<T>>() {
+            public final Iterator<Sequence<T>> iterator() {
+                return new TransposeIterator<T>(iterables.map(Callables.<T>asIterator()));
+            }
+        };
+
+    }
+
+    public static <T> Sequence<Sequence<T>> transpose(final Iterable<T>... iterables) {
+        return transpose(sequence(iterables));
     }
 
     public static <F, S> Pair<Sequence<F>, Sequence<S>> unzip(final Iterable<Pair<F, S>> pairs) {
