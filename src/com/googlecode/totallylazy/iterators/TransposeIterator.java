@@ -14,7 +14,7 @@ public final class TransposeIterator<T> extends ReadOnlyIterator<Sequence<T>> {
     private final Sequence<Iterator<T>> iterators;
 
     public TransposeIterator(Iterable<Iterator<T>> iterators) {
-        this.iterators = Sequences.sequence(iterators).realise();
+        this.iterators = Sequences.sequence(iterators).memorise();
     }
 
     public final boolean hasNext() {
@@ -24,7 +24,7 @@ public final class TransposeIterator<T> extends ReadOnlyIterator<Sequence<T>> {
 
     public final Sequence<T> next() {
         if (hasNext()) {
-            return iterators.map(Iterators.<T>next());
+            return iterators.map(Iterators.<T>next()).memorise();
         }
         throw new NoSuchElementException();
     }

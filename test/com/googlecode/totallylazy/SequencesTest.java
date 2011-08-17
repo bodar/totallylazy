@@ -31,8 +31,10 @@ import static org.hamcrest.core.Is.is;
 public class SequencesTest {
     @Test
     public void supportsTranspose() {
-        assertThat(transpose(sequence(1, 2), sequence(3, 4), sequence(5, 6)), hasExactly(sequence(1,3,5), sequence(2,4,6)));
-        assertThat(transpose(sequence(1, 3, 5), sequence(2, 4, 6)), hasExactly(sequence(1, 2), sequence(3, 4), sequence(5,6)));
+        Sequence<Sequence<Integer>> transposed = transpose(sequence(1, 2), sequence(3, 4), sequence(5, 6));
+        assertThat(transposed, hasExactly(sequence(1,3,5), sequence(2,4,6)));
+        assertThat(transpose(transposed), hasExactly(sequence(1, 2), sequence(3, 4), sequence(5,6)));
+        assertThat(sequence(1, 2).transpose(sequence(3, 4)), hasExactly(sequence(1, 3), sequence(2, 4)));
     }
 
     @Test
