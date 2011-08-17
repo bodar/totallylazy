@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.iterators.PeekingIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -303,5 +304,21 @@ public class Iterators {
                 return new Group<Key, T>(entry.getKey(), entry.getValue());
             }
         });
+    }
+
+    public static <T> LogicalPredicate<? super Iterator<T>> hasNext() {
+        return new LogicalPredicate<Iterator<T>>() {
+            public boolean matches(Iterator<T> iterator) {
+                return iterator.hasNext();
+            }
+        };
+    }
+
+    public static <T> Callable1<? super Iterator<T>, T> next() {
+        return new Callable1<Iterator<T>, T>() {
+            public T call(Iterator<T> iterator) throws Exception {
+                return iterator.next();
+            }
+        };
     }
 }
