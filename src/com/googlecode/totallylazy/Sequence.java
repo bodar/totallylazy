@@ -227,6 +227,14 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.zip(this, second);
     }
 
+    public Sequence<Sequence<T>> transpose(final Iterable<T>... iterables){
+        return transpose(Sequences.sequence(iterables));
+    }
+
+    public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<T>> iterables){
+        return Sequences.transpose(((Sequence) Sequences.sequence(iterables)).cons(this));
+    }
+
     public <S, Th> Sequence<Triple<T, S, Th>> zip(final Iterable<S> second, final Iterable<Th> third) {
         return Sequences.zip(this, second, third);
     }
