@@ -387,7 +387,6 @@ public class Sequences {
                 sequence(quadruples).map(Callables.<Fo>fourth()));
     }
 
-
     public static <T> Sequence<Pair<Number, T>> zipWithIndex(final Iterable<T> iterable) {
         return zip(integersStartingFrom(0), iterable);
     }
