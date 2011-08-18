@@ -373,7 +373,7 @@ public class Sequences {
     public static <T> Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<T>> iterables) {
         return new Sequence<Sequence<T>>() {
             public final Iterator<Sequence<T>> iterator() {
-                return new TransposeIterator<T>(sequence(iterables).map(Callables.<T>asIterator()));
+                return new TransposeIterator<T>(sequence(iterables).map(Callables.<T>asIterator()).toList());
             }
         };
 
