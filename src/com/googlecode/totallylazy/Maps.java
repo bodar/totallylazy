@@ -7,9 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Maps {
     public static <K,V> HashMap<K, V> map(Pair<? extends K, ? extends V>... entries) {
+        return map(sequence(entries));
+    }
+
+    public static <K,V> HashMap<K, V> map(Iterable<Pair<? extends K, ? extends V>> entries) {
         HashMap<K, V> map = new HashMap<K, V>();
         for (Pair<? extends K, ? extends V> entry : entries) {
             map.put(entry.first(), entry.second());
