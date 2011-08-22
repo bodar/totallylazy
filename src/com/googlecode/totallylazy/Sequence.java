@@ -272,7 +272,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public <Key> Map<Key,List<T>> toMap(final Callable1<? super T,Key> callable) {
-        return Maps.toMap(this, callable);
+        return Maps.multiMap(this, callable);
     }
 
     public  <Key> Sequence<Group<Key, T>> groupBy(final Callable1<? super T, Key> callable) {

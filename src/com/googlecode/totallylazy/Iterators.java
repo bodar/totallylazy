@@ -299,7 +299,7 @@ public class Iterators {
     }
 
     public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
-        return sequence(Maps.toMap(iterator, callable).entrySet()).map(new Callable1<Map.Entry<Key, List<T>>, Group<Key, T>>() {
+        return sequence(Maps.multiMap(iterator, callable).entrySet()).map(new Callable1<Map.Entry<Key, List<T>>, Group<Key, T>>() {
             public Group<Key, T> call(Map.Entry<Key, List<T>> entry) throws Exception {
                 return new Group<Key, T>(entry.getKey(), entry.getValue());
             }

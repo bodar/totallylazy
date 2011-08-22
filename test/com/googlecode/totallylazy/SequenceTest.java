@@ -7,7 +7,6 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -160,10 +159,10 @@ public class SequenceTest {
     @Test
     public void supportsGroupBy() throws Exception {
         Sequence<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(remainder(2));
-        assertThat(groups.first().key(), NumberMatcher.is(0));
-        assertThat(groups.first(), hasExactly(2, 4));
-        assertThat(groups.second().key(), NumberMatcher.is(1));
-        assertThat(groups.second(), hasExactly(1, 3));
+        assertThat(groups.first().key(), NumberMatcher.is(1));
+        assertThat(groups.first(), hasExactly(1, 3));
+        assertThat(groups.second().key(), NumberMatcher.is(0));
+        assertThat(groups.second(), hasExactly(2, 4));
     }
 
     @Test

@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,6 +37,27 @@ public class Maps {
         return seed;
     }
 
+    public static <T, Key> Map<Key, T> map(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+       return map(new LinkedHashMap<Key, T>(), iterator, callable);
+    }
+
+    public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+        while (iterator.hasNext()) {
+            final T next = iterator.next();
+            final Key key = Callers.call(callable, next);
+            seed.put(key, next);
+        }
+        return seed;
+    }
+
+    public static <T, Key> Map<Key, T> map(final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
+        return map(iterable.iterator(), callable);
+    }
+
+    public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
+        return map(seed, iterable.iterator(), callable);
+    }
+    
     public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V>... entries) {
         return multiMap(sequence(entries));
     }
@@ -58,6 +78,30 @@ public class Maps {
             seed.get(entry.first()).add(entry.second());
         }
         return seed;
+    }
+    
+    public static <T, Key> Map<Key, List<T>> multiMap(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+       return multiMap(new LinkedHashMap<Key, List<T>>(), iterator, callable);
+    }
+
+    public static <T, Key> Map<Key, List<T>> multiMap(final Map<Key, List<T>> seed, final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+        while (iterator.hasNext()) {
+            final T next = iterator.next();
+            final Key key = Callers.call(callable, next);
+            if (!seed.containsKey(key)) {
+                seed.put(key, new ArrayList<T>());
+            }
+            seed.get(key).add(next);
+        }
+        return seed;
+    }
+
+    public static <T, Key> Map<Key, List<T>> multiMap(final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
+        return multiMap(iterable.iterator(), callable);
+    }
+
+    public static <T, Key> Map<Key, List<T>> multiMap(final Map<Key, List<T>> seed, final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
+        return multiMap(seed, iterable.iterator(), callable);
     }
 
     public static <K, V> Callable2<? super Map<K, List<V>>, ? super Pair<K, V>, Map<K, List<V>>> asMultiValuedMap() {
@@ -112,24 +156,7 @@ public class Maps {
     public static <K, V> Callable1<Map.Entry<K, V>, Pair<K, V>> entryToPair(final Class<K> keyClass, final Class<V> valueClass) {
         return entryToPair();
     }
-
-    public static <T, Key> Map<Key, List<T>> toMap(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
-        final Map<Key, List<T>> result = new HashMap<Key, List<T>>();
-        while (iterator.hasNext()) {
-            final T next = iterator.next();
-            final Key key = Callers.call(callable, next);
-            if (!result.containsKey(key)) {
-                result.put(key, new ArrayList<T>());
-            }
-            result.get(key).add(next);
-        }
-        return result;
-    }
-
-    public static <T, Key> Map<Key, List<T>> toMap(final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
-        return toMap(iterable.iterator(), callable);
-    }
-
+    
     private static class PairEntry<K, V> implements Map.Entry<K, V> {
         private final Pair<K, V> pair;
 
