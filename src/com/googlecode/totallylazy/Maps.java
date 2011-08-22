@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,17 +11,47 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Maps {
-    public static <K,V> HashMap<K, V> map(Pair<K, V>... entries) {
+    public static <K,V> Map<K, V> map(final Pair<K, V>... entries) {
         return map(sequence(entries));
     }
 
-    public static <K,V> HashMap<K, V> map(Iterable<Pair<K, V>> entries) {
-        HashMap<K, V> map = new HashMap<K, V>();
-        for (Pair<K, V> entry : entries) {
-            map.put(entry.first(), entry.second());
-        }
-        return map;
+    public static <K,V> Map<K, V> map(final Map<K, V> seed, final Pair<K, V>... entries) {
+        return map(seed, sequence(entries));
     }
+
+    public static <K,V> Map<K, V> map(final Iterable<Pair<K, V>> entries) {
+        return map(new LinkedHashMap<K, V>(), entries);
+    }
+
+    public static <K,V> Map<K, V> map(final Map<K, V> seed, final Iterable<Pair<K, V>> entries) {
+        for (Pair<K, V> entry : entries) {
+            seed.put(entry.first(), entry.second());
+        }
+        return seed;
+    }
+
+    public static <K,V> Map<K, List<V>> multiMap(final Pair<K, V>... entries) {
+        return multiMap(sequence(entries));
+    }
+
+    public static <K,V> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Pair<K, V>... entries) {
+        return multiMap(seed, sequence(entries));
+    }
+
+    public static <K,V> Map<K, List<V>> multiMap(final Iterable<Pair<K, V>> entries) {
+        return multiMap(new LinkedHashMap<K, List<V>>(), entries);
+    }
+
+    public static <K,V> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterable<Pair<K, V>> entries) {
+        for (Pair<K, V> entry : entries) {
+            if(!seed.containsKey(entry.first())){
+                seed.put(entry.first(), new ArrayList<V>());
+            }
+            seed.get(entry.first()).add(entry.second());
+        }
+        return seed;
+    }
+
     public static <K,V> Callable2<? super Map<K, List<V>>,? super Pair<K, V>, Map<K, List<V>>> asMultiValuedMap() {
         return new Callable2<Map<K, List<V>>, Pair<K, V>, Map<K, List<V>>>() {
             public Map<K, List<V>> call(Map<K, List<V>> map, Pair<K, V> pair) throws Exception {

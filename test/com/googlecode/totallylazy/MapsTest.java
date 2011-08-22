@@ -11,10 +11,25 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
 
 public class MapsTest {
+
+    @Test
+    public void maintainsMapEntriesOrder() throws Exception {
+        Map<String,String> map = Maps.map(Pair.pair("name", "Dan"), Pair.pair("tel", "123432"));
+        assertThat(map.keySet().iterator().next(), is("name"));
+    }
+
+    @Test
+    public void supportsMultiValuedMapCreation() throws Exception {
+        Map<String, List<String>> map = Maps.multiMap(Pair.pair("name", "Dan"), Pair.pair("name", "Mat"));
+        List<String> values = map.entrySet().iterator().next().getValue();
+        assertThat(values, hasExactly("Dan", "Mat"));
+    }
+
     @Test
     public void supportsConvertingPairsToMapEntries() throws Exception {
         Map<String, Integer> map = new AbstractMap<String, Integer>() {
