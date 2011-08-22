@@ -48,7 +48,7 @@ public class MapsTest {
         Map<String, Integer> map = Maps.map();
         map.put("Dan", 2);
 
-        assertThat(sequence(map.entrySet()).map(Maps.<String, Integer>entryToPair()), hasExactly(pair("Dan", 2)));
+        assertThat(sequence(Maps.pairs(map)), hasExactly(pair("Dan", 2)));
     }
 
     @Test

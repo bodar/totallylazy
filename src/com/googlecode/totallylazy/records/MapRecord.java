@@ -6,15 +6,13 @@ import com.googlecode.totallylazy.Sequence;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Callables.second;
-import static com.googlecode.totallylazy.Maps.entryToPair;
+import static com.googlecode.totallylazy.Maps.pairs;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.numbers.Numbers.equalTo;
 
 public class MapRecord implements Record {
     private final Map<Keyword, Object> fields = new LinkedHashMap<Keyword, Object>();
@@ -29,7 +27,7 @@ public class MapRecord implements Record {
     }
 
     public Sequence<Pair<Keyword, Object>> fields() {
-        return sequence(fields.entrySet()).map(entryToPair(Keyword.class, Object.class));
+        return pairs(fields);
     }
 
     public Sequence<Keyword> keywords() {
