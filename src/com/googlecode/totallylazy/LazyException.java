@@ -3,6 +3,13 @@ package com.googlecode.totallylazy;
 import java.lang.reflect.InvocationTargetException;
 
 public class LazyException extends RuntimeException {
+    public static LazyException lazyException(final Throwable cause){
+        if(cause instanceof RuntimeException){
+            throw (RuntimeException)cause;
+        }
+        return new LazyException(cause);
+    }
+
     public LazyException(Throwable cause) {
         this(null, cause);
     }

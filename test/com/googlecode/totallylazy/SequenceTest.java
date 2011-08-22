@@ -422,6 +422,18 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsInit() throws Exception {
+        assertThat(sequence(1, 2, 3).init(), hasExactly(1, 2));
+        assertThat(Sequences.init(sequence(1, 2, 3)), hasExactly(1, 2));
+        try {
+            Sequences.<Object>empty().init().isEmpty();
+            fail("Should have thrown NoSuchElementException");
+        } catch (NoSuchElementException e) {
+            // all good
+        }
+    }
+
+    @Test
     public void supportsHead() throws Exception {
         assertThat(sequence(1, 2).head(), is(1));
     }

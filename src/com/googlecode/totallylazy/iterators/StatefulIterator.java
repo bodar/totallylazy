@@ -1,9 +1,10 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Peekable;
 
 import java.util.NoSuchElementException;
+
+import static com.googlecode.totallylazy.LazyException.lazyException;
 
 public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements Peekable<T> {
     private State state = State.Ready;
@@ -27,7 +28,7 @@ public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements
             }
             return !state.equals(State.Finished);
         } catch (Exception e) {
-            throw new LazyException(e);
+            throw lazyException(e);
         }
     }
 

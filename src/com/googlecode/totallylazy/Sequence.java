@@ -79,6 +79,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.tail(this);
     }
 
+    public Sequence<T> init() {
+        return Sequences.init(this);
+    }
+
     public <S> S fold(final S seed, final Callable2<? super S, ? super T, S> callable) {
         return Sequences.fold(this, seed, callable);
     }

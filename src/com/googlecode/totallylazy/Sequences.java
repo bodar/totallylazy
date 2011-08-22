@@ -9,14 +9,12 @@ import com.googlecode.totallylazy.iterators.PairIterator;
 import com.googlecode.totallylazy.iterators.QuadrupleIterator;
 import com.googlecode.totallylazy.iterators.TransposeIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
-import com.googlecode.totallylazy.records.Keyword;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
@@ -195,6 +193,14 @@ public class Sequences {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.tail(iterable.iterator());
+            }
+        };
+    }
+
+    public static <T> Sequence<T> init(final Iterable<T> iterable) {
+        return new Sequence<T>() {
+            public final Iterator<T> iterator() {
+                return Iterators.init(iterable.iterator());
             }
         };
     }
