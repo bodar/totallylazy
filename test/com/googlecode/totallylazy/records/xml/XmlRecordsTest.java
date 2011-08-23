@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.records.Keywords;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import static com.googlecode.totallylazy.records.xml.Xml.load;
+import static com.googlecode.totallylazy.records.xml.Xml.document;
 
 public class XmlRecordsTest extends AbstractRecordsTests<XmlRecords>{
     private Document document;
@@ -17,7 +17,7 @@ public class XmlRecordsTest extends AbstractRecordsTests<XmlRecords>{
 
     @Override
     protected XmlRecords createRecords() throws Exception {
-        document = load("<data/>");
+        document = document("<data/>");
         return new XmlRecords(document);
     }
 
