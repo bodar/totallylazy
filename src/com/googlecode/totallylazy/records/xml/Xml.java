@@ -10,6 +10,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,6 +27,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
 
@@ -114,14 +119,23 @@ public class Xml {
     }
 
 
-    public static Document load(String xml) {
+    public static Document document(String xml) {
         try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            documentBuilder.setEntityResolver(ignoreEntities());
             return documentBuilder.parse(new ByteArrayInputStream(xml.getBytes()));
         } catch (Exception e) {
             throw new LazyException(e);
         }
+    }
+
+    private static EntityResolver ignoreEntities() {
+        return new EntityResolver() {
+            public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+                return new InputSource(new StringReader(""));
+            }
+        };
     }
 
     public static Sequence<Node> remove(final Node root, final String expression) {

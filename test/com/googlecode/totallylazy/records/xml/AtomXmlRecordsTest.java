@@ -13,7 +13,7 @@ import java.util.Date;
 
 import static com.googlecode.totallylazy.Dates.date;
 import static com.googlecode.totallylazy.URLs.uri;
-import static com.googlecode.totallylazy.records.xml.Xml.load;
+import static com.googlecode.totallylazy.records.xml.Xml.document;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -26,7 +26,7 @@ public class AtomXmlRecordsTest {
 
     @Test
     public void canGetElements() throws Exception {
-        Records records = new XmlRecords(load(XML), new Mappings().add(Date.class, DateMapping.atomDateFormat()));
+        Records records = new XmlRecords(document(XML), new Mappings().add(Date.class, DateMapping.atomDateFormat()));
         records.define(entries, id, link, content, updated);
         Record record = records.get(entries).head();
         assertThat(record.get(id), is(ID));
