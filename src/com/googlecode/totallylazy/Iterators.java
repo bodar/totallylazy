@@ -55,6 +55,10 @@ public class Iterators {
         return !(a.hasNext() || b.hasNext());
     }
 
+    public static <T> void each(final Iterator<T> iterator, final Callable1<? super T, Void> runnable) {
+        forEach(iterator, runnable);
+    }
+
     public static <T> void forEach(final Iterator<T> iterator, final Callable1<? super T, Void> runnable) {
         while (iterator.hasNext()) {
             Callers.call(runnable, iterator.next());
