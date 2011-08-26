@@ -23,6 +23,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return fold(31, asHashCode());
     }
 
+    public void each(final Callable1<T,Void> runnable) {
+        forEach(runnable);
+    }
+
     public void forEach(final Callable1<T,Void> runnable) {
         Sequences.forEach(this, runnable);
     }

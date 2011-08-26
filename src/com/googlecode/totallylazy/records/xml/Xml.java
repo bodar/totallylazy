@@ -32,6 +32,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
 
+import static com.googlecode.totallylazy.Runnables.VOID;
+
 public class Xml {
     public static String selectContents(final Node node, final String expression) {
         return contents(selectNodes(node, expression));
@@ -71,6 +73,15 @@ public class Xml {
 
     public static String contents(Sequence<Node> nodes) {
         return nodes.map(contents()).toString("");
+    }
+
+    public static Callable1<Element, Void> removeAttribute(final String name) {
+        return new Callable1<Element, Void>() {
+            public Void call(Element element) throws Exception {
+                element.removeAttribute(name);
+                return VOID;
+            }
+        };
     }
 
     public static Callable1<? super Node, String> contents() {
