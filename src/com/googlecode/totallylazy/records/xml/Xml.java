@@ -37,12 +37,24 @@ public class Xml {
         return contents(selectNodes(node, expression));
     }
 
-    public static Sequence<Node> selectNodes(Node node, String expression) {
+    public static Sequence<Node> selectNodes(final Node node, final String expression) {
         try {
             return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
         } catch (XPathExpressionException e) {
             throw new LazyException(e);
         }
+    }
+
+    public static Node selectNode(final Node node, final String expression){
+        return selectNodes(node, expression).head();
+    }
+
+    public static Sequence<Element> selectElements(final Node node, final String expression){
+        return selectNodes(node, expression).safeCast(Element.class);
+    }
+
+    public static Element selectElement(final Node node, final String expression){
+        return selectElements(node, expression).head();
     }
 
     public static XPath xpath() {
