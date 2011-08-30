@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.regex;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
+import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -41,5 +42,9 @@ public class Regex implements Predicate<CharSequence>{
     @Override
     public String toString() {
         return pattern.pattern();
+    }
+
+    public MatchResult match(CharSequence value) {
+        return findMatches(value).head();
     }
 }

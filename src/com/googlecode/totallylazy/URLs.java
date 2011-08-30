@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.regex.Regex;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
