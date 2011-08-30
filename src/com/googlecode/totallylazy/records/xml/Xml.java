@@ -177,9 +177,14 @@ public class Xml {
         };
     }
 
-    public static String format(Node node) throws Exception {
-        Transformer transformer = transformer(Pair.<String, Object>pair("indent-number", 4));
+    public static String format(final Node node) throws Exception {
+        return format(node, Pair.<String, Object>pair("indent-number", 4));
+    }
+
+    public static String format(final Node node, final Pair<String, Object>... attributes) throws Exception {
+        Transformer transformer = transformer(attributes);
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(node), new StreamResult(writer));
         return writer.toString();
