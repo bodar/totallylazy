@@ -58,7 +58,7 @@ public class Uri {
     }
 
     private static String mergePath(Uri baseUri, String referencePath){
-        if(referencePath.startsWith("/") || baseUri.path() == null || !baseUri.path().contains("/")){
+        if(referencePath.startsWith("/") || baseUri.path() == null || baseUri.isRelative()){
             return referencePath;
         }
 
@@ -113,5 +113,13 @@ public class Uri {
             builder.append("#").append(fragment);
         }
         return builder.toString();
+    }
+
+    public boolean isAbsolute() {
+        return path.startsWith("/");
+    }
+
+    public boolean isRelative() {
+        return !isAbsolute();
     }
 }
