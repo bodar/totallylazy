@@ -34,4 +34,15 @@ public class UriTest {
         assertThat(uri("relative?foo=bar").path("bob").toString(), is("bob?foo=bar"));
         assertThat(uri("/pub/ietf/uri/?foo=bar#Related").path("bob").toString(), is("/pub/ietf/uri/bob?foo=bar#Related"));
     }
+
+    @Test
+    public void supportsDetectingAbsolutePaths() throws Exception {
+        assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").isAbsolute(), is(true));
+        assertThat(uri("#Related").isAbsolute(), is(false));
+        assertThat(uri("#Related").isRelative(), is(true));
+        assertThat(uri("relative?foo=bar").isAbsolute(), is(false));
+        assertThat(uri("relative?foo=bar").isRelative(), is(true));
+        assertThat(uri("/pub/ietf/uri/?foo=bar#Related").isAbsolute(), is(true));
+        assertThat(uri("/pub/ietf/uri/?foo=bar#Related").isRelative(), is(false));
+    }
 }
