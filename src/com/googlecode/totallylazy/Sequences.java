@@ -161,6 +161,10 @@ public class Sequences {
         };
     }
 
+    public static <T> void each(final Iterable<T> iterable, final Callable1<T, Void> runnable) {
+        forEach(iterable, runnable);
+    }
+
     public static <T> void forEach(final Iterable<T> iterable, final Callable1<T, Void> runnable) {
         Iterators.forEach(iterable.iterator(), runnable);
     }
