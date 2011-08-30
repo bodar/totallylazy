@@ -2,6 +2,8 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.regex.Regex;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.regex.MatchResult;
 
 public class Uri {
@@ -31,6 +33,14 @@ public class Uri {
 
     public static Uri uri(CharSequence value) {
         return new Uri(value);
+    }
+
+    public static Uri uri(URL value) {
+        return new Uri(value.toString());
+    }
+
+    public static Uri uri(URI value) {
+        return new Uri(value.toString());
     }
 
     public String scheme(){
@@ -113,6 +123,14 @@ public class Uri {
             builder.append("#").append(fragment);
         }
         return builder.toString();
+    }
+
+    public URL toURL() {
+        return URLs.url(toString());
+    }
+
+    public URI toURI() {
+        return URLs.uri(toString());
     }
 
     public boolean isAbsolute() {
