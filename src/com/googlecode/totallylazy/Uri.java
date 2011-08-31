@@ -7,7 +7,9 @@ import java.net.URL;
 import java.util.regex.MatchResult;
 
 public class Uri {
+    public static Regex JAR_URL = Regex.regex("jar:([^!]+)!(/.*)");
     public static Regex RFC3986 = Regex.regex("^(?:([^:/?\\#]+):)?(?://([^/?\\#]*))?([^?\\#]*)(?:\\?([^\\#]*))?(?:\\#(.*))?");
+    public static final String JAR_SCHEME = "jar";
     private final String scheme;
     private final String authority;
     private final String path;
@@ -23,12 +25,21 @@ public class Uri {
     }
 
     public Uri(CharSequence value) {
-        MatchResult result = RFC3986.match(value);
-        scheme = result.group(1);
-        authority = result.group(2);
-        path = result.group(3);
-        query = result.group(4);
-        fragment = result.group(5);
+        if (JAR_URL.matches(value)) {
+            MatchResult jar = JAR_URL.match(value);
+            scheme = JAR_SCHEME;
+            authority = jar.group(1);
+            path = jar.group(2);
+            query = null;
+            fragment = null;
+        } else {
+            MatchResult result = RFC3986.match(value);
+            scheme = result.group(1);
+            authority = result.group(2);
+            path = result.group(3);
+            query = result.group(4);
+            fragment = result.group(5);
+        }
     }
 
     public static Uri uri(CharSequence value) {
@@ -43,36 +54,36 @@ public class Uri {
         return new Uri(value.toString());
     }
 
-    public String scheme(){
+    public String scheme() {
         return scheme;
     }
 
-    public Uri scheme(String value){
+    public Uri scheme(String value) {
         return new Uri(value, authority, path, query, fragment);
     }
 
-    public String authority(){
+    public String authority() {
         return authority;
     }
 
-    public Uri authority(String value){
+    public Uri authority(String value) {
         return new Uri(scheme, value, path, query, fragment);
     }
 
-    public String path(){
+    public String path() {
         return path;
     }
 
-    public Uri path(String value){
+    public Uri path(String value) {
         return new Uri(scheme, authority, mergePath(this, value), query, fragment);
     }
 
-    private static String mergePath(Uri baseUri, String referencePath){
-        if(referencePath.startsWith("/") || baseUri.path() == null || baseUri.isRelative()){
+    private static String mergePath(Uri baseUri, String referencePath) {
+        if (referencePath.startsWith("/") || baseUri.path() == null || baseUri.isRelative()) {
             return referencePath;
         }
 
-        if(baseUri.path().equals(Strings.EMPTY)){
+        if (baseUri.path().equals(Strings.EMPTY)) {
             return "/" + referencePath;
         }
 
@@ -80,19 +91,19 @@ public class Uri {
 
     }
 
-    public String query(){
+    public String query() {
         return query;
     }
 
-    public Uri query(String value){
+    public Uri query(String value) {
         return new Uri(scheme, authority, path, value, fragment);
     }
 
-    public String fragment(){
+    public String fragment() {
         return fragment;
     }
 
-    public Uri fragment(String value){
+    public Uri fragment(String value) {
         return new Uri(scheme, authority, path, query, value);
     }
 
@@ -108,18 +119,25 @@ public class Uri {
 
     @Override
     public String toString() {
+        if(JAR_SCHEME.equals(scheme)){
+            return String.format("%s:%s!%s", JAR_SCHEME, authority, path);
+        }
+        return standardToString();
+    }
+
+    private String standardToString() {
         StringBuilder builder = new StringBuilder();
-        if(scheme != null){
+        if (scheme != null) {
             builder.append(scheme).append(":");
         }
-        if(authority != null){
+        if (authority != null) {
             builder.append("//").append(authority);
         }
         builder.append(path);
-        if(query != null){
+        if (query != null) {
             builder.append("?").append(query);
         }
-        if(fragment != null){
+        if (fragment != null) {
             builder.append("#").append(fragment);
         }
         return builder.toString();
