@@ -99,9 +99,13 @@ public class Strings {
     public static Predicate<? super String> empty() {
         return new Predicate<String>() {
             public boolean matches(String value) {
-                return value == null || value.equals(EMPTY);
+                return isEmpty(value);
             }
         };
+    }
+
+    public static boolean isEmpty(String value) {
+        return value == null || value.equals(EMPTY);
     }
 
     public static String escapeXml(String value) {

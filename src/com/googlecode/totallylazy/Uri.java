@@ -6,6 +6,8 @@ import java.net.URI;
 import java.net.URL;
 import java.util.regex.MatchResult;
 
+import static com.googlecode.totallylazy.Strings.isEmpty;
+
 public class Uri {
     public static Regex JAR_URL = Regex.regex("jar:([^!]+)!(/.*)");
     public static Regex RFC3986 = Regex.regex("^(?:([^:/?\\#]+):)?(?://([^/?\\#]*))?([^?\\#]*)(?:\\?([^\\#]*))?(?:\\#(.*))?");
@@ -149,6 +151,10 @@ public class Uri {
 
     public URI toURI() {
         return URLs.uri(toString());
+    }
+
+    public boolean isFullyQualified() {
+        return !isEmpty(authority);
     }
 
     public boolean isAbsolute() {
