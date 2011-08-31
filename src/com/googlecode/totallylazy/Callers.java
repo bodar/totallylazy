@@ -9,19 +9,11 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Arrays.asList;
 
 public final class Callers {
-    public static <T> Sequence<T> callConcurrently(final Iterable<Callable<T>> callables) {
-        return callConcurrently(sequence(callables).toList());
-    }
-
-    public static <T> Sequence<T> callConcurrently(final Iterable<Callable<T>> callables, final Executor executor) {
-        return callConcurrently(sequence(callables).toList(), executor);
-    }
-
     public static <T> Sequence<T> callConcurrently(final Callable<T>... callables) {
-        return callConcurrently(asList(callables));
+        return callConcurrently(sequence(callables));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Collection<Callable<T>> callables) {
+    public static <T> Sequence<T> callConcurrently(final Iterable<Callable<T>> callables) {
         ExecutorService service = Executors.newCachedThreadPool();
         try {
             return callConcurrently(callables, service);
@@ -30,14 +22,44 @@ public final class Callers {
         }
     }
 
-    private static <T> Sequence<T> callConcurrently(final Collection<Callable<T>> callables, final Executor service) {
-        List<Future<T>> futures = new ArrayList<Future<T>>();
-        for (Callable<T> callable : callables) {
-            FutureTask<T> future = new FutureTask<T>(callable);
-            futures.add(future);
-            service.execute(future);
-        }
-        return sequence(futures).map(Callables.<T>realiseFuture());
+    public static <T> Sequence<T> callConcurrently(final Iterable<Callable<T>> callables, final Executor executor) {
+        return sequence(callables).map(Callers.<T>asFutureTask()).
+                map(Callers.<T>executeWith(executor)).
+                realise().
+                map(Callers.<T>realiseFuture());
+    }
+
+    public static <T> Callable1<? super FutureTask<T>, Future<T>> executeWith(final Executor executor) {
+        return new Callable1<FutureTask<T>, Future<T>>() {
+            public Future<T> call(FutureTask<T> task) throws Exception {
+                executor.execute(task);
+                return task;
+            }
+        };
+    }
+
+    public static <T> Callable1<? super Callable<T>, FutureTask<T>> asFutureTask() {
+        return new Callable1<Callable<T>, FutureTask<T>>() {
+            public FutureTask<T> call(Callable<T> callable) throws Exception {
+                return new FutureTask<T>(callable);
+            }
+        };
+    }
+
+    public static <T> Callable1<? super Future<T>, T> realiseFuture() {
+        return new Callable1<Future<T>, T>() {
+            public final T call(final Future<T> future) throws Exception {
+                return future.get();
+            }
+        };
+    }
+
+    public static <T> Callable1<? super Future<T>, T> realiseFuture(final long timeout, final TimeUnit unit) {
+        return new Callable1<Future<T>, T>() {
+            public final T call(final Future<T> future) throws Exception {
+                return future.get(timeout, unit);
+            }
+        };
     }
 
     public static <T> T call(final Callable<T> callable) {

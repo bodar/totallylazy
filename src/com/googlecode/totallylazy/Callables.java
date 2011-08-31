@@ -110,14 +110,6 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<Future<T>, T> realiseFuture() {
-        return new Callable1<Future<T>, T>() {
-            public final T call(final Future<T> future) throws Exception {
-                return future.get();
-            }
-        };
-    }
-
     public static <T> Callable1<? super First<T>, T> first(Class<T> aClass) {
         return first();
     }
