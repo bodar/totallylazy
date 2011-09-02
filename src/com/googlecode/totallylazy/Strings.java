@@ -4,7 +4,14 @@ import com.googlecode.totallylazy.predicates.ContainsPredicate;
 import com.googlecode.totallylazy.predicates.EndsWithPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Closeables.using;
@@ -50,7 +57,6 @@ public class Strings {
             }
         };
     }
-
 
     public static Callable1<String, String> toLowerCase() {
         return new Callable1<String, String>() {
@@ -191,5 +197,43 @@ public class Strings {
                 return characters(value);
             }
         };
+    }
+
+    public static Callable1<String, String> reverse() {
+        return new Callable1<String, String>() {
+            public String call(String value) throws Exception {
+                return reverse(value);
+            }
+        };
+    }
+
+    public static Callable1<String, String> substring(final int beginIndex, final int endIndex) {
+        return new Callable1<String, String>() {
+            public String call(String value) throws Exception {
+                return substring(value, beginIndex, endIndex);
+            }
+        };
+    }
+
+    public static String reverse(String original) {
+        return new StringBuilder(original).reverse().toString();
+    }
+
+    public static String substring(String original, int beginIndex, int endIndex) {
+        int length = original.length();
+        int beginIndexPositive = toPositive(length, beginIndex);
+        int endIndexPositive = toPositive(length, endIndex);
+
+        if (beginIndexPositive > endIndexPositive) {
+            return substring(reverse(original), length - beginIndexPositive, length - endIndexPositive);
+        }
+        return original.substring(beginIndexPositive, endIndexPositive);
+    }
+
+    private static int toPositive(int stringLength, int index) {
+        if (index < 0) {
+            return stringLength + index;
+        }
+        return index;
     }
 }
