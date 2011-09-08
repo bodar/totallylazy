@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.records.xml.mappings;
 
+import com.googlecode.totallylazy.DateConverter;
+import com.googlecode.totallylazy.DateFormatConverter;
 import com.googlecode.totallylazy.Dates;
 import com.googlecode.totallylazy.Sequence;
 import org.w3c.dom.Document;
@@ -12,22 +14,26 @@ import java.util.Date;
 
 public class DateMapping implements Mapping<Date> {
     private final StringMapping mapping = new StringMapping();
-    private final DateFormat dateFormat;
+    private final DateConverter dateConverter;
 
-    public DateMapping(DateFormat dateFormat) {
-        this.dateFormat = dateFormat;
+    public DateMapping(DateConverter dateConverter) {
+        this.dateConverter = dateConverter;
+    }
+
+    public DateMapping(DateFormat... dateFormat) {
+        this(new DateFormatConverter(dateFormat));
     }
 
     public Sequence<Node> to(Document document, String expression, Date value) {
-        return mapping.to(document, expression, dateFormat.format(value));
+        return mapping.to(document, expression, dateConverter.toString(value));
     }
 
     public Date from(Sequence<Node> nodes) throws ParseException {
-        return dateFormat.parse(mapping.from(nodes));
+        return dateConverter.toDate(mapping.from(nodes));
     }
 
     public static DateMapping defaultFormat() {
-        return new DateMapping(new SimpleDateFormat());
+        return new DateMapping(new DateFormatConverter(Dates.RFC3339(), Dates.RFC822()));
     }
 
     public static DateMapping atomDateFormat() {
