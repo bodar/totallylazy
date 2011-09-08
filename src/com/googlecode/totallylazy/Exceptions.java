@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Runnables.VOID;
@@ -33,6 +34,22 @@ public class Exceptions {
         return new Callable1<Throwable, Throwable>() {
             public Throwable call(final Throwable throwable) throws Exception {
                 return throwable.getCause();
+            }
+        };
+    }
+
+    public static <T, S> Callable1<T, Option<S>> ignoringException(final Callable1<? super T, S> callable) {
+        return handleException(callable, instanceOf(Exception.class));
+    }
+
+    public static <T, S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Class<? extends Exception>... exceptionClasses) {
+        return handleException(callable, sequence(exceptionClasses).map(asInstanceOf()));
+    }
+
+    public static <T> Callable1<Class<? extends T>, Predicate<? super T>> asInstanceOf() {
+        return new Callable1<Class<? extends T>, Predicate<? super T>>() {
+            public Predicate<? super T> call(Class<? extends T> aClass) throws Exception {
+                return instanceOf(aClass);
             }
         };
     }
