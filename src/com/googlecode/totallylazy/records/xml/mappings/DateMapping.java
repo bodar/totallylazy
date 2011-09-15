@@ -33,7 +33,7 @@ public class DateMapping implements Mapping<Date> {
     }
 
     public static DateMapping defaultFormat() {
-        return new DateMapping(new DateFormatConverter(Dates.RFC3339(), Dates.RFC822()));
+        return new DateMapping(new DateFormatConverter(Dates.RFC3339(), Dates.RFC822(), Dates.javaToString()));
     }
 
     public static DateMapping atomDateFormat() {
