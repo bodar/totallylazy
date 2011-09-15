@@ -10,9 +10,10 @@ import static org.junit.Assert.fail;
 public class DateFormatConverterTest {
     @Test
     public void triesMultipleFormatsBeforeGivingUp() throws Exception {
-        DateFormatConverter converter = new DateFormatConverter(Dates.RFC3339(), Dates.RFC822());
+        DateFormatConverter converter = new DateFormatConverter(Dates.RFC3339(), Dates.RFC822(), Dates.javaToString());
         assertThat(converter.toDate("2011-07-19T12:43:26Z"), is(date(2011, 7, 19, 12, 43, 26)));
         assertThat(converter.toDate("Thu, 08 Sep 2011 07:14:14 GMT"), is(date(2011, 9, 8, 7, 14, 14)));
+        assertThat(converter.toDate("Thu Sep 15 13:27:31 GMT 2011"), is(date(2011, 9, 15, 13, 27, 31)));
         try {
             converter.toDate("gibberish");
             fail("should have thrown IllegalArgumentException");
