@@ -15,7 +15,7 @@ import static java.util.Calendar.YEAR;
 public class Dates {
     public static final String RFC3339 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String RFC822 = "EEE, dd MMM yyyy HH:mm:ss zzz";
-    public static final String JAVA_TO_STRING = "EEE MMM dd hh:mm:ss zzz yyyy";
+    public static final String JAVA_UTIL_DATE_TO_STRING = "EEE MMM dd hh:mm:ss zzz yyyy";
     public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 
     public static DateFormat RFC3339() {
@@ -32,8 +32,8 @@ public class Dates {
         return format(RFC822);
     }
 
-    public static DateFormat javaToString() {
-        return format(JAVA_TO_STRING);
+    public static DateFormat javaUtilDateToString() {
+        return format(JAVA_UTIL_DATE_TO_STRING);
     }
 
     public static Date date(int year, int month, int day) {
