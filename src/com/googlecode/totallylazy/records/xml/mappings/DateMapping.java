@@ -9,7 +9,6 @@ import org.w3c.dom.Node;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateMapping implements Mapping<Date> {
@@ -33,7 +32,7 @@ public class DateMapping implements Mapping<Date> {
     }
 
     public static DateMapping defaultFormat() {
-        return new DateMapping(new DateFormatConverter(Dates.RFC3339(), Dates.RFC822(), Dates.javaToString()));
+        return new DateMapping(new DateFormatConverter(Dates.RFC3339(), Dates.RFC822(), Dates.javaUtilDateToString()));
     }
 
     public static DateMapping atomDateFormat() {
