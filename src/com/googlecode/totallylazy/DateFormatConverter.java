@@ -21,6 +21,10 @@ public class DateFormatConverter implements DateConverter {
         }
     }
 
+    public static DateFormatConverter defaultConverter() {
+        return new DateFormatConverter(Dates.RFC3339(), Dates.RFC822(), Dates.javaUtilDateToString());
+    }
+
     public String toString(final Date value) {
         return formats.head().format(value);
     }
