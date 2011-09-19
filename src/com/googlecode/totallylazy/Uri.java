@@ -77,20 +77,19 @@ public class Uri {
     }
 
     public Uri path(String value) {
-        return new Uri(scheme, authority, mergePath(this, value), query, fragment);
+        return new Uri(scheme, authority, value, query, fragment);
     }
 
-    private static String mergePath(Uri baseUri, String referencePath) {
-        if (referencePath.startsWith("/") || baseUri.path() == null || baseUri.isRelative()) {
-            return referencePath;
+    public Uri mergePath(String value) {
+        if (value.startsWith("/") || path() == null || isRelative()) {
+            return path(value);
         }
 
-        if (baseUri.path().equals(Strings.EMPTY)) {
-            return "/" + referencePath;
+        if (path().equals(Strings.EMPTY)) {
+            return path("/" + value);
         }
 
-        return baseUri.path().replaceFirst("/([^/]*)$", "/" + referencePath);
-
+        return path(path().replaceFirst("/([^/]*)$", "/" + value));
     }
 
     public String query() {
