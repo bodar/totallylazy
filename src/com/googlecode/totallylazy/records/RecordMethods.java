@@ -42,8 +42,7 @@ public class RecordMethods {
     }
 
     public static Keyword getKeyword(String name, Sequence<Keyword> definitions) {
-        Keyword keyword = definitions.find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
-        return keyword(keyword.name(), keyword.forClass());
+        return definitions.find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
     }
 
     public static Callable1<? super Record, Sequence<Object>> getValuesFor(final Sequence<Keyword> fields) {
