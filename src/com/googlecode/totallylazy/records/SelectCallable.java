@@ -15,7 +15,7 @@ public class SelectCallable implements Callable1<Record, Record> {
     public Record call(Record source) throws Exception {
         Record result = new MapRecord();
         for (Keyword keyword : keywords) {
-            result.set(Keywords.keyword(keyword.name(), keyword.forClass()), keyword.call(source));
+            result.set(keyword, keyword.call(source));
         }
         return result;
     }

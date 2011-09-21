@@ -221,8 +221,6 @@ public abstract class AbstractRecordsTests<T extends Records> {
         assertThat(record.get(first), Matchers.is("dan"));
         Keyword<String> result = record.keywords().head();
         assertThat(result, Matchers.is(first));
-        assertThat(result, instanceOf(ImmutableKeyword.class));
-
     }
 
     @Test
