@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,6 +50,7 @@ import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static com.googlecode.totallylazy.records.Using.using;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.instanceOf;
 
 public abstract class AbstractRecordsTests<T extends Records> {
     protected static Keyword people = keyword("people");
@@ -214,9 +216,13 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     @Test
     public void supportsAliasingAKeyword() throws Exception {
-        Keyword<String> bob = keyword("bob", String.class);
-        Sequence<Keyword> fields = records.get(people).map(select(firstName.as(bob))).head().keywords();
-        assertThat(fields, hasExactly(bob));
+        Keyword<String> first = keyword("first", String.class);
+        Record record = records.get(people).filter(where(lastName, is("bodart"))).map(select(firstName.as(first))).head();
+        assertThat(record.get(first), Matchers.is("dan"));
+        Keyword<String> result = record.keywords().head();
+        assertThat(result, Matchers.is(first));
+        assertThat(result, instanceOf(ImmutableKeyword.class));
+
     }
 
     @Test

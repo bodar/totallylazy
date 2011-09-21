@@ -31,4 +31,9 @@ public class AliasedKeyword<T> extends AbstractKeyword<T>{
         source.metadata(metadata);
         return this;
     }
+
+    @Override
+    public T call(Record record) throws Exception {
+        return record.get(source);
+    }
 }
