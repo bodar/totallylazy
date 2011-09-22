@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
@@ -17,7 +18,7 @@ import org.w3c.dom.Node;
 
 import javax.xml.xpath.XPath;
 
-import static com.googlecode.totallylazy.records.xml.Xml.xpath;
+import static com.googlecode.totallylazy.Xml.xpath;
 
 public class XmlRecords extends AbstractRecords {
     private final XPath xpath = xpath();

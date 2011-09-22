@@ -1,11 +1,12 @@
-package com.googlecode.totallylazy.records.xml;
+package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class XmlTest {
     @Test
@@ -18,5 +19,20 @@ public class XmlTest {
 
         Sequence<String> values = Xml.selectNodes(document, "//meta/@content").map(Xml.contents());
         assertThat(values, hasExactly("Foo", "Bar"));
+    }
+
+    @Test
+    public void canEscapeXml() throws Exception {
+        assertThat(Xml.escape("& < > ' " + new Character((char) 0x80)), is("&amp; &lt; &gt; &apos; &#128;"));
+    }
+
+    @Test
+    public void doesNotTruncateString() throws Exception {
+        String testString = longStringWithoutEncodedChars();
+        assertThat(Xml.escape(testString), is(testString));
+    }
+
+    private String longStringWithoutEncodedChars() {
+        return repeat("A").take(100).toString("", "", "", Long.MAX_VALUE);
     }
 }

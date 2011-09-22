@@ -13,7 +13,7 @@ import java.util.Date;
 
 import static com.googlecode.totallylazy.Dates.date;
 import static com.googlecode.totallylazy.URLs.uri;
-import static com.googlecode.totallylazy.records.xml.Xml.document;
+import static com.googlecode.totallylazy.Xml.document;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 

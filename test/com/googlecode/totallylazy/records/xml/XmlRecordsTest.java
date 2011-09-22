@@ -1,11 +1,12 @@
 package com.googlecode.totallylazy.records.xml;
 
+import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.records.AbstractRecordsTests;
 import com.googlecode.totallylazy.records.Keywords;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import static com.googlecode.totallylazy.records.xml.Xml.document;
+import static com.googlecode.totallylazy.Xml.document;
 
 public class XmlRecordsTest extends AbstractRecordsTests<XmlRecords>{
     private Document document;

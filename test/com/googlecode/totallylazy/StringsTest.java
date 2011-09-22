@@ -43,17 +43,6 @@ public class StringsTest {
     }
 
     @Test
-    public void canEscapeXml() throws Exception {
-        assertThat(Strings.escapeXml("& < > ' " + new Character((char) 0x80)), is("&amp; &lt; &gt; &apos; &#128;"));
-    }
-
-    @Test
-    public void doesNotTruncateString() throws Exception {
-        String testString = longStringWithoutEncodedChars();
-        assertThat(Strings.escapeXml(testString), is(testString));
-    }
-
-    @Test
     public void supportsSubstring() throws Exception {
         assertThat(sequence("abcdXYZ").map(substring(1, 4)), hasExactly("bcd"));
 
@@ -81,9 +70,5 @@ public class StringsTest {
     @Test
     public void supportsReverse() throws Exception {
         assertThat(sequence("abc").map(reverse()), hasExactly("cba"));
-    }
-
-    private String longStringWithoutEncodedChars() {
-        return repeat("A").take(100).toString("", "", "", Long.MAX_VALUE);
     }
 }
