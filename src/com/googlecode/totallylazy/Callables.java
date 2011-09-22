@@ -243,6 +243,14 @@ public final class Callables {
         };
     }
 
+    public static <T,R> Callable1<T,R> ignoreAndReturn(final R r) {
+        return new Callable1<T, R>() {
+            public R call(T t) throws Exception {
+                return r;
+            }
+        };
+    }
+
     public static <T> Callable1<T, T> returnArgument() {
         return new Callable1<T, T>() {
             public final T call(final T value) {

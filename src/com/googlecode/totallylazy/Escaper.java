@@ -1,65 +1,57 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import static com.googlecode.totallylazy.Callables.asString;
+import static com.googlecode.totallylazy.Callables.ignoreAndReturn;
 import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Escaper {
-    private final List<Rule> escapeRules = new ArrayList<Rule>();
+    private final Deque<Rule> rules = new ArrayDeque<Rule>();
 
     public Escaper() {
-        escapeRules.add(new Rule(always(Character.class), asString(Character.class)));
+        rules.add(Rule.rule(always(Character.class), asString(Character.class)));
     }
 
-    public Escaper withRule(Character appliesTo, final String returns) {
-        return withRule(is(appliesTo), returns(returns));
+    public Escaper withRule(Character appliesTo, final String result) {
+        return withRule(is(appliesTo), ignoreAndReturn(result));
     }
 
     public Escaper withRule(Predicate<? super Character> appliesTo, Callable1<? super Character, String> action) {
-        escapeRules.add(new Rule(appliesTo, action));
+        rules.addFirst(Rule.rule(appliesTo, action));
         return this;
     }
 
-    public String escape(String value) {
+    public String escape(CharSequence value) {
         return value == null ? null : characters(value).map(escape()).toString("", "", "", Long.MAX_VALUE);
     }
 
     private Callable1<? super Character, String> escape() {
         return new Callable1<Character, String>() {
             public String call(Character character) throws Exception {
-                Rule matchingRule = sequence(escapeRules).
-                        reverse().
-                        filter(Rule.appliesTo(character)).
-                        head();
-                return matchingRule.call(character);
-            }
-        };
-    }
-
-    private Callable1<Character, String> returns(final String returns) {
-        return new Callable1<Character, String>() {
-            public String call(Character character) throws Exception {
-                return returns;
+                return sequence(rules).
+                        filter(Predicates.matches(character)).
+                        head().
+                        call(character);
             }
         };
     }
 
     private static class Rule implements Predicate<Character>, Callable1<Character, String> {
-
-        Predicate<? super Character> condition;
-
-        Callable1<? super Character, String> escape;
+        private final Predicate<? super Character> condition;
+        private final Callable1<? super Character, String> escape;
 
         private Rule(Predicate<? super Character> condition, Callable1<? super Character, String> escape) {
             this.condition = condition;
             this.escape = escape;
+        }
+
+        private static Rule rule(Predicate<? super Character> condition, Callable1<? super Character, String> escape) {
+            return new Rule(condition, escape);
         }
 
         public boolean matches(Character character) {
@@ -69,14 +61,5 @@ public class Escaper {
         public String call(Character character) throws Exception {
             return escape.call(character);
         }
-
-        public static Predicate<? super Rule> appliesTo(final Character character) {
-            return new Predicate<Rule>() {
-                public boolean matches(Rule rule) {
-                    return rule.matches(character);
-                }
-            };
-        }
-
     }
 }

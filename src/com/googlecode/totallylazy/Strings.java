@@ -114,24 +114,6 @@ public class Strings {
         return value == null || value.equals(EMPTY);
     }
 
-    public static String escapeXml(String value) {
-        return new Escaper().
-                withRule('&', "&amp;").
-                withRule('<', "&lt;").
-                withRule('>', "&gt;").
-                withRule('\'', "&apos;").
-                withRule(unicodeControlOrUndefinedCharacter(), toXmlEntity()).
-                escape(value);
-    }
-
-    public static Callable1<Character, String> toXmlEntity() {
-        return new Callable1<Character, String>() {
-            public String call(Character character) throws Exception {
-                return String.format("&#%s;", Integer.toString(character, 10));
-            }
-        };
-    }
-
     public static Predicate<? super Character> unicodeControlOrUndefinedCharacter() {
         return new Predicate<Character>() {
             public boolean matches(Character character) {

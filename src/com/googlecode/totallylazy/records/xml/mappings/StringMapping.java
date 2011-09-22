@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import static com.googlecode.totallylazy.records.xml.Xml.contents;
+import static com.googlecode.totallylazy.Xml.contents;
 import static com.googlecode.totallylazy.records.xml.XmlRecords.toTagName;
 
 public class StringMapping implements Mapping<String> {

@@ -1,9 +1,12 @@
-package com.googlecode.totallylazy.records.xml;
+package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Escaper;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Strings;
+import com.googlecode.totallylazy.records.xml.NodeIterator;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -188,5 +191,31 @@ public class Xml {
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(node), new StreamResult(writer));
         return writer.toString();
+    }
+
+    public static String escape(CharSequence value) {
+        return new Escaper().
+                withRule('&', "&amp;").
+                withRule('<', "&lt;").
+                withRule('>', "&gt;").
+                withRule('\'', "&apos;").
+                withRule(Strings.unicodeControlOrUndefinedCharacter(), toXmlEntity()).
+                escape(value);
+    }
+
+    public static Callable1<CharSequence, CharSequence> escape() {
+        return new Callable1<CharSequence, CharSequence>() {
+            public CharSequence call(CharSequence charSequence) throws Exception {
+                return escape(charSequence);
+            }
+        };
+    }
+
+    public static Callable1<Character, String> toXmlEntity() {
+        return new Callable1<Character, String>() {
+            public String call(Character character) throws Exception {
+                return String.format("&#%s;", Integer.toString(character, 10));
+            }
+        };
     }
 }
