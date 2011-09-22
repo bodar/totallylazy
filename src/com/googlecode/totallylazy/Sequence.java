@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import java.lang.reflect.Array;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -140,7 +140,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Set<T> toSet() {
-        return toSet(new HashSet<T>());
+        return toSet(new LinkedHashSet<T>());
     }
 
     public Sequence<T> unique() {

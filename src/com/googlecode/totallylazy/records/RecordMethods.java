@@ -2,15 +2,20 @@ package com.googlecode.totallylazy.records;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Callables.first;
+import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
@@ -94,7 +99,7 @@ public class RecordMethods {
     }
 
     public static Map<String, Object> toMap(Record record) {
-        return record.fields().fold(new HashMap<String, Object>(), intoMap());
+        return map(record.fields().map(first(asString(Keyword.class))));
     }
 
     public static Callable2<? super Map<String, Object>, ? super Pair<Keyword, Object>, Map<String, Object>> intoMap() {

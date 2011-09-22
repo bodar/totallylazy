@@ -157,7 +157,7 @@ public class SequenceTest {
     }
 
     @Test
-    public void supportsGroupBy() throws Exception {
+    public void supportsGroupByAndPreservesOrder() throws Exception {
         Sequence<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(remainder(2));
         assertThat(groups.first().key(), NumberMatcher.is(1));
         assertThat(groups.first(), hasExactly(1, 3));
@@ -166,9 +166,9 @@ public class SequenceTest {
     }
 
     @Test
-    public void supportsToMap() throws Exception {
-        Map<Number, List<Integer>> groups = sequence(1, 2, 3, 4).toMap(remainder(2));
-        assertThat(groups.get(0), hasExactly(2, 4));
+    public void supportsToMapAndPreservesOrder() throws Exception {
+        Map<Number, List<Integer>> groups = sequence(1, 4, 2, 3).toMap(remainder(2));
+        assertThat(groups.get(0), hasExactly(4, 2));
         assertThat(groups.get(1), hasExactly(1, 3));
     }
 
@@ -240,9 +240,9 @@ public class SequenceTest {
     }
 
     @Test
-    public void supportsUnique() throws Exception {
-        assertThat(sequence(1, 2, 1, 3, 4, 2).unique(), hasExactly(1, 2, 3, 4));
-        assertThat(sequence("Matt", "Dan", "Matt", "Bob").unique(), containsInAnyOrder("Matt", "Dan", "Bob"));
+    public void supportsUniqueAndPreservesOrder() throws Exception {
+        assertThat(sequence(1, 2, 1, 4, 3, 2).unique(), hasExactly(1, 2, 4, 3));
+        assertThat(sequence("Matt", "Dan", "Matt", "Bob").unique(), hasExactly("Matt", "Dan", "Bob"));
     }
 
     @Test
