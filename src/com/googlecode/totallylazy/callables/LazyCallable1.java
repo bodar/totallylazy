@@ -1,15 +1,10 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Option;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 import static java.util.Collections.synchronizedMap;
 
 public final class LazyCallable1<T, R> implements Callable1<T,R> {

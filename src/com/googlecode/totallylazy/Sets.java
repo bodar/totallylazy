@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.size;
@@ -10,7 +10,7 @@ import static java.util.Arrays.asList;
 
 public class Sets {
     public static <T> Set<T> set(T... values) {
-        return set(new HashSet<T>(), values);
+        return set(new LinkedHashSet<T>(), values);
     }
 
     public static <T, S extends Set<T>> S set(S result, T... values) {
@@ -18,7 +18,7 @@ public class Sets {
     }
 
     public static <T> Set<T> set(final Iterable<? extends T> iterable) {
-        return set(new HashSet<T>(), iterable);
+        return set(new LinkedHashSet<T>(), iterable);
     }
 
     public static <T, S extends Set<T>> S set(S result, final Iterable<? extends T> iterable) {
@@ -26,7 +26,7 @@ public class Sets {
     }
 
     public static <T> Set<T> set(final Iterator<? extends T> iterator) {
-        return set(new HashSet<T>(), iterator);
+        return set(new LinkedHashSet<T>(), iterator);
     }
 
     public static <T, S extends Set<T>> S set(S result, final Iterator<? extends T> iterator) {
@@ -41,7 +41,7 @@ public class Sets {
     }
 
     public static <T> Set<T> union(final Iterable<Set<? extends T>> sets) {
-        Set<T> result = new HashSet<T>();
+        Set<T> result = new LinkedHashSet<T>();
         for (Set<? extends T> set : sets) {
             result.addAll(set);
         }
@@ -56,7 +56,7 @@ public class Sets {
         Sequence<Set<? extends T>> sets = Sequences.sequence(iterables).sortBy(size());
         Set<? extends T> smallest = sets.head();
         Sequence<Set<? extends T>> theRest = sets.tail();
-        Set<T> result = new HashSet<T>();
+        Set<T> result = new LinkedHashSet<T>();
         for (T t : smallest) {
             if (theRest.forAll(contains(t))) {
                 result.add(t);
@@ -73,7 +73,7 @@ public class Sets {
         Sequence<Set<? extends T>> sets = Sequences.sequence(iterables);
         Set<? extends T> head = sets.head();
         Sequence<Set<? extends T>> theRest = sets.tail();
-        Set<T> result = new HashSet<T>();
+        Set<T> result = new LinkedHashSet<T>();
         result.addAll(head);
         for (Set<? extends T> set : theRest) {
             result.removeAll(set);
