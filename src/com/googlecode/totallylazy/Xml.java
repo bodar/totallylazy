@@ -203,9 +203,9 @@ public class Xml {
                 escape(value);
     }
 
-    public static Callable1<CharSequence, CharSequence> escape() {
-        return new Callable1<CharSequence, CharSequence>() {
-            public CharSequence call(CharSequence charSequence) throws Exception {
+    public static Callable1<CharSequence, String> escape() {
+        return new Callable1<CharSequence, String>() {
+            public String call(CharSequence charSequence) throws Exception {
                 return escape(charSequence);
             }
         };
