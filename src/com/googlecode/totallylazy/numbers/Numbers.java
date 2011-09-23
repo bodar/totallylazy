@@ -37,6 +37,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.curry;
+import static com.googlecode.totallylazy.Callables.flip;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
 import static com.googlecode.totallylazy.Sequences.*;
 
@@ -343,11 +344,15 @@ public class Numbers {
     }
 
     public static <T extends Number> Callable2<T, T, Number> product() {
-        return new Multiply<T>();
+        return multiply();
     }
 
     public static <T extends Number> Callable2<T, T, Number> multiply() {
-        return new Multiply<T>();
+        return new Callable2<T, T, Number>() {
+            public Number call(T multiplicand, T multiplier) throws Exception {
+                return multiply(multiplicand, multiplier);
+            }
+        };
     }
 
     public static <T extends Number> Callable1<T, Number> multiply(final T multiplicand) {
@@ -361,6 +366,22 @@ public class Numbers {
     public static <X extends Number, Y extends Number> Number divide(X x, Y y) {
         throwIfZero(y);
         return operatorsFor(x, y).divide(x, y);
+    }
+
+    public static <X extends Number> Callable1<Number, Number> divide(final X divisor) {
+        return new Callable1<Number, Number>() {
+            public Number call(Number dividend) throws Exception {
+                return divide(dividend, divisor);
+            }
+        };
+    }
+
+    public static <T extends Number> Callable2<T, T, Number> divide() {
+        return new Callable2<T, T, Number>() {
+            public Number call(T dividend, T divisor) throws Exception {
+                return divide(dividend, divisor);
+            }
+        };
     }
 
     public static <X extends Number, Y extends Number> Number quotient(X x, Y y) {
@@ -411,11 +432,5 @@ public class Numbers {
 
     public static Number parseLexicalString(String value, final Number minValue) {
         return add(valueOf(value), minValue);
-    }
-
-    private static class Multiply<T extends Number> implements Callable2<T, T, Number> {
-        public Number call(T multiplicand, T multiplier) throws Exception {
-            return multiply(multiplicand, multiplier);
-        }
     }
 }
