@@ -23,7 +23,7 @@ public class NumbersTest {
 
     @Test
     public void supportsMultiply() throws Exception {
-        assertThat(sequence(200, 400, 600).map(multiply(100)), hasExactly(2, 4, 6));
+        assertThat(sequence(2, 4, 6).map(multiply(100)), hasExactly(200, 400, 600));
     }
 
     @Test
