@@ -2,8 +2,10 @@ package com.googlecode.totallylazy.iterators;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
-public final class MemorisedIterator<T> extends StatefulIterator<T> {
+public final class MemorisedIterator<T> extends StatefulIterator<T> implements ListIterator<T>{
     private final Iterator<T> iterator;
     private final List<T> memory;
     private int position = 0;
@@ -36,5 +38,32 @@ public final class MemorisedIterator<T> extends StatefulIterator<T> {
 
     private T getCachedAnswer(int position) {
         return memory.get(position);
+    }
+
+    public boolean hasPrevious() {
+        return position > 0;
+    }
+
+    public T previous() {
+        if(hasPrevious()){
+            return getCachedAnswer(--position);
+        }
+        throw new NoSuchElementException();
+    }
+
+    public int nextIndex() {
+        return position;
+    }
+
+    public int previousIndex() {
+        return position -1;
+    }
+
+    public void set(T t) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void add(T t) {
+        throw new UnsupportedOperationException();
     }
 }
