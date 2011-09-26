@@ -99,7 +99,7 @@ public class RecordMethods {
     }
 
     public static Map<String, Object> toMap(Record record) {
-        return map(record.fields().map(first(asString(Keyword.class))));
+        return map(record.fields().map(Callables.<Keyword, Object, String>first(asString(Keyword.class))));
     }
 
     public static Callable2<? super Map<String, Object>, ? super Pair<Keyword, Object>, Map<String, Object>> intoMap() {
