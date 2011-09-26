@@ -38,6 +38,14 @@ import java.util.Iterator;
 import static com.googlecode.totallylazy.Runnables.VOID;
 
 public class Xml {
+    public static final Escaper DEFAULT_ESCAPER = new Escaper().
+            withRule('&', "&amp;").
+            withRule('<', "&lt;").
+            withRule('>', "&gt;").
+            withRule('\'', "&apos;").
+            withRule('"', "&quot;").
+            withRule(Strings.unicodeControlOrUndefinedCharacter(), toXmlEntity());
+
     public static String selectContents(final Node node, final String expression) {
         return contents(selectNodes(node, expression));
     }
@@ -193,20 +201,15 @@ public class Xml {
         return writer.toString();
     }
 
-    public static String escape(CharSequence value) {
-        return new Escaper().
-                withRule('&', "&amp;").
-                withRule('<', "&lt;").
-                withRule('>', "&gt;").
-                withRule('\'', "&apos;").
-                withRule(Strings.unicodeControlOrUndefinedCharacter(), toXmlEntity()).
+    public static String escape(Object value) {
+        return DEFAULT_ESCAPER.
                 escape(value);
     }
 
-    public static Callable1<CharSequence, String> escape() {
-        return new Callable1<CharSequence, String>() {
-            public String call(CharSequence charSequence) throws Exception {
-                return escape(charSequence);
+    public static Callable1<Object, String> escape() {
+        return new Callable1<Object, String>() {
+            public String call(Object value) throws Exception {
+                return escape(value);
             }
         };
     }
