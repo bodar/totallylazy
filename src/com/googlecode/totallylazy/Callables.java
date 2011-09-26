@@ -122,7 +122,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, R> Callable1<? super Pair<F, S>,Pair<R, S>> first(final Callable1<F, R> firstCallable) {
+    public static <F, S, R> Callable1<? super Pair<F, S>, Pair<R, S>> first(final Callable1<? super F, R> firstCallable) {
         return new Callable1<Pair<F, S>, Pair<R, S>>() {
             public Pair<R, S> call(Pair<F, S> pair) throws Exception {
                 return Pair.pair(firstCallable.call(pair.first()), pair.second());
@@ -142,7 +142,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, R> Callable1<? super Pair<F, S>,Pair<F, R>> second(final Callable1<S, R> secondCallable) {
+    public static <F, S, R> Callable1<? super Pair<F, S>,Pair<F, R>> second(final Callable1<? super S, R> secondCallable) {
         return new Callable1<Pair<F, S>, Pair<F, R>>() {
             public Pair<F, R> call(Pair<F, S> pair) throws Exception {
                 return Pair.pair(pair.first(), secondCallable.call(pair.second()));
@@ -162,7 +162,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, T, R> Callable1<? super Triple<F, S, T>,Triple<F, S, R>> third(final Callable1<T, R> thirdCallable) {
+    public static <F, S, T, R> Callable1<? super Triple<F, S, T>,Triple<F, S, R>> third(final Callable1<? super T, R> thirdCallable) {
         return new Callable1<Triple<F, S, T>, Triple<F, S, R>>() {
             public Triple<F, S, R> call(Triple<F, S, T> triple) throws Exception {
                 return Triple.triple(triple.first(), triple.second(), thirdCallable.call(triple.third()));
@@ -182,7 +182,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, T, Fo, R> Callable1<? super Quadruple<F, S, T, Fo>,Quadruple<F, S, T, R>> fourth(final Callable1<Fo, R> fourthCallable) {
+    public static <F, S, T, Fo, R> Callable1<? super Quadruple<F, S, T, Fo>,Quadruple<F, S, T, R>> fourth(final Callable1<? super Fo, R> fourthCallable) {
         return new Callable1<Quadruple<F, S, T, Fo>, Quadruple<F, S, T, R>>() {
             public Quadruple<F, S, T, R> call(Quadruple<F, S, T, Fo> quadruple) throws Exception {
                 return Quadruple.quadruple(quadruple.first(), quadruple.second(), quadruple.third(), fourthCallable.call(quadruple.fourth()));
@@ -198,7 +198,7 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<T, String> asString(Class<T> aClass) {
+    public static <T> Callable1<? super T, String> asString(Class<T> aClass) {
         return asString();
     }
 
