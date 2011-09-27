@@ -81,15 +81,15 @@ public class Uri {
     }
 
     public Uri mergePath(String value) {
-        if (value.startsWith("/") || path() == null || isRelative()) {
+        if(value.startsWith("/")){
             return path(value);
         }
 
-        if (path().equals(Strings.EMPTY)) {
+        if (authority() != null && path().equals(Strings.EMPTY)) {
             return path("/" + value);
         }
 
-        return path(path().replaceFirst("/([^/]*)$", "/" + value));
+        return path(path().replaceFirst("([^/]*)$", value));
     }
 
     public String query() {
