@@ -43,9 +43,11 @@ public class UriTest {
     @Test
     public void supportsMergingPaths() throws Exception {
         assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").mergePath("/bob").toString(), is("http://www.ics.uci.edu:80/bob?foo=bar#Related"));
+        assertThat(uri("foo/bar").mergePath("bob").toString(), is("foo/bob"));
         assertThat(uri("#Related").mergePath("bob").toString(), is("bob#Related"));
         assertThat(uri("relative?foo=bar").mergePath("bob").toString(), is("bob?foo=bar"));
         assertThat(uri("/pub/ietf/uri/?foo=bar#Related").mergePath("bob").toString(), is("/pub/ietf/uri/bob?foo=bar#Related"));
+        assertThat(uri("/pub/ietf/uri/?foo=bar#Related").mergePath("/bob").toString(), is("/bob?foo=bar#Related"));
     }
 
     @Test
