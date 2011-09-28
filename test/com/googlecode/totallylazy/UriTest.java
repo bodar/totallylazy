@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Uri.uri;
@@ -59,5 +58,12 @@ public class UriTest {
         assertThat(uri("relative?foo=bar").isRelative(), is(true));
         assertThat(uri("/pub/ietf/uri/?foo=bar#Related").isAbsolute(), is(true));
         assertThat(uri("/pub/ietf/uri/?foo=bar#Related").isRelative(), is(false));
+    }
+
+    @Test
+    public void supportsDroppingParts() throws Exception {
+        assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").dropScheme().dropAuthority(), is(uri("/pub/ietf/uri/?foo=bar#Related")));
+        assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").dropScheme().dropAuthority().dropPath(), is(uri("?foo=bar#Related")));
+        assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").dropScheme().dropAuthority().dropPath().dropQuery(), is(uri("#Related")));
     }
 }

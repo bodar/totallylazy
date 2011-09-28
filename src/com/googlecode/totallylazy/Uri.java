@@ -64,6 +64,10 @@ public class Uri {
         return new Uri(value, authority, path, query, fragment);
     }
 
+    public Uri dropScheme() {
+        return scheme(null);
+    }
+
     public String authority() {
         return authority;
     }
@@ -72,12 +76,20 @@ public class Uri {
         return new Uri(scheme, value, path, query, fragment);
     }
 
+    public Uri dropAuthority() {
+        return authority(null);
+    }
+
     public String path() {
         return path;
     }
 
     public Uri path(String value) {
         return new Uri(scheme, authority, value, query, fragment);
+    }
+
+    public Uri dropPath() {
+        return path(Strings.EMPTY);
     }
 
     public Uri mergePath(String value) {
@@ -100,12 +112,20 @@ public class Uri {
         return new Uri(scheme, authority, path, value, fragment);
     }
 
+    public Uri dropQuery() {
+        return query(null);
+    }
+
     public String fragment() {
         return fragment;
     }
 
     public Uri fragment(String value) {
         return new Uri(scheme, authority, path, query, value);
+    }
+
+    public Uri dropFragment() {
+        return fragment(null);
     }
 
     @Override
