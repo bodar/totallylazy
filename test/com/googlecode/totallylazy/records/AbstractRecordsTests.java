@@ -1,11 +1,13 @@
 package com.googlecode.totallylazy.records;
 
+import com.googlecode.totallylazy.Closeables;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -85,6 +87,11 @@ public abstract class AbstractRecordsTests<T extends Records> {
         this.records = createRecords();
         setupPeople();
         setupBooks();
+    }
+
+    @After
+    public void cleanUp() throws Exception {
+        Closeables.close(records);
     }
 
     public String log() {
