@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.records.Keyword;
+import org.apache.lucene.search.ScoreDoc;
 
 import java.util.List;
 
@@ -26,5 +27,9 @@ public class Arrays {
 
     public static <T> List<T> list(T... values) {
         return java.util.Arrays.asList(values);
+    }
+
+    public static <T> boolean containsIndex(T[] array, int index) {
+        return index < array.length;
     }
 }

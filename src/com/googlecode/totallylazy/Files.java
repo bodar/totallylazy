@@ -60,7 +60,7 @@ public class Files {
 
     public static File temporaryDirectory(String name) {
         File directory = new File(TEMP_DIR, name);
-        directory.deleteOnExit();
+        recursiveFiles(directory).map(delete()).realise();
         directory.mkdirs();
         return directory;
     }
