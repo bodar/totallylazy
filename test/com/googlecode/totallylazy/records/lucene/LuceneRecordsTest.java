@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.records.AbstractRecordsTests;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.Records;
 import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -13,7 +14,6 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
-import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.junit.After;
 import org.junit.Test;
@@ -24,6 +24,7 @@ import java.io.IOException;
 import static com.googlecode.totallylazy.Files.temporaryDirectory;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class LuceneRecordsTest extends AbstractRecordsTests<LuceneRecords> {
     public static final Version VERSION = Version.LUCENE_33;

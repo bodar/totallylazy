@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.records.lucene;
 
-import com.googlecode.totallylazy.Arrays;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Closeables;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
