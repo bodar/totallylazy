@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.records.sql;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.CloseableList;
 import com.googlecode.totallylazy.Group;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -16,6 +17,8 @@ import com.googlecode.totallylazy.records.sql.expressions.Expression;
 import com.googlecode.totallylazy.records.sql.expressions.Expressions;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.util.Iterator;
@@ -34,11 +37,12 @@ import static com.googlecode.totallylazy.records.sql.expressions.TableDefinition
 import static com.googlecode.totallylazy.records.sql.expressions.UpdateStatement.updateStatement;
 import static java.lang.String.format;
 
-public class SqlRecords extends AbstractRecords implements Queryable<Expression> {
+public class SqlRecords extends AbstractRecords implements Queryable<Expression>, Closeable {
     private final Connection connection;
     private final PrintStream logger;
     private final Mappings mappings;
     private final CreateTable createTable;
+    private final CloseableList closeables = new CloseableList();
 
     public SqlRecords(final Connection connection, CreateTable createTable, Mappings mappings, PrintStream logger) {
         this.connection = connection;
@@ -50,6 +54,11 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     public SqlRecords(final Connection connection) {
         this(connection, CreateTable.Enabled, new Mappings(), new PrintStream(nullOutputStream()));
     }
+
+    public void close() throws IOException {
+        closeables.close();
+    }
+
 
     public RecordSequence get(Keyword recordName) {
         return new RecordSequence(this, from(recordName).select(definitions(recordName)), logger);
@@ -64,7 +73,9 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     public RecordIterator iterator(Expression expression, Sequence<Keyword> definitions) {
-        return new RecordIterator(connection, mappings, expression, definitions, logger);
+        RecordIterator iterator = new RecordIterator(connection, mappings, expression, definitions, logger);
+        closeables.add(iterator);
+        return iterator;
     }
 
     public void define(Keyword recordName, Keyword<?>... fields) {

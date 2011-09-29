@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.records.lucene;
 
+import com.googlecode.totallylazy.CloseableList;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
@@ -14,6 +15,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -22,12 +24,13 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.lucene.Lucene.and;
 import static com.googlecode.totallylazy.records.lucene.Lucene.record;
 
-public class LuceneRecords extends AbstractRecords implements Queryable<Query>{
+public class LuceneRecords extends AbstractRecords implements Queryable<Query>, Closeable {
     private final Directory directory;
     private final IndexWriter writer;
     private final Mappings mappings;
     private final PrintStream printStream;
     private final Lucene lucene;
+    private final CloseableList closeables = new CloseableList();
 
     public LuceneRecords(final Directory directory, final IndexWriter writer, final Mappings mappings, final PrintStream printStream) throws IOException {
         this.directory = directory;
@@ -41,8 +44,12 @@ public class LuceneRecords extends AbstractRecords implements Queryable<Query>{
         this(directory, writer, new Mappings(), new PrintStream(nullOutputStream()));
     }
 
+    public void close() throws IOException {
+        closeables.close();
+    }
+
     public Sequence<Record> query(final Query query, final Sequence<Keyword> definitions) {
-        return new RecordSequence(lucene, directory, query, mappings.asRecord(definitions), printStream);
+        return new RecordSequence(lucene, directory, query, mappings.asRecord(definitions), closeables, printStream);
     }
 
     public Sequence<Record> get(final Keyword recordName) {

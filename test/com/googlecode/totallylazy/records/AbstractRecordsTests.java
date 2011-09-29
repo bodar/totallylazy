@@ -10,9 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
 import java.util.Date;
+import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
@@ -50,7 +53,7 @@ import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static com.googlecode.totallylazy.records.Using.using;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.fail;
 
 public abstract class AbstractRecordsTests<T extends Records> {
     protected static Keyword people = keyword("people");
@@ -84,7 +87,7 @@ public abstract class AbstractRecordsTests<T extends Records> {
         setupBooks();
     }
 
-    public String log(){
+    public String log() {
         return stream.toString();
     }
 
@@ -380,5 +383,23 @@ public abstract class AbstractRecordsTests<T extends Records> {
         assertThat(records.add(people, new Record[0]), equalTo(0));
         assertThat(records.add(people, Sequences.<Record>sequence()), equalTo(0));
     }
+
+    @Test
+    public void closesResourcesEvenIfYouDontIterateToTheEnd() throws IOException {
+        if (records instanceof Closeable) {
+            Closeable closeable = (Closeable) records;
+            closeable.close();
+            Iterator<Record> results = records.get(people).iterator();
+            assertThat(results.next(), Matchers.is(Matchers.notNullValue()));
+            closeable.close();
+            try {
+                results.next();
+                fail("We should get some kind of already closed exception");
+            }catch (Exception e){
+                // all good
+            }
+        }
+    }
+
 
 }
