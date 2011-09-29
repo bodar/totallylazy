@@ -12,13 +12,16 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.junit.After;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
+import static com.googlecode.totallylazy.Files.temporaryDirectory;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -30,7 +33,8 @@ public class LuceneRecordsTest extends AbstractRecordsTests<LuceneRecords> {
 
     @Override
     protected LuceneRecords createRecords() throws Exception {
-        directory = new RAMDirectory();
+        File file = temporaryDirectory("totallylazy");
+        directory = new NIOFSDirectory(file);
         writer = new IndexWriter(directory, new IndexWriterConfig(VERSION, ANALYZER));
         writer.commit();
         return new LuceneRecords(directory, writer, new Mappings(), logger);

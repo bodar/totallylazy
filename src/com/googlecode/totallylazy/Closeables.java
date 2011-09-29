@@ -17,6 +17,9 @@ public class Closeables {
     }
 
     public static <T extends Closeable> T close(final T t) {
+        if(t == null){
+            return t;
+        }
         try {
             t.close();
         } catch (IOException e) {
