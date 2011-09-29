@@ -73,7 +73,6 @@ public abstract class AbstractRecordsTests<T extends Records> {
     protected PrintStream logger;
     private ByteArrayOutputStream stream;
 
-
     protected abstract T createRecords() throws Exception;
 
     @Before
