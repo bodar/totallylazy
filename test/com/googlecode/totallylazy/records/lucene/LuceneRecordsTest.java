@@ -42,7 +42,8 @@ public class LuceneRecordsTest extends AbstractRecordsTests<LuceneRecords> {
     }
 
     @After
-    public void cleanUp() throws IOException {
+    public void cleanUp() throws Exception {
+        super.cleanUp();
         writer.close();
         directory.close();
     }

@@ -16,8 +16,23 @@ public class Closeables {
         };
     }
 
+    public static <T> T close(final T t) {
+        if (t == null) {
+            return t;
+        }
+
+        final Option<Method> close = Methods.method(t, "close");
+        if (close.isEmpty()) {
+            return t;
+        }
+
+        Methods.invoke(close.get(), t);
+        return t;
+    }
+
+
     public static <T extends Closeable> T close(final T t) {
-        if(t == null){
+        if (t == null) {
             return t;
         }
         try {
@@ -47,12 +62,7 @@ public class Closeables {
     public static <T> Callable1<T, Void> reflectiveClose() {
         return new Callable1<T, Void>() {
             public Void call(T instanceWithCloseMethod) throws Exception {
-                final Option<Method> close = Methods.method(instanceWithCloseMethod, "close");
-                if (close.isEmpty()) {
-                    throw new IllegalArgumentException("Instance T must have a 'close()' method");
-                }
-
-                Methods.invoke(close.get(), instanceWithCloseMethod);
+                close(instanceWithCloseMethod);
                 return VOID;
             }
         };
