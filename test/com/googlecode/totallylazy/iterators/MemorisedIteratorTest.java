@@ -19,18 +19,27 @@ public class MemorisedIteratorTest {
         List<Integer> memory = new ArrayList<Integer>();
         Iterator<Integer> iterator = sequence(100, 200, 300, 400).iterator();
         ListIterator<Integer> memorisedIterator = new MemorisedIterator<Integer>(iterator, memory);
+
         assertThat(memorisedIterator.previousIndex(), is(-1));
         assertThat(memorisedIterator.nextIndex(), is(0));
         assertThat(memorisedIterator.hasNext(), is(true));
-//        assertThat(memorisedIterator.hasPrevious(), is(false));
+        assertThat(memorisedIterator.hasPrevious(), is(false));
 
         assertThat(memorisedIterator.next(), is(100));
-        assertThat(memorisedIterator.previousIndex(), is(0));
-        assertThat(memorisedIterator.nextIndex(), is(1));
-        assertThat(memorisedIterator.hasPrevious(), is(true));
         assertThat(memorisedIterator.previous(), is(100));
+
+        assertThat(memorisedIterator.previousIndex(), is(-1));
+        assertThat(memorisedIterator.nextIndex(), is(0));
+        assertThat(memorisedIterator.hasNext(), is(true));
+        assertThat(memorisedIterator.hasPrevious(), is(false));
+
         assertThat(memorisedIterator.next(), is(100));
         assertThat(memorisedIterator.previous(), is(100));
+
+        assertThat(memorisedIterator.previousIndex(), is(-1));
+        assertThat(memorisedIterator.nextIndex(), is(0));
+        assertThat(memorisedIterator.hasNext(), is(true));
+        assertThat(memorisedIterator.hasPrevious(), is(false));
 
         try{
             assertThat(memorisedIterator.hasPrevious(), is(false));
@@ -42,20 +51,28 @@ public class MemorisedIteratorTest {
 
         assertThat(memorisedIterator.next(), is(100));
         assertThat(memorisedIterator.next(), is(200));
+
+        assertThat(memorisedIterator.previousIndex(), is(1));
+        assertThat(memorisedIterator.nextIndex(), is(2));
+        assertThat(memorisedIterator.hasNext(), is(true));
+        assertThat(memorisedIterator.hasPrevious(), is(true));
+
         assertThat(memorisedIterator.next(), is(300));
         assertThat(memorisedIterator.next(), is(400));
 
         assertThat(memorisedIterator.previousIndex(), is(3));
         assertThat(memorisedIterator.nextIndex(), is(4));
-//        assertThat(memorisedIterator.hasNext(), is(false));
-//        assertThat(memorisedIterator.hasPrevious(), is(true));
+        assertThat(memorisedIterator.hasNext(), is(false));
+        assertThat(memorisedIterator.hasPrevious(), is(true));
 
         assertThat(memorisedIterator.previous(), is(400));
         assertThat(memorisedIterator.previous(), is(300));
         assertThat(memorisedIterator.previous(), is(200));
         assertThat(memorisedIterator.previous(), is(100));
 
-
-
+        assertThat(memorisedIterator.previousIndex(), is(-1));
+        assertThat(memorisedIterator.nextIndex(), is(0));
+        assertThat(memorisedIterator.hasNext(), is(true));
+        assertThat(memorisedIterator.hasPrevious(), is(false));
     }
 }
