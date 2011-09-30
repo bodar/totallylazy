@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.iterators.EmptyIterator;
 import com.googlecode.totallylazy.iterators.EnumerationIterator;
 import com.googlecode.totallylazy.iterators.PairIterator;
 import com.googlecode.totallylazy.iterators.QuadrupleIterator;
+import com.googlecode.totallylazy.iterators.QuintupleIterator;
 import com.googlecode.totallylazy.iterators.TransposeIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
 
@@ -382,6 +383,14 @@ public class Sequences {
         };
     }
 
+    public static <F, S, T, Fo, Fi> Sequence<Quintuple<F, S, T, Fo, Fi>> zip(final Iterable<F> first, final Iterable<S> second, final Iterable<T> third, final Iterable<Fo> forth, final Iterable<Fi> fifth) {
+        return new Sequence<Quintuple<F, S, T, Fo, Fi>>() {
+            public final Iterator<Quintuple<F, S, T, Fo, Fi>> iterator() {
+                return new QuintupleIterator<F, S, T, Fo, Fi>(first.iterator(), second.iterator(), third.iterator(), forth.iterator(), fifth.iterator());
+            }
+        };
+    }
+
     public static <T> Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<T>> iterables) {
         return new Sequence<Sequence<T>>() {
             public final Iterator<Sequence<T>> iterator() {
@@ -411,6 +420,15 @@ public class Sequences {
                 sequence(quadruples).map(Callables.<S>second()),
                 sequence(quadruples).map(Callables.<T>third()),
                 sequence(quadruples).map(Callables.<Fo>fourth()));
+    }
+
+    public static <F, S, T, Fo, Fi> Quintuple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>, Sequence<Fi>> unzip5(final Iterable<Quintuple<F, S, T, Fo, Fi>> quintuples) {
+        return Quintuple.quintuple(
+                sequence(quintuples).map(Callables.<F>first()),
+                sequence(quintuples).map(Callables.<S>second()),
+                sequence(quintuples).map(Callables.<T>third()),
+                sequence(quintuples).map(Callables.<Fo>fourth()),
+                sequence(quintuples).map(Callables.<Fi>fifth()));
     }
 
     public static <T> Sequence<Pair<Number, T>> zipWithIndex(final Iterable<T> iterable) {
