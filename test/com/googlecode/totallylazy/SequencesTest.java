@@ -9,21 +9,12 @@ import java.util.Vector;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
-import static com.googlecode.totallylazy.Sequences.characters;
-import static com.googlecode.totallylazy.Sequences.iterate;
-import static com.googlecode.totallylazy.Sequences.join;
-import static com.googlecode.totallylazy.Sequences.repeat;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sequences.transpose;
-import static com.googlecode.totallylazy.Sequences.zip;
+import static com.googlecode.totallylazy.Quintuple.quintuple;
+import static com.googlecode.totallylazy.Sequences.*;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
-import static com.googlecode.totallylazy.numbers.Numbers.even;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static com.googlecode.totallylazy.numbers.Numbers.numbers;
-import static com.googlecode.totallylazy.numbers.Numbers.odd;
-import static com.googlecode.totallylazy.numbers.Numbers.range;
+import static com.googlecode.totallylazy.numbers.Numbers.*;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -32,8 +23,8 @@ public class SequencesTest {
     @Test
     public void supportsTranspose() {
         Sequence<Sequence<Integer>> transposed = transpose(sequence(1, 2), sequence(3, 4), sequence(5, 6));
-        assertThat(transposed, hasExactly(sequence(1,3,5), sequence(2,4,6)));
-        assertThat(transpose(transposed), hasExactly(sequence(1, 2), sequence(3, 4), sequence(5,6)));
+        assertThat(transposed, hasExactly(sequence(1, 3, 5), sequence(2, 4, 6)));
+        assertThat(transpose(transposed), hasExactly(sequence(1, 2), sequence(3, 4), sequence(5, 6)));
         assertThat(sequence(1, 2).transpose(sequence(3, 4)), hasExactly(sequence(1, 3), sequence(2, 4)));
     }
 
@@ -59,6 +50,17 @@ public class SequencesTest {
         assertThat(quadruple.second(), hasExactly(2, 4));
         assertThat(quadruple.third(), hasExactly("car", "cat"));
         assertThat(quadruple.fourth(), hasExactly('C', 'D'));
+    }
+
+    @Test
+    public void supportsUnzippingQuintuples() {
+        Quintuple<Sequence<Integer>, Sequence<Integer>, Sequence<String>, Sequence<Character>, Sequence<Integer>> quintuple =
+                Sequences.unzip5(sequence(quintuple(1, 2, "car", 'C', 1), quintuple(3, 4, "cat", 'D', 2)));
+        assertThat(quintuple.first(), hasExactly(1, 3));
+        assertThat(quintuple.second(), hasExactly(2, 4));
+        assertThat(quintuple.third(), hasExactly("car", "cat"));
+        assertThat(quintuple.fourth(), hasExactly('C', 'D'));
+        assertThat(quintuple.fifth(), hasExactly(1, 2));
     }
 
     @Test
