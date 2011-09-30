@@ -158,6 +158,7 @@ public class Xml {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             documentBuilder.setEntityResolver(ignoreEntities());
+            documentBuilder.setErrorHandler(null);
             return documentBuilder.parse(new ByteArrayInputStream(xml.getBytes()));
         } catch (Exception e) {
             throw new LazyException(e);
