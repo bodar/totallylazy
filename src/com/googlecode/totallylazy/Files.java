@@ -1,13 +1,16 @@
 package com.googlecode.totallylazy;
 
-import java.io.*;
-import java.util.concurrent.Callable;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
-import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static java.lang.String.format;
 import static java.lang.System.getProperty;
 import static java.util.UUID.randomUUID;
 
@@ -59,10 +62,13 @@ public class Files {
     }
 
     public static File temporaryDirectory(String name) {
-        File directory = new File(TEMP_DIR, name);
-        recursiveFiles(directory).map(delete()).realise();
-        directory.mkdirs();
+        File directory = directory(TEMP_DIR, name);
+        delete(directory);
         return directory;
+    }
+
+    public static boolean delete(File file) {
+        return recursiveFiles(file).map(delete()).forAll(is(true));
     }
 
     public static File temporaryFile() {
@@ -92,14 +98,14 @@ public class Files {
         return sequence(directory.listFiles());
     }
 
-    public static Sequence<File> recursiveFiles(final File directory){
+    public static Sequence<File> recursiveFiles(final File directory) {
         return files(directory).flatMap(recursiveFiles());
     }
 
     public static Callable1<File, Iterable<File>> recursiveFiles() {
         return new Callable1<File, Iterable<File>>() {
             public Iterable<File> call(File file) throws Exception {
-                return file.isDirectory() ? sequence(file).join(recursiveFiles(file)) : sequence(file);
+                return file.isDirectory() ? recursiveFiles(file).add(file) : sequence(file);
             }
         };
     }
@@ -121,11 +127,30 @@ public class Files {
         };
     }
 
-    public static Callable1<? super String,File> asFile() {
+    public static Callable1<? super String, File> asFile() {
         return new Callable1<String, File>() {
             public File call(String name) throws Exception {
                 return new File(name);
             }
         };
+    }
+
+    public static File directory(File parent, String name) {
+        File child = new File(parent, name);
+        child.mkdirs();
+        return child;
+    }
+
+    public static File file(File parent, String name) {
+        File child = new File(parent, name);
+        if (child.isDirectory()) {
+            throw new IllegalArgumentException(format("%s is a directory", child));
+        }
+        try {
+            child.createNewFile();
+        } catch (IOException e) {
+            throw new LazyException(e);
+        }
+        return child;
     }
 }
