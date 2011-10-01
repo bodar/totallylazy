@@ -54,8 +54,12 @@ public class Sequences {
         };
     }
 
+    public static <T> Sequence<T> sequence() {
+        return empty();
+    }
+
     public static <T> Sequence<T> sequence(final T... items) {
-        if (items == null) {
+        if (items == null || items.length == 0) {
             return empty();
         }
         return new Sequence<T>() {
