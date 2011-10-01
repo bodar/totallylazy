@@ -404,25 +404,25 @@ public class Sequences {
         return transpose(sequence(iterables));
     }
 
-    public static <F, S> Pair<Sequence<F>, Sequence<S>> unzip(final Iterable<Pair<F, S>> pairs) {
+    public static <F, S> Pair<Sequence<F>, Sequence<S>> unzip(final Iterable<? extends Pair<F, S>> pairs) {
         return pair(sequence(pairs).map(Callables.<F>first()),
                 sequence(pairs).map(Callables.<S>second()));
     }
 
-    public static <F, S, T> Triple<Sequence<F>, Sequence<S>, Sequence<T>> unzip3(final Iterable<Triple<F, S, T>> triples) {
+    public static <F, S, T> Triple<Sequence<F>, Sequence<S>, Sequence<T>> unzip3(final Iterable<? extends Triple<F, S, T>> triples) {
         return triple(sequence(triples).map(Callables.<F>first()),
                 sequence(triples).map(Callables.<S>second()),
                 sequence(triples).map(Callables.<T>third()));
     }
 
-    public static <F, S, T, Fo> Quadruple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>> unzip4(final Iterable<Quadruple<F, S, T, Fo>> quadruples) {
+    public static <F, S, T, Fo> Quadruple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>> unzip4(final Iterable<? extends Quadruple<F, S, T, Fo>> quadruples) {
         return Quadruple.quadruple(sequence(quadruples).map(Callables.<F>first()),
                 sequence(quadruples).map(Callables.<S>second()),
                 sequence(quadruples).map(Callables.<T>third()),
                 sequence(quadruples).map(Callables.<Fo>fourth()));
     }
 
-    public static <F, S, T, Fo, Fi> Quintuple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>, Sequence<Fi>> unzip5(final Iterable<Quintuple<F, S, T, Fo, Fi>> quintuples) {
+    public static <F, S, T, Fo, Fi> Quintuple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>, Sequence<Fi>> unzip5(final Iterable<? extends Quintuple<F, S, T, Fo, Fi>> quintuples) {
         return Quintuple.quintuple(
                 sequence(quintuples).map(Callables.<F>first()),
                 sequence(quintuples).map(Callables.<S>second()),
