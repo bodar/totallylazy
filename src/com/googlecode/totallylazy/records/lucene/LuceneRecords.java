@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.records.lucene;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.CloseableList;
+import com.googlecode.totallylazy.Closeables;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
@@ -19,6 +21,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.lucene.Lucene.and;
@@ -89,9 +92,13 @@ public class LuceneRecords extends AbstractRecords implements Queryable<Query>, 
         }
     }
 
-    private int count(Query query) {
+    private int count(final Query query) {
         try {
-            return new IndexSearcher(directory).search(query, Integer.MAX_VALUE).totalHits;
+            return using(new IndexSearcher(directory), new Callable1<IndexSearcher, Integer>() {
+                public Integer call(IndexSearcher indexSearcher) throws Exception {
+                    return indexSearcher.search(query, Integer.MAX_VALUE).totalHits;
+                }
+            });
         } catch (IOException e) {
             return 0;
         }
