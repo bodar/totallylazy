@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.iterators.EmptyIterator;
 import com.googlecode.totallylazy.iterators.EnumerationIterator;
 import com.googlecode.totallylazy.iterators.PairIterator;
 import com.googlecode.totallylazy.iterators.QuadrupleIterator;
+import com.googlecode.totallylazy.iterators.QuintupleIterator;
 import com.googlecode.totallylazy.iterators.TransposeIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
 
@@ -53,8 +54,12 @@ public class Sequences {
         };
     }
 
+    public static <T> Sequence<T> sequence() {
+        return empty();
+    }
+
     public static <T> Sequence<T> sequence(final T... items) {
-        if (items == null) {
+        if (items == null || items.length == 0) {
             return empty();
         }
         return new Sequence<T>() {
@@ -382,6 +387,14 @@ public class Sequences {
         };
     }
 
+    public static <F, S, T, Fo, Fi> Sequence<Quintuple<F, S, T, Fo, Fi>> zip(final Iterable<F> first, final Iterable<S> second, final Iterable<T> third, final Iterable<Fo> forth, final Iterable<Fi> fifth) {
+        return new Sequence<Quintuple<F, S, T, Fo, Fi>>() {
+            public final Iterator<Quintuple<F, S, T, Fo, Fi>> iterator() {
+                return new QuintupleIterator<F, S, T, Fo, Fi>(first.iterator(), second.iterator(), third.iterator(), forth.iterator(), fifth.iterator());
+            }
+        };
+    }
+
     public static <T> Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<T>> iterables) {
         return new Sequence<Sequence<T>>() {
             public final Iterator<Sequence<T>> iterator() {
@@ -395,22 +408,31 @@ public class Sequences {
         return transpose(sequence(iterables));
     }
 
-    public static <F, S> Pair<Sequence<F>, Sequence<S>> unzip(final Iterable<Pair<F, S>> pairs) {
+    public static <F, S> Pair<Sequence<F>, Sequence<S>> unzip(final Iterable<? extends Pair<F, S>> pairs) {
         return pair(sequence(pairs).map(Callables.<F>first()),
                 sequence(pairs).map(Callables.<S>second()));
     }
 
-    public static <F, S, T> Triple<Sequence<F>, Sequence<S>, Sequence<T>> unzip3(final Iterable<Triple<F, S, T>> triples) {
+    public static <F, S, T> Triple<Sequence<F>, Sequence<S>, Sequence<T>> unzip3(final Iterable<? extends Triple<F, S, T>> triples) {
         return triple(sequence(triples).map(Callables.<F>first()),
                 sequence(triples).map(Callables.<S>second()),
                 sequence(triples).map(Callables.<T>third()));
     }
 
-    public static <F, S, T, Fo> Quadruple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>> unzip4(final Iterable<Quadruple<F, S, T, Fo>> quadruples) {
+    public static <F, S, T, Fo> Quadruple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>> unzip4(final Iterable<? extends Quadruple<F, S, T, Fo>> quadruples) {
         return Quadruple.quadruple(sequence(quadruples).map(Callables.<F>first()),
                 sequence(quadruples).map(Callables.<S>second()),
                 sequence(quadruples).map(Callables.<T>third()),
                 sequence(quadruples).map(Callables.<Fo>fourth()));
+    }
+
+    public static <F, S, T, Fo, Fi> Quintuple<Sequence<F>, Sequence<S>, Sequence<T>, Sequence<Fo>, Sequence<Fi>> unzip5(final Iterable<? extends Quintuple<F, S, T, Fo, Fi>> quintuples) {
+        return Quintuple.quintuple(
+                sequence(quintuples).map(Callables.<F>first()),
+                sequence(quintuples).map(Callables.<S>second()),
+                sequence(quintuples).map(Callables.<T>third()),
+                sequence(quintuples).map(Callables.<Fo>fourth()),
+                sequence(quintuples).map(Callables.<Fi>fifth()));
     }
 
     public static <T> Sequence<Pair<Number, T>> zipWithIndex(final Iterable<T> iterable) {
