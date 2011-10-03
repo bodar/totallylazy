@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Mappings {
     private final Map<Class, Mapping<Object>> map = new HashMap<Class, Mapping<Object>>();
@@ -15,6 +16,7 @@ public class Mappings {
         add(String.class, new StringMapping());
         add(URI.class, new UriMapping());
         add(Boolean.class, new BooleanMapping());
+        add(UUID.class, new UUIDMapping());
         add(Object.class, new ObjectMapping());
     }
 
