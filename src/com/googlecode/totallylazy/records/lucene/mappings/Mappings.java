@@ -17,6 +17,7 @@ import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.is;
@@ -36,6 +37,7 @@ public class Mappings {
         add(String.class, new StringMapping());
         add(URI.class, new UriMapping());
         add(Boolean.class, new BooleanMapping());
+        add(UUID.class, new UUIDMapping());
         add(Object.class, new ObjectMapping());
     }
 

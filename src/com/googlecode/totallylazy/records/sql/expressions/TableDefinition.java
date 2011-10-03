@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.textOnly;
@@ -30,6 +31,7 @@ public class TableDefinition extends TextOnlyExpression {
         put(Timestamp.class, "timestamp");
         put(URI.class, "varchar(4000)");
         put(Boolean.class, "bit");
+        put(UUID.class, "varchar(36)");
     }};
 
     public static Callable1<? super Keyword<?>, String> asColumn() {

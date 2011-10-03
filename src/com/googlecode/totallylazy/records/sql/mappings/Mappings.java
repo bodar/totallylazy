@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -30,6 +31,7 @@ public class Mappings {
         add(String.class, new StringMapping());
         add(URI.class, new UriMapping());
         add(Boolean.class, new BooleanMapping());
+        add(UUID.class, new UUIDMapping());
         add(Object.class, new ObjectMapping());
     }
 

@@ -34,6 +34,7 @@ public class Mappings {
         add(Long.class, new LongMapping());
         add(URI.class, new UriMapping());
         add(Boolean.class, new BooleanMapping());
+        add(UUID.class, new UUIDMapping());
         add(Object.class, new ObjectMapping());
     }
 

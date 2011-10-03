@@ -18,6 +18,7 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.UUID;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
@@ -53,6 +54,7 @@ import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.totallylazy.records.RecordMethods.update;
 import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static com.googlecode.totallylazy.records.Using.using;
+import static java.util.UUID.randomUUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.fail;
@@ -68,10 +70,12 @@ public abstract class AbstractRecordsTests<T extends Records> {
     protected static Keyword<URI> isbn = keyword("isbn", URI.class);
     protected static Keyword<String> title = keyword("title", String.class);
     protected static Keyword<Boolean> inPrint = keyword("inPrint", Boolean.class);
+    protected static Keyword<UUID> uuid = keyword("uuid", UUID.class);
 
     public static final URI zenIsbn = uri("urn:isbn:0099322617");
     public static final URI godelEsherBach = uri("urn:isbn:0140289208");
     public static final URI cleanCode = uri("urn:isbn:0132350882");
+    public static final UUID zenUuid = randomUUID();
 
     protected T records;
 
@@ -109,11 +113,11 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     private void setupBooks() {
         records.undefine(books);
-        records.define(books, isbn, title, inPrint);
+        records.define(books, isbn, title, inPrint, uuid);
         records.add(books,
-                record().set(isbn, zenIsbn).set(title, "Zen And The Art Of Motorcycle Maintenance").set(inPrint, true),
-                record().set(isbn, godelEsherBach).set(title, "Godel, Escher, Bach: An Eternal Golden Braid").set(inPrint, false),
-                record().set(isbn, cleanCode).set(title, "Clean Code: A Handbook of Agile Software Craftsmanship").set(inPrint, true));
+                record().set(isbn, zenIsbn).set(title, "Zen And The Art Of Motorcycle Maintenance").set(inPrint, true).set(uuid, zenUuid),
+                record().set(isbn, godelEsherBach).set(title, "Godel, Escher, Bach: An Eternal Golden Braid").set(inPrint, false).set(uuid, randomUUID()),
+                record().set(isbn, cleanCode).set(title, "Clean Code: A Handbook of Agile Software Craftsmanship").set(inPrint, true).set(uuid, randomUUID()));
     }
 
     @Test
@@ -128,6 +132,13 @@ public abstract class AbstractRecordsTests<T extends Records> {
         assertThat(records.get(people).filter(where(age, is(lessThan(12)))).
                 flatMap(join(records.get(books), using(isbn))).
                 map(title), containsInAnyOrder("Zen And The Art Of Motorcycle Maintenance", "Clean Code: A Handbook of Agile Software Craftsmanship"));
+    }
+
+    @Test
+    public void supportsUUID() throws Exception {
+        Record record = records.get(books).filter(where(uuid, is(zenUuid))).head();
+        assertThat(record.get(isbn), CoreMatchers.is(zenIsbn));
+        assertThat(record.get(uuid), CoreMatchers.is(zenUuid));
     }
 
     @Test
