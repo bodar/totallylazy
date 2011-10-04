@@ -35,8 +35,9 @@ public class Mappings {
         add(Object.class, new ObjectMapping());
     }
 
-    public <T> void add(final Class<T> type, final Mapping<T> mapping) {
+    public <T> Mappings add(final Class<T> type, final Mapping<T> mapping) {
         map.put(type, (Mapping<Object>) mapping);
+        return this;
     }
 
     public Mapping<Object> get(final Class aClass) {
