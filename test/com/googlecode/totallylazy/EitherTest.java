@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.NoSuchElementException;
 
-import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Predicates.isLeft;
 import static com.googlecode.totallylazy.Predicates.isRight;

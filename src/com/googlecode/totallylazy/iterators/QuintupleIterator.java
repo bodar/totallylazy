@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.Quadruple;
 import com.googlecode.totallylazy.Quintuple;
 
 import java.util.Iterator;

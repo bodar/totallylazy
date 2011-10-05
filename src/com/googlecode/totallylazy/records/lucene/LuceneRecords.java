@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.records.lucene;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.CloseableList;
-import com.googlecode.totallylazy.Closeables;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;

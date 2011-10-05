@@ -8,12 +8,10 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Sequences.reduceLeft;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.ascending;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
-import static com.googlecode.totallylazy.numbers.Numbers.divide;
 
 public class TimeReport implements Callable1<Double, Void> {
     private final List<Number> times = new ArrayList<Number>();

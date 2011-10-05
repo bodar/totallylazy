@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.numbers.Numbers;
 
 import static com.googlecode.totallylazy.numbers.Numbers.remainder;

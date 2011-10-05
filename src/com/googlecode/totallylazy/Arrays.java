@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
-import com.googlecode.totallylazy.records.Keyword;
-import org.apache.lucene.search.ScoreDoc;
 
 import java.util.List;
 

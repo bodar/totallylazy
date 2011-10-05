@@ -2,10 +2,7 @@ package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
-
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callers.callConcurrently;

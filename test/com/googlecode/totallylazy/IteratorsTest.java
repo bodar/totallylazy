@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Arrays.list;

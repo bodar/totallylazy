@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.intersection;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Sets.union;
