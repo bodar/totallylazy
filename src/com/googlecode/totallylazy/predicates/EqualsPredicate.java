@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Value;
 
 public class EqualsPredicate<T> extends LogicalPredicate<T> implements Value<T> {

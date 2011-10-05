@@ -37,9 +37,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.curry;
-import static com.googlecode.totallylazy.Callables.flip;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
-import static com.googlecode.totallylazy.Sequences.*;
+import static com.googlecode.totallylazy.Sequences.characters;
+import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Numbers {
     public static Sequence<Number> range(final Number end) {

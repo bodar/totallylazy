@@ -6,7 +6,6 @@ import java.io.File;
 
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.write;
-import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.lines;
 import static com.googlecode.totallylazy.Strings.reverse;

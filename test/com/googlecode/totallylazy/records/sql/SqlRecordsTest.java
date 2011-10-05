@@ -5,8 +5,6 @@ import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static com.googlecode.totallylazy.records.sql.SqlKeywords.keyword;
 import static java.sql.DriverManager.getConnection;
 import static org.hamcrest.MatcherAssert.assertThat;

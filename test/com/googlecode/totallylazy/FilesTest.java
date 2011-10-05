@@ -5,11 +5,17 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static com.googlecode.totallylazy.Files.*;
 import static com.googlecode.totallylazy.Files.TEMP_DIR;
 import static com.googlecode.totallylazy.Files.directory;
 import static com.googlecode.totallylazy.Files.file;
+import static com.googlecode.totallylazy.Files.files;
+import static com.googlecode.totallylazy.Files.name;
+import static com.googlecode.totallylazy.Files.path;
 import static com.googlecode.totallylazy.Files.randomFilename;
+import static com.googlecode.totallylazy.Files.recursiveFiles;
+import static com.googlecode.totallylazy.Files.temporaryDirectory;
+import static com.googlecode.totallylazy.Files.temporaryFile;
+import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Predicates.where;

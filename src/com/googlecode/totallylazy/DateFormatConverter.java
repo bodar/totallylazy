@@ -5,7 +5,6 @@ import java.util.Date;
 
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Exceptions.ignoringException;
-import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class DateFormatConverter implements DateConverter {
     private final Sequence<DateFormat> formats;

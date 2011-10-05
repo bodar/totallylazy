@@ -1,9 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
-
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 public class Constructors {

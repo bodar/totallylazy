@@ -1,11 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Escaper;
-import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.records.xml.NodeIterator;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;

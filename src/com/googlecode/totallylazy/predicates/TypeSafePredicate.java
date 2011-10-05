@@ -1,10 +1,7 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.proxy.Generics;
-
-import java.lang.reflect.ParameterizedType;
 
 public abstract class TypeSafePredicate<T> implements Predicate<T> {
     private final Class<T> expectedClass;
