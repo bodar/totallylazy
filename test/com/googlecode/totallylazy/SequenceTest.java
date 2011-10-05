@@ -4,8 +4,10 @@ import com.googlecode.totallylazy.callables.CountingCallable;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
+import com.googlecode.yatspec.junit.SpecRunner;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.fail;
 
+@RunWith(SpecRunner.class)
 public class SequenceTest {
     @Test
     public void recursiveCallOnlyEndsWhenThereIsNoRemainder() throws Exception {

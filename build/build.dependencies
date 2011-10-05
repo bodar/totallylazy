@@ -2,3 +2,4 @@ mvn:org.hamcrest:hamcrest-core:jar:1.2
 mvn:org.hamcrest:hamcrest-library:jar:1.2
 mvn:junit:junit-dep:jar:4.8.2
 
+mvn://repo.bodar.com/com.googlecode.yatspec:yatspec:jar:165
