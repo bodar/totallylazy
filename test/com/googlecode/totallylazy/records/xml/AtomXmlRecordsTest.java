@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.net.URI;
 import java.util.Date;
 
-import static com.googlecode.totallylazy.Dates.date;
+import static com.googlecode.totallylazy.time.Dates.date;
 import static com.googlecode.totallylazy.URLs.uri;
 import static com.googlecode.totallylazy.Xml.document;
 import static org.hamcrest.MatcherAssert.assertThat;

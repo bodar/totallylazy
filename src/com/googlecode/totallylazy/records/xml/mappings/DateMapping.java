@@ -1,9 +1,12 @@
 package com.googlecode.totallylazy.records.xml.mappings;
 
-import com.googlecode.totallylazy.DateConverter;
-import com.googlecode.totallylazy.DateFormatConverter;
-import com.googlecode.totallylazy.Dates;
+import com.googlecode.totallylazy.time.DateConverter;
+import com.googlecode.totallylazy.time.DateConverter;
+import com.googlecode.totallylazy.time.DateFormatConverter;
+import com.googlecode.totallylazy.time.DateFormatConverter;
+import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.time.Dates;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 

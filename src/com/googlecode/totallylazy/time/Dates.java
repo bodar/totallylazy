@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.time;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
