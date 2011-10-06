@@ -1,4 +1,9 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.time;
+
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 import java.text.DateFormat;
 import java.util.Date;

@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
-import static com.googlecode.totallylazy.Dates.date;
+import static com.googlecode.totallylazy.time.Dates.date;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.between;
 import static com.googlecode.totallylazy.Predicates.greaterThan;

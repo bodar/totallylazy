@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-import static com.googlecode.totallylazy.Dates.RFC3339;
+import static com.googlecode.totallylazy.time.Dates.RFC3339;
 
 public class DateMapping implements Mapping<Date>{
     private final DateFormat dateFormat;

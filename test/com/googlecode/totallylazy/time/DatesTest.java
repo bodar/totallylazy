@@ -1,10 +1,10 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.time;
 
 import org.junit.Test;
 
 import java.util.Date;
 
-import static com.googlecode.totallylazy.Dates.date;
+import static com.googlecode.totallylazy.time.Dates.date;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 

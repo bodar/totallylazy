@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.time.Dates;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Arrays.list;
