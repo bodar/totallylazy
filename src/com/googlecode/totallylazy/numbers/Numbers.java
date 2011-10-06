@@ -273,7 +273,7 @@ public class Numbers {
     }
 
     public static int compare(Number x, Number y) {
-        Operators operators = operatorsFor(x, y);
+        Operators<Number> operators = operatorsFor(x, y);
         if (operators.lessThan(x, y))
             return -1;
         else if (operators.lessThan(y, x))
