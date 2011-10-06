@@ -2,14 +2,17 @@ package com.googlecode.totallylazy.time;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MILLISECOND;
+import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.MONTH;
+import static java.util.Calendar.SECOND;
 import static java.util.Calendar.YEAR;
 
 public class Dates {
@@ -53,14 +56,30 @@ public class Dates {
     }
 
     public static Date date(int year, int month, int day, int hour, int minute, int second, int milliSec) {
-        GregorianCalendar calendar = new GregorianCalendar(UTC);
+        GregorianCalendar calendar = calendar();
         calendar.set(YEAR, year);
         calendar.set(MONTH, month - 1);
         calendar.set(DAY_OF_MONTH, day);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, second);
-        calendar.set(Calendar.MILLISECOND, milliSec);
+        calendar.set(HOUR_OF_DAY, hour);
+        calendar.set(MINUTE, minute);
+        calendar.set(SECOND, second);
+        calendar.set(MILLISECOND, milliSec);
         return calendar.getTime();
+    }
+
+    public static Date addSeconds(Date date, int amount) {
+        GregorianCalendar calendar = calendar(date);
+        calendar.add(SECOND, amount);
+        return calendar.getTime();
+    }
+
+    private static GregorianCalendar calendar() {
+        return new GregorianCalendar(UTC);
+    }
+
+    private static GregorianCalendar calendar(Date date) {
+        GregorianCalendar calendar = calendar();
+        calendar.setTime(date);
+        return calendar;
     }
 }
