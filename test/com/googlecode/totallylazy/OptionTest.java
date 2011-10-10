@@ -40,15 +40,13 @@ public class OptionTest {
     }
 
     @Test
-    public void canGetValue() throws Exception {
+    public void canGetValueOfSome() throws Exception {
         assertThat(some(1).get(), is(1));
+    }
 
-        try {
-            none().get();
-            fail();
-        } catch (NoSuchElementException e) {
-            
-        }
+    @Test(expected=NoSuchElementException.class)
+    public void cannotGetValueOfNone() throws Exception {
+        none().get();
     }
 
     @Test

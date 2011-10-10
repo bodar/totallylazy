@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.matchers.NumberMatcher;
+
 import org.junit.Test;
 
 import java.util.concurrent.Callable;
@@ -80,9 +82,9 @@ public class MemoriseTest {
     public void memorisingSize() throws InterruptedException {
         CountingCallable<Integer> counting = counting();
         Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
-        sequence.size();
-        sequence.size();
-
+        assertThat(sequence.size(), NumberMatcher.is(1));
+        assertThat(counting.count(), is(1));
+        assertThat(sequence.size(), NumberMatcher.is(1));
         assertThat(counting.count(), is(1));
     }
 }
