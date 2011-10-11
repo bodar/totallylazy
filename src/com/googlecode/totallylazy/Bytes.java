@@ -7,6 +7,9 @@ import java.io.OutputStream;
 
 public class Bytes {
     public static byte[] bytes(InputStream stream) {
+        if(stream == null) {
+            return new byte[0];
+        }
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[512];
