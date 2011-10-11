@@ -5,7 +5,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class HasSizeMatcher extends TypeSafeMatcher<Iterable> {
+public class HasSizeMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
     private final Number size;
 
     public HasSizeMatcher(Number size) {
@@ -13,7 +13,7 @@ public class HasSizeMatcher extends TypeSafeMatcher<Iterable> {
     }
 
     @Override
-    protected boolean matchesSafely(Iterable iterable) {
+    protected boolean matchesSafely(Iterable<T> iterable) {
         return size.equals(sequence(iterable).size());
     }
 

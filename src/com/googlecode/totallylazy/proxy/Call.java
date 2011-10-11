@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.proxy.Proxy.createProxy;
 
-public class Call implements InvocationHandler{
+public class Call<T,R> implements InvocationHandler{
     public static ThreadLocalInvocation invocation = new ThreadLocalInvocation();
 
     private Call() {}
@@ -16,7 +16,7 @@ public class Call implements InvocationHandler{
     }
 
     public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
-        invocation.set(new Invocation(proxy, method, arguments));
+        invocation.set(new Invocation<T,R>(proxy, method, arguments));
         return null;
     }
 
