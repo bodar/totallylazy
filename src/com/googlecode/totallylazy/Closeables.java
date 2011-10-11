@@ -71,7 +71,7 @@ public class Closeables {
     public static Callable1<Closeable, Void> close() {
         return new Callable1<Closeable, Void>() {
             public Void call(Closeable closeable) throws IOException {
-                closeable.close();
+                close(closeable);
                 return VOID;
             }
         };
