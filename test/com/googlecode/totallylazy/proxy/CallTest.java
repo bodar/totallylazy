@@ -17,7 +17,7 @@ public class CallTest {
         User dan = user("Dan", "Bodart");
         User bob = user("Bob", "Marshal");
         Sequence<User> unsorted = sequence(matt, dan, bob);
-        Sequence<User> sorted = unsorted.sortBy(Call.<User, String>method(on(User.class).firstName()));
+        Sequence<User> sorted = unsorted.sortBy(method(on(User.class).firstName()));
         assertThat(sorted, hasExactly(bob, dan, matt));
     }
 
