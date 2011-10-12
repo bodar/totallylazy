@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 
-public final class Ratio extends Number implements Comparable {
+public final class Ratio extends Number implements Comparable<Number> {
     final public BigInteger numerator;
     final public BigInteger denominator;
 
@@ -75,8 +75,7 @@ public final class Ratio extends Number implements Comparable {
         return numerator.divide(denominator);
     }
 
-    public final int compareTo(Object o) {
-        Number other = (Number) o;
+    public final int compareTo(Number other) {
         return Numbers.compare(this, other);
     }
 }
