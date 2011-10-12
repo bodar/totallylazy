@@ -19,19 +19,19 @@ public class Proxy {
     private final static ObjenesisStd objenesis = new ObjenesisStd(false);
 
     public static <T> T createProxy(Class<T> aCLass, InvocationHandler invocationHandler) {
-        return (T) new Proxy().createInstance(aCLass, invocationHandler);
+        return new Proxy().createInstance(aCLass, invocationHandler);
     }
 
-    public Object createInstance(final Class aClass, final Callback invocationHandler) {
+    public <T> T createInstance(final Class<T> aClass, final Callback invocationHandler) {
         Callback[] callbacks = {invocationHandler, NoOp.INSTANCE};
         ObjectInstantiator instantiator = get(aClass, callbacks);
         Object instance = instantiator.newInstance();
         Factory factory = (Factory) instance;
         factory.setCallbacks(callbacks);
-        return instance;
+        return (T) instance;
     }
 
-    private ObjectInstantiator get(final Class aClass, final Callback[] callbacks) {
+    private ObjectInstantiator get(final Class<?> aClass, final Callback[] callbacks) {
         synchronized (cache) {
             if (!cache.containsKey(aClass)) {
                 cache.put(aClass, createInstantiator(aClass, callbacks));
@@ -40,7 +40,7 @@ public class Proxy {
         }
     }
 
-    private ObjectInstantiator createInstantiator(Class aClass, Callback[] callbacks) {
+    private ObjectInstantiator createInstantiator(Class<?> aClass, Callback[] callbacks) {
         IgnoreConstructorsEnhancer enhancer = new IgnoreConstructorsEnhancer();
         enhancer.setSuperclass(aClass);
         enhancer.setCallbackTypes(sequence(callbacks).map(toClass()).toArray(Class.class));
@@ -49,6 +49,4 @@ public class Proxy {
         Class enhancedClass = enhancer.createClass();
         return objenesis.getInstantiatorOf(enhancedClass);
     }
-
-
 }

@@ -112,7 +112,7 @@ public class Predicates {
         return new OnlyOnce<T>(predicate);
     }
 
-    public static <T> LogicalPredicate<T> instanceOf(final Class t) {
+    public static <T> LogicalPredicate<T> instanceOf(final Class<?> t) {
         return new InstanceOf<T>(t);
     }
 
@@ -180,15 +180,15 @@ public class Predicates {
         };
     }
 
-    public static LogicalPredicate<Class> assignableTo(final Object o) {
-        return new LogicalPredicate<Class>() {
-            public boolean matches(Class aClass) {
+    public static LogicalPredicate<Class<?>> assignableTo(final Object o) {
+        return new LogicalPredicate<Class<?>>() {
+            public boolean matches(Class<?> aClass) {
                 return isAssignableTo(o, aClass);
             }
         };
     }
 
-    public static LogicalPredicate<Object> assignableTo(final Class aClass) {
+    public static LogicalPredicate<Object> assignableTo(final Class<?> aClass) {
         return new LogicalPredicate<Object>() {
             public boolean matches(Object o) {
                 return isAssignableTo(o, aClass);
@@ -196,7 +196,7 @@ public class Predicates {
         };
     }
 
-    public static boolean isAssignableTo(Object o, Class aClass) {
+    public static boolean isAssignableTo(Object o, Class<?> aClass) {
         if (o == null) return false;
         return aClass.isAssignableFrom(o.getClass());
     }

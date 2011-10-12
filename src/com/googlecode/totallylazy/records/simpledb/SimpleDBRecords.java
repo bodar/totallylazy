@@ -25,6 +25,7 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Streams.nullPrintStream;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
+import static com.googlecode.totallylazy.records.SelectCallable.select;
 import static com.googlecode.totallylazy.records.sql.expressions.SelectBuilder.from;
 
 public class SimpleDBRecords extends AbstractRecords {
@@ -85,7 +86,7 @@ public class SimpleDBRecords extends AbstractRecords {
 
     @Override
     public Number remove(Keyword recordName) {
-        Record head = get(recordName).map(SelectCallable.select(Keywords.keyword("count(*)", String.class))).head();
+        Record head = get(recordName).map(select(Keywords.keyword("count(*)", String.class))).head();
         Number result = Numbers.valueOf(head.get(Keywords.keyword("Count", String.class)));
         List<Keyword<?>> undefine = undefine(recordName);
         define(recordName, undefine.toArray(new Keyword[0]));
