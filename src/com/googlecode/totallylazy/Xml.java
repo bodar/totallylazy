@@ -36,7 +36,7 @@ public class Xml {
             withRule('&', "&amp;").
             withRule('<', "&lt;").
             withRule('>', "&gt;").
-            withRule('\'', "&apos;").
+            withRule('\'', "&#39;").
             withRule('"', "&quot;").
             withRule(Strings.unicodeControlOrUndefinedCharacter(), toXmlEntity());
 

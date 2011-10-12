@@ -23,7 +23,7 @@ public class XmlTest {
 
     @Test
     public void canEscapeXml() throws Exception {
-        assertThat(Xml.escape("& < > ' " + new Character((char) 0x80)), is("&amp; &lt; &gt; &apos; &#128;"));
+        assertThat(Xml.escape("& < > ' \" " + new Character((char) 0x80)), is("&amp; &lt; &gt; &#39; &quot; &#128;"));
     }
 
     @Test
