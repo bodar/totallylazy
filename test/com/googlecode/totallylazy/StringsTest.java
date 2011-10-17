@@ -8,6 +8,9 @@ import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.write;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.lines;
+import static com.googlecode.totallylazy.Strings.replace;
+import static com.googlecode.totallylazy.Strings.replaceAll;
+import static com.googlecode.totallylazy.Strings.replaceFirst;
 import static com.googlecode.totallylazy.Strings.reverse;
 import static com.googlecode.totallylazy.Strings.substring;
 import static com.googlecode.totallylazy.Strings.toLowerCase;
@@ -39,6 +42,14 @@ public class StringsTest {
     public void canMapToStringFunctions() throws Exception {
         assertThat(sequence("Dan").map(toLowerCase()), hasExactly("dan"));
         assertThat(sequence("Dan").map(toUpperCase()), hasExactly("DAN"));
+    }
+
+    @Test
+    public void canReplaceCharacters() throws Exception {
+        assertThat(sequence("A_TEST").map(replace('_', ' ')), hasExactly("A TEST"));
+        assertThat(sequence("A_TEST").map(replace("_", " ")), hasExactly("A TEST"));
+        assertThat(sequence("A TEST EXAMPLE").map(replaceAll("\\s", "_")), hasExactly("A_TEST_EXAMPLE"));
+        assertThat(sequence("A TEST EXAMPLE").map(replaceFirst("\\s", "_")), hasExactly("A_TEST EXAMPLE"));
     }
 
     @Test
