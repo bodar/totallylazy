@@ -8,6 +8,14 @@ import java.util.NoSuchElementException;
 public class None<T> extends Option<T>{
     public None() {}
 
+    public static <T> None<T> none() {
+        return new None<T>();
+    }
+
+    public static <T> None<T> none(Class<T> aClass) {
+        return none();
+    }
+
     public Iterator<T> iterator() {
         return new EmptyIterator<T>();
     }

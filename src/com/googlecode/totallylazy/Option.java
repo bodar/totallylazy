@@ -8,21 +8,21 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 public abstract class Option<T> implements Iterable<T>, Value<T> {
     public static <T> Option<T> option(T t) {
         if (t == null) {
-            return none();
+            return None.none();
         }
         return new Some<T>(t);
     }
 
-    public static <T> Some<T> some(T t) {
-        return new Some<T>(t);
+    public static <T> Option<T> some(T t) {
+        return Some.some(t);
     }
 
-    public static <T> None<T> none() {
-        return new None<T>();
+    public static <T> Option<T> none() {
+        return None.none();
     }
 
-    public static <T> None<T> none(Class<T> aClass) {
-        return none();
+    public static <T> Option<T> none(Class<T> aClass) {
+        return None.none(aClass);
     }
 
     public abstract T get();
