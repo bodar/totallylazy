@@ -14,11 +14,11 @@ public abstract class Option<T> implements Iterable<T>, Value<T> {
     }
 
     public static <T> Option<T> some(T t) {
-        return Some.some(t);
+        return new Some<T>(t);
     }
 
     public static <T> Option<T> none() {
-        return None.none();
+        return new None<T>();
     }
 
     public static <T> Option<T> none(Class<T> aClass) {

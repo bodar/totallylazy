@@ -5,6 +5,15 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Callers.call;
 
 public abstract class Either<L, R> {
+
+    public static <L,R> Either<L,R> right(R value) {
+        return new Right<L,R>(value);
+    }
+
+    public static <L,R> Either<L,R> left(L value) {
+        return new Left<L,R>(value);
+    }
+
     public boolean isRight() {
         return false;
     }
