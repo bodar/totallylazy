@@ -11,6 +11,10 @@ public class Some<T> extends Option<T> {
         this.t = t;
     }
 
+    public static <T> Some<T> some(T t) {
+        return new Some<T>(t);
+    }
+
     public Iterator<T> iterator() {
         return sequence(t).iterator();
     }
