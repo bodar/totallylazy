@@ -10,7 +10,7 @@ public class EqualsPredicate<T> extends LogicalPredicate<T> implements Value<T> 
     }
 
     public boolean matches(T other) {
-        return other.equals(value);
+        return value.equals(other);
     }
 
     public T value() {

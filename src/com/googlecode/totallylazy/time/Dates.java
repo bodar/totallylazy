@@ -28,6 +28,7 @@ public class Dates {
     private static SimpleDateFormat format(final String pattern) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
         simpleDateFormat.setTimeZone(UTC);
+        simpleDateFormat.setLenient(false);
         return simpleDateFormat;
     }
 
