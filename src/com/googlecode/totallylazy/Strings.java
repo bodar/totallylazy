@@ -66,6 +66,38 @@ public class Strings {
         };
     }
 
+    public static Callable1<String, String> replace(final char oldChar, final char newChar) {
+        return new Callable1<String, String>() {
+            public String call(String value) throws Exception {
+                return value.replace(oldChar, newChar);
+            }
+        };
+    }
+
+    public static Callable1<String, String> replace(final CharSequence target, final CharSequence replacement) {
+        return new Callable1<String, String>() {
+            public String call(String value) throws Exception {
+                return value.replace(target, replacement);
+            }
+        };
+    }
+
+    public static Callable1<String, String> replaceAll(final String regex, final String replacement) {
+        return new Callable1<String, String>() {
+            public String call(String value) throws Exception {
+                return value.replaceAll(regex, replacement);
+            }
+        };
+    }
+
+    public static Callable1<String, String> replaceFirst(final String regex, final String replacement) {
+        return new Callable1<String, String>() {
+            public String call(String value) throws Exception {
+                return value.replaceFirst(regex, replacement);
+            }
+        };
+    }
+
     public static Callable1<String, String> toUpperCase() {
         return new Callable1<String, String>() {
             public String call(String value) throws Exception {
