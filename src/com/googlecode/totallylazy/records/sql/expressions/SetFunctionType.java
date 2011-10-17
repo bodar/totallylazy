@@ -14,7 +14,7 @@ import java.util.Map;
 import static java.lang.String.format;
 
 public class SetFunctionType extends TextOnlyExpression {
-    private static final Map<Class, String> names = new HashMap<Class, String>() {{
+    private static final Map<Class<?>, String> names = new HashMap<Class<?>, String>() {{
         put(CountNotNull.class, "count");
         put(Average.class, "avg");
         put(Sum.class, "sum");
@@ -22,18 +22,18 @@ public class SetFunctionType extends TextOnlyExpression {
         put(Maximum.class, "max");
     }};
 
-    public SetFunctionType(Callable2<?, ?, ?> callable, Keyword column) {
+    public SetFunctionType(Callable2<?, ?, ?> callable, Keyword<?> column) {
         super(functionName(callable.getClass(), column));
     }
 
-    public static String functionName(final Class<? extends Callable2> aClass, Keyword column) {
+    public static String functionName(final Class<? extends Callable2> aClass, Keyword<?> column) {
         if (!names.containsKey(aClass)) {
             throw new UnsupportedOperationException();
         }
         return format("%s(%s)", names.get(aClass), column);
     }
 
-    public static SetFunctionType setFunctionType(Callable2<?, ?, ?> callable, Keyword column) {
+    public static SetFunctionType setFunctionType(Callable2<?, ?, ?> callable, Keyword<?> column) {
         return new SetFunctionType(callable, column);
     }
 }
