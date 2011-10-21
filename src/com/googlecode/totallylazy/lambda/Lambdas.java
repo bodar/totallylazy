@@ -15,7 +15,7 @@ public class Lambdas {
     }
 
     @NewLambda
-    public static <F, T> Callable1<F, T> λ(F from, T to) {
+    public static <I, R> Callable1<I, R> λ(I input, R result) {
         throw new LambdaWeavingNotEnabledException();
     }
 
@@ -25,7 +25,27 @@ public class Lambdas {
     }
 
     @NewLambda
+    public static <T> Callable<T> lambda(T result) {
+        throw new LambdaWeavingNotEnabledException();
+    }
+
+    @NewLambda
+    public static <I, R> Callable1<I, R> lambda(I input, R result) {
+        throw new LambdaWeavingNotEnabledException();
+    }
+
+    @NewLambda
+    public static <F, S, R> Callable2<F, S, R> lambda(F first, S second, R result) {
+        throw new LambdaWeavingNotEnabledException();
+    }
+
+    @NewLambda
     public static <T> Predicate<T> λ(T input, boolean to) {
+        throw new LambdaWeavingNotEnabledException();
+    }
+
+    @NewLambda
+    public static <T> Predicate<T> predicate(T input, boolean to) {
         throw new LambdaWeavingNotEnabledException();
     }
 }
