@@ -13,7 +13,8 @@
     <property name="release.pom" value="${release.name}.pom"/>
     <property name="release.src" value="${release.name}-sources.jar"/>
     <property name="release.jar.path" value="${artifacts}/${release.jar}"/>
-    <property name="test.jar.path" value="${artifacts}/${release.name}.test.jar"/>
+    <property name="test.jar" value="${release.name}.test.jar"/>
+    <property name="test.jar.path" value="${artifacts}/${test.jar}"/>
     <property name="build.dependencies.dir" value="lib/build"/>
     <property name="runtime.dependencies.dir" value="lib/runtime"/>
     <property name="optional.dependencies.dir" value="lib/optional"/>
@@ -54,7 +55,9 @@
     <target name="compile">
         <compile.and.jar src="${src}" jar="${release.jar.path}" classpathref="all.dependancies"
                          version="${release.version}"/>
+        <create.lambda jar="${release.jar}" packages="com.googlecode.totallylazy"/>
         <compile.and.jar src="${test}" jar="${test.jar.path}" classpathref="all.jars" version="${release.version}"/>
+        <create.lambda jar="${test.jar}" packages="com.googlecode.totallylazy"/>
     </target>
 
     <target name="test">
