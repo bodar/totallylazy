@@ -558,4 +558,10 @@ public class Sequences {
             }
         };
     }
+
+    public static <T> Sequence<T> shuffle(Iterable<T> iterable) {
+        List<T> list = sequence(iterable).toList();
+        Collections.shuffle(list);
+        return sequence(list);
+    }
 }

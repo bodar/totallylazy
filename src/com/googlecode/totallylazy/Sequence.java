@@ -310,4 +310,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     public Pair<Sequence<T>,Sequence<T>> breakOn(final Predicate<? super T> predicate) {
         return Sequences.breakOn(this, predicate);
     }
+
+    public Sequence<T> shuffle() {
+        return Sequences.shuffle(this);
+    }
 }
