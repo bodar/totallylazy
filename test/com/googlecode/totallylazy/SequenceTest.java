@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
+import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -53,10 +54,17 @@ import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
 
 @RunWith(SpecRunner.class)
 public class SequenceTest {
+    @Test
+    @Notes("This test has a very small chance that it could fail")
+    public void supportsShuffle() throws Exception {
+        assertThat(range(1, 100).shuffle(), is(not(range(1, 100))));
+    }
+
     @Test
     public void recursiveCallOnlyEndsWhenThereIsNoRemainder() throws Exception {
         assertThat(numbers(1, 3, 0, 0, 2).recursive(Sequences.<Number>splitOn(0)),
