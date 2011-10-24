@@ -27,6 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Runnables.VOID;
@@ -52,16 +53,16 @@ public class Xml {
         }
     }
 
-    public static Node selectNode(final Node node, final String expression){
-        return selectNodes(node, expression).head();
+    public static Option<Node> selectNode(final Node node, final String expression){
+        return selectNodes(node, expression).headOption();
     }
 
     public static Sequence<Element> selectElements(final Node node, final String expression){
         return selectNodes(node, expression).safeCast(Element.class);
     }
 
-    public static Element selectElement(final Node node, final String expression){
-        return selectElements(node, expression).head();
+    public static Option<Element> selectElement(final Node node, final String expression){
+        return selectElements(node, expression).headOption();
     }
 
     public static XPath xpath() {
@@ -146,6 +147,13 @@ public class Xml {
         return transformerFactory.newTransformer();
     }
 
+    public static Document document(byte[] bytes) {
+        try {
+            return document(new String(bytes, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new LazyException(e);
+        }
+    }
 
     public static Document document(String xml) {
         try {
