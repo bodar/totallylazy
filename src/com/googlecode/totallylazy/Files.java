@@ -1,10 +1,8 @@
 package com.googlecode.totallylazy;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
+import static com.googlecode.totallylazy.Bytes.bytes;
 import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
@@ -117,6 +115,16 @@ public class Files {
         } catch (FileNotFoundException e) {
             throw new LazyException(e);
         }
+    }
+
+    public static Callable1<InputStream, Void> write(final File output) {
+        return new Callable1<InputStream, Void>() {
+            @Override
+            public Void call(InputStream inputStream) throws Exception {
+                write(bytes(inputStream), output);
+                return null;
+            }
+        };
     }
 
     public static Callable1<? super File, Boolean> delete() {
