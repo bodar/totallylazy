@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static com.googlecode.totallylazy.Files.TEMP_DIR;
+import static com.googlecode.totallylazy.Files.append;
 import static com.googlecode.totallylazy.Files.directory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.files;
@@ -16,6 +17,7 @@ import static com.googlecode.totallylazy.Files.recursiveFiles;
 import static com.googlecode.totallylazy.Files.temporaryDirectory;
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.workingDirectory;
+import static com.googlecode.totallylazy.Files.write;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Predicates.where;
@@ -60,5 +62,14 @@ public class FilesTest {
     @Test
     public void shouldNotFindAFileThatDoesNotExist() {
         assertThat(recursiveFiles(workingDirectory()).find(where(name(), endsWith("doesNotExist"))), CoreMatchers.is((Option<File>) none(File.class)));
+    }
+
+    @Test
+    public void appendToAFile() throws Exception {
+       File aFile = temporaryFile();
+       write("a".getBytes(), aFile);
+       append("b".getBytes(), aFile);
+
+       assertThat(Strings.lines(aFile).first(), is("ab"));
     }
 }
