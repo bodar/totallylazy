@@ -110,8 +110,18 @@ public class Files {
 
     @SuppressWarnings("unchecked")
     public static File write(byte[] bytes, File file) {
+        return write(bytes, file, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static File append(byte[] bytes, File file) {
+        return write(bytes, file, true);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static File write(byte[] bytes, File file, boolean append) {
         try {
-            return using(new FileOutputStream(file), doThen(Runnables.write(bytes), returns(file)));
+            return using(new FileOutputStream(file, append), doThen(Runnables.write(bytes), returns(file)));
         } catch (FileNotFoundException e) {
             throw new LazyException(e);
         }
