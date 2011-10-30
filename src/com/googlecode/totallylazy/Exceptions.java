@@ -38,6 +38,7 @@ public class Exceptions {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public static <T, S> Callable1<T, Option<S>> ignoringException(final Callable1<? super T, S> callable) {
         return handleException(callable, instanceOf(Exception.class));
     }

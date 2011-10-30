@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.proxy.Proxy.createProxy;
 
+@SuppressWarnings("unchecked")
 public class Call<T,R> implements InvocationHandler{
     public static ThreadLocalInvocation invocation = new ThreadLocalInvocation();
 

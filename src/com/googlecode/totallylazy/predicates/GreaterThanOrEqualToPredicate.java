@@ -8,7 +8,7 @@ public class GreaterThanOrEqualToPredicate<T extends Comparable<T>> extends Logi
     }
 
     public boolean matches(T other) {
-        return other.compareTo((T) comparable) >= 0;
+        return other.compareTo(comparable) >= 0;
     }
 
     public T value() {

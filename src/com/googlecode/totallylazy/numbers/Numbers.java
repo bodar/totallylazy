@@ -181,10 +181,12 @@ public class Numbers {
         throw new UnsupportedOperationException("Unsupported number class " + numberClass);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends Number> Operators<T> operatorsFor(T number) {
         return (Operators<T>) operatorsFor(number.getClass());
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends Number> Operators<T> operatorsFor(T a, T b) {
         Operators aOperators = operatorsFor(a.getClass());
         Operators bOperators = operatorsFor(b.getClass());

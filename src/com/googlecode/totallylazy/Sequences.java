@@ -77,6 +77,7 @@ public class Sequences {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Sequence<T> sequence(final Enumeration enumeration, final Class<T> aClass) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
@@ -234,6 +235,7 @@ public class Sequences {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T, S> S reduceRight(final Iterable<T> iterable, final Callable2<? super T, ? super S, S> callable) {
         Iterator<T> iterator = iterable.iterator();
         return foldRight(forwardOnly(iterator), (S) iterator.next(), callable);
@@ -339,6 +341,7 @@ public class Sequences {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Sequence<T> join(final Iterable<? extends T>... iterables) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
@@ -439,7 +442,7 @@ public class Sequences {
         return zip(integersStartingFrom(0), iterable);
     }
 
-    public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<? super T, ? extends Comparable> callable) {
+    public static <T, R extends Comparable<R>> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<? super T, R> callable) {
         return sortBy(iterable, ascending(callable));
     }
 

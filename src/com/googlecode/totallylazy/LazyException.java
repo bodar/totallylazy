@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import java.lang.reflect.InvocationTargetException;
 
 public class LazyException extends RuntimeException {
+    static final long serialVersionUID = -6664897190745766939L;
     public static LazyException lazyException(final Throwable cause){
         if(cause instanceof RuntimeException){
             throw (RuntimeException)cause;
@@ -31,6 +32,7 @@ public class LazyException extends RuntimeException {
         return unwrap(this, exception);
     }
 
+    @SuppressWarnings("unchecked")
     public static  <E extends Exception> E unwrap(RuntimeException e, Class<E> exception) throws E{
         final Throwable theCause = e.getCause();
         if(theCause.getClass().equals(exception)){

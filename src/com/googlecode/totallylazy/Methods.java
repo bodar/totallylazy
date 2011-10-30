@@ -47,6 +47,7 @@ public class Methods {
 
     public static Callable1<Class, Method> method(final String name, final Class<?>... parameters) {
         return new Callable1<Class, Method>() {
+            @SuppressWarnings("unchecked")
             public Method call(Class aClass) throws Exception {
                 return aClass.getMethod(name, parameters);
             }
@@ -57,6 +58,7 @@ public class Methods {
         return method(instance.getClass(), name, parameters);
     }
 
+    @SuppressWarnings("unchecked")
     public static Option<Method> method(Class aClass, String name, final Class<?>... parameters) {
         return call(handleException(method(name, parameters), instanceOf(NoSuchMethodException.class)), aClass);
     }
@@ -69,6 +71,7 @@ public class Methods {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public static <T, R> R invoke(Method method, T instance, Object... arguments) {
         try {
             method.setAccessible(true);
@@ -83,6 +86,7 @@ public class Methods {
 
     public static <R> Callable1<? super Method,R> invokeOn(final Object instance, final Object... arguments) {
         return new Callable1<Method, R>() {
+            @SuppressWarnings("unchecked")
             public R call(Method method) throws Exception {
                 return (R) invoke(method, instance, arguments);
             }
