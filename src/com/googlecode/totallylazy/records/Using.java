@@ -28,7 +28,8 @@ public class Using implements Callable1<Record, Predicate<Record>> {
         return and(keywords.map(asPredicate(record)).toArray(Predicate.class));
     }
 
-    private Callable1<Keyword,Predicate<Record>> asPredicate(final Record record) {
+    @SuppressWarnings("unchecked")
+    private Callable1<Keyword, Predicate<Record>> asPredicate(final Record record) {
         return new Callable1<Keyword, Predicate<Record>>() {
             public Predicate<Record> call(Keyword keyword) throws Exception {
                 return where(keyword, is(record.get(keyword)));

@@ -17,6 +17,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 public class MapRecord implements Record {
     private final Map<Keyword, Object> fields = new LinkedHashMap<Keyword, Object>();
 
+    @SuppressWarnings("unchecked")
     public <T> T get(Keyword<T> keyword) {
         return (T) fields.get(keyword);
     }

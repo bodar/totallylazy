@@ -102,7 +102,7 @@ public class Lucene {
         throw new UnsupportedOperationException();
     }
 
-
+    @SuppressWarnings("unchecked")
     private Callable1<? super Predicate, Query> asQuery() {
         return new Callable1<Predicate, Query>() {
             public Query call(Predicate predicate) throws Exception {
@@ -117,6 +117,7 @@ public class Lucene {
         return query(keyword, predicate);
     }
 
+    @SuppressWarnings("unchecked")
     private Query query(Keyword keyword, Predicate predicate) {
         if (predicate instanceof EqualsPredicate) {
             return equalTo(keyword, ((Value) predicate).value());

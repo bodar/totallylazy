@@ -377,6 +377,11 @@ public class Sequences {
         return internalJoin(first);
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> Sequence<T> join(final Iterable<? extends T> first, final Iterable<? extends T> second) {
+        return internalJoin(first, second);
+    }
+
     public static <T> Sequence<T> join(final Iterable<? extends T>... iterables) {
         return internalJoin(iterables);
     }

@@ -45,6 +45,7 @@ public class Methods {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public static Callable1<Class, Method> method(final String name, final Class<?>... parameters) {
         return new Callable1<Class, Method>() {
             public Method call(Class aClass) throws Exception {
