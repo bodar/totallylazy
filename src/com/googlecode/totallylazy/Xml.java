@@ -131,7 +131,6 @@ public class Xml {
 
     }
 
-    @SuppressWarnings("unchecked")
     public static String asString(Element element) throws Exception {
         Transformer transformer = transformer();
         StringWriter writer = new StringWriter();
@@ -140,7 +139,16 @@ public class Xml {
         return writer.toString();
     }
 
+    @SuppressWarnings("unchecked")
+    public static Transformer transformer() throws TransformerConfigurationException {
+        return internalTransformer();
+    }
+
     public static Transformer transformer(Pair<String, Object>... attributes) throws TransformerConfigurationException {
+        return internalTransformer(attributes);
+    }
+
+    private static Transformer internalTransformer(Pair<String, Object>... attributes) throws TransformerConfigurationException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         for (Pair<String, Object> attribute : attributes) {
             transformerFactory.setAttribute(attribute.first(), attribute.second());

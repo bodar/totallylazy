@@ -15,7 +15,6 @@ public class Some<T> extends Option<T> {
         return new Some<T>(t);
     }
 
-    @SuppressWarnings("unchecked")
     public Iterator<T> iterator() {
         return sequence(t).iterator();
     }

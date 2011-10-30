@@ -584,7 +584,6 @@ public class Sequences {
         return Iterators.breakOn(iterable.iterator(), predicate);
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> Sequence<Sequence<T>> recursive(final Iterable<T> iterable,
                                                       final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
         return iterate(applyToSecond(callable), Callers.call(callable, sequence(iterable))).
