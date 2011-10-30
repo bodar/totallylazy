@@ -120,6 +120,7 @@ public class Iterators {
         return reduceLeft(iterator, callable);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T, S> S reduceLeft(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
         return foldLeft(iterator, (S) iterator.next(), callable);
     }
@@ -250,6 +251,7 @@ public class Iterators {
         return tryPick(iterator, callable).get();
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Iterator<T> add(final Iterator<T> iterator, final T t) {
         return join(iterator, sequence(t).iterator());
     }
@@ -262,6 +264,7 @@ public class Iterators {
         return new FlatMapIterator<Iterator<T>, T>(iterable.iterator(), Callables.<T>asIterable());
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Iterator<T> cons(final T t, final Iterator<T> iterator) {
         return join(sequence(t).iterator(), iterator);
     }

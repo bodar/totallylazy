@@ -13,7 +13,7 @@ import static com.googlecode.totallylazy.Methods.method;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callables {
-    public static <T> Callable1<? super Value<T>, T> value() {
+    public static <T> Callable1<Value<T>, T> value() {
         return new Callable1<Value<T>, T>() {
             public T call(Value<T> value) throws Exception {
                 return value.value();
@@ -57,6 +57,7 @@ public final class Callables {
 
     public static <T, S> Callable1<T, S> cast(final Class<S> aClass) {
         return new Callable1<T, S>() {
+            @SuppressWarnings("unchecked")
             public final S call(final T t) throws Exception {
                 return (S) t;
             }
@@ -85,6 +86,7 @@ public final class Callables {
 
     public static Callable1<Object, Integer> length() {
         return new Callable1<Object, Integer>() {
+            @SuppressWarnings("unchecked")
             public final Integer call(final Object instance) throws Exception {
                 Class aClass = instance.getClass();
                 if (aClass.isArray()) {

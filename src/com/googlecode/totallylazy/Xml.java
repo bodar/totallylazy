@@ -131,6 +131,7 @@ public class Xml {
 
     }
 
+    @SuppressWarnings("unchecked")
     public static String asString(Element element) throws Exception {
         Transformer transformer = transformer();
         StringWriter writer = new StringWriter();
@@ -191,6 +192,7 @@ public class Xml {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public static String format(final Node node) throws Exception {
         return format(node, Pair.<String, Object>pair("indent-number", 4));
     }

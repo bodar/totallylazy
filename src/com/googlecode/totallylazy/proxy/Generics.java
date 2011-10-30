@@ -4,6 +4,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public class Generics {
+    @SuppressWarnings("unchecked")
     public static <T> Class<T> getGenericSuperclassType(Class<?> aClass, int index) {
         ParameterizedType type = (ParameterizedType) aClass.getGenericSuperclass();
         Type[] actualTypeArguments = type.getActualTypeArguments();

@@ -282,6 +282,7 @@ public class SequenceTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void supportsSortBySizeAndLength() throws Exception {
         int[] small = {1};
         String medium = "123";

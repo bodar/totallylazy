@@ -10,8 +10,11 @@
 
         <sequential>
             <mkdir dir="@{classes}"/>
-            <javac srcdir="@{src}" destdir="@{classes}" classpathref="@{classpathref}" bootclasspath="${java.home}/lib/rt.jar" target="1.6" source="1.6" debug="true"
-                   includeantruntime="false"/>
+            <javac srcdir="@{src}" destdir="@{classes}" classpathref="@{classpathref}"
+                   bootclasspath="${java.home}/lib/rt.jar" target="1.6" source="1.6" debug="true"
+                   includeantruntime="false">
+                <!--<compilerarg value="-Xlint"/>-->
+            </javac>
             <copy todir="@{classes}">
                 <fileset dir="@{src}">
                     <exclude name="**/*.java"/>
@@ -50,7 +53,8 @@
             <unzip dest="${unzipped.jar}" src="@{jar}"/>
             <junit printsummary="no" fork="on" failureproperty="failed" forkmode="once">
                 <sysproperty key="yatspec.output.dir" value="@{reports}"/>
-                <sysproperty key="yatspec.result.renderer" value="com.googlecode.yatspec.rendering.wiki.WikiResultRenderer"/>
+                <sysproperty key="yatspec.result.renderer"
+                             value="com.googlecode.yatspec.rendering.wiki.WikiResultRenderer"/>
                 <!--<jvmarg line="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"/>-->
                 <classpath refid="@{classpathref}"/>
                 <formatter type="xml"/>

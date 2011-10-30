@@ -6,6 +6,7 @@ public final class CountingCallable<T> implements Callable<T> {
     private int count = 0;
     private final Callable<T> callable;
 
+    @SuppressWarnings("unchecked")
     private CountingCallable(Callable<T> callable) {
         this.callable = callable == null ? new Callable() {
             public Object call() throws Exception {

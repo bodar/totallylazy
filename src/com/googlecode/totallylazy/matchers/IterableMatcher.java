@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
+@SuppressWarnings("unchecked")
 public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<? super T>> {
     private final Sequence<? super T> expected;
     private boolean shouldBeSameSize;

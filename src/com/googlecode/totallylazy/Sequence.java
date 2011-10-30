@@ -127,10 +127,12 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.toString(this, start, separator, end, limit);
     }
 
+    @SuppressWarnings("unchecked")
     public Set<T> union(final Iterable<? extends T> other) {
         return Sets.union(toSet(), Sets.set(other));
     }
 
+    @SuppressWarnings("unchecked")
     public Set<T> intersection(final Iterable<? extends T> other) {
         return Sets.intersection(toSet(), Sets.set(other));
     }
@@ -155,6 +157,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.toList(this);
     }
 
+    @SuppressWarnings("unchecked")
     public T[] toArray(final Class<T> aClass) {
         return toArray((T[]) Array.newInstance(aClass, 0));
     }
@@ -215,6 +218,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.add(this, t);
     }
 
+    @SuppressWarnings("unchecked")
     public Sequence<T> join(final Iterable<? extends T> iterable) {
         return Sequences.join(this, iterable);
     }
@@ -239,6 +243,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return transpose(Sequences.sequence(iterables));
     }
 
+    @SuppressWarnings("unchecked")
     public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<T>> iterables){
         return Sequences.transpose(((Sequence) Sequences.sequence(iterables)).cons(this));
     }
@@ -255,7 +260,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.zipWithIndex(this);
     }
 
-    public Sequence<T> sortBy(final Callable1<? super T, ? extends Comparable> callable) {
+    public <R extends Comparable<R>> Sequence<T> sortBy(final Callable1<? super T, R> callable) {
         return sortBy(ascending(callable));
     }
 

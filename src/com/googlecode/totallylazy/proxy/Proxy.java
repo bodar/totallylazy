@@ -22,6 +22,7 @@ public class Proxy {
         return new Proxy().createInstance(aCLass, invocationHandler);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T createInstance(final Class<T> aClass, final Callback invocationHandler) {
         Callback[] callbacks = {invocationHandler, NoOp.INSTANCE};
         ObjectInstantiator instantiator = get(aClass, callbacks);
