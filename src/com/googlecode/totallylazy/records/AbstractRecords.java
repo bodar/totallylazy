@@ -48,7 +48,7 @@ public abstract class AbstractRecords implements Records {
         return set(recordName, sequence(records));
     }
 
-    public Number set(final Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records) {
+    public Number set(final Keyword recordName, Sequence<? extends Pair<? extends Predicate<? super Record>, Record>> records) {
         return records.map(update(recordName, false)).reduce(sum());
     }
 

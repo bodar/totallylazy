@@ -116,7 +116,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
     }
 
     @Override
-    public Number set(Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records) {
+    public Number set(Keyword recordName, Sequence<? extends Pair<? extends Predicate<? super Record>, Record>> records) {
         return update(records.map(updateStatement(recordName)));
     }
 
