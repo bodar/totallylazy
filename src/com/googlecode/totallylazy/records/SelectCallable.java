@@ -12,6 +12,7 @@ public class SelectCallable implements Callable1<Record, Record> {
         this.keywords = keywords;
     }
 
+    @SuppressWarnings("unchecked")
     public Record call(Record source) throws Exception {
         Record result = new MapRecord();
         for (Keyword keyword : keywords) {

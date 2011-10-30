@@ -13,6 +13,7 @@ public class Aggregates implements Callable2<Record, Record, Record>, Value<Sequ
         this.aggregates = aggregates;
     }
 
+    @SuppressWarnings("unchecked")
     public Record call(final Record accumulator, final Record nextRecord) throws Exception {
         Record result = new MapRecord();
         for (Aggregate aggregate : aggregates) {
@@ -21,9 +22,10 @@ public class Aggregates implements Callable2<Record, Record, Record>, Value<Sequ
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     private Object accumulatorValue(Record record, Aggregate aggregate) {
         Object value = record.get(aggregate.source());
-        if(value == null) {
+        if (value == null) {
             return record.get(aggregate);
         }
         return value;
@@ -40,6 +42,4 @@ public class Aggregates implements Callable2<Record, Record, Record>, Value<Sequ
     public static Aggregates aggregates(final Sequence<Aggregate> sequence) {
         return new Aggregates(sequence);
     }
-
-
 }

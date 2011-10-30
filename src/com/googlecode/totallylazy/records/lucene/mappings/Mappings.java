@@ -41,13 +41,14 @@ public class Mappings {
         add(Object.class, new ObjectMapping());
     }
 
+    @SuppressWarnings("unchecked")
     public <T> Mappings add(final Class<T> type, final Mapping<T> mapping) {
         map.put(type, (Mapping<Object>) mapping);
         return this;
     }
 
     public Mapping<Object> get(final Class aClass) {
-        if(!map.containsKey(aClass)) {
+        if (!map.containsKey(aClass)) {
             return map.get(Object.class);
         }
         return map.get(aClass);
@@ -108,7 +109,6 @@ public class Mappings {
             }
         };
     }
-
 
 
 }

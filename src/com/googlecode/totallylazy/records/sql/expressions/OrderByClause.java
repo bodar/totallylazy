@@ -23,6 +23,7 @@ public class OrderByClause {
         return expression("order by").join(toSql(comparator));
     }
 
+    @SuppressWarnings("unchecked")
     public static Expression toSql(Comparator<? super Record> comparator) {
         if (comparator instanceof AscendingComparator) {
             return SelectList.derivedColumn(((AscendingComparator<? super Record, ?>) comparator).callable()).join(expression("asc"));

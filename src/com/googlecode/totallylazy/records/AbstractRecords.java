@@ -27,6 +27,7 @@ public abstract class AbstractRecords implements Records {
         return definitions.remove(recordName);
     }
 
+    @SuppressWarnings("unchecked")
     public Sequence<Keyword> definitions(Keyword recordName) {
         if (!definitions.containsKey(recordName)) {
             return Sequences.empty();

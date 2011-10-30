@@ -277,6 +277,7 @@ public class Iterators {
         return new FlatMapIterator<Iterator<T>, T>(iterable.iterator(), Callables.<T>asIterable());
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Iterator<T> cons(final T t, final Iterator<? extends T> iterator) {
         return join(sequence(t).iterator(), (Iterator<T>) iterator);
     }
