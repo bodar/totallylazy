@@ -31,7 +31,7 @@ public final class Callers {
                 map(Callers.<T>realiseFuture());
     }
 
-    public static <T> Callable1<? super FutureTask<T>, Future<T>> executeWith(final Executor executor) {
+    public static <T> Callable1<FutureTask<T>, Future<T>> executeWith(final Executor executor) {
         return new Callable1<FutureTask<T>, Future<T>>() {
             public Future<T> call(FutureTask<T> task) throws Exception {
                 executor.execute(task);
@@ -40,7 +40,7 @@ public final class Callers {
         };
     }
 
-    public static <T> Callable1<? super Callable<T>, FutureTask<T>> asFutureTask() {
+    public static <T> Callable1<Callable<T>, FutureTask<T>> asFutureTask() {
         return new Callable1<Callable<T>, FutureTask<T>>() {
             public FutureTask<T> call(Callable<T> callable) throws Exception {
                 return new FutureTask<T>(callable);
@@ -48,7 +48,7 @@ public final class Callers {
         };
     }
 
-    public static <T> Callable1<? super Future<T>, T> realiseFuture() {
+    public static <T> Callable1<Future<T>, T> realiseFuture() {
         return new Callable1<Future<T>, T>() {
             public final T call(final Future<T> future) throws Exception {
                 return future.get();
@@ -56,7 +56,7 @@ public final class Callers {
         };
     }
 
-    public static <T> Callable1<? super Future<T>, T> realiseFuture(final long timeout, final TimeUnit unit) {
+    public static <T> Callable1<Future<T>, T> realiseFuture(final long timeout, final TimeUnit unit) {
         return new Callable1<Future<T>, T>() {
             public final T call(final Future<T> future) throws Exception {
                 return future.get(timeout, unit);

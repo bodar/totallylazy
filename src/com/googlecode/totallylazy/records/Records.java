@@ -21,9 +21,9 @@ public interface Records {
 
     Number set(Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records);
 
-    Number put(Keyword recordName, Pair<? extends Predicate<? super Record>, Record>... records);
+    Number put(Keyword recordName, Pair<Predicate<Record>, Record>... records);
 
-    Number put(Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records);
+    Number put(Keyword recordName, Sequence<Pair<Predicate<Record>, Record>> records);
 
     Number remove(Keyword recordName, Predicate<? super Record> predicate);
 

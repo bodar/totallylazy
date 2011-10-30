@@ -318,7 +318,7 @@ public class Iterators {
         });
     }
 
-    public static <T> LogicalPredicate<? super Iterator<T>> hasNext() {
+    public static <T> LogicalPredicate<Iterator<T>> hasNext() {
         return new LogicalPredicate<Iterator<T>>() {
             public boolean matches(Iterator<T> iterator) {
                 return iterator.hasNext();
@@ -326,7 +326,7 @@ public class Iterators {
         };
     }
 
-    public static <T> Callable1<? super Iterator<T>, T> next() {
+    public static <T> Callable1<Iterator<T>, T> next() {
         return new Callable1<Iterator<T>, T>() {
             public T call(Iterator<T> iterator) throws Exception {
                 return iterator.next();

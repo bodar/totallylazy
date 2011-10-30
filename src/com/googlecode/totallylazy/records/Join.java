@@ -8,9 +8,9 @@ import static com.googlecode.totallylazy.records.RecordMethods.merge;
 
 public class Join implements Callable1<Record, Iterable<Record>> {
     private final Sequence<Record> records;
-    private final Callable1<Record, Predicate<? super Record>> using;
+    private final Callable1<Record, Predicate<Record>> using;
 
-    public Join(Sequence<Record> records, Callable1<Record, Predicate<? super Record>> using) {
+    public Join(Sequence<Record> records, Callable1<Record, Predicate<Record>> using) {
         this.records = records;
         this.using = using;
     }
@@ -19,8 +19,8 @@ public class Join implements Callable1<Record, Iterable<Record>> {
         return records.filter(using.call(record)).map(merge(record));
     }
 
-    public static Callable1<? super Record,Iterable<Record>> join(final Sequence<Record> records,
-                                                                  final Callable1<Record, Predicate<? super Record>> using) {
+    public static Callable1<Record,Iterable<Record>> join(final Sequence<Record> records,
+                                                                  final Callable1<Record, Predicate<Record>> using) {
         return new Join(records, using);
     }
 }

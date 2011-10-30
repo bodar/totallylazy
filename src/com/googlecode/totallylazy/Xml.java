@@ -90,7 +90,7 @@ public class Xml {
         };
     }
 
-    public static Callable1<? super Node, String> contents() {
+    public static Callable1<Node, String> contents() {
         return new Callable1<Node, String>() {
             public String call(Node node) throws Exception {
                 return contents(node);

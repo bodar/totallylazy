@@ -28,7 +28,7 @@ public class Keywords {
         return keyword.name().equalsIgnoreCase(other.name());
     }
 
-    public static <T> Callable1<? super Keyword, T> metadata(final Keyword<T> metadataKey) {
+    public static <T> Callable1<Keyword, T> metadata(final Keyword<T> metadataKey) {
         return new Callable1<Keyword, T>() {
             public T call(Keyword keyword) throws Exception {
                 return keyword.metadata().get(metadataKey);
@@ -40,7 +40,7 @@ public class Keywords {
         return results.flatMap(keywords()).unique();
     }
 
-    public static Callable1<? super Record, Sequence<Keyword>> keywords() {
+    public static Callable1<Record, Sequence<Keyword>> keywords() {
         return new Callable1<Record, Sequence<Keyword>>() {
             public Sequence<Keyword> call(Record record) throws Exception {
                 return record.keywords();

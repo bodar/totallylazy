@@ -44,7 +44,7 @@ public class Runnables {
         };
     }
 
-    public static <T> Callable1<? super T, T> run(final Callable1<? super T, Void> callable) {
+    public static <T> Callable1<T, T> run(final Callable1<? super T, Void> callable) {
         return new Callable1<T, T>() {
             public T call(T t) throws Exception {
                 callable.call(t);
