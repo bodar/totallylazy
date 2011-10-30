@@ -13,7 +13,7 @@ import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Methods {
-    public static <T extends Annotation> Callable1<? super Method, T> annotation(final Class<T> annotationClass) {
+    public static <T extends Annotation> Callable1<Method, T> annotation(final Class<T> annotationClass) {
         return new Callable1<Method, T>() {
             public T call(Method method) throws Exception {
                 return method.getAnnotation(annotationClass);
@@ -21,7 +21,7 @@ public class Methods {
         };
     }
 
-    public static Callable1<? super Method, Type> genericReturnType() {
+    public static Callable1<Method, Type> genericReturnType() {
         return new Callable1<Method, Type>() {
             public Type call(Method method) throws Exception {
                 return method.getGenericReturnType();
@@ -29,7 +29,7 @@ public class Methods {
         };
     }
 
-    public static Callable1<? super Method, Type[]> genericParameterTypes() {
+    public static Callable1<Method, Type[]> genericParameterTypes() {
         return new Callable1<Method, Type[]>() {
             public Type[] call(Method method) throws Exception {
                 return method.getGenericParameterTypes();
@@ -84,7 +84,7 @@ public class Methods {
     }
 
 
-    public static <R> Callable1<? super Method,R> invokeOn(final Object instance, final Object... arguments) {
+    public static <R> Callable1<Method,R> invokeOn(final Object instance, final Object... arguments) {
         return new Callable1<Method, R>() {
             @SuppressWarnings("unchecked")
             public R call(Method method) throws Exception {

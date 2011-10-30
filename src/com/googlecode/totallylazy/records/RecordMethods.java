@@ -23,7 +23,7 @@ import static com.googlecode.totallylazy.records.Keywords.name;
 
 public class RecordMethods {
     @SuppressWarnings({"unchecked"})
-    public static Callable2<? super Record, ? super Pair<Keyword, Object>, Record> updateValues() {
+    public static Callable2<Record, Pair<Keyword, Object>, Record> updateValues() {
         return new Callable2<Record, Pair<Keyword, Object>, Record>() {
             public Record call(Record record, Pair<Keyword, Object> field) throws Exception {
                 return record.set(field.first(), field.second());
@@ -31,11 +31,11 @@ public class RecordMethods {
         };
     }
 
-    public static Callable1<? super Record, Record> merge(final Record other) {
+    public static Callable1<Record, Record> merge(final Record other) {
         return merge(other.fields());
     }
 
-    public static Callable1<? super Record, Record> merge(final Sequence<Pair<Keyword, Object>> fields) {
+    public static Callable1<Record, Record> merge(final Sequence<Pair<Keyword, Object>> fields) {
         return new Callable1<Record, Record>() {
             public Record call(Record record) throws Exception {
                 return fields.fold(record, updateValues());
@@ -47,7 +47,7 @@ public class RecordMethods {
         return definitions.find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
     }
 
-    public static Callable1<? super Record, Sequence<Object>> getValuesFor(final Sequence<Keyword> fields) {
+    public static Callable1<Record, Sequence<Object>> getValuesFor(final Sequence<Keyword> fields) {
         return new Callable1<Record, Sequence<Object>>() {
             public Sequence<Object> call(Record record) throws Exception {
                 return record.getValuesFor(fields);
@@ -71,17 +71,18 @@ public class RecordMethods {
         return fields.fold(new MapRecord(), updateValues());
     }
 
-    public static Sequence<Pair<? extends Predicate<? super Record>, Record>> update(final Callable1<Record, Predicate<? super Record>> callable, final Record... records) {
-        return update(callable, sequence(records));
+    public static Sequence<Pair<Predicate<Record>, Record>> update(final Callable1<? super Record, Predicate<Record>> callable, final Record... records) {
+        Sequence<Record> sequence = sequence(records);
+        return update(callable, sequence);
     }
 
-    public static Sequence<Pair<? extends Predicate<? super Record>, Record>> update(final Callable1<Record, Predicate<? super Record>> callable, final Sequence<Record> records) {
+    public static Sequence<Pair<Predicate<Record>, Record>> update(final Callable1<? super Record, Predicate<Record>> callable, final Sequence<Record> records) {
         return records.map(toPair(callable));
     }
 
-    public static Callable1<Record, Pair<? extends Predicate<? super Record>, Record>> toPair(final Callable1<Record, Predicate<? super Record>> callable) {
-        return new Callable1<Record, Pair<? extends Predicate<? super Record>, Record>>() {
-            public Pair<? extends Predicate<? super Record>, Record> call(Record record) throws Exception {
+    public static Callable1<Record, Pair<Predicate<Record>, Record>> toPair(final Callable1<? super Record, Predicate<Record>> callable) {
+        return new Callable1<Record, Pair<Predicate<Record>, Record>>() {
+            public Pair<Predicate<Record>, Record> call(Record record) throws Exception {
                 return Pair.pair(callable.call(record), record);
             }
         };

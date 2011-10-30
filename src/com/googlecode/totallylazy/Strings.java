@@ -22,7 +22,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 public class Strings {
     public static final String EMPTY = "";
 
-    public static Callable1<? super String, Boolean> asBoolean() {
+    public static Callable1<String, Boolean> asBoolean() {
         return new Callable1<String, Boolean>() {
             public Boolean call(String value) throws Exception {
                 return Boolean.parseBoolean(value);
@@ -205,7 +205,7 @@ public class Strings {
         };
     }
 
-    public static Callable1<? super CharSequence, Sequence<Character>> toCharacters() {
+    public static Callable1<CharSequence, Sequence<Character>> toCharacters() {
         return new Callable1<CharSequence, Sequence<Character>>() {
             public Sequence<Character> call(CharSequence value) throws Exception {
                 return characters(value);

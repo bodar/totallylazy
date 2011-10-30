@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 
-public class Using implements Callable1<Record, Predicate<? super Record>> {
+public class Using implements Callable1<Record, Predicate<Record>> {
     private final Sequence<Keyword> keywords;
 
     public Using(Sequence<Keyword> keywords) {
@@ -24,13 +24,13 @@ public class Using implements Callable1<Record, Predicate<? super Record>> {
         return new Using(keyword);
     }
 
-    public Predicate<? super Record> call(Record record) {
+    public Predicate<Record> call(Record record) {
         return and(keywords.map(asPredicate(record)).toArray(Predicate.class));
     }
 
-    private Callable1<? super Keyword,Predicate> asPredicate(final Record record) {
-        return new Callable1<Keyword, Predicate>() {
-            public Predicate call(Keyword keyword) throws Exception {
+    private Callable1<Keyword,Predicate<Record>> asPredicate(final Record record) {
+        return new Callable1<Keyword, Predicate<Record>>() {
+            public Predicate<Record> call(Keyword keyword) throws Exception {
                 return where(keyword, is(record.get(keyword)));
             }
         };

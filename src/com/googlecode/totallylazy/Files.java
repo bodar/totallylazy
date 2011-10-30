@@ -39,7 +39,7 @@ public class Files {
         };
     }
 
-    public static Callable1<? super File, String> path() {
+    public static Callable1<File, String> path() {
         return new Callable1<File, String>() {
             public String call(File file) throws Exception {
                 return file.getPath();
@@ -47,7 +47,7 @@ public class Files {
         };
     }
 
-    public static Callable1<? super File, File> parent() {
+    public static Callable1<File, File> parent() {
         return new Callable1<File, File>() {
             public File call(File file) throws Exception {
                 return file.getParentFile();
@@ -137,7 +137,7 @@ public class Files {
         };
     }
 
-    public static Callable1<? super File, Boolean> delete() {
+    public static Callable1<File, Boolean> delete() {
         return new Callable1<File, Boolean>() {
             public Boolean call(File file) throws Exception {
                 return file.delete();
@@ -145,7 +145,7 @@ public class Files {
         };
     }
 
-    public static Callable1<? super String, File> asFile() {
+    public static Callable1<String, File> asFile() {
         return new Callable1<String, File>() {
             public File call(String name) throws Exception {
                 return new File(name);

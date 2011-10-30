@@ -8,7 +8,7 @@ import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Runnables.VOID;
 
 public class Closeables {
-    public static <T extends Closeable> Callable1<? super T, Void> closeAfter(final Callable1<? super T, Void> callable) {
+    public static <T extends Closeable> Callable1<T, Void> closeAfter(final Callable1<? super T, Void> callable) {
         return new Callable1<T, Void>() {
             public Void call(T t) throws Exception {
                 return using(t, callable);

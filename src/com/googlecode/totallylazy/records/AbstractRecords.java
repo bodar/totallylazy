@@ -52,11 +52,11 @@ public abstract class AbstractRecords implements Records {
         return records.map(update(recordName, false)).reduce(sum());
     }
 
-    public Number put(final Keyword recordName, Pair<? extends Predicate<? super Record>, Record>... records) {
+    public Number put(final Keyword recordName, Pair<Predicate<Record>, Record>... records) {
         return put(recordName, sequence(records));
     }
 
-    public Number put(final Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records) {
+    public Number put(final Keyword recordName, Sequence<Pair<Predicate<Record>, Record>> records) {
         return records.map(update(recordName, true)).reduce(sum());
     }
 

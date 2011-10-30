@@ -554,7 +554,7 @@ public class Sequences {
                         map(Callables.<Sequence<T>>first());
     }
 
-    public static <F, S> Callable1<? super Pair<F, S>, Pair<F, S>> applyToSecond(final Callable1<S, Pair<F, S>> callable) {
+    public static <F, S> Callable1<Pair<F, S>, Pair<F, S>> applyToSecond(final Callable1<S, Pair<F, S>> callable) {
         return new Callable1<Pair<F, S>, Pair<F, S>>() {
             public Pair<F, S> call(Pair<F, S> pair) throws Exception {
                 return callable.call(pair.second());
