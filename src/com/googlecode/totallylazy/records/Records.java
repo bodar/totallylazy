@@ -19,7 +19,7 @@ public interface Records {
 
     Number set(Keyword recordName, Pair<? extends Predicate<? super Record>, Record>... records);
 
-    Number set(Keyword recordName, Sequence<Pair<? extends Predicate<? super Record>, Record>> records);
+    Number set(Keyword recordName, Sequence<? extends Pair<? extends Predicate<? super Record>, Record>> records);
 
     Number put(Keyword recordName, Pair<? extends Predicate<? super Record>, Record>... records);
 
