@@ -128,11 +128,29 @@ public class Predicates {
         return t;
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second) {
+        return internalAnd(first, second);
+    }
+
     public static <T> LogicalPredicate<T> and(final Predicate<? super T>... predicates) {
+        return internalAnd(predicates);
+    }
+
+    private static <T> LogicalPredicate<T> internalAnd(Predicate<? super T>... predicates) {
         return new AndPredicate<T>(predicates);
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> LogicalPredicate<T> or(final Predicate<? super T> first, final Predicate<? super T> second) {
+        return internalOr(first, second);
+    }
+
     public static <T> LogicalPredicate<T> or(final Predicate<? super T>... predicates) {
+        return internalOr(predicates);
+    }
+
+    private static <T> OrPredicate<T> internalOr(Predicate<? super T>... predicates) {
         return new OrPredicate<T>(predicates);
     }
 

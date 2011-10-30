@@ -242,11 +242,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return transpose(sequence(iterables));
     }
 
-    @SuppressWarnings("unchecked")
     public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<T>> iterables){
-        Sequence<? extends Iterable<T>> sequence = sequence(iterables);
-        Sequence<? extends Iterable<T>> cons = Sequences.cons(this, sequence);
-        return Sequences.transpose(cons);
+        return Sequences.transpose(Sequences.cons(this, sequence(iterables)));
     }
 
     public <S, Th> Sequence<Triple<T, S, Th>> zip(final Iterable<S> second, final Iterable<Th> third) {
