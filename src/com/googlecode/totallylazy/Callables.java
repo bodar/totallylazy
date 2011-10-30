@@ -21,7 +21,7 @@ public final class Callables {
         };
     }
 
-    public static <T, R> Callable1<? super T, R> doThen(final Callable1<? super T, Void> runnable, final Callable<R> callable) {
+    public static <T, R> Callable1<T, R> doThen(final Callable1<? super T, Void> runnable, final Callable<R> callable) {
         return new Callable1<T, R>() {
             public R call(T t) throws Exception {
                 runnable.call(t);
@@ -38,7 +38,7 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<? super T, T> nullGuard(final Callable1<? super T, T> callable) {
+    public static <T> Callable1<T, T> nullGuard(final Callable1<? super T, T> callable) {
         return new Callable1<T, T>() {
             public T call(T o) throws Exception {
                 if (o == null) return null;
@@ -111,11 +111,11 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<? super First<T>, T> first(Class<T> aClass) {
+    public static <T> Callable1<First<T>, T> first(Class<T> aClass) {
         return first();
     }
 
-    public static <T> Callable1<? super First<T>, T> first() {
+    public static <T> Callable1<First<T>, T> first() {
         return new Callable1<First<T>, T>() {
             public final T call(final First<T> first) throws Exception {
                 return first.first();
@@ -123,7 +123,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, R> Callable1<? super Pair<F, S>, Pair<R, S>> first(final Callable1<? super F, R> firstCallable) {
+    public static <F, S, R> Callable1<Pair<F, S>, Pair<R, S>> first(final Callable1<? super F, R> firstCallable) {
         return new Callable1<Pair<F, S>, Pair<R, S>>() {
             public Pair<R, S> call(Pair<F, S> pair) throws Exception {
                 return Pair.pair(firstCallable.call(pair.first()), pair.second());
@@ -131,11 +131,11 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<? super Second<T>, T> second(Class<T> aClass) {
+    public static <T> Callable1<Second<T>, T> second(Class<T> aClass) {
         return second();
     }
 
-    public static <T> Callable1<? super Second<T>, T> second() {
+    public static <T> Callable1<Second<T>, T> second() {
         return new Callable1<Second<T>, T>() {
             public final T call(final Second<T> second) throws Exception {
                 return second.second();
@@ -143,7 +143,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, R> Callable1<? super Pair<F, S>, Pair<F, R>> second(final Callable1<? super S, R> secondCallable) {
+    public static <F, S, R> Callable1<Pair<F, S>, Pair<F, R>> second(final Callable1<? super S, R> secondCallable) {
         return new Callable1<Pair<F, S>, Pair<F, R>>() {
             public Pair<F, R> call(Pair<F, S> pair) throws Exception {
                 return Pair.pair(pair.first(), secondCallable.call(pair.second()));
@@ -151,11 +151,11 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<? super Third<T>, T> third(Class<T> aClass) {
+    public static <T> Callable1<Third<T>, T> third(Class<T> aClass) {
         return third();
     }
 
-    public static <T> Callable1<? super Third<T>, T> third() {
+    public static <T> Callable1<Third<T>, T> third() {
         return new Callable1<Third<T>, T>() {
             public final T call(final Third<T> third) throws Exception {
                 return third.third();
@@ -163,7 +163,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, T, R> Callable1<? super Triple<F, S, T>, Triple<F, S, R>> third(final Callable1<? super T, R> thirdCallable) {
+    public static <F, S, T, R> Callable1<Triple<F, S, T>, Triple<F, S, R>> third(final Callable1<? super T, R> thirdCallable) {
         return new Callable1<Triple<F, S, T>, Triple<F, S, R>>() {
             public Triple<F, S, R> call(Triple<F, S, T> triple) throws Exception {
                 return Triple.triple(triple.first(), triple.second(), thirdCallable.call(triple.third()));
@@ -171,11 +171,11 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<? super Fourth<T>, T> fourth(Class<T> aClass) {
+    public static <T> Callable1<Fourth<T>, T> fourth(Class<T> aClass) {
         return fourth();
     }
 
-    public static <T> Callable1<? super Fourth<T>, T> fourth() {
+    public static <T> Callable1<Fourth<T>, T> fourth() {
         return new Callable1<Fourth<T>, T>() {
             public final T call(final Fourth<T> fourth) throws Exception {
                 return fourth.fourth();
@@ -183,7 +183,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, T, Fo, R> Callable1<? super Quadruple<F, S, T, Fo>, Quadruple<F, S, T, R>> fourth(final Callable1<? super Fo, R> fourthCallable) {
+    public static <F, S, T, Fo, R> Callable1<Quadruple<F, S, T, Fo>, Quadruple<F, S, T, R>> fourth(final Callable1<? super Fo, R> fourthCallable) {
         return new Callable1<Quadruple<F, S, T, Fo>, Quadruple<F, S, T, R>>() {
             public Quadruple<F, S, T, R> call(Quadruple<F, S, T, Fo> quadruple) throws Exception {
                 return Quadruple.quadruple(quadruple.first(), quadruple.second(), quadruple.third(), fourthCallable.call(quadruple.fourth()));
@@ -191,11 +191,11 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<? super Fifth<T>, T> fifth(Class<T> aClass) {
+    public static <T> Callable1<Fifth<T>, T> fifth(Class<T> aClass) {
         return fifth();
     }
 
-    public static <T> Callable1<? super Fifth<T>, T> fifth() {
+    public static <T> Callable1<Fifth<T>, T> fifth() {
         return new Callable1<Fifth<T>, T>() {
             public final T call(final Fifth<T> fifth) throws Exception {
                 return fifth.fifth();
@@ -203,7 +203,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, T, Fo, Fi, R> Callable1<? super Quintuple<F, S, T, Fo, Fi>, Quintuple<F, S, T, Fo, R>> fifth(final Callable1<? super Fi, R> callable) {
+    public static <F, S, T, Fo, Fi, R> Callable1<Quintuple<F, S, T, Fo, Fi>, Quintuple<F, S, T, Fo, R>> fifth(final Callable1<? super Fi, R> callable) {
         return new Callable1<Quintuple<F, S, T, Fo, Fi>, Quintuple<F, S, T, Fo, R>>() {
             public Quintuple<F, S, T, Fo, R> call(Quintuple<F, S, T, Fo, Fi> quintuple) throws Exception {
                 return Quintuple.quintuple(quintuple.first(), quintuple.second(), quintuple.third(), quintuple.fourth(), callable.call(quintuple.fifth()));
@@ -211,7 +211,7 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<? super Iterable<T>, T> head() {
+    public static <T> Callable1<Iterable<T>, T> head() {
         return new Callable1<Iterable<T>, T>() {
             public final T call(final Iterable<T> iterable) throws Exception {
                 return Sequences.head(iterable);
@@ -219,8 +219,8 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<? super T, String> asString(Class<T> aClass) {
-        return asString();
+    public static <T> Callable1<T, String> asString(Class<T> aClass) {
+        return Callables.<T>asString();
     }
 
     public static <T> Callable1<T, String> asString() {
@@ -240,7 +240,7 @@ public final class Callables {
     }
 
 
-    public static <T> Callable1<? super Iterable<T>, Iterator<T>> asIterator() {
+    public static <T> Callable1<Iterable<T>, Iterator<T>> asIterator() {
         return new Callable1<Iterable<T>, Iterator<T>>() {
             public Iterator<T> call(Iterable<T> iterable) throws Exception {
                 return iterable.iterator();
@@ -248,7 +248,7 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<? super Iterator<T>, Iterable<T>> asIterable() {
+    public static <T> Callable1<Iterator<T>, Iterable<T>> asIterable() {
         return new Callable1<Iterator<T>, Iterable<T>>() {
             public final Iterable<T> call(final Iterator<T> iterator) throws Exception {
                 return Sequences.forwardOnly(iterator);
@@ -380,7 +380,7 @@ public final class Callables {
         };
     }
 
-    public static <T, S> Callable2<? super S, ? super T, S> flip(final Callable2<? super T, ? super S, S> callable) {
+    public static <T, S> Callable2<S, T, S> flip(final Callable2<? super T, ? super S, S> callable) {
         return new Callable2<S, T, S>() {
             public S call(S s, T t) throws Exception {
                 return callable.call(t, s);
