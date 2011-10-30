@@ -88,7 +88,7 @@ public class RecordMethods {
         };
     }
 
-    public static Callable1<? super Record, Map<String, Object>> asMap() {
+    public static Callable1<Record, Map<String, Object>> asMap() {
         return new Callable1<Record, Map<String, Object>>() {
             public Map<String, Object> call(Record record) throws Exception {
                 return toMap(record);
@@ -100,7 +100,7 @@ public class RecordMethods {
         return map(record.fields().map(Callables.<Keyword, Object, String>first(asString(Keyword.class))));
     }
 
-    public static Callable2<? super Map<String, Object>, ? super Pair<Keyword, Object>, Map<String, Object>> intoMap() {
+    public static Callable2<Map<String, Object>, Pair<Keyword, Object>, Map<String, Object>> intoMap() {
         return new Callable2<Map<String, Object>, Pair<Keyword, Object>, Map<String, Object>>() {
             public Map<String, Object> call(Map<String, Object> map, Pair<Keyword, Object> pair) throws Exception {
                 map.put(pair.first().toString(), pair.second());
