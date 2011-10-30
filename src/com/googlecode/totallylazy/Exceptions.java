@@ -47,12 +47,16 @@ public class Exceptions {
         return handleException(callable, sequence(exceptionClasses).map(asInstanceOf()));
     }
 
-    public static <T> Callable1<Class<? extends T>, Predicate<? super T>> asInstanceOf() {
+    private static <T> Callable1<Class<? extends T>, Predicate<? super T>> asInstanceOf() {
         return new Callable1<Class<? extends T>, Predicate<? super T>>() {
             public Predicate<? super T> call(Class<? extends T> aClass) throws Exception {
                 return instanceOf(aClass);
             }
         };
+    }
+
+    public static <T, S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Predicate<? super Exception> first) {
+        return handleException(callable, sequence(first));
     }
 
     public static <T, S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Predicate<? super Exception>... exceptionClasses) {

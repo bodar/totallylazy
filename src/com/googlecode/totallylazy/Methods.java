@@ -47,18 +47,16 @@ public class Methods {
 
     public static Callable1<Class, Method> method(final String name, final Class<?>... parameters) {
         return new Callable1<Class, Method>() {
-            @SuppressWarnings("unchecked")
             public Method call(Class aClass) throws Exception {
                 return aClass.getMethod(name, parameters);
             }
         };
     }
 
-    public static <T> Option<Method> method(T instance, final String name, final Class<?>... parameters)  {
+    public static <T> Option<Method> method(T instance, final String name, final Class<?>... parameters) {
         return method(instance.getClass(), name, parameters);
     }
 
-    @SuppressWarnings("unchecked")
     public static Option<Method> method(Class aClass, String name, final Class<?>... parameters) {
         return call(handleException(method(name, parameters), instanceOf(NoSuchMethodException.class)), aClass);
     }
@@ -84,7 +82,7 @@ public class Methods {
     }
 
 
-    public static <R> Callable1<Method,R> invokeOn(final Object instance, final Object... arguments) {
+    public static <R> Callable1<Method, R> invokeOn(final Object instance, final Object... arguments) {
         return new Callable1<Method, R>() {
             @SuppressWarnings("unchecked")
             public R call(Method method) throws Exception {

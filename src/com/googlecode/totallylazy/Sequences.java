@@ -11,6 +11,7 @@ import com.googlecode.totallylazy.iterators.QuintupleIterator;
 import com.googlecode.totallylazy.iterators.TransposeIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
 
+import java.lang.reflect.Array;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -56,6 +57,36 @@ public class Sequences {
 
     public static <T> Sequence<T> sequence() {
         return empty();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public static <T> Sequence<T> sequence(final T first) {
+        return internal(first);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Sequence<T> sequence(final T first, final T second) {
+        return internal(first, second);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Sequence<T> sequence(final T first, final T second, final T third) {
+        return internal(first, second, third);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Sequence<T> sequence(final T first, final T second, final T third, final T fourth) {
+        return internal(first, second, third, fourth);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Sequence<T> sequence(final T first, final T second, final T third, final T fourth, final T fifth) {
+        return internal(first, second, third, fourth, fifth);
+    }
+
+    private static <T> Sequence<T> internal(final T... items) {
+        return sequence(items);
     }
 
     public static <T> Sequence<T> sequence(final T... items) {
@@ -342,7 +373,16 @@ public class Sequences {
     }
 
     @SuppressWarnings("unchecked")
+    public static <T> Sequence<T> join(final Iterable<? extends T> first) {
+        return internalJoin(first);
+    }
+
     public static <T> Sequence<T> join(final Iterable<? extends T>... iterables) {
+        return internalJoin(iterables);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Sequence<T> internalJoin(final Iterable<? extends T>... iterables) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.join(sequence(iterables).map(new Callable1<Iterable<? extends T>, Iterator<T>>() {
@@ -354,7 +394,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> cons(final T t, final Iterable<T> iterable) {
+    public static <T> Sequence<T> cons(final T t, final Iterable<? extends T> iterable) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.cons(t, iterable.iterator());
