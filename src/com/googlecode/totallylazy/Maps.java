@@ -18,6 +18,10 @@ public class Maps {
         return sequence(map.entrySet());
     }
 
+    public static <K, V> Map<K, V> map() {
+        return new LinkedHashMap<K, V>();
+    }
+
     public static <K, V> Map<K, V> map(final Pair<K, V>... entries) {
         return map(sequence(entries));
     }

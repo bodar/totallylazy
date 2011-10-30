@@ -10,6 +10,7 @@ import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.ascending;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
@@ -132,9 +133,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sets.union(toSet(), Sets.set(other));
     }
 
-    @SuppressWarnings("unchecked")
     public Set<T> intersection(final Iterable<? extends T> other) {
-        return Sets.intersection(toSet(), Sets.set(other));
+        return Sets.intersection(sequence(toSet(), Sets.set(other)));
     }
 
     public <S extends Set<T>> S toSet(S set) {
@@ -146,7 +146,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Sequence<T> unique() {
-        return Sequences.sequence(toSet());
+        return sequence(toSet());
     }
 
     public boolean isEmpty() {
@@ -218,7 +218,6 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.add(this, t);
     }
 
-    @SuppressWarnings("unchecked")
     public Sequence<T> join(final Iterable<? extends T> iterable) {
         return Sequences.join(this, iterable);
     }
@@ -240,12 +239,14 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Sequence<Sequence<T>> transpose(final Iterable<T>... iterables){
-        return transpose(Sequences.sequence(iterables));
+        return transpose(sequence(iterables));
     }
 
     @SuppressWarnings("unchecked")
     public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<T>> iterables){
-        return Sequences.transpose(((Sequence) Sequences.sequence(iterables)).cons(this));
+        Sequence<? extends Iterable<T>> sequence = sequence(iterables);
+        Sequence<? extends Iterable<T>> cons = Sequences.cons(this, sequence);
+        return Sequences.transpose(cons);
     }
 
     public <S, Th> Sequence<Triple<T, S, Th>> zip(final Iterable<S> second, final Iterable<Th> third) {

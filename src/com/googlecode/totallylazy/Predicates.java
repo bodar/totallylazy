@@ -52,15 +52,15 @@ public class Predicates {
         return not(always());
     }
 
-    public static <T> LogicalPredicate<Collection<? extends T>> contains(final T t) {
-        return new LogicalPredicate<Collection<? extends T>>() {
-            public boolean matches(Collection<? extends T> other) {
+    public static <T> LogicalPredicate<Collection<T>> contains(final T t) {
+        return new LogicalPredicate<Collection<T>>() {
+            public boolean matches(Collection<T> other) {
                 return other.contains(t);
             }
         };
     }
 
-    public static <T> LogicalPredicate<? super Iterable<T>> exists(final Predicate<? super T> predicate) {
+    public static <T> LogicalPredicate<Iterable<T>> exists(final Predicate<? super T> predicate) {
         return new LogicalPredicate<Iterable<T>>() {
             public boolean matches(Iterable<T> iterable) {
                 return sequence(iterable).exists(predicate);
@@ -92,7 +92,7 @@ public class Predicates {
         return new InPredicate<T>(sequence(values));
     }
 
-    public static LogicalPredicate<? super Either> isLeft() {
+    public static LogicalPredicate<Either> isLeft() {
         return new LogicalPredicate<Either>() {
             public boolean matches(Either either) {
                 return either.isLeft();
@@ -100,7 +100,7 @@ public class Predicates {
         };
     }
 
-    public static LogicalPredicate<? super Either> isRight() {
+    public static LogicalPredicate<Either> isRight() {
         return new LogicalPredicate<Either>() {
             public boolean matches(Either either) {
                 return either.isRight();

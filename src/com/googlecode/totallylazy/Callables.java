@@ -86,7 +86,6 @@ public final class Callables {
 
     public static Callable1<Object, Integer> length() {
         return new Callable1<Object, Integer>() {
-            @SuppressWarnings("unchecked")
             public final Integer call(final Object instance) throws Exception {
                 Class aClass = instance.getClass();
                 if (aClass.isArray()) {

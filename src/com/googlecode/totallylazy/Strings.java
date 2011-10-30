@@ -134,7 +134,7 @@ public class Strings {
         };
     }
 
-    public static Predicate<? super String> empty() {
+    public static Predicate<String> empty() {
         return new Predicate<String>() {
             public boolean matches(String value) {
                 return isEmpty(value);
@@ -146,7 +146,7 @@ public class Strings {
         return value == null || value.equals(EMPTY);
     }
 
-    public static Predicate<? super Character> unicodeControlOrUndefinedCharacter() {
+    public static Predicate<Character> unicodeControlOrUndefinedCharacter() {
         return new Predicate<Character>() {
             public boolean matches(Character character) {
                 return character > 0x7F;

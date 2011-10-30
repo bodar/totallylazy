@@ -1,11 +1,15 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Predicates.contains;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Arrays.asList;
 
 public class Sets {
@@ -52,10 +56,11 @@ public class Sets {
         return intersection(asList(sets));
     }
 
-    public static <T> Set<T> intersection(final Iterable<Set<? extends T>> iterables) {
-        Sequence<Set<? extends T>> sets = Sequences.sequence(iterables).sortBy(size());
-        Set<? extends T> smallest = sets.head();
-        Sequence<Set<? extends T>> theRest = sets.tail();
+    @SuppressWarnings("unchecked")
+    public static <T> Set<T> intersection(final Iterable<? extends Set<? extends T>> iterables) {
+        Sequence<Set<T>> sets = (Sequence<Set<T>>) sequence(iterables).sortBy(size());
+        Set<T> smallest = sets.head();
+        Sequence<Set<T>> theRest = sets.tail();
         Set<T> result = new LinkedHashSet<T>();
         for (T t : smallest) {
             if (theRest.forAll(contains(t))) {
@@ -70,7 +75,7 @@ public class Sets {
     }
 
     public static <T> Set<T> complement(final Iterable<Set<? extends T>> iterables) {
-        Sequence<Set<? extends T>> sets = Sequences.sequence(iterables);
+        Sequence<Set<? extends T>> sets = sequence(iterables);
         Set<? extends T> head = sets.head();
         Sequence<Set<? extends T>> theRest = sets.tail();
         Set<T> result = new LinkedHashSet<T>();

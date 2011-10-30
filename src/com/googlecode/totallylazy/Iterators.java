@@ -44,7 +44,7 @@ public class Iterators {
             Object aValue = a.next();
             Object bValue = b.next();
 
-            if(aValue == bValue){
+            if (aValue == bValue) {
                 continue;
             }
 
@@ -251,12 +251,25 @@ public class Iterators {
         return tryPick(iterator, callable).get();
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> Iterator<T> add(final Iterator<T> iterator, final T t) {
         return join(iterator, sequence(t).iterator());
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> Iterator<T> join(final Iterator<T> first, final Iterator<T> second) {
+        return internalJoin(first, second);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Iterator<T> join(final Iterator<T> first, final Iterator<T> second, final Iterator<T> third) {
+        return internalJoin(first, second, third);
+    }
+
     public static <T> Iterator<T> join(final Iterator<T>... iterators) {
+        return internalJoin(iterators);
+    }
+
+    private static <T> Iterator<T> internalJoin(final Iterator<T>... iterators) {
         return join(sequence(iterators));
     }
 
@@ -264,9 +277,8 @@ public class Iterators {
         return new FlatMapIterator<Iterator<T>, T>(iterable.iterator(), Callables.<T>asIterable());
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> Iterator<T> cons(final T t, final Iterator<T> iterator) {
-        return join(sequence(t).iterator(), iterator);
+    public static <T> Iterator<T> cons(final T t, final Iterator<? extends T> iterator) {
+        return join(sequence(t).iterator(), (Iterator<T>) iterator);
     }
 
     public static <T, S> Iterator<S> safeCast(final Iterator<T> iterator, final Class<S> aClass) {
