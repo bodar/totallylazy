@@ -11,7 +11,6 @@ import com.googlecode.totallylazy.iterators.QuintupleIterator;
 import com.googlecode.totallylazy.iterators.TransposeIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
 
-import java.lang.reflect.Array;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -59,6 +58,11 @@ public class Sequences {
         return empty();
     }
 
+
+    @SuppressWarnings("unchecked")
+    public static <T> Sequence<T> one(final T first) {
+        return internal(first);
+    }
 
     @SuppressWarnings("unchecked")
     public static <T> Sequence<T> sequence(final T first) {
@@ -372,25 +376,31 @@ public class Sequences {
         };
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> Sequence<T> join(final Iterable<? extends T> first) {
-        return internalJoin(first);
+    public static <T> Sequence<T> join(final Iterable<? extends T> first, final Iterable<? extends T> second) {
+        return join(sequence(first, second));
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> Sequence<T> join(final Iterable<? extends T> first, final Iterable<? extends T> second) {
-        return internalJoin(first, second);
+    public static <T> Sequence<T> join(final Iterable<? extends T> first, final Iterable<? extends T> second, final Iterable<? extends T> third) {
+        return join(sequence(first, second, third));
+    }
+
+    public static <T> Sequence<T> join(final Iterable<? extends T> first, final Iterable<? extends T> second, final Iterable<? extends T> third, final Iterable<? extends T> fourth) {
+        return join(sequence(first, second, third, fourth));
+    }
+
+    public static <T> Sequence<T> join(final Iterable<? extends T> first, final Iterable<? extends T> second, final Iterable<? extends T> third, final Iterable<? extends T> fourth, final Iterable<? extends T> fifth) {
+        return join(sequence(first, second, third, fourth, fifth));
     }
 
     public static <T> Sequence<T> join(final Iterable<? extends T>... iterables) {
-        return internalJoin(iterables);
+        return join(sequence(iterables));
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> Sequence<T> internalJoin(final Iterable<? extends T>... iterables) {
+    public static <T> Sequence<T> join(final Sequence<? extends Iterable<? extends T>> sequence) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
-                return Iterators.join(sequence(iterables).map(new Callable1<Iterable<? extends T>, Iterator<T>>() {
+                return Iterators.join(sequence.map(new Callable1<Iterable<? extends T>, Iterator<T>>() {
                     public Iterator<T> call(Iterable<? extends T> iterable) throws Exception {
                         return (Iterator<T>) iterable.iterator();
                     }

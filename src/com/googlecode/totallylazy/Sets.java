@@ -1,8 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
-
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -40,11 +37,27 @@ public class Sets {
         return result;
     }
 
+    public static <T> Set<T> union(final Set<? extends T> first, final Set<? extends T> second) {
+        return union(sequence(first, second));
+    }
+
+    public static <T> Set<T> union(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third) {
+        return union(sequence(first, second, third));
+    }
+
+    public static <T> Set<T> union(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth) {
+        return union(sequence(first, second, third, fourth));
+    }
+
+    public static <T> Set<T> union(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth, final Set<? extends T> firth) {
+        return union(sequence(first, second, third, fourth, firth));
+    }
+
     public static <T> Set<T> union(final Set<? extends T>... sets) {
         return union(asList(sets));
     }
 
-    public static <T> Set<T> union(final Iterable<Set<? extends T>> sets) {
+    public static <T> Set<T> union(final Iterable<? extends Set<? extends T>> sets) {
         Set<T> result = new LinkedHashSet<T>();
         for (Set<? extends T> set : sets) {
             result.addAll(set);
@@ -52,8 +65,24 @@ public class Sets {
         return result;
     }
 
+    public static <T> Set<T> intersection(final Set<? extends T> first, final Set<? extends T> second) {
+        return intersection(sequence(first, second));
+    }
+
+    public static <T> Set<T> intersection(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third) {
+        return intersection(sequence(first, second, third));
+    }
+
+    public static <T> Set<T> intersection(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth) {
+        return intersection(sequence(first, second, third, fourth));
+    }
+
+    public static <T> Set<T> intersection(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth, final Set<? extends T> firth) {
+        return intersection(sequence(first, second, third, fourth, firth));
+    }
+
     public static <T> Set<T> intersection(final Set<? extends T>... sets) {
-        return intersection(asList(sets));
+        return intersection(sequence(sets));
     }
 
     @SuppressWarnings("unchecked")
@@ -68,6 +97,22 @@ public class Sets {
             }
         }
         return result;
+    }
+
+    public static <T> Set<T> complement(final Set<? extends T> first, final Set<? extends T> second) {
+        return complement(sequence(first, second));
+    }
+
+    public static <T> Set<T> complement(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third) {
+        return complement(sequence(first, second, third));
+    }
+
+    public static <T> Set<T> complement(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth) {
+        return complement(sequence(first, second, third, fourth));
+    }
+
+    public static <T> Set<T> complement(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth, final Set<? extends T> firth) {
+        return complement(sequence(first, second, third, fourth, firth));
     }
 
     public static <T> Set<T> complement(final Set<? extends T>... sets) {
