@@ -11,6 +11,22 @@ import java.util.concurrent.TimeUnit;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callers {
+    public static <T> Sequence<T> callConcurrently(final Callable<T>first, final Callable<T>second) {
+        return callConcurrently(sequence(first, second));
+    }
+
+    public static <T> Sequence<T> callConcurrently(final Callable<T>first, final Callable<T>second, final Callable<T>third) {
+        return callConcurrently(sequence(first, second, third));
+    }
+
+    public static <T> Sequence<T> callConcurrently(final Callable<T>first, final Callable<T>second, final Callable<T>third, final Callable<T>fourth) {
+        return callConcurrently(sequence(first, second, third, fourth));
+    }
+
+    public static <T> Sequence<T> callConcurrently(final Callable<T>first, final Callable<T>second, final Callable<T>third, final Callable<T>fourth, final Callable<T>fifth) {
+        return callConcurrently(sequence(first, second, third, fourth, fifth));
+    }
+
     public static <T> Sequence<T> callConcurrently(final Callable<T>... callables) {
         return callConcurrently(sequence(callables));
     }

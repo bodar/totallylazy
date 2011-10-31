@@ -112,23 +112,23 @@ public class Numbers {
         return multiply(value, value);
     }
 
-    public static LogicalPredicate<? super Number> not(Number value) {
+    public static LogicalPredicate<Number> not(Number value) {
         return Predicates.not(value);
     }
 
-    public static LogicalPredicate<? super Number> not(Predicate<? super Number> predicate) {
+    public static LogicalPredicate<Number> not(Predicate<? super Number> predicate) {
         return Predicates.not(predicate);
     }
 
-    public static LogicalPredicate<? super Number> even() {
+    public static LogicalPredicate<Number> even() {
         return remainderIs(2, 0);
     }
 
-    public static LogicalPredicate<? super Number> odd() {
+    public static LogicalPredicate<Number> odd() {
         return remainderIs(2, 1);
     }
 
-    public static LogicalPredicate<? super Number> prime() {
+    public static LogicalPredicate<Number> prime() {
         return new LogicalPredicate<Number>() {
             public final boolean matches(final Number candidate) {
                 return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(not(remainderIsZero(candidate)));
@@ -136,7 +136,7 @@ public class Numbers {
         };
     }
 
-    public static LogicalPredicate<? super Number> primeSquaredLessThan(final Number candidate) {
+    public static LogicalPredicate<Number> primeSquaredLessThan(final Number candidate) {
         return new LogicalPredicate<Number>() {
             public final boolean matches(final Number prime) {
                 return Numbers.lessThanOrEqualTo(squared(prime), candidate);
@@ -144,7 +144,7 @@ public class Numbers {
         };
     }
 
-    public static LogicalPredicate<? super Number> remainderIsZero(final Number dividend) {
+    public static LogicalPredicate<Number> remainderIsZero(final Number dividend) {
         return new LogicalPredicate<Number>() {
             public final boolean matches(Number divisor) {
                 return Numbers.isZero(remainder(dividend, divisor));
@@ -152,7 +152,7 @@ public class Numbers {
         };
     }
 
-    public static LogicalPredicate<? super Number> remainderIs(final Number divisor, final Number remainder) {
+    public static LogicalPredicate<Number> remainderIs(final Number divisor, final Number remainder) {
         return new RemainderIs(divisor, remainder);
     }
 
@@ -254,7 +254,7 @@ public class Numbers {
         return !operatorsFor(x, y).lessThan(y, x);
     }
 
-    public static LogicalPredicate<? super Number> greaterThan(final Number value) {
+    public static LogicalPredicate<Number> greaterThan(final Number value) {
         return new GreaterThanPredicate(value);
     }
 
@@ -262,7 +262,7 @@ public class Numbers {
         return operatorsFor(x, y).lessThan(y, x);
     }
 
-    public static LogicalPredicate<? super Number> greaterThanOrEqualTo(final Number value) {
+    public static LogicalPredicate<Number> greaterThanOrEqualTo(final Number value) {
         return new GreaterThanOrEqualToPredicate(value);
     }
 
@@ -270,7 +270,7 @@ public class Numbers {
         return !operatorsFor(x, y).lessThan(x, y);
     }
 
-    public static LogicalPredicate<? super Number> between(final Number a, final Number b) {
+    public static LogicalPredicate<Number> between(final Number a, final Number b) {
         return new BetweenPredicate(a, b);
     }
 

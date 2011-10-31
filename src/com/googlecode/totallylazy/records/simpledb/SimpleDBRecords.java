@@ -16,7 +16,6 @@ import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Keywords;
 import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.SelectCallable;
 import com.googlecode.totallylazy.records.SourceRecord;
 import com.googlecode.totallylazy.records.simpledb.mappings.Mappings;
 
@@ -99,6 +98,7 @@ public class SimpleDBRecords extends AbstractRecords {
         return super.undefine(recordName);
     }
 
+    @SuppressWarnings("unchecked")
     private Callable1<? super Record, DeletableItem> asItem() {
         return new Callable1<Record, DeletableItem>() {
             public DeletableItem call(Record record) throws Exception {

@@ -23,15 +23,15 @@ public class NumberMatcher extends TypeSafeMatcher<Number> {
         return Numbers.equalTo(number, other);
     }
 
-    public static Matcher<? super Number> is(final Number other) {
+    public static Matcher<Number> is(final Number other) {
         return new NumberMatcher(other);
     }
 
-    public static Matcher<? super Number> equalTo(final Number other) {
+    public static Matcher<Number> equalTo(final Number other) {
         return is(other);
     }
 
-    public static Matcher<? super Number> between(Number lower, Number upper) {
+    public static Matcher<Number> between(Number lower, Number upper) {
         return matcher(Numbers.between(lower, upper));
     }
 

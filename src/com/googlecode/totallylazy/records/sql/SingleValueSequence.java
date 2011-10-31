@@ -42,6 +42,7 @@ class SingleValueSequence<T> extends Sequence<T> implements Expressible {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <S> S reduce(Callable2<? super S, ? super T, S> callable) {
         try{
             SelectBuilder reduce = builder.reduce(callable);

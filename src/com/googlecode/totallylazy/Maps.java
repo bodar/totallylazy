@@ -22,6 +22,22 @@ public class Maps {
         return new LinkedHashMap<K, V>();
     }
 
+    public static <K, V> Map<K, V> map(final Pair<K, V> first, final Pair<K, V> second) {
+        return map(sequence(first, second));
+    }
+
+    public static <K, V> Map<K, V> map(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third) {
+        return map(sequence(first, second, third));
+    }
+
+    public static <K, V> Map<K, V> map(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third, final Pair<K, V> fourth) {
+        return map(sequence(first, second, third, fourth));
+    }
+
+    public static <K, V> Map<K, V> map(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third, final Pair<K, V> fourth, final Pair<K, V> fifth) {
+        return map(sequence(first, second, third, fourth, fifth));
+    }
+
     public static <K, V> Map<K, V> map(final Pair<K, V>... entries) {
         return map(sequence(entries));
     }
@@ -42,7 +58,7 @@ public class Maps {
     }
 
     public static <T, Key> Map<Key, T> map(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
-       return map(new LinkedHashMap<Key, T>(), iterator, callable);
+        return map(new LinkedHashMap<Key, T>(), iterator, callable);
     }
 
     public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
@@ -61,7 +77,23 @@ public class Maps {
     public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
         return map(seed, iterable.iterator(), callable);
     }
-    
+
+    public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V> first, final Pair<K, V> second) {
+        return multiMap(sequence(first, second));
+    }
+
+    public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third) {
+        return multiMap(sequence(first, second, third));
+    }
+
+    public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third, final Pair<K, V> fourth) {
+        return multiMap(sequence(first, second, third, fourth));
+    }
+
+    public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third, final Pair<K, V> fourth, final Pair<K, V> fifth) {
+        return multiMap(sequence(first, second, third, fourth, fifth));
+    }
+
     public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V>... entries) {
         return multiMap(sequence(entries));
     }
@@ -83,9 +115,9 @@ public class Maps {
         }
         return seed;
     }
-    
+
     public static <T, Key> Map<Key, List<T>> multiMap(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
-       return multiMap(new LinkedHashMap<Key, List<T>>(), iterator, callable);
+        return multiMap(new LinkedHashMap<Key, List<T>>(), iterator, callable);
     }
 
     public static <T, Key> Map<Key, List<T>> multiMap(final Map<Key, List<T>> seed, final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
@@ -160,7 +192,7 @@ public class Maps {
     public static <K, V> Callable1<Map.Entry<K, V>, Pair<K, V>> entryToPair(final Class<K> keyClass, final Class<V> valueClass) {
         return entryToPair();
     }
-    
+
     private static class PairEntry<K, V> implements Map.Entry<K, V> {
         private final Pair<K, V> pair;
 

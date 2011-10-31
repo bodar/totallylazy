@@ -54,6 +54,7 @@ public class XmlRecords extends AbstractRecords {
         return Sequences.sequence(parts).take(parts.length - 1).toString("/");
     }
 
+    @SuppressWarnings("unchecked")
     private Callable2<? super Element, ? super Keyword, Element> addNodes(final Record record) {
         return new Callable2<Element, Keyword, Element>() {
             public Element call(Element container, Keyword field) throws Exception {
@@ -80,6 +81,7 @@ public class XmlRecords extends AbstractRecords {
         return Xml.remove(map).size();
     }
 
+    @SuppressWarnings("unchecked")
     private Callable1<? super Record, Node> asNode() {
         return new Callable1<Record, Node>() {
             public Node call(Record record) throws Exception {
