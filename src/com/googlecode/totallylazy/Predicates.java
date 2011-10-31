@@ -227,9 +227,9 @@ public class Predicates {
         return where(callable, predicate);
     }
 
-    public static <T> LogicalPredicate<Predicate<? super T>> matches(final T instance) {
-        return new LogicalPredicate<Predicate<? super T>>() {
-            public boolean matches(Predicate<? super T> predicate) {
+    public static <T> LogicalPredicate<Predicate<T>> matches(final T instance) {
+        return new LogicalPredicate<Predicate<T>>() {
+            public boolean matches(Predicate<T> predicate) {
                 return predicate.matches(instance);
             }
         };
