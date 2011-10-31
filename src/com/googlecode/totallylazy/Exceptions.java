@@ -62,13 +62,14 @@ public class Exceptions {
         return handleException(callable, sequence(exceptionClasses));
     }
 
+    @SuppressWarnings("unchecked")
     public static <T, S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Iterable<? extends Predicate<? super Exception>> predicates) {
         return new Callable1<T, Option<S>>() {
             public Option<S> call(T t) throws Exception {
                 try {
                     return Option.some(callable.call(t));
                 } catch (Exception e) {
-                    if (sequence(predicates).exists(Predicates.<Exception>matches(e))) {
+                    if (sequence((Iterable<Predicate<Exception>>) predicates).exists(Predicates.matches(e))) {
                         return none();
                     }
                     throw e;
