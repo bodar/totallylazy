@@ -30,6 +30,7 @@ import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
     @Test
+    @SuppressWarnings("unchecked")
     public void supportsTranspose() {
         Sequence<Sequence<Integer>> transposed = transpose(sequence(1, 2), sequence(3, 4), sequence(5, 6));
         assertThat(transposed, hasExactly(sequence(1, 3, 5), sequence(2, 4, 6)));
@@ -74,12 +75,12 @@ public class SequencesTest {
 
     @Test
     public void supportsCycle() throws Exception {
-        assertThat(range(1, 4).cycle(), startsWith(1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3));
+        assertThat(range(1, 4).cycle(), startsWith((Number)1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3));
     }
 
     @Test
     public void supportsAddingToAnEmptyList() throws Exception {
-        assertThat(sequence().add(1).add(2).add(3), hasExactly(1, 2, 3));
+        assertThat(sequence().add(1).add(2).add(3), hasExactly((Object)1, 2, 3));
     }
 
     @Test
@@ -94,8 +95,8 @@ public class SequencesTest {
         final Sequence<Number> numbers = numbers(2, 3.0D);
         Sequence<Integer> integers = sequence(2, 3);
         Sequence<Long> longs = sequence(2L, 3L);
-        assertThat(numbers.join(integers).join(longs), hasExactly(2, 3.0D, 2, 3, 2L, 3L));
-        assertThat(join(sequence(1L, 2.0D, 3), numbers, asList(4, 5, 6), integers), hasExactly(1L, 2.0D, 3, 2, 3.0D, 4, 5, 6, 2, 3));
+        assertThat(numbers.join(integers).join(longs), hasExactly((Number)2, 3.0D, 2, 3, 2L, 3L));
+        assertThat(join(sequence(1L, 2.0D, 3), numbers, asList(4, 5, 6), integers), hasExactly((Number)1L, 2.0D, 3, 2, 3.0D, 4, 5, 6, 2, 3));
     }
 
     @Test
@@ -123,7 +124,7 @@ public class SequencesTest {
 
     @Test
     public void supportsIterate() throws Exception {
-        assertThat(iterate(increment(), 1), startsWith(1, 2, 3, 4, 5));
+        assertThat(iterate(increment(), 1), startsWith((Number)1, 2, 3, 4, 5));
     }
 
     @Test
@@ -141,7 +142,7 @@ public class SequencesTest {
     @Test
     public void canCombineIterateWithOtherOperations() throws Exception {
         final Sequence<Number> numbers = iterate(increment(), 1);
-        assertThat(numbers.filter(even()), startsWith(2, 4, 6));
-        assertThat(numbers.filter(odd()), startsWith(1, 3, 5, 7, 9));
+        assertThat(numbers.filter(even()), startsWith((Number)2, 4, 6));
+        assertThat(numbers.filter(odd()), startsWith((Number)1, 3, 5, 7, 9));
     }
 }

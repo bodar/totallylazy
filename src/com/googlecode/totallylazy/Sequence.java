@@ -128,7 +128,6 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.toString(this, start, separator, end, limit);
     }
 
-    @SuppressWarnings("unchecked")
     public Set<T> union(final Iterable<? extends T> other) {
         return Sets.union(toSet(), Sets.set(other));
     }

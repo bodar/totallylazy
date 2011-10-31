@@ -5,6 +5,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.Matchers.matcher;
 
 public class NumberMatcher extends TypeSafeMatcher<Number> {
@@ -33,6 +34,14 @@ public class NumberMatcher extends TypeSafeMatcher<Number> {
 
     public static Matcher<Number> between(Number lower, Number upper) {
         return matcher(Numbers.between(lower, upper));
+    }
+
+    public static Matcher<Iterable<Number>> hasExactly(Number... items) {
+        return IterableMatcher.hasExactly(sequence(items));
+    }
+
+    public static Matcher<Iterable<Number>> startsWith(Number... items) {
+        return IterableMatcher.startsWith(sequence(items));
     }
 
 }
