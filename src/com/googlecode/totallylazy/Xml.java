@@ -42,26 +42,38 @@ public class Xml {
             withRule(Strings.unicodeControlOrUndefinedCharacter(), toXmlEntity());
 
     public static String selectContents(final Node node, final String expression) {
-        return contents(selectNodes(node, expression));
+        try {
+            return contents(internalSelectNodes(node, expression));
+        } catch (XPathExpressionException e) {
+            try {
+                return (String) xpath().evaluate(expression, node, XPathConstants.STRING);
+            } catch (XPathExpressionException ignore) {
+                throw new LazyException(e);
+            }
+        }
     }
 
     public static Sequence<Node> selectNodes(final Node node, final String expression) {
         try {
-            return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
+            return internalSelectNodes(node, expression);
         } catch (XPathExpressionException e) {
             throw new LazyException(e);
         }
     }
 
-    public static Option<Node> selectNode(final Node node, final String expression){
+    private static Sequence<Node> internalSelectNodes(Node node, String expression) throws XPathExpressionException {
+        return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
+    }
+
+    public static Option<Node> selectNode(final Node node, final String expression) {
         return selectNodes(node, expression).headOption();
     }
 
-    public static Sequence<Element> selectElements(final Node node, final String expression){
+    public static Sequence<Element> selectElements(final Node node, final String expression) {
         return selectNodes(node, expression).safeCast(Element.class);
     }
 
-    public static Option<Element> selectElement(final Node node, final String expression){
+    public static Option<Element> selectElement(final Node node, final String expression) {
         return selectElements(node, expression).headOption();
     }
 
