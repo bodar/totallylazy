@@ -35,4 +35,11 @@ public class XmlTest {
     private String longStringWithoutEncodedChars() {
         return repeat("A").take(100).toString("", "", "", Long.MAX_VALUE);
     }
+
+    @Test
+    public void supportsXPathExpressionsWithFunctionsThatReturnStrings() throws Exception{
+        Document document = Xml.document("<root><child type=\"name\" value=\"bob\"/></root>");
+        String value = Xml.selectContents(document, "concat(//child/@type, ':', //child/@value)");
+        assertThat(value, is("name:bob"));
+    }
 }
