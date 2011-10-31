@@ -15,6 +15,7 @@ import static com.googlecode.totallylazy.matchers.NumberMatcher.between;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+
 public class LazyCallableTest {
     @Test
     public void instancesDoNotInteract() throws Exception {

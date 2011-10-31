@@ -38,6 +38,7 @@ public class Mappings {
         add(Object.class, new ObjectMapping());
     }
 
+    @SuppressWarnings("unchecked")
     public <T> Mappings add(final Class<T> type, final Mapping<T> mapping) {
         map.put(type, (Mapping<Object>) mapping);
         return this;
@@ -58,6 +59,7 @@ public class Mappings {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T toValue(final Class<T> aClass, String value){
         try {
             return value == null ? null : (T) get(aClass).toValue(value);
@@ -74,6 +76,7 @@ public class Mappings {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public Callable2<? super Record, ? super Attribute, Record> asField(final Sequence<Keyword> definitions) {
         return new Callable2<Record, Attribute, Record>() {
             public Record call(Record mapRecord, Attribute attribute) throws Exception {

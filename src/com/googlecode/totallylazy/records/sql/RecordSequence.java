@@ -72,6 +72,7 @@ public class RecordSequence extends Sequence<Record> implements Expressible {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <S> S reduce(Callable2<? super S, ? super Record, S> callable) {
         try {
             SelectBuilder query = builder.reduce(callable);

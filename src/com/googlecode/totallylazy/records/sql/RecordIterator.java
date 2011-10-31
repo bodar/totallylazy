@@ -40,6 +40,7 @@ public class RecordIterator extends StatefulIterator<Record> implements Closeabl
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected Record getNext() throws Exception {
         ResultSet resultSet = getResultSet();
         boolean hasNext = resultSet.next();

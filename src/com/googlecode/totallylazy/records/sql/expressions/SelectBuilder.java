@@ -33,7 +33,7 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
 
     private SelectBuilder(SetQuantifier setQuantifier, Sequence<? extends Keyword> select, Keyword table, Option<Predicate<? super Record>> where, Option<Comparator<? super Record>> comparator) {
         this.setQuantifier = setQuantifier;
-        this.select = select.isEmpty() ? ALL_COLUMNS : (Sequence < Keyword >) select;
+        this.select = select.isEmpty() ? ALL_COLUMNS : select.safeCast(Keyword.class);
         this.table = table;
         this.where = where;
         this.comparator = comparator;
@@ -80,6 +80,7 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
         return new SelectBuilder(setQuantifier, select, table, where, Option.<Comparator<? super Record>>some(comparator));
     }
 
+    @SuppressWarnings("unchecked")
     public SelectBuilder count() {
         Callable2 count = CountNotNull.<Number>count();
         Sequence<Keyword> sequence = Sequences.<Keyword>sequence(aggregate(count, STAR).as(keyword("record_count")));
@@ -90,8 +91,9 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
         return new SelectBuilder(DISTINCT, select, table, where, comparator);
     }
 
+    @SuppressWarnings("unchecked")
     public <S> SelectBuilder reduce(Callable2 callable) {
-        if(callable instanceof Aggregates){
+        if (callable instanceof Aggregates) {
             return new SelectBuilder(setQuantifier, ((Aggregates) callable).value(), table, where, comparator);
         }
         return new SelectBuilder(setQuantifier, sequence(Aggregate.aggregate(callable, select().head())), table, where, comparator);

@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.time.Dates.date;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.between;
@@ -201,10 +202,10 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     @Test
     public void supportsUpdating() throws Exception {
-        Number count = records.set(people,
+        Number count = records.set(people, sequence(
                 pair(where(age, is(12)), record().set(isbn, zenIsbn)),
                 pair(where(age, is(11)), record().set(isbn, zenIsbn))
-        );
+        ));
         assertThat(count, NumberMatcher.is(2));
         assertThat(records.get(people).filter(where(age, is(12))).map(isbn), hasExactly(zenIsbn));
         assertThat(records.get(people).filter(where(age, is(11))).map(isbn), hasExactly(zenIsbn));
@@ -238,6 +239,7 @@ public abstract class AbstractRecordsTests<T extends Records> {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void supportsAliasingAKeyword() throws Exception {
         Keyword<String> first = keyword("first", String.class);
         Record record = records.get(people).filter(where(lastName, is("bodart"))).map(select(firstName.as(first))).head();

@@ -67,6 +67,7 @@ public class SimpleDBSequence<T> extends Sequence<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Sequence<T> filter(Predicate<? super T> predicate) {
         return new SimpleDBSequence<T>(sdb, builder.where((Predicate) predicate), mappings, itemToRecord, logger, consistentRead);
     }
@@ -95,6 +96,7 @@ public class SimpleDBSequence<T> extends Sequence<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Sequence<T> sortBy(Comparator<? super T> comparator) {
         try {
             return new SimpleDBSequence(sdb, builder.orderBy((Comparator) comparator), mappings, itemToRecord, logger, consistentRead);
@@ -103,11 +105,4 @@ public class SimpleDBSequence<T> extends Sequence<T> {
             return super.sortBy(comparator);
         }
     }
-
-//    @Override
-//    public Number size() {
-//        SelectBuilder count = builder.select(keyword("count(*)"));
-//        Record next = (Record) iterator(count.express()).next();
-//        return Numbers.valueOf(next.get(keyword("Count", String.class)));
-//    }
 }

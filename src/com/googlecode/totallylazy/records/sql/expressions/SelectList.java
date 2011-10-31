@@ -26,6 +26,7 @@ public class SelectList extends CompoundExpression{
         return expressions.map(Expressions.text()).toString();
     }
 
+    @SuppressWarnings("unchecked")
     public static Callable1<Keyword, Expression> derivedColumn() {
         return new Callable1<Keyword, Expression>() {
             public Expression call(Keyword keyword) throws Exception {

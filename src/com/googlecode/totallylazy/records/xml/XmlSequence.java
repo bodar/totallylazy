@@ -26,11 +26,11 @@ public class XmlSequence extends Sequence<Record> {
     public Iterator<Record> iterator() {
         return nodes.map(asRecord()).iterator();
     }
-
+    @SuppressWarnings("unchecked")
     private Callable1<? super Node, Record> asRecord() {
         return new Callable1<Node, Record>() {
             public Record call(final Node node) throws Exception {
-                return definitions.fold(new SourceRecord(node), new Callable2<Record, Keyword, Record>() {
+                return definitions.fold(new SourceRecord<Node>(node), new Callable2<Record, Keyword, Record>() {
                     public Record call(Record nodeRecord, Keyword keyword) throws Exception {
                         Sequence<Node> nodes = Xml.selectNodes(node, keyword.name());
                         if (nodes.isEmpty()) {
