@@ -61,7 +61,23 @@ public class Xml {
         }
     }
 
-    private static Sequence<Node> internalSelectNodes(Node node, String expression) throws XPathExpressionException {
+    public static Number selectNumber(final Node node, final String expression) {
+        try {
+            return (Number) xpath().evaluate(expression, node, XPathConstants.NUMBER);
+        } catch (XPathExpressionException e) {
+            throw new LazyException(e);
+        }
+    }
+
+    public static boolean matches(final Node node, final String expression) {
+        try {
+            return (Boolean) xpath().evaluate(expression, node, XPathConstants.BOOLEAN);
+        } catch (XPathExpressionException e) {
+            throw new LazyException(e);
+        }
+    }
+
+    private static Sequence<Node> internalSelectNodes(final Node node, final String expression) throws XPathExpressionException {
         return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
     }
 
@@ -246,4 +262,5 @@ public class Xml {
             }
         };
     }
+
 }
