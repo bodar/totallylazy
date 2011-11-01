@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
@@ -41,5 +42,19 @@ public class XmlTest {
         Document document = Xml.document("<root><child type=\"name\" value=\"bob\"/></root>");
         String value = Xml.selectContents(document, "concat(//child/@type, ':', //child/@value)");
         assertThat(value, is("name:bob"));
+    }
+
+    @Test
+    public void supportsReturningANumber() throws Exception{
+        Document document = Xml.document("<root><child type=\"name\" value=\"bob\"/></root>");
+        Number value = Xml.selectNumber(document, "count(//child)");
+        assertThat(value, NumberMatcher.is(1));
+    }
+
+    @Test
+    public void supportsReturningABoolean() throws Exception{
+        Document document = Xml.document("<root><child type=\"name\" value=\"bob\"/></root>");
+        boolean value = Xml.matches(document, "count(//child) = 1");
+        assertThat(value, is(true));
     }
 }
