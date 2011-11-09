@@ -59,6 +59,33 @@ import static org.junit.Assert.fail;
 
 @RunWith(SpecRunner.class)
 public class SequenceTest {
+
+    @Test
+    @Notes("Eagerly return the first element of a sequence, throws NoSuchElementException if empty.")
+    public void head() throws Exception {
+        assertThat(sequence(1, 2).head(), is(1));
+    }
+
+    @Test
+    @Notes("Eagerly return the first element of a sequence wrapped in a some, returns none if empty.")
+    public void headOption() throws Exception {
+        assertThat(sequence(1).headOption(), is(some(1)));
+        assertThat(empty().headOption(), is(none()));
+    }
+
+    @Test
+    @Notes("Eagerly return the last element of a sequence, throws NoSuchElementException if empty. Must be finite")
+    public void last() throws Exception {
+        assertThat(sequence(1, 2, 3).last(), is(3));
+    }
+
+    @Test
+    @Notes("Eagerly return the last element of a sequence wrapped in a some, throws NoSuchElementException if empty. Must be finite")
+    public void LastOption() throws Exception {
+        assertThat(sequence(1, 2, 3).lastOption(), is(some(3)));
+        assertThat(empty().lastOption(), is(none()));
+    }
+
     @Test
     @Notes("This test has a very small chance that it could fail")
     public void supportsShuffle() throws Exception {
@@ -197,16 +224,6 @@ public class SequenceTest {
         assertThat(result.second(), hasExactly(1, 3));
     }
 
-    @Test
-    public void supportsLast() throws Exception {
-        assertThat(sequence(1, 2, 3).last(), is(3));
-    }
-
-    @Test
-    public void supportsLastOrOption() throws Exception {
-        assertThat(sequence(1, 2, 3).lastOption(), is((Option<Integer>) Option.<Integer>some(3)));
-        assertThat(Sequences.<Number>sequence().lastOption(), is((Option<Number>) Option.<Number>none()));
-    }
 
     @Test
     public void supportsReverse() throws Exception {
@@ -445,16 +462,6 @@ public class SequenceTest {
         }
     }
 
-    @Test
-    public void supportsHead() throws Exception {
-        assertThat(sequence(1, 2).head(), is(1));
-    }
-
-    @Test
-    public void supportsHeadOrOption() throws Exception {
-        assertThat(sequence(1).headOption(), is((Option<Integer>) Option.<Integer>some(1)));
-        assertThat(Sequences.<Number>sequence().headOption(), is((Option<Number>) Option.<Number>none()));
-    }
 
 
     @Test
