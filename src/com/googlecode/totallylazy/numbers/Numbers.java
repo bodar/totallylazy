@@ -131,7 +131,7 @@ public class Numbers {
     public static LogicalPredicate<Number> prime() {
         return new LogicalPredicate<Number>() {
             public final boolean matches(final Number candidate) {
-                return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(not(remainderIsZero(candidate)));
+                return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(Predicates.not(remainderIsZero(candidate)));
             }
         };
     }
