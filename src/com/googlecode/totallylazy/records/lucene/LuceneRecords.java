@@ -80,7 +80,7 @@ public class LuceneRecords extends AbstractRecords implements Queryable<Query>, 
         return remove(record(recordName));
     }
 
-    private Number remove(Query query) {
+    public Number remove(Query query) {
         try {
             int result = count(query);
             writer.deleteDocuments(query);
@@ -91,7 +91,7 @@ public class LuceneRecords extends AbstractRecords implements Queryable<Query>, 
         }
     }
 
-    private int count(final Query query) {
+    public int count(final Query query) {
         try {
             return using(new IndexSearcher(directory), new Callable1<IndexSearcher, Integer>() {
                 public Integer call(IndexSearcher indexSearcher) throws Exception {
