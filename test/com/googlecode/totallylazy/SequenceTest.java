@@ -307,6 +307,11 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsUniqueWithCallable() throws Exception {
+        assertThat(sequence("Matt", "Dan", "Dominic", "Mary").unique(Strings.characterAt(0)), hasExactly("Matt", "Dan"));
+    }
+
+    @Test
     public void supportsSort() throws Exception {
         assertThat(sort(sequence(5, 6, 1, 3, 4, 2)), hasExactly(1, 2, 3, 4, 5, 6));
         assertThat(sort(sequence("Matt", "Dan", "Bob")), hasExactly("Bob", "Dan", "Matt"));
