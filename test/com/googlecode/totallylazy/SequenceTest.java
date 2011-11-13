@@ -62,7 +62,6 @@ import static org.junit.Assert.fail;
 
 @RunWith(SpecRunner.class)
 public class SequenceTest {
-
     @Test
     @Notes("Eagerly return the first element of a sequence, throws NoSuchElementException if empty.")
     public void head() throws Exception {
@@ -84,9 +83,35 @@ public class SequenceTest {
 
     @Test
     @Notes("Eagerly return the last element of a finite sequence wrapped in a some, returns none if empty.")
-    public void LastOption() throws Exception {
+    public void lastOption() throws Exception {
         assertThat(sequence(1, 2, 3).lastOption(), is(some(3)));
         assertThat(empty().lastOption(), is(none()));
+    }
+
+    @Test
+    @Notes("Lazily returns the elements after the head of the sequence. Lazily throws NoSuchElementException if empty. Works with infinite sequences.")
+    public void supportsTail() throws Exception {
+        assertThat(sequence(1, 2, 3).tail(), hasExactly(2, 3));
+        assertThat(sequence(1).tail().isEmpty(), is(true));
+        try {
+            empty().tail().isEmpty();
+            fail("Should have thrown NoSuchElementException");
+        } catch (NoSuchElementException e) {
+            // all good
+        }
+    }
+
+    @Test
+    @Notes("Lazily returns all the elements of a finite sequence except the last one. Lazily throws NoSuchElementException if empty.s")
+    public void supportsInit() throws Exception {
+        assertThat(sequence(1, 2, 3).init(), hasExactly(1, 2));
+        assertThat(sequence(1).init().isEmpty(), is(true));
+        try {
+            empty().init().isEmpty();
+            fail("Should have thrown NoSuchElementException");
+        } catch (NoSuchElementException e) {
+            // all good
+        }
     }
 
     @Test
@@ -445,31 +470,6 @@ public class SequenceTest {
         assertThat(sequence(1, 2, 3).fold(0, sum()), NumberMatcher.is(6));
         assertThat(sequence(1, 2, 3).foldLeft(0, sum()), NumberMatcher.is(6));
     }
-
-    @Test
-    public void supportsTail() throws Exception {
-        assertThat(sequence(1, 2, 3).tail(), hasExactly(2, 3));
-        assertThat(sequence(1).tail().isEmpty(), Matchers.is(true));
-        try {
-            Sequences.<Object>empty().tail().isEmpty();
-            fail("Should have thrown NoSuchElementException");
-        } catch (NoSuchElementException e) {
-            // all good
-        }
-    }
-
-    @Test
-    public void supportsInit() throws Exception {
-        assertThat(sequence(1, 2, 3).init(), hasExactly(1, 2));
-        assertThat(Sequences.init(sequence(1, 2, 3)), hasExactly(1, 2));
-        try {
-            Sequences.<Object>empty().init().isEmpty();
-            fail("Should have thrown NoSuchElementException");
-        } catch (NoSuchElementException e) {
-            // all good
-        }
-    }
-
 
     @Test
     public void supportsForEach() throws Exception {
