@@ -27,4 +27,10 @@ public class Matchers {
             }
         };
     }
+
+    // fix broken Hamcrest 1.2 return type
+    @SuppressWarnings("unchecked")
+    public static <T> Matcher<T> is(T t) {
+        return (Matcher<T>) org.hamcrest.Matchers.is(t);
+    }
 }
