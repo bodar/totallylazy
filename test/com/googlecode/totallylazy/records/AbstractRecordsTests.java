@@ -201,6 +201,13 @@ public abstract class AbstractRecordsTests<T extends Records> {
     }
 
     @Test
+    public void supportsUnique() throws Exception {
+        records.add(people, record().set(firstName, "chris").set(lastName, "bodart").set(age, 13).set(dob, date(1974, 1, 10)));
+        assertThat(records.get(people).filter(where(lastName, startsWith("bod"))).map(select(lastName)).unique(), hasExactly(record().set(lastName, "bodart")));
+        assertThat(records.get(people).map(lastName).unique(), containsInAnyOrder("bodart", "savage", "martin"));
+    }
+
+    @Test
     public void supportsUpdating() throws Exception {
         Number count = records.set(people, sequence(
                 pair(where(age, is(12)), record().set(isbn, zenIsbn)),
