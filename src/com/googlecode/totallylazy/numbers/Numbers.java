@@ -238,7 +238,7 @@ public class Numbers {
         return operatorsFor(x, y).equalTo(x, y);
     }
 
-    public static Predicate<Number> lessThan(final Number value) {
+    public static LogicalPredicate<Number> lessThan(final Number value) {
         return new LessThanPredicate(value);
     }
 
@@ -246,7 +246,7 @@ public class Numbers {
         return operatorsFor(x, y).lessThan(x, y);
     }
 
-    public static LogicalPredicate<? super Number> lessThanOrEqualTo(final Number value) {
+    public static LogicalPredicate<Number> lessThanOrEqualTo(final Number value) {
         return new LessThanOrEqualToPredicate(value);
     }
 

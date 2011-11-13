@@ -30,6 +30,7 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.greaterThan;
 import static com.googlecode.totallylazy.Predicates.lessThan;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
@@ -38,6 +39,8 @@ import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
+import static com.googlecode.totallylazy.Sequences.splitOn;
+import static com.googlecode.totallylazy.Sequences.splitWhen;
 import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
@@ -59,7 +62,6 @@ import static org.junit.Assert.fail;
 
 @RunWith(SpecRunner.class)
 public class SequenceTest {
-
     @Test
     @Notes("Eagerly return the first element of a sequence, throws NoSuchElementException if empty.")
     public void head() throws Exception {
@@ -74,16 +76,42 @@ public class SequenceTest {
     }
 
     @Test
-    @Notes("Eagerly return the last element of a sequence, throws NoSuchElementException if empty. Must be finite")
+    @Notes("Eagerly return the last element of a finite sequence, throws NoSuchElementException if empty.")
     public void last() throws Exception {
         assertThat(sequence(1, 2, 3).last(), is(3));
     }
 
     @Test
-    @Notes("Eagerly return the last element of a sequence wrapped in a some, throws NoSuchElementException if empty. Must be finite")
-    public void LastOption() throws Exception {
+    @Notes("Eagerly return the last element of a finite sequence wrapped in a some, returns none if empty.")
+    public void lastOption() throws Exception {
         assertThat(sequence(1, 2, 3).lastOption(), is(some(3)));
         assertThat(empty().lastOption(), is(none()));
+    }
+
+    @Test
+    @Notes("Lazily returns the elements after the head of the sequence. Lazily throws NoSuchElementException if empty. Works with infinite sequences.")
+    public void supportsTail() throws Exception {
+        assertThat(sequence(1, 2, 3).tail(), hasExactly(2, 3));
+        assertThat(sequence(1).tail().isEmpty(), is(true));
+        try {
+            empty().tail().isEmpty();
+            fail("Should have thrown NoSuchElementException");
+        } catch (NoSuchElementException e) {
+            // all good
+        }
+    }
+
+    @Test
+    @Notes("Lazily returns all the elements of a finite sequence except the last one. Lazily throws NoSuchElementException if empty.s")
+    public void supportsInit() throws Exception {
+        assertThat(sequence(1, 2, 3).init(), hasExactly(1, 2));
+        assertThat(sequence(1).init().isEmpty(), is(true));
+        try {
+            empty().init().isEmpty();
+            fail("Should have thrown NoSuchElementException");
+        } catch (NoSuchElementException e) {
+            // all good
+        }
     }
 
     @Test
@@ -94,19 +122,20 @@ public class SequenceTest {
 
     @Test
     public void recursiveCallOnlyEndsWhenThereIsNoRemainder() throws Exception {
-        assertThat(numbers(1, 3, 0, 0, 2).recursive(Sequences.<Number>splitOn(0)),
-                is(sequence(numbers(1, 3), Sequences.<Number>empty(), numbers(2))));
+        assertThat(sequence(1, 3, 0, 0, 2).recursive(splitOn(0)),
+                is(sequence(sequence(1, 3), empty(Integer.class), sequence(2))));
     }
 
     @Test
     public void supportsRecursiveSplitOn() throws Exception {
-        assertThat(numbers(1, 3, -4, 0, 7, -9, 0, 2).recursive(Sequences.<Number>splitOn(0)),
-                is(sequence(numbers(1, 3, -4), numbers(7, -9), numbers(2))));
+        assertThat(sequence(1, 3, -4, 0, 7, -9, 0, 2).recursive(splitOn(0)),
+                is(sequence(sequence(1, 3, -4), sequence(7, -9), sequence(2))));
     }
 
     @Test
     public void supportsSplitOn() throws Exception {
-        assertThat(numbers(1, 3, -4, 0, 7, -9, 0, 2).splitOn(0), is(pair(numbers(1, 3, -4), numbers(7, -9, 0, 2))));
+        assertThat(sequence(1, 3, -4, 0, 7, -9, 0, 2).splitOn(0),
+                is(pair(sequence(1, 3, -4), sequence(7, -9, 0, 2))));
     }
 
     @Test
@@ -117,7 +146,8 @@ public class SequenceTest {
 
     @Test
     public void supportsSplitWhen() throws Exception {
-        assertThat(numbers(1, 3, -4, 5, 7, -9, 0, 2).splitWhen(Numbers.lessThan(0)), is(pair(numbers(1, 3), numbers(5, 7, -9, 0, 2))));
+        assertThat(numbers(1, 3, -4, 5, 7, -9, 0, 2).splitWhen(Numbers.lessThan(0)),
+                is(pair(numbers(1, 3), numbers(5, 7, -9, 0, 2))));
     }
 
     @Test
@@ -132,9 +162,12 @@ public class SequenceTest {
 
     @Test
     public void supportsBreak() throws Exception {
-        assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).breakOn(Predicates.greaterThan(3)), is(pair(sequence(1, 2, 3), sequence(4, 1, 2, 3, 4))));
-        assertThat(sequence(1, 2, 3).breakOn(lessThan(9)), is(pair(Sequences.<Integer>empty(), sequence(1, 2, 3))));
-        assertThat(sequence(1, 2, 3).breakOn(Predicates.greaterThan(9)), is(pair(sequence(1, 2, 3), Sequences.<Integer>empty())));
+        assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).breakOn(greaterThan(3)),
+                is(pair(sequence(1, 2, 3), sequence(4, 1, 2, 3, 4))));
+        assertThat(sequence(1, 2, 3).breakOn(lessThan(9)),
+                is(pair(empty(Integer.class), sequence(1, 2, 3))));
+        assertThat(sequence(1, 2, 3).breakOn(greaterThan(9)), 
+                is(pair(sequence(1, 2, 3), empty(Integer.class))));
     }
 
     @Test
@@ -271,6 +304,11 @@ public class SequenceTest {
     public void supportsUniqueAndPreservesOrder() throws Exception {
         assertThat(sequence(1, 2, 1, 4, 3, 2).unique(), hasExactly(1, 2, 4, 3));
         assertThat(sequence("Matt", "Dan", "Matt", "Bob").unique(), hasExactly("Matt", "Dan", "Bob"));
+    }
+
+    @Test
+    public void supportsUniqueWithCallable() throws Exception {
+        assertThat(sequence("Matt", "Dan", "Dominic", "Mary").unique(Strings.characterAt(0)), hasExactly("Matt", "Dan"));
     }
 
     @Test
@@ -437,32 +475,6 @@ public class SequenceTest {
         assertThat(sequence(1, 2, 3).fold(0, sum()), NumberMatcher.is(6));
         assertThat(sequence(1, 2, 3).foldLeft(0, sum()), NumberMatcher.is(6));
     }
-
-    @Test
-    public void supportsTail() throws Exception {
-        assertThat(sequence(1, 2, 3).tail(), hasExactly(2, 3));
-        assertThat(sequence(1).tail().isEmpty(), Matchers.is(true));
-        try {
-            Sequences.<Object>empty().tail().isEmpty();
-            fail("Should have thrown NoSuchElementException");
-        } catch (NoSuchElementException e) {
-            // all good
-        }
-    }
-
-    @Test
-    public void supportsInit() throws Exception {
-        assertThat(sequence(1, 2, 3).init(), hasExactly(1, 2));
-        assertThat(Sequences.init(sequence(1, 2, 3)), hasExactly(1, 2));
-        try {
-            Sequences.<Object>empty().init().isEmpty();
-            fail("Should have thrown NoSuchElementException");
-        } catch (NoSuchElementException e) {
-            // all good
-        }
-    }
-
-
 
     @Test
     public void supportsForEach() throws Exception {
