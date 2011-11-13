@@ -95,6 +95,11 @@ public class RecordSequence extends Sequence<Record> implements Expressible {
     }
 
     @Override
+    public Sequence<Record> unique() {
+        return new RecordSequence(sqlRecords, builder.distinct(), logger);
+    }
+
+    @Override
     public String toString() {
         return builder.toString();
     }

@@ -250,4 +250,13 @@ public class Strings {
         }
         return index;
     }
+
+    public static Callable1<String, Character> characterAt(final int index) {
+        return new Callable1<String, Character>() {
+            @Override
+            public Character call(String s) throws Exception {
+                return s.charAt(index);
+            }
+        };
+    }
 }

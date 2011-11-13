@@ -10,6 +10,7 @@ import com.googlecode.totallylazy.iterators.QuadrupleIterator;
 import com.googlecode.totallylazy.iterators.QuintupleIterator;
 import com.googlecode.totallylazy.iterators.TransposeIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
+import com.googlecode.totallylazy.predicates.UniquePredicate;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -620,5 +621,9 @@ public class Sequences {
         List<T> list = sequence(iterable).toList();
         Collections.shuffle(list);
         return sequence(list);
+    }
+
+    public static <T, S> Sequence<T> unique(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
+        return sequence(iterable).filter(new UniquePredicate<T, S>(callable));
     }
 }

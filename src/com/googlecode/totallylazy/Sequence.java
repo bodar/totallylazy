@@ -10,6 +10,7 @@ import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.ascending;
+import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
@@ -145,7 +146,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Sequence<T> unique() {
-        return sequence(toSet());
+        return unique(returnArgument());
+    }
+
+    public <S> Sequence<T> unique(Callable1<? super T, S> callable) {
+        return Sequences.unique(this, callable);
     }
 
     public boolean isEmpty() {
@@ -316,4 +321,5 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     public Sequence<T> shuffle() {
         return Sequences.shuffle(this);
     }
+
 }
