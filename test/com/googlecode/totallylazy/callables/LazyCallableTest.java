@@ -31,7 +31,7 @@ public class LazyCallableTest {
         System.out.println(secondTimes);
 
         assertThat(firstTimes.average(), is(between(5, 50)));
-        assertThat(secondTimes.average(), is(between(50, 100)));
+        assertThat(secondTimes.average(), is(between(50, 1000)));
     }
 
     @Test
