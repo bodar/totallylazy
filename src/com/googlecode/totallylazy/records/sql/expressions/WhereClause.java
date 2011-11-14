@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Value;
+import com.googlecode.totallylazy.predicates.AllPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.Between;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
@@ -23,6 +24,8 @@ import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.records.Record;
 
+import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.records.sql.expressions.Expressions.empty;
@@ -40,7 +43,7 @@ public class WhereClause extends CompoundExpression{
     }
 
     public static Expression whereClause(Option<Predicate<? super Record>> predicate) {
-        return predicate.map(new Callable1<Predicate<? super Record>, Expression>() {
+        return sequence(predicate).find(not(instanceOf(AllPredicate.class))).map(new Callable1<Predicate<? super Record>, Expression>() {
             public Expression call(Predicate<? super Record> predicate) throws Exception {
                 return whereClause(predicate);
             }

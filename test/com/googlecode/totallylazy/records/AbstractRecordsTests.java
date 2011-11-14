@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.records;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Closeables;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.descending;
+import static com.googlecode.totallylazy.Predicates.all;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.time.Dates.date;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -121,6 +123,11 @@ public abstract class AbstractRecordsTests<T extends Records> {
                 record().set(isbn, zenIsbn).set(title, "Zen And The Art Of Motorcycle Maintenance").set(inPrint, true).set(uuid, zenUuid),
                 record().set(isbn, godelEsherBach).set(title, "Godel, Escher, Bach: An Eternal Golden Braid").set(inPrint, false).set(uuid, randomUUID()),
                 record().set(isbn, cleanCode).set(title, "Clean Code: A Handbook of Agile Software Craftsmanship").set(inPrint, true).set(uuid, randomUUID()));
+    }
+
+    @Test
+    public void supportsAllPredicate() throws Exception {
+        assertThat(records.get(people).filter(all()).size(), NumberMatcher.is(3));
     }
 
     @Test
