@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.FilterIterator;
-import com.googlecode.totallylazy.iterators.FlatMapIterator;
+import com.googlecode.totallylazy.iterators.FlattenIterator;
 import com.googlecode.totallylazy.iterators.InitIterator;
 import com.googlecode.totallylazy.iterators.IterateIterator;
 import com.googlecode.totallylazy.iterators.MapIterator;
@@ -70,7 +70,7 @@ public class Iterators {
     }
 
     public static <T, S> Iterator<S> flatMap(final Iterator<T> iterator, final Callable1<? super T, ? extends Iterable<S>> callable) {
-        return new FlatMapIterator<T, S>(iterator, callable);
+        return flatten(map(iterator, callable));
     }
 
     public static <T> Iterator<T> filter(final Iterator<T> iterator, final Predicate<? super T> predicate) {
@@ -274,7 +274,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> join(final Iterable<Iterator<T>> iterable) {
-        return new FlatMapIterator<Iterator<T>, T>(iterable.iterator(), Callables.<T>asIterable());
+        return flatten(map(iterable.iterator(), Callables.<T>asIterable()));
     }
 
     @SuppressWarnings("unchecked")
@@ -345,5 +345,9 @@ public class Iterators {
                 return iterator.next();
             }
         };
+    }
+
+    public static <T> Iterator<T> flatten(Iterator<? extends Iterable<? extends T>> iterator) {
+        return new FlattenIterator<T>(iterator);
     }
 }
