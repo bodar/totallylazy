@@ -537,6 +537,12 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsFlatten() throws Exception {
+        Sequence<Character> characters = Sequences.flatten(sequence("Hello").map(toCharacters()));
+        assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
+    }
+
+    @Test
     public void supportsTake() throws Exception {
         final Sequence<Integer> sequence = sequence(1, 2, 3).take(2);
         assertThat(sequence, hasExactly(1, 2));
