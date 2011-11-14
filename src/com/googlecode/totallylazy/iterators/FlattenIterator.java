@@ -3,10 +3,10 @@ package com.googlecode.totallylazy.iterators;
 import java.util.Iterator;
 
 public class FlattenIterator<T> extends StatefulIterator<T> {
-    private final Iterator<? extends Iterable<? extends T>> iterator;
+    private final Iterator<? extends Iterator<? extends T>> iterator;
     private Iterator<? extends T> currentIterator = new EmptyIterator<T>();
 
-    public FlattenIterator(Iterator<? extends Iterable<? extends T>> iterator) {
+    public FlattenIterator(Iterator<? extends Iterator<? extends T>> iterator) {
         this.iterator = iterator;
     }
 
@@ -23,7 +23,7 @@ public class FlattenIterator<T> extends StatefulIterator<T> {
             if(!iterator.hasNext()){
                 return new EmptyIterator<T>();
             }
-            currentIterator = iterator.next().iterator();
+            currentIterator = iterator.next();
         }
         return currentIterator;
     }
