@@ -57,6 +57,14 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.flatMap(this, callable);
     }
 
+    public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<S>> callable) {
+        return Sequences.flatMapConcurrently(this, callable);
+    }
+
+    public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<S>> callable, final Executor executor) {
+        return Sequences.flatMapConcurrently(this, callable, executor);
+    }
+
     public T first() {
         return Sequences.first(this);
     }

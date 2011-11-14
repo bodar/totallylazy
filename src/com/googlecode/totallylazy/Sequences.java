@@ -179,6 +179,14 @@ public class Sequences {
         };
     }
 
+    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<T> iterable, final Callable1<? super T, ? extends Iterable<S>> callable) {
+        return flatten(mapConcurrently(iterable, callable));
+    }
+
+    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<T> iterable, final Callable1<? super T, ? extends Iterable<S>> callable, final Executor executor) {
+        return flatten(mapConcurrently(iterable, callable, executor));
+    }
+
     public static <T> Sequence<T> iterate(final Callable1<? super T, T> callable, final T t) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
