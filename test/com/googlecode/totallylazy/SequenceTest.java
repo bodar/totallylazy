@@ -90,7 +90,7 @@ public class SequenceTest {
 
     @Test
     @Notes("Lazily returns the elements after the head of the sequence. Lazily throws NoSuchElementException if empty. Works with infinite sequences.")
-    public void supportsTail() throws Exception {
+    public void tail() throws Exception {
         assertThat(sequence(1, 2, 3).tail(), hasExactly(2, 3));
         assertThat(sequence(1).tail().isEmpty(), is(true));
         try {
@@ -103,7 +103,7 @@ public class SequenceTest {
 
     @Test
     @Notes("Lazily returns all the elements of a finite sequence except the last one. Lazily throws NoSuchElementException if empty.s")
-    public void supportsInit() throws Exception {
+    public void init() throws Exception {
         assertThat(sequence(1, 2, 3).init(), hasExactly(1, 2));
         assertThat(sequence(1).init().isEmpty(), is(true));
         try {
