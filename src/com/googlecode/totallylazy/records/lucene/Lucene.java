@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Value;
+import com.googlecode.totallylazy.predicates.AllPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.Between;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
@@ -27,6 +28,7 @@ import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
@@ -98,6 +100,9 @@ public class Lucene {
         }
         if (predicate instanceof OrPredicate) {
             return or(sequence(((OrPredicate) predicate).predicates()).map(asQuery()));
+        }
+        if (predicate instanceof AllPredicate) {
+            return new MatchAllDocsQuery();
         }
         throw new UnsupportedOperationException();
     }

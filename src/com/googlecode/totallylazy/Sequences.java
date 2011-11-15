@@ -179,6 +179,14 @@ public class Sequences {
         };
     }
 
+    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<T> iterable, final Callable1<? super T, ? extends Iterable<S>> callable) {
+        return flatten(mapConcurrently(iterable, callable));
+    }
+
+    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<T> iterable, final Callable1<? super T, ? extends Iterable<S>> callable, final Executor executor) {
+        return flatten(mapConcurrently(iterable, callable, executor));
+    }
+
     public static <T> Sequence<T> iterate(final Callable1<? super T, T> callable, final T t) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
@@ -397,17 +405,8 @@ public class Sequences {
         return join(sequence(iterables));
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> Sequence<T> join(final Sequence<? extends Iterable<? extends T>> sequence) {
-        return new Sequence<T>() {
-            public final Iterator<T> iterator() {
-                return Iterators.join(sequence.map(new Callable1<Iterable<? extends T>, Iterator<T>>() {
-                    public Iterator<T> call(Iterable<? extends T> iterable) throws Exception {
-                        return (Iterator<T>) iterable.iterator();
-                    }
-                }));
-            }
-        };
+    public static <T> Sequence<T> join(final Iterable<? extends Iterable<? extends T>> sequence) {
+        return flatten(sequence);
     }
 
     public static <T> Sequence<T> cons(final T t, final Iterable<? extends T> iterable) {
@@ -625,5 +624,14 @@ public class Sequences {
 
     public static <T, S> Sequence<T> unique(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
         return sequence(iterable).filter(new UniquePredicate<T, S>(callable));
+    }
+
+    public static <T> Sequence<T> flatten(final Iterable<? extends Iterable<? extends T>> iterable) {
+        return new Sequence<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return Iterators.flattenIterable(iterable.iterator());
+            }
+        };
     }
 }
