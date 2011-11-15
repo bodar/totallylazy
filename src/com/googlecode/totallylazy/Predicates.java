@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.AllPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.BetweenPredicate;
 import com.googlecode.totallylazy.predicates.CountTo;
@@ -25,23 +26,19 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Predicates {
     public static <T> LogicalPredicate<T> all() {
-        return always();
+        return new AllPredicate<T>();
     }
 
     public static <T> LogicalPredicate<T> all(Class<T> aClass) {
-        return always();
+        return all();
     }
 
     public static <T> LogicalPredicate<T> always(Class<T> aClass) {
-        return always();
+        return all();
     }
 
     public static <T> LogicalPredicate<T> always() {
-        return new LogicalPredicate<T>() {
-            public boolean matches(T instance) {
-                return true;
-            }
-        };
+        return all();
     }
 
     public static <T> LogicalPredicate<T> never(Class<T> aClass) {
@@ -274,4 +271,5 @@ public class Predicates {
     public static <T> LogicalPredicate<Sequence<T>> empty(Class<T> aClass) {
         return empty();
     }
+
 }

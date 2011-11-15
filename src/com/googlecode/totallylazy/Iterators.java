@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.FilterIterator;
-import com.googlecode.totallylazy.iterators.FlatMapIterator;
+import com.googlecode.totallylazy.iterators.FlattenIterator;
 import com.googlecode.totallylazy.iterators.InitIterator;
 import com.googlecode.totallylazy.iterators.IterateIterator;
 import com.googlecode.totallylazy.iterators.MapIterator;
@@ -33,6 +33,7 @@ import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Sequences.memorise;
+import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.equalTo;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
@@ -65,12 +66,12 @@ public class Iterators {
         }
     }
 
-    public static <T, S> Iterator<S> map(final Iterator<T> iterator, final Callable1<? super T, S> callable) {
+    public static <T, S> Iterator<S> map(final Iterator<? extends T> iterator, final Callable1<? super T, S> callable) {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> Iterator<S> flatMap(final Iterator<T> iterator, final Callable1<? super T, ? extends Iterable<S>> callable) {
-        return new FlatMapIterator<T, S>(iterator, callable);
+    public static <T, S> Iterator<S> flatMap(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Iterable<S>> callable) {
+        return flattenIterable(map(iterator, callable));
     }
 
     public static <T> Iterator<T> filter(final Iterator<T> iterator, final Predicate<? super T> predicate) {
@@ -256,7 +257,7 @@ public class Iterators {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Iterator<T> join(final Iterator<T> first, final Iterator<T> second) {
+    public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<? extends T> second) {
         return internalJoin(first, second);
     }
 
@@ -269,17 +270,16 @@ public class Iterators {
         return internalJoin(iterators);
     }
 
-    private static <T> Iterator<T> internalJoin(final Iterator<T>... iterators) {
+    private static <T> Iterator<T> internalJoin(final Iterator<? extends T>... iterators) {
         return join(sequence(iterators));
     }
 
-    public static <T> Iterator<T> join(final Iterable<Iterator<T>> iterable) {
-        return new FlatMapIterator<Iterator<T>, T>(iterable.iterator(), Callables.<T>asIterable());
+    public static <T> Iterator<T> join(final Iterable<? extends Iterator<? extends T>> iterable) {
+        return flatten(iterable.iterator());
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> Iterator<T> cons(final T t, final Iterator<? extends T> iterator) {
-        return join(sequence(t).iterator(), (Iterator<T>) iterator);
+        return join(one(t).iterator(), iterator);
     }
 
     public static <T, S> Iterator<S> safeCast(final Iterator<T> iterator, final Class<S> aClass) {
@@ -346,4 +346,18 @@ public class Iterators {
             }
         };
     }
+
+    public static <T> Iterator<T> flatten(Iterator<? extends Iterator<? extends T>> iterator) {
+        return new FlattenIterator<T>(iterator);
+    }
+
+    public static <T> Iterator<T> flattenIterable(Iterator<? extends Iterable<? extends T>> iterator) {
+        return flatten(map(iterator, new Callable1<Iterable<? extends T>, Iterator<? extends T>>() {
+            @Override
+            public Iterator<? extends T> call(Iterable<? extends T> iterable) throws Exception {
+                return iterable.iterator();
+            }
+        }));
+    }
+
 }
