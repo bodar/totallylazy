@@ -17,6 +17,7 @@ import com.googlecode.totallylazy.predicates.InPredicate;
 import com.googlecode.totallylazy.predicates.LessThan;
 import com.googlecode.totallylazy.predicates.LessThanOrEqualTo;
 import com.googlecode.totallylazy.predicates.Not;
+import com.googlecode.totallylazy.predicates.NotEqualsPredicate;
 import com.googlecode.totallylazy.predicates.NotNullPredicate;
 import com.googlecode.totallylazy.predicates.NullPredicate;
 import com.googlecode.totallylazy.predicates.OrPredicate;
@@ -73,8 +74,11 @@ public class WhereClause extends CompoundExpression{
         if (predicate instanceof EqualsPredicate) {
             return expression("= ?", getValue(predicate));
         }
+        if (predicate instanceof NotEqualsPredicate) {
+            return expression("!= ?", getValue(predicate));
+        }
         if (predicate instanceof Not) {
-            return expression("!= ?", sequence(toSql(((Not) predicate).predicate()).parameters()));
+            return textOnly("not").join(toSql(((Not) predicate).predicate()));
         }
         if (predicate instanceof GreaterThan) {
             return expression("> ?", getValue(predicate));

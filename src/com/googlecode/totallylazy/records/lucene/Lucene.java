@@ -17,6 +17,7 @@ import com.googlecode.totallylazy.predicates.InPredicate;
 import com.googlecode.totallylazy.predicates.LessThan;
 import com.googlecode.totallylazy.predicates.LessThanOrEqualTo;
 import com.googlecode.totallylazy.predicates.Not;
+import com.googlecode.totallylazy.predicates.NotEqualsPredicate;
 import com.googlecode.totallylazy.predicates.NotNullPredicate;
 import com.googlecode.totallylazy.predicates.NullPredicate;
 import com.googlecode.totallylazy.predicates.OrPredicate;
@@ -91,6 +92,7 @@ public class Lucene {
         this.mappings = mappings;
     }
 
+    @SuppressWarnings("unchecked")
     public Query query(Predicate<? super Record> predicate) {
         if (predicate instanceof WherePredicate) {
             return where((WherePredicate) predicate);
@@ -100,6 +102,9 @@ public class Lucene {
         }
         if (predicate instanceof OrPredicate) {
             return or(sequence(((OrPredicate) predicate).predicates()).map(asQuery()));
+        }
+        if (predicate instanceof Not) {
+            return not(query(((Not) predicate).predicate()));
         }
         if (predicate instanceof AllPredicate) {
             return new MatchAllDocsQuery();
@@ -147,6 +152,9 @@ public class Lucene {
             Object lower = ((Between) predicate).lower();
             Object upper = ((Between) predicate).upper();
             return between(keyword, lower, upper);
+        }
+        if (predicate instanceof NotEqualsPredicate) {
+            return not(equalTo(keyword, ((Value) predicate).value()));
         }
         if (predicate instanceof Not) {
             Predicate p = ((Not) predicate).predicate();
