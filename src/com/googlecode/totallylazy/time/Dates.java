@@ -25,7 +25,7 @@ public class Dates {
         return format(RFC3339);
     }
 
-    private static SimpleDateFormat format(final String pattern) {
+    public static SimpleDateFormat format(final String pattern) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
         simpleDateFormat.setTimeZone(UTC);
         simpleDateFormat.setLenient(false);
