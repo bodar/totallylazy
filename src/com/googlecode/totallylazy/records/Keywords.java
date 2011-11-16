@@ -37,7 +37,7 @@ public class Keywords {
     }
 
     public static Sequence<Keyword> keywords(Sequence<Record> results) {
-        return results.flatMap(keywords()).unique();
+        return results.flatMap(keywords()).unique().realise();
     }
 
     public static Callable1<Record, Sequence<Keyword>> keywords() {
