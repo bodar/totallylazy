@@ -15,6 +15,8 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
+    private Integer hashCode;
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Sequence && Sequences.equalTo(this, (Iterable) obj);
@@ -22,7 +24,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     @Override
     public int hashCode() {
-        return fold(31, asHashCode());
+        if (hashCode == null) {
+            hashCode = fold(31, asHashCode());
+        }
+        return hashCode;
     }
 
     public void each(final Callable1<T,Void> runnable) {
