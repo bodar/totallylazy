@@ -68,19 +68,29 @@ public class Dates {
         return calendar.getTime();
     }
 
+    @Deprecated
     public static Date addSeconds(Date date, int amount) {
-        GregorianCalendar calendar = calendar(date);
-        calendar.add(SECOND, amount);
-        return calendar.getTime();
+        return Seconds.add(date, amount);
     }
 
-    private static GregorianCalendar calendar() {
+    public static GregorianCalendar calendar() {
         return new GregorianCalendar(UTC);
     }
 
-    private static GregorianCalendar calendar(Date date) {
+    public static GregorianCalendar calendar(Date date) {
         GregorianCalendar calendar = calendar();
         calendar.setTime(date);
         return calendar;
     }
+
+    public static Date add(Date date, int timeUnit, int amount) {
+        GregorianCalendar calendar = Dates.calendar(date);
+        calendar.add(timeUnit, amount);
+        return calendar.getTime();
+    }
+
+    public static Date subtract(Date date, int timeUnit, int amount) {
+        return add(date, timeUnit, -amount);
+    }
+
 }

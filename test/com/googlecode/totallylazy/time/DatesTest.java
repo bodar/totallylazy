@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static com.googlecode.totallylazy.time.Dates.addSeconds;
 import static com.googlecode.totallylazy.time.Dates.date;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -23,7 +22,22 @@ public class DatesTest {
     }
 
     @Test
-    public void canAddToDates() throws Exception {
-        assertThat(addSeconds(date(2000, 1, 1), 60), is(date(2000, 1, 1, 0, 0, 60)));
+    public void canAddSecondsToDates() throws Exception {
+        assertThat(Seconds.add(date(2000, 1, 1), 60), is(date(2000, 1, 1, 0, 0, 60)));
+    }
+
+    @Test
+    public void canSubtractSecondsFromDates() throws Exception {
+        assertThat(Seconds.subtract(date(2000, 1, 1), 60), is(date(1999, 12, 31, 23, 59, 0)));
+    }
+
+    @Test
+    public void canAddDaysToDates() throws Exception {
+        assertThat(Days.add(date(2000, 1, 1), 10), is(date(2000, 1, 11)));
+    }
+
+    @Test
+    public void canSubtractDaysFromDates() throws Exception {
+        assertThat(Days.subtract(date(2000, 1, 11), 10), is(date(2000, 1, 1)));
     }
 }
