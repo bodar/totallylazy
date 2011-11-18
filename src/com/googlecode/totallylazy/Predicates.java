@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.predicates.AllPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.BetweenPredicate;
 import com.googlecode.totallylazy.predicates.CountTo;
+import com.googlecode.totallylazy.predicates.DelegatingPredicate;
 import com.googlecode.totallylazy.predicates.EqualsPredicate;
 import com.googlecode.totallylazy.predicates.GreaterThanOrEqualToPredicate;
 import com.googlecode.totallylazy.predicates.GreaterThanPredicate;
@@ -24,6 +25,7 @@ import com.googlecode.totallylazy.predicates.WhileTrue;
 import java.util.Collection;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;
 
 public class Predicates {
     public static <T> LogicalPredicate<T> all() {
@@ -136,8 +138,12 @@ public class Predicates {
     }
 
     private static <T> LogicalPredicate<T> internalAnd(Predicate<? super T>... predicates) {
+        if(predicates.length == 1){
+            return logicalPredicate(predicates[0]);
+        }
         return new AndPredicate<T>(predicates);
     }
+
 
     @SuppressWarnings("unchecked")
     public static <T> LogicalPredicate<T> or(final Predicate<? super T> first, final Predicate<? super T> second) {
@@ -148,7 +154,10 @@ public class Predicates {
         return internalOr(predicates);
     }
 
-    private static <T> OrPredicate<T> internalOr(Predicate<? super T>... predicates) {
+    private static <T> LogicalPredicate<T> internalOr(Predicate<? super T>... predicates) {
+        if(predicates.length == 1){
+            return logicalPredicate(predicates[0]);
+        }
         return new OrPredicate<T>(predicates);
     }
 
