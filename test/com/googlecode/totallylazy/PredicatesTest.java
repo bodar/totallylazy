@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Predicates.assignableTo;
@@ -7,6 +8,7 @@ import static com.googlecode.totallylazy.Predicates.subsetOf;
 import static com.googlecode.totallylazy.Predicates.supersetOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PredicatesTest {
@@ -36,6 +38,24 @@ public class PredicatesTest {
         assertThat(supersetOf(sequence("a")).matches(sequence("a", "b")), is(true));
         assertThat(supersetOf(sequence("a", "b")).matches(sequence("a")), is(false));
         assertThat(supersetOf(Sequences.<String>sequence()).matches(sequence("a")), is(true));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void logicalAndWithOnePredicateReturnsPredicate() throws Exception{
+        Predicate always = Predicates.always();
+        Predicate predicate = Predicates.and(always);
+        assertThat(predicate.matches(null), is(true));
+        assertThat(predicate, is(sameInstance(always)));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void logicalOrWithOnePredicateReturnsPredicate() throws Exception{
+        Predicate always = Predicates.always();
+        Predicate predicate = Predicates.or(always);
+        assertThat(predicate.matches(null), is(true));
+        assertThat(predicate, is(sameInstance(always)));
     }
 }
 
