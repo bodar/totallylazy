@@ -127,4 +127,12 @@ public class NumbersTest {
         assertThat(powersOf(3), startsWith(1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683, 59049));
         assertThat(powersOf(10), startsWith(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, 10000000000L, 100000000000L));
     }
+
+    @Test
+    public void supportsStringToNumberConversion() throws Exception {
+        assertThat(Numbers.valueOf("1").get().intValue(), is(1));
+        assertThat(Numbers.valueOf("1.11").get().doubleValue(), is(1.11d));
+        assertThat(Numbers.valueOf("-1.11").get().doubleValue(), is(-1.11d));
+        assertThat(Numbers.valueOf("").isEmpty(), is(true));
+    }
 }
