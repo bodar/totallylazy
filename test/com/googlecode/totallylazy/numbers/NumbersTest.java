@@ -134,5 +134,6 @@ public class NumbersTest {
         assertThat(Numbers.valueOf("1.11").get().doubleValue(), is(1.11d));
         assertThat(Numbers.valueOf("-1.11").get().doubleValue(), is(-1.11d));
         assertThat(Numbers.valueOf("").isEmpty(), is(true));
+        assertThat(Numbers.valueOf(null).isEmpty(), is(true));
     }
 }
