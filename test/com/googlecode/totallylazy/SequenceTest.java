@@ -7,10 +7,10 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -40,12 +40,13 @@ import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
 import static com.googlecode.totallylazy.Sequences.splitOn;
-import static com.googlecode.totallylazy.Sequences.splitWhen;
 import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Strings.toCharacters;
+import static com.googlecode.totallylazy.Strings.toLowerCase;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.comparators.Comparators.comparators;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
@@ -166,7 +167,7 @@ public class SequenceTest {
                 is(pair(sequence(1, 2, 3), sequence(4, 1, 2, 3, 4))));
         assertThat(sequence(1, 2, 3).breakOn(lessThan(9)),
                 is(pair(empty(Integer.class), sequence(1, 2, 3))));
-        assertThat(sequence(1, 2, 3).breakOn(greaterThan(9)), 
+        assertThat(sequence(1, 2, 3).breakOn(greaterThan(9)),
                 is(pair(sequence(1, 2, 3), empty(Integer.class))));
     }
 
@@ -334,6 +335,14 @@ public class SequenceTest {
         assertThat(unsorted.sortBy(length()), hasExactly(small, medium, large));
         assertThat(unsorted.sortBy(ascending(length())), hasExactly(small, medium, large));
         assertThat(unsorted.sortBy(descending(length())), hasExactly(large, medium, small));
+    }
+
+    @Test
+    public void supportsSortByWithCompositeComparator() throws Exception {
+        Sequence<String> unsorted = Sequences.sequence("dan", "tom", "mateusz", "stuart");
+        final Sequence<String> sorted = unsorted.sortBy(comparators(descending(length()), ascending(Callables.<String>returnArgument())));
+
+        assertThat(sorted, hasExactly("mateusz", "stuart", "dan", "tom"));
     }
 
     @Test
@@ -541,7 +550,7 @@ public class SequenceTest {
         Sequence<Character> characters = sequence("Hello").flatMapConcurrently(toCharacters());
         assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
     }
-    
+
     @Test
     public void supportsConcurrentFlatMapWithCustomExecutor() throws Exception {
         ExecutorService executorService = Executors.newCachedThreadPool();
