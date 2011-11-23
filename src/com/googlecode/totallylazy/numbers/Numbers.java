@@ -22,6 +22,7 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.MemorisedSequence;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
@@ -38,6 +39,8 @@ import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
@@ -68,8 +71,12 @@ public class Numbers {
         };
     }
 
-    public static Number valueOf(String string) {
-        return reduce(new BigInteger(string));
+    public static Option<Number> valueOf(String string) {
+        try {
+            return some(reduce(new BigDecimal(string)));
+        } catch(NumberFormatException e) {
+            return none(Number.class);
+        }
     }
 
     public static Sequence<Number> integersStartingFrom(final int value) {
@@ -435,6 +442,6 @@ public class Numbers {
     }
 
     public static Number parseLexicalString(String value, final Number minValue) {
-        return add(valueOf(value), minValue);
+        return add(valueOf(value).get(), minValue);
     }
 }

@@ -86,7 +86,7 @@ public class SimpleDBRecords extends AbstractRecords {
     @Override
     public Number remove(Keyword recordName) {
         Record head = get(recordName).map(select(Keywords.keyword("count(*)", String.class))).head();
-        Number result = Numbers.valueOf(head.get(Keywords.keyword("Count", String.class)));
+        Number result = Numbers.valueOf(head.get(Keywords.keyword("Count", String.class))).get();
         List<Keyword<?>> undefine = undefine(recordName);
         define(recordName, undefine.toArray(new Keyword[0]));
         return result;
