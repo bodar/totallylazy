@@ -74,7 +74,7 @@ public class Numbers {
     public static Option<Number> valueOf(String string) {
         try {
             return some(reduce(new BigDecimal(string)));
-        } catch(NumberFormatException e) {
+        } catch(Exception e) {
             return none(Number.class);
         }
     }
