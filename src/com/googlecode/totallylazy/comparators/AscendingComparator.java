@@ -14,7 +14,7 @@ public class AscendingComparator<T, R extends Comparable<R>> implements Comparat
     }
 
     public final int compare(final T first, final T second) {
-        return call(callable, first).compareTo(call(callable, second));
+        return NullComparator.compare(call(callable, first), call(callable, second), NullComparator.Direction.Up) ;
     }
 
     public Callable1<T, R> callable() {
