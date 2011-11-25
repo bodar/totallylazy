@@ -24,6 +24,7 @@ import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.length;
+import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Option.none;
@@ -335,6 +336,15 @@ public class SequenceTest {
         assertThat(unsorted.sortBy(length()), hasExactly(small, medium, large));
         assertThat(unsorted.sortBy(ascending(length())), hasExactly(small, medium, large));
         assertThat(unsorted.sortBy(descending(length())), hasExactly(large, medium, small));
+    }
+
+    @Test
+    @Notes("This behaviour is like SQL order by, not 100% convinced this is correct so please give feedback")
+    public void whenSortingWithNullsTheyAlwaysComeLast() throws Exception {
+        Sequence<Integer> unsorted = sequence(2, null, 1);
+        assertThat(unsorted.sortBy(returnArgument(Integer.class)), hasExactly(1, 2, null));
+        assertThat(unsorted.sortBy(ascending(returnArgument(Integer.class))), hasExactly(1, 2, null));
+        assertThat(unsorted.sortBy(descending(returnArgument(Integer.class))), hasExactly(2, 1, null));
     }
 
     @Test

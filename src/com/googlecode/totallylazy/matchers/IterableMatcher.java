@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.matchers;
 
+import com.googlecode.totallylazy.Objects;
 import com.googlecode.totallylazy.Sequence;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -76,7 +77,7 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
                 return false;
             }
 
-            if(!e.next().equals(a.next())){
+            if(!Objects.equalTo(e.next(), a.next())){
                 return false;
             }
         }
