@@ -41,19 +41,17 @@ public class PredicatesTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void logicalAndWithOnePredicateReturnsPredicate() throws Exception{
-        Predicate always = Predicates.always();
-        Predicate predicate = Predicates.and(always);
+        Predicate<Object> always = Predicates.always();
+        Predicate<Object> predicate = Predicates.and(always);
         assertThat(predicate.matches(null), is(true));
         assertThat(predicate, is(sameInstance(always)));
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void logicalOrWithOnePredicateReturnsPredicate() throws Exception{
-        Predicate always = Predicates.always();
-        Predicate predicate = Predicates.or(always);
+        Predicate<Object> always = Predicates.always();
+        Predicate<Object> predicate = Predicates.or(always);
         assertThat(predicate.matches(null), is(true));
         assertThat(predicate, is(sameInstance(always)));
     }
