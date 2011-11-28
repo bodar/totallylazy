@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.matchers;
 
 import com.googlecode.totallylazy.Objects;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -10,7 +11,6 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-@SuppressWarnings("unchecked")
 public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
     private final Sequence<T> expected;
     private boolean shouldBeSameSize;
@@ -20,6 +20,7 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
         this.shouldBeSameSize = shouldBeSameSize;
     }
 
+    @SuppressWarnings("unchecked")
     public static Matcher<Iterable> hasSize(final Number size) {
         return new HasSizeMatcher(size);
     }
@@ -29,7 +30,7 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
     }
 
     public static <T> Matcher<Iterable<T>> isEmpty() {
-        return IterableMatcher.<T>hasExactly();
+        return IterableMatcher.<T>hasExactly(Sequences.<T>empty());
     }
 
     public static <T> Matcher<Iterable<T>> hasExactly(final T first) {
