@@ -45,10 +45,9 @@ public class Methods {
         };
     }
 
-    @SuppressWarnings("unchecked")
-    public static Callable1<Class, Method> method(final String name, final Class<?>... parameters) {
-        return new Callable1<Class, Method>() {
-            public Method call(Class aClass) throws Exception {
+    public static Callable1<Class<?>, Method> method(final String name, final Class<?>... parameters) {
+        return new Callable1<Class<?>, Method>() {
+            public Method call(Class<?> aClass) throws Exception {
                 return aClass.getMethod(name, parameters);
             }
         };
@@ -58,7 +57,7 @@ public class Methods {
         return method(instance.getClass(), name, parameters);
     }
 
-    public static Option<Method> method(Class aClass, String name, final Class<?>... parameters) {
+    public static Option<Method> method(Class<?> aClass, String name, final Class<?>... parameters) {
         return call(handleException(method(name, parameters), instanceOf(NoSuchMethodException.class)), aClass);
     }
 
