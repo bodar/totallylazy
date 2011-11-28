@@ -22,14 +22,13 @@ public class Proxy {
         return new Proxy().createInstance(aCLass, invocationHandler);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T createInstance(final Class<T> aClass, final Callback invocationHandler) {
         Callback[] callbacks = {invocationHandler, NoOp.INSTANCE};
         ObjectInstantiator instantiator = get(aClass, callbacks);
         Object instance = instantiator.newInstance();
         Factory factory = (Factory) instance;
         factory.setCallbacks(callbacks);
-        return (T) instance;
+        return aClass.cast(instance);
     }
 
     private ObjectInstantiator get(final Class<?> aClass, final Callback[] callbacks) {
