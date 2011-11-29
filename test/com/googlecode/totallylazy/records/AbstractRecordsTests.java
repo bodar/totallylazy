@@ -264,8 +264,7 @@ public abstract class AbstractRecordsTests<T extends Records> {
 
     @Test
     public void supportsSelectingMultipleKeywords() throws Exception {
-        Sequence<Record> users = records.get(people);
-        Sequence<Record> fullNames = users.map(select(firstName, lastName));
+        Sequence<Record> fullNames = records.get(people).map(select(firstName, lastName));
         assertThat(fullNames.first().fields().size(), NumberMatcher.is(2));
     }
 

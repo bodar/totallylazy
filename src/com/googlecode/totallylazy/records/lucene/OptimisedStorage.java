@@ -33,32 +33,57 @@ public class OptimisedStorage implements LuceneStorage {
 
     @Override
     public IndexWriter writer() throws IOException {
+        ensureIndexIsSetup();
+        closeSearcher();
+        return writer;
+    }
+
+    @Override
+    public IndexSearcher searcher() throws IOException {
+        ensureIndexIsSetup();
+        createSearcher();
+        return searcher;
+    }
+
+    @Override
+    public void close() throws IOException {
+        closeSearcher();
+        closeWriter();
+        directory.close();
+    }
+
+    private void ensureIndexIsSetup() throws IOException {
         synchronized (writerLock) {
             if (writer == null) {
                 writer = new IndexWriter(directory, new IndexWriterConfig(version, analyzer).setOpenMode(mode));
                 writer.commit();
             }
-            synchronized (readerLock) {
-                searcher = null;
-            }
-            return writer;
         }
     }
 
-    @Override
-    public IndexSearcher searcher() throws IOException {
+    private void createSearcher() throws IOException {
         synchronized (readerLock) {
             if (searcher == null) {
                 searcher = new IndexSearcher(directory);
             }
-            return searcher;
         }
     }
 
-    @Override
-    public void close() throws IOException {
-        if (searcher != null) searcher.close();
-        if (writer != null) writer.close();
-        directory.close();
+    private void closeWriter() throws IOException {
+        synchronized (writerLock) {
+            if (writer != null) {
+                writer.close();
+                writer = null;
+            }
+        }
+    }
+
+    private void closeSearcher() throws IOException {
+        synchronized (readerLock) {
+            if (searcher != null) {
+                searcher.close();
+                searcher = null;
+            }
+        }
     }
 }
