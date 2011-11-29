@@ -26,32 +26,25 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.lucene.Lucene.and;
 import static com.googlecode.totallylazy.records.lucene.Lucene.record;
 
-public class LuceneRecords extends AbstractRecords implements Queryable<Query>, Closeable {
-    private final Directory directory;
-    private final IndexWriter writer;
+public class LuceneRecords extends AbstractRecords implements Queryable<Query> {
+    private final LuceneStorage storage;
     private final Mappings mappings;
     private final PrintStream printStream;
     private final Lucene lucene;
-    private final CloseableList closeables = new CloseableList();
 
-    public LuceneRecords(final Directory directory, final IndexWriter writer, final Mappings mappings, final PrintStream printStream) throws IOException {
-        this.directory = directory;
-        this.writer = writer;
+    public LuceneRecords(final LuceneStorage storage, final Mappings mappings, final PrintStream printStream) throws IOException {
+        this.storage = storage;
         this.mappings = mappings;
         this.printStream = printStream;
         lucene = new Lucene(this.mappings);
     }
 
-    public LuceneRecords(final Directory directory, final IndexWriter writer) throws IOException {
-        this(directory, writer, new Mappings(), new PrintStream(nullOutputStream()));
-    }
-
-    public void close() throws IOException {
-        closeables.close();
+    public LuceneRecords(final LuceneStorage storage) throws IOException {
+        this(storage, new Mappings(), new PrintStream(nullOutputStream()));
     }
 
     public Sequence<Record> query(final Query query, final Sequence<Keyword> definitions) {
-        return new RecordSequence(lucene, directory, query, mappings.asRecord(definitions), closeables, printStream);
+        return new RecordSequence(lucene, storage, query, mappings.asRecord(definitions), printStream);
     }
 
     public Sequence<Record> get(final Keyword recordName) {
@@ -62,10 +55,10 @@ public class LuceneRecords extends AbstractRecords implements Queryable<Query>, 
         try {
             Number count = 0;
             for (Document document : records.map(mappings.asDocument(recordName, definitions(recordName)))) {
-                writer.addDocument(document);
+                storage.writer().addDocument(document);
                 count = increment(count);
             }
-            writer.commit();
+            storage.writer().commit();
             return count;
         } catch (IOException e) {
             throw new LazyException(e);
@@ -83,8 +76,8 @@ public class LuceneRecords extends AbstractRecords implements Queryable<Query>, 
     public Number remove(Query query) {
         try {
             int result = count(query);
-            writer.deleteDocuments(query);
-            writer.commit();
+            storage.writer().deleteDocuments(query);
+            storage.writer().commit();
             return result;
         } catch (IOException e) {
             throw new LazyException(e);
@@ -93,11 +86,7 @@ public class LuceneRecords extends AbstractRecords implements Queryable<Query>, 
 
     public int count(final Query query) {
         try {
-            return using(new IndexSearcher(directory), new Callable1<IndexSearcher, Integer>() {
-                public Integer call(IndexSearcher indexSearcher) throws Exception {
-                    return indexSearcher.search(query, Integer.MAX_VALUE).totalHits;
-                }
-            });
+            return storage.searcher().search(query, Integer.MAX_VALUE).totalHits;
         } catch (IOException e) {
             return 0;
         }

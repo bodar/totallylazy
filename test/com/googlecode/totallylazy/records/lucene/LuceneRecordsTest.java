@@ -27,21 +27,20 @@ public class LuceneRecordsTest extends AbstractRecordsTests<LuceneRecords> {
     public static final Version VERSION = Version.LUCENE_33;
     public static final Analyzer ANALYZER = new StandardAnalyzer(VERSION);
     private Directory directory;
-    private IndexWriter writer;
+    private LuceneStorage storage;
 
     @Override
     protected LuceneRecords createRecords() throws Exception {
         File file = temporaryDirectory("totallylazy");
         directory = new NIOFSDirectory(file);
-        writer = new IndexWriter(directory, new IndexWriterConfig(VERSION, ANALYZER));
-        writer.commit();
-        return new LuceneRecords(directory, writer, new Mappings(), logger);
+        storage = new OptimisedStorage(directory);
+        return new LuceneRecords(storage, new Mappings(), logger);
     }
 
     @After
     public void cleanUp() throws Exception {
         super.cleanUp();
-        writer.close();
+        storage.close();
         directory.close();
     }
 

@@ -16,17 +16,16 @@ import java.io.PrintStream;
 
 import static com.googlecode.totallylazy.Arrays.containsIndex;
 
-public class LuceneIterator extends StatefulIterator<Record> implements Closeable{
-    private final Directory directory;
+public class LuceneIterator extends StatefulIterator<Record>{
+    private final LuceneStorage storage;
     private final Query query;
     private final Callable1<? super Document, Record> documentToRecord;
     private final PrintStream printStream;
-    private IndexSearcher indexSearcher;
     private ScoreDoc[] scoreDocs;
     private int index = 0;
 
-    public LuceneIterator(Directory directory, Query query, Callable1<? super Document, Record> documentToRecord, PrintStream printStream) {
-        this.directory = directory;
+    public LuceneIterator(LuceneStorage storage, Query query, Callable1<? super Document, Record> documentToRecord, PrintStream printStream) {
+        this.storage = storage;
         this.query = query;
         this.documentToRecord = documentToRecord;
         this.printStream = printStream;
@@ -35,29 +34,17 @@ public class LuceneIterator extends StatefulIterator<Record> implements Closeabl
     @Override
     protected Record getNext() throws Exception {
         if(!containsIndex(scoreDocs(), index)){
-            close();
             return finished();
         }
-        Document document = indexSearcher().doc(scoreDocs()[index++].doc);
+        Document document = storage.searcher().doc(scoreDocs()[index++].doc);
         return documentToRecord.call(document);
-    }
-
-    private IndexSearcher indexSearcher() throws IOException {
-        if(indexSearcher == null){
-            indexSearcher = new IndexSearcher(directory);
-        }
-        return indexSearcher;
     }
 
     private ScoreDoc[] scoreDocs() throws IOException {
         if( scoreDocs == null) {
             printStream.println("LUCENE = " + query);
-            scoreDocs = indexSearcher().search(query, Integer.MAX_VALUE).scoreDocs;
+            scoreDocs = storage.searcher().search(query, Integer.MAX_VALUE).scoreDocs;
         }
         return scoreDocs;
-    }
-
-    public void close() throws IOException {
-        Closeables.close(indexSearcher);
     }
 }
