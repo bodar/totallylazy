@@ -20,7 +20,12 @@ public class Dates {
     public static final String RFC3339_WITH_MILLISECONDS = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final String RFC822 = "EEE, dd MMM yyyy HH:mm:ss zzz";
     public static final String JAVA_UTIL_DATE_TO_STRING = "EEE MMM dd HH:mm:ss zzz yyyy";
+    public static final String LUCENE = "yyyyMMddHHmmssSSS";
     public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
+
+    public static DateFormat LUCENE() {
+        return format(LUCENE);
+    }
 
     public static DateFormatConverter RFC3339() {
         return new DateFormatConverter(RFC3339_WITH_MILLISECONDS, RFC3339);
