@@ -25,11 +25,11 @@ public class DateMapping implements Mapping<Date> {
     }
 
     public Sequence<Node> to(Document document, String expression, Date value) {
-        return mapping.to(document, expression, dateConverter.toString(value));
+        return mapping.to(document, expression, dateConverter.format(value));
     }
 
     public Date from(Sequence<Node> nodes) throws ParseException {
-        return dateConverter.toDate(mapping.from(nodes));
+        return dateConverter.parse(mapping.from(nodes));
     }
 
     public static DateMapping defaultFormat() {
