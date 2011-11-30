@@ -1,14 +1,23 @@
 package com.googlecode.totallylazy.time;
 
+import org.apache.lucene.document.DateTools;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.util.Date;
 
 import static com.googlecode.totallylazy.time.Dates.date;
+import static org.apache.lucene.document.DateTools.dateToString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class DatesTest {
+    @Test
+    public void canParseALuceneDate() throws Exception{
+        Date result = Dates.LUCENE().parse("20110908071414123");
+        assertThat(result, Matchers.is(date(2011, 9, 8, 7, 14, 14, 123)));
+    }
+
     @Test
     public void canParseAtomDate() throws Exception {
         Date result = Dates.RFC3339().parse("2011-07-19T12:43:26Z");
