@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.records.simpledb.mappings;
 
 import com.googlecode.totallylazy.time.DateConverter;
+import com.googlecode.totallylazy.time.DateFormatConverter;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -15,7 +16,7 @@ public class DateMapping implements Mapping<Date>{
     }
 
     public DateMapping() {
-        this(RFC3339());
+        this(DateFormatConverter.defaultConverter());
     }
 
     public Date toValue(String value) throws ParseException {
