@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.time;
 import java.util.Date;
 
 public interface DateConverter {
-    String toString(Date value);
+    String format(Date value);
 
-    Date toDate(String value);
+    Date parse(String value);
 }
