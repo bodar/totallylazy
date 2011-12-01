@@ -7,7 +7,6 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Record;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.store.Directory;
 
 import java.io.PrintStream;
 import java.util.Iterator;
