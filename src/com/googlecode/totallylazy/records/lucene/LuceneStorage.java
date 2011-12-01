@@ -1,13 +1,22 @@
 package com.googlecode.totallylazy.records.lucene;
 
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.search.IndexSearcher;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Sequence;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TopDocs;
 
 import java.io.Closeable;
 import java.io.IOException;
 
 public interface LuceneStorage extends Closeable{
-    IndexWriter writer() throws IOException;
+    Number add(Sequence<Document> documents) throws IOException;
 
-    IndexSearcher searcher() throws IOException;
+    Number delete(Query query) throws IOException;
+
+    int count(Query query) throws IOException;
+
+    <T> T search(Callable1<Searcher, T> callable) throws IOException;
+
+    Searcher searcher() throws IOException;
 }

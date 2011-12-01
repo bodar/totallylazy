@@ -28,10 +28,11 @@ public class LuceneRecordsTest extends AbstractRecordsTests<LuceneRecords> {
     public static final Analyzer ANALYZER = new StandardAnalyzer(VERSION);
     private Directory directory;
     private LuceneStorage storage;
+    private File file;
 
     @Override
     protected LuceneRecords createRecords() throws Exception {
-        File file = temporaryDirectory("totallylazy");
+        file = temporaryDirectory("totallylazy");
         directory = new NIOFSDirectory(file);
         storage = new OptimisedStorage(directory);
         return new LuceneRecords(storage, new Mappings(), logger);
@@ -42,6 +43,7 @@ public class LuceneRecordsTest extends AbstractRecordsTests<LuceneRecords> {
         super.cleanUp();
         storage.close();
         directory.close();
+        System.out.println(file);
     }
 
     @Test
