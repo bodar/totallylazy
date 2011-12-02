@@ -21,18 +21,19 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.lucene.Lucene.and;
 import static com.googlecode.totallylazy.records.lucene.Lucene.record;
 
-public class LuceneRecords extends AbstractRecords implements Queryable<Query> {
+public class LuceneRecords extends AbstractRecords implements Queryable<Query>, Closeable {
     private final LuceneStorage storage;
     private final Mappings mappings;
     private final PrintStream printStream;
     private final Lucene lucene;
+    private CloseableList closeables;
 
     public LuceneRecords(final LuceneStorage storage, final Mappings mappings, final PrintStream printStream) throws IOException {
         this.storage = storage;
         this.mappings = mappings;
         this.printStream = printStream;
         lucene = new Lucene(this.mappings);
-
+        closeables = new CloseableList();
     }
 
     public LuceneRecords(final LuceneStorage storage) throws IOException {
@@ -40,7 +41,7 @@ public class LuceneRecords extends AbstractRecords implements Queryable<Query> {
     }
 
     public Sequence<Record> query(final Query query, final Sequence<Keyword> definitions) {
-        return new RecordSequence(lucene, storage, query, mappings.asRecord(definitions), printStream);
+        return new RecordSequence(lucene, storage, query, mappings.asRecord(definitions), printStream, closeables);
     }
 
     public Sequence<Record> get(final Keyword recordName) {
@@ -77,5 +78,10 @@ public class LuceneRecords extends AbstractRecords implements Queryable<Query> {
         } catch (IOException e) {
             return 0;
         }
+    }
+
+    @Override
+    public void close() throws IOException {
+        closeables.close();
     }
 }

@@ -48,14 +48,16 @@ public class SearchPoolTest {
     }
 
     @Test
-    public void closeCheckedOutSearcherWhenTheyAreReturned() throws Exception {
+    public void closeDirtyCheckedOutSearcherWhenTheyAreReturned() throws Exception {
         SearcherPool pool = new OptimisedPool(emptyDirectory());
         Searcher searcher1 = pool.searcher();
         Searcher searcher2 = pool.searcher();
         assertThat(pool.size(), is(1));
         searcher1.close();
         assertThat(pool.size(), is(1));
+
         pool.markAsDirty();
+
         assertThat(pool.size(), is(1));
         searcher2.close();
         assertThat(pool.size(), is(0));

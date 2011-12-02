@@ -9,6 +9,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
 
 import java.io.Closeable;
@@ -25,6 +26,7 @@ public class LuceneIterator extends StatefulIterator<Record> implements Closeabl
     private ScoreDoc[] scoreDocs;
     private int index = 0;
     private Searcher searcher;
+    private boolean closed = false;
 
     public LuceneIterator(LuceneStorage storage, Query query, Callable1<? super Document, Record> documentToRecord, PrintStream printStream) {
         this.storage = storage;
@@ -52,6 +54,10 @@ public class LuceneIterator extends StatefulIterator<Record> implements Closeabl
     }
 
     private Searcher searcher() throws IOException {
+        if(closed){
+            throw new AlreadyClosedException("This iterator has already been closed");
+        }
+
         if( searcher == null){
             searcher = storage.searcher();
         }
@@ -61,5 +67,7 @@ public class LuceneIterator extends StatefulIterator<Record> implements Closeabl
     @Override
     public void close() throws IOException {
         Closeables.close(searcher);
+        searcher = null;
+        closed = true;
     }
 }

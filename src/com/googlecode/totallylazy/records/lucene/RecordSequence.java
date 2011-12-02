@@ -19,23 +19,25 @@ public class RecordSequence extends Sequence<Record> {
     private final PrintStream printStream;
     private final Lucene lucene;
     private final Callable1<? super Document,Record> documentToRecord;
+    private CloseableList closeables;
 
     public RecordSequence(final Lucene lucene, final LuceneStorage storage, final Query query,
-                          final Callable1<? super Document, Record> documentToRecord, final PrintStream printStream) {
+                          final Callable1<? super Document, Record> documentToRecord, final PrintStream printStream, CloseableList closeables) {
         this.lucene = lucene;
         this.storage = storage;
         this.query = query;
         this.documentToRecord = documentToRecord;
         this.printStream = printStream;
+        this.closeables = closeables;
     }
 
 
     public Iterator<Record> iterator() {
-        return new LuceneIterator(storage, query, documentToRecord, printStream);
+        return closeables.manage(new LuceneIterator(storage, query, documentToRecord, printStream));
     }
 
     @Override
     public Sequence<Record> filter(Predicate<? super Record> predicate) {
-        return new RecordSequence(lucene, storage, and(query, lucene.query(predicate)), documentToRecord, printStream);
+        return new RecordSequence(lucene, storage, and(query, lucene.query(predicate)), documentToRecord, printStream, closeables);
     }
 }
