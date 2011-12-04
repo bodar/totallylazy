@@ -30,11 +30,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return hashCode;
     }
 
-    public void each(final Callable1<T,Void> runnable) {
+    public void each(final Callable1<? super T, ?> runnable) {
         forEach(runnable);
     }
 
-    public void forEach(final Callable1<T,Void> runnable) {
+    public void forEach(final Callable1<? super T, ?> runnable) {
         Sequences.forEach(this, runnable);
     }
 
