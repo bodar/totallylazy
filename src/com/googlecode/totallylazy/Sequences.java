@@ -211,11 +211,11 @@ public class Sequences {
         };
     }
 
-    public static <T> void each(final Iterable<T> iterable, final Callable1<T, Void> runnable) {
+    public static <T> void each(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable) {
         forEach(iterable, runnable);
     }
 
-    public static <T> void forEach(final Iterable<T> iterable, final Callable1<T, Void> runnable) {
+    public static <T> void forEach(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable) {
         Iterators.forEach(iterable.iterator(), runnable);
     }
 
