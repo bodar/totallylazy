@@ -11,10 +11,10 @@ import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Escaper {
-    private final Deque<Rule> rules = new ArrayDeque<Rule>();
+    private final Deque<Rule<Character, Character, String>> rules = new ArrayDeque<Rule<Character, Character, String>>();
 
     public Escaper() {
-        rules.add(Rule.rule(always(Character.class), asString(Character.class)));
+        rules.add(Rule.<Character, Character, String>rule(always(Character.class), asString(Character.class)));
     }
 
     public Escaper withRule(Character appliesTo, final String result) {
@@ -22,7 +22,7 @@ public class Escaper {
     }
 
     public Escaper withRule(Predicate<? super Character> appliesTo, Callable1<? super Character, String> action) {
-        rules.addFirst(Rule.rule(appliesTo, action));
+        rules.addFirst(Rule.<Character, Character, String>rule(appliesTo, action));
         return this;
     }
 
@@ -41,25 +41,4 @@ public class Escaper {
         };
     }
 
-    private static class Rule implements Predicate<Character>, Callable1<Character, String> {
-        private final Predicate<? super Character> condition;
-        private final Callable1<? super Character, String> escape;
-
-        private Rule(Predicate<? super Character> condition, Callable1<? super Character, String> escape) {
-            this.condition = condition;
-            this.escape = escape;
-        }
-
-        private static Rule rule(Predicate<? super Character> condition, Callable1<? super Character, String> escape) {
-            return new Rule(condition, escape);
-        }
-
-        public boolean matches(Character character) {
-            return condition.matches(character);
-        }
-
-        public String call(Character character) throws Exception {
-            return escape.call(character);
-        }
-    }
 }
