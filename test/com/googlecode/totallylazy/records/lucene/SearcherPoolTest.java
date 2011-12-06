@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 
-public class SearchPoolTest {
+public class SearcherPoolTest {
     @Test
     public void returnsTheSameSearchIfNotWrites() throws Exception {
         SearcherPool pool = new OptimisedPool(emptyDirectory());
@@ -58,6 +58,20 @@ public class SearchPoolTest {
 
         pool.markAsDirty();
 
+        assertThat(pool.size(), is(1));
+        searcher2.close();
+        assertThat(pool.size(), is(0));
+    }
+
+    @Test
+    public void onlyClosesCheckedInPoolsWhenEveryoneHasFinished() throws Exception {
+        SearcherPool pool = new OptimisedPool(emptyDirectory());
+        Searcher searcher1 = pool.searcher();
+        Searcher searcher2 = pool.searcher();
+        assertThat(pool.size(), is(1));
+        pool.markAsDirty();
+        assertThat(pool.size(), is(1));
+        searcher1.close();
         assertThat(pool.size(), is(1));
         searcher2.close();
         assertThat(pool.size(), is(0));
