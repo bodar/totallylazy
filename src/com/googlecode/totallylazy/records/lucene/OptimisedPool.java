@@ -59,10 +59,10 @@ public class OptimisedPool implements SearcherPool {
         };
     }
 
-    private void checkin(Searcher searcher) throws IOException {
+    private synchronized void checkin(Searcher searcher) throws IOException {
         PooledValue pooledValue = sequence(pool).find(where(PooledValue.searcher(), is(searcher))).get();
-        pooledValue.checkin();
-        if(pooledValue.dirty){
+        int count = pooledValue.checkin();
+        if(count == 0 && pooledValue.dirty){
             closeAndRemove(pooledValue);
         }
     }
@@ -154,8 +154,8 @@ public class OptimisedPool implements SearcherPool {
             };
         }
 
-        public void checkin() {
-            checkoutCount--;
+        public int checkin() {
+            return --checkoutCount;
         }
 
         public static Callable1<PooledValue, Void> markAsDirty() {
