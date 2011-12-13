@@ -1,22 +1,31 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Sequence;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 import static com.googlecode.totallylazy.callables.SleepyCallable.sleepy;
 import static com.googlecode.totallylazy.callables.TimeCallable.time;
+import static com.googlecode.totallylazy.callables.TimeReport.reportTime;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.between;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 
 public class LazyCallableTest {
+    @Test
+    public void isVeryFast() throws Exception {
+        System.out.println("base = " + reportTime(returns(1), 1000));
+        System.out.println("lazy = " + reportTime(lazy(returns(1)), 1000));
+    }
+
     @Test
     public void instancesDoNotInteract() throws Exception {
         TimeReport firstTimes = new TimeReport();
