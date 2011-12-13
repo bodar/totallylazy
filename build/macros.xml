@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <macrodef name="compile.and.jar">
+        <attribute name="src"/>
+        <attribute name="jar"/>
+        <attribute name="classpathref"/>
+        <attribute name="version"/>
+        <attribute name="classes" default="@{jar}.classes"/>
+        <attribute name="main.class" default=""/>
+
+        <sequential>
+            <mkdir dir="@{classes}"/>
+            <javac srcdir="@{src}" destdir="@{classes}" classpathref="@{classpathref}"
+                   bootclasspath="${java.home}/lib/rt.jar" target="1.6" source="1.6" debug="true"
+                   includeantruntime="false">
+                <compilerarg value="-Xlint:unchecked"/>
+                <compilerarg value="-Werror"/>
+            </javac>
+            <copy todir="@{classes}">
+                <fileset dir="@{src}">
+                    <exclude name="**/*.java"/>
+                    <exclude name="**/*.scala"/>
+                </fileset>
+            </copy>
+
+            <property name="manifest" value="@{jar}.mf"/>
+            <manifest file="${manifest}">
+                <attribute name="Main-Class" value="@{main.class}"/>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Specification-Title" value="${ant.project.name}"/>
+                <attribute name="Specification-Version" value="@{version}"/>
+                <attribute name="Specification-Vendor" value="${ant.project.name}"/>
+                <attribute name="Implementation-Title" value="${ant.project.name}"/>
+                <attribute name="Implementation-Version" value="@{version}"/>
+                <attribute name="Implementation-Vendor" value="${ant.project.name}"/>
+            </manifest>
+
+            <jar destfile="@{jar}" basedir="@{classes}" manifest="${manifest}"/>
+
+            <delete file="$manifest"/>
+            <delete dir="@{classes}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="test">
+        <attribute name="jar"/>
+        <attribute name="reports"/>
+        <attribute name="classpathref"/>
+
+        <sequential>
+            <mkdir dir="@{reports}"/>
+            <property name="unzipped.jar" value="@{reports}.unzipped.jar"/>
+            <mkdir dir="${unzipped.jar}"/>
+            <unzip dest="${unzipped.jar}" src="@{jar}"/>
+            <junit printsummary="no" fork="on" failureproperty="failed" forkmode="once">
+                <sysproperty key="yatspec.output.dir" value="@{reports}"/>
+                <sysproperty key="yatspec.result.renderer"
+                             value="com.googlecode.yatspec.rendering.wiki.WikiResultRenderer"/>
+                <!--<jvmarg line="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"/>-->
+                <classpath refid="@{classpathref}"/>
+                <formatter type="xml"/>
+                <batchtest todir="@{reports}">
+                    <fileset dir="${unzipped.jar}">
+                        <include name="**/*Test.class"/>
+                        <exclude name="**/*$*"/>
+                    </fileset>
+                </batchtest>
+            </junit>
+
+            <delete dir="${unzipped.jar}"/>
+            <fail message="Tests failed" if="failed"/>
+        </sequential>
+    </macrodef>
+
+</project>
