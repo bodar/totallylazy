@@ -14,6 +14,8 @@ public interface LuceneStorage extends Closeable{
 
     Number delete(Query query) throws IOException;
 
+    void deleteAll() throws IOException;
+
     int count(Query query) throws IOException;
 
     <T> T search(Callable1<Searcher, T> callable) throws IOException;

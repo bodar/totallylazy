@@ -6,22 +6,15 @@ import com.googlecode.totallylazy.Sequence;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Executors;
 
-import static com.googlecode.totallylazy.Closeables.reflectiveClose;
 import static com.googlecode.totallylazy.Closeables.using;
 
 public class OptimisedStorage implements LuceneStorage {
@@ -63,6 +56,13 @@ public class OptimisedStorage implements LuceneStorage {
         writer.commit();
         pool.markAsDirty();
         return count;
+    }
+
+    @Override
+    public void deleteAll() throws IOException {
+        writer.deleteAll();
+        writer.commit();
+        pool.markAsDirty();
     }
 
     @Override
