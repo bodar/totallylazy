@@ -15,16 +15,16 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
-    private Integer hashCode;
-
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Sequence && Sequences.equalTo(this, (Iterable) obj);
     }
 
+    // Thread-safe Racy Single Check Idiom (Effective Java 2nd Edition p.284)
+    private int hashCode;
     @Override
     public int hashCode() {
-        if (hashCode == null) {
+        if (hashCode == 0) {
             hashCode = fold(31, asHashCode());
         }
         return hashCode;
