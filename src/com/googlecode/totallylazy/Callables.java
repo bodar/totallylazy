@@ -218,24 +218,26 @@ public final class Callables {
         };
     }
 
-    public static <T> Callable1<T, String> asString(Class<T> aClass) {
-        return Callables.<T>asString();
+    public static <T> Callable1<Object, String> asString(Class<T> aClass) {
+        return Callables.asString();
     }
 
-    public static <T> Callable1<T, String> asString() {
-        return new Callable1<T, String>() {
-            public final String call(final T value) {
+    public static Callable1<Object, String> asString() {
+        return new Callable1<Object, String>() {
+            public final String call(final Object value) {
                 return value.toString();
             }
         };
     }
 
+    private static final Callable2<Integer, Object, Integer> HASH_CODE = new Callable2<Integer, Object, Integer>() {
+        public Integer call(Integer hash, Object value) throws Exception {
+            return hash * (value == null ? 19 : value.hashCode() == 0 ? 19 : value.hashCode());
+        }
+    };
+
     public static Callable2<Integer, Object, Integer> asHashCode() {
-        return new Callable2<Integer, Object, Integer>() {
-            public Integer call(Integer hash, Object value) throws Exception {
-                return hash * (value == null ? 19 : value.hashCode() == 0 ? 19 : value.hashCode());
-            }
-        };
+        return HASH_CODE;
     }
 
 
