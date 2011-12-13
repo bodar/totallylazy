@@ -7,11 +7,11 @@ import com.googlecode.totallylazy.numbers.Numbers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.numbers.Numbers.add;
-import static com.googlecode.totallylazy.numbers.Numbers.ascending;
-import static com.googlecode.totallylazy.numbers.Numbers.descending;
+import static com.googlecode.totallylazy.numbers.Numbers.*;
 
 public class TimeReport implements Callable1<Double, Void> {
     private final List<Number> times = new ArrayList<Number>();
@@ -61,5 +61,11 @@ public class TimeReport implements Callable1<Double, Void> {
 
     public Number total() {
         return sequence(times).reduce(add());
+    }
+
+    public static TimeReport reportTime(Callable<?> callable, int numberOfCalls){
+        TimeReport report = new TimeReport();
+        repeat(TimeCallable.time(callable, report)).take(numberOfCalls).realise();
+        return report;
     }
 }
