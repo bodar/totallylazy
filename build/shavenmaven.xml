@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+
+    <!-- Example usage pattern
+    <import file="shavenmaven.xml"/>
+    <target name="update">
+        <install version="38"/> // This can either be done ever update or just once
+        <parallel>
+            <update dependencies="${build}/build.dependencies"
+                    directory="${build.dependencies.dir}"/>
+            <update dependencies="${build}/runtime.dependencies"
+                    directory="${runtime.dependencies.dir}"/>
+        </parallel>
+    </target>
+    -->
+
+    <macrodef name="install">
+        <attribute name="version"/>
+        <attribute name="directory" default="lib"/>
+
+        <sequential>
+            <mkdir dir="@{directory}"/>
+            <get src="http://shavenmaven.googlecode.com/files/shavenmaven-@{version}.jar"
+                 dest="@{directory}/shavenmaven.jar" usetimestamp="true"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="update">
+        <attribute name="dependencies"/>
+        <attribute name="directory"/>
+        <attribute name="shavenmaven.jar" default="lib/shavenmaven.jar"/>
+
+        <sequential>
+            <mkdir dir="@{directory}"/>
+            <java classname="com.googlecode.shavenmaven.Dependencies" classpath="@{shavenmaven.jar}" fork="true"
+                  failonerror="true">
+                <arg value="@{dependencies}"/>
+                <arg value="@{directory}"/>
+            </java>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="generate.pom">
+        <attribute name="artifact.uri"/>
+        <attribute name="dependencies"/>
+        <attribute name="directory"/>
+        <attribute name="shavenmaven.jar" default="lib/shavenmaven.jar"/>
+
+        <sequential>
+            <mkdir dir="@{directory}"/>
+            <java classname="com.googlecode.shavenmaven.PomGenerator" classpath="@{shavenmaven.jar}" fork="true"
+                  failonerror="true">
+                <arg value="@{artifact.uri}"/>
+                <arg value="@{dependencies}"/>
+                <arg value="@{directory}"/>
+            </java>
+        </sequential>
+    </macrodef>
+</project>
