@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
@@ -17,11 +18,11 @@ public class LazyCallable1Test {
     @Test
     public void isThreadSafe() throws Exception {
         CountingCallable1<Number, Number> counting = counting(increment());
-        Callable1<Number, Number> lazyCallable1 = lazy(sleepy(counting, 10));
+        Function1<Number, Number> lazyCallable1 = lazy(sleepy(counting, 10));
 
         Sequence<Number> result = callConcurrently(
-                curry(lazyCallable1, 3), curry(lazyCallable1, 6),
-                curry(lazyCallable1, 3), curry(lazyCallable1, 6)).realise();
+                lazyCallable1.curry(3), lazyCallable1.curry(6),
+                lazyCallable1.curry(3), lazyCallable1.curry(6)).realise();
 
         assertThat(counting.count(3), is(1));
         assertThat(counting.count(6), is(1));
@@ -32,7 +33,7 @@ public class LazyCallable1Test {
     @Test
     public void onlyCallsUnderlyingCallableOnce() throws Exception {
         CountingCallable1<Number, Number> counting = counting(increment());
-        Callable1<Number, Number> lazyCallable = lazy(counting);
+        Function1<Number, Number> lazyCallable = lazy(counting);
 
         assertThat(lazyCallable.call(0), is(1));
         assertThat(lazyCallable.call(0), is(1));

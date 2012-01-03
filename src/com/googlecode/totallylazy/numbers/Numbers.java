@@ -180,8 +180,8 @@ public class Numbers {
         return operatorsFor(value).negate(value);
     }
 
-    public static Callable1<Number, Number> increment() {
-        return new Callable1<Number, Number>() {
+    public static Function1<Number, Number> increment() {
+        return new Function1<Number, Number>() {
             public Number call(Number number) throws Exception {
                 return Numbers.increment(number);
             }
@@ -192,8 +192,8 @@ public class Numbers {
         return operatorsFor(value).increment(value);
     }
 
-    public static Callable1<Number, Number> decrement() {
-        return new Callable1<Number, Number>() {
+    public static Function1<Number, Number> decrement() {
+        return new Function1<Number, Number>() {
             public Number call(Number number) throws Exception {
                 return Numbers.decrement(number);
             }
