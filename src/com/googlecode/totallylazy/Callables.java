@@ -317,14 +317,14 @@ public final class Callables {
         return call();
     }
 
-    public static <T, R, S> Callable1<R, S> curry(final Callable2<T, R, S> callable, final T value) {
+    public static <T, R, S> Function1<R, S> curry(final Callable2<T, R, S> callable, final T value) {
         return Callers.call(curry(callable), value);
     }
 
-    public static <T, R, S> Callable1<T, Callable1<R, S>> curry(final Callable2<T, R, S> callable) {
-        return new Callable1<T, Callable1<R, S>>() {
-            public final Callable1<R, S> call(final T t) throws Exception {
-                return new Callable1<R, S>() {
+    public static <T, R, S> Function1<T, Function1<R, S>> curry(final Callable2<T, R, S> callable) {
+        return new Function1<T, Function1<R, S>>() {
+            public final Function1<R, S> call(final T t) throws Exception {
+                return new Function1<R, S>() {
                     public final S call(final R r) throws Exception {
                         return callable.call(t, r);
                     }
@@ -333,7 +333,7 @@ public final class Callables {
         };
     }
 
-    public static <T, R> Callable<R> curry(final Callable1<T, R> callable, final T value) {
+    public static <T, R> Callable<R> curry(final Callable1<? super T, ? extends R> callable, final T value) {
         return new Callable<R>() {
             public final R call() throws Exception {
                 return callable.call(value);
@@ -341,49 +341,49 @@ public final class Callables {
         };
     }
 
-    public static <T, S> Callable1<T, Callable<S>> bounce(final Callable1<? super T, S> callable) {
-        return new Callable1<T, Callable<S>>() {
+    public static <T, S> Function1<T, Callable<S>> bounce(final Callable1<? super T, S> callable) {
+        return new Function1<T, Callable<S>>() {
             public Callable<S> call(T t) throws Exception {
                 return Callables.curry(callable, t);
             }
         };
     }
 
-    public static <T, R, S> Callable2<T, R, S> unCurry(final Callable1<T, Callable1<R, S>> callable) {
-        return new Callable2<T, R, S>() {
-            public final S call(final T t, final R r) throws Exception {
-                return callable.call(t).call(r);
+    public static <A, B, C> Function2<A, B, C> unCurry(final Callable1<? super A, ? extends Callable1<B, C>> callable) {
+        return new Function2<A, B, C>() {
+            public final C call(final A a, final B b) throws Exception {
+                return callable.call(a).call(b);
             }
         };
     }
 
-    public static <L> Callable1<Either<L, ?>, L> left(Class<L> aClass) {
+    public static <L> Function1<Either<L, ?>, L> left(Class<L> aClass) {
         return left();
     }
 
-    public static <L> Callable1<Either<L, ?>, L> left() {
-        return new Callable1<Either<L, ?>, L>() {
+    public static <L> Function1<Either<L, ?>, L> left() {
+        return new Function1<Either<L, ?>, L>() {
             public L call(Either<L, ?> either) throws Exception {
                 return either.left();
             }
         };
     }
 
-    public static <R> Callable1<Either<?, R>, R> right(Class<R> aClass) {
+    public static <R> Function1<Either<?, R>, R> right(Class<R> aClass) {
         return right();
     }
 
-    public static <R> Callable1<Either<?, R>, R> right() {
-        return new Callable1<Either<?, R>, R>() {
+    public static <R> Function1<Either<?, R>, R> right() {
+        return new Function1<Either<?, R>, R>() {
             public R call(Either<?, R> either) throws Exception {
                 return either.right();
             }
         };
     }
 
-    public static <T, S> Callable2<S, T, S> flip(final Callable2<? super T, ? super S, S> callable) {
-        return new Callable2<S, T, S>() {
-            public S call(S s, T t) throws Exception {
+    public static <A, B, C> Function2<B, A, C> flip(final Callable2<? super A, ? super B, C> callable) {
+        return new Function2<B, A, C>() {
+            public C call(B s, A t) throws Exception {
                 return callable.call(t, s);
             }
         };

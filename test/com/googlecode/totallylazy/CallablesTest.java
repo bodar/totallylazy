@@ -13,20 +13,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class CallablesTest {
     @Test
     public void canCurrySingleArgumentCallablesAsWell() throws Exception {
-        final Callable1<Number, Callable1<Number, Number>> curriedAdd = curry(add());
+        final Function1<Number, Function1<Number, Number>> curriedAdd = curry(add());
         final Callable<Number> numberNumberCallable1 = curry(curriedAdd.call(1), 2);
         assertThat(numberNumberCallable1.call(), is(3));
     }
 
     @Test
     public void canCurryAdd() throws Exception {
-        final Callable1<Number, Callable1<Number, Number>> curriedAdd = curry(add());
+        final Function1<Number, Function1<Number, Number>> curriedAdd = curry(add());
         assertThat(curriedAdd.call(1).call(2), is(3));
     }
 
     @Test
     public void canUnCurryAdd() throws Exception {
-        final Callable1<Number, Callable1<Number, Number>> curriedAdd = curry(add());
+        final Function1<Number, Function1<Number, Number>> curriedAdd = curry(add());
         Callable2<Number, Number, Number> unCurriedAdd = unCurry(curriedAdd);
         assertThat(unCurriedAdd.call(1,2), is(3));
     }

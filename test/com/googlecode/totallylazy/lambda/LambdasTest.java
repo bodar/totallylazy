@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy.lambda;
 
+import com.googlecode.totallylazy.Callable1;
+import org.enumerable.lambda.annotation.NewLambda;
+import org.enumerable.lambda.exception.LambdaWeavingNotEnabledException;
 import org.junit.Ignore;
 import org.junit.Test;
 
