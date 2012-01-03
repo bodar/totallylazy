@@ -11,10 +11,6 @@ public final class RangerIterator extends ReadOnlyIterator<Number> {
     private final Number end;
     private final Number step;
 
-    public RangerIterator(final Number end) {
-        this(0, end);
-    }
-
     public RangerIterator(final Number start, final Number end) {
         this(start, end, 1);
     }

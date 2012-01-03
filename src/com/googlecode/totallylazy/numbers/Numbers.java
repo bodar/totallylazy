@@ -47,28 +47,16 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Numbers {
-    public static Sequence<Number> range(final Number end) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(end);
-            }
-        };
+    public static Sequence<Number> range(final Number start) {
+        return iterate(increment(), start);
     }
 
     public static Sequence<Number> range(final Number start, final Number end) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(start, end);
-            }
-        };
+        return range(start).takeWhile(lessThan(end));
     }
 
     public static Sequence<Number> range(final Number start, final Number end, final Number step) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(start, end, step);
-            }
-        };
+        return iterate(add(step), start).takeWhile(lessThan(end));
     }
 
     public static Option<Number> valueOf(String string) {
@@ -77,10 +65,6 @@ public class Numbers {
         } catch(Exception e) {
             return none(Number.class);
         }
-    }
-
-    public static Sequence<Number> integersStartingFrom(final int value) {
-        return iterate(increment(), value);
     }
 
     public static Sequence<Number> numbers(Number... numbers) {

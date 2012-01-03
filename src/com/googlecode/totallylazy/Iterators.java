@@ -170,8 +170,8 @@ public class Iterators {
         return new RepeatIterator<T>(returns(item));
     }
 
-    public static Iterator<Number> range(final Number end) {
-        return new RangerIterator(end);
+    public static Iterator<Number> range(final Number start) {
+        return iterate(increment(), start);
     }
 
     public static Iterator<Number> range(final Number start, final Number end) {
