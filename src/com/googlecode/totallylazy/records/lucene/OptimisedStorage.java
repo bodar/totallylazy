@@ -89,7 +89,17 @@ public class OptimisedStorage implements LuceneStorage {
     @Override
     public void close() throws IOException {
         Closeables.close(pool);
-        Closeables.close(writer);
+        try {
+            Closeables.close(writer);
+        } finally {
+            ensureDirectoryUnlocked();
+        }
+    }
+
+    private void ensureDirectoryUnlocked() throws IOException {
+        if(IndexWriter.isLocked(directory)) {
+            IndexWriter.unlock(directory);
+        }
     }
 
     private void ensureIndexIsSetup() throws IOException {
