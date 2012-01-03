@@ -333,8 +333,8 @@ public final class Callables {
         };
     }
 
-    public static <T, R> Callable<R> curry(final Callable1<? super T, ? extends R> callable, final T value) {
-        return new Callable<R>() {
+    public static <T, R> Function<R> curry(final Callable1<? super T, ? extends R> callable, final T value) {
+        return new Function<R>() {
             public final R call() throws Exception {
                 return callable.call(value);
             }
