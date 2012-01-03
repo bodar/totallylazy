@@ -17,16 +17,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Iterators;
-import com.googlecode.totallylazy.MemorisedSequence;
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
@@ -302,16 +293,16 @@ public class Numbers {
         return new Average<T>();
     }
 
-    public static <T extends Number> Callable2<T, T, Number> sum() {
+    public static <T extends Number> Function2<T, T, Number> sum() {
         return new Sum<T>();
     }
 
-    public static <T extends Number> Callable2<T, T, Number> add() {
+    public static <T extends Number> Function2<T, T, Number> add() {
         return new Sum<T>();
     }
 
     public static Callable1<Number, Number> add(final Number amount) {
-        return curry(add(), amount);
+        return add().apply(amount);
     }
 
     public static <X extends Number, Y extends Number> Number add(X x, Y y) {
@@ -338,20 +329,20 @@ public class Numbers {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
-    public static <T extends Number> Callable2<T, T, Number> product() {
+    public static <T extends Number> Function2<T, T, Number> product() {
         return multiply();
     }
 
-    public static <T extends Number> Callable2<T, T, Number> multiply() {
-        return new Callable2<T, T, Number>() {
+    public static <T extends Number> Function2<T, T, Number> multiply() {
+        return new Function2<T, T, Number>() {
             public Number call(T multiplicand, T multiplier) throws Exception {
                 return multiply(multiplicand, multiplier);
             }
         };
     }
 
-    public static <T extends Number> Callable1<T, Number> multiply(final T multiplicand) {
-        return curry(Numbers.<T>multiply(), multiplicand);
+    public static <T extends Number> Function1<T, Number> multiply(final T multiplicand) {
+        return Numbers.<T>multiply().apply(multiplicand);
     }
 
     public static <X extends Number, Y extends Number> Number multiply(X x, Y y) {
@@ -363,16 +354,12 @@ public class Numbers {
         return operatorsFor(x, y).divide(x, y);
     }
 
-    public static <X extends Number> Callable1<Number, Number> divide(final X divisor) {
-        return new Callable1<Number, Number>() {
-            public Number call(Number dividend) throws Exception {
-                return divide(dividend, divisor);
-            }
-        };
+    public static <X extends Number> Function1<Number, Number> divide(final X divisor) {
+        return divide().flip().apply(divisor);
     }
 
-    public static <T extends Number> Callable2<T, T, Number> divide() {
-        return new Callable2<T, T, Number>() {
+    public static <T extends Number> Function2<T, T, Number> divide() {
+        return new Function2<T, T, Number>() {
             public Number call(T dividend, T divisor) throws Exception {
                 return divide(dividend, divisor);
             }
