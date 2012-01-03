@@ -42,7 +42,7 @@ public class NumbersTest {
 
     @Test
     public void supportsRange() throws Exception {
-        assertThat(range(5), hasExactly(0, 1, 2, 3, 4));
+        assertThat(range(0), startsWith(0, 1, 2, 3, 4, 5, 6));
         assertThat(range(0, 5), hasExactly(0, 1, 2, 3, 4));
         assertThat(range(0, 5, 2), hasExactly(0, 2, 4));
     }
@@ -68,7 +68,7 @@ public class NumbersTest {
     @Test
     public void shouldBePrettyFast() throws Exception {
         TimeReport report = new TimeReport();
-        repeat(time(sumIterable(), iterate(increment(), 0).take(10000), report)).take(100).realise();
+        repeat(time(sumIterable(), range(0, 10000), report)).take(100).realise();
         System.out.println(report);
         assertThat(report.average(), is(lessThan(20.0)));
     }

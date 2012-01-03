@@ -18,6 +18,7 @@ import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
+import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 
 public class Mappings {
@@ -53,7 +54,7 @@ public class Mappings {
     }
 
     public void addValues(PreparedStatement statement, Sequence<Object> values) throws SQLException {
-        for (Pair<Integer, Object> pair : iterate(increment(), 1).safeCast(Integer.class).zip(values)) {
+        for (Pair<Integer, Object> pair : range(1).safeCast(Integer.class).zip(values)) {
             Integer index = pair.first();
             Object value = pair.second();
             get(value == null ? Object.class : value.getClass()).setValue(statement, index, value);

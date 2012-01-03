@@ -27,7 +27,7 @@ import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Triple.triple;
-import static com.googlecode.totallylazy.numbers.Numbers.integersStartingFrom;
+import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static java.nio.CharBuffer.wrap;
 
 public class Sequences {
@@ -494,7 +494,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<Pair<Number, T>> zipWithIndex(final Iterable<T> iterable) {
-        return zip(integersStartingFrom(0), iterable);
+        return zip(range(0), iterable);
     }
 
     public static <T, R extends Comparable<R>> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<? super T, R> callable) {
