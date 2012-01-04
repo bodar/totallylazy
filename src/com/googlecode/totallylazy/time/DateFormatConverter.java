@@ -1,15 +1,12 @@
 package com.googlecode.totallylazy.time;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 
 import java.text.DateFormat;
 import java.util.Date;
 
 import static com.googlecode.totallylazy.Callables.callThrows;
-import static com.googlecode.totallylazy.Exceptions.ignoringException;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class DateFormatConverter implements DateConverter {
@@ -38,7 +35,7 @@ public class DateFormatConverter implements DateConverter {
 
     public DateFormatConverter(Iterable<DateFormat> formats) {
         this.formats = sequence(formats);
-        if(this.formats.isEmpty()) {
+        if (this.formats.isEmpty()) {
             throw new IllegalArgumentException("No format specified");
         }
     }
@@ -52,13 +49,12 @@ public class DateFormatConverter implements DateConverter {
     }
 
     public Date parse(final String value) {
-        Callable1<DateFormat, Option<Date>> callable = ignoringException(parseToDate(value));
-        return formats.tryPick(callable).
+        return formats.tryPick(parseToDate(value).optional()).
                 getOrElse(callThrows(new IllegalArgumentException("Invalid date string: " + value), Date.class));
     }
 
-    public static Callable1<DateFormat, Date> parseToDate(final String value) {
-        return new Callable1<DateFormat, Date>() {
+    public static Function1<DateFormat, Date> parseToDate(final String value) {
+        return new Function1<DateFormat, Date>() {
             public Date call(DateFormat dateFormat) throws Exception {
                 return dateFormat.parse(value);
             }

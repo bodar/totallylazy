@@ -19,4 +19,12 @@ public abstract class Function1<A, B> implements Callable1<A, B> {
     public Function1<A, B> sleep(int millis) {
         return SleepyCallable1.sleepy(this, millis);
     }
+
+    public Function1<A, Option<B>> optional() {
+        return Exceptions.optional(this);
+    }
+
+    public Function1<A, Either<Exception, B>> either() {
+        return Exceptions.either(this);
+    }
 }
