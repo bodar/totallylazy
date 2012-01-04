@@ -1,8 +1,10 @@
 package com.googlecode.totallylazy.callables;
 
+import com.googlecode.totallylazy.Function;
+
 import java.util.concurrent.Callable;
 
-public final class LazyCallable<T> implements Callable<T> {
+public final class LazyCallable<T> extends Function<T> {
     private final Callable<T> callable;
     private final Object lock = new Object();
     private volatile T state;
@@ -11,7 +13,7 @@ public final class LazyCallable<T> implements Callable<T> {
         this.callable = callable;
     }
 
-    public static <T> Callable<T> lazy(Callable<T> callable) {
+    public static <T> Function<T> lazy(Callable<T> callable) {
         return new LazyCallable<T>(callable);
     }
 

@@ -13,7 +13,6 @@ import static com.googlecode.totallylazy.Runnables.doNothing;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
-import static com.googlecode.totallylazy.callables.SleepyCallable.sleepy;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -42,17 +41,17 @@ public class MemoriseTest {
     @Test
     public void memoriseIsThreadSafe() throws Exception {
         CountingCallable<Integer> counting = counting();
-        final Sequence<Integer> number = sequence(sleepy(counting, 10)).map(call(Integer.class)).memorise();
+        final Sequence<Integer> number = sequence(counting.sleep(10)).map(call(Integer.class)).memorise();
 
-        Sequence<Integer> result = callConcurrently(sleepy(callHead(number), 10), sleepy(callHead(number), 10));
+        Sequence<Integer> result = callConcurrently(callHead(number).sleep(10), callHead(number).sleep(10));
 
         assertThat(result.first(), is(0));
         assertThat(result.second(), is(0));
         assertThat(counting.count(), is(1));
     }
 
-    private Callable<Integer> callHead(final Sequence<Integer> number) {
-        return new Callable<Integer>() {
+    private Function<Integer> callHead(final Sequence<Integer> number) {
+        return new Function<Integer>() {
             public Integer call() throws Exception {
                 return number.head();
             }

@@ -1,15 +1,12 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Runnables;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.*;
 
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.curry;
 
-public final class TimeCallable<T> implements Callable<T> {
+public final class TimeCallable<T> extends Function<T> {
     private static final String FORMAT = "Elapsed time: %s msecs";
     private static final Callable1<Double, Void> DEFAULT_REPORTER = Runnables.printLine(FORMAT);
     private final Callable<T> callable;

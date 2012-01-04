@@ -18,7 +18,7 @@ public class LazyCallable1Test {
     @Test
     public void isThreadSafe() throws Exception {
         CountingCallable1<Number, Number> counting = counting(increment());
-        Function1<Number, Number> lazyCallable1 = lazy(sleepy(counting, 10));
+        Function1<Number, Number> lazyCallable1 = counting.sleep(10).lazy();
 
         Sequence<Number> result = callConcurrently(
                 lazyCallable1.curry(3), lazyCallable1.curry(6),
