@@ -1,15 +1,12 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.callables.CountingCallable1.counting;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
-import static com.googlecode.totallylazy.callables.SleepyCallable1.sleepy;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static org.hamcrest.MatcherAssert.assertThat;

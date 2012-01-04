@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.records.xml;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;

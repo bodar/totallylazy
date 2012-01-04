@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy.records.lucene;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.predicates.AllPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.Between;

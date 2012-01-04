@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callers;
-import com.googlecode.totallylazy.Predicate;
 
 import java.util.HashSet;
 import java.util.Set;

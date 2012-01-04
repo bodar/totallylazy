@@ -11,7 +11,9 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
+import static com.googlecode.totallylazy.numbers.Numbers.ascending;
+import static com.googlecode.totallylazy.numbers.Numbers.descending;
 
 public class TimeReport implements Callable1<Double, Void> {
     private final List<Number> times = new ArrayList<Number>();

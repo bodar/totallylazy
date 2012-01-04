@@ -5,7 +5,6 @@ import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.time;
@@ -16,7 +15,6 @@ import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.fibonacci;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.powersOf;

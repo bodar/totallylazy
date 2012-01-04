@@ -15,9 +15,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.records.lucene.Lucene.and;
 import static com.googlecode.totallylazy.records.lucene.Lucene.record;
 

@@ -17,7 +17,15 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.MemorisedSequence;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
@@ -28,7 +36,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Callables.curry;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;

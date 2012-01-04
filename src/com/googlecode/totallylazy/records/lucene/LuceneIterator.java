@@ -1,16 +1,13 @@
 package com.googlecode.totallylazy.records.lucene;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.CloseableList;
 import com.googlecode.totallylazy.Closeables;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.records.Record;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.store.AlreadyClosedException;
-import org.apache.lucene.store.Directory;
 
 import java.io.Closeable;
 import java.io.IOException;

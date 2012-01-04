@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TopDocs;
 
 import java.io.Closeable;
 import java.io.IOException;

@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy.records;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 import java.util.HashMap;
 import java.util.List;

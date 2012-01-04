@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.records.lucene;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 
 import java.io.Closeable;

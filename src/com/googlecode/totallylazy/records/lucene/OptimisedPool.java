@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.records.lucene;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function1;
 import org.apache.lucene.search.IndexSearcher;
@@ -8,7 +7,6 @@ import org.apache.lucene.store.Directory;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.googlecode.totallylazy.Predicates.is;

@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Predicates.assignableTo;
