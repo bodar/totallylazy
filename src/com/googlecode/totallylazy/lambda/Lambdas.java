@@ -1,41 +1,41 @@
 package com.googlecode.totallylazy.lambda;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Predicate;
 import org.enumerable.lambda.annotation.NewLambda;
 import org.enumerable.lambda.exception.LambdaWeavingNotEnabledException;
 
-import java.util.concurrent.Callable;
 
 public class Lambdas {
     @NewLambda
-    public static <T> Callable<T> λ(T result) {
+    public static <T> Function<T> λ(T result) {
         throw new LambdaWeavingNotEnabledException();
     }
 
     @NewLambda
-    public static <I, R> Callable1<I, R> λ(I input, R result) {
+    public static <I, R> Function1<I, R> λ(I input, R result) {
         throw new LambdaWeavingNotEnabledException();
     }
 
     @NewLambda
-    public static <F, S, R> Callable2<F, S, R> λ(F first, S second, R result) {
+    public static <F, S, R> Function2<F, S, R> λ(F first, S second, R result) {
         throw new LambdaWeavingNotEnabledException();
     }
 
     @NewLambda
-    public static <T> Callable<T> lambda(T result) {
+    public static <T> Function<T> lambda(T result) {
         throw new LambdaWeavingNotEnabledException();
     }
 
     @NewLambda
-    public static <I, R> Callable1<I, R> lambda(I input, R result) {
+    public static <I, R> Function1<I, R> lambda(I input, R result) {
         throw new LambdaWeavingNotEnabledException();
     }
 
     @NewLambda
-    public static <F, S, R> Callable2<F, S, R> lambda(F first, S second, R result) {
+    public static <F, S, R> Function2<F, S, R> lambda(F first, S second, R result) {
         throw new LambdaWeavingNotEnabledException();
     }
 
