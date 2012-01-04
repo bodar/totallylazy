@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.time;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 
@@ -18,8 +19,8 @@ public class DateFormatConverter implements DateConverter {
         this(sequence(formats).map(asDateFormat()));
     }
 
-    public static Callable1<? super String, DateFormat> asDateFormat() {
-        return new Callable1<String, DateFormat>() {
+    public static Function1<? super String, DateFormat> asDateFormat() {
+        return new Function1<String, DateFormat>() {
             @Override
             public DateFormat call(String value) throws Exception {
                 return Dates.format(value);

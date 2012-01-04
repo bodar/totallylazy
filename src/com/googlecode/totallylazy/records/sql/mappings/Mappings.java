@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.records.sql.mappings;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 
@@ -61,8 +62,8 @@ public class Mappings {
         }
     }
 
-    public Callable1<PreparedStatement, Number> addValuesInBatch(final Sequence<? extends Iterable<Object>> allValues) {
-        return new Callable1<PreparedStatement, Number>() {
+    public Function1<PreparedStatement, Number> addValuesInBatch(final Sequence<? extends Iterable<Object>> allValues) {
+        return new Function1<PreparedStatement, Number>() {
             public Number call(PreparedStatement statement) throws Exception {
                 for (Iterable<Object> values : allValues) {
                     addValues(statement, sequence(values));

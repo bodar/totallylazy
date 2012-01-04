@@ -281,15 +281,15 @@ public class Numbers {
         };
     }
 
-    public static Callable1<Iterable<Number>, Number> sumIterable() {
-        return new Callable1<Iterable<Number>, Number>() {
+    public static Function1<Iterable<Number>, Number> sumIterable() {
+        return new Function1<Iterable<Number>, Number>() {
             public Number call(Iterable<Number> numbers) throws Exception {
                 return Sequences.reduceLeft(numbers, sum());
             }
         };
     }
 
-    public static <T extends Number> Callable2<T, T, Number> average() {
+    public static <T extends Number> Function2<T, T, Number> average() {
         return new Average<T>();
     }
 
@@ -301,7 +301,7 @@ public class Numbers {
         return new Sum<T>();
     }
 
-    public static Callable1<Number, Number> add(final Number amount) {
+    public static Function1<Number, Number> add(final Number amount) {
         return add().apply(amount);
     }
 
@@ -309,20 +309,16 @@ public class Numbers {
         return operatorsFor(x, y).add(x, y);
     }
 
-    public static <T extends Number> Callable2<T, T, Number> subtract() {
-        return new Callable2<T, T, Number>() {
+    public static <T extends Number> Function2<T, T, Number> subtract() {
+        return new Function2<T, T, Number>() {
             public Number call(T a, T b) {
                 return Numbers.subtract(a, b);
             }
         };
     }
 
-    public static Callable1<Number, Number> subtract(final Number amount) {
-        return new Callable1<Number, Number>() {
-            public Number call(Number number) throws Exception {
-                return Numbers.subtract(number, amount);
-            }
-        };
+    public static Function1<Number, Number> subtract(final Number amount) {
+        return subtract().flip().apply(amount);
     }
 
     public static <X extends Number, Y extends Number> Number subtract(X x, Y y) {
@@ -390,16 +386,16 @@ public class Numbers {
         return value;
     }
 
-    public static Callable1<Number, Character> toCharacter() {
-        return new Callable1<Number, Character>() {
+    public static Function1<Number, Character> toCharacter() {
+        return new Function1<Number, Character>() {
             public Character call(Number number) throws Exception {
                 return (char) number.shortValue();
             }
         };
     }
 
-    public static Callable1<Number, Number> remainder(final Number divisor) {
-        return new Callable1<Number, Number>() {
+    public static Function1<Number, Number> remainder(final Number divisor) {
+        return new Function1<Number, Number>() {
             public Number call(Number dividend) throws Exception {
                 return remainder(dividend, divisor);
             }

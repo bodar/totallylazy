@@ -5,8 +5,8 @@ import java.lang.reflect.Type;
 
 public class Constructors {
 
-    public static Callable1<Constructor, Type[]> genericParameterTypes() {
-        return new Callable1<Constructor, Type[]>() {
+    public static Function1<Constructor, Type[]> genericParameterTypes() {
+        return new Function1<Constructor, Type[]>() {
             public Type[] call(Constructor constructor) throws Exception {
                 return constructor.getGenericParameterTypes();
             }

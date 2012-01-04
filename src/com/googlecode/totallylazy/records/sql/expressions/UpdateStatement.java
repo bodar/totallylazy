@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.records.sql.expressions;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Strings;
@@ -31,8 +32,8 @@ public class UpdateStatement extends CompoundExpression {
         return new UpdateStatement(recordName, predicate, record);
     }
 
-    public static Callable1<Pair<? extends Predicate<? super Record>, Record>, Expression> updateStatement(final Keyword recordName) {
-        return new Callable1<Pair<? extends Predicate<? super Record>, Record>, Expression>() {
+    public static Function1<Pair<? extends Predicate<? super Record>, Record>, Expression> updateStatement(final Keyword recordName) {
+        return new Function1<Pair<? extends Predicate<? super Record>, Record>, Expression>() {
             public Expression call(Pair<? extends Predicate<? super Record>, Record> recordPair) throws Exception {
                 return updateStatement(recordName, recordPair.first(), recordPair.second());
             }

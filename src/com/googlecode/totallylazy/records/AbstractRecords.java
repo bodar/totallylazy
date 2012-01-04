@@ -1,10 +1,6 @@
 package com.googlecode.totallylazy.records;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,8 +57,8 @@ public abstract class AbstractRecords implements Records {
         return records.map(update(recordName, true)).reduce(sum());
     }
 
-    private Callable1<Pair<? extends Predicate<? super Record>, Record>, Number> update(final Keyword recordName, final boolean add) {
-        return new Callable1<Pair<? extends Predicate<? super Record>, Record>, Number>() {
+    private Function1<Pair<? extends Predicate<? super Record>, Record>, Number> update(final Keyword recordName, final boolean add) {
+        return new Function1<Pair<? extends Predicate<? super Record>, Record>, Number>() {
             public Number call(Pair<? extends Predicate<? super Record>, Record> pair) throws Exception {
                 Predicate<? super Record> predicate = pair.first();
                 Sequence<Record> matched = get(recordName).filter(predicate).realise();

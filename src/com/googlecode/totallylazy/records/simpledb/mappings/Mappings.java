@@ -4,8 +4,8 @@ import com.amazonaws.services.simpledb.model.Attribute;
 import com.amazonaws.services.simpledb.model.Item;
 import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
 import com.amazonaws.services.simpledb.model.ReplaceableItem;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
@@ -45,13 +45,13 @@ public class Mappings {
     }
 
     public Mapping<Object> get(final Class aClass) {
-        if(!map.containsKey(aClass)) {
+        if (!map.containsKey(aClass)) {
             return map.get(Object.class);
         }
         return map.get(aClass);
     }
 
-    public String toString(final Class aClass, Object value){
+    public String toString(final Class aClass, Object value) {
         try {
             return value == null ? null : get(aClass).toString(value);
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class Mappings {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T toValue(final Class<T> aClass, String value){
+    public <T> T toValue(final Class<T> aClass, String value) {
         try {
             return value == null ? null : (T) get(aClass).toValue(value);
         } catch (Exception e) {
@@ -68,8 +68,8 @@ public class Mappings {
         }
     }
 
-    public Callable1<? super Item, Record> asRecord(final Sequence<Keyword> definitions) {
-        return new Callable1<Item, Record>() {
+    public Function1<? super Item, Record> asRecord(final Sequence<Keyword> definitions) {
+        return new Function1<Item, Record>() {
             public Record call(Item item) throws Exception {
                 return sequence(item.getAttributes()).fold(record(item), asField(definitions));
             }
@@ -77,8 +77,8 @@ public class Mappings {
     }
 
     @SuppressWarnings("unchecked")
-    public Callable2<? super Record, ? super Attribute, Record> asField(final Sequence<Keyword> definitions) {
-        return new Callable2<Record, Attribute, Record>() {
+    public Function2<? super Record, ? super Attribute, Record> asField(final Sequence<Keyword> definitions) {
+        return new Function2<Record, Attribute, Record>() {
             public Record call(Record mapRecord, Attribute attribute) throws Exception {
                 Keyword keyword = RecordMethods.getKeyword(attribute.getName(), definitions);
                 return mapRecord.set(keyword, toValue(keyword.forClass(), attribute.getValue()));
@@ -86,8 +86,8 @@ public class Mappings {
         };
     }
 
-    public Callable1<? super Record, ReplaceableItem> toReplaceableItem() {
-        return new Callable1<Record, ReplaceableItem>() {
+    public Function1<? super Record, ReplaceableItem> toReplaceableItem() {
+        return new Function1<Record, ReplaceableItem>() {
             public ReplaceableItem call(Record record) throws Exception {
                 return new ReplaceableItem(UUID.randomUUID().toString(), record.fields().
                         filter(where(second(Object.class), is(notNullValue()))).
@@ -96,8 +96,8 @@ public class Mappings {
         };
     }
 
-    public Callable1<? super Pair<Keyword, Object>, ReplaceableAttribute> asAttribute() {
-        return new Callable1<Pair<Keyword, Object>, ReplaceableAttribute>() {
+    public Function1<? super Pair<Keyword, Object>, ReplaceableAttribute> asAttribute() {
+        return new Function1<Pair<Keyword, Object>, ReplaceableAttribute>() {
             public ReplaceableAttribute call(Pair<Keyword, Object> pair) throws Exception {
                 Keyword keyword = pair.first();
                 Object value = pair.second();

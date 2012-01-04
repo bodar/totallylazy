@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.records.xml;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
@@ -55,8 +55,8 @@ public class XmlRecords extends AbstractRecords {
     }
 
     @SuppressWarnings("unchecked")
-    private Callable2<? super Element, ? super Keyword, Element> addNodes(final Record record) {
-        return new Callable2<Element, Keyword, Element>() {
+    private Function2<? super Element, ? super Keyword, Element> addNodes(final Record record) {
+        return new Function2<Element, Keyword, Element>() {
             public Element call(Element container, Keyword field) throws Exception {
                 Object value = record.get(field);
                 if (value != null) {
@@ -82,8 +82,8 @@ public class XmlRecords extends AbstractRecords {
     }
 
     @SuppressWarnings("unchecked")
-    private Callable1<? super Record, Node> asNode() {
-        return new Callable1<Record, Node>() {
+    private Function1<? super Record, Node> asNode() {
+        return new Function1<Record, Node>() {
             public Node call(Record record) throws Exception {
                 return ((SourceRecord<Node>) record).value();
             }

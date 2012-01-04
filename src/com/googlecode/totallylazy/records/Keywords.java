@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.records;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 
 public class Keywords {
@@ -8,8 +8,8 @@ public class Keywords {
     public static final Keyword<Boolean> UNIQUE = Keywords.keyword("unique", Boolean.class);
     public static final Keyword<Boolean> INDEXED = Keywords.keyword("indexed", Boolean.class);
 
-    public static Callable1<Keyword, String> name() {
-        return new Callable1<Keyword, String>() {
+    public static Function1<Keyword, String> name() {
+        return new Function1<Keyword, String>() {
             public String call(Keyword keyword) throws Exception {
                 return keyword.name();
             }
@@ -28,8 +28,8 @@ public class Keywords {
         return keyword.name().equalsIgnoreCase(other.name());
     }
 
-    public static <T> Callable1<Keyword, T> metadata(final Keyword<T> metadataKey) {
-        return new Callable1<Keyword, T>() {
+    public static <T> Function1<Keyword, T> metadata(final Keyword<T> metadataKey) {
+        return new Function1<Keyword, T>() {
             public T call(Keyword keyword) throws Exception {
                 return keyword.metadata().get(metadataKey);
             }
@@ -40,8 +40,8 @@ public class Keywords {
         return results.flatMap(keywords()).unique().realise();
     }
 
-    public static Callable1<Record, Sequence<Keyword>> keywords() {
-        return new Callable1<Record, Sequence<Keyword>>() {
+    public static Function1<Record, Sequence<Keyword>> keywords() {
+        return new Function1<Record, Sequence<Keyword>>() {
             public Sequence<Keyword> call(Record record) throws Exception {
                 return record.keywords();
             }

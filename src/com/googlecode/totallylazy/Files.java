@@ -31,24 +31,24 @@ public class Files {
         };
     }
 
-    public static Callable1<File, String> name() {
-        return new Callable1<File, String>() {
+    public static Function1<File, String> name() {
+        return new Function1<File, String>() {
             public String call(File file) throws Exception {
                 return file.getName();
             }
         };
     }
 
-    public static Callable1<File, String> path() {
-        return new Callable1<File, String>() {
+    public static Function1<File, String> path() {
+        return new Function1<File, String>() {
             public String call(File file) throws Exception {
                 return file.getPath();
             }
         };
     }
 
-    public static Callable1<File, File> parent() {
-        return new Callable1<File, File>() {
+    public static Function1<File, File> parent() {
+        return new Function1<File, File>() {
             public File call(File file) throws Exception {
                 return file.getParentFile();
             }
@@ -100,8 +100,8 @@ public class Files {
         return files(directory).flatMap(recursiveFiles());
     }
 
-    public static Callable1<File, Iterable<File>> recursiveFiles() {
-        return new Callable1<File, Iterable<File>>() {
+    public static Function1<File, Iterable<File>> recursiveFiles() {
+        return new Function1<File, Iterable<File>>() {
             public Iterable<File> call(File file) throws Exception {
                 return file.isDirectory() ? recursiveFiles(file).add(file) : sequence(file);
             }
@@ -124,8 +124,8 @@ public class Files {
         }
     }
 
-    public static Callable1<InputStream, Void> write(final File output) {
-        return new Callable1<InputStream, Void>() {
+    public static Function1<InputStream, Void> write(final File output) {
+        return new Function1<InputStream, Void>() {
             @Override
             public Void call(InputStream inputStream) throws Exception {
                 write(bytes(inputStream), output);
@@ -134,16 +134,16 @@ public class Files {
         };
     }
 
-    public static Callable1<File, Boolean> delete() {
-        return new Callable1<File, Boolean>() {
+    public static Function1<File, Boolean> delete() {
+        return new Function1<File, Boolean>() {
             public Boolean call(File file) throws Exception {
                 return file.delete();
             }
         };
     }
 
-    public static Callable1<String, File> asFile() {
-        return new Callable1<String, File>() {
+    public static Function1<String, File> asFile() {
+        return new Function1<String, File>() {
             public File call(String name) throws Exception {
                 return new File(name);
             }

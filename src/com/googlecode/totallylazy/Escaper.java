@@ -30,8 +30,8 @@ public class Escaper {
         return value == null ? null : characters(value.toString()).map(escape()).toString("", "", "", Long.MAX_VALUE);
     }
 
-    private Callable1<Character, String> escape() {
-        return new Callable1<Character, String>() {
+    private Function1<Character, String> escape() {
+        return new Function1<Character, String>() {
             public String call(Character character) throws Exception {
                 return sequence(rules).
                         filter(Predicates.matches(character)).

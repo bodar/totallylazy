@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.records.sql.expressions;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.records.Keyword;
 
 import java.net.URI;
@@ -34,8 +35,8 @@ public class TableDefinition extends TextOnlyExpression {
         put(UUID.class, "varchar(36)");
     }};
 
-    public static Callable1<? super Keyword<?>, String> asColumn() {
-        return new Callable1<Keyword<?>, String>() {
+    public static Function1<? super Keyword<?>, String> asColumn() {
+        return new Function1<Keyword<?>, String>() {
             public String call(Keyword<?> keyword) throws Exception {
                 Class<?> aClass = keyword.forClass();
                 if (!mappings.containsKey(aClass)) {

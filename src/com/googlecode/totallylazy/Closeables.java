@@ -8,8 +8,8 @@ import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Runnables.VOID;
 
 public class Closeables {
-    public static <T extends Closeable> Callable1<T, Void> closeAfter(final Callable1<? super T, Void> callable) {
-        return new Callable1<T, Void>() {
+    public static <T extends Closeable> Function1<T, Void> closeAfter(final Callable1<? super T, Void> callable) {
+        return new Function1<T, Void>() {
             public Void call(T t) throws Exception {
                 return using(t, callable);
             }
@@ -59,8 +59,8 @@ public class Closeables {
         }
     }
 
-    public static <T> Callable1<T, Void> reflectiveClose() {
-        return new Callable1<T, Void>() {
+    public static <T> Function1<T, Void> reflectiveClose() {
+        return new Function1<T, Void>() {
             public Void call(T instanceWithCloseMethod) throws Exception {
                 close(instanceWithCloseMethod);
                 return VOID;
@@ -68,8 +68,8 @@ public class Closeables {
         };
     }
 
-    public static Callable1<Closeable, Void> close() {
-        return new Callable1<Closeable, Void>() {
+    public static Function1<Closeable, Void> close() {
+        return new Function1<Closeable, Void>() {
             public Void call(Closeable closeable) throws IOException {
                 close(closeable);
                 return VOID;

@@ -1,12 +1,6 @@
 package com.googlecode.totallylazy.records;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 
 import java.util.Map;
 
@@ -23,20 +17,20 @@ import static com.googlecode.totallylazy.records.Keywords.name;
 
 public class RecordMethods {
     @SuppressWarnings({"unchecked"})
-    public static Callable2<Record, Pair<Keyword, Object>, Record> updateValues() {
-        return new Callable2<Record, Pair<Keyword, Object>, Record>() {
+    public static Function2<Record, Pair<Keyword, Object>, Record> updateValues() {
+        return new Function2<Record, Pair<Keyword, Object>, Record>() {
             public Record call(Record record, Pair<Keyword, Object> field) throws Exception {
                 return record.set(field.first(), field.second());
             }
         };
     }
 
-    public static Callable1<Record, Record> merge(final Record other) {
+    public static Function1<Record, Record> merge(final Record other) {
         return merge(other.fields());
     }
 
-    public static Callable1<Record, Record> merge(final Sequence<Pair<Keyword, Object>> fields) {
-        return new Callable1<Record, Record>() {
+    public static Function1<Record, Record> merge(final Sequence<Pair<Keyword, Object>> fields) {
+        return new Function1<Record, Record>() {
             public Record call(Record record) throws Exception {
                 return fields.fold(record, updateValues());
             }
@@ -47,8 +41,8 @@ public class RecordMethods {
         return definitions.find(where(name(), equalIgnoringCase(name))).getOrElse(keyword(name));
     }
 
-    public static Callable1<Record, Sequence<Object>> getValuesFor(final Sequence<Keyword> fields) {
-        return new Callable1<Record, Sequence<Object>>() {
+    public static Function1<Record, Sequence<Object>> getValuesFor(final Sequence<Keyword> fields) {
+        return new Function1<Record, Sequence<Object>>() {
             public Sequence<Object> call(Record record) throws Exception {
                 return record.getValuesFor(fields);
             }
@@ -80,16 +74,16 @@ public class RecordMethods {
         return records.map(toPair(callable));
     }
 
-    public static Callable1<Record, Pair<Predicate<Record>, Record>> toPair(final Callable1<? super Record, Predicate<Record>> callable) {
-        return new Callable1<Record, Pair<Predicate<Record>, Record>>() {
+    public static Function1<Record, Pair<Predicate<Record>, Record>> toPair(final Callable1<? super Record, Predicate<Record>> callable) {
+        return new Function1<Record, Pair<Predicate<Record>, Record>>() {
             public Pair<Predicate<Record>, Record> call(Record record) throws Exception {
                 return Pair.pair(callable.call(record), record);
             }
         };
     }
 
-    public static Callable1<Record, Map<String, Object>> asMap() {
-        return new Callable1<Record, Map<String, Object>>() {
+    public static Function1<Record, Map<String, Object>> asMap() {
+        return new Function1<Record, Map<String, Object>>() {
             public Map<String, Object> call(Record record) throws Exception {
                 return toMap(record);
             }
@@ -100,8 +94,8 @@ public class RecordMethods {
         return map(record.fields().map(Callables.<Keyword, Object, String>first(asString(Keyword.class))));
     }
 
-    public static Callable2<Map<String, Object>, Pair<Keyword, Object>, Map<String, Object>> intoMap() {
-        return new Callable2<Map<String, Object>, Pair<Keyword, Object>, Map<String, Object>>() {
+    public static Function2<Map<String, Object>, Pair<Keyword, Object>, Map<String, Object>> intoMap() {
+        return new Function2<Map<String, Object>, Pair<Keyword, Object>, Map<String, Object>>() {
             public Map<String, Object> call(Map<String, Object> map, Pair<Keyword, Object> pair) throws Exception {
                 map.put(pair.first().toString(), pair.second());
                 return map;
