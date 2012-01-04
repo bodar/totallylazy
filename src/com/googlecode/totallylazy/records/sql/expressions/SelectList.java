@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.records.sql.expressions;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Aggregate;
 import com.googlecode.totallylazy.records.AliasedKeyword;
@@ -27,8 +28,8 @@ public class SelectList extends CompoundExpression{
     }
 
     @SuppressWarnings("unchecked")
-    public static Callable1<Keyword, Expression> derivedColumn() {
-        return new Callable1<Keyword, Expression>() {
+    public static Function1<Keyword, Expression> derivedColumn() {
+        return new Function1<Keyword, Expression>() {
             public Expression call(Keyword keyword) throws Exception {
                 return derivedColumn(keyword);
             }

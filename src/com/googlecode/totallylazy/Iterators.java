@@ -339,8 +339,8 @@ public class Iterators {
         };
     }
 
-    public static <T> Callable1<Iterator<T>, T> next() {
-        return new Callable1<Iterator<T>, T>() {
+    public static <T> Function1<Iterator<T>, T> next() {
+        return new Function1<Iterator<T>, T>() {
             public T call(Iterator<T> iterator) throws Exception {
                 return iterator.next();
             }

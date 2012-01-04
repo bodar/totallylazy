@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.records.xml;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.records.Keyword;
@@ -27,8 +28,8 @@ public class XmlSequence extends Sequence<Record> {
         return nodes.map(asRecord()).iterator();
     }
     @SuppressWarnings("unchecked")
-    private Callable1<? super Node, Record> asRecord() {
-        return new Callable1<Node, Record>() {
+    private Function1<? super Node, Record> asRecord() {
+        return new Function1<Node, Record>() {
             public Record call(final Node node) throws Exception {
                 return definitions.fold(new SourceRecord<Node>(node), new Callable2<Record, Keyword, Record>() {
                     public Record call(Record nodeRecord, Keyword keyword) throws Exception {

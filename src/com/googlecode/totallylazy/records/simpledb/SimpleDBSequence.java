@@ -4,10 +4,7 @@ import com.amazonaws.services.simpledb.AmazonSimpleDB;
 import com.amazonaws.services.simpledb.model.Item;
 import com.amazonaws.services.simpledb.model.SelectRequest;
 import com.amazonaws.services.simpledb.model.SelectResult;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.SelectCallable;
@@ -48,8 +45,8 @@ public class SimpleDBSequence<T> extends Sequence<T> {
         return iterator(new SelectRequest(selectExpression, consistentRead)).map(itemToRecord).iterator();
     }
 
-    private Callable1<Object, Object> value() {
-        return new Callable1<Object, Object>() {
+    private Function1<Object, Object> value() {
+        return new Function1<Object, Object>() {
             public Object call(Object value) throws Exception {
                 return mappings.toString(value.getClass(), value);
             }
@@ -87,8 +84,8 @@ public class SimpleDBSequence<T> extends Sequence<T> {
         return super.map(callable);
     }
 
-    private <S> Callable1<Item, S> itemToValue(final Keyword<S> keyword) {
-        return new Callable1<Item, S>() {
+    private <S> Function1<Item, S> itemToValue(final Keyword<S> keyword) {
+        return new Function1<Item, S>() {
             public S call(Item item) throws Exception {
                 return ((Record) itemToRecord.call(item)).get(keyword);
             }

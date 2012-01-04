@@ -109,8 +109,8 @@ public class Xml {
         return nodes.map(contents()).toString("");
     }
 
-    public static Callable1<Element, Void> removeAttribute(final String name) {
-        return new Callable1<Element, Void>() {
+    public static Function1<Element, Void> removeAttribute(final String name) {
+        return new Function1<Element, Void>() {
             public Void call(Element element) throws Exception {
                 element.removeAttribute(name);
                 return VOID;
@@ -118,8 +118,8 @@ public class Xml {
         };
     }
 
-    public static Callable1<Node, String> contents() {
-        return new Callable1<Node, String>() {
+    public static Function1<Node, String> contents() {
+        return new Function1<Node, String>() {
             public String call(Node node) throws Exception {
                 return contents(node);
             }
@@ -220,8 +220,8 @@ public class Xml {
         return nodes.map(remove()).realise();
     }
 
-    private static Callable1<Node, Node> remove() {
-        return new Callable1<Node, Node>() {
+    private static Function1<Node, Node> remove() {
+        return new Function1<Node, Node>() {
             public Node call(Node node) throws Exception {
                 return node.getParentNode().removeChild(node);
             }
@@ -247,16 +247,16 @@ public class Xml {
                 escape(value);
     }
 
-    public static Callable1<Object, String> escape() {
-        return new Callable1<Object, String>() {
+    public static Function1<Object, String> escape() {
+        return new Function1<Object, String>() {
             public String call(Object value) throws Exception {
                 return escape(value);
             }
         };
     }
 
-    public static Callable1<Character, String> toXmlEntity() {
-        return new Callable1<Character, String>() {
+    public static Function1<Character, String> toXmlEntity() {
+        return new Function1<Character, String>() {
             public String call(Character character) throws Exception {
                 return String.format("&#%s;", Integer.toString(character, 10));
             }

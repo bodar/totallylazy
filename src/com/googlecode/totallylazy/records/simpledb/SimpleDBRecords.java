@@ -7,10 +7,7 @@ import com.amazonaws.services.simpledb.model.CreateDomainRequest;
 import com.amazonaws.services.simpledb.model.DeletableItem;
 import com.amazonaws.services.simpledb.model.DeleteDomainRequest;
 import com.amazonaws.services.simpledb.model.Item;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.records.AbstractRecords;
 import com.googlecode.totallylazy.records.Keyword;
@@ -99,8 +96,8 @@ public class SimpleDBRecords extends AbstractRecords {
     }
 
     @SuppressWarnings("unchecked")
-    private Callable1<? super Record, DeletableItem> asItem() {
-        return new Callable1<Record, DeletableItem>() {
+    private Function1<? super Record, DeletableItem> asItem() {
+        return new Function1<Record, DeletableItem>() {
             public DeletableItem call(Record record) throws Exception {
                 Item item = ((SourceRecord<Item>) record).value();
                 return new DeletableItem().withName(item.getName());
@@ -108,8 +105,8 @@ public class SimpleDBRecords extends AbstractRecords {
         };
     }
 
-    private Callable1<Sequence<Record>, Number> putAttributes(final Keyword recordName) {
-        return new Callable1<Sequence<Record>, Number>() {
+    private Function1<Sequence<Record>, Number> putAttributes(final Keyword recordName) {
+        return new Function1<Sequence<Record>, Number>() {
             public Number call(Sequence<Record> batch) throws Exception {
                 sdb.batchPutAttributes(new BatchPutAttributesRequest(recordName.name(), batch.map(mappings.toReplaceableItem()).toList()));
                 return batch.size();
@@ -117,8 +114,8 @@ public class SimpleDBRecords extends AbstractRecords {
         };
     }
 
-    private Callable1<Sequence<Record>, Number> deleteAttributes(final Keyword recordName) {
-        return new Callable1<Sequence<Record>, Number>() {
+    private Function1<Sequence<Record>, Number> deleteAttributes(final Keyword recordName) {
+        return new Function1<Sequence<Record>, Number>() {
             public Number call(Sequence<Record> batch) throws Exception {
                 sdb.batchDeleteAttributes(new BatchDeleteAttributesRequest(recordName.name(), batch.map(asItem()).toList()));
                 return batch.size();

@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.records.sql.expressions;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
@@ -125,8 +126,8 @@ public class WhereClause extends CompoundExpression{
         return sequence(((Value) predicate).value());
     }
 
-    public static Callable1<? super Predicate, Expression> toSql() {
-        return new Callable1<Predicate, Expression>() {
+    public static Function1<? super Predicate, Expression> toSql() {
+        return new Function1<Predicate, Expression>() {
             public Expression call(Predicate predicate) throws Exception {
                 return toSql(predicate);
             }

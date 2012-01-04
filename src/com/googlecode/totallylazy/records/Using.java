@@ -1,9 +1,6 @@
 package com.googlecode.totallylazy.records;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 
 import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.is;
@@ -29,8 +26,8 @@ public class Using implements Callable1<Record, Predicate<Record>> {
     }
 
     @SuppressWarnings("unchecked")
-    private Callable1<Keyword, Predicate<Record>> asPredicate(final Record record) {
-        return new Callable1<Keyword, Predicate<Record>>() {
+    private Function1<Keyword, Predicate<Record>> asPredicate(final Record record) {
+        return new Function1<Keyword, Predicate<Record>>() {
             public Predicate<Record> call(Keyword keyword) throws Exception {
                 return where(keyword, is(record.get(keyword)));
             }

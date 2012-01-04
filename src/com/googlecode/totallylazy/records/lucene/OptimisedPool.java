@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.records.lucene;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function1;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.Directory;
 
@@ -38,8 +40,8 @@ public class OptimisedPool implements SearcherPool {
                 getOrElse(createSearcher());
     }
 
-    private Callable<Searcher> createSearcher() throws IOException {
-        return new Callable<Searcher>() {
+    private Function<Searcher> createSearcher() throws IOException {
+        return new Function<Searcher>() {
             @Override
             public Searcher call() throws Exception {
                 PooledSearcher pooledSearcher = new PooledSearcher(new IndexSearcher(directory), checkIn());
@@ -49,8 +51,8 @@ public class OptimisedPool implements SearcherPool {
         };
     }
 
-    private Callable1<Searcher, Void> checkIn() {
-        return new Callable1<Searcher, Void>() {
+    private Function1<Searcher, Void> checkIn() {
+        return new Function1<Searcher, Void>() {
             @Override
             public Void call(Searcher searcher) throws Exception {
                 checkin(searcher);
@@ -76,8 +78,8 @@ public class OptimisedPool implements SearcherPool {
 
     }
 
-    private Callable1<PooledValue, Void> closeAndRemove() {
-        return new Callable1<PooledValue, Void>() {
+    private Function1<PooledValue, Void> closeAndRemove() {
+        return new Function1<PooledValue, Void>() {
             @Override
             public Void call(PooledValue pooledValue) throws Exception {
                 closeAndRemove(pooledValue);
@@ -109,8 +111,8 @@ public class OptimisedPool implements SearcherPool {
             this.searcher = searcher;
         }
 
-        public static Callable1<PooledValue, Boolean> dirty() {
-            return new Callable1<PooledValue, Boolean>() {
+        public static Function1<PooledValue, Boolean> dirty() {
+            return new Function1<PooledValue, Boolean>() {
                 @Override
                 public Boolean call(PooledValue value) {
                     return value.dirty;
@@ -122,8 +124,8 @@ public class OptimisedPool implements SearcherPool {
             this.dirty = value;
         }
 
-        public static Callable1<PooledValue, Searcher> checkoutValue() {
-            return new Callable1<PooledValue, Searcher>() {
+        public static Function1<PooledValue, Searcher> checkoutValue() {
+            return new Function1<PooledValue, Searcher>() {
                 @Override
                 public Searcher call(PooledValue pooledValue) throws Exception {
                     return pooledValue.checkout();
@@ -131,8 +133,8 @@ public class OptimisedPool implements SearcherPool {
             };
         }
 
-        public static Callable1<PooledValue, Searcher> searcher() {
-            return new Callable1<PooledValue, Searcher>() {
+        public static Function1<PooledValue, Searcher> searcher() {
+            return new Function1<PooledValue, Searcher>() {
                 @Override
                 public Searcher call(PooledValue pooledValue) throws Exception {
                     return pooledValue.searcher;
@@ -145,8 +147,8 @@ public class OptimisedPool implements SearcherPool {
             return searcher;
         }
 
-        public static Callable1<PooledValue, Integer> checkoutCount() {
-            return new Callable1<PooledValue, Integer>() {
+        public static Function1<PooledValue, Integer> checkoutCount() {
+            return new Function1<PooledValue, Integer>() {
                 @Override
                 public Integer call(PooledValue pooledValue) throws Exception {
                     return pooledValue.checkoutCount;
@@ -158,8 +160,8 @@ public class OptimisedPool implements SearcherPool {
             return --checkoutCount;
         }
 
-        public static Callable1<PooledValue, Void> markAsDirty() {
-            return new Callable1<PooledValue, Void>() {
+        public static Function1<PooledValue, Void> markAsDirty() {
+            return new Function1<PooledValue, Void>() {
                 @Override
                 public Void call(PooledValue pooledValue) throws Exception {
                     pooledValue.dirty(true);

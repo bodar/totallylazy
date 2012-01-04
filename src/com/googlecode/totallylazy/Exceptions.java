@@ -30,40 +30,40 @@ public class Exceptions {
                 takeWhile(notNullValue());
     }
 
-    public static Callable1<Throwable, Throwable> getCause() {
-        return new Callable1<Throwable, Throwable>() {
+    public static Function1<Throwable, Throwable> getCause() {
+        return new Function1<Throwable, Throwable>() {
             public Throwable call(final Throwable throwable) throws Exception {
                 return throwable.getCause();
             }
         };
     }
 
-    public static <T, S> Callable1<T, Option<S>> ignoringException(final Callable1<? super T, S> callable) {
+    public static <T, S> Function1<T, Option<S>> ignoringException(final Callable1<? super T, S> callable) {
         return handleException(callable, instanceOf(Exception.class));
     }
 
-    public static <T, S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Class<? extends Exception>... exceptionClasses) {
+    public static <T, S> Function1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Class<? extends Exception>... exceptionClasses) {
         return handleException(callable, sequence(exceptionClasses).map(asInstanceOf()));
     }
 
-    private static <T> Callable1<Class<? extends T>, Predicate<? super T>> asInstanceOf() {
-        return new Callable1<Class<? extends T>, Predicate<? super T>>() {
+    private static <T> Function1<Class<? extends T>, Predicate<? super T>> asInstanceOf() {
+        return new Function1<Class<? extends T>, Predicate<? super T>>() {
             public Predicate<? super T> call(Class<? extends T> aClass) throws Exception {
                 return instanceOf(aClass);
             }
         };
     }
 
-    public static <T, S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Predicate<? super Exception> first) {
+    public static <T, S> Function1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Predicate<? super Exception> first) {
         return handleException(callable, sequence(first));
     }
 
-    public static <T, S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Predicate<? super Exception>... exceptionClasses) {
+    public static <T, S> Function1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Predicate<? super Exception>... exceptionClasses) {
         return handleException(callable, sequence(exceptionClasses));
     }
 
-    public static <T, S> Callable1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Iterable<? extends Predicate<? super Exception>> predicates) {
-        return new Callable1<T, Option<S>>() {
+    public static <T, S> Function1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Iterable<? extends Predicate<? super Exception>> predicates) {
+        return new Function1<T, Option<S>>() {
             public Option<S> call(T t) throws Exception {
                 try {
                     return Option.some(callable.call(t));
@@ -86,8 +86,8 @@ public class Exceptions {
         };
     }
 
-    public static <T, S> Callable1<T, Either<S, Throwable>> captureException(final Callable1<? super T, S> callable) {
-        return new Callable1<T, Either<S, Throwable>>() {
+    public static <T, S> Function1<T, Either<S, Throwable>> captureException(final Callable1<? super T, S> callable) {
+        return new Function1<T, Either<S, Throwable>>() {
             public Either<S, Throwable> call(T input) throws Exception {
                 try {
                     return left(callable.call(input));
@@ -98,8 +98,8 @@ public class Exceptions {
         };
     }
 
-    public static Callable1<PrintWriter, Void> printStackTrace(final Throwable e) {
-        return new Callable1<PrintWriter, Void>() {
+    public static Function1<PrintWriter, Void> printStackTrace(final Throwable e) {
+        return new Function1<PrintWriter, Void>() {
             public Void call(PrintWriter writer) {
                 e.printStackTrace(writer);
                 return VOID;

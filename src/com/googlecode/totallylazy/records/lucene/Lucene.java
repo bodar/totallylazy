@@ -1,10 +1,6 @@
 package com.googlecode.totallylazy.records.lucene;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Value;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.predicates.AllPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.Between;
@@ -69,8 +65,8 @@ public class Lucene {
         return sequence(queries).fold(new BooleanQuery(), add(BooleanClause.Occur.MUST_NOT));
     }
 
-    private static Callable2<? super BooleanQuery, ? super Query, BooleanQuery> add(final BooleanClause.Occur occur) {
-        return new Callable2<BooleanQuery, Query, BooleanQuery>() {
+    private static Function2<? super BooleanQuery, ? super Query, BooleanQuery> add(final BooleanClause.Occur occur) {
+        return new Function2<BooleanQuery, Query, BooleanQuery>() {
             public BooleanQuery call(BooleanQuery booleanQuery, Query query) throws Exception {
                 // FIX Lucene issue where it does not understand nested boolean negatives
                 if (query instanceof BooleanQuery && occur.equals(BooleanClause.Occur.MUST)) {
@@ -113,8 +109,8 @@ public class Lucene {
     }
 
     @SuppressWarnings("unchecked")
-    private Callable1<? super Predicate, Query> asQuery() {
-        return new Callable1<Predicate, Query>() {
+    private Function1<? super Predicate, Query> asQuery() {
+        return new Function1<Predicate, Query>() {
             public Query call(Predicate predicate) throws Exception {
                 return query(predicate);
             }
@@ -213,8 +209,8 @@ public class Lucene {
         return mappings.get(keyword.forClass()).notNull(keyword.toString());
     }
 
-    private Callable1<Object, Query> asQuery(final Keyword keyword) {
-        return new Callable1<Object, Query>() {
+    private Function1<Object, Query> asQuery(final Keyword keyword) {
+        return new Function1<Object, Query>() {
             public Query call(Object o) throws Exception {
                 return equalTo(keyword, o);
             }
