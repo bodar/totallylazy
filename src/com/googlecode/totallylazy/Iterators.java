@@ -204,8 +204,7 @@ public class Iterators {
 
     public static <T> boolean forAll(final Iterator<T> iterator, final Predicate<? super T> predicate) {
         while (iterator.hasNext()) {
-            boolean result = predicate.matches(iterator.next());
-            if (!result) {
+            if (!predicate.matches(iterator.next())) {
                 return false;
             }
         }

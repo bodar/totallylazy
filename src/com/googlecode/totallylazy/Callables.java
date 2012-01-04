@@ -320,30 +320,30 @@ public final class Callables {
         return Callers.call(curry(callable), value);
     }
 
-    public static <T, R, S> Function1<T, Function1<R, S>> curry(final Callable2<T, R, S> callable) {
-        return new Function1<T, Function1<R, S>>() {
-            public final Function1<R, S> call(final T t) throws Exception {
-                return new Function1<R, S>() {
-                    public final S call(final R r) throws Exception {
-                        return callable.call(t, r);
+    public static <A, B, C> Function1<A, Function1<B, C>> curry(final Callable2<A, B, C> callable) {
+        return new Function1<A, Function1<B, C>>() {
+            public final Function1<B, C> call(final A a) throws Exception {
+                return new Function1<B, C>() {
+                    public final C call(final B b) throws Exception {
+                        return callable.call(a, b);
                     }
                 };
             }
         };
     }
 
-    public static <T, R> Function<R> curry(final Callable1<? super T, ? extends R> callable, final T value) {
-        return new Function<R>() {
-            public final R call() throws Exception {
+    public static <A, B> Function<B> curry(final Callable1<? super A, ? extends B> callable, final A value) {
+        return new Function<B>() {
+            public final B call() throws Exception {
                 return callable.call(value);
             }
         };
     }
 
-    public static <T, S> Function1<T, Callable<S>> bounce(final Callable1<? super T, S> callable) {
-        return new Function1<T, Callable<S>>() {
-            public Callable<S> call(T t) throws Exception {
-                return Callables.curry(callable, t);
+    public static <A, B> Function1<A, Callable<B>> bounce(final Callable1<? super A, B> callable) {
+        return new Function1<A, Callable<B>>() {
+            public Callable<B> call(A a) throws Exception {
+                return Callables.curry(callable, a);
             }
         };
     }

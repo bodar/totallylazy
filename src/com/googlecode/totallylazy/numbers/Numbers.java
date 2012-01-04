@@ -39,6 +39,7 @@ import java.util.Set;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
@@ -120,7 +121,7 @@ public class Numbers {
     public static LogicalPredicate<Number> prime() {
         return new LogicalPredicate<Number>() {
             public final boolean matches(final Number candidate) {
-                return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(Predicates.not(remainderIsZero(candidate)));
+                return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(remainderIsZero(candidate).not());
             }
         };
     }
@@ -401,12 +402,18 @@ public class Numbers {
         };
     }
 
-    public static Function1<Number, Number> remainder(final Number divisor) {
-        return new Function1<Number, Number>() {
-            public Number call(Number dividend) throws Exception {
+    public static Function2<Number, Number, Number> remainder() {
+        return new Function2<Number, Number, Number>() {
+            @Override
+            public Number call(Number dividend, Number divisor) throws Exception {
                 return remainder(dividend, divisor);
             }
         };
+    }
+
+
+    public static Function1<Number, Number> remainder(final Number divisor) {
+        return remainder().flip().apply(divisor);
     }
 
     public static String toLexicalString(Number value, final Number minValue, final Number maxValue) {
