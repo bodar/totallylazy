@@ -16,8 +16,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import static com.googlecode.totallylazy.Sequences.iterate;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.totallylazy.records.RecordMethods.getKeyword;

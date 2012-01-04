@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Function2;
 
 import static com.googlecode.totallylazy.numbers.Numbers.add;

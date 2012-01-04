@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.records.sql.mappings;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
@@ -15,9 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;

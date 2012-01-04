@@ -10,7 +10,6 @@ import com.googlecode.yatspec.junit.SpecRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -43,7 +42,6 @@ import static com.googlecode.totallylazy.Sequences.sort;
 import static com.googlecode.totallylazy.Sequences.splitOn;
 import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Strings.toCharacters;
-import static com.googlecode.totallylazy.Strings.toLowerCase;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;

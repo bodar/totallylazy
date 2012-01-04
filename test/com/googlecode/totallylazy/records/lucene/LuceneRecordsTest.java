@@ -8,8 +8,6 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.lucene.mappings.Mappings;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;

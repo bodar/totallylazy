@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.predicates.AllPredicate;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.BetweenPredicate;
 import com.googlecode.totallylazy.predicates.CountTo;
-import com.googlecode.totallylazy.predicates.DelegatingPredicate;
 import com.googlecode.totallylazy.predicates.EqualsPredicate;
 import com.googlecode.totallylazy.predicates.GreaterThanOrEqualToPredicate;
 import com.googlecode.totallylazy.predicates.GreaterThanPredicate;

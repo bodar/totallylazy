@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy.records.lucene.mappings;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.RecordMethods;

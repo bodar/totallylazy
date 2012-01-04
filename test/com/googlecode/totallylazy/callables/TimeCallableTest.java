@@ -4,7 +4,9 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 
 public class TimeCallableTest {
     @Test

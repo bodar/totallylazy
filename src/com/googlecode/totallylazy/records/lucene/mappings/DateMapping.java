@@ -2,15 +2,12 @@ package com.googlecode.totallylazy.records.lucene.mappings;
 
 import com.googlecode.totallylazy.time.DateFormatConverter;
 import com.googlecode.totallylazy.time.Dates;
-import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Field;
 
 import java.text.ParseException;
 import java.util.Date;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static org.apache.lucene.document.DateTools.dateToString;
-import static org.apache.lucene.document.DateTools.stringToDate;
 
 public class DateMapping extends AbstractStringMapping<Date> {
     public DateMapping() {

@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy.records;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.is;

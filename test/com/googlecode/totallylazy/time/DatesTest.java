@@ -1,13 +1,11 @@
 package com.googlecode.totallylazy.time;
 
-import org.apache.lucene.document.DateTools;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.util.Date;
 
 import static com.googlecode.totallylazy.time.Dates.date;
-import static org.apache.lucene.document.DateTools.dateToString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
