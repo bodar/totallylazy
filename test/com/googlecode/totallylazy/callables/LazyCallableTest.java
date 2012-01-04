@@ -1,17 +1,15 @@
 package com.googlecode.totallylazy.callables;
 
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Sequence;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
-import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
-import static com.googlecode.totallylazy.callables.SleepyCallable.sleepy;
 import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.callables.TimeReport.reportTime;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.between;
@@ -29,10 +27,10 @@ public class LazyCallableTest {
     @Test
     public void instancesDoNotInteract() throws Exception {
         TimeReport firstTimes = new TimeReport();
-        Callable<Sequence<Integer>> firstLazy = time(repeat(lazy(sleepy(counting(), 5))).take(200), firstTimes);
+        Callable<Sequence<Integer>> firstLazy = time(counting().sleep(5).lazy().repeat().take(200), firstTimes);
 
         TimeReport secondTimes = new TimeReport();
-        Callable<Sequence<Integer>> secondLazy = time(repeat(lazy(sleepy(counting(), 50))).take(100), secondTimes);
+        Callable<Sequence<Integer>> secondLazy = time(counting().sleep(50).lazy().repeat().take(100), secondTimes);
 
         callConcurrently(firstLazy, secondLazy).realise();
 
@@ -46,7 +44,7 @@ public class LazyCallableTest {
     @Test
     public void isThreadSafe() throws Exception {
         CountingCallable<Integer> callable = counting();
-        Callable<Integer> lazyCallable = lazy(sleepy(callable, 10));
+        Function<Integer> lazyCallable = callable.sleep(10).lazy();
 
         Sequence<Integer> result = callConcurrently(lazyCallable, lazyCallable).realise();
 
@@ -58,7 +56,7 @@ public class LazyCallableTest {
     @Test
     public void onlyCallsUnderlyingCallableOnce() throws Exception {
         CountingCallable<Integer> callable = counting();
-        Callable<Integer> lazyCallable = lazy(callable);
+        Callable<Integer> lazyCallable = callable.lazy();
 
         assertThat(lazyCallable.call(), is(0));
         assertThat(lazyCallable.call(), is(0));
