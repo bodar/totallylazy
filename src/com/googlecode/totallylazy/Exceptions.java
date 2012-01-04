@@ -39,7 +39,7 @@ public class Exceptions {
     }
 
     public static <T, S> Function1<T, Option<S>> ignoringException(final Callable1<? super T, S> callable) {
-        return handleException(callable, instanceOf(Exception.class));
+        return optional(callable);
     }
 
     public static <T, S> Function1<T, Option<S>> handleException(final Callable1<? super T, S> callable, final Class<? extends Exception>... exceptionClasses) {
@@ -103,6 +103,31 @@ public class Exceptions {
             public Void call(PrintWriter writer) {
                 e.printStackTrace(writer);
                 return VOID;
+            }
+        };
+    }
+
+    public static <A, B> Function1<A, Either<Exception, B>> either(final Callable1<A, B> callable) {
+        return new Function1<A, Either<Exception, B>>() {
+            @Override
+            public Either<Exception, B> call(A a) throws Exception {
+                try {
+                    return Either.right(callable.call(a));
+                } catch (Exception e) {
+                    return Either.left(e);
+                }
+            }
+        };
+    }
+
+    public static <T, S> Function1<T, Option<S>> optional(final Callable1<? super T, S> callable) {
+        return new Function1<T, Option<S>>() {
+            public Option<S> call(T t) throws Exception {
+                try {
+                    return Option.some(callable.call(t));
+                } catch (Exception e) {
+                    return none();
+                }
             }
         };
     }
