@@ -27,4 +27,12 @@ public abstract class Function1<A, B> implements Callable1<A, B> {
     public Function1<A, Either<Exception, B>> either() {
         return Exceptions.either(this);
     }
+
+    public <C> Function1<A, C> map(final Callable1<B, C> callable) {
+        return Callables.compose(this, callable);
+    }
+
+    public Function1<A,B> interruptable() {
+        return Callables.interruptable(this);
+    }
 }
