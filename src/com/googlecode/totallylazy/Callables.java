@@ -389,4 +389,25 @@ public final class Callables {
             }
         };
     }
+
+    public static <A, B, C> Function1<A, C> compose(final Callable1<? super A, B> first, final Callable1<? super B, C> second) {
+        return new Function1<A, C>() {
+            @Override
+            public C call(A a) throws Exception {
+                return second.call(first.call(a));
+            }
+        };
+    }
+
+    public static <A,B> Function1<A,B> interruptable(final Function1<A,B> function){
+        return new Function1<A, B>() {
+            @Override
+            public B call(A a) throws Exception {
+                if(Thread.interrupted()){
+                    throw new InterruptedException();
+                }
+                return function.call(a);
+            }
+        };
+    }
 }

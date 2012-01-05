@@ -39,7 +39,6 @@ import java.util.Set;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
@@ -61,7 +60,7 @@ public class Numbers {
     public static Option<Number> valueOf(String string) {
         try {
             return some(reduce(new BigDecimal(string)));
-        } catch(Exception e) {
+        } catch (Exception e) {
             return none(Number.class);
         }
     }
@@ -333,54 +332,54 @@ public class Numbers {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
-    public static <T extends Number> Function2<T, T, Number> product() {
+    public static Function2<Number, Number, Number> product() {
         return multiply();
     }
 
-    public static <T extends Number> Function2<T, T, Number> multiply() {
-        return new Function2<T, T, Number>() {
-            public Number call(T multiplicand, T multiplier) throws Exception {
+    public static Function2<Number, Number, Number> multiply() {
+        return new Function2<Number, Number, Number>() {
+            public Number call(Number multiplicand, Number multiplier) throws Exception {
                 return multiply(multiplicand, multiplier);
             }
         };
     }
 
-    public static <T extends Number> Function1<T, Number> multiply(final T multiplicand) {
-        return Numbers.<T>multiply().apply(multiplicand);
+    public static Function1<Number, Number> multiply(final Number multiplicand) {
+        return Numbers.multiply().apply(multiplicand);
     }
 
-    public static <X extends Number, Y extends Number> Number multiply(X x, Y y) {
+    public static Number multiply(Number x, Number y) {
         return operatorsFor(x, y).multiply(x, y);
     }
 
-    public static <X extends Number, Y extends Number> Number divide(X x, Y y) {
+    public static Number divide(Number x, Number y) {
         throwIfZero(y);
         return operatorsFor(x, y).divide(x, y);
     }
 
-    public static <X extends Number> Function1<Number, Number> divide(final X divisor) {
+    public static Function1<Number, Number> divide(final Number divisor) {
         return divide().flip().apply(divisor);
     }
 
-    public static <T extends Number> Function2<T, T, Number> divide() {
-        return new Function2<T, T, Number>() {
-            public Number call(T dividend, T divisor) throws Exception {
+    public static Function2<Number, Number, Number> divide() {
+        return new Function2<Number, Number, Number>() {
+            public Number call(Number dividend, Number divisor) throws Exception {
                 return divide(dividend, divisor);
             }
         };
     }
 
-    public static <X extends Number, Y extends Number> Number quotient(X x, Y y) {
+    public static Number quotient(Number x, Number y) {
         throwIfZero(y);
         return reduce(operatorsFor(x, y).quotient(x, y));
     }
 
-    public static <X extends Number, Y extends Number> Number remainder(X dividend, Y divisor) {
+    public static Number remainder(Number dividend, Number divisor) {
         throwIfZero(divisor);
         return reduce(operatorsFor(dividend, divisor).remainder(dividend, divisor));
     }
 
-    private static <T extends Number> void throwIfZero(T value) {
+    private static void throwIfZero(Number value) {
         if (operatorsFor(value).isZero(value)) {
             throw new ArithmeticException("Divide by zero");
         }
