@@ -231,7 +231,9 @@ public final class Callables {
 
     private static final Function2<Integer, Object, Integer> HASH_CODE = new Function2<Integer, Object, Integer>() {
         public Integer call(Integer hash, Object value) throws Exception {
-            return hash * (value == null ? 19 : value.hashCode() == 0 ? 19 : value.hashCode());
+            if (value == null) return hash * 19;
+            int current = value.hashCode();
+            return (current == 0 ? 19 : current) * hash;
         }
     };
 

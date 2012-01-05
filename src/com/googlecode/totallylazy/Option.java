@@ -5,7 +5,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public abstract class Option<T> implements Iterable<T>, Value<T> {
+public abstract class Option<T> implements Iterable<T>, Value<T>, Functor<T, Option<?>> {
     public static <T> Option<T> option(T t) {
         if (t == null) {
             return None.none();
@@ -45,6 +45,7 @@ public abstract class Option<T> implements Iterable<T>, Value<T> {
         return isEmpty() ? null : get();
     }
 
+    @Override
     public final <S> Option<S> map(Callable1<? super T, S> callable) {
         return isEmpty() ? Option.<S>none() : some(Callers.call(callable, get()));
     }

@@ -3,7 +3,7 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.callables.LazyCallable1;
 import com.googlecode.totallylazy.callables.SleepyCallable1;
 
-public abstract class Function1<A, B> implements Callable1<A, B> {
+public abstract class Function1<A, B> implements Callable1<A, B>, Functor<A, Function1<A, ?>> {
     public B apply(final A a) {
         return Callers.call(this, a);
     }

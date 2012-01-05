@@ -4,8 +4,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callers.call;
 
-public abstract class Either<L, R> {
-
+public abstract class Either<L, R> implements Functor<R, Either<L, ?>>{
     public static <L,R> Either<L,R> right(R value) {
         return new Right<L,R>(value);
     }
@@ -36,6 +35,11 @@ public abstract class Either<L, R> {
 
     public <S> S map(final Callable1<? super L, S> left, final Callable1<? super R, S> right) {
         return isLeft() ? call(left, left()) : call(right, right());
+    }
+
+    @Override
+    public <S> Either<L, S> map(Callable1<? super R, S> callable) {
+        return isLeft() ? Either.<L, S>left(left()) : Either.<L, S>right(call(callable, right()));
     }
 
     public abstract Object value();
