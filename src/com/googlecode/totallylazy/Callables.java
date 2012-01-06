@@ -21,15 +21,6 @@ public final class Callables {
         };
     }
 
-    public static <T, R> Function1<T, R> doThen(final Callable1<? super T, Void> runnable, final Callable<R> callable) {
-        return new Function1<T, R>() {
-            public R call(T t) throws Exception {
-                runnable.call(t);
-                return callable.call();
-            }
-        };
-    }
-
     public static <T, R> Function1<T, R> asCallable1(final Callable<? extends R> callable) {
         return new Function1<T, R>() {
             public R call(T t) throws Exception {
@@ -318,8 +309,17 @@ public final class Callables {
         return call();
     }
 
-    public static <T, R, S> Function1<R, S> curry(final Callable2<T, R, S> callable, final T value) {
-        return Callers.call(curry(callable), value);
+    public static <A, B, C> Function1<B, C> curry(final Callable2<A, B, C> callable, final A value) {
+        return curry(callable).apply(value);
+    }
+
+    public static <A, B, C> Function<C> curry(final Callable2<A, B, C> callable, final A a, final B b) {
+        return new Function<C>() {
+            @Override
+            public C call() throws Exception {
+                return callable.call(a, b);
+            }
+        };
     }
 
     public static <A, B, C> Function1<A, Function1<B, C>> curry(final Callable2<A, B, C> callable) {
@@ -342,9 +342,9 @@ public final class Callables {
         };
     }
 
-    public static <A, B> Function1<A, Callable<B>> bounce(final Callable1<? super A, B> callable) {
-        return new Function1<A, Callable<B>>() {
-            public Callable<B> call(A a) throws Exception {
+    public static <A, B> Function1<A, Function<B>> deferExecution(final Callable1<? super A, B> callable) {
+        return new Function1<A, Function<B>>() {
+            public Function<B> call(A a) throws Exception {
                 return Callables.curry(callable, a);
             }
         };
@@ -399,7 +399,30 @@ public final class Callables {
         };
     }
 
-    public static <A,B> Function1<A,B> interruptable(final Function1<A,B> function){
+    public static <A, B> Function1<A, B> compose(final Callable1<? super A, ?> ignoreResult, final Callable<B> callable) {
+        return new Function1<A, B>() {
+            public B call(A a) throws Exception {
+                ignoreResult.call(a);
+                return callable.call();
+            }
+        };
+    }
+
+    public static <A, B> Function1<A, B> doThen(final Callable1<? super A, ?> ignoreResult, final Callable<B> callable) {
+        return compose(ignoreResult, callable);
+    }
+
+    public static <A, B> Function<B> compose(final Callable<A> first, final Callable1<? super A, B> second) {
+        return new Function<B>() {
+            @Override
+            public B call() throws Exception {
+                return second.call(first.call());
+            }
+        };
+    }
+
+
+    public static <A,B> Function1<A,B> interruptable(final Callable1<A,B> function){
         return new Function1<A, B>() {
             @Override
             public B call(A a) throws Exception {
@@ -407,6 +430,24 @@ public final class Callables {
                     throw new InterruptedException();
                 }
                 return function.call(a);
+            }
+        };
+    }
+
+    public static <A,B,C> Function1<Pair<A, B>,C> paired(final Callable2<A,B,C> function) {
+        return new Function1<Pair<A, B>, C>() {
+            @Override
+            public C call(Pair<A, B> pair) throws Exception {
+                return function.call(pair.first(), pair.second());
+            }
+        };
+    }
+
+    public static <A,B,C> Function2<A,B,C> unpaired(final Callable1<Pair<A, B>,C> function) {
+        return new Function2<A, B, C>() {
+            @Override
+            public C call(A a, B b) throws Exception {
+                return function.call(Pair.pair(a, b));
             }
         };
     }

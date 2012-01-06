@@ -31,7 +31,7 @@ public final class Callers {
         return callConcurrently(sequence(callables));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Iterable<Callable<T>> callables) {
+    public static <T> Sequence<T> callConcurrently(final Iterable<? extends Callable<T>> callables) {
         ExecutorService service = Executors.newCachedThreadPool();
         try {
             return callConcurrently(callables, service);
@@ -40,7 +40,7 @@ public final class Callers {
         }
     }
 
-    public static <T> Sequence<T> callConcurrently(final Iterable<Callable<T>> callables, final Executor executor) {
+    public static <T> Sequence<T> callConcurrently(final Iterable<? extends Callable<T>> callables, final Executor executor) {
         return sequence(callables).map(Callers.<T>asFutureTask()).
                 map(Callers.<T>executeWith(executor)).
                 realise().

@@ -21,7 +21,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.Callables.ascending;
-import static com.googlecode.totallylazy.Callables.bounce;
+import static com.googlecode.totallylazy.Callables.deferExecution;
 import static com.googlecode.totallylazy.Callables.flip;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -540,11 +540,11 @@ public class Sequences {
     }
 
     public static <T, S> Sequence<S> mapConcurrently(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
-        return callConcurrently(sequence(iterable).map(bounce(callable)));
+        return callConcurrently(sequence(iterable).map(deferExecution(callable)));
     }
 
     public static <T, S> Sequence<S> mapConcurrently(final Iterable<T> iterable, final Callable1<? super T, S> callable, final Executor executor) {
-        return callConcurrently(sequence(iterable).map(bounce(callable)), executor);
+        return callConcurrently(sequence(iterable).map(deferExecution(callable)), executor);
     }
 
     public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
