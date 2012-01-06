@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -152,14 +153,19 @@ public class Numbers {
     }
 
     public static Sequence<Number> fibonacci() {
-        return iterate(reduceAndShift(sum()), numbers(0, 1)).map(Callables.first(Number.class));
+        return iterate(reduceAndShift(sum()), numbers(0, 1)).map(first(Number.class));
     }
 
     public static Sequence<Number> powersOf(Number amount) {
         return iterate(multiply(amount), 1);
     }
 
-    public static <T> Operators operatorsFor(Class<T> numberClass) {
+    @SuppressWarnings("unchecked")
+    public static <T> Operators<Number> operatorsFor(Class<T> numberClass) {
+        return (Operators<Number>) internalOperatorsFor(numberClass);
+    }
+
+    private static <T> Operators<? extends Number> internalOperatorsFor(Class<T> numberClass) {
         if (numberClass == Integer.class) return IntegerOperators.Instance;
         if (numberClass == Long.class) return LongOperators.Instance;
         if (numberClass == BigInteger.class) return BigIntegerOperators.Instance;
@@ -170,15 +176,13 @@ public class Numbers {
         throw new UnsupportedOperationException("Unsupported number class " + numberClass);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T extends Number> Operators<T> operatorsFor(T number) {
-        return (Operators<T>) operatorsFor(number.getClass());
+    public static Operators<Number> operatorsFor(Number number) {
+        return operatorsFor(number.getClass());
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T extends Number> Operators<T> operatorsFor(T a, T b) {
-        Operators aOperators = operatorsFor(a.getClass());
-        Operators bOperators = operatorsFor(b.getClass());
+    public static Operators<Number> operatorsFor(Number a, Number b) {
+        Operators<Number> aOperators = operatorsFor(a.getClass());
+        Operators<Number> bOperators = operatorsFor(b.getClass());
 
         return aOperators.priority() > bOperators.priority() ? aOperators : bOperators;
     }
