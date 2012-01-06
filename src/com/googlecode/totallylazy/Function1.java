@@ -3,7 +3,18 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.callables.LazyCallable1;
 import com.googlecode.totallylazy.callables.SleepyCallable1;
 
+import java.util.concurrent.Callable;
+
 public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Function1<A, ?>> {
+    public static <A, B> Function1<A, B> function(final Callable1<A, B> callable) {
+        return new Function1<A, B>() {
+            @Override
+            public B call(A a) throws Exception {
+                return callable.call(a);
+            }
+        };
+    }
+
     public B apply(final A a) {
         return Callers.call(this, a);
     }
@@ -33,15 +44,19 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Fun
         return Callables.compose(this, callable);
     }
 
-    public <C> Function1<C, B> following(final Callable1<? super C, A> callable) {
-        return Callables.compose(callable, this);
-    }
-
     public <C> Function1<A, C> then(final Callable1<? super B, C> callable) {
         return map(callable);
     }
 
+    public <C> Function1<A, C> then(final Callable<C> callable) {
+        return Callables.compose(this, callable);
+    }
+
     public Function1<A,B> interruptable() {
         return Callables.interruptable(this);
+    }
+
+    public Function1<A, Function<B>> deferExecution() {
+        return Callables.deferExecution(this);
     }
 }

@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
 import com.googlecode.totallylazy.predicates.EndsWithPredicate;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 
 import java.io.BufferedReader;
@@ -105,15 +106,15 @@ public class Strings {
         };
     }
 
-    public static Predicate<String> startsWith(final String value) {
+    public static LogicalPredicate<String> startsWith(final String value) {
         return new StartsWithPredicate(value);
     }
 
-    public static Predicate<String> endsWith(final String value) {
+    public static LogicalPredicate<String> endsWith(final String value) {
         return new EndsWithPredicate(value);
     }
 
-    public static Predicate<String> contains(final String value) {
+    public static LogicalPredicate<String> contains(final String value) {
         return new ContainsPredicate(value);
     }
 
@@ -125,16 +126,16 @@ public class Strings {
         };
     }
 
-    public static Predicate<String> equalIgnoringCase(final String expected) {
-        return new Predicate<String>() {
+    public static LogicalPredicate<String> equalIgnoringCase(final String expected) {
+        return new LogicalPredicate<String>() {
             public boolean matches(String actual) {
                 return expected.equalsIgnoreCase(actual);
             }
         };
     }
 
-    public static Predicate<String> empty() {
-        return new Predicate<String>() {
+    public static LogicalPredicate<String> empty() {
+        return new LogicalPredicate<String>() {
             public boolean matches(String value) {
                 return isEmpty(value);
             }
@@ -145,8 +146,8 @@ public class Strings {
         return value == null || value.equals(EMPTY);
     }
 
-    public static Predicate<Character> unicodeControlOrUndefinedCharacter() {
-        return new Predicate<Character>() {
+    public static LogicalPredicate<Character> unicodeControlOrUndefinedCharacter() {
+        return new LogicalPredicate<Character>() {
             public boolean matches(Character character) {
                 return character > 0x7F;
             }

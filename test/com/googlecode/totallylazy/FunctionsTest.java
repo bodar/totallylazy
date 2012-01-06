@@ -14,6 +14,7 @@ public class FunctionsTest {
         assertThat(compose(add(10), multiply(3)).apply(2), NumberMatcher.is(36));
         assertThat(add(10).map(multiply(3)).apply(2), NumberMatcher.is(36));
         assertThat(add(10).then(multiply(3)).apply(2), NumberMatcher.is(36));
-        assertThat(multiply(3).following(add(10)).apply(2), NumberMatcher.is(36));
+        assertThat(add(10).curry(2).map(multiply(3)).apply(), NumberMatcher.is(36));
+        assertThat(add(10).curry(2).then(multiply(3)).apply(), NumberMatcher.is(36));
     }
 }
