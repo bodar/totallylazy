@@ -133,7 +133,7 @@ public class SqlRecords extends AbstractRecords implements Queryable<Expression>
                 logger.println(format(" Count:%s", rowCount));
                 return rowCount;
             }
-        }).reduce(Numbers.<Number>sum());
+        }).reduce(Numbers.sum());
     }
 
     public Number remove(Keyword recordName, Predicate<? super Record> predicate) {
