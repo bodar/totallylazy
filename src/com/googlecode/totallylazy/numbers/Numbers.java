@@ -183,7 +183,7 @@ public class Numbers {
         return aOperators.priority() > bOperators.priority() ? aOperators : bOperators;
     }
 
-    public static <T extends Number> Number negate(T value) {
+    public static Number negate(Number value) {
         return operatorsFor(value).negate(value);
     }
 
@@ -195,7 +195,7 @@ public class Numbers {
         };
     }
 
-    public static <T extends Number> Number increment(T value) {
+    public static Number increment(Number value) {
         return operatorsFor(value).increment(value);
     }
 
@@ -207,19 +207,19 @@ public class Numbers {
         };
     }
 
-    public static <T extends Number> Number decrement(T value) {
+    public static Number decrement(Number value) {
         return operatorsFor(value).decrement(value);
     }
 
-    public static <T extends Number> boolean isZero(T value) {
+    public static boolean isZero(Number value) {
         return operatorsFor(value).isZero(value);
     }
 
-    public static <T extends Number> boolean isPositive(T value) {
+    public static boolean isPositive(Number value) {
         return operatorsFor(value).isPositive(value);
     }
 
-    public static <T extends Number> boolean isNegative(T value) {
+    public static boolean isNegative(Number value) {
         return operatorsFor(value).isNegative(value);
     }
 
@@ -296,29 +296,29 @@ public class Numbers {
         };
     }
 
-    public static <T extends Number> Function2<T, T, Number> average() {
-        return new Average<T>();
+    public static Function2<Number, Number, Number> average() {
+        return new Average();
     }
 
-    public static <T extends Number> Function2<T, T, Number> sum() {
-        return new Sum<T>();
+    public static Function2<Number, Number, Number> sum() {
+        return new Sum();
     }
 
-    public static <T extends Number> Function2<T, T, Number> add() {
-        return new Sum<T>();
+    public static Function2<Number, Number, Number> add() {
+        return new Sum();
     }
 
     public static Function1<Number, Number> add(final Number amount) {
         return add().apply(amount);
     }
 
-    public static <X extends Number, Y extends Number> Number add(X x, Y y) {
+    public static Number add(Number x, Number y) {
         return operatorsFor(x, y).add(x, y);
     }
 
-    public static <T extends Number> Function2<T, T, Number> subtract() {
-        return new Function2<T, T, Number>() {
-            public Number call(T a, T b) {
+    public static Function2<Number, Number, Number> subtract() {
+        return new Function2<Number, Number, Number>() {
+            public Number call(Number a, Number b) {
                 return Numbers.subtract(a, b);
             }
         };
@@ -328,7 +328,7 @@ public class Numbers {
         return subtract().flip().apply(amount);
     }
 
-    public static <X extends Number, Y extends Number> Number subtract(X x, Y y) {
+    public static Number subtract(Number x, Number y) {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 

@@ -46,11 +46,11 @@ public class Aggregate<T, R> extends AliasedKeyword<T> implements Callable2<T, T
     }
 
     public static <T extends Number> Aggregate<T, Number> sum(Keyword<T> keyword) {
-        return aggregate(Numbers.<T>sum(), keyword);
+        return aggregate(Numbers.sum(), keyword);
     }
 
     public static <T extends Number> Aggregate<T, Number> average(Keyword<T> keyword) {
-        return aggregate(Numbers.<T>average(), keyword);
+        return aggregate(Numbers.average(), keyword);
     }
 
     @SuppressWarnings("unchecked")

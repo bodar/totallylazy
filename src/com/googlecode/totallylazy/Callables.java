@@ -217,13 +217,13 @@ public final class Callables {
         };
     }
 
-    public static <T> Function1<Object, String> asString(Class<T> aClass) {
+    public static <T> Function1<T, String> asString(Class<T> aClass) {
         return Callables.asString();
     }
 
-    public static Function1<Object, String> asString() {
-        return new Function1<Object, String>() {
-            public final String call(final Object value) {
+    public static <T> Function1<T, String> asString() {
+        return new Function1<T, String>() {
+            public final String call(final T value) {
                 return value.toString();
             }
         };
