@@ -82,7 +82,7 @@ public class SelectBuilder implements Expressible, Callable<Expression> {
 
     @SuppressWarnings("unchecked")
     public SelectBuilder count() {
-        Callable2 count = CountNotNull.<Number>count();
+        Callable2 count = CountNotNull.count();
         Sequence<Keyword> sequence = Sequences.<Keyword>sequence(aggregate(count, STAR).as(keyword("record_count")));
         return new SelectBuilder(setQuantifier, sequence, table, where, comparator);
     }
