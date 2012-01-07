@@ -17,6 +17,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
@@ -144,6 +145,19 @@ public class Numbers {
 
     public static LogicalPredicate<Number> remainderIs(final Number divisor, final Number remainder) {
         return new RemainderIs(divisor, remainder);
+    }
+
+    public static Sequence<Number> probablePrimes() {
+        return iterate(nextProbablePrime(), BigInteger.valueOf(2)).map(reduce());
+    }
+
+    private static Function1<BigInteger, BigInteger> nextProbablePrime() {
+        return new Function1<BigInteger, BigInteger>() {
+            @Override
+            public BigInteger call(BigInteger bigInteger) throws Exception {
+                return bigInteger.nextProbablePrime();
+            }
+        };
     }
 
     private static final MemorisedSequence<Number> primes = Sequences.<Number>sequence(2).join(iterate(add(2), 3).filter(prime())).memorise();
@@ -395,6 +409,15 @@ public class Numbers {
         else if (value instanceof BigInteger)
             return BigIntegerOperators.reduce((BigInteger) value);
         return value;
+    }
+
+    public static Function1<Number, Number> reduce() {
+        return new Function1<Number, Number>() {
+            @Override
+            public Number call(Number number) throws Exception {
+                return reduce(number);
+            }
+        };
     }
 
     public static Function1<Number, Character> toCharacter() {
