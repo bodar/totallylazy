@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
@@ -20,6 +22,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.powersOf;
 import static com.googlecode.totallylazy.numbers.Numbers.primeFactorsOf;
 import static com.googlecode.totallylazy.numbers.Numbers.primes;
+import static com.googlecode.totallylazy.numbers.Numbers.probablePrimes;
 import static com.googlecode.totallylazy.numbers.Numbers.product;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sumIterable;
@@ -106,9 +109,14 @@ public class NumbersTest {
     }
 
     @Test
+    public void supportsProbablePrimes() throws Exception {
+        assertThat(probablePrimes(), startsWith(2, 3, 5, 7, 11, 13, 17, 19, 23, 29));
+    }
+
+    @Test
     public void primesIsPrettyFastAndIsMemorised() throws Exception {
         TimeReport report = new TimeReport();
-        repeat(time(primes().take(1000), report)).take(100).realise();
+        repeat(time(primes().take(1000), report)).take(1000).realise();
         System.out.println(report);
         assertThat(report.average(), Matchers.is(lessThan(10.0)));
     }
