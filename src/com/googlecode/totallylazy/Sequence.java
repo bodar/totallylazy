@@ -336,4 +336,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.shuffle(this);
     }
 
+    public Sequence<T> interruptable(){
+        return Sequences.interruptable(this);
+    }
+
 }
