@@ -86,7 +86,7 @@ public final class Callers {
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -96,7 +96,7 @@ public final class Callers {
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -106,7 +106,7 @@ public final class Callers {
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 }

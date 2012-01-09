@@ -38,7 +38,7 @@ public class Closeables {
         try {
             t.close();
         } catch (IOException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
         return t;
     }

@@ -84,7 +84,7 @@ public class Files {
             file.createNewFile();
             return file;
         } catch (IOException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -124,7 +124,7 @@ public class Files {
         try {
             return using(new FileOutputStream(file, append), doThen(Runnables.write(bytes), returns(file)));
         } catch (FileNotFoundException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -168,7 +168,7 @@ public class Files {
         try {
             child.createNewFile();
         } catch (IOException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
         return child;
     }

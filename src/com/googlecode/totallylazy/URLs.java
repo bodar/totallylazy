@@ -18,7 +18,7 @@ public class URLs {
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 

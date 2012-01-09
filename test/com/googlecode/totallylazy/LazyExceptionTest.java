@@ -15,7 +15,7 @@ public class LazyExceptionTest {
         final ParseException expected = new ParseException("blah blah", 1);
         
         final InvocationTargetException invocationTargetException = new InvocationTargetException(expected);
-        final LazyException lazyException = new LazyException(new LazyException(new LazyException(invocationTargetException)));
+        final LazyException lazyException = LazyException.lazyException(LazyException.lazyException(LazyException.lazyException(invocationTargetException)));
 
         checkException(lazyException, ParseException.class, expected);
     }
@@ -23,7 +23,7 @@ public class LazyExceptionTest {
     @Test
     public void neverContainsItSelf() throws Exception {
         final ParseException expected = new ParseException("blah blah", 1);
-        final LazyException lazyException = new LazyException(new LazyException(new LazyException(expected)));
+        final LazyException lazyException = LazyException.lazyException(LazyException.lazyException(LazyException.lazyException(expected)));
 
         checkException(lazyException, ParseException.class, expected);
     }
@@ -31,7 +31,7 @@ public class LazyExceptionTest {
     @Test
     public void shouldUnwrapSpecificCheckedCause() throws Exception {
         final ParseException expected = new ParseException("blah blah", 1);
-        final LazyException lazyException = new LazyException(expected);
+        final LazyException lazyException = LazyException.lazyException(expected);
 
         checkException(lazyException, ParseException.class, expected);
     }
@@ -39,7 +39,7 @@ public class LazyExceptionTest {
     @Test
     public void shouldUnwrapThrowOriginalExceptionWhenNotSpecifiedCheckedExceptionIsTheCause() throws Exception {
         final FileNotFoundException differentChecked = new FileNotFoundException();
-        final LazyException lazyException = new LazyException(differentChecked);
+        final LazyException lazyException = LazyException.lazyException(differentChecked);
 
         checkException(lazyException, ParseException.class, lazyException);
     }

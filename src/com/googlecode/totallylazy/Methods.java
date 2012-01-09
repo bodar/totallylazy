@@ -75,9 +75,9 @@ public class Methods {
             method.setAccessible(true);
             return (R) method.invoke(instance, arguments);
         } catch (IllegalAccessException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         } catch (InvocationTargetException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
