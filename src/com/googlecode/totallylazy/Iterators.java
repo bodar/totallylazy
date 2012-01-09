@@ -23,6 +23,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.cast;
 import static com.googlecode.totallylazy.Callables.nullGuard;
+import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
@@ -359,4 +360,7 @@ public class Iterators {
         }));
     }
 
+    public static <T> Iterator<T> interruptable(Iterator<T> iterator) {
+        return map(iterator, Callables.<T>returnArgument().interruptable());
+    }
 }

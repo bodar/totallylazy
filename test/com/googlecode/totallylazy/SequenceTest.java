@@ -37,6 +37,7 @@ import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
 import static com.googlecode.totallylazy.Sequences.splitOn;
@@ -55,8 +56,10 @@ import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
+import static java.lang.Thread.currentThread;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
 
@@ -637,5 +640,26 @@ public class SequenceTest {
 
         assertThat(sequence.headOption(), is(option(1)));
         assertThat(sequence.headOption(), is(option(2)));
+    }
+
+    @Test
+    public void supportsInterruption() throws Exception {
+        final int[] count = new int[]{0};
+        Sequence<Integer> interruptable = repeat(new Function<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                if (++count[0] == 5) {
+                    currentThread().interrupt();
+                }
+                return count[0];
+            }
+        }).interruptable();
+
+        try{
+            interruptable.realise();
+        } catch (LazyException e){
+            assertThat(e.getCause(), instanceOf(InterruptedException.class));
+            assertThat(count[0], is(5));
+        }
     }
 }
