@@ -20,7 +20,7 @@ public class Bytes {
             }
             return outputStream.toByteArray();
         } catch (IOException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -30,7 +30,7 @@ public class Bytes {
             outputStream.write(value);
             return outputStream;
         } catch (IOException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
     

@@ -5,19 +5,24 @@ import java.lang.reflect.InvocationTargetException;
 public class LazyException extends RuntimeException {
     static final long serialVersionUID = -6664897190745766939L;
     public static LazyException lazyException(final Throwable cause){
+        return lazyException(null, cause);
+    }
+
+    public static LazyException lazyException(String message, final Throwable cause){
         if(cause instanceof RuntimeException){
             throw (RuntimeException)cause;
         }
-        return new LazyException(cause);
+        return new LazyException(message, cause);
     }
 
-    public LazyException(Throwable cause) {
+    private LazyException(Throwable cause) {
         this(null, cause);
     }
-    public LazyException(String message, Throwable cause) {
+
+    private LazyException(String message, Throwable cause) {
         super(message, unwrapLazy(cause));
     }
-
+    
     private static Throwable unwrapLazy(Throwable cause) {
         if(cause instanceof LazyException){
             return cause.getCause();

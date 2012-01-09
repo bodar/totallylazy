@@ -48,7 +48,7 @@ public class Xml {
             try {
                 return (String) xpath().evaluate(expression, node, XPathConstants.STRING);
             } catch (XPathExpressionException ignore) {
-                throw new LazyException(e);
+                throw LazyException.lazyException(e);
             }
         }
     }
@@ -57,7 +57,7 @@ public class Xml {
         try {
             return internalSelectNodes(node, expression);
         } catch (XPathExpressionException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -65,7 +65,7 @@ public class Xml {
         try {
             return (Number) xpath().evaluate(expression, node, XPathConstants.NUMBER);
         } catch (XPathExpressionException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -73,7 +73,7 @@ public class Xml {
         try {
             return (Boolean) xpath().evaluate(expression, node, XPathConstants.BOOLEAN);
         } catch (XPathExpressionException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -188,7 +188,7 @@ public class Xml {
         try {
             return document(new String(bytes, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -200,7 +200,7 @@ public class Xml {
             documentBuilder.setErrorHandler(null);
             return documentBuilder.parse(new ByteArrayInputStream(xml.getBytes()));
         } catch (Exception e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 

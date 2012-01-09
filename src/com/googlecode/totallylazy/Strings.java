@@ -34,7 +34,7 @@ public class Strings {
         try {
             return lines(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -173,7 +173,7 @@ public class Strings {
         try {
             return toString(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
