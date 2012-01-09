@@ -634,4 +634,13 @@ public class Sequences {
             }
         };
     }
+
+    public static <T> Sequence<T> interruptable(final Iterable<T> iterable) {
+        return new Sequence<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return Iterators.interruptable(iterable.iterator());
+            }
+        };
+    }
 }
