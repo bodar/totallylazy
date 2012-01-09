@@ -15,14 +15,10 @@ public class LazyException extends RuntimeException {
         return new LazyException(message, cause);
     }
 
-    private LazyException(Throwable cause) {
-        this(null, cause);
-    }
-
     private LazyException(String message, Throwable cause) {
         super(message, unwrapLazy(cause));
     }
-    
+
     private static Throwable unwrapLazy(Throwable cause) {
         if(cause instanceof LazyException){
             return cause.getCause();
