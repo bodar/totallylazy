@@ -1,6 +1,5 @@
-package com.googlecode.totallylazy.records.xml;
+package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
