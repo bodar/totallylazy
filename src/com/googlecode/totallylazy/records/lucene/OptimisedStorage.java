@@ -88,8 +88,8 @@ public class OptimisedStorage implements LuceneStorage {
 
     @Override
     public void close() throws IOException {
-        Closeables.close(pool);
         try {
+            Closeables.close(pool);
             Closeables.close(writer);
         } catch (Throwable ignoredException) {
         } finally {
