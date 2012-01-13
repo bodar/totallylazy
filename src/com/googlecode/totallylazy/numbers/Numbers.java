@@ -52,11 +52,13 @@ public class Numbers {
     }
 
     public static Sequence<Number> range(final Number start, final Number end) {
-        return range(start).takeWhile(lessThan(end));
+        if(lessThan(end, start)) return range(start, end, -1);
+        return range(start).takeWhile(lessThanOrEqualTo(end));
     }
 
     public static Sequence<Number> range(final Number start, final Number end, final Number step) {
-        return iterate(add(step), start).takeWhile(lessThan(end));
+        if(lessThan(end, start)) return iterate(add(step), start).takeWhile(greaterThanOrEqualTo(end));
+        return iterate(add(step), start).takeWhile(lessThanOrEqualTo(end));
     }
 
     public static Option<Number> valueOf(String string) {

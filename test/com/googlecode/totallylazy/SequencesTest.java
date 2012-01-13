@@ -75,7 +75,7 @@ public class SequencesTest {
 
     @Test
     public void supportsCycle() throws Exception {
-        assertThat(range(1, 4).cycle(), startsWith((Number)1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3));
+        assertThat(range(1, 3).cycle(), startsWith((Number)1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3));
     }
 
     @Test

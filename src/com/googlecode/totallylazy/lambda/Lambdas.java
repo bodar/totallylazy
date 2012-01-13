@@ -9,6 +9,9 @@ import org.enumerable.lambda.exception.LambdaWeavingNotEnabledException;
 
 
 public class Lambdas {
+    @org.enumerable.lambda.annotation.LambdaParameter
+    public static Number n;
+
     @NewLambda
     public static <T> Function<T> λ(T result) {
         throw new LambdaWeavingNotEnabledException();
