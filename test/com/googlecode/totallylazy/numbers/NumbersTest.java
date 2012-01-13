@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
@@ -44,8 +42,10 @@ public class NumbersTest {
     @Test
     public void supportsRange() throws Exception {
         assertThat(range(0), startsWith(0, 1, 2, 3, 4, 5, 6));
-        assertThat(range(0, 5), hasExactly(0, 1, 2, 3, 4));
-        assertThat(range(0, 5, 2), hasExactly(0, 2, 4));
+        assertThat(range(1, 5), hasExactly(1, 2, 3, 4, 5));
+        assertThat(range(5, 1), hasExactly(5, 4, 3, 2, 1));
+        assertThat(range(0, 4, 2), hasExactly(0, 2, 4));
+        assertThat(range(4, 0, -2), hasExactly(4, 2, 0));
     }
 
     @Test

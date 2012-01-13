@@ -268,7 +268,7 @@ public class SequenceTest {
 
     @Test
     public void supportsSize() throws Exception {
-        assertThat(range(10000000000L, 10000000100L).size(), NumberMatcher.is(100));
+        assertThat(range(10000000000L, 10000000099L).size(), NumberMatcher.is(100));
     }
 
     @Test
