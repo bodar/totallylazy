@@ -284,6 +284,18 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsUnsafeCast() throws Exception {
+        Sequence<? extends Predicate<?>> wild = sequence(wildCard());
+        Sequence<Predicate<Object>> boring = wild.unsafeCast();
+        assertThat(boring.head().matches(new Cat()), is(true));
+        assertThat(boring.head().matches(null), is(false));
+    }
+
+    private Predicate<?> wildCard() {
+        return Predicates.notNullValue();
+    }
+
+    @Test
     public void supportsSafeCast() throws Exception {
         Cat freaky = new Cat(), fatty = new Cat();
         Dog buster = new Dog();

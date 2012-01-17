@@ -3,9 +3,9 @@ package com.googlecode.totallylazy.predicates;
 import java.lang.annotation.Annotation;
 
 public class InstanceOf<T> extends LogicalPredicate<T> {
-    private final Class aClass;
+    private final Class<?> aClass;
 
-    public InstanceOf(Class aClass) {
+    public InstanceOf(Class<?> aClass) {
         this.aClass = aClass;
     }
 

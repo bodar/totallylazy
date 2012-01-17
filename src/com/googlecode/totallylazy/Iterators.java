@@ -282,8 +282,12 @@ public class Iterators {
         return join(one(t).iterator(), iterator);
     }
 
-    public static <T, S> Iterator<S> safeCast(final Iterator<T> iterator, final Class<S> aClass) {
-        return map(filter(iterator, instanceOf(aClass)), cast(aClass));
+    public static <T, S> Iterator<S> safeCast(final Iterator<T> iterator, final Class<? extends S> aClass) {
+        return map(filter(iterator, instanceOf(aClass)), Callables.cast(aClass));
+    }
+
+    public static <T, S> Iterator<S> unsafeCast(final Iterator<T> iterator) {
+        return map(iterator, Callables.<T,S>cast());
     }
 
     public static <T> Number size(final Iterator<T> iterator) {
