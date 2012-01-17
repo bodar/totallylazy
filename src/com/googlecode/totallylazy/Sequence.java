@@ -175,9 +175,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.toList(this);
     }
 
-    @SuppressWarnings("unchecked")
     public T[] toArray(final Class<?> aClass) {
-        return toArray((T[]) Array.newInstance(aClass, 0));
+        return toArray(Unchecked.<T[]>cast(Array.newInstance(aClass, 0)));
     }
 
     public T[] toArray(T[] array) {

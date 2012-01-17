@@ -122,9 +122,8 @@ public class Iterators {
         return reduceLeft(iterator, callable);
     }
 
-    @SuppressWarnings("unchecked")
     public static <T, S> S reduceLeft(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
-        return foldLeft(iterator, (S) iterator.next(), callable);
+        return foldLeft(iterator, Unchecked.<S>cast(iterator.next()), callable);
     }
 
     public static String toString(final Iterator iterator) {

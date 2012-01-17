@@ -27,6 +27,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
@@ -176,9 +177,8 @@ public class Numbers {
         return iterate(multiply(amount), 1);
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> Operators<Number> operatorsFor(Class<T> numberClass) {
-        return (Operators<Number>) internalOperatorsFor(numberClass);
+        return Unchecked.cast(internalOperatorsFor(numberClass));
     }
 
     private static <T> Operators<? extends Number> internalOperatorsFor(Class<T> numberClass) {

@@ -279,10 +279,9 @@ public class Sequences {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
 
-    @SuppressWarnings("unchecked")
     public static <T, S> S reduceRight(final Iterable<T> iterable, final Callable2<? super T, ? super S, S> callable) {
         Iterator<T> iterator = iterable.iterator();
-        return foldRight(forwardOnly(iterator), (S) iterator.next(), callable);
+        return foldRight(forwardOnly(iterator), Unchecked.<S>cast(iterator.next()), callable);
     }
 
     public static String toString(final Iterable iterable) {
