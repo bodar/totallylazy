@@ -46,10 +46,19 @@ public final class Callables {
         };
     }
 
-    public static <T, S> Function1<T, S> cast(final Class<S> aClass) {
+    public static <T, S> Function1<T, S> cast(final Class<? extends S> aClass) {
         return new Function1<T, S>() {
             public final S call(final T t) throws Exception {
                 return aClass.cast(t);
+            }
+        };
+    }
+
+    public static <T, S> Function1<T, S> cast() {
+        return new Function1<T, S>() {
+            @SuppressWarnings("unchecked")
+            public S call(T t) throws Exception {
+                return (S) t;
             }
         };
     }

@@ -284,8 +284,12 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.sortBy(this, comparator);
     }
 
-    public <S> Sequence<S> safeCast(final Class<S> aClass) {
+    public <S> Sequence<S> safeCast(final Class<? extends S> aClass) {
         return Sequences.safeCast(this, aClass);
+    }
+
+    public <S> Sequence<S> unsafeCast() {
+        return Sequences.unsafeCast(this);
     }
 
     public Sequence<T> realise() {
@@ -339,5 +343,4 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
     public Sequence<T> interruptable(){
         return Sequences.interruptable(this);
     }
-
 }

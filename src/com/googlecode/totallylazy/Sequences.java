@@ -517,13 +517,23 @@ public class Sequences {
         return sequence(result);
     }
 
-    public static <T, S> Sequence<S> safeCast(final Iterable<T> iterable, final Class<S> aClass) {
+    public static <T, S> Sequence<S> safeCast(final Iterable<T> iterable, final Class<? extends S> aClass) {
         return new Sequence<S>() {
             public final Iterator<S> iterator() {
                 return Iterators.safeCast(iterable.iterator(), aClass);
             }
         };
     }
+
+    public static <T, S> Sequence<S> unsafeCast(final Iterable<T> iterable) {
+        return new Sequence<S>() {
+            @Override
+            public Iterator<S> iterator() {
+                return Iterators.unsafeCast(iterable.iterator());
+            }
+        };
+    }
+
 
     public static <T> Sequence<T> realise(final Iterable<T> iterable) {
         return sequence(Iterators.toList(iterable.iterator()));
