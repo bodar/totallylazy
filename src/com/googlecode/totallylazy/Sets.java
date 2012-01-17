@@ -85,9 +85,8 @@ public class Sets {
         return intersection(sequence(sets));
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> Set<T> intersection(final Iterable<? extends Set<? extends T>> iterables) {
-        Sequence<Set<T>> sets = (Sequence<Set<T>>) sequence(iterables).sortBy(size());
+        Sequence<Set<T>> sets = sequence(iterables).sortBy(size()).unsafeCast();
         Set<T> smallest = sets.head();
         Sequence<Set<T>> theRest = sets.tail();
         Set<T> result = new LinkedHashSet<T>();

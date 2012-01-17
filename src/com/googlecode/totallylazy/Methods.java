@@ -69,11 +69,10 @@ public class Methods {
         };
     }
 
-    @SuppressWarnings("unchecked")
     public static <T, R> R invoke(Method method, T instance, Object... arguments) {
         try {
             method.setAccessible(true);
-            return (R) method.invoke(instance, arguments);
+            return Unchecked.cast(method.invoke(instance, arguments));
         } catch (IllegalAccessException e) {
             throw LazyException.lazyException(e);
         } catch (InvocationTargetException e) {
@@ -81,12 +80,10 @@ public class Methods {
         }
     }
 
-
     public static <R> Function1<Method, R> invokeOn(final Object instance, final Object... arguments) {
         return new Function1<Method, R>() {
-            @SuppressWarnings("unchecked")
             public R call(Method method) throws Exception {
-                return (R) invoke(method, instance, arguments);
+                return Unchecked.cast(invoke(method, instance, arguments));
             }
         };
     }

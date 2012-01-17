@@ -56,9 +56,8 @@ public final class Callables {
 
     public static <T, S> Function1<T, S> cast() {
         return new Function1<T, S>() {
-            @SuppressWarnings("unchecked")
             public S call(T t) throws Exception {
-                return (S) t;
+                return Unchecked.cast(t);
             }
         };
     }
