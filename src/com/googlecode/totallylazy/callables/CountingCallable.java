@@ -6,10 +6,10 @@ import java.util.concurrent.Callable;
 
 public final class CountingCallable<T> extends Function<T> {
     private int count = 0;
-    private final Callable<T> callable;
+    private final Callable<? extends T> callable;
 
     @SuppressWarnings("unchecked")
-    private CountingCallable(Callable<T> callable) {
+    private CountingCallable(Callable<? extends T> callable) {
         this.callable = callable == null ? new Callable() {
             public Object call() throws Exception {
                 return count;
@@ -31,7 +31,7 @@ public final class CountingCallable<T> extends Function<T> {
         return CountingCallable.<Integer>counting(null);
     }
 
-    public static <T> CountingCallable<T> counting(Callable<T> callable) {
+    public static <T> CountingCallable<T> counting(Callable<? extends T> callable) {
         return new CountingCallable<T>(callable);
     }
 }

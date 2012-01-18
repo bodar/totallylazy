@@ -27,6 +27,7 @@ import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Triple.triple;
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static java.nio.CharBuffer.wrap;
 
@@ -43,14 +44,14 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> sequence(final Iterable<T> iterable) {
+    public static <T> Sequence<T> sequence(final Iterable<? extends T> iterable) {
         if (iterable instanceof Sequence) {
-            return (Sequence<T>) iterable;
+            return cast(iterable);
         }
 
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
-                return iterable.iterator();
+                return cast(iterable.iterator());
             }
         };
     }
@@ -113,11 +114,10 @@ public class Sequences {
         };
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> Sequence<T> sequence(final Enumeration enumeration, final Class<T> aClass) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
-                return new EnumerationIterator<T>(enumeration);
+                return new EnumerationIterator<T>(Unchecked.<Enumeration<T>>cast(enumeration));
             }
         };
     }
@@ -195,7 +195,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> repeat(final Callable<T> callable) {
+    public static <T> Sequence<T> repeat(final Callable<? extends T> callable) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.repeat(callable);

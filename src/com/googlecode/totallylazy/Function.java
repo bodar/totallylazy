@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.callables.TimeCallable;
 import java.util.concurrent.Callable;
 
 public abstract class Function<A> implements Callable<A>, Runnable, Functor<A, Function<?>> {
-    public static <A> Function<A> function(final Callable<A> callable) {
+    public static <A> Function<A> function(final Callable<? extends A> callable) {
         return new Function<A>() {
             @Override
             public A call() throws Exception {

@@ -5,15 +5,15 @@ import com.googlecode.totallylazy.Function;
 import java.util.concurrent.Callable;
 
 public final class LazyCallable<T> extends Function<T> {
-    private final Callable<T> callable;
+    private final Callable<? extends T> callable;
     private final Object lock = new Object();
     private volatile T state;
 
-    private LazyCallable(Callable<T> callable) {
+    private LazyCallable(Callable<? extends T> callable) {
         this.callable = callable;
     }
 
-    public static <T> Function<T> lazy(Callable<T> callable) {
+    public static <T> Function<T> lazy(Callable<? extends T> callable) {
         return new LazyCallable<T>(callable);
     }
 

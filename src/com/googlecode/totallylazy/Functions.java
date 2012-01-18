@@ -3,7 +3,7 @@ package com.googlecode.totallylazy;
 import java.util.concurrent.Callable;
 
 public class Functions {
-    public static <A> Function<A> function(final Callable<A> callable) {
+    public static <A> Function<A> function(final Callable<? extends A> callable) {
         return Function.function(callable);
     }
 

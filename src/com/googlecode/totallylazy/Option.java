@@ -37,7 +37,7 @@ public abstract class Option<T> implements Iterable<T>, Value<T>, Functor<T, Opt
         return isEmpty() ? other : get();
     }
 
-    public final T getOrElse(Callable<T> callable){
+    public final T getOrElse(Callable<? extends T> callable){
         return isEmpty() ? call(callable) : get();
     }
 

@@ -11,27 +11,27 @@ import java.util.concurrent.TimeUnit;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callers {
-    public static <T> Sequence<T> callConcurrently(final Callable<T>first, final Callable<T>second) {
+    public static <T> Sequence<T> callConcurrently(final Callable<? extends T>first, final Callable<? extends T>second) {
         return callConcurrently(sequence(first, second));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Callable<T>first, final Callable<T>second, final Callable<T>third) {
+    public static <T> Sequence<T> callConcurrently(final Callable<? extends T>first, final Callable<? extends T>second, final Callable<? extends T>third) {
         return callConcurrently(sequence(first, second, third));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Callable<T>first, final Callable<T>second, final Callable<T>third, final Callable<T>fourth) {
+    public static <T> Sequence<T> callConcurrently(final Callable<? extends T>first, final Callable<? extends T>second, final Callable<? extends T>third, final Callable<? extends T>fourth) {
         return callConcurrently(sequence(first, second, third, fourth));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Callable<T>first, final Callable<T>second, final Callable<T>third, final Callable<T>fourth, final Callable<T>fifth) {
+    public static <T> Sequence<T> callConcurrently(final Callable<? extends T>first, final Callable<? extends T>second, final Callable<? extends T>third, final Callable<? extends T>fourth, final Callable<? extends T>fifth) {
         return callConcurrently(sequence(first, second, third, fourth, fifth));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Callable<T>... callables) {
+    public static <T> Sequence<T> callConcurrently(final Callable<? extends T>... callables) {
         return callConcurrently(sequence(callables));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Iterable<? extends Callable<T>> callables) {
+    public static <T> Sequence<T> callConcurrently(final Iterable<? extends Callable<? extends T>> callables) {
         ExecutorService service = Executors.newCachedThreadPool();
         try {
             return callConcurrently(callables, service);
@@ -40,8 +40,8 @@ public final class Callers {
         }
     }
 
-    public static <T> Sequence<T> callConcurrently(final Iterable<? extends Callable<T>> callables, final Executor executor) {
-        return sequence(callables).map(Callers.<T>asFutureTask()).
+    public static <T> Sequence<T> callConcurrently(final Iterable<? extends Callable<? extends T>> callables, final Executor executor) {
+        return Sequences.sequence(callables).<Callable<T>>unsafeCast().map(Callers.<T>asFutureTask()).
                 map(Callers.<T>executeWith(executor)).
                 realise().
                 map(Callers.<T>realiseFuture());
@@ -80,7 +80,7 @@ public final class Callers {
         };
     }
 
-    public static <T> T call(final Callable<T> callable) {
+    public static <T> T call(final Callable<? extends T> callable) {
         try {
             return callable.call();
         } catch (RuntimeException e) {
