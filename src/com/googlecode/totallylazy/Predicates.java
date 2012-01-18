@@ -236,23 +236,23 @@ public class Predicates {
         };
     }
 
-    public static <T extends Comparable<T>> LogicalPredicate<T> greaterThan(final T comparable) {
+    public static <T extends Comparable<? super T>> LogicalPredicate<T> greaterThan(final T comparable) {
         return new GreaterThanPredicate<T>(comparable);
     }
 
-    public static <T extends Comparable<T>> LogicalPredicate<T> greaterThanOrEqualTo(final T comparable) {
+    public static <T extends Comparable<? super T>> LogicalPredicate<T> greaterThanOrEqualTo(final T comparable) {
         return new GreaterThanOrEqualToPredicate<T>(comparable);
     }
 
-    public static <T extends Comparable<T>> LogicalPredicate<T> lessThan(final T comparable) {
+    public static <T extends Comparable<? super T>> LogicalPredicate<T> lessThan(final T comparable) {
         return new LessThanPredicate<T>(comparable);
     }
 
-    public static <T extends Comparable<T>> LogicalPredicate<T> lessThanOrEqualTo(final T comparable) {
+    public static <T extends Comparable<? super T>> LogicalPredicate<T> lessThanOrEqualTo(final T comparable) {
         return new LessThanOrEqualToPredicate<T>(comparable);
     }
 
-    public static <T extends Comparable<T>> LogicalPredicate<T> between(final T lower, final T upper) {
+    public static <T extends Comparable<? super T>> LogicalPredicate<T> between(final T lower, final T upper) {
         return new BetweenPredicate<T>(lower, upper);
     }
 

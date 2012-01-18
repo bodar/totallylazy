@@ -275,7 +275,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.zipWithIndex(this);
     }
 
-    public <R extends Comparable<R>> Sequence<T> sortBy(final Callable1<? super T, R> callable) {
+    public <R extends Comparable<? super R>> Sequence<T> sortBy(final Callable1<? super T, R> callable) {
         return sortBy(ascending(callable));
     }
 

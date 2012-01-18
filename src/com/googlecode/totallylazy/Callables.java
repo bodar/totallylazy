@@ -70,11 +70,11 @@ public final class Callables {
         };
     }
 
-    public static <T, R extends Comparable<R>> Comparator<T> ascending(final Callable1<T, R> callable) {
+    public static <T, R extends Comparable<? super R>> Comparator<T> ascending(final Callable1<T, R> callable) {
         return new AscendingComparator<T, R>(callable);
     }
 
-    public static <T, R extends Comparable<R>> Comparator<T> descending(final Callable1<T, R> callable) {
+    public static <T, R extends Comparable<? super R>> Comparator<T> descending(final Callable1<T, R> callable) {
         return new DescendingComparator<T, R>(callable);
     }
 

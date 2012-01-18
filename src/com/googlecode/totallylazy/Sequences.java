@@ -496,7 +496,7 @@ public class Sequences {
         return zip(range(0), iterable);
     }
 
-    public static <T, R extends Comparable<R>> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<? super T, R> callable) {
+    public static <T, R extends Comparable<? super R>> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<? super T, R> callable) {
         return sortBy(iterable, ascending(callable));
     }
 
