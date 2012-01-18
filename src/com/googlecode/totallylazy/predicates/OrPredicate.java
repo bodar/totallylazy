@@ -1,12 +1,22 @@
 package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 public class OrPredicate<T> extends LogicalPredicate<T> {
-    private final Predicate<? super T>[] predicates;
+    private final Sequence<Predicate<T>> predicates;
 
-    public OrPredicate(Predicate<? super T>... predicates) {
+    private OrPredicate(Sequence<Predicate<T>> predicates) {
         this.predicates = predicates;
+    }
+
+    public static <T> LogicalPredicate<T> or(Iterable<? extends Predicate<? super T>> predicates) {
+        Sequence<Predicate<T>> sequence = Sequences.sequence(predicates).unsafeCast();
+        if(sequence.size().equals(1)){
+            return logicalPredicate(sequence.head());
+        }
+        return new OrPredicate<T>(sequence);
     }
 
     public boolean matches(T value) {
@@ -16,7 +26,7 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
         return false;
     }
 
-    public Predicate<? super T>[] predicates() {
+    public Sequence<Predicate<T>> predicates() {
         return predicates;
     }
 }

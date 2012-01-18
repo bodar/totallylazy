@@ -131,41 +131,27 @@ public class Predicates {
         return logicalPredicate(first);
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second) {
-        return internalAnd(first, second);
+        return AndPredicate.and(Sequences.<Predicate<? super T>>sequence(first, second));
     }
 
     public static <T> LogicalPredicate<T> and(final Predicate<? super T>... predicates) {
-        return internalAnd(predicates);
-    }
+        return AndPredicate.and(sequence(predicates));    }
 
-    private static <T> LogicalPredicate<T> internalAnd(Predicate<? super T>... predicates) {
-        if(predicates.length == 1){
-            return logicalPredicate(predicates[0]);
-        }
-        return new AndPredicate<T>(predicates);
+    public static <T> LogicalPredicate<T> and(final Iterable<? extends Predicate<? super T>> predicates) {
+        return AndPredicate.and(predicates);
     }
-
 
     public static <T> LogicalPredicate<T> or(final Predicate<? super T> first) {
         return logicalPredicate(first);
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> LogicalPredicate<T> or(final Predicate<? super T> first, final Predicate<? super T> second) {
-        return internalOr(first, second);
+        return OrPredicate.or(Sequences.<Predicate<? super T>>sequence(first, second));
     }
 
     public static <T> LogicalPredicate<T> or(final Predicate<? super T>... predicates) {
-        return internalOr(predicates);
-    }
-
-    private static <T> LogicalPredicate<T> internalOr(Predicate<? super T>... predicates) {
-        if(predicates.length == 1){
-            return logicalPredicate(predicates[0]);
-        }
-        return new OrPredicate<T>(predicates);
+        return OrPredicate.or(sequence(predicates));
     }
 
     public static <T> LogicalPredicate<T> not(final T t) {
@@ -243,6 +229,7 @@ public class Predicates {
 
     public static <T> LogicalPredicate<Predicate<T>> matches(final T instance) {
         return new LogicalPredicate<Predicate<T>>() {
+            @Override
             public boolean matches(Predicate<T> predicate) {
                 return predicate.matches(instance);
             }
