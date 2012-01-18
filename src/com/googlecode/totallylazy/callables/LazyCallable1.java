@@ -9,14 +9,14 @@ import java.util.Map;
 import static java.util.Collections.synchronizedMap;
 
 public final class LazyCallable1<T, R> extends Function1<T,R> {
-    private final Callable1<T,R> callable;
+    private final Callable1<? super T, ? extends R> callable;
     private final Map<T,R> state = synchronizedMap(new HashMap<T, R>());
 
-    private LazyCallable1(Callable1<T,R> callable) {
+    private LazyCallable1(Callable1<? super T, ? extends R> callable) {
         this.callable = callable;
     }
 
-    public static <T,R> Function1<T,R> lazy(Callable1<T,R> callable) {
+    public static <T,R> Function1<T,R> lazy(Callable1<? super T, ? extends R> callable) {
         return new LazyCallable1<T,R>(callable);
     }
 

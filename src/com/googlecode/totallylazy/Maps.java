@@ -57,11 +57,11 @@ public class Maps {
         return seed;
     }
 
-    public static <T, Key> Map<Key, T> map(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+    public static <T, Key> Map<Key, T> map(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Key> callable) {
         return map(new LinkedHashMap<Key, T>(), iterator, callable);
     }
 
-    public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+    public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Key> callable) {
         while (iterator.hasNext()) {
             final T next = iterator.next();
             final Key key = Callers.call(callable, next);
@@ -70,11 +70,11 @@ public class Maps {
         return seed;
     }
 
-    public static <T, Key> Map<Key, T> map(final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
+    public static <T, Key> Map<Key, T> map(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Key> callable) {
         return map(iterable.iterator(), callable);
     }
 
-    public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
+    public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Key> callable) {
         return map(seed, iterable.iterator(), callable);
     }
 
@@ -116,27 +116,27 @@ public class Maps {
         return seed;
     }
 
-    public static <T, Key> Map<Key, List<T>> multiMap(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+    public static <T, Key> Map<Key, List<T>> multiMap(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Key> callable) {
         return multiMap(new LinkedHashMap<Key, List<T>>(), iterator, callable);
     }
 
-    public static <T, Key> Map<Key, List<T>> multiMap(final Map<Key, List<T>> seed, final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+    public static <V, K> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterator<? extends V> iterator, final Callable1<? super V, ? extends K> callable) {
         while (iterator.hasNext()) {
-            final T next = iterator.next();
-            final Key key = Callers.call(callable, next);
+            final V value = iterator.next();
+            final K key = Callers.call(callable, value);
             if (!seed.containsKey(key)) {
-                seed.put(key, new ArrayList<T>());
+                seed.put(key, new ArrayList<V>());
             }
-            seed.get(key).add(next);
+            seed.get(key).add(value);
         }
         return seed;
     }
 
-    public static <T, Key> Map<Key, List<T>> multiMap(final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
+    public static <V, K> Map<K, List<V>> multiMap(final Iterable<? extends V> iterable, final Callable1<? super V, ? extends K> callable) {
         return multiMap(iterable.iterator(), callable);
     }
 
-    public static <T, Key> Map<Key, List<T>> multiMap(final Map<Key, List<T>> seed, final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
+    public static <V, K> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterable<? extends V> iterable, final Callable1<? super V, ? extends K> callable) {
         return multiMap(seed, iterable.iterator(), callable);
     }
 

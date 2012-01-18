@@ -219,12 +219,12 @@ public class Predicates {
         return aClass.isAssignableFrom(o.getClass());
     }
 
-    public static <T, R> LogicalPredicate<T> where(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
-        return new WherePredicate<T, R>(callable, predicate);
+    public static <T, R> LogicalPredicate<T> where(final Callable1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+        return WherePredicate.where(callable, predicate);
     }
 
-    public static <T, R> LogicalPredicate<T> by(final Callable1<? super T, R> callable, final Predicate<? super R> predicate) {
-        return where(callable, predicate);
+    public static <T, R> LogicalPredicate<T> by(final Callable1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+        return WherePredicate.where(callable, predicate);
     }
 
     public static <T> LogicalPredicate<Predicate<T>> matches(final T instance) {

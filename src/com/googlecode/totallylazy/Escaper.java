@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 import static com.googlecode.totallylazy.Callables.asString;
-import static com.googlecode.totallylazy.Callables.ignoreAndReturn;
+import static com.googlecode.totallylazy.Function1.returns1;
 import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.characters;
@@ -18,10 +18,10 @@ public class Escaper {
     }
 
     public Escaper withRule(Character appliesTo, final String result) {
-        return withRule(is(appliesTo), ignoreAndReturn(result));
+        return withRule(is(appliesTo), returns1(result));
     }
 
-    public Escaper withRule(Predicate<? super Character> appliesTo, Callable1<? super Character, String> action) {
+    public Escaper withRule(Predicate<? super Character> appliesTo, Callable1<? super Character, ? extends String> action) {
         rules.addFirst(Rule.<Character, Character, String>rule(appliesTo, action));
         return this;
     }

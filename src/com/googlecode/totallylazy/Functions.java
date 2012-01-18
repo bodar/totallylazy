@@ -7,11 +7,11 @@ public class Functions {
         return Function.function(callable);
     }
 
-    public static <A, B> Function1<A, B> function(final Callable1<A, B> callable) {
+    public static <A, B> Function1<A, B> function(final Callable1<? super A, ? extends B> callable) {
         return Function1.function(callable);
     }
 
-    public static <A, B, C> Function2<A, B, C> function(final Callable2<A, B, C> callable) {
+    public static <A, B, C> Function2<A, B, C> function(final Callable2<? super A, ? super B, ? extends C> callable) {
         return Function2.function(callable);
     }
 }

@@ -37,7 +37,7 @@ public abstract class Function<A> implements Callable<A>, Runnable, Functor<A, F
         return Sequences.repeat(this);
     }
 
-    public Function<A> time(Callable1<Double, Void> report) {
+    public Function<A> time(Callable1<? super Double, Void> report) {
         return TimeCallable.time(this, report);
     }
 
@@ -46,11 +46,19 @@ public abstract class Function<A> implements Callable<A>, Runnable, Functor<A, F
     }
 
     @Override
-    public <B> Function<B> map(final Callable1<? super A, B> callable) {
+    public <B> Function<B> map(final Callable1<? super A, ? extends B> callable) {
         return Callables.compose(this, callable);
     }
 
-    public <B> Function<B> then(final Callable1<? super A, B> callable) {
+    public <B> Function<B> then(final Callable1<? super A, ? extends B> callable) {
         return map(callable);
+    }
+
+    public static <T> Function<T> returns(final T t) {
+        return new Function<T>() {
+            public final T call() throws Exception {
+                return t;
+            }
+        };
     }
 }

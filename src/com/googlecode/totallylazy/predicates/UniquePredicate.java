@@ -8,10 +8,10 @@ import java.util.Set;
 import static com.googlecode.totallylazy.Callers.call;
 
 public class UniquePredicate<T, S> extends LogicalPredicate<T> {
-    private final Callable1<? super T, S> callable;
+    private final Callable1<? super T, ? extends S> callable;
     private final Set<S> valuesSeen = new HashSet<S>();
 
-    public UniquePredicate(Callable1<? super T, S> callable) {
+    public UniquePredicate(Callable1<? super T, ? extends S> callable) {
         this.callable = callable;
     }
 
