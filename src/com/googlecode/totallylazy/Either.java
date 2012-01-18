@@ -29,16 +29,16 @@ public abstract class Either<L, R> implements Functor<R, Either<L, ?>>{
         throw new NoSuchElementException();
     }
 
-    public <S> S fold(final S seed, final Callable2<? super S, L, S> left, final Callable2<? super S, R, S> right) {
+    public <S> S fold(final S seed, final Callable2<? super S, ? super L, ? extends S> left, final Callable2<? super S, ? super R, ? extends S> right) {
         return isLeft() ? call(left, seed, left()) : call(right, seed, right());
     }
 
-    public <S> S map(final Callable1<? super L, S> left, final Callable1<? super R, S> right) {
+    public <S> S map(final Callable1<? super L, S> left, final Callable1<? super R, ? extends S> right) {
         return isLeft() ? call(left, left()) : call(right, right());
     }
 
     @Override
-    public <S> Either<L, S> map(Callable1<? super R, S> callable) {
+    public <S> Either<L, S> map(Callable1<? super R, ? extends S> callable) {
         return isLeft() ? Either.<L, S>left(left()) : Either.<L, S>right(call(callable, right()));
     }
 

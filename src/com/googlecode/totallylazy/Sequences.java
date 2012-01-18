@@ -151,7 +151,7 @@ public class Sequences {
         return characters(wrap(value));
     }
 
-    public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
+    public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<? super T, ? extends S> callable) {
         return new Sequence<S>() {
             public final Iterator<S> iterator() {
                 return Iterators.map(iterable.iterator(), callable);
@@ -171,7 +171,7 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> flatMap(final Iterable<T> iterable, final Callable1<? super T, ? extends Iterable<S>> callable) {
+    public static <T, S> Sequence<S> flatMap(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
         return new Sequence<S>() {
             public final Iterator<S> iterator() {
                 return Iterators.flatMap(iterable.iterator(), callable);
@@ -179,15 +179,15 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<T> iterable, final Callable1<? super T, ? extends Iterable<S>> callable) {
+    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
         return flatten(mapConcurrently(iterable, callable));
     }
 
-    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<T> iterable, final Callable1<? super T, ? extends Iterable<S>> callable, final Executor executor) {
+    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Iterable<? extends S>> callable, final Executor executor) {
         return flatten(mapConcurrently(iterable, callable, executor));
     }
 
-    public static <T> Sequence<T> iterate(final Callable1<? super T, T> callable, final T t) {
+    public static <T> Sequence<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.iterate(callable, t);
@@ -368,11 +368,11 @@ public class Sequences {
         return Iterators.find(iterable.iterator(), predicate);
     }
 
-    public static <T, S> Option<S> tryPick(final Iterable<T> iterable, final Callable1<T, Option<S>> callable) {
+    public static <T, S> Option<S> tryPick(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Option<? extends S>> callable) {
         return Iterators.tryPick(iterable.iterator(), callable);
     }
 
-    public static <T, S> S pick(final Iterable<T> iterable, final Callable1<T, Option<S>> callable) {
+    public static <T, S> S pick(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Option<? extends S>> callable) {
         return Iterators.pick(iterable.iterator(), callable);
     }
 
@@ -496,11 +496,11 @@ public class Sequences {
         return zip(range(0), iterable);
     }
 
-    public static <T, R extends Comparable<? super R>> Sequence<T> sortBy(final Iterable<T> iterable, final Callable1<? super T, R> callable) {
+    public static <T, R extends Comparable<? super R>> Sequence<T> sortBy(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends R> callable) {
         return sortBy(iterable, ascending(callable));
     }
 
-    public static <T> Sequence<T> sortBy(final Iterable<T> iterable, final Comparator<? super T> comparator) {
+    public static <T> Sequence<T> sortBy(final Iterable<? extends T> iterable, final Comparator<? super T> comparator) {
         List<T> result = sequence(iterable).toList();
         Collections.sort(result, comparator);
         return sequence(result);
@@ -548,15 +548,15 @@ public class Sequences {
         return repeat(sequence(iterable).memorise()).flatMap(Callables.<Iterable<T>>returnArgument());
     }
 
-    public static <T, S> Sequence<S> mapConcurrently(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
+    public static <T, S> Sequence<S> mapConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends S> callable) {
         return callConcurrently(sequence(iterable).map(deferExecution(callable)));
     }
 
-    public static <T, S> Sequence<S> mapConcurrently(final Iterable<T> iterable, final Callable1<? super T, S> callable, final Executor executor) {
+    public static <T, S> Sequence<S> mapConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends S> callable, final Executor executor) {
         return callConcurrently(sequence(iterable).map(deferExecution(callable)), executor);
     }
 
-    public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterable<T> iterable, final Callable1<? super T, Key> callable) {
+    public static <T, K> Sequence<Group<K, T>> groupBy(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends K> callable) {
         return Iterators.groupBy(iterable.iterator(), callable);
     }
 
@@ -608,7 +608,7 @@ public class Sequences {
         return Iterators.breakOn(iterable.iterator(), predicate);
     }
 
-    public static <T> Sequence<Sequence<T>> recursive(final Iterable<T> iterable,
+    public static <T> Sequence<Sequence<T>> recursive(final Iterable<? extends T> iterable,
                                                       final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
         return iterate(applyToSecond(callable), Callers.call(callable, sequence(iterable))).
                 takeWhile(Predicates.not(Predicates.<Pair<Sequence<T>, Sequence<T>>>and(
@@ -631,7 +631,7 @@ public class Sequences {
         return sequence(list);
     }
 
-    public static <T, S> Sequence<T> unique(final Iterable<T> iterable, final Callable1<? super T, S> callable) {
+    public static <T, S> Sequence<T> unique(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends S> callable) {
         return sequence(iterable).filter(new UniquePredicate<T, S>(callable));
     }
 

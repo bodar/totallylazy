@@ -10,7 +10,7 @@ import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Comparators {
-    public static <T, R> Comparator<? super T> where(final Callable1<T, R> callable, final Comparator<R> comparator) {
+    public static <T, R> Comparator<T> where(final Callable1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
         return new Comparator<T>() {
             public int compare(T instance, T otherInstance) {
                 return comparator.compare(call(callable, instance), call(callable, otherInstance));

@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.callables.SleepyCallable1;
 import java.util.concurrent.Callable;
 
 public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Function1<A, ?>> {
-    public static <A, B> Function1<A, B> function(final Callable1<A, B> callable) {
+    public static <A, B> Function1<A, B> function(final Callable1<? super A, ? extends B> callable) {
         return new Function1<A, B>() {
             @Override
             public B call(A a) throws Exception {
@@ -40,11 +40,11 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Fun
     }
 
     @Override
-    public <C> Function1<A, C> map(final Callable1<? super B, C> callable) {
+    public <C> Function1<A, C> map(final Callable1<? super B, ? extends C> callable) {
         return Callables.compose(this, callable);
     }
 
-    public <C> Function1<A, C> then(final Callable1<? super B, C> callable) {
+    public <C> Function1<A, C> then(final Callable1<? super B, ? extends C> callable) {
         return map(callable);
     }
 
@@ -58,5 +58,13 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Fun
 
     public Function1<A, Function<B>> deferExecution() {
         return Callables.deferExecution(this);
+    }
+
+    public static <A,B> Function1<A, B> returns1(final B result) {
+        return new Function1<A, B>() {
+            public B call(A ignore) throws Exception {
+                return result;
+            }
+        };
     }
 }

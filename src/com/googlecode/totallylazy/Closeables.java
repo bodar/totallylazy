@@ -43,7 +43,7 @@ public class Closeables {
         return t;
     }
 
-    public static <T extends Closeable, R> R using(T t, Callable1<? super T, R> callable) {
+    public static <T extends Closeable, R> R using(T t, Callable1<? super T, ? extends R> callable) {
         try {
             return call(callable, t);
         } finally {
@@ -51,7 +51,7 @@ public class Closeables {
         }
     }
 
-    public static <T, R> R using(T instanceWithCloseMethod, Callable1<? super T, R> callable) {
+    public static <T, R> R using(T instanceWithCloseMethod, Callable1<? super T, ? extends R> callable) {
         try {
             return call(callable, instanceWithCloseMethod);
         } finally {

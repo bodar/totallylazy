@@ -21,9 +21,7 @@ import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callables.cast;
 import static com.googlecode.totallylazy.Callables.nullGuard;
-import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
@@ -67,11 +65,11 @@ public class Iterators {
         }
     }
 
-    public static <T, S> Iterator<S> map(final Iterator<? extends T> iterator, final Callable1<? super T, S> callable) {
+    public static <T, S> Iterator<S> map(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends S> callable) {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> Iterator<S> flatMap(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Iterable<S>> callable) {
+    public static <T, S> Iterator<S> flatMap(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
         return flattenIterable(map(iterator, callable));
     }
 
@@ -79,7 +77,7 @@ public class Iterators {
         return new FilterIterator<T>(iterator, predicate);
     }
 
-    public static <T> Iterator<T> iterate(final Callable1<? super T, T> callable, final T t) {
+    public static <T> Iterator<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {
         return new IterateIterator<T>(nullGuard(callable), t);
     }
 
@@ -236,10 +234,10 @@ public class Iterators {
         return none();
     }
 
-    public static <T, S> Option<S> tryPick(final Iterator<T> iterator, final Callable1<T, Option<S>> callable) {
+    public static <T, S> Option<S> tryPick(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Option<? extends S>> callable) {
         while (iterator.hasNext()) {
             T item = iterator.next();
-            Option<S> result = call(callable, item);
+            Option<S> result = Unchecked.cast(call(callable, item));
             if (!result.isEmpty()) {
                 return result;
             }
@@ -247,7 +245,7 @@ public class Iterators {
         return none();
     }
 
-    public static <T, S> S pick(final Iterator<T> iterator, final Callable1<T, Option<S>> callable) {
+    public static <T, S> S pick(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Option<? extends S>> callable) {
         return tryPick(iterator, callable).get();
     }
 
@@ -286,7 +284,7 @@ public class Iterators {
     }
 
     public static <T, S> Iterator<S> unsafeCast(final Iterator<T> iterator) {
-        return map(iterator, Callables.<T,S>cast());
+        return map(iterator, Callables.<T, S>cast());
     }
 
     public static <T> Number size(final Iterator<T> iterator) {
@@ -326,8 +324,9 @@ public class Iterators {
         return partition(iterator, whileTrue(Predicates.<T>not(predicate)));
     }
 
-    public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterator<T> iterator, final Callable1<? super T, Key> callable) {
+    public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Key> callable) {
         return Maps.entries(Maps.multiMap(iterator, callable)).map(new Callable1<Map.Entry<Key, List<T>>, Group<Key, T>>() {
+            @Override
             public Group<Key, T> call(Map.Entry<Key, List<T>> entry) throws Exception {
                 return new Group<Key, T>(entry.getKey(), entry.getValue());
             }
@@ -355,12 +354,8 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> flattenIterable(Iterator<? extends Iterable<? extends T>> iterator) {
-        return flatten(map(iterator, new Callable1<Iterable<? extends T>, Iterator<? extends T>>() {
-            @Override
-            public Iterator<? extends T> call(Iterable<? extends T> iterable) throws Exception {
-                return iterable.iterator();
-            }
-        }));
+        Iterator<Iterable<T>> noWildCards = unsafeCast(iterator);
+        return flatten(map(noWildCards, Callables.<T>asIterator()));
     }
 
     public static <T> Iterator<T> interruptable(Iterator<T> iterator) {

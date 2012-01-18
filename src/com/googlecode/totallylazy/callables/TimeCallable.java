@@ -36,7 +36,7 @@ public final class TimeCallable<T> extends Function<T> {
         return time(callable, DEFAULT_REPORTER);
     }
 
-    public static <T> TimeCallable<T> time(Callable<? extends T> callable, Callable1<? super Double, ? extends Void> reporter){
+    public static <T> TimeCallable<T> time(Callable<? extends T> callable, Callable1<? super Double, Void> reporter){
         return new TimeCallable<T>(callable, reporter);
     }
 
@@ -44,7 +44,7 @@ public final class TimeCallable<T> extends Function<T> {
         return time(callable, value, DEFAULT_REPORTER);
     }
 
-    public static <T,R> TimeCallable<R> time(Callable1<? super T,? extends R> callable, T value, Callable1<? super Double, ? extends Void> reporter){
+    public static <T,R> TimeCallable<R> time(Callable1<? super T,? extends R> callable, T value, Callable1<? super Double, Void> reporter){
         return new TimeCallable<R>(curry(callable, value), reporter);
     }
 
@@ -52,7 +52,7 @@ public final class TimeCallable<T> extends Function<T> {
         return time(Callables.<T>realise(), sequence, DEFAULT_REPORTER);
     }
 
-    public static <T> TimeCallable<Sequence<T>> time(Sequence<T> sequence, Callable1<? super Double, ? extends Void> reporter){
+    public static <T> TimeCallable<Sequence<T>> time(Sequence<T> sequence, Callable1<? super Double, Void> reporter){
         return time(Callables.<T>realise(), sequence, reporter);
     }
 }

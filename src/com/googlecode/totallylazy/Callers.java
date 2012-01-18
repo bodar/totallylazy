@@ -90,7 +90,7 @@ public final class Callers {
         }
     }
 
-    public static <T, S> S call(final Callable1<? super T, S> callable, final T t) {
+    public static <T, S> S call(final Callable1<? super T, ? extends S> callable, final T t) {
         try {
             return callable.call(t);
         } catch (RuntimeException e) {
@@ -100,7 +100,7 @@ public final class Callers {
         }
     }
 
-    public static <T, S, R> R call(final Callable2<? super T, ? super S, R> callable, final T t, final S s) {
+    public static <T, S, R> R call(final Callable2<? super T, ? super S, ? extends R> callable, final T t, final S s) {
         try {
             return callable.call(t, s);
         } catch (RuntimeException e) {

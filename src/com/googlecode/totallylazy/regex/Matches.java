@@ -23,11 +23,11 @@ public class Matches extends Sequence<MatchResult> {
         return new MatchIterator(pattern.matcher(text));
     }
 
-    public String replace(Callable1<MatchResult, CharSequence> matched) {
+    public String replace(Callable1<? super MatchResult, ? extends CharSequence> matched) {
         return replace(returnArgument(CharSequence.class), matched);
     }
 
-    public String replace(Callable1<CharSequence, CharSequence> notMatched, Callable1<MatchResult, CharSequence> matched) {
+    public String replace(Callable1<? super CharSequence, ? extends CharSequence> notMatched, Callable1<? super MatchResult, ? extends CharSequence> matched) {
         StringBuilder builder = new StringBuilder();
         int position = 0;
         for (MatchResult matchResult : this) {

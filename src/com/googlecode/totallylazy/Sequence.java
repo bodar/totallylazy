@@ -47,7 +47,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
     }
 
     @Override
-    public <S> Sequence<S> map(final Callable1<? super T, S> callable) {
+    public <S> Sequence<S> map(final Callable1<? super T, ? extends S> callable) {
         return Sequences.map(this, callable);
     }
 
@@ -59,15 +59,15 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.filter(this, predicate);
     }
 
-    public <S> Sequence<S> flatMap(final Callable1<? super T, ? extends Iterable<S>> callable) {
+    public <S> Sequence<S> flatMap(final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
         return Sequences.flatMap(this, callable);
     }
 
-    public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<S>> callable) {
+    public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
         return Sequences.flatMapConcurrently(this, callable);
     }
 
-    public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<S>> callable, final Executor executor) {
+    public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<? extends S>> callable, final Executor executor) {
         return Sequences.flatMapConcurrently(this, callable, executor);
     }
 
@@ -163,7 +163,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return unique(returnArgument());
     }
 
-    public <S> Sequence<T> unique(Callable1<? super T, S> callable) {
+    public <S> Sequence<T> unique(Callable1<? super T, ? extends S> callable) {
         return Sequences.unique(this, callable);
     }
 
@@ -223,11 +223,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.find(this, predicate);
     }
 
-    public <S> Option<S> tryPick(final Callable1<T, Option<S>> callable) {
+    public <S> Option<S> tryPick(final Callable1<? super T, ? extends Option<? extends S>> callable) {
         return Sequences.tryPick(this, callable);
     }
 
-    public <S> S pick(final Callable1<T, Option<S>> callable) {
+    public <S> S pick(final Callable1<? super T, ? extends Option<? extends S>> callable) {
         return Sequences.pick(this, callable);
     }
 
@@ -275,7 +275,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.zipWithIndex(this);
     }
 
-    public <R extends Comparable<? super R>> Sequence<T> sortBy(final Callable1<? super T, R> callable) {
+    public <R extends Comparable<? super R>> Sequence<T> sortBy(final Callable1<? super T, ? extends R> callable) {
         return sortBy(ascending(callable));
     }
 
@@ -303,11 +303,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.cycle(this);
     }
 
-    public <Key> Map<Key,List<T>> toMap(final Callable1<? super T,Key> callable) {
+    public <K> Map<K,List<T>> toMap(final Callable1<? super T, ? extends K> callable) {
         return Maps.multiMap(this, callable);
     }
 
-    public  <Key> Sequence<Group<Key, T>> groupBy(final Callable1<? super T, Key> callable) {
+    public  <K> Sequence<Group<K, T>> groupBy(final Callable1<? super T, ? extends K> callable) {
         return Sequences.groupBy(this, callable);
     }
 
