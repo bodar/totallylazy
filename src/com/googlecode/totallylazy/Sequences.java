@@ -259,28 +259,28 @@ public class Sequences {
         };
     }
 
-    public static <T, S> S fold(final Iterable<T> iterable, S seed, final Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S fold(final Iterable<? extends T> iterable, S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         return Iterators.fold(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> S foldLeft(final Iterable<T> iterable, S seed, final Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S foldLeft(final Iterable<? extends T> iterable, S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         return Iterators.foldLeft(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> S foldRight(final Iterable<T> iterable, S seed, final Callable2<? super T, ? super S, S> callable) {
+    public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
         return foldLeft(sequence(iterable).reverse(), seed, flip(callable));
     }
 
-    public static <T, S> S reduce(final Iterable<T> iterable, final Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S reduce(final Iterable<? extends T> iterable, final Callable2<? super S, ? super T, ? extends S> callable) {
         return Iterators.reduce(iterable.iterator(), callable);
     }
 
-    public static <T, S> S reduceLeft(final Iterable<T> iterable, final Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S reduceLeft(final Iterable<? extends T> iterable, final Callable2<? super S, ? super T, ? extends S> callable) {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
 
-    public static <T, S> S reduceRight(final Iterable<T> iterable, final Callable2<? super T, ? super S, S> callable) {
-        Iterator<T> iterator = iterable.iterator();
+    public static <T, S> S reduceRight(final Iterable<? extends T> iterable, final Callable2<? super T, ? super S, ? extends S> callable) {
+        Iterator<T> iterator = Unchecked.cast(iterable.iterator());
         return foldRight(forwardOnly(iterator), Unchecked.<S>cast(iterator.next()), callable);
     }
 
