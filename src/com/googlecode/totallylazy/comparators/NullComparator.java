@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.comparators;
 
 public class NullComparator {
-    public static <T extends Comparable<T>>int compare(T a, T b, Direction direction) {
+    public static <T extends Comparable<? super T>> int compare(T a, T b, Direction direction) {
         if (a == null && b == null) {
             return 0;
         }

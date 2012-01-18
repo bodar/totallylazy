@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Callers.call;
 
-public class DescendingComparator<T, R extends Comparable<R>> implements Comparator<T> {
+public class DescendingComparator<T, R extends Comparable<? super R>> implements Comparator<T> {
     private final Callable1<T, R> callable;
 
     public DescendingComparator(Callable1<T, R> callable) {
