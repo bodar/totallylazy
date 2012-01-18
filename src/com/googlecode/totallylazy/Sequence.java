@@ -17,7 +17,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Functor<T, Sequence<?>> {
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Sequence && Sequences.equalTo(this, (Iterable) obj);
+        return obj instanceof Sequence && Sequences.equalTo(this, (Sequence) obj);
     }
 
     // Thread-safe Racy Single Check Idiom (Effective Java 2nd Edition p.284)
