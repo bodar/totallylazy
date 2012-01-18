@@ -162,7 +162,7 @@ public class Iterators {
         return result;
     }
 
-    public static <T> Iterator<T> repeat(final Callable<T> callable) {
+    public static <T> Iterator<T> repeat(final Callable<? extends T> callable) {
         return new RepeatIterator<T>(callable);
     }
 

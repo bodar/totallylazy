@@ -48,7 +48,7 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Fun
         return map(callable);
     }
 
-    public <C> Function1<A, C> then(final Callable<C> callable) {
+    public <C> Function1<A, C> then(final Callable<? extends C> callable) {
         return Callables.compose(this, callable);
     }
 

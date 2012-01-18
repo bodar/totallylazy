@@ -407,7 +407,7 @@ public final class Callables {
         };
     }
 
-    public static <A, B> Function1<A, B> compose(final Callable1<? super A, ?> ignoreResult, final Callable<B> callable) {
+    public static <A, B> Function1<A, B> compose(final Callable1<? super A, ?> ignoreResult, final Callable<? extends B> callable) {
         return new Function1<A, B>() {
             public B call(A a) throws Exception {
                 ignoreResult.call(a);
@@ -416,11 +416,11 @@ public final class Callables {
         };
     }
 
-    public static <A, B> Function1<A, B> doThen(final Callable1<? super A, ?> ignoreResult, final Callable<B> callable) {
+    public static <A, B> Function1<A, B> doThen(final Callable1<? super A, ?> ignoreResult, final Callable<? extends B> callable) {
         return compose(ignoreResult, callable);
     }
 
-    public static <A, B> Function<B> compose(final Callable<A> first, final Callable1<? super A, B> second) {
+    public static <A, B> Function<B> compose(final Callable<? extends A> first, final Callable1<? super A, B> second) {
         return new Function<B>() {
             @Override
             public B call() throws Exception {
