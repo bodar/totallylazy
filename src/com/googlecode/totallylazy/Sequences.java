@@ -123,11 +123,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> memorise(final Iterator<? extends T> iterator) {
-        return new MemorisedSequence<T>(new Iterable<T>() {
-            public final Iterator<T> iterator() {
-                return cast(iterator);
-            }
-        });
+        return new MemorisedSequence<T>(forwardOnly(iterator));
     }
 
     public static <T> ForwardOnlySequence<T> forwardOnly(final Iterator<? extends T> iterator) {
