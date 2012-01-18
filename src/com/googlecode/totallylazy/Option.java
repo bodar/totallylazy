@@ -50,7 +50,7 @@ public abstract class Option<T> implements Iterable<T>, Value<T>, Functor<T, Opt
         return isEmpty() ? Option.<S>none() : some(Callers.call(callable, get()));
     }
 
-    public <S> S fold(final S seed, final Callable2<? super S, ? super T, S> callable) {
+    public <S> S fold(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         return isEmpty() ? seed : Callers.call(callable, seed, get());
     }
 

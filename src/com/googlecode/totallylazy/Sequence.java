@@ -103,27 +103,27 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.init(this);
     }
 
-    public <S> S fold(final S seed, final Callable2<? super S, ? super T, S> callable) {
+    public <S> S fold(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         return Sequences.fold(this, seed, callable);
     }
 
-    public <S> S foldLeft(final S seed, final Callable2<? super S, ? super T, S> callable) {
+    public <S> S foldLeft(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         return Sequences.foldLeft(this, seed, callable);
     }
 
-    public <S> S foldRight(final S seed, final Callable2<? super T, ? super S, S> callable) {
+    public <S> S foldRight(final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
         return Sequences.foldRight(this, seed, callable);
     }
 
-    public <S> S reduce(final Callable2<? super S, ? super T, S> callable) {
+    public <S> S reduce(final Callable2<? super S, ? super T, ? extends S> callable) {
         return Sequences.reduce(this, callable);
     }
 
-    public <S> S reduceLeft(final Callable2<? super S, ? super T, S> callable) {
+    public <S> S reduceLeft(final Callable2<? super S, ? super T, ? extends S> callable) {
         return Sequences.reduceLeft(this, callable);
     }
 
-    public <S> S reduceRight(final Callable2<? super T, ? super S, S> callable) {
+    public <S> S reduceRight(final Callable2<? super T, ? super S, ? extends S> callable) {
         return Sequences.reduceRight(this, callable);
     }
 

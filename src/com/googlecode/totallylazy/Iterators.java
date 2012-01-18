@@ -104,11 +104,11 @@ public class Iterators {
         return new InitIterator<T>(iterator);
     }
 
-    public static <T, S> S fold(final Iterator<T> iterator, final S seed, final Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S fold(final Iterator<T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         return foldLeft(iterator, seed, callable);
     }
 
-    public static <T, S> S foldLeft(final Iterator<T> iterator, final S seed, final Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S foldLeft(final Iterator<T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         S accumulator = seed;
         while (iterator.hasNext()) {
             accumulator = call(callable, accumulator, iterator.next());
@@ -116,11 +116,11 @@ public class Iterators {
         return accumulator;
     }
 
-    public static <T, S> S reduce(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S reduce(final Iterator<T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
         return reduceLeft(iterator, callable);
     }
 
-    public static <T, S> S reduceLeft(final Iterator<T> iterator, final Callable2<? super S, ? super T, S> callable) {
+    public static <T, S> S reduceLeft(final Iterator<T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
         return foldLeft(iterator, Unchecked.<S>cast(iterator.next()), callable);
     }
 

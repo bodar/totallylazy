@@ -38,7 +38,7 @@ public final class Callables {
         };
     }
 
-    public static <T> Function1<Sequence<T>, Sequence<T>> reduceAndShift(final Callable2<T, T, T> action) {
+    public static <T> Function1<Sequence<T>, Sequence<T>> reduceAndShift(final Callable2<? super T, ? super T, ? extends T> action) {
         return new Function1<Sequence<T>, Sequence<T>>() {
             public final Sequence<T> call(final Sequence<T> values) throws Exception {
                 return values.tail().add(values.reduceLeft(action));
@@ -317,11 +317,11 @@ public final class Callables {
         return call();
     }
 
-    public static <A, B, C> Function1<B, C> curry(final Callable2<A, B, C> callable, final A value) {
+    public static <A, B, C> Function1<B, C> curry(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
         return curry(callable).apply(value);
     }
 
-    public static <A, B, C> Function<C> curry(final Callable2<A, B, C> callable, final A a, final B b) {
+    public static <A, B, C> Function<C> curry(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
         return new Function<C>() {
             @Override
             public C call() throws Exception {
@@ -330,7 +330,7 @@ public final class Callables {
         };
     }
 
-    public static <A, B, C> Function1<A, Function1<B, C>> curry(final Callable2<A, B, C> callable) {
+    public static <A, B, C> Function1<A, Function1<B, C>> curry(final Callable2<? super A, ? super B, ? extends C> callable) {
         return new Function1<A, Function1<B, C>>() {
             public final Function1<B, C> call(final A a) throws Exception {
                 return new Function1<B, C>() {
@@ -390,7 +390,7 @@ public final class Callables {
         };
     }
 
-    public static <A, B, C> Function2<B, A, C> flip(final Callable2<? super A, ? super B, C> callable) {
+    public static <A, B, C> Function2<B, A, C> flip(final Callable2<? super A, ? super B, ? extends C> callable) {
         return new Function2<B, A, C>() {
             public C call(B s, A t) throws Exception {
                 return callable.call(t, s);
