@@ -318,7 +318,7 @@ public final class Callables {
     }
 
     public static <A, B, C> Function1<B, C> curry(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
-        return curry(callable).apply(value);
+        return Callables.<A,B,C>curry(callable).apply(value);
     }
 
     public static <A, B, C> Function<C> curry(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {

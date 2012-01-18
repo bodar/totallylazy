@@ -118,13 +118,13 @@ public class Sets {
         return complement(asList(sets));
     }
 
-    public static <T> Set<T> complement(final Iterable<Set<? extends T>> iterables) {
-        Sequence<Set<? extends T>> sets = sequence(iterables);
-        Set<? extends T> head = sets.head();
-        Sequence<Set<? extends T>> theRest = sets.tail();
+    public static <T> Set<T> complement(final Iterable<? extends Set<? extends T>> iterables) {
+        Sequence<Set<T>> sets = sequence(iterables).unsafeCast();
+        Set<T> head = sets.head();
+        Sequence<Set<T>> theRest = sets.tail();
         Set<T> result = new LinkedHashSet<T>();
         result.addAll(head);
-        for (Set<? extends T> set : theRest) {
+        for (Set<T> set : theRest) {
             result.removeAll(set);
         }
         return result;

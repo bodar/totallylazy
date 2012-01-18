@@ -8,10 +8,10 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Pair.pair;
 
 public final class PairIterator<F, S> extends ReadOnlyIterator<Pair<F, S>> {
-    private final Iterator<F> left;
-    private final Iterator<S> right;
+    private final Iterator<? extends F> left;
+    private final Iterator<? extends S> right;
 
-    public PairIterator(final Iterator<F> left, final Iterator<S> right) {
+    public PairIterator(final Iterator<? extends F> left, final Iterator<? extends S> right) {
         this.left = left;
         this.right = right;
     }

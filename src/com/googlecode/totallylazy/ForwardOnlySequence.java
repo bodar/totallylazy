@@ -2,14 +2,16 @@ package com.googlecode.totallylazy;
 
 import java.util.Iterator;
 
-public class ForwardOnlySequence<T> extends Sequence<T> {
-    private final Iterator<T> iterator;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
-    public ForwardOnlySequence(Iterator<T> iterator) {
+public final class ForwardOnlySequence<T> extends Sequence<T> {
+    private final Iterator<? extends T> iterator;
+
+    public ForwardOnlySequence(final Iterator<? extends T> iterator) {
         this.iterator = iterator;
     }
 
     public final Iterator<T> iterator() {
-        return iterator;
+        return cast(iterator);
     }
 }

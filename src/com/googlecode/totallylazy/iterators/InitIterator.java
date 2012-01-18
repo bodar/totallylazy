@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class InitIterator<T> extends StatefulIterator<T> {
     private final PeekingIterator<T> peekingIterator;
 
-    public InitIterator(Iterator<T> iterator) {
+    public InitIterator(Iterator<? extends T> iterator) {
         this.peekingIterator = new PeekingIterator<T>(iterator);
     }
 

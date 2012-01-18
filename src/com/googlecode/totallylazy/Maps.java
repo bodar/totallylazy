@@ -22,36 +22,36 @@ public class Maps {
         return new LinkedHashMap<K, V>();
     }
 
-    public static <K, V> Map<K, V> map(final Pair<K, V> first, final Pair<K, V> second) {
+    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second) {
         return map(sequence(first, second));
     }
 
-    public static <K, V> Map<K, V> map(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third) {
+    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third) {
         return map(sequence(first, second, third));
     }
 
-    public static <K, V> Map<K, V> map(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third, final Pair<K, V> fourth) {
+    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third, final Pair<? extends K, ? extends V> fourth) {
         return map(sequence(first, second, third, fourth));
     }
 
-    public static <K, V> Map<K, V> map(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third, final Pair<K, V> fourth, final Pair<K, V> fifth) {
+    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third, final Pair<? extends K, ? extends V> fourth, final Pair<? extends K, ? extends V> fifth) {
         return map(sequence(first, second, third, fourth, fifth));
     }
 
-    public static <K, V> Map<K, V> map(final Pair<K, V>... entries) {
+    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V>... entries) {
         return map(sequence(entries));
     }
 
-    public static <K, V> Map<K, V> map(final Map<K, V> seed, final Pair<K, V>... entries) {
+    public static <K, V> Map<K, V> map(final Map<K, V> seed, final Pair<? extends K, ? extends V>... entries) {
         return map(seed, sequence(entries));
     }
 
-    public static <K, V> Map<K, V> map(final Iterable<Pair<K, V>> entries) {
+    public static <K, V> Map<K, V> map(final Iterable<? extends Pair<? extends K, ? extends V>> entries) {
         return map(new LinkedHashMap<K, V>(), entries);
     }
 
-    public static <K, V> Map<K, V> map(final Map<K, V> seed, final Iterable<Pair<K, V>> entries) {
-        for (Pair<K, V> entry : entries) {
+    public static <K, V> Map<K, V> map(final Map<K, V> seed, final Iterable<? extends Pair<? extends K, ? extends V>> entries) {
+        for (Pair<? extends K, ? extends V> entry : entries) {
             seed.put(entry.first(), entry.second());
         }
         return seed;
@@ -78,36 +78,36 @@ public class Maps {
         return map(seed, iterable.iterator(), callable);
     }
 
-    public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V> first, final Pair<K, V> second) {
+    public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second) {
         return multiMap(sequence(first, second));
     }
 
-    public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third) {
+    public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third) {
         return multiMap(sequence(first, second, third));
     }
 
-    public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third, final Pair<K, V> fourth) {
+    public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third, final Pair<? extends K, ? extends V> fourth) {
         return multiMap(sequence(first, second, third, fourth));
     }
 
-    public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V> first, final Pair<K, V> second, final Pair<K, V> third, final Pair<K, V> fourth, final Pair<K, V> fifth) {
+    public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third, final Pair<? extends K, ? extends V> fourth, final Pair<? extends K, ? extends V> fifth) {
         return multiMap(sequence(first, second, third, fourth, fifth));
     }
 
-    public static <K, V> Map<K, List<V>> multiMap(final Pair<K, V>... entries) {
+    public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V>... entries) {
         return multiMap(sequence(entries));
     }
 
-    public static <K, V> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Pair<K, V>... entries) {
+    public static <K, V> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Pair<? extends K, ? extends V>... entries) {
         return multiMap(seed, sequence(entries));
     }
 
-    public static <K, V> Map<K, List<V>> multiMap(final Iterable<Pair<K, V>> entries) {
+    public static <K, V> Map<K, List<V>> multiMap(final Iterable<? extends Pair<? extends K, ? extends V>> entries) {
         return multiMap(new LinkedHashMap<K, List<V>>(), entries);
     }
 
-    public static <K, V> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterable<Pair<K, V>> entries) {
-        for (Pair<K, V> entry : entries) {
+    public static <K, V> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterable<? extends Pair<? extends K, ? extends V>> entries) {
+        for (Pair<? extends K, ? extends V> entry : entries) {
             if (!seed.containsKey(entry.first())) {
                 seed.put(entry.first(), new ArrayList<V>());
             }
@@ -140,9 +140,9 @@ public class Maps {
         return multiMap(seed, iterable.iterator(), callable);
     }
 
-    public static <K, V> Function2<? super Map<K, List<V>>, ? super Pair<K, V>, Map<K, List<V>>> asMultiValuedMap() {
-        return new Function2<Map<K, List<V>>, Pair<K, V>, Map<K, List<V>>>() {
-            public Map<K, List<V>> call(Map<K, List<V>> map, Pair<K, V> pair) throws Exception {
+    public static <K, V> Function2<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap() {
+        return new Function2<Map<K, List<V>>, Pair<? extends K, ? extends V>, Map<K, List<V>>>() {
+            public Map<K, List<V>> call(Map<K, List<V>> map, Pair<? extends K, ? extends V> pair) throws Exception {
                 if (!map.containsKey(pair.first())) {
                     map.put(pair.first(), new ArrayList<V>());
                 }
@@ -152,7 +152,7 @@ public class Maps {
         };
     }
 
-    public static <K, V> Function2<? super Map<K, List<V>>, ? super Pair<K, V>, Map<K, List<V>>> asMultiValuedMap(Class<K> key, Class<V> value) {
+    public static <K, V> Function2<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap(Class<K> key, Class<V> value) {
         return asMultiValuedMap();
     }
 

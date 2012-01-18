@@ -122,19 +122,19 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> memorise(final Iterator<T> iterator) {
+    public static <T> Sequence<T> memorise(final Iterator<? extends T> iterator) {
         return new MemorisedSequence<T>(new Iterable<T>() {
             public final Iterator<T> iterator() {
-                return iterator;
+                return cast(iterator);
             }
         });
     }
 
-    public static <T> ForwardOnlySequence<T> forwardOnly(final Iterator<T> iterator) {
+    public static <T> ForwardOnlySequence<T> forwardOnly(final Iterator<? extends T> iterator) {
         return new ForwardOnlySequence<T>(iterator);
     }
 
-    public static <T> ForwardOnlySequence<T> forwardOnly(final Iterable<T> iterable) {
+    public static <T> ForwardOnlySequence<T> forwardOnly(final Iterable<? extends T> iterable) {
         return forwardOnly(iterable.iterator());
     }
 
@@ -151,7 +151,7 @@ public class Sequences {
         return characters(wrap(value));
     }
 
-    public static <T, S> Sequence<S> map(final Iterable<T> iterable, final Callable1<? super T, ? extends S> callable) {
+    public static <T, S> Sequence<S> map(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends S> callable) {
         return new Sequence<S>() {
             public final Iterator<S> iterator() {
                 return Iterators.map(iterable.iterator(), callable);
@@ -159,11 +159,11 @@ public class Sequences {
         };
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
         return Iterators.partition(iterable.iterator(), predicate);
     }
 
-    public static <T> Sequence<T> filter(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+    public static <T> Sequence<T> filter(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.filter(iterable.iterator(), predicate);
@@ -219,31 +219,31 @@ public class Sequences {
         Iterators.forEach(iterable.iterator(), runnable);
     }
 
-    public static <T> T first(final Iterable<T> iterable) {
+    public static <T> T first(final Iterable<? extends T> iterable) {
         return head(iterable);
     }
 
-    public static <T> T last(final Iterable<T> iterable) {
+    public static <T> T last(final Iterable<? extends T> iterable) {
         return head(reverse(iterable));
     }
 
-    public static <T> Option<T>  lastOption(final Iterable<T> iterable) {
+    public static <T> Option<T>  lastOption(final Iterable<? extends T> iterable) {
         return headOption(reverse(iterable));
     }
 
-    public static <T> T second(final Iterable<T> iterable) {
+    public static <T> T second(final Iterable<? extends T> iterable) {
         return tail(iterable).head();
     }
 
-    public static <T> T head(final Iterable<T> iterable) {
+    public static <T> T head(final Iterable<? extends T> iterable) {
         return Iterators.head(iterable.iterator());
     }
 
-    public static <T> Option<T> headOption(final Iterable<T> iterable) {
+    public static <T> Option<T> headOption(final Iterable<? extends T> iterable) {
         return Iterators.headOption(iterable.iterator());
     }
 
-    public static <T> Sequence<T> tail(final Iterable<T> iterable) {
+    public static <T> Sequence<T> tail(final Iterable<? extends T> iterable) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.tail(iterable.iterator());
@@ -251,7 +251,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> init(final Iterable<T> iterable) {
+    public static <T> Sequence<T> init(final Iterable<? extends T> iterable) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.init(iterable.iterator());
@@ -300,15 +300,15 @@ public class Sequences {
         return Iterators.toString(iterable.iterator(), start, separator, end, limit);
     }
 
-    public static boolean isEmpty(final Iterable iterable) {
+    public static boolean isEmpty(final Iterable<?> iterable) {
         return !iterable.iterator().hasNext();
     }
 
-    public static <T> List<T> toList(final Iterable<T> iterable) {
+    public static <T> List<T> toList(final Iterable<? extends T> iterable) {
         return Iterators.toList(iterable.iterator());
     }
 
-    public static <T> Sequence<T> remove(final Iterable<T> iterable, final T t) {
+    public static <T> Sequence<T> remove(final Iterable<? extends T> iterable, final T t) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.remove(iterable.iterator(), t);
@@ -316,11 +316,11 @@ public class Sequences {
         };
     }
 
-    public static <T> Number size(final Iterable<T> iterable) {
+    public static <T> Number size(final Iterable<? extends T> iterable) {
         return Iterators.size(iterable.iterator());
     }
 
-    public static <T> Sequence<T> take(final Iterable<T> iterable, final int count) {
+    public static <T> Sequence<T> take(final Iterable<? extends T> iterable, final int count) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.take(iterable.iterator(), count);
@@ -328,7 +328,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> takeWhile(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+    public static <T> Sequence<T> takeWhile(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.takeWhile(iterable.iterator(), predicate);
@@ -336,7 +336,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> drop(final Iterable<T> iterable, final int count) {
+    public static <T> Sequence<T> drop(final Iterable<? extends T> iterable, final int count) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.drop(iterable.iterator(), count);
@@ -344,7 +344,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> dropWhile(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+    public static <T> Sequence<T> dropWhile(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.dropWhile(iterable.iterator(), predicate);
@@ -352,19 +352,19 @@ public class Sequences {
         };
     }
 
-    public static <T> boolean forAll(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+    public static <T> boolean forAll(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
         return Iterators.forAll(iterable.iterator(), predicate);
     }
 
-    public static <T> boolean contains(final Iterable<T> iterable, final T t) {
+    public static <T> boolean contains(final Iterable<? extends T> iterable, final T t) {
         return Iterators.contains(iterable.iterator(), t);
     }
 
-    public static <T> boolean exists(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+    public static <T> boolean exists(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
         return Iterators.exists(iterable.iterator(), predicate);
     }
 
-    public static <T> Option<T> find(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+    public static <T> Option<T> find(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
         return Iterators.find(iterable.iterator(), predicate);
     }
 
@@ -376,7 +376,7 @@ public class Sequences {
         return Iterators.pick(iterable.iterator(), callable);
     }
 
-    public static <T> Sequence<T> add(final Iterable<T> iterable, final T t) {
+    public static <T> Sequence<T> add(final Iterable<? extends T> iterable, final T t) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.add(iterable.iterator(), t);
@@ -416,11 +416,11 @@ public class Sequences {
         };
     }
 
-    public static <T> MemorisedSequence<T> memorise(final Iterable<T> iterable) {
+    public static <T> MemorisedSequence<T> memorise(final Iterable<? extends T> iterable) {
         return new MemorisedSequence<T>(iterable);
     }
 
-    public static <F, S> Sequence<Pair<F, S>> zip(final Iterable<F> first, final Iterable<S> second) {
+    public static <F, S> Sequence<Pair<F, S>> zip(final Iterable<? extends F> first, final Iterable<? extends S> second) {
         return new Sequence<Pair<F, S>>() {
             public final Iterator<Pair<F, S>> iterator() {
                 return new PairIterator<F, S>(first.iterator(), second.iterator());
@@ -428,7 +428,7 @@ public class Sequences {
         };
     }
 
-    public static <F, S, T> Sequence<Triple<F, S, T>> zip(final Iterable<F> first, final Iterable<S> second, final Iterable<T> third) {
+    public static <F, S, T> Sequence<Triple<F, S, T>> zip(final Iterable<? extends F> first, final Iterable<? extends S> second, final Iterable<? extends T> third) {
         return new Sequence<Triple<F, S, T>>() {
             public final Iterator<Triple<F, S, T>> iterator() {
                 return new TripleIterator<F, S, T>(first.iterator(), second.iterator(), third.iterator());
@@ -436,7 +436,7 @@ public class Sequences {
         };
     }
 
-    public static <F, S, T, Fo> Sequence<Quadruple<F, S, T, Fo>> zip(final Iterable<F> first, final Iterable<S> second, final Iterable<T> third, final Iterable<Fo> forth) {
+    public static <F, S, T, Fo> Sequence<Quadruple<F, S, T, Fo>> zip(final Iterable<? extends F> first, final Iterable<? extends S> second, final Iterable<? extends T> third, final Iterable<? extends Fo> forth) {
         return new Sequence<Quadruple<F, S, T, Fo>>() {
             public final Iterator<Quadruple<F, S, T, Fo>> iterator() {
                 return new QuadrupleIterator<F, S, T, Fo>(first.iterator(), second.iterator(), third.iterator(), forth.iterator());
@@ -444,7 +444,7 @@ public class Sequences {
         };
     }
 
-    public static <F, S, T, Fo, Fi> Sequence<Quintuple<F, S, T, Fo, Fi>> zip(final Iterable<F> first, final Iterable<S> second, final Iterable<T> third, final Iterable<Fo> forth, final Iterable<Fi> fifth) {
+    public static <F, S, T, Fo, Fi> Sequence<Quintuple<F, S, T, Fo, Fi>> zip(final Iterable<? extends F> first, final Iterable<? extends S> second, final Iterable<? extends T> third, final Iterable<? extends Fo> forth, final Iterable<? extends Fi> fifth) {
         return new Sequence<Quintuple<F, S, T, Fo, Fi>>() {
             public final Iterator<Quintuple<F, S, T, Fo, Fi>> iterator() {
                 return new QuintupleIterator<F, S, T, Fo, Fi>(first.iterator(), second.iterator(), third.iterator(), forth.iterator(), fifth.iterator());
@@ -452,16 +452,16 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<T>> iterables) {
+    public static <T> Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<? extends T>> iterables) {
         return new Sequence<Sequence<T>>() {
             public final Iterator<Sequence<T>> iterator() {
-                return new TransposeIterator<T>(sequence(iterables).map(Callables.<T>asIterator()));
+                return new TransposeIterator<T>(sequence(iterables).<Iterable<T>>unsafeCast().map(Callables.<T>asIterator()));
             }
         };
 
     }
 
-    public static <T> Sequence<Sequence<T>> transpose(final Iterable<T>... iterables) {
+    public static <T> Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables) {
         return transpose(sequence(iterables));
     }
 
@@ -492,7 +492,7 @@ public class Sequences {
                 sequence(quintuples).map(Callables.<Fi>fifth()));
     }
 
-    public static <T> Sequence<Pair<Number, T>> zipWithIndex(final Iterable<T> iterable) {
+    public static <T> Sequence<Pair<Number, T>> zipWithIndex(final Iterable<? extends T> iterable) {
         return zip(range(0), iterable);
     }
 
@@ -506,17 +506,17 @@ public class Sequences {
         return sequence(result);
     }
 
-    public static <T extends Comparable<? super T>> Sequence<T> sort(final Iterable<T> iterable) {
+    public static <T extends Comparable<? super T>> Sequence<T> sort(final Iterable<? extends T> iterable) {
         return sort(iterable, Comparators.<T>ascending());
     }
 
-    public static <T extends Comparable<? super T>> Sequence<T> sort(final Iterable<T> iterable, Comparator<? super T> comparator) {
+    public static <T extends Comparable<? super T>> Sequence<T> sort(final Iterable<? extends T> iterable, Comparator<? super T> comparator) {
         List<T> result = sequence(iterable).toList();
         Collections.sort(result, comparator);
         return sequence(result);
     }
 
-    public static <T, S> Sequence<S> safeCast(final Iterable<T> iterable, final Class<? extends S> aClass) {
+    public static <T, S> Sequence<S> safeCast(final Iterable<? extends T> iterable, final Class<? extends S> aClass) {
         return new Sequence<S>() {
             public final Iterator<S> iterator() {
                 return Iterators.safeCast(iterable.iterator(), aClass);
@@ -524,7 +524,7 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> unsafeCast(final Iterable<T> iterable) {
+    public static <T, S> Sequence<S> unsafeCast(final Iterable<? extends T> iterable) {
         return new Sequence<S>() {
             @Override
             public Iterator<S> iterator() {
@@ -534,17 +534,17 @@ public class Sequences {
     }
 
 
-    public static <T> Sequence<T> realise(final Iterable<T> iterable) {
+    public static <T> Sequence<T> realise(final Iterable<? extends T> iterable) {
         return sequence(Iterators.toList(iterable.iterator()));
     }
 
-    public static <T> Sequence<T> reverse(final Iterable<T> iterable) {
+    public static <T> Sequence<T> reverse(final Iterable<? extends T> iterable) {
         final List<T> result = sequence(iterable).toList();
         Collections.reverse(result);
         return sequence(result);
     }
 
-    public static <T> Sequence<T> cycle(final Iterable<T> iterable) {
+    public static <T> Sequence<T> cycle(final Iterable<? extends T> iterable) {
         return repeat(sequence(iterable).memorise()).flatMap(Callables.<Iterable<T>>returnArgument());
     }
 
@@ -564,7 +564,7 @@ public class Sequences {
         return Iterators.equalsTo(iterable.iterator(), other.iterator());
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterable<T> iterable, final Number index) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterable<? extends T> iterable, final Number index) {
         return Iterators.splitAt(iterable.iterator(), index);
     }
 
@@ -576,7 +576,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> splitWhen(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitWhen(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
         return Iterators.splitWhen(iterable.iterator(), predicate);
     }
 
@@ -588,7 +588,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> splitOn(final Iterable<T> iterable, final T instance) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitOn(final Iterable<? extends T> iterable, final T instance) {
         return Iterators.splitOn(iterable.iterator(), instance);
     }
 
@@ -600,11 +600,11 @@ public class Sequences {
         };
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> span(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> span(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
         return Iterators.span(iterable.iterator(), predicate);
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> breakOn(final Iterable<T> iterable, final Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> breakOn(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
         return Iterators.breakOn(iterable.iterator(), predicate);
     }
 
@@ -644,7 +644,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> interruptable(final Iterable<T> iterable) {
+    public static <T> Sequence<T> interruptable(final Iterable<? extends T> iterable) {
         return new Sequence<T>() {
             @Override
             public Iterator<T> iterator() {
