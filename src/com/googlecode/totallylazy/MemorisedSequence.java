@@ -6,14 +6,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static java.util.Collections.synchronizedList;
 
 public final class MemorisedSequence<T> extends Sequence<T> {
     private final List<T> memory = synchronizedList(new ArrayList<T>());
-    private final Iterable<T> iterable;
-    private Iterator<T> iterator = null;
+    private final Iterable<? extends T> iterable;
+    private Iterator<? extends T> iterator = null;
 
-    public MemorisedSequence(Iterable<T> iterable) {
+    public MemorisedSequence(Iterable<? extends T> iterable) {
         this.iterable = iterable;
     }
 
@@ -33,7 +34,7 @@ public final class MemorisedSequence<T> extends Sequence<T> {
             if (iterator == null) {
                 iterator = iterable.iterator();
             }
-            return iterator;
+            return cast(iterator);
         }
     }
 }

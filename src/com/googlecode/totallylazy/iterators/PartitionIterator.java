@@ -6,12 +6,12 @@ import java.util.Iterator;
 import java.util.Queue;
 
 public class PartitionIterator<T> extends StatefulIterator<T> {
-    private final Iterator<T> underlyingIterator;
+    private final Iterator<? extends T> underlyingIterator;
     private final Predicate<? super T> predicate;
     private final Queue<T> matched;
     private final Queue<T> unmatched;
 
-    public PartitionIterator(Iterator<T> underlyingIterator, Predicate<? super T> predicate, Queue<T> matched, Queue<T> unmatched) {
+    public PartitionIterator(Iterator<? extends T> underlyingIterator, Predicate<? super T> predicate, Queue<T> matched, Queue<T> unmatched) {
         this.underlyingIterator = underlyingIterator;
         this.predicate = predicate;
         this.matched = matched;

@@ -251,23 +251,23 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.forwardOnly(this);
     }
 
-    public <S> Sequence<Pair<T, S>> zip(final Iterable<S> second) {
+    public <S> Sequence<Pair<T, S>> zip(final Iterable<? extends S> second) {
         return Sequences.zip(this, second);
     }
 
-    public Sequence<Sequence<T>> transpose(final Iterable<T>... iterables){
+    public Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables){
         return transpose(sequence(iterables));
     }
 
-    public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<T>> iterables){
-        return Sequences.transpose(Sequences.cons(this, sequence(iterables)));
+    public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<? extends T>> iterables){
+        return Sequences.transpose(Sequences.cons(this, sequence(iterables).<Iterable<T>>unsafeCast()));
     }
 
-    public <S, Th> Sequence<Triple<T, S, Th>> zip(final Iterable<S> second, final Iterable<Th> third) {
+    public <S, Th> Sequence<Triple<T, S, Th>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third) {
         return Sequences.zip(this, second, third);
     }
 
-    public <S, Th, Fo> Sequence<Quadruple<T, S, Th, Fo>> zip(final Iterable<S> second, final Iterable<Th> third, final Iterable<Fo> fourth) {
+    public <S, Th, Fo> Sequence<Quadruple<T, S, Th, Fo>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third, final Iterable<? extends Fo> fourth) {
         return Sequences.zip(this, second, third, fourth);
     }
 

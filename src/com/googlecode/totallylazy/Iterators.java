@@ -73,7 +73,7 @@ public class Iterators {
         return flattenIterable(map(iterator, callable));
     }
 
-    public static <T> Iterator<T> filter(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+    public static <T> Iterator<T> filter(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         return new FilterIterator<T>(iterator, predicate);
     }
 
@@ -81,18 +81,18 @@ public class Iterators {
         return new IterateIterator<T>(nullGuard(callable), t);
     }
 
-    public static <T> T head(final Iterator<T> iterator) {
+    public static <T> T head(final Iterator<? extends T> iterator) {
         if (iterator.hasNext()) {
             return iterator.next();
         }
         throw new NoSuchElementException();
     }
 
-    public static <T> Option<T> headOption(final Iterator<T> iterator) {
+    public static <T> Option<T> headOption(final Iterator<? extends T> iterator) {
         return iterator.hasNext() ? some(iterator.next()) : Option.<T>none();
     }
 
-    public static <T> Iterator<T> tail(final Iterator<T> iterator) {
+    public static <T> Iterator<T> tail(final Iterator<? extends T> iterator) {
         if (iterator.hasNext()) {
             iterator.next();
             return new PeekingIterator<T>(iterator);
@@ -100,15 +100,15 @@ public class Iterators {
         throw new NoSuchElementException();
     }
 
-    public static <T> Iterator<T> init(final Iterator<T> iterator) {
+    public static <T> Iterator<T> init(final Iterator<? extends T> iterator) {
         return new InitIterator<T>(iterator);
     }
 
-    public static <T, S> S fold(final Iterator<T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S fold(final Iterator<? extends T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         return foldLeft(iterator, seed, callable);
     }
 
-    public static <T, S> S foldLeft(final Iterator<T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S foldLeft(final Iterator<? extends T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         S accumulator = seed;
         while (iterator.hasNext()) {
             accumulator = call(callable, accumulator, iterator.next());
@@ -116,11 +116,11 @@ public class Iterators {
         return accumulator;
     }
 
-    public static <T, S> S reduce(final Iterator<T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S reduce(final Iterator<? extends T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
         return reduceLeft(iterator, callable);
     }
 
-    public static <T, S> S reduceLeft(final Iterator<T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S reduceLeft(final Iterator<? extends T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
         return foldLeft(iterator, Unchecked.<S>cast(iterator.next()), callable);
     }
 
@@ -152,7 +152,7 @@ public class Iterators {
         return builder.toString();
     }
 
-    public static <T> List<T> toList(final Iterator<T> iterator) {
+    public static <T> List<T> toList(final Iterator<? extends T> iterator) {
         final List<T> result = new ArrayList<T>();
         while (iterator.hasNext()) {
             result.add(iterator.next());
@@ -180,27 +180,27 @@ public class Iterators {
         return new RangerIterator(start, end, step);
     }
 
-    public static <T> Iterator<T> remove(final Iterator<T> iterator, final T t) {
+    public static <T> Iterator<T> remove(final Iterator<? extends T> iterator, final T t) {
         return filter(iterator, not(onlyOnce(is(t))));
     }
 
-    public static <T> Iterator<T> take(final Iterator<T> iterator, final int count) {
+    public static <T> Iterator<T> take(final Iterator<? extends T> iterator, final int count) {
         return takeWhile(iterator, Predicates.countTo(count));
     }
 
-    public static <T> Iterator<T> takeWhile(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+    public static <T> Iterator<T> takeWhile(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         return new TakeWhileIterator<T>(iterator, predicate);
     }
 
-    public static <T> Iterator<T> drop(final Iterator<T> iterator, final int count) {
+    public static <T> Iterator<T> drop(final Iterator<? extends T> iterator, final int count) {
         return dropWhile(iterator, Predicates.countTo(count));
     }
 
-    public static <T> Iterator<T> dropWhile(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+    public static <T> Iterator<T> dropWhile(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         return filter(iterator, not(whileTrue(predicate)));
     }
 
-    public static <T> boolean forAll(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+    public static <T> boolean forAll(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         while (iterator.hasNext()) {
             if (!predicate.matches(iterator.next())) {
                 return false;
@@ -209,11 +209,11 @@ public class Iterators {
         return true;
     }
 
-    public static <T> boolean contains(final Iterator<T> iterator, final T t) {
+    public static <T> boolean contains(final Iterator<? extends T> iterator, final T t) {
         return exists(iterator, is(t));
     }
 
-    public static <T> boolean exists(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+    public static <T> boolean exists(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         while (iterator.hasNext()) {
             boolean result = predicate.matches(iterator.next());
             if (result) {
@@ -223,7 +223,7 @@ public class Iterators {
         return false;
     }
 
-    public static <T> Option<T> find(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+    public static <T> Option<T> find(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         while (iterator.hasNext()) {
             T item = iterator.next();
             boolean result = predicate.matches(item);
@@ -249,7 +249,7 @@ public class Iterators {
         return tryPick(iterator, callable).get();
     }
 
-    public static <T> Iterator<T> add(final Iterator<T> iterator, final T t) {
+    public static <T> Iterator<T> add(final Iterator<? extends T> iterator, final T t) {
         return join(iterator, sequence(t).iterator());
     }
 
@@ -259,11 +259,11 @@ public class Iterators {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Iterator<T> join(final Iterator<T> first, final Iterator<T> second, final Iterator<T> third) {
+    public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<T> second, final Iterator<T> third) {
         return internalJoin(first, second, third);
     }
 
-    public static <T> Iterator<T> join(final Iterator<T>... iterators) {
+    public static <T> Iterator<T> join(final Iterator<? extends T>... iterators) {
         return internalJoin(iterators);
     }
 
@@ -279,15 +279,15 @@ public class Iterators {
         return join(one(t).iterator(), iterator);
     }
 
-    public static <T, S> Iterator<S> safeCast(final Iterator<T> iterator, final Class<? extends S> aClass) {
+    public static <T, S> Iterator<S> safeCast(final Iterator<? extends T> iterator, final Class<? extends S> aClass) {
         return map(filter(iterator, instanceOf(aClass)), Callables.cast(aClass));
     }
 
-    public static <T, S> Iterator<S> unsafeCast(final Iterator<T> iterator) {
+    public static <T, S> Iterator<S> unsafeCast(final Iterator<? extends T> iterator) {
         return map(iterator, Callables.<T, S>cast());
     }
 
-    public static <T> Number size(final Iterator<T> iterator) {
+    public static <T> Number size(final Iterator<? extends T> iterator) {
         Number count = 0;
         while (iterator.hasNext()) {
             iterator.next();
@@ -296,31 +296,31 @@ public class Iterators {
         return count;
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         final Queue<T> matchedQueue = new LinkedList<T>();
         final Queue<T> unmatchedUnmatched = new LinkedList<T>();
         return Pair.pair(memorise(new PartitionIterator<T>(iterator, predicate, matchedQueue, unmatchedUnmatched)),
                 memorise(new PartitionIterator<T>(iterator, Predicates.<T>not(predicate), unmatchedUnmatched, matchedQueue)));
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterator<T> iterator, final Number index) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterator<? extends T> iterator, final Number index) {
         return partition(iterator, Predicates.countTo(index));
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> splitWhen(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitWhen(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         Pair<Sequence<T>, Sequence<T>> partition = breakOn(iterator, predicate);
         return Pair.pair(partition.first(), partition.second().isEmpty() ? Sequences.<T>empty() : partition.second().tail());
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> splitOn(final Iterator<T> iterator, final T instance) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitOn(final Iterator<? extends T> iterator, final T instance) {
         return splitWhen(iterator, is(instance));
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> span(Iterator<T> iterator, Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> span(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         return partition(iterator, whileTrue(predicate));
     }
 
-    public static <T> Pair<Sequence<T>, Sequence<T>> breakOn(Iterator<T> iterator, Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> breakOn(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         return partition(iterator, whileTrue(Predicates.<T>not(predicate)));
     }
 
@@ -358,7 +358,7 @@ public class Iterators {
         return flatten(map(noWildCards, Callables.<T>asIterator()));
     }
 
-    public static <T> Iterator<T> interruptable(Iterator<T> iterator) {
+    public static <T> Iterator<T> interruptable(final Iterator<? extends T> iterator) {
         return map(iterator, Callables.<T>returnArgument().interruptable());
     }
 }

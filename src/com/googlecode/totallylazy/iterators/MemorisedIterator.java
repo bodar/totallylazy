@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public final class MemorisedIterator<T> extends ReadOnlyListIterator<T> {
-    private final Iterator<T> iterator;
+    private final Iterator<? extends T> iterator;
     private final List<T> memory;
     private volatile int position = 0;
 
-    public MemorisedIterator(final Iterator<T> iterator, final List<T> memory) {
+    public MemorisedIterator(final Iterator<? extends T> iterator, final List<T> memory) {
         this.iterator = iterator;
         this.memory = memory;
     }

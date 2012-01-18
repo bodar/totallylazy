@@ -5,10 +5,10 @@ import com.googlecode.totallylazy.Predicate;
 import java.util.Iterator;
 
 public final class FilterIterator<T> extends StatefulIterator<T> {
-    private final Iterator<T> iterator;
+    private final Iterator<? extends T> iterator;
     private final Predicate<? super T> predicate;
 
-    public FilterIterator(final Iterator<T> iterator, final Predicate<? super T> predicate) {
+    public FilterIterator(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }
