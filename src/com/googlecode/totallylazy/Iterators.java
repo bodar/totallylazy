@@ -39,7 +39,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 
 public class Iterators {
-    public static boolean equalsTo(Iterator a, Iterator b) {
+    public static boolean equalsTo(Iterator<?> a, Iterator<?> b) {
         while (a.hasNext() && b.hasNext()) {
             Object aValue = a.next();
             Object bValue = b.next();
@@ -349,11 +349,11 @@ public class Iterators {
         };
     }
 
-    public static <T> Iterator<T> flatten(Iterator<? extends Iterator<? extends T>> iterator) {
+    public static <T> Iterator<T> flatten(final Iterator<? extends Iterator<? extends T>> iterator) {
         return new FlattenIterator<T>(iterator);
     }
 
-    public static <T> Iterator<T> flattenIterable(Iterator<? extends Iterable<? extends T>> iterator) {
+    public static <T> Iterator<T> flattenIterable(final Iterator<? extends Iterable<? extends T>> iterator) {
         Iterator<Iterable<T>> noWildCards = unsafeCast(iterator);
         return flatten(map(noWildCards, Callables.<T>asIterator()));
     }

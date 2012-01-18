@@ -560,7 +560,7 @@ public class Sequences {
         return Iterators.groupBy(iterable.iterator(), callable);
     }
 
-    public static boolean equalTo(Iterable iterable, Iterable other) {
+    public static boolean equalTo(Iterable<?> iterable, Iterable<?> other) {
         return Iterators.equalsTo(iterable.iterator(), other.iterator());
     }
 
@@ -625,7 +625,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> shuffle(Iterable<T> iterable) {
+    public static <T> Sequence<T> shuffle(final Iterable<? extends T> iterable) {
         List<T> list = sequence(iterable).toList();
         Collections.shuffle(list);
         return sequence(list);
