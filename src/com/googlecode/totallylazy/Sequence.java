@@ -271,6 +271,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.zip(this, second, third, fourth);
     }
 
+    public <S, Th, Fo, Fi> Sequence<Quintuple<T, S, Th, Fo, Fi>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third, final Iterable<? extends Fo> fourth, final Iterable<? extends Fi> fifth) {
+        return Sequences.zip(this, second, third, fourth, fifth);
+    }
+
     public Sequence<Pair<Number, T>> zipWithIndex() {
         return Sequences.zipWithIndex(this);
     }
