@@ -541,7 +541,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> cycle(final Iterable<? extends T> iterable) {
-        return repeat(sequence(iterable).memorise()).flatMap(Callables.<Iterable<T>>returnArgument());
+        return flatten(repeat(memorise(iterable)));
     }
 
     public static <T, S> Sequence<S> mapConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends S> callable) {
