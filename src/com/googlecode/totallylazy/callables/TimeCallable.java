@@ -8,8 +8,6 @@ import com.googlecode.totallylazy.Sequence;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callables.curry;
-
 public final class TimeCallable<T> extends Function<T> {
     private static final String FORMAT = "Elapsed time: %s msecs";
     private static final Callable1<Double, Void> DEFAULT_REPORTER = Runnables.printLine(FORMAT);
@@ -45,7 +43,7 @@ public final class TimeCallable<T> extends Function<T> {
     }
 
     public static <T,R> TimeCallable<R> time(Callable1<? super T,? extends R> callable, T value, Callable1<? super Double, Void> reporter){
-        return new TimeCallable<R>(curry(callable, value), reporter);
+        return new TimeCallable<R>(Callables.partial(callable, value), reporter);
     }
 
     public static <T> TimeCallable<Sequence<T>> time(Sequence<T> sequence){

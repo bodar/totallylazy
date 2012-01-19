@@ -325,15 +325,32 @@ public final class Callables {
         };
     }
 
-    public static <A, B, C> Function1<B, C> curry(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
+    public static <A, B, C> Function1<B, C> partial(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
         return Callables.<A, B, C>curry(callable).apply(value);
     }
 
-    public static <A, B, C> Function<C> curry(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
+    public static <A, B, C> Function<C> partial(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
         return new Function<C>() {
             @Override
             public C call() throws Exception {
                 return callable.call(a, b);
+            }
+        };
+    }
+
+    public static <A, B> Function<B> partial(final Callable1<? super A, ? extends B> callable, final A value) {
+        return new Function<B>() {
+            public final B call() throws Exception {
+                return callable.call(value);
+            }
+        };
+    }
+
+    public static <A, B, C, D> Function2<B, C, D> partial(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
+        return new Function2<B, C, D>() {
+            @Override
+            public D call(B b, C c) throws Exception {
+                return callable.call(value, b, c);
             }
         };
     }
@@ -350,10 +367,21 @@ public final class Callables {
         };
     }
 
-    public static <A, B> Function<B> curry(final Callable1<? super A, ? extends B> callable, final A value) {
-        return new Function<B>() {
-            public final B call() throws Exception {
-                return callable.call(value);
+    public static <A, B, C, D> Function1<A, Function1<B, Function1<C, D>>> curry(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
+        return new Function1<A, Function1<B, Function1<C, D>>>() {
+            @Override
+            public Function1<B, Function1<C, D>> call(final A a) throws Exception {
+                return new Function1<B, Function1<C, D>>() {
+                    @Override
+                    public Function1<C, D> call(final B b) throws Exception {
+                        return new Function1<C, D>() {
+                            @Override
+                            public D call(C c) throws Exception {
+                                return callable.call(a, b, c);
+                            }
+                        };
+                    }
+                };
             }
         };
     }
@@ -361,7 +389,7 @@ public final class Callables {
     public static <A, B> Function1<A, Function<B>> deferExecution(final Callable1<? super A, ? extends B> callable) {
         return new Function1<A, Function<B>>() {
             public Function<B> call(A a) throws Exception {
-                return Callables.curry(callable, a);
+                return Callables.partial(callable, a);
             }
         };
     }

@@ -6,6 +6,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import static com.googlecode.totallylazy.Unchecked.cast;
+
 public class Matchers {
     public static <T> LogicalPredicate<T> predicate(final Matcher<T> matcher) {
         return new LogicalPredicate<T>() {
@@ -29,8 +31,7 @@ public class Matchers {
     }
 
     // fix broken Hamcrest 1.2 return type
-    @SuppressWarnings("unchecked")
     public static <T> Matcher<T> is(T t) {
-        return (Matcher<T>) org.hamcrest.Matchers.is(t);
+        return cast(org.hamcrest.Matchers.is(t));
     }
 }

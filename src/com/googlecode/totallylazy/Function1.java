@@ -20,7 +20,7 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Fun
     }
 
     public Function<B> curry(final A a) {
-        return Callables.curry(this, a);
+        return Callables.partial(this, a);
     }
 
     public Function1<A, B> lazy() {
