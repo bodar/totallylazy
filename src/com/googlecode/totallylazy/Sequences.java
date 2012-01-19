@@ -14,6 +14,7 @@ import com.googlecode.totallylazy.predicates.UniquePredicate;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -304,6 +305,10 @@ public class Sequences {
         return Iterators.toList(iterable.iterator());
     }
 
+    public static <T> Deque<T> toDeque(final Iterable<? extends T> iterable) {
+        return Iterators.toDeque(iterable.iterator());
+    }
+
     public static <T> Sequence<T> remove(final Iterable<? extends T> iterable, final T t) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
@@ -535,7 +540,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> reverse(final Iterable<? extends T> iterable) {
-        final List<T> result = sequence(iterable).toList();
+        final List<T> result = toList(iterable);
         Collections.reverse(result);
         return sequence(result);
     }

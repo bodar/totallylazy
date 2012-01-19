@@ -12,7 +12,9 @@ import com.googlecode.totallylazy.iterators.RepeatIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -154,6 +156,14 @@ public class Iterators {
 
     public static <T> List<T> toList(final Iterator<? extends T> iterator) {
         final List<T> result = new ArrayList<T>();
+        while (iterator.hasNext()) {
+            result.add(iterator.next());
+        }
+        return result;
+    }
+
+    public static <T> Deque<T> toDeque(final Iterator<? extends T> iterator) {
+        final Deque<T> result = new ArrayDeque<T>();
         while (iterator.hasNext()) {
             result.add(iterator.next());
         }

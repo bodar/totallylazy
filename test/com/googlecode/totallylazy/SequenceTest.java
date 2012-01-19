@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
@@ -10,9 +11,11 @@ import com.googlecode.yatspec.junit.SpecRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -47,6 +50,7 @@ import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.comparators.Comparators.comparators;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
@@ -261,7 +265,6 @@ public class SequenceTest {
         assertThat(result.second(), hasExactly(1, 3));
     }
 
-
     @Test
     public void supportsReverse() throws Exception {
         assertThat(sequence(1, 2, 3).reverse(), hasExactly(3, 2, 1));
@@ -471,6 +474,12 @@ public class SequenceTest {
     @Test
     public void canConvertToList() throws Exception {
         final List<Integer> aList = sequence(1, 2).toList();
+        assertThat(aList, hasExactly(1, 2));
+    }
+
+    @Test
+    public void canConvertToDeque() throws Exception {
+        final Deque<Integer> aList = sequence(1, 2).toDeque();
         assertThat(aList, hasExactly(1, 2));
     }
 
