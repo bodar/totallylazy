@@ -317,8 +317,16 @@ public final class Callables {
         return call();
     }
 
+    public static <T, R> Function1<Callable1<T, R>, R> callWith(final T value) {
+        return new Function1<Callable1<T, R>, R>() {
+            public final R call(final Callable1<T, R> callable) throws Exception {
+                return callable.call(value);
+            }
+        };
+    }
+
     public static <A, B, C> Function1<B, C> curry(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
-        return Callables.<A,B,C>curry(callable).apply(value);
+        return Callables.<A, B, C>curry(callable).apply(value);
     }
 
     public static <A, B, C> Function<C> curry(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {

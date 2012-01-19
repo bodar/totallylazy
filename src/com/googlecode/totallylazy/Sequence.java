@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import java.lang.reflect.Array;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -173,6 +174,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
 
     public List<T> toList() {
         return Sequences.toList(this);
+    }
+
+    public Deque<T> toDeque() {
+        return Sequences.toDeque(this);
     }
 
     public T[] toArray(final Class<?> aClass) {
