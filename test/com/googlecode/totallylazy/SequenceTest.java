@@ -34,6 +34,7 @@ import static com.googlecode.totallylazy.Predicates.greaterThan;
 import static com.googlecode.totallylazy.Predicates.lessThan;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
+import static com.googlecode.totallylazy.Quintuple.quintuple;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
@@ -641,10 +642,15 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsZipToQuintuple() {
+        assertThat(zip(sequence(1, 3, 5), sequence(2, 4, 6, 8), sequence("car", "cat"), sequence('C'), sequence('D')), hasExactly(quintuple(1, 2, "car", 'C', 'D')));
+        assertThat(sequence(1, 3, 5).zip(sequence(2, 4, 6, 8), sequence("car", "cat"), sequence('C'), sequence('D')), hasExactly(quintuple(1, 2, "car", 'C', 'D')));
+    }
+
+    @Test
     public void supportsZipWithIndex() {
         assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(), hasExactly(pair((Number) 0, "Dan"), pair((Number) 1, "Matt"), pair((Number) 2, "Bob")));
     }
-
 
     @Test
     public void supportsForwardOnly() throws Exception {
