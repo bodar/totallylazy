@@ -14,7 +14,7 @@ public final class MemorisedSequence<T> extends Sequence<T> {
     private final Iterable<? extends T> iterable;
     private Iterator<? extends T> iterator = null;
 
-    public MemorisedSequence(Iterable<? extends T> iterable) {
+    public MemorisedSequence(final Iterable<? extends T> iterable) {
         this.iterable = iterable;
     }
 
