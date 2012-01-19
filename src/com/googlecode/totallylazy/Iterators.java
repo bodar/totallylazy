@@ -253,21 +253,23 @@ public class Iterators {
         return join(iterator, sequence(t).iterator());
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<? extends T> second) {
-        return internalJoin(first, second);
+        return join(sequence(first, second));
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<T> second, final Iterator<T> third) {
-        return internalJoin(first, second, third);
+    public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<? extends T> second, final Iterator<? extends T> third) {
+        return join(sequence(first, second, third));
+    }
+
+    public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<? extends T> second, final Iterator<? extends T> third, final Iterator<? extends T> fourth) {
+        return join(sequence(first, second, third, fourth));
+    }
+
+    public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<? extends T> second, final Iterator<? extends T> third, final Iterator<? extends T> fourth, final Iterator<? extends T> fifth) {
+        return join(sequence(first, second, third, fourth, fifth));
     }
 
     public static <T> Iterator<T> join(final Iterator<? extends T>... iterators) {
-        return internalJoin(iterators);
-    }
-
-    private static <T> Iterator<T> internalJoin(final Iterator<? extends T>... iterators) {
         return join(sequence(iterators));
     }
 
