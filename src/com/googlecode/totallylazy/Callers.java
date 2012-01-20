@@ -8,22 +8,23 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
+import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callers {
-    public static <T> Sequence<T> callConcurrently(final Callable<? extends T>first, final Callable<? extends T>second) {
+    public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second) {
         return callConcurrently(sequence(first, second));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Callable<? extends T>first, final Callable<? extends T>second, final Callable<? extends T>third) {
+    public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second, final Callable<? extends T> third) {
         return callConcurrently(sequence(first, second, third));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Callable<? extends T>first, final Callable<? extends T>second, final Callable<? extends T>third, final Callable<? extends T>fourth) {
+    public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second, final Callable<? extends T> third, final Callable<? extends T> fourth) {
         return callConcurrently(sequence(first, second, third, fourth));
     }
 
-    public static <T> Sequence<T> callConcurrently(final Callable<? extends T>first, final Callable<? extends T>second, final Callable<? extends T>third, final Callable<? extends T>fourth, final Callable<? extends T>fifth) {
+    public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second, final Callable<? extends T> third, final Callable<? extends T> fourth, final Callable<? extends T> fifth) {
         return callConcurrently(sequence(first, second, third, fourth, fifth));
     }
 
@@ -83,30 +84,32 @@ public final class Callers {
     public static <T> T call(final Callable<? extends T> callable) {
         try {
             return callable.call();
-        } catch (RuntimeException e) {
-            throw e;
         } catch (Exception e) {
-            throw LazyException.lazyException(e);
+            throw lazyException(e);
         }
     }
 
     public static <T, S> S call(final Callable1<? super T, ? extends S> callable, final T t) {
         try {
             return callable.call(t);
-        } catch (RuntimeException e) {
-            throw e;
         } catch (Exception e) {
-            throw LazyException.lazyException(e);
+            throw lazyException(e);
         }
     }
 
     public static <T, S, R> R call(final Callable2<? super T, ? super S, ? extends R> callable, final T t, final S s) {
         try {
             return callable.call(t, s);
-        } catch (RuntimeException e) {
-            throw e;
         } catch (Exception e) {
-            throw LazyException.lazyException(e);
+            throw lazyException(e);
+        }
+    }
+
+    public static <A, B, C, D> D call(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A a, final B b, final C c) {
+        try {
+            return callable.call(a, b, c);
+        } catch (Exception e) {
+            throw lazyException(e);
         }
     }
 }

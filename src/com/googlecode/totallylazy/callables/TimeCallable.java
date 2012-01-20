@@ -43,7 +43,7 @@ public final class TimeCallable<T> extends Function<T> {
     }
 
     public static <T,R> TimeCallable<R> time(Callable1<? super T,? extends R> callable, T value, Callable1<? super Double, Void> reporter){
-        return new TimeCallable<R>(Callables.partial(callable, value), reporter);
+        return new TimeCallable<R>(Callables.deferApply(callable, value), reporter);
     }
 
     public static <T> TimeCallable<Sequence<T>> time(Sequence<T> sequence){

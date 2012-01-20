@@ -19,8 +19,8 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Fun
         return Callers.call(this, a);
     }
 
-    public Function<B> curry(final A a) {
-        return Callables.partial(this, a);
+    public Function<B> deferApply(final A a) {
+        return Callables.deferApply(this, a);
     }
 
     public Function1<A, B> lazy() {
@@ -57,7 +57,7 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Fun
     }
 
     public Function1<A, Function<B>> deferExecution() {
-        return Callables.deferExecution(this);
+        return Callables.deferReturn(this);
     }
 
     public static <A,B> Function1<A, B> returns1(final B result) {

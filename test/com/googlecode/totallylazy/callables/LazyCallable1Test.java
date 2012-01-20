@@ -18,8 +18,8 @@ public class LazyCallable1Test {
         Function1<Number, Number> lazyCallable1 = counting.sleep(10).lazy();
 
         Sequence<Number> result = callConcurrently(
-                lazyCallable1.curry(3), lazyCallable1.curry(6),
-                lazyCallable1.curry(3), lazyCallable1.curry(6)).realise();
+                lazyCallable1.deferApply(3), lazyCallable1.deferApply(6),
+                lazyCallable1.deferApply(3), lazyCallable1.deferApply(6)).realise();
 
         assertThat(counting.count(3), is(1));
         assertThat(counting.count(6), is(1));

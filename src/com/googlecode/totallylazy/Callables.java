@@ -325,11 +325,7 @@ public final class Callables {
         };
     }
 
-    public static <A, B, C> Function1<B, C> partial(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
-        return Callables.<A, B, C>curry(callable).apply(value);
-    }
-
-    public static <A, B, C> Function<C> partial(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
+    public static <A, B, C> Function<C> deferApply(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
         return new Function<C>() {
             @Override
             public C call() throws Exception {
@@ -338,7 +334,7 @@ public final class Callables {
         };
     }
 
-    public static <A, B> Function<B> partial(final Callable1<? super A, ? extends B> callable, final A value) {
+    public static <A, B> Function<B> deferApply(final Callable1<? super A, ? extends B> callable, final A value) {
         return new Function<B>() {
             public final B call() throws Exception {
                 return callable.call(value);
@@ -346,60 +342,37 @@ public final class Callables {
         };
     }
 
-    public static <A, B, C, D> Function2<B, C, D> partial(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
-        return new Function2<B, C, D>() {
-            @Override
-            public D call(B b, C c) throws Exception {
-                return callable.call(value, b, c);
+    public static <A, B> Function1<A, Function<B>> deferReturn(final Callable1<? super A, ? extends B> callable) {
+        return new Function1<A, Function<B>>() {
+            public Function<B> call(A a) throws Exception {
+                return Callables.deferApply(callable, a);
             }
         };
+    }
+
+    public static <A, B, C> Function1<B, C> apply(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
+        return Function2.apply(callable, value);
+    }
+
+
+    public static <A, B, C, D> Function2<B, C, D> apply(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
+        return Function3.apply(callable, value);
     }
 
     public static <A, B, C> Function1<A, Function1<B, C>> curry(final Callable2<? super A, ? super B, ? extends C> callable) {
-        return new Function1<A, Function1<B, C>>() {
-            public final Function1<B, C> call(final A a) throws Exception {
-                return new Function1<B, C>() {
-                    public final C call(final B b) throws Exception {
-                        return callable.call(a, b);
-                    }
-                };
-            }
-        };
+        return Function2.curry(callable);
     }
 
     public static <A, B, C, D> Function1<A, Function1<B, Function1<C, D>>> curry(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
-        return new Function1<A, Function1<B, Function1<C, D>>>() {
-            @Override
-            public Function1<B, Function1<C, D>> call(final A a) throws Exception {
-                return new Function1<B, Function1<C, D>>() {
-                    @Override
-                    public Function1<C, D> call(final B b) throws Exception {
-                        return new Function1<C, D>() {
-                            @Override
-                            public D call(C c) throws Exception {
-                                return callable.call(a, b, c);
-                            }
-                        };
-                    }
-                };
-            }
-        };
+        return Function3.curry(callable);
     }
 
-    public static <A, B> Function1<A, Function<B>> deferExecution(final Callable1<? super A, ? extends B> callable) {
-        return new Function1<A, Function<B>>() {
-            public Function<B> call(A a) throws Exception {
-                return Callables.partial(callable, a);
-            }
-        };
+    public static <A, B, C> Function2<A, B, C> uncurry2(final Callable1<? super A, ? extends Callable1<? super B, ? extends C>> callable) {
+        return Function2.uncurry2(callable);
     }
 
-    public static <A, B, C> Function2<A, B, C> unCurry(final Callable1<? super A, ? extends Callable1<? super B, ? extends C>> callable) {
-        return new Function2<A, B, C>() {
-            public final C call(final A a, final B b) throws Exception {
-                return callable.call(a).call(b);
-            }
-        };
+    public static <A, B, C, D> Function3<A, B, C, D> uncurry3(final Callable1<? super A, ? extends Callable1<? super B, ? extends Callable1<? super C, ? extends D>>> callable) {
+        return Function3.uncurry3(callable);
     }
 
     public static <L> Function1<Either<L, ?>, L> left(Class<L> aClass) {
@@ -478,7 +451,7 @@ public final class Callables {
         };
     }
 
-    public static <A, B, C> Function1<Pair<A, B>, C> paired(final Callable2<? super A, ? super B, ? extends C> function) {
+    public static <A, B, C> Function1<Pair<A, B>, C> pair(final Callable2<? super A, ? super B, ? extends C> function) {
         return new Function1<Pair<A, B>, C>() {
             @Override
             public C call(Pair<A, B> pair) throws Exception {
@@ -487,11 +460,20 @@ public final class Callables {
         };
     }
 
-    public static <A, B, C> Function2<A, B, C> unpaired(final Callable1<? super Pair<? extends A, ? extends B>, ? extends C> function) {
+    public static <A, B, C> Function2<A, B, C> unpair(final Callable1<? super Pair<? extends A, ? extends B>, ? extends C> function) {
         return new Function2<A, B, C>() {
             @Override
             public C call(A a, B b) throws Exception {
                 return function.call(Pair.pair(a, b));
+            }
+        };
+    }
+
+    public static <A, B, C, D>Function1<Triple<A, B, C>, D> triple(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
+        return new Function1<Triple<A, B, C>, D>() {
+            @Override
+            public D call(Triple<A, B, C> triple) throws Exception {
+                return callable.call(triple.first(), triple.second(), triple.third());
             }
         };
     }
