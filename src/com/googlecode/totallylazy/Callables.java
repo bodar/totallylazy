@@ -477,4 +477,15 @@ public final class Callables {
             }
         };
     }
+
+    public static <A, B, C, D> Function3<A, B, C, D> untriple(final Callable1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> function) {
+        return new Function3<A, B, C, D>() {
+            @Override
+            public D call(A a, B b, C c) throws Exception {
+                return function.call(Triple.triple(a, b, c));
+            }
+        };
+    }
+
+
 }

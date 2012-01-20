@@ -24,6 +24,7 @@ import java.util.Queue;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.nullGuard;
+import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
@@ -126,7 +127,7 @@ public class Iterators {
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
         if(!iterator.hasNext()) return seed;
-        return Callers.call(callable, Pair.pair(head(iterator), new Function<S>() {
+        return Callers.call(callable, Pair.pair(returns(head(iterator)), new Function<S>() {
             @Override
             public S call() throws Exception {
                 return foldRight(iterator, seed, callable);
