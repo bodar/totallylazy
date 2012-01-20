@@ -281,8 +281,11 @@ public class Sequences {
     }
 
     public static <T, S> S reduceRight(final Iterable<? extends T> iterable, final Callable2<? super T, ? super S, ? extends S> callable) {
-        Iterator<T> iterator = Unchecked.cast(iterable.iterator());
-        return foldRight(forwardOnly(iterator), Unchecked.<S>cast(iterator.next()), callable);
+        return Iterators.reduceRight(iterable.iterator(), callable);
+    }
+
+    public static <T, S> S reduceRight(final Iterable<? extends T> iterable, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+        return Iterators.reduceRight(iterable.iterator(), callable);
     }
 
     public static String toString(final Iterable iterable) {

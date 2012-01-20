@@ -132,6 +132,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
         return Sequences.reduceRight(this, callable);
     }
 
+    public <S> S reduceRight(final Callable1<? super Pair<T, S>, ? extends S> callable) {
+        return Sequences.reduceRight(this, callable);
+    }
+
     public String toString() {
         return Sequences.toString(this);
     }
