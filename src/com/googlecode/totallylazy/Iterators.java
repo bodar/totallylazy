@@ -10,6 +10,7 @@ import com.googlecode.totallylazy.iterators.PeekingIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
+import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.ArrayDeque;
@@ -397,5 +398,9 @@ public class Iterators {
 
     public static <T> Iterator<T> interruptable(final Iterator<? extends T> iterator) {
         return map(iterator, Callables.<T>returnArgument().interruptable());
+    }
+
+    public static <A,B> Iterator<A> unfoldRight(Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, B seed) {
+        return new UnfoldRightIterator<A,B>(callable, seed);
     }
 }

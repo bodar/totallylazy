@@ -660,4 +660,13 @@ public class Sequences {
             }
         };
     }
+
+    public static <A,B> Sequence<A> unfoldRight(final Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, final B seed) {
+        return new Sequence<A>() {
+            @Override
+            public Iterator<A> iterator() {
+                return Iterators.unfoldRight(callable, seed);
+            }
+        };
+    }
 }

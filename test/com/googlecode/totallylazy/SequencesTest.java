@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -7,6 +8,9 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Functions.or;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Quintuple.quintuple;
@@ -19,8 +23,10 @@ import static com.googlecode.totallylazy.Sequences.transpose;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
+import static com.googlecode.totallylazy.numbers.Numbers.decrement;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static com.googlecode.totallylazy.numbers.Numbers.negate;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
@@ -144,5 +150,17 @@ public class SequencesTest {
         final Sequence<Number> numbers = iterate(increment(), 1);
         assertThat(numbers.filter(even()), startsWith((Number)2, 4, 6));
         assertThat(numbers.filter(odd()), startsWith((Number)1, 3, 5, 7, 9));
+    }
+
+    @Test
+    public void supportsUnfoldRight() throws Exception {
+        Sequence<Number> result = Sequences.unfoldRight(new Function1<Number, Option<Pair<Number, Number>>>() {
+            @Override
+            public Option<Pair<Number, Number>> call(Number number) throws Exception {
+                if(number.equals(0)) return none();
+                return some(pair(number, decrement(number)));
+            }
+        }, 10);
+        assertThat(result, is(range(10,1)));
     }
 }
