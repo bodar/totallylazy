@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
-import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
@@ -15,7 +14,6 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,6 +27,8 @@ import static com.googlecode.totallylazy.Callables.length;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callables.size;
+import static com.googlecode.totallylazy.Functions.and;
+import static com.googlecode.totallylazy.Functions.or;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
@@ -169,17 +169,13 @@ public class SequenceTest {
     }
 
     @Test
-    public void supportsFoldRightWithInfiniteSequenceIfFunctionTerminatesEarly() throws Exception {
+    public void supportsFoldRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs() throws Exception {
         assertThat(repeat(false).foldRight(false, and()), is(false));
     }
 
-    private Function1<Pair<Boolean, Boolean>, Boolean> and() {
-        return new Function1<Pair<Boolean, Boolean>, Boolean>() {
-            @Override
-            public Boolean call(Pair<Boolean, Boolean> pair) throws Exception {
-                return pair.first() && pair.second();
-            }
-        };
+    @Test
+    public void supportsReduceRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs() throws Exception {
+        assertThat(repeat(true).reduceRight(or()), is(true));
     }
 
     @Test

@@ -143,6 +143,14 @@ public class Iterators {
         return foldLeft(iterator, Unchecked.<S>cast(iterator.next()), callable);
     }
 
+    public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Callable2<? super T, ? super S, ? extends S> callable) {
+        return foldRight(iterator, Unchecked.<S>cast(iterator.next()), callable);
+    }
+
+    public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+        return foldRight(iterator, Unchecked.<S>cast(iterator.next()), callable);
+    }
+
     public static String toString(final Iterator iterator) {
         return toString(iterator, ",");
     }
