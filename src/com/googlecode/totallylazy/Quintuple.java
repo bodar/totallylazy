@@ -20,6 +20,6 @@ public class Quintuple<F, S, T, Fo, Fi> extends Quadruple<F, S, T, Fo> implement
 
     @Override
     public Sequence<Object> values() {
-        return sequence(first, second, third, fourth, fifth);
+        return sequence(first(), second(), third, fourth, fifth);
     }
 }

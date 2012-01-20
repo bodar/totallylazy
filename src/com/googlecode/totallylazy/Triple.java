@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Triple<F, S, T> extends Pair<F,S> implements Third<T> {
+public class Triple<F, S, T> extends Pair<F, S> implements Third<T> {
     protected final T third;
 
     public static <F, S, T> Triple<F, S, T> triple(final F first, final S second, final T third) {
@@ -20,7 +20,7 @@ public class Triple<F, S, T> extends Pair<F,S> implements Third<T> {
 
     @Override
     public Sequence<Object> values() {
-        return sequence(first, second, third);
+        return sequence(first(), second(), third);
     }
 
 }
