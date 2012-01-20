@@ -33,9 +33,11 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
+import static com.googlecode.totallylazy.Sequences.foldRight;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Sequences.tail;
 import static com.googlecode.totallylazy.numbers.Numbers.equalTo;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
@@ -116,6 +118,20 @@ public class Iterators {
             accumulator = call(callable, accumulator, iterator.next());
         }
         return accumulator;
+    }
+
+    public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
+        return foldRight(iterator, seed, Function2.<T, S, S>function(callable).pair());
+    }
+
+    public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+        if(!iterator.hasNext()) return seed;
+        return Callers.call(callable, Pair.pair(head(iterator), new Function<S>() {
+            @Override
+            public S call() throws Exception {
+                return foldRight(iterator, seed, callable);
+            }
+        }));
     }
 
     public static <T, S> S reduce(final Iterator<? extends T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {

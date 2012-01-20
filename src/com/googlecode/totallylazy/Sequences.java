@@ -265,7 +265,11 @@ public class Sequences {
     }
 
     public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
-        return foldLeft(sequence(iterable).reverse(), seed, flip(callable));
+        return Iterators.foldRight(iterable.iterator(), seed, callable);
+    }
+
+    public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+        return Iterators.foldRight(iterable.iterator(), seed, callable);
     }
 
     public static <T, S> S reduce(final Iterable<? extends T> iterable, final Callable2<? super S, ? super T, ? extends S> callable) {

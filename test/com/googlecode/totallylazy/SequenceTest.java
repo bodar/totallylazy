@@ -169,6 +169,20 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsFoldRightWithInfiniteSequenceIfFunctionTerminatesEarly() throws Exception {
+        assertThat(repeat(false).foldRight(false, and()), is(false));
+    }
+
+    private Function1<Pair<Boolean, Boolean>, Boolean> and() {
+        return new Function1<Pair<Boolean, Boolean>, Boolean>() {
+            @Override
+            public Boolean call(Pair<Boolean, Boolean> pair) throws Exception {
+                return pair.first() && pair.second();
+            }
+        };
+    }
+
+    @Test
     public void supportsBreak() throws Exception {
         assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).breakOn(greaterThan(3)),
                 is(pair(sequence(1, 2, 3), sequence(4, 1, 2, 3, 4))));
