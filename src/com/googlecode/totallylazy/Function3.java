@@ -42,6 +42,24 @@ public abstract class Function3<A, B, C, D> extends Function2<A, B, Function1<C,
     }
 
     public Function1<Triple<A, B, C>, D> triple() {
-        return Callables.triple(this);
+        return Function3.<A,B,C,D>triple(this);
+    }
+
+    public static <A, B, C, D>Function1<Triple<A, B, C>, D> triple(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
+        return new Function1<Triple<A, B, C>, D>() {
+            @Override
+            public D call(Triple<A, B, C> triple) throws Exception {
+                return callable.call(triple.first(), triple.second(), triple.third());
+            }
+        };
+    }
+
+    public static <A, B, C, D> Function3<A, B, C, D> untriple(final Callable1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> function) {
+        return new Function3<A, B, C, D>() {
+            @Override
+            public D call(A a, B b, C c) throws Exception {
+                return function.call(Triple.triple(a, b, c));
+            }
+        };
     }
 }
