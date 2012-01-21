@@ -2,10 +2,6 @@ package com.googlecode.totallylazy;
 
 
 public abstract class Function2<A, B, C> extends Function1<A, Function1<B, C>> implements Callable2<A, B, C> {
-    public static <A, B, C> Function1<A, Function1<B, C>> curry(final Callable2<? super A, ? super B, ? extends C> callable) {
-        return function(callable);
-    }
-
     public static <A, B, C> Function2<A, B, C> function(final Callable2<? super A, ? super B, ? extends C> callable) {
         return new Function2<A, B, C>() {
             @Override

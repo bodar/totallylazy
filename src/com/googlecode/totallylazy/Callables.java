@@ -360,11 +360,11 @@ public final class Callables {
     }
 
     public static <A, B, C> Function1<A, Function1<B, C>> curry(final Callable2<? super A, ? super B, ? extends C> callable) {
-        return Function2.curry(callable);
+        return Function2.function(callable);
     }
 
     public static <A, B, C, D> Function1<A, Function1<B, Function1<C, D>>> curry(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
-        return Function3.curry(callable);
+        return Function3.function(callable);
     }
 
     public static <A, B, C> Function2<A, B, C> uncurry2(final Callable1<? super A, ? extends Callable1<? super B, ? extends C>> callable) {
