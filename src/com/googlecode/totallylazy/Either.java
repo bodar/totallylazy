@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callers.call;
 
-public abstract class Either<L, R> implements Functor<R, Either<L, ?>>{
+public abstract class Either<L, R> implements Mappable<R, Either<L, ?>> {
     public static <L,R> Either<L,R> right(R value) {
         return new Right<L,R>(value);
     }
