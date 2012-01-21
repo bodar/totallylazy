@@ -5,6 +5,8 @@ import com.googlecode.totallylazy.callables.SleepyCallable1;
 
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.LazyException.lazyException;
+
 public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Function1<A, ?>> {
     public static <A, B> Function1<A, B> function(final Callable1<? super A, ? extends B> callable) {
         return new Function1<A, B>() {
@@ -16,7 +18,15 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Fun
     }
 
     public B apply(final A a) {
-        return Callers.call(this, a);
+        return Function1.call(this, a);
+    }
+
+    public static <A, B> B call(final Callable1<? super A, ? extends B> callable, final A a) {
+        try {
+            return callable.call(a);
+        } catch (Exception e) {
+            throw lazyException(e);
+        }
     }
 
     public Function<B> deferApply(final A a) {
