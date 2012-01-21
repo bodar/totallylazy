@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import static com.googlecode.totallylazy.LazyException.lazyException;
+
 public abstract class Function3<A, B, C, D> extends Function2<A, B, Function1<C, D>> implements Callable3<A, B, C, D> {
     public static <A, B, C, D> Function3<A, B, C, D> function(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
         return new Function3<A, B, C, D>() {
@@ -25,7 +27,15 @@ public abstract class Function3<A, B, C, D> extends Function2<A, B, Function1<C,
     }
 
     public D apply(final A a, final B b, final C c){
-        return Callers.call(this, a, b, c);
+        return Function3.<A,B,C,D>call(this, a, b, c);
+    }
+
+    public static <A, B, C, D> D call(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A a, final B b, final C c) {
+        try {
+            return callable.call(a, b, c);
+        } catch (Exception e) {
+            throw lazyException(e);
+        }
     }
 
     public static <A, B, C, D> Function3<A, B, C, D> uncurry3(final Callable1<? super A, ? extends Callable1<? super B, ? extends Callable1<? super C, ? extends D>>> callable) {

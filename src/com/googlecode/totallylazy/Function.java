@@ -6,6 +6,8 @@ import com.googlecode.totallylazy.callables.TimeCallable;
 
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.LazyException.lazyException;
+
 public abstract class Function<A> implements Callable<A>, Runnable, Functor<A, Function<?>>, Value<A> {
     public static <A> Function<A> function(final Callable<? extends A> callable) {
         return new Function<A>() {
@@ -17,7 +19,15 @@ public abstract class Function<A> implements Callable<A>, Runnable, Functor<A, F
     }
 
     public A apply() {
-        return Callers.call(this);
+        return Function.call(this);
+    }
+
+    public static <A> A call(final Callable<? extends A> callable) {
+        try {
+            return callable.call();
+        } catch (Exception e) {
+            throw lazyException(e);
+        }
     }
 
     @Override

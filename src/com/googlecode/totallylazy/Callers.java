@@ -82,34 +82,22 @@ public final class Callers {
     }
 
     public static <T> T call(final Callable<? extends T> callable) {
-        try {
-            return callable.call();
-        } catch (Exception e) {
-            throw lazyException(e);
-        }
+        return Function.call(callable);
     }
 
-    public static <T, S> S call(final Callable1<? super T, ? extends S> callable, final T t) {
-        try {
-            return callable.call(t);
-        } catch (Exception e) {
-            throw lazyException(e);
-        }
+    public static <A, B> B call(final Callable1<? super A, ? extends B> callable, final A a) {
+        return Function1.call(callable, a);
     }
 
-    public static <T, S, R> R call(final Callable2<? super T, ? super S, ? extends R> callable, final T t, final S s) {
-        try {
-            return callable.call(t, s);
-        } catch (Exception e) {
-            throw lazyException(e);
-        }
+    public static <A, B, C> C call(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
+        return Function2.call(callable, a, b);
     }
 
     public static <A, B, C, D> D call(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A a, final B b, final C c) {
-        try {
-            return callable.call(a, b, c);
-        } catch (Exception e) {
-            throw lazyException(e);
-        }
+        return Function3.call(callable, a, b, c);
+    }
+
+    public static <A, B, C, D, E> E call(final Callable4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A a, final B b, final C c, final D d) {
+        return Function4.call(callable, a, b, c, d);
     }
 }
