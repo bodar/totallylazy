@@ -100,4 +100,8 @@ public final class Callers {
     public static <A, B, C, D, E> E call(final Callable4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A a, final B b, final C c, final D d) {
         return Function4.call(callable, a, b, c, d);
     }
+
+    public static <A, B, C, D, E, F> F call(final Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A a, final B b, final C c, final D d, final E e) {
+        return Function5.call(callable, a, b, c, d, e);
+    }
 }

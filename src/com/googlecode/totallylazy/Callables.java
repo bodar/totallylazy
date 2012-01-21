@@ -354,7 +354,6 @@ public final class Callables {
         return Function2.apply(callable, value);
     }
 
-
     public static <A, B, C, D> Function2<B, C, D> apply(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
         return Function3.apply(callable, value);
     }
