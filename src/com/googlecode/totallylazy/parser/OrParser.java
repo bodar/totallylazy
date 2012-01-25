@@ -4,17 +4,17 @@ import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class DisjunctiveParser<A> extends BaseParser<A> {
+public class OrParser<A> extends BaseParser<A> {
     private final Parser<? extends A> parserA;
     private final Parser<? extends A> parserB;
 
-    private DisjunctiveParser(Parser<? extends A> parserA, Parser<? extends A> parserB) {
+    private OrParser(Parser<? extends A> parserA, Parser<? extends A> parserB) {
         this.parserA = parserA;
         this.parserB = parserB;
     }
 
-    public static <A> DisjunctiveParser<A> or(Parser<? extends A> parserA, Parser<? extends A> parserB) {
-        return new DisjunctiveParser<A>(parserA, parserB);
+    public static <A> OrParser<A> or(Parser<? extends A> parserA, Parser<? extends A> parserB) {
+        return new OrParser<A>(parserA, parserB);
     }
 
     @Override

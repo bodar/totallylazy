@@ -25,15 +25,15 @@ public abstract class BaseParser<A> implements Parser<A> {
     }
 
     public <B> BaseParser<Pair<A, B>> then(Parser<? extends B> parser){
-        return SequenceParser.sequenceOf(this, parser);
+        return PairParser.pairOf(this, parser);
     }
 
     public <B> BaseParser<Pair<A, B>> then(Callable<? extends Parser<? extends B>> parser){
-        return SequenceParser.sequenceOf(this, parser);
+        return PairParser.pairOf(this, parser);
     }
 
     public BaseParser<A> or(Parser<? extends A> parser){
-        return DisjunctiveParser.or(this, parser);
+        return OrParser.or(this, parser);
     }
 
     public BaseParser<Option<A>> optional(){
