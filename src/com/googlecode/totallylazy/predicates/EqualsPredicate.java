@@ -16,4 +16,9 @@ public class EqualsPredicate<T> extends LogicalPredicate<T> implements Value<T> 
     public T value() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }

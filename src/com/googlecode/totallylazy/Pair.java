@@ -6,7 +6,7 @@ import static com.googlecode.totallylazy.Function.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
-public class Pair<F, S> implements First<F>, Second<S> {
+public class Pair<F, S> implements First<F>, Second<S>, Value<F> {
     private final Value<? extends F> first;
     private final Value<? extends S> second;
 
@@ -29,6 +29,11 @@ public class Pair<F, S> implements First<F>, Second<S> {
 
     public final S second() {
         return second.value();
+    }
+
+    @Override
+    public F value() {
+        return first();
     }
 
     @Override

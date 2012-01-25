@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
 // A Functor in Haskell
-public interface Mappable<T, Self extends Mappable<?, Self>> {
-    <S> Self map(Callable1<? super T, ? extends S> callable);
+public interface Mappable<A, Self extends Mappable<?, Self>> {
+    <B> Self map(Callable1<? super A, ? extends B> callable);
 }
