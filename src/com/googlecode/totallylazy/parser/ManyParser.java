@@ -20,7 +20,7 @@ public class ManyParser<A> extends BaseParser<Sequence<A>>{
 
     @Override
     public String toString() {
-        return null;
+        return String.format("many %s", parser);
     }
 
     @Override
