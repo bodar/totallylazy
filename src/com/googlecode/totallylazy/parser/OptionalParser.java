@@ -4,13 +4,14 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
+import static com.googlecode.totallylazy.parser.ReturnsParser.returns;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class OptionalParser<A> extends AbstractParser<Option<A>>{
-    private final Parser<? extends A> parserA;
+public class OptionalParser<A> extends BaseParser<Option<A>> {
+    private final BaseParser<? extends A> parserA;
 
     private OptionalParser(Parser<? extends A> parserA) {
-        this.parserA = parserA;
+        this.parserA = parser(parserA);
     }
 
     public static <A> OptionalParser<A> optional(Parser<? extends A> parserA) {
@@ -24,11 +25,8 @@ public class OptionalParser<A> extends AbstractParser<Option<A>>{
 
     @Override
     public Result<Option<A>> parse(Sequence<Character> characters) throws Exception {
-        Result<? extends A> result = parserA.parse(characters);
-        if(result instanceof Success){
-            Success<A> success = cast(result);
-            return success(Option.some(result.value()), success.remainder());
-        }
-        return success(Option.<A>none(), characters);
+        return parserA.map(Option.<A>option()).
+                or(returns(Option.<A>none())).
+                parse(characters);
     }
 }

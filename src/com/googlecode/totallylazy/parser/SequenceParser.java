@@ -2,14 +2,10 @@ package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Value;
-
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
-public class SequenceParser<A,B> extends AbstractParser<Pair<A,B>>{
+public class SequenceParser<A,B> extends BaseParser<Pair<A,B>> {
     private final Parser<? extends A> parserA;
     private final Parser<? extends B> parserB;
 
