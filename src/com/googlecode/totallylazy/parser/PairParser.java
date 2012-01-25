@@ -10,25 +10,25 @@ import static com.googlecode.totallylazy.Function.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
-public class SequenceParser<A,B> extends BaseParser<Pair<A,B>> {
+public class PairParser<A,B> extends BaseParser<Pair<A,B>> {
     private final Function<? extends Parser<? extends A>> parserA;
     private final Function<? extends Parser<? extends B>> parserB;
 
-    private SequenceParser(Callable<? extends Parser<? extends A>> parserA, Callable<? extends Parser<? extends B>> parserB) {
+    private PairParser(Callable<? extends Parser<? extends A>> parserA, Callable<? extends Parser<? extends B>> parserB) {
         this.parserA = lazy(parserA);
         this.parserB = lazy(parserB);
     }
 
-    public static <A, B> SequenceParser<A, B> sequenceOf(final Parser<? extends A> parserA, final Parser<? extends B> parserB) {
-        return new SequenceParser<A, B>(returns(parserA), returns(parserB));
+    public static <A, B> PairParser<A, B> pairOf(final Parser<? extends A> parserA, final Parser<? extends B> parserB) {
+        return new PairParser<A, B>(returns(parserA), returns(parserB));
     }
 
-    public static <A, B> SequenceParser<A, B> sequenceOf(final Parser<? extends A> parserA, final Callable<? extends Parser<? extends B>> parserB) {
-        return new SequenceParser<A, B>(returns(parserA), parserB);
+    public static <A, B> PairParser<A, B> pairOf(final Parser<? extends A> parserA, final Callable<? extends Parser<? extends B>> parserB) {
+        return new PairParser<A, B>(returns(parserA), parserB);
     }
 
-    public static <A, B> SequenceParser<A, B> sequenceOf(final Callable<? extends Parser<? extends A>> parserA, final Callable<? extends Parser<? extends B>> parserB) {
-        return new SequenceParser<A, B>(parserA, parserB);
+    public static <A, B> PairParser<A, B> pairOf(final Callable<? extends Parser<? extends A>> parserA, final Callable<? extends Parser<? extends B>> parserB) {
+        return new PairParser<A, B>(parserA, parserB);
     }
 
     @Override

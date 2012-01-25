@@ -14,19 +14,20 @@ public class CharacterParser extends BaseParser<Character> {
         this.value = value;
     }
 
-    public static CharacterParser character(char value) {
-        return character(is(value));
-    }
-
     public static CharacterParser character(Predicate<Character> value) {
         return new CharacterParser(value);
+    }
+
+    public static CharacterParser character(char value) {
+        return character(is(value));
     }
 
     @Override
     public Result<Character> parse(final Sequence<Character> characters) {
         return characters.headOption().
-                map(ifMatches(characters)).getOrElse(fail());
-                }
+                map(ifMatches(characters)).
+                getOrElse(fail());
+    }
 
     private Callable1<Character, Result<Character>> ifMatches(final Sequence<Character> characters) {
         return new Callable1<Character, Result<Character>>() {

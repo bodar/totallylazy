@@ -15,4 +15,10 @@ public class StringParserTest {
         assertThat(result.value(), is("ABC"));
         assertThat(result.remainder(), is(empty(Character.class)));
     }
+    @Test
+    public void supportsRemainder() throws Exception {
+        Success<String> result = (Success<String>) string("ABC").parse(characters("ABCDEF"));
+        assertThat(result.value(), is("ABC"));
+        assertThat(result.remainder(), is(characters("DEF")));
+    }
 }
