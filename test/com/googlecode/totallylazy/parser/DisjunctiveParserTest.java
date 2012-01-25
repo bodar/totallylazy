@@ -16,6 +16,11 @@ public class DisjunctiveParserTest {
         Success<String> result = cast(parser.call(characters("food")));
         assertThat(result.value(), is("foo"));
         assertThat(result.remainder(), is(characters("d")));
+    }
+
+    @Test
+    public void supportsChaining() throws Exception {
+        DisjunctiveParser<String> parser = string("foo").or(string("bar"));
         Success<String> result1 = cast(parser.call(characters("bart")));
         assertThat(result1.value(), is("bar"));
         assertThat(result1.remainder(), is(characters("t")));
