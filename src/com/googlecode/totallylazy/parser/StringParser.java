@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class StringParser extends AbstractParser<String> {
+public class StringParser extends BaseParser<String> {
     private final String expected;
 
     private StringParser(String expected) {

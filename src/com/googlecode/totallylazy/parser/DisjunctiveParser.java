@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class DisjunctiveParser<A> extends AbstractParser<A>{
+public class DisjunctiveParser<A> extends BaseParser<A> {
     private final Parser<? extends A> parserA;
     private final Parser<? extends A> parserB;
 

@@ -57,4 +57,13 @@ public abstract class Option<T> implements Iterable<T>, Value<T>, Mappable<T, Op
     public Sequence<T> toSequence() {
         return sequence(this);
     }
+
+    public static <A> Function1<A, Option<A>> option() {
+        return new Function1<A, Option<A>>() {
+            @Override
+            public Option<A> call(A a) throws Exception {
+                return option(a);
+            }
+        };
+    }
 }

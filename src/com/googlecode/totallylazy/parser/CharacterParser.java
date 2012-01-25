@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class CharacterParser extends AbstractParser<Character> {
+public class CharacterParser extends BaseParser<Character> {
     private final Predicate<Character> value;
 
     private CharacterParser(Predicate<Character> value) {
