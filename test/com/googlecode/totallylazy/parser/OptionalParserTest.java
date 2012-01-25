@@ -19,4 +19,12 @@ public class OptionalParserTest {
         assertThat(result.value(), is(none(String.class)));
         assertThat(result.remainder(), is(characters("bob")));
     }
+
+    @Test
+    public void canChain() throws Exception {
+        Parser<Option<String>> parser = string("foo").optional();
+        Success<Option<String>> result = cast(parser.parse(characters("bob")));
+        assertThat(result.value(), is(none(String.class)));
+        assertThat(result.remainder(), is(characters("bob")));
+    }
 }

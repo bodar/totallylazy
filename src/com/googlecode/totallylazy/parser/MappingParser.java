@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class MappingParser<A, B> implements Parser<B> {
+public class MappingParser<A, B> extends AbstractParser<B> {
     private final Parser<? extends A> source;
     private final Callable1<? super A, ? extends B> callable;
 
@@ -24,7 +24,7 @@ public class MappingParser<A, B> implements Parser<B> {
     }
 
     @Override
-    public <C> Parser<C> map(Callable1<? super B, ? extends C> callable) {
-        return map(this, callable);
+    public String toString() {
+        return String.format("%s %s", source, callable);
     }
 }
