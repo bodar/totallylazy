@@ -23,10 +23,10 @@ public class DisjunctiveParser<A> extends AbstractParser<A>{
     }
 
     @Override
-    public Result<A> call(Sequence<Character> characters) throws Exception {
-        Result<? extends A> result = parserA.call(characters);
+    public Result<A> parse(Sequence<Character> characters) throws Exception {
+        Result<? extends A> result = parserA.parse(characters);
         if(result instanceof Failure){
-            return cast(parserB.call(characters));
+            return cast(parserB.parse(characters));
         }
         return cast(result);
     }

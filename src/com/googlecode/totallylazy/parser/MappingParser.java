@@ -19,8 +19,8 @@ public class MappingParser<A, B> implements Parser<B> {
     }
 
     @Override
-    public Result<B> call(Sequence<Character> characters) throws Exception {
-        return cast(source.call(characters).map(callable));
+    public Result<B> parse(Sequence<Character> characters) throws Exception {
+        return cast(source.parse(characters).map(callable));
     }
 
     @Override

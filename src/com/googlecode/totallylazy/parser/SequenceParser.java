@@ -28,11 +28,11 @@ public class SequenceParser<A,B> extends AbstractParser<Pair<A,B>>{
     }
 
     @Override
-    public Result<Pair<A, B>> call(Sequence<Character> characters) throws Exception {
-        Result<? extends A> resultA = parserA.call(characters);
+    public Result<Pair<A, B>> parse(Sequence<Character> characters) throws Exception {
+        Result<? extends A> resultA = parserA.parse(characters);
         if(resultA instanceof Success){
             Success<A> successA = cast(resultA);
-            Result<? extends B> resultB = parserB.call(successA.remainder());
+            Result<? extends B> resultB = parserB.parse(successA.remainder());
             if(resultB instanceof Success){
                 Success<B> successB = cast(resultB);
                 return Success.success(Pair.pair(successA.value(), successB.value()), successB.remainder());

@@ -11,14 +11,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class CharacterParserTest {
     @Test
     public void canParseACharacter() throws Exception {
-        Success<Character> result = cast(character('A').call(characters("ABC")));
+        Success<Character> result = cast(character('A').parse(characters("ABC")));
         assertThat(result.value(), is('A'));
         assertThat(result.remainder(), is(characters("BC")));
     }
 
     @Test
     public void handlesNoMatch() throws Exception {
-        Failure<Character> result = cast(character('A').call(characters("CBA")));
+        Failure<Character> result = cast(character('A').parse(characters("CBA")));
         assertThat(result.message(), is("Expected 'A' but 'C'"));
     }
 }

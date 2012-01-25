@@ -23,8 +23,8 @@ public class OptionalParser<A> extends AbstractParser<Option<A>>{
     }
 
     @Override
-    public Result<Option<A>> call(Sequence<Character> characters) throws Exception {
-        Result<? extends A> result = parserA.call(characters);
+    public Result<Option<A>> parse(Sequence<Character> characters) throws Exception {
+        Result<? extends A> result = parserA.parse(characters);
         if(result instanceof Success){
             Success<A> success = cast(result);
             return success(Option.some(result.value()), success.remainder());
