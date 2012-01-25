@@ -12,7 +12,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class PatternParserTest {
     @Test
     public void canParseUsingRegex() throws Exception {
-        Result<String> result = pattern("\\d{4}/\\d{1,2}/\\d{1,2}").parse(characters("1977/1/10"));
+        Success<String> result = cast(pattern("\\d{4}/\\d{1,2}/\\d{1,2}").parse(characters("1977/1/10ABC")));
         assertThat(result.value(), is("1977/1/10"));
+        assertThat(result.remainder(), is(characters("ABC")));
     }
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static java.util.Collections.synchronizedList;
 
@@ -36,5 +37,13 @@ public final class MemorisedSequence<T> extends Sequence<T> {
             }
             return cast(iterator);
         }
+    }
+
+    @Override
+    public T get(int index) {
+        if(memory.size() > index){
+            return memory.get(index);
+        }
+        return super.get(index);
     }
 }

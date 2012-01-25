@@ -699,4 +699,13 @@ public class SequenceTest {
             assertThat(count[0], is(5));
         }
     }
+
+    @Test
+    public void supportsGetWithIndex() throws Exception {
+        Sequence<Integer> counting = sequence(3,2,1);
+        assertThat(counting.get(0), is(3));
+        assertThat(counting.get(1), is(2));
+        assertThat(counting.get(2), is(1));
+    }
+
 }

@@ -12,6 +12,7 @@ import java.util.concurrent.Executor;
 import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.returnArgument;
+import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
@@ -358,5 +359,9 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, M
 
     public Sequence<T> interruptable(){
         return Sequences.interruptable(this);
+    }
+
+    public T get(int index){
+        return drop(index).head();
     }
 }
