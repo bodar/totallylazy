@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.characters;
@@ -11,6 +12,13 @@ import static com.googlecode.totallylazy.parser.ManyParser.many;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ManyParserTest {
+    @Test
+    public void doesNotThrowIfItConsumesAllCharacters() throws Exception {
+        Success<Sequence<Character>> result = cast(many(character('C')).parse(characters("CCCCC")));
+        assertThat(result.value(), is(characters("CCCCC")));
+        assertThat(result.remainder(), is(Sequences.empty(Character.class)));
+    }
+
     @Test
     public void supportMany() throws Exception {
         Success<Sequence<Character>> result = cast(many(character('C')).parse(characters("CCCCCDDDD")));
