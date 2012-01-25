@@ -27,7 +27,7 @@ public class StringParser extends AbstractParser<String> {
     }
 
     @Override
-    protected String expected() {
+    public String toString() {
         return expected;
     }
 }

@@ -31,7 +31,7 @@ public class CharacterParser extends AbstractParser<Character> {
     }
 
     @Override
-    protected Predicate<Character> expected() {
-        return value;
+    public String toString() {
+        return value.toString();
     }
 }

@@ -23,8 +23,8 @@ public class SequenceParser<A,B> extends AbstractParser<Pair<A,B>>{
     }
 
     @Override
-    protected Pair<A, B> expected() {
-        throw new UnsupportedOperationException();
+    public String toString() {
+        return String.format("%s and %s", parserA, parserB);
     }
 
     @Override
