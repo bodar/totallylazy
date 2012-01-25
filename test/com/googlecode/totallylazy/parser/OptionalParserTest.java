@@ -15,7 +15,7 @@ public class OptionalParserTest {
     @Test
     public void canMatchOneParser() throws Exception {
         OptionalParser<String> parser = optional(string("foo"));
-        Success<Option<String>> result = cast(parser.call(characters("bob")));
+        Success<Option<String>> result = cast(parser.parse(characters("bob")));
         assertThat(result.value(), is(none(String.class)));
         assertThat(result.remainder(), is(characters("bob")));
     }

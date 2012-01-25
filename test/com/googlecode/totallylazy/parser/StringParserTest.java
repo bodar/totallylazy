@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class StringParserTest {
     @Test
     public void canParseAString() throws Exception {
-        Success<String> result = (Success<String>) string("ABC").call(characters("ABC"));
+        Success<String> result = (Success<String>) string("ABC").parse(characters("ABC"));
         assertThat(result.value(), is("ABC"));
         assertThat(result.remainder(), is(empty(Character.class)));
     }

@@ -22,7 +22,7 @@ public class CharacterParser extends AbstractParser<Character> {
     }
 
     @Override
-    public Result<Character> call(final Sequence<Character> characters) {
+    public Result<Character> parse(final Sequence<Character> characters) {
         Character head = characters.head();
         if (value.matches(head)) {
             return success(head, characters.tail());

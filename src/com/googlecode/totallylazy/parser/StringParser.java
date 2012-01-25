@@ -17,7 +17,7 @@ public class StringParser extends AbstractParser<String> {
     }
 
     @Override
-    public Result<String> call(Sequence<Character> input) {
+    public Result<String> parse(Sequence<Character> input) {
         Pair<Sequence<Character>, Sequence<Character>> pair = input.splitAt(expected.length());
         String actual = pair.first().toString("");
         if (actual.equals(expected)) {
