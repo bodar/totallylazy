@@ -1,9 +1,11 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Sequences;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -13,11 +15,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OptionalParserTest {
     @Test
-    public void canMatchOneParser() throws Exception {
+    public void isOptional() throws Exception {
         OptionalParser<String> parser = optional(string("foo"));
-        Success<Option<String>> result = cast(parser.parse(characters("bob")));
-        assertThat(result.value(), is(none(String.class)));
-        assertThat(result.remainder(), is(characters("bob")));
+        Success<Option<String>> result = cast(parser.parse(characters("foo")));
+        assertThat(result.value(), is(some("foo")));
+        assertThat(result.remainder(), is(Sequences.empty(Character.class)));
     }
 
     @Test

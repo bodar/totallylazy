@@ -4,6 +4,9 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
+
+import java.util.concurrent.Callable;
 
 public abstract class BaseParser<A> implements Parser<A> {
     protected Failure<A> fail(A actual) {
@@ -21,7 +24,11 @@ public abstract class BaseParser<A> implements Parser<A> {
         return MappingParser.map(this, callable);
     }
 
-    public BaseParser<Pair<A, A>> then(Parser<? extends A> parser){
+    public <B> BaseParser<Pair<A, B>> then(Parser<? extends B> parser){
+        return SequenceParser.sequenceOf(this, parser);
+    }
+
+    public <B> BaseParser<Pair<A, B>> then(Callable<? extends Parser<? extends B>> parser){
         return SequenceParser.sequenceOf(this, parser);
     }
 
@@ -31,5 +38,9 @@ public abstract class BaseParser<A> implements Parser<A> {
 
     public BaseParser<Option<A>> optional(){
         return OptionalParser.optional(this);
+    }
+    
+    public BaseParser<Sequence<A>> many() {
+        return ManyParser.many(this);
     }
 }
