@@ -20,7 +20,7 @@ public class DisjunctiveParserTest {
 
     @Test
     public void supportsChaining() throws Exception {
-        DisjunctiveParser<String> parser = string("foo").or(string("bar"));
+        Parser<String> parser = string("foo").or(string("bar"));
         Success<String> result1 = cast(parser.parse(characters("bart")));
         assertThat(result1.value(), is("bar"));
         assertThat(result1.remainder(), is(characters("t")));
