@@ -13,4 +13,12 @@ public abstract class AbstractParser<A> implements Parser<A> {
     }
 
     public abstract String toString();
+
+    public DisjunctiveParser<A> or(Parser<? extends A> parser){
+        return DisjunctiveParser.or(this, parser);
+    }
+
+    public OptionalParser<A> optional(){
+        return OptionalParser.optional(this);
+    }
 }
