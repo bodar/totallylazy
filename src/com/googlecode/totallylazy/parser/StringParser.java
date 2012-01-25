@@ -23,7 +23,7 @@ public class StringParser extends BaseParser<String> {
         if (actual.equals(expected)) {
             return success(expected, pair.second());
         }
-        return fail(actual);
+        return fail();
     }
 
     @Override

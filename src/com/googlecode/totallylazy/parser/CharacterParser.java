@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
@@ -23,11 +24,17 @@ public class CharacterParser extends BaseParser<Character> {
 
     @Override
     public Result<Character> parse(final Sequence<Character> characters) {
-        Character head = characters.head();
-        if (value.matches(head)) {
-            return success(head, characters.tail());
-        }
-        return fail(head);
+        return characters.headOption().
+                map(ifMatches(characters)).getOrElse(fail());
+                }
+
+    private Callable1<Character, Result<Character>> ifMatches(final Sequence<Character> characters) {
+        return new Callable1<Character, Result<Character>>() {
+            @Override
+            public Result<Character> call(Character character) throws Exception {
+                return value.matches(character) ? success(character, characters.tail()) : fail();
+                }
+            };
     }
 
     @Override

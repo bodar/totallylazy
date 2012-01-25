@@ -9,8 +9,8 @@ import com.googlecode.totallylazy.Sequence;
 import java.util.concurrent.Callable;
 
 public abstract class BaseParser<A> implements Parser<A> {
-    protected Failure<A> fail(A actual) {
-        return Failure.failure(String.format("Expected '%s' but '%s'", toString(), actual));
+    protected Failure<A> fail() {
+        return Failure.failure(String.format("%s expected", toString()));
     }
 
     public abstract String toString();
