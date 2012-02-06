@@ -281,7 +281,8 @@ public class Predicates {
         return new LogicalPredicate<T>() {
             @Override
             public boolean matches(T other) {
-                return function(callable).apply(other);
+                Boolean result = function(callable).apply(other);
+                return result == null ? false : result;
             }
         };
     }
