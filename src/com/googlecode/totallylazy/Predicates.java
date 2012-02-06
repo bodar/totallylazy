@@ -23,6 +23,7 @@ import com.googlecode.totallylazy.predicates.WhileTrue;
 
 import java.util.Collection;
 
+import static com.googlecode.totallylazy.Function1.function;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;
 
@@ -274,6 +275,15 @@ public class Predicates {
 
     public static <T> LogicalPredicate<Sequence<T>> empty(Class<T> aClass) {
         return empty();
+    }
+
+    public static <T> LogicalPredicate<T> predicate(final Callable1<T, Boolean> callable) {
+        return new LogicalPredicate<T>() {
+            @Override
+            public boolean matches(T other) {
+                return function(callable).apply(other);
+            }
+        };
     }
 
 }
