@@ -7,7 +7,7 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.characters;
 
 public class Escaper {
-    private final Rules<Character, String> rules = new Rules<Character, String>();
+    private final Rules<Character, String> rules = Rules.rules();
 
     public Escaper() {
         rules.add(always(Character.class), asString(Character.class));
