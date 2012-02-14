@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.callables.SleepyCallable1;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
+import static com.googlecode.totallylazy.Pair.pair;
 
 public abstract class Function1<A, B> implements Callable1<A, B>, Mappable<B, Function1<A, ?>> {
     public static <A, B> Function1<A, B> function(final Callable1<? super A, ? extends B> callable) {
@@ -68,6 +69,14 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Mappable<B, Fu
 
     public Function1<A, Function<B>> deferExecution() {
         return Callables.deferReturn(this);
+    }
+
+    public Function1<A, Pair<B, A>> asFirst() {
+        return new Function1<A, Pair<B, A>>() {
+            public Pair<B, A> call(A original) throws Exception {
+                return pair(Function1.this.apply(original), original);
+            }
+        };
     }
 
     public static <A,B> Function1<A, B> returns1(final B result) {

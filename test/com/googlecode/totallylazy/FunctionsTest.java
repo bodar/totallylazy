@@ -3,11 +3,13 @@ package com.googlecode.totallylazy;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.compose;
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FunctionsTest {
@@ -31,6 +33,11 @@ public class FunctionsTest {
         assertThat(addThenMultiple().apply(10).apply(2).apply(3), is(36));
         assertThat(addThenMultiple().apply(10, 2).apply(3), is(36));
         assertThat(addThenMultiple().apply(10, 2, 3), is(36));
+    }
+
+    @Test
+    public void canMapToPairOfValueAndOriginal() throws Exception {
+        assertThat(multiply(10).asFirst().apply(1), equalTo(Pair.<Number,Number>pair(10, 1)));
     }
 
     private Function3<Number, Number, Number, Number> addThenMultiple() {
