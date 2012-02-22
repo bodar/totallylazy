@@ -10,13 +10,14 @@ import org.hamcrest.TypeSafeMatcher;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.matchers.Matchers.are;
 
 public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
-    private final Sequence<T> expected;
+    private final Sequence<Matcher<? super T>> expected;
     private boolean shouldBeSameSize;
 
-    private IterableMatcher(Sequence<T> expected, boolean shouldBeSameSize) {
-        this.expected = expected;
+    private IterableMatcher(Iterable<? extends Matcher<? super T>> expected, boolean shouldBeSameSize) {
+        this.expected = sequence(expected);
         this.shouldBeSameSize = shouldBeSameSize;
     }
 
@@ -57,7 +58,11 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
         return hasExactly(sequence(items));
     }
 
-    public static <T> Matcher<Iterable<T>> hasExactly(Sequence<T> expected) {
+    public static <T> Matcher<Iterable<T>> hasExactly(Iterable<T> expected) {
+        return new IterableMatcher<T>(are(expected), true);
+    }
+
+    public static <T> Matcher<Iterable<T>> hasExactlyMatching(Iterable<? extends Matcher<? super T>> expected) {
         return new IterableMatcher<T>(expected, true);
     }
 
@@ -65,20 +70,21 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
         return startsWith(sequence(items));
     }
 
-    public static <T> Matcher<Iterable<T>> startsWith(Sequence<T> expected) {
-        return new IterableMatcher<T>(expected, false);
+    public static <T> Matcher<Iterable<T>> startsWith(Iterable<T> expected) {
+        Iterable<? extends Matcher<T>> are = are(expected);
+        return new IterableMatcher<T>(are, false);
     }
 
     @Override
     public boolean matchesSafely(Iterable<T> actual) {
-        Iterator<T> e = this.expected.iterator();
+        Iterator<Matcher<? super T>> e = this.expected.iterator();
         Iterator<T> a = actual.iterator();
         while(e.hasNext()){
             if(!a.hasNext()){
                 return false;
             }
 
-            if(!Objects.equalTo(e.next(), a.next())){
+            if(!e.next().matches(a.next())){
                 return false;
             }
         }
@@ -89,6 +95,7 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
     }
 
     public void describeTo(Description description) {
+        description.appendValue("An iterable with values matching: ");
         description.appendValue(expected);
     }
 
