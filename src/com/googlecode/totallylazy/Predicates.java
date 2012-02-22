@@ -25,6 +25,7 @@ import java.util.Collection;
 
 import static com.googlecode.totallylazy.Function1.function;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Sets.*;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;
 
 public class Predicates {
@@ -80,6 +81,14 @@ public class Predicates {
         return new LogicalPredicate<Iterable<T>>() {
             public boolean matches(Iterable<T> superset) {
                 return sequence(subset).forAll(in(superset));
+            }
+        };
+    }
+
+    public static <T> LogicalPredicate<Iterable<T>> setEqualityWith(final Iterable<? extends T> other) {
+        return new LogicalPredicate<Iterable<T>>() {
+            public boolean matches(Iterable<T> iterable) {
+                return set(iterable).equals(set(other));
             }
         };
     }

@@ -71,10 +71,10 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Mappable<B, Fu
         return Callables.deferReturn(this);
     }
 
-    public Function1<A, Pair<B, A>> asFirst() {
-        return new Function1<A, Pair<B, A>>() {
-            public Pair<B, A> call(A original) throws Exception {
-                return pair(Function1.this.apply(original), original);
+    public Function1<A, Pair<A, B>> capturing() {
+        return new Function1<A, Pair<A, B>>() {
+            public Pair<A, B> call(A original) throws Exception {
+                return pair(original, Function1.this.apply(original));
             }
         };
     }
