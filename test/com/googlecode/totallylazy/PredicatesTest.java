@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Predicates.assignableTo;
+import static com.googlecode.totallylazy.Predicates.setEqualityWith;
 import static com.googlecode.totallylazy.Predicates.subsetOf;
 import static com.googlecode.totallylazy.Predicates.supersetOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -40,7 +41,7 @@ public class PredicatesTest {
     }
 
     @Test
-    public void logicalAndWithOnePredicateReturnsPredicate() throws Exception{
+    public void logicalAndWithOnePredicateReturnsPredicate() throws Exception {
         Predicate<Object> always = Predicates.always();
         Predicate<Object> predicate = Predicates.and(always);
         assertThat(predicate.matches(null), is(true));
@@ -48,11 +49,20 @@ public class PredicatesTest {
     }
 
     @Test
-    public void logicalOrWithOnePredicateReturnsPredicate() throws Exception{
+    public void logicalOrWithOnePredicateReturnsPredicate() throws Exception {
         Predicate<Object> always = Predicates.always();
         Predicate<Object> predicate = Predicates.or(always);
         assertThat(predicate.matches(null), is(true));
         assertThat(predicate, is(sameInstance(always)));
+    }
+
+    @Test
+    public void supportsEqualAsSet() throws Exception {
+        assertThat(setEqualityWith(sequence(1, 2, 3)).matches(sequence(1, 2, 3)), is(true));
+        assertThat(setEqualityWith(sequence(1, 2, 3)).matches(sequence(3, 1, 2)), is(true));
+        assertThat(setEqualityWith(sequence(1, 2, 3)).matches(sequence(1, 2, 3, 4)), is(false));
+        assertThat(setEqualityWith(sequence(1, 2, 3)).matches(sequence(1, 2)), is(false));
+        assertThat(setEqualityWith(sequence(1, 1)).matches(sequence(1)), is(true));
     }
 }
 

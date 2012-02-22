@@ -3,7 +3,6 @@ package com.googlecode.totallylazy;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.compose;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
@@ -36,8 +35,8 @@ public class FunctionsTest {
     }
 
     @Test
-    public void canMapToPairOfValueAndOriginal() throws Exception {
-        assertThat(multiply(10).asFirst().apply(1), equalTo(Pair.<Number,Number>pair(10, 1)));
+    public void canCaptureArgument() throws Exception {
+        assertThat(multiply(10).capturing().apply(1), equalTo(Pair.<Number,Number>pair(1, 10)));
     }
 
     private Function3<Number, Number, Number, Number> addThenMultiple() {
