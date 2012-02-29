@@ -89,6 +89,16 @@
 
     </target>
 
-    <target name="build" depends="update, clean, compile, test, package" description="build all"/>
+    <target name="build" description="build all">
+        <parallel>
+           <antcall target="update"/>
+           <antcall target="clean"/>
+        </parallel>
+        <antcall target="compile"/>
+        <parallel>
+           <antcall target="test"/>
+           <antcall target="package"/>
+        </parallel>
+    </target>
 
 </project>
