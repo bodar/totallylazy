@@ -21,6 +21,10 @@ public final class Callables {
         };
     }
 
+    public static <T> Function1<Value<T>, T> value(Class<T> aClass) {
+        return value();
+    }
+
     public static <T, R> Function1<T, R> asCallable1(final Callable<? extends R> callable) {
         return new Function1<T, R>() {
             public R call(T t) throws Exception {
