@@ -1,0 +1,5 @@
+mvn:cglib:cglib-nodep:jar:2.2
+mvn:org.objenesis:objenesis:jar:1.2
+mvn:com.h2database:h2:jar:1.3.160
+mvn:org.enumerable:enumerable-java:jar:0.4.0
+
