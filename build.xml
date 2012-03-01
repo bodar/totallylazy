@@ -100,5 +100,4 @@
            <antcall target="package"/>
         </parallel>
     </target>
-
 </project>
