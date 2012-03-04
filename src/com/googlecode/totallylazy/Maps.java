@@ -22,6 +22,10 @@ public class Maps {
         return new LinkedHashMap<K, V>();
     }
 
+    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first) {
+        return map(sequence(first));
+    }
+
     public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second) {
         return map(sequence(first, second));
     }
