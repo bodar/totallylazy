@@ -52,7 +52,7 @@ public abstract class Function<A> implements Callable<A>, Runnable, Mappable<A, 
         return Sequences.repeat(this);
     }
 
-    public Function<A> time(Callable1<? super Double, Void> report) {
+    public Function<A> time(Callable1<? super Number, ?> report) {
         return TimeCallable.time(this, report);
     }
 

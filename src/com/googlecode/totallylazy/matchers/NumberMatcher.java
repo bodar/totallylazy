@@ -44,4 +44,22 @@ public class NumberMatcher extends TypeSafeMatcher<Number> {
         return IterableMatcher.startsWith(sequence(items));
     }
 
+    public static Matcher<Number> greaterThan(final Number other) {
+        return matcher(Numbers.greaterThan(other));
+    }
+
+    public static Matcher<Number> greaterThanOrEqualTo(final Number other) {
+        return matcher(Numbers.greaterThanOrEqualTo(other));
+    }
+
+    public static Matcher<Number> lessThan(final Number other) {
+        return matcher(Numbers.lessThan(other));
+    }
+
+    public static Matcher<Number> lessThanOrEqualTo(final Number other) {
+        return matcher(Numbers.lessThanOrEqualTo(other));
+    }
+
+
+
 }
