@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.LazyCallable1;
 import com.googlecode.totallylazy.callables.SleepyCallable1;
+import com.googlecode.totallylazy.callables.TimeCallable1;
 
 import java.util.concurrent.Callable;
 
@@ -85,5 +86,13 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Mappable<B, Fu
                 return result;
             }
         };
+    }
+
+    public Function1<A,B> time() {
+        return TimeCallable1.time(this);
+    }
+
+    public Function1<A,B> time(Callable1<? super Number, ?> reporter) {
+        return TimeCallable1.time(this, reporter);
     }
 }

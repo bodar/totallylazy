@@ -11,14 +11,15 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.numbers.BigDecimalOperators.decimal;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.ascending;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 
-public class TimeReport implements Callable1<Double, Void> {
+public class TimeReport implements Callable1<Number, Void> {
     private final List<Number> times = new ArrayList<Number>();
 
-    public Void call(Double time) {
+    public Void call(Number time) {
         this.times.add(time);
         return Runnables.VOID;
     }
@@ -50,7 +51,8 @@ public class TimeReport implements Callable1<Double, Void> {
                 drop(tenPercent()).
                 reverse().
                 drop(tenPercent()).
-                reduce(Numbers.average()).doubleValue();
+                reduce(Numbers.average()).
+                doubleValue();
     }
 
     private int tenPercent() {
@@ -61,8 +63,8 @@ public class TimeReport implements Callable1<Double, Void> {
         return times.size();
     }
 
-    public Number total() {
-        return sequence(times).reduce(add());
+    public double total() {
+        return sequence(times).reduce(add()).doubleValue();
     }
 
     public static TimeReport reportTime(Callable<?> callable, int numberOfCalls){

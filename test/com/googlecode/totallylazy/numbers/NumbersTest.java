@@ -9,6 +9,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.NumberMatcher.lessThan;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.BigIntegerOperators.bigInteger;
 import static com.googlecode.totallylazy.numbers.Numbers.average;
@@ -26,7 +27,6 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sumIterable;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.lessThan;
 
 public class NumbersTest {
     @Test
@@ -71,7 +71,7 @@ public class NumbersTest {
         TimeReport report = new TimeReport();
         repeat(time(sumIterable(), range(0, 10000), report)).take(100).realise();
         System.out.println(report);
-        assertThat(report.average(), is(lessThan(20.0)));
+        assertThat(report.average(), is(lessThan(20)));
     }
 
     @Test
