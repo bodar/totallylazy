@@ -33,21 +33,25 @@ public abstract class Option<T> implements Iterable<T>, Value<T>, Mappable<T, Op
         return get();
     }
 
-    public final T getOrElse(T other){
+    public final T getOrElse(T other) {
         return isEmpty() ? other : get();
     }
 
-    public final T getOrElse(Callable<? extends T> callable){
+    public final T getOrElse(Callable<? extends T> callable) {
         return isEmpty() ? call(callable) : get();
     }
 
-    public final T getOrNull(){
+    public final T getOrNull() {
         return isEmpty() ? null : get();
     }
 
     @Override
     public final <S> Option<S> map(Callable1<? super T, ? extends S> callable) {
         return isEmpty() ? Option.<S>none() : some(Callers.call(callable, get()));
+    }
+
+    public final <S> Option<S> flatMap(Callable1<? super T, ? extends Option<S>> callable) {
+        return isEmpty() ? Option.<S>none() : Callers.call(callable, get());
     }
 
     public <S> S fold(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
