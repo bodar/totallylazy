@@ -34,6 +34,25 @@ public class OptionTest {
     }
 
     @Test
+    public void canFlatMap() {
+        assertThat(option(1).flatMap(mapWith(option(2))).get(), is(3));
+        assertThat(option(1).flatMap(mapWith(Option.<Integer>none())).isEmpty(), is(true));
+        assertThat(Option.<Integer>none().flatMap(mapWith(Option.<Integer>none())).isEmpty(), is(true));
+    }
+
+    private Callable1<Integer, Option<Integer>> mapWith(final Option<Integer> anotherOption) {
+        return new Callable1<Integer, Option<Integer>>() {
+            public Option<Integer> call(final Integer one) throws Exception {
+                return anotherOption.map(new Callable1<Integer, Integer>() {
+                    public Integer call(Integer two) throws Exception {
+                        return one + two;
+                    }
+                });
+            }
+        };
+    }
+
+    @Test
     public void areIterable() throws Exception {
         assertThat(size(some(1)), NumberMatcher.is(1));
         assertThat(size(none()), NumberMatcher.is(0));
