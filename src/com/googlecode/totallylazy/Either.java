@@ -42,5 +42,14 @@ public abstract class Either<L, R> implements Mappable<R, Either<L, ?>> {
         return isLeft() ? Either.<L, S>left(left()) : Either.<L, S>right(call(callable, right()));
     }
 
+    public <S> Either<L, S> flatMap(Callable1<? super R, ? extends Either<L, S>> callable) {
+        return isLeft() ? Either.<L, S>left(left()) : call(callable, right());
+    }
+
+    public static <L,R> Either<L,R> flatten(final Either<L, Either<L,R>> either) {
+        return either.flatMap(Function1.<Either<L,R>>identity());
+    }
+
+
     public abstract Object value();
 }

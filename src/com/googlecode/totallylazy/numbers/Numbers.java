@@ -48,6 +48,8 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Numbers {
+    public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
+
     public static Sequence<Number> range(final Number start) {
         return iterate(increment(), start);
     }
@@ -401,8 +403,12 @@ public class Numbers {
 
     private static void throwIfZero(Number value) {
         if (operatorsFor(value).isZero(value)) {
-            throw new ArithmeticException("Divide by zero");
+            throw DIVIDE_BY_ZERO;
         }
+    }
+
+    public static Number number(Number value) {
+        return reduce(value);
     }
 
     public static Number reduce(Number value) {

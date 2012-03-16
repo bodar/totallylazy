@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Function1.identity;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public abstract class Option<T> implements Iterable<T>, Value<T>, Mappable<T, Option<?>> {
@@ -60,5 +61,9 @@ public abstract class Option<T> implements Iterable<T>, Value<T>, Mappable<T, Op
 
     public Sequence<T> toSequence() {
         return sequence(this);
+    }
+
+    public static <T> Option<T> flatten(Option<? extends Option<T>> option) {
+        return option.flatMap(Function1.<Option<T>>identity());
     }
 }
