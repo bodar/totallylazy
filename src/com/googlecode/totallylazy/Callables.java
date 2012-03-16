@@ -278,11 +278,7 @@ public final class Callables {
     }
 
     public static <T> Function1<T, T> returnArgument() {
-        return new Function1<T, T>() {
-            public final T call(final T value) {
-                return value;
-            }
-        };
+        return Function1.identity();
     }
 
     public static <T> Function1<T, T> returnArgument(final Class<T> aClass) {

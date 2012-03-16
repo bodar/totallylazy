@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import com.googlecode.totallylazy.numbers.Numbers;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
@@ -8,11 +9,14 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Function1.constant;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.size;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
+import static com.googlecode.totallylazy.numbers.Numbers.divide;
+import static com.googlecode.totallylazy.numbers.Numbers.number;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,27 +33,22 @@ public class OptionTest {
     @Test
     public void canMap() throws Exception {
         assertThat(option(1).map(asString()), is(option("1")));
-        assertThat(some(2).map(asString()), is((Option)some("2")));
-        assertThat(none().map(asString()), is((Option)none()));
+        assertThat(some(2).map(asString()), is(some("2")));
+        assertThat(none().map(asString()), is(none(String.class)));
     }
 
     @Test
     public void canFlatMap() {
-        assertThat(option(1).flatMap(mapWith(option(2))).get(), is(3));
-        assertThat(option(1).flatMap(mapWith(Option.<Integer>none())).isEmpty(), is(true));
-        assertThat(Option.<Integer>none().flatMap(mapWith(Option.<Integer>none())).isEmpty(), is(true));
+        assertThat(some(number(4)).flatMap(divide(2).optional()), is(some((Number)2)) );
+        assertThat(some(number(4)).flatMap(divide(0).optional()), is(none(Number.class)));
+        assertThat(none(Number.class).flatMap(constant(none(Number.class))), is(none(Number.class)));
+        assertThat(none(Number.class).flatMap(constant(some(number(4)))), is(none(Number.class)));
     }
 
-    private Callable1<Integer, Option<Integer>> mapWith(final Option<Integer> anotherOption) {
-        return new Callable1<Integer, Option<Integer>>() {
-            public Option<Integer> call(final Integer one) throws Exception {
-                return anotherOption.map(new Callable1<Integer, Integer>() {
-                    public Integer call(Integer two) throws Exception {
-                        return one + two;
-                    }
-                });
-            }
-        };
+    @Test
+    public void canFlatten() {
+        assertThat(Option.flatten(some(some(1))), is(some(1)));
+        assertThat(Option.flatten(some(none())), is(none()));
     }
 
     @Test

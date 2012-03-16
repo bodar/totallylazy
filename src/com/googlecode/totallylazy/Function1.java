@@ -51,6 +51,10 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Mappable<B, Fu
         return Exceptions.either(this);
     }
 
+    public Function1<A, Either<Exception, B>> orException() {
+        return either();
+    }
+
     @Override
     public <C> Function1<A, C> map(final Callable1<? super B, ? extends C> callable) {
         return Callables.compose(this, callable);
@@ -81,9 +85,21 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Mappable<B, Fu
     }
 
     public static <A,B> Function1<A, B> returns1(final B result) {
+        return constant(result);
+    }
+
+    public static <A, B> Function1<A, B> constant(final B result) {
         return new Function1<A, B>() {
             public B call(A ignore) throws Exception {
                 return result;
+            }
+        };
+    }
+
+    public static <A> Function1<A, A> identity() {
+        return new Function1<A, A>() {
+            public A call(A self) throws Exception {
+                return self;
             }
         };
     }
