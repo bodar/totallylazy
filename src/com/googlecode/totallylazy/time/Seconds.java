@@ -12,4 +12,8 @@ public class Seconds {
     public static Date subtract(Date date, int amount) {
         return Dates.subtract(date, SECOND, amount);
     }
+
+    public static Long calculateSeconds(Date start, Date end) {
+        return (end.getTime() - start.getTime()) / 1000L;
+    }
 }
