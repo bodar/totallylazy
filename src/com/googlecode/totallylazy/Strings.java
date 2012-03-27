@@ -145,6 +145,10 @@ public class Strings {
     public static boolean isEmpty(String value) {
         return value == null || value.equals(EMPTY);
     }
+    
+    public static boolean isBlank(String value) {
+        return isEmpty(value) || isEmpty(value.trim());
+    }
 
     public static LogicalPredicate<Character> unicodeControlOrUndefinedCharacter() {
         return new LogicalPredicate<Character>() {
