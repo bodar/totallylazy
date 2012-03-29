@@ -60,10 +60,14 @@ public class Files {
     }
 
     public static File temporaryDirectory() {
-        return temporaryDirectory(randomFilename());
+        return TEMP_DIR;
     }
 
     public static File temporaryDirectory(String name) {
+        return directory(TEMP_DIR, name);
+    }
+
+    public static File emptyTemporaryDirectory(String name) {
         File directory = directory(TEMP_DIR, name);
         delete(directory);
         return directory;
