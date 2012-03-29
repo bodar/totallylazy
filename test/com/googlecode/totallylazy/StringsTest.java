@@ -81,4 +81,19 @@ public class StringsTest {
     public void supportsReverse() throws Exception {
         assertThat(sequence("abc").map(reverse()), hasExactly("cba"));
     }
+
+    @Test
+    public void supportsIsBlank() throws Exception {
+        assertThat(Strings.isBlank(null), is(true));
+        assertThat(Strings.isBlank(""), is(true));
+        assertThat(Strings.isBlank(" "), is(true));
+        assertThat(Strings.isBlank("\t"), is(true));
+        assertThat(Strings.isBlank("\n"), is(true));
+        assertThat(Strings.isBlank("\r\n"), is(true));
+
+        assertThat(Strings.isBlank(" din"), is(false));
+        assertThat(Strings.isBlank("\tdin"), is(false));
+        assertThat(Strings.isBlank("\rdin"), is(false));
+    }
+
 }
