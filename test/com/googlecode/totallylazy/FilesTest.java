@@ -7,6 +7,7 @@ import java.io.File;
 
 import static com.googlecode.totallylazy.Files.TEMP_DIR;
 import static com.googlecode.totallylazy.Files.append;
+import static com.googlecode.totallylazy.Files.emptyTemporaryDirectory;
 import static com.googlecode.totallylazy.Files.directory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.files;
@@ -40,8 +41,17 @@ public class FilesTest {
     }
 
     @Test
+    public void shouldDeleteDirectoryContents() throws Exception {
+        File parentDir = emptyTemporaryDirectory("aTempDir");
+        File file = Files.file(parentDir, "aFile");
+        assertThat(file.exists(), is(true));
+        emptyTemporaryDirectory("aTempDir");
+        assertThat(file.exists(), is(false));
+    }
+
+    @Test
     public void supportsFiltering() throws Exception {
-        File directory = temporaryDirectory();
+        File directory = emptyTemporaryDirectory("filtering-test");
         File aFile = temporaryFile(directory);
         File anOtherFile = temporaryFile(directory);
         Sequence<File> files = files(directory);
