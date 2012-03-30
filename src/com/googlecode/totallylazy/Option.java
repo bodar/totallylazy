@@ -48,7 +48,7 @@ public abstract class Option<T> implements Iterable<T>, Value<T>, Mappable<T, Op
 
     @Override
     public final <S> Option<S> map(Callable1<? super T, ? extends S> callable) {
-        return isEmpty() ? Option.<S>none() : some(Callers.call(callable, get()));
+        return isEmpty() ? Option.<S>none() : option(Callers.call(callable, get()));
     }
 
     public final <S> Option<S> flatMap(Callable1<? super T, ? extends Option<S>> callable) {
