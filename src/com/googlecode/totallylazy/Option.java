@@ -11,15 +11,15 @@ public abstract class Option<T> implements Iterable<T>, Value<T>, Mappable<T, Op
         if (t == null) {
             return None.none();
         }
-        return new Some<T>(t);
+        return Some.some(t);
     }
 
     public static <T> Option<T> some(T t) {
-        return new Some<T>(t);
+        return Some.some(t);
     }
 
     public static <T> Option<T> none() {
-        return new None<T>();
+        return None.none();
     }
 
     public static <T> Option<T> none(Class<T> aClass) {

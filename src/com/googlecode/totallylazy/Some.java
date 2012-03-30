@@ -7,7 +7,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 public class Some<T> extends Option<T> {
     private final T t;
 
-    public Some(T t) {
+    private Some(T t) {
         this.t = t;
     }
 

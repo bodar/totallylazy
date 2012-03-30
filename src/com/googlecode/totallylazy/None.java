@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class None<T> extends Option<T>{
-    public None() {}
+    private None() {}
 
     public static <T> None<T> none() {
         return new None<T>();
