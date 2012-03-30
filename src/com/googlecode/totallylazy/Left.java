@@ -3,7 +3,7 @@ package com.googlecode.totallylazy;
 public class Left<L,R> extends Either<L, R> {
     private final L value;
 
-    public Left(L value) {
+    private Left(L value) {
         this.value = value;
     }
 

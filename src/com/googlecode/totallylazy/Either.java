@@ -6,11 +6,11 @@ import static com.googlecode.totallylazy.Callers.call;
 
 public abstract class Either<L, R> implements Mappable<R, Either<L, ?>> {
     public static <L,R> Either<L,R> right(R value) {
-        return new Right<L,R>(value);
+        return Right.right(value);
     }
 
     public static <L,R> Either<L,R> left(L value) {
-        return new Left<L,R>(value);
+        return Left.left(value);
     }
 
     public boolean isRight() {
