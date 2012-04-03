@@ -1,14 +1,11 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.EmptyIterator;
-import com.googlecode.totallylazy.iterators.ReadOnlyListIterator;
-import com.googlecode.totallylazy.iterators.StatefulIterator;
+import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 
-import java.util.AbstractList;
-import java.util.AbstractSequentialList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
@@ -20,6 +17,7 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 
 public abstract class PersistentList<T> implements Iterable<T> {
     private static final Empty EMPTY = new Empty();
+
     public static <T> PersistentList<T> empty() {
         return cast(EMPTY);
     }
@@ -56,7 +54,13 @@ public abstract class PersistentList<T> implements Iterable<T> {
         return sequence(values).foldRight(PersistentList.<T>empty(), PersistentList.<T>cons().flip());
     }
 
+    public abstract T head();
+
+    public abstract PersistentList<T> tail();
+
     public abstract int size();
+
+    public abstract boolean isEmpty();
 
     public PersistentList<T> cons(T head) {
         return cons(head, this);
@@ -83,7 +87,7 @@ public abstract class PersistentList<T> implements Iterable<T> {
         return list(sequence(this).add(value));
     }
 
-    public List<T> toList(){
+    public List<T> toList() {
         return sequence(this).toList();
     }
 
@@ -92,8 +96,23 @@ public abstract class PersistentList<T> implements Iterable<T> {
         }
 
         @Override
+        public T head() {
+            throw new NoSuchElementException();
+        }
+
+        @Override
+        public PersistentList<T> tail() {
+            throw new NoSuchElementException();
+        }
+
+        @Override
         public int size() {
             return 0;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return true;
         }
 
         @Override
@@ -119,13 +138,28 @@ public abstract class PersistentList<T> implements Iterable<T> {
         }
 
         @Override
+        public T head() {
+            return head;
+        }
+
+        @Override
+        public PersistentList<T> tail() {
+            return tail;
+        }
+
+        @Override
         public int size() {
             return size;
         }
 
         @Override
+        public boolean isEmpty() {
+            return false;
+        }
+
+        @Override
         public Iterator<T> iterator() {
-            return Iterators.flatten(sequence(new OneElementIterator<T>(head), tail.iterator()).iterator());
+            return new ConsIterator<T>(this);
         }
 
         @Override
@@ -144,22 +178,25 @@ public abstract class PersistentList<T> implements Iterable<T> {
         }
     }
 
-    private static class OneElementIterator<T> extends StatefulIterator<T> {
-        private final T value;
-        private boolean called;
+    private static class ConsIterator<T> extends ReadOnlyIterator<T> {
+        private PersistentList<T> list;
 
-        public OneElementIterator(T value) {
-            this.value = value;
+        public ConsIterator(PersistentList<T> list) {
+            this.list = list;
         }
 
         @Override
-        protected T getNext() throws Exception {
-            if (called) {
-                return finished();
-            }
-            called = true;
-            return value;
+        public boolean hasNext() {
+            return !list.isEmpty();
+        }
+
+        @Override
+        public T next() {
+            final T head = list.head();
+            list = list.tail();
+            return head;
         }
     }
+
 
 }

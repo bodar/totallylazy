@@ -1,9 +1,12 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.iterators.ReadOnlyListIterator;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import static com.googlecode.totallylazy.PersistentList.list;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -82,5 +85,17 @@ public class PersistentListTest {
             add(1);
         }};
         assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void supportIterator() throws Exception {
+        final Iterator<Integer> iterator = list(1, 2, 3).iterator();
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next(), is(1));
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next(), is(2));
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next(), is(3));
+        assertThat(iterator.hasNext(), is(false));
     }
 }
