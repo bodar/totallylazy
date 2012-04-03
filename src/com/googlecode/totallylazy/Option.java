@@ -26,38 +26,25 @@ public abstract class Option<T> implements Iterable<T>, Value<T>, Mappable<T, Op
         return None.none(aClass);
     }
 
-    public abstract T get();
-
-    public abstract boolean isEmpty();
-
     public T value() {
         return get();
     }
 
-    public final T getOrElse(T other) {
-        return isEmpty() ? other : get();
-    }
+    public abstract T get();
 
-    public final T getOrElse(Callable<? extends T> callable) {
-        return isEmpty() ? call(callable) : get();
-    }
+    public abstract boolean isEmpty();
 
-    public final T getOrNull() {
-        return isEmpty() ? null : get();
-    }
+    public abstract T getOrElse(T other);
 
-    @Override
-    public final <S> Option<S> map(Callable1<? super T, ? extends S> callable) {
-        return isEmpty() ? Option.<S>none() : option(Callers.call(callable, get()));
-    }
+    public abstract T getOrElse(Callable<? extends T> callable);
 
-    public final <S> Option<S> flatMap(Callable1<? super T, ? extends Option<S>> callable) {
-        return isEmpty() ? Option.<S>none() : Callers.call(callable, get());
-    }
+    public abstract T getOrNull();
 
-    public <S> S fold(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
-        return isEmpty() ? seed : Callers.call(callable, seed, get());
-    }
+    public abstract <S> Option<S> map(Callable1<? super T, ? extends S> callable);
+
+    public abstract <S> Option<S> flatMap(Callable1<? super T, ? extends Option<S>> callable);
+
+    public abstract <S> S fold(final S seed, final Callable2<? super S, ? super T, ? extends S> callable);
 
     public Sequence<T> toSequence() {
         return sequence(this);
