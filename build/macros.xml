@@ -37,7 +37,7 @@
 
             <jar destfile="@{jar}" basedir="@{classes}" manifest="${manifest}"/>
 
-            <delete file="$manifest"/>
+            <delete file="${manifest}"/>
             <delete dir="@{classes}"/>
         </sequential>
     </macrodef>

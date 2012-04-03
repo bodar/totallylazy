@@ -7,15 +7,15 @@ import java.io.File;
 
 import static com.googlecode.totallylazy.Files.TEMP_DIR;
 import static com.googlecode.totallylazy.Files.append;
-import static com.googlecode.totallylazy.Files.emptyTemporaryDirectory;
 import static com.googlecode.totallylazy.Files.directory;
+import static com.googlecode.totallylazy.Files.emptyTemporaryDirectory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.files;
+import static com.googlecode.totallylazy.Files.hasSuffix;
 import static com.googlecode.totallylazy.Files.name;
 import static com.googlecode.totallylazy.Files.path;
 import static com.googlecode.totallylazy.Files.randomFilename;
 import static com.googlecode.totallylazy.Files.recursiveFiles;
-import static com.googlecode.totallylazy.Files.temporaryDirectory;
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Files.write;
@@ -30,6 +30,17 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 
 public class FilesTest {
+
+    @Test
+    public void shouldHaveSuffix(){
+        assertThat(hasSuffix("xml").matches(new File("doesNotExist.xml")), is(true));
+    }
+
+    @Test
+    public void shouldNotHaveSuffix(){
+        assertThat(hasSuffix("xml").matches(new File("doesNotExist")), is(false));
+    }
+
     @Test
     public void canDeleteNonEmptyDirectory() throws Exception {
         File parent = directory(TEMP_DIR, randomFilename());

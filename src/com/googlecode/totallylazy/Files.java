@@ -27,6 +27,14 @@ public class Files {
         };
     }
 
+    public static Predicate<? super File> hasSuffix(final String suffix) {
+        return new Predicate<File>() {
+            public boolean matches(File file) {
+                return file.getName().endsWith("." + suffix);
+            }
+        };
+    }
+
     public static Predicate<? super File> isDirectory() {
         return new Predicate<File>() {
             public boolean matches(File file) {
