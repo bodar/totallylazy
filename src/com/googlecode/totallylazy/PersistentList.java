@@ -67,11 +67,15 @@ public abstract class PersistentList<T> implements Iterable<T> {
     }
 
     public PersistentList<T> remove(T value) {
-        return list(sequence(this).filter(not(onlyOnce(is(value)))));
+        return list(toSequence().filter(not(onlyOnce(is(value)))));
+    }
+
+    public Sequence<T> toSequence() {
+        return sequence(this);
     }
 
     public PersistentList<T> removeAll(Iterable<T> values) {
-        return list(sequence(this).filter(not(in(set(values)))));
+        return list(toSequence().filter(not(in(set(values)))));
     }
 
     public static <T> Function2<PersistentList<T>, T, PersistentList<T>> cons() {
@@ -84,11 +88,11 @@ public abstract class PersistentList<T> implements Iterable<T> {
     }
 
     public PersistentList<T> add(T value) {
-        return list(sequence(this).add(value));
+        return list(toSequence().add(value));
     }
 
     public List<T> toList() {
-        return sequence(this).toList();
+        return toSequence().toList();
     }
 
     private static class Empty<T> extends PersistentList<T> {
