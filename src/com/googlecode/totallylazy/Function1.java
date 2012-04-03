@@ -105,10 +105,10 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Mappable<B, Fu
     }
 
     public Function1<A,B> time() {
-        return TimeCallable1.time(this);
+        return TimeCallable1.time1(this);
     }
 
     public Function1<A,B> time(Callable1<? super Number, ?> reporter) {
-        return TimeCallable1.time(this, reporter);
+        return TimeCallable1.time1(this, reporter);
     }
 }
