@@ -1,10 +1,12 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.MemorisedIterator;
+import com.googlecode.totallylazy.iterators.ReadOnlyListIterator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static java.util.Collections.synchronizedList;
@@ -18,7 +20,7 @@ public final class MemorisedSequence<T> extends Sequence<T> {
         this.iterable = iterable;
     }
 
-    public final Iterator<T> iterator() {
+    public final ReadOnlyListIterator<T> iterator() {
         return new MemorisedIterator<T>(getIterator(), memory);
     }
 
