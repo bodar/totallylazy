@@ -69,12 +69,16 @@ public class Predicates {
         };
     }
 
-    public static <T> LogicalPredicate<Iterable<T>> subsetOf(final Iterable<? extends T> superset) {
+    public static <T> LogicalPredicate<Iterable<T>> forAll(final Predicate<? super T> predicate) {
         return new LogicalPredicate<Iterable<T>>() {
-            public boolean matches(Iterable<T> subset) {
-                return sequence(subset).forAll(in(superset));
+            public boolean matches(Iterable<T> iterable) {
+                return sequence(iterable).forAll(predicate);
             }
         };
+    }
+
+    public static <T> LogicalPredicate<Iterable<T>> subsetOf(final Iterable<? extends T> superset) {
+        return forAll(in(superset));
     }
 
     public static <T> LogicalPredicate<Iterable<T>> supersetOf(final Iterable<? extends T> subset) {
