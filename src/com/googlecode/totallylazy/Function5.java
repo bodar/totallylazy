@@ -38,7 +38,7 @@ public abstract class Function5<A, B, C, D, E, F> extends Function4<A, B, C, D, 
         }
     }
 
-    public static <A, B, C, D, E, F> Function5<A, B, C, D, E, F> uncurry4(final Callable1<? super A, ? extends Callable1<? super B, ? extends Callable1<? super C, ? extends Callable1<? super D, ? extends Callable1<? super E, ? extends F>>>>> callable) {
+    public static <A, B, C, D, E, F> Function5<A, B, C, D, E, F> uncurry5(final Callable1<? super A, ? extends Callable1<? super B, ? extends Callable1<? super C, ? extends Callable1<? super D, ? extends Callable1<? super E, ? extends F>>>>> callable) {
         return new Function5<A, B, C, D, E, F>() {
             @Override
             public F call(A a, B b, C c, D d, E e) throws Exception {
