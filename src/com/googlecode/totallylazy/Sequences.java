@@ -669,4 +669,8 @@ public class Sequences {
             }
         };
     }
+
+    public static <T> Function1<T, Integer> indexIn(final Iterable<? extends T> values){
+        return Lists.indexIn(sequence(values).toList());
+    }
 }

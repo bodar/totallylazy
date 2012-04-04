@@ -24,7 +24,7 @@ public class Arrays {
     }
 
     public static <T> List<T> list(T... values) {
-        return java.util.Arrays.asList(values);
+        return Lists.list(values);
     }
 
     public static <T> boolean containsIndex(T[] array, int index) {
