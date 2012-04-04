@@ -7,9 +7,11 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +28,11 @@ import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.length;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Functions.and;
 import static com.googlecode.totallylazy.Functions.or;
+import static com.googlecode.totallylazy.Lists.indexIn;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
@@ -698,5 +702,12 @@ public class SequenceTest {
             assertThat(e.getCause(), instanceOf(InterruptedException.class));
             assertThat(count[0], is(5));
         }
+    }
+
+    @Test
+    public void supportsSortingByOtherIterableOrder() throws Exception {
+        assertThat(sequence('D', 'E', 'F').sortBy(indexIn(list('F', 'E', 'D'))), hasExactly('F', 'E', 'D'));
+        assertThat(sequence(pair("Dan", 'D'), pair("Ray", 'R'), pair("Tom", 'T')).sortBy(second(Character.class).then(indexIn(list('T', 'R', 'D')))),
+                hasExactly(pair("Tom", 'T'), pair("Ray", 'R'), pair("Dan", 'D')));
     }
 }
