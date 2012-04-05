@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 public class XmlTest {
@@ -20,7 +21,7 @@ public class XmlTest {
                         "</xh:html>");
 
         assertThat(Xml.selectNodes(document, "//meta/@content").map(Xml.contents()), hasExactly("Foo", "Bar"));
-        assertThat(Xml.selectContents(document, "//boo/text()"), is("far")); // this should without text()
+        assertThat(Xml.selectContents(document, "//boo/text()"), is("far")); // this should work without text()
     }
 
     @Test

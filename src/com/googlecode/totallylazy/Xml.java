@@ -31,6 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Runnables.VOID;
+import static com.googlecode.totallylazy.XPathFunctions.TotallyLazyXPathFunction.totallyLazyXPathFunctions;
 
 public class Xml {
     public static final Escaper DEFAULT_ESCAPER = new Escaper().
@@ -94,7 +95,9 @@ public class Xml {
     }
 
     public static XPath xpath() {
-        return XPathFactory.newInstance().newXPath();
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        xPath.setXPathFunctionResolver(totallyLazyXPathFunctions());
+        return xPath;
     }
 
     public static Sequence<Node> sequence(final NodeList nodes) {
@@ -262,5 +265,4 @@ public class Xml {
             }
         };
     }
-
 }
