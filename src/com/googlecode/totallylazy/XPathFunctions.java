@@ -12,57 +12,43 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class XPathFunctions {
-    public static final Map<String, Callable1<List, Object>> functions = new ConcurrentHashMap<String, Callable1<List, Object>>() {
-        {
-            put("join-strings", joinStrings());
-        }
+    public static final Map<String, Callable1<List, Object>> functions = new ConcurrentHashMap<String, Callable1<List, Object>>() {{
+        put("join-strings", adapt(joinStrings()));
+    }};
 
-        private Callable1<List, Object> joinStrings() {
-            return new Callable1<List, Object>() {
-                @Override
-                public Object call(List list) throws Exception {
-                    return Xml.sequence((NodeList) list.get(0)).map(toNodeValues()).toString((String) list.get(1));
-                }
-
-                private Function1<Node, String> toNodeValues() {
-                    return new Function1<Node, String>() {
-                        @Override
-                        public String call(Node node) throws Exception {
-                            return node.getTextContent();
-                        }
-                    };
-                }
-            };
-        }
-    };
-
-    static class FunctionAdapter implements XPathFunction {
-        private final Callable1<List, Object> callable1;
-
-        public FunctionAdapter(Callable1<List, Object> callable1) {
-            this.callable1 = callable1;
-        }
-
-        @Override
-        public Object evaluate(List args) throws XPathFunctionException {
-            try {
-                return callable1.call(args);
-            } catch (Exception e) {
-                throw new XPathFunctionException(e);
+    public static Callable2<Sequence<Node>, String, String> joinStrings() {
+        return new Callable2<Sequence<Node>, String, String>() {
+            @Override
+            public String call(Sequence<Node> nodes, String joinWith) throws Exception {
+                return Xml.textContents(nodes).toString(joinWith);
             }
-        }
+        };
     }
 
-    static class TotallyLazyXPathFunction implements XPathFunctionResolver {
-        private TotallyLazyXPathFunction() { }
+    public static Callable1<List, Object> adapt(final Callable2<Sequence<Node>, String, String> callable) {
+        return new Callable1<List, Object>() {
+            @Override
+            public Object call(List list) throws Exception {
+                return callable.call(Xml.sequence((NodeList) list.get(0)), (String) list.get(1));
+            }
+        };
+    }
 
-        static TotallyLazyXPathFunction totallyLazyXPathFunctions() {
-            return new TotallyLazyXPathFunction();
-        }
-
-        @Override
-        public XPathFunction resolveFunction(QName functionName, int arity) {
-            return new FunctionAdapter(functions.get(functionName.getLocalPart()));
-        }
+    public static XPathFunctionResolver resolver() {
+        return new XPathFunctionResolver() {
+            @Override
+            public XPathFunction resolveFunction(final QName functionName, int arity) {
+                return new XPathFunction() {
+                    @Override
+                    public Object evaluate(List args) throws XPathFunctionException {
+                        try {
+                            return functions.get(functionName.getLocalPart()).call(args);
+                        } catch (Exception e) {
+                            throw new XPathFunctionException(e);
+                        }
+                    }
+                };
+            }
+        };
     }
 }

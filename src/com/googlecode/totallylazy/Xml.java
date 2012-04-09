@@ -31,7 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Runnables.VOID;
-import static com.googlecode.totallylazy.XPathFunctions.TotallyLazyXPathFunction.totallyLazyXPathFunctions;
+import static com.googlecode.totallylazy.XPathFunctions.resolver;
 
 public class Xml {
     public static final Escaper DEFAULT_ESCAPER = new Escaper().
@@ -96,7 +96,7 @@ public class Xml {
 
     public static XPath xpath() {
         XPath xPath = XPathFactory.newInstance().newXPath();
-        xPath.setXPathFunctionResolver(totallyLazyXPathFunctions());
+        xPath.setXPathFunctionResolver(resolver());
         return xPath;
     }
 
@@ -109,7 +109,24 @@ public class Xml {
     }
 
     public static String contents(Sequence<Node> nodes) {
-        return nodes.map(contents()).toString("");
+        return contentsSequence(nodes).toString("");
+    }
+
+    public static Sequence<String> contentsSequence(Sequence<Node> nodes) {
+        return nodes.map(contents());
+    }
+
+    public static Sequence<String> textContents(Sequence<Node> nodes) {
+        return nodes.map(textContent());
+    }
+
+    public static Function1<Node, String> textContent() {
+        return new Function1<Node, String>() {
+            @Override
+            public String call(Node node) throws Exception {
+                return node.getTextContent();
+            }
+        };
     }
 
     public static Function1<Element, Void> removeAttribute(final String name) {
