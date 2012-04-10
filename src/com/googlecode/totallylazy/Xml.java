@@ -41,25 +41,14 @@ public class Xml {
             withRule('\'', "&#39;").
             withRule('"', "&quot;").
             withRule(Strings.unicodeControlOrUndefinedCharacter(), toXmlEntity());
+    private static final Document DOCUMENT = document("<totallylazy/>");
 
     public static String selectContents(final Node node, final String expression) {
-        try {
-            return contents(internalSelectNodes(node, expression));
-        } catch (XPathExpressionException e) {
-            try {
-                return (String) xpath().evaluate(expression, node, XPathConstants.STRING);
-            } catch (XPathExpressionException ignore) {
-                throw LazyException.lazyException(e);
-            }
-        }
+        return contents(internalSelectNodes(node, expression));
     }
 
     public static Sequence<Node> selectNodes(final Node node, final String expression) {
-        try {
-            return internalSelectNodes(node, expression);
-        } catch (XPathExpressionException e) {
-            throw LazyException.lazyException(e);
-        }
+        return internalSelectNodes(node, expression);
     }
 
     public static Number selectNumber(final Node node, final String expression) {
@@ -78,8 +67,17 @@ public class Xml {
         }
     }
 
-    private static Sequence<Node> internalSelectNodes(final Node node, final String expression) throws XPathExpressionException {
-        return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
+    private static Sequence<Node> internalSelectNodes(final Node node, final String expression) {
+        try {
+            return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
+        } catch (XPathExpressionException e) {
+            try {
+                String nodeAsString = (String) xpath().evaluate(expression, node, XPathConstants.STRING);
+                return Sequences.<Node>sequence(DOCUMENT.createTextNode(nodeAsString));
+            } catch (XPathExpressionException ignore) {
+                throw LazyException.lazyException(e);
+            }
+        }
     }
 
     public static Option<Node> selectNode(final Node node, final String expression) {
