@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class XPathFunctions {
     public static final Map<String, Callable1<List, Object>> functions = new ConcurrentHashMap<String, Callable1<List, Object>>() {{
-        put("join-strings", adapt(joinStrings()));
+        put("string-join", adapt(joinStrings()));
     }};
 
     public static Callable2<Sequence<Node>, String, String> joinStrings() {
