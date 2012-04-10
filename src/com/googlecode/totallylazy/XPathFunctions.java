@@ -9,6 +9,7 @@ import javax.xml.xpath.XPathFunctionException;
 import javax.xml.xpath.XPathFunctionResolver;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class XPathFunctions {
@@ -29,7 +30,11 @@ public class XPathFunctions {
         return new Callable1<List, Object>() {
             @Override
             public Object call(List list) throws Exception {
-                return callable.call(Xml.sequence((NodeList) list.get(0)), (String) list.get(1));
+                return callable.call(Xml.sequence((NodeList) list.get(0)), unescape((String) list.get(1)));
+            }
+
+            private String unescape(String value) {
+                return value.replace("\\n", "\n");
             }
         };
     }

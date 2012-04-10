@@ -9,6 +9,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class XPathFunctionsTest {
+
+    @Test
+    public void supportsNewLineChar() throws Exception {
+        Document document = document("<root><node>hello</node><node>world</node></root>");
+        String joinedStrings = xpath().evaluate("tl:join-strings(//node, '\\n')", document);
+        assertThat(joinedStrings, equalTo("hello\nworld"));
+    }
+
     @Test
     public void supportsJoinStringsInXPath() throws Exception {
         Document document = document("<root><node>hello</node><node>world</node></root>");
