@@ -8,6 +8,7 @@ import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Comparators {
     public static <T, R> Comparator<T> where(final Callable1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
@@ -18,20 +19,26 @@ public class Comparators {
         };
     }
 
-    public static <T extends Comparable<? super T>> Comparator<? super T> ascending() {
-        return new Comparator<T>() {
-            public int compare(T a, T b) {
-                return a.compareTo(b);
-            }
-        };
+    @SuppressWarnings("unchecked")
+    private static final Comparator<Comparable> ASCENDING = new Comparator<Comparable>() {
+        public int compare(Comparable a, Comparable b) {
+            return a.compareTo(b);
+        }
+    };
+
+    public static <T extends Comparable<? super T>> Comparator<T> ascending() {
+        return cast(ASCENDING);
     }
 
-    public static <T extends Comparable<? super T>> Comparator<? super T> descending() {
-        return new Comparator<T>() {
-            public int compare(T a, T b) {
-                return b.compareTo(a);
-            }
-        };
+    @SuppressWarnings("unchecked")
+    private static final Comparator<Comparable> DESCENDING = new Comparator<Comparable>() {
+        public int compare(Comparable a, Comparable b) {
+            return b.compareTo(a);
+        }
+    };
+
+    public static <T extends Comparable<? super T>> Comparator<T> descending() {
+        return cast(DESCENDING);
     }
 
     public static <T> Comparator<T> comparators(final Comparator<? super T>... comparators) {
