@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.time;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -107,4 +108,13 @@ public class Dates {
         return add(date, timeUnit, -amount);
     }
 
+    public static Date stripTime(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(HOUR_OF_DAY, 0);
+        calendar.set(MINUTE, 0);
+        calendar.set(SECOND, 0);
+        calendar.set(MILLISECOND, 0);
+        return calendar.getTime();
+    }
 }
