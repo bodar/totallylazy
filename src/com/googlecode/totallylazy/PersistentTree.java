@@ -3,10 +3,11 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public abstract class PersistentTree<T> {
+public abstract class PersistentTree<T> implements Iterable<T> {
     protected final Comparator<T> comparator;
 
     protected PersistentTree(Comparator<T> comparator) {
@@ -46,7 +47,7 @@ public abstract class PersistentTree<T> {
     }
 
     public static <T> PersistentTree<T> tree(final Iterable<T> values, Comparator<T> comparator) {
-        return sequence(values).foldRight(PersistentTree.<T>empty(comparator), PersistentTree.<T>insert());
+        return sequence(values).fold(PersistentTree.<T>empty(comparator), PersistentTree.<T>insert());
     }
 
     public static <T extends Comparable<? super T>> PersistentTree<T> node(T value, PersistentTree<T> left, PersistentTree<T> right) {
@@ -57,12 +58,21 @@ public abstract class PersistentTree<T> {
         return new Node<T>(value, left, right, comparator);
     }
 
+    @Override
+    public Iterator<T> iterator() {
+        return persistentList().iterator();
+    }
+
+    public abstract PersistentList<T> persistentList();
+
+    public abstract PersistentList<T> join(PersistentList<T> cons);
+
     public abstract PersistentTree<T> insert(T newValue);
 
-    public static <T> Function2<T, PersistentTree<T>, PersistentTree<T>> insert() {
-        return new Function2<T, PersistentTree<T>, PersistentTree<T>>() {
+    public static <T> Function2<PersistentTree<T>, T, PersistentTree<T>> insert() {
+        return new Function2<PersistentTree<T>, T, PersistentTree<T>>() {
             @Override
-            public PersistentTree<T> call(T t, PersistentTree<T> tree) throws Exception {
+            public PersistentTree<T> call(PersistentTree<T> tree, T t) throws Exception {
                 return tree.insert(t);
             }
         };
@@ -73,6 +83,16 @@ public abstract class PersistentTree<T> {
     private static class Empty<T> extends PersistentTree<T> {
         private Empty(Comparator<T> comparator) {
             super(comparator);
+        }
+
+        @Override
+        public PersistentList<T> persistentList() {
+            return PersistentList.empty();
+        }
+
+        @Override
+        public PersistentList<T> join(PersistentList<T> cons) {
+            return cons;
         }
 
         @Override
@@ -114,6 +134,16 @@ public abstract class PersistentTree<T> {
         }
 
         @Override
+        public PersistentList<T> persistentList() {
+            return join(PersistentList.<T>empty());
+        }
+
+        @Override
+        public PersistentList<T> join(PersistentList<T> list) {
+            return left.join(right.join(list).cons(value));
+        }
+
+        @Override
         public PersistentTree<T> insert(T newValue) {
             int difference = comparator.compare(newValue, value);
             if(difference == 0) return node(newValue, left, right, comparator);
@@ -145,7 +175,7 @@ public abstract class PersistentTree<T> {
 
         @Override
         public String toString() {
-            return String.format("(%s<%s>%s)", left, value, right);
+            return String.format("%s -> (%s %s)", value, left, right);
         }
     }
 }
