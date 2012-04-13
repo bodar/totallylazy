@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.EmptyIterator;
 import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 
 import java.util.Iterator;
@@ -22,8 +21,8 @@ public abstract class PersistentList<T> implements Iterable<T> {
         return cast(EMPTY);
     }
 
-    public static <T> Cons<T> cons(T head, PersistentList<T> tail) {
-        return new Cons<T>(head, tail);
+    public static <T> Node<T> cons(T head, PersistentList<T> tail) {
+        return new Node<T>(head, tail);
     }
 
     public static <T> PersistentList<T> list(T one) {
@@ -95,6 +94,11 @@ public abstract class PersistentList<T> implements Iterable<T> {
         return toSequence().toList();
     }
 
+    @Override
+    public Iterator<T> iterator() {
+        return new PersistentListIterator<T>(this);
+    }
+
     private static class Empty<T> extends PersistentList<T> {
         private Empty() {
         }
@@ -120,22 +124,17 @@ public abstract class PersistentList<T> implements Iterable<T> {
         }
 
         @Override
-        public Iterator<T> iterator() {
-            return new EmptyIterator<T>();
-        }
-
-        @Override
         public String toString() {
             return "[]";
         }
     }
 
-    private static class Cons<T> extends PersistentList<T> {
+    private static class Node<T> extends PersistentList<T> {
         private final T head;
         private final PersistentList<T> tail;
         private final int size;
 
-        private Cons(T head, PersistentList<T> tail) {
+        private Node(T head, PersistentList<T> tail) {
             this.head = head;
             this.tail = tail;
             size = 1 + tail.size();
@@ -162,11 +161,6 @@ public abstract class PersistentList<T> implements Iterable<T> {
         }
 
         @Override
-        public Iterator<T> iterator() {
-            return new ConsIterator<T>(this);
-        }
-
-        @Override
         public String toString() {
             return String.format("%s::%s", head, tail);
         }
@@ -178,14 +172,14 @@ public abstract class PersistentList<T> implements Iterable<T> {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof Cons ? ((Cons) obj).head.equals(head) && ((Cons) obj).tail.equals(tail) : false;
+            return obj instanceof Node ? ((Node) obj).head.equals(head) && ((Node) obj).tail.equals(tail) : false;
         }
     }
 
-    private static class ConsIterator<T> extends ReadOnlyIterator<T> {
+    private static class PersistentListIterator<T> extends ReadOnlyIterator<T> {
         private PersistentList<T> list;
 
-        public ConsIterator(PersistentList<T> list) {
+        public PersistentListIterator(PersistentList<T> list) {
             this.list = list;
         }
 
