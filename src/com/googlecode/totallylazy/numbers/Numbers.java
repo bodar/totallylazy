@@ -17,11 +17,9 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
-import com.googlecode.totallylazy.MemorisedSequence;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -29,7 +27,6 @@ import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.iterators.SegmentIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
@@ -42,6 +39,7 @@ import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
+import static com.googlecode.totallylazy.Computation.generate;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -129,6 +127,10 @@ public class Numbers {
     }
 
     public static LogicalPredicate<Number> prime() {
+        return isPrime();
+    }
+
+    public static LogicalPredicate<Number> isPrime() {
         return new LogicalPredicate<Number>() {
             public final boolean matches(final Number candidate) {
                 return isPrime(candidate);
@@ -138,18 +140,6 @@ public class Numbers {
 
     public static boolean isPrime(Number candidate) {
         return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(remainderIsZero(candidate).not());
-    }
-
-    public static LogicalPredicate<Number> prime2() {
-        return new LogicalPredicate<Number>() {
-            public final boolean matches(final Number candidate) {
-                return isPrime2(candidate);
-            }
-        };
-    }
-
-    public static boolean isPrime2(Number candidate) {
-        return primes2().takeWhile(primeSquaredLessThan(candidate)).forAll(remainderIsZero(candidate).not());
     }
 
 
@@ -186,38 +176,26 @@ public class Numbers {
         };
     }
 
-    private static final MemorisedSequence<Number> primes = Sequences.<Number>sequence(2).join(iterate(add(2), 3).filter(prime())).memorise();
-
-    public static MemorisedSequence<Number> primes() {
+    private static Computation<Number> primes = computation(2, computation(3, computation(5, generate(nextPrime()))));
+    public static Computation<Number> primes() {
         return primes;
     }
 
-    private static Computation<Number> primes2 = computation(2, Function1.<Number, Computation<Number>>constant(computation(3, Function1.<Number, Computation<Number>>constant(computation(5, generate())))));
+    public static Number nextPrime(Number number) {
+        return Computation.iterate(add(2), number).filter(isPrime()).second();
+    }
 
-    private static Callable1<Number, Computation<Number>> generate() {
-        return new Callable1<Number, Computation<Number>>() {
+    public static Function1<Number, Number> nextPrime() {
+        return new Function1<Number, Number>() {
             @Override
-            public Computation<Number> call(Number number) throws Exception {
-                return computation(iterate(add(2), add(2, number)).filter(prime2()).head(), generate());
+            public Number call(Number number) throws Exception {
+                return nextPrime(number);
             }
         };
     }
 
-    public static Sequence<Number> primes2() {
-        return primes2;
-    }
-
-    public static Sequence<Number> fibonacci2() {
-        return sequence(computation(Pair.<Number, Number>pair(0,1), new Callable1<Pair<Number, Number>, Computation<Pair<Number, Number>>>() {
-            @Override
-            public Computation<Pair<Number, Number>> call(Pair<Number, Number> p) throws Exception {
-                return computation(pair(p.second(), add(p.first(), p.second())), this);
-            }
-        })).map(first(Number.class));
-    }
-
     public static Sequence<Number> fibonacci() {
-        return iterate(reduceAndShift(sum()), numbers(0, 1)).map(first(Number.class));
+        return computation(Pair.<Number, Number>pair(0,1), generate(sum())).map(first(Number.class));
     }
 
     public static Sequence<Number> powersOf(Number amount) {

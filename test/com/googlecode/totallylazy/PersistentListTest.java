@@ -107,10 +107,4 @@ public class PersistentListTest {
         PersistentSet<Integer> set = list(2, 1, 4, 3).join(set(3, 4));
         assertThat(set, hasExactly(1, 2, 3, 4));
     }
-
-    @Test
-    public void blah() throws Exception {
-        PersistentList<Number> join = list(range(0, 1000000));
-        assertThat(join, startsWith((Number) 0, 1, 2, 3, 4));
-    }
 }

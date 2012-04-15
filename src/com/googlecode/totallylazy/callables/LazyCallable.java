@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Function;
 
 import java.util.concurrent.Callable;
 
-public final class LazyCallable<T> extends Function<T> {
+public class LazyCallable<T> extends Function<T> {
     private final Callable<? extends T> callable;
     private final Object lock = new Object();
     private volatile T state;

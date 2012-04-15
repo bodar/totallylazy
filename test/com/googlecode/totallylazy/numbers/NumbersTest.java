@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
@@ -17,13 +16,11 @@ import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.fibonacci;
-import static com.googlecode.totallylazy.numbers.Numbers.fibonacci2;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.powersOf;
 import static com.googlecode.totallylazy.numbers.Numbers.primeFactorsOf;
 import static com.googlecode.totallylazy.numbers.Numbers.primes;
-import static com.googlecode.totallylazy.numbers.Numbers.primes2;
 import static com.googlecode.totallylazy.numbers.Numbers.probablePrimes;
 import static com.googlecode.totallylazy.numbers.Numbers.product;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
@@ -108,7 +105,7 @@ public class NumbersTest {
 
     @Test
     public void supportsPrimes() throws Exception {
-        assertThat(primes2(), startsWith(2, 3, 5, 7, 11, 13, 17, 19, 23, 29));
+        assertThat(primes(), startsWith(2, 3, 5, 7, 11, 13, 17, 19, 23, 29));
     }
 
     @Test
@@ -120,14 +117,9 @@ public class NumbersTest {
     public void primesIsPrettyFastAndIsMemorised() throws Exception {
         TimeReport report = new TimeReport();
         repeat(time(primes().take(1000), report)).take(1000).realise();
-        System.out.println("primes" + report);
+        System.out.println("primes2" + report);
         assertThat(report.average(), Matchers.is(lessThan(10.0)));
-        TimeReport report2 = new TimeReport();
-        repeat(time(primes2().take(1000), report2)).take(1000).realise();
-        System.out.println("primes2" + report2);
-        assertThat(report2.average(), Matchers.is(lessThan(10.0)));
     }
-
 
     @Test
     public void supportsFibonacci() throws Exception {
