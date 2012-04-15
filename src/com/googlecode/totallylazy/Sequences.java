@@ -192,6 +192,7 @@ public class Sequences {
         };
     }
 
+
     public static <T> Sequence<T> repeat(final Callable<? extends T> callable) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
