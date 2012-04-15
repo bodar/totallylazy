@@ -10,7 +10,9 @@ import static com.googlecode.totallylazy.PersistentList.list;
 import static com.googlecode.totallylazy.PersistentSet.set;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 
@@ -104,5 +106,11 @@ public class PersistentListTest {
         assertThat(join, hasExactly(1, 2, 3, 4, 4, 3, 2, 1));
         PersistentSet<Integer> set = list(2, 1, 4, 3).join(set(3, 4));
         assertThat(set, hasExactly(1, 2, 3, 4));
+    }
+
+    @Test
+    public void blah() throws Exception {
+        PersistentList<Number> join = list(range(0, 1000000));
+        assertThat(join, startsWith((Number) 0, 1, 2, 3, 4));
     }
 }
