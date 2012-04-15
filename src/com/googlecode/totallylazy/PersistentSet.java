@@ -48,7 +48,7 @@ public abstract class PersistentSet<T> implements Iterable<T>, Constructable<T, 
     }
 
     public static <T> PersistentSet<T> set(final Iterable<T> values, Comparator<T> comparator) {
-        return sequence(values).fold(PersistentSet.<T>empty(comparator), PersistentSet.<T>cons());
+        return sequence(values).fold(PersistentSet.<T>empty(comparator), functions.<T, PersistentSet<T>>cons());
     }
 
     public static <T extends Comparable<? super T>> PersistentSet<T> node(T value, PersistentSet<T> left, PersistentSet<T> right) {
@@ -65,15 +65,6 @@ public abstract class PersistentSet<T> implements Iterable<T>, Constructable<T, 
     }
 
     public abstract PersistentList<T> persistentList();
-
-    public static <T> Function2<PersistentSet<T>, T, PersistentSet<T>> cons() {
-        return new Function2<PersistentSet<T>, T, PersistentSet<T>>() {
-            @Override
-            public PersistentSet<T> call(PersistentSet<T> set, T t) throws Exception {
-                return set.cons(t);
-            }
-        };
-    }
 
     public abstract boolean contains(T other);
 
