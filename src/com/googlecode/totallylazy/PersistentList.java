@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
+import com.googlecode.totallylazy.iterators.DeconstructableIterator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -14,7 +14,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public abstract class PersistentList<T> implements Iterable<T> {
+public abstract class PersistentList<T> implements Iterable<T>, Constructable<T, PersistentList<T>>, Deconstructable<T, PersistentList<T>> {
     private static final Empty EMPTY = new Empty();
 
     public static <T> PersistentList<T> empty() {
@@ -61,6 +61,7 @@ public abstract class PersistentList<T> implements Iterable<T> {
 
     public abstract boolean isEmpty();
 
+    @Override
     public PersistentList<T> cons(T head) {
         return cons(head, this);
     }
@@ -96,7 +97,7 @@ public abstract class PersistentList<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new PersistentListIterator<T>(this);
+        return new DeconstructableIterator<T, PersistentList<T>>(this);
     }
 
     private static class Empty<T> extends PersistentList<T> {
@@ -121,6 +122,11 @@ public abstract class PersistentList<T> implements Iterable<T> {
         @Override
         public boolean isEmpty() {
             return true;
+        }
+
+        @Override
+        public <C extends Constructable<T, C>> C join(C rest) {
+            return rest;
         }
 
         @Override
@@ -161,6 +167,11 @@ public abstract class PersistentList<T> implements Iterable<T> {
         }
 
         @Override
+        public <C extends Constructable<T, C>> C join(C rest) {
+            return tail.join(rest).cons(head);
+        }
+
+        @Override
         public String toString() {
             return String.format("%s::%s", head, tail);
         }
@@ -175,26 +186,4 @@ public abstract class PersistentList<T> implements Iterable<T> {
             return obj instanceof Node ? ((Node) obj).head.equals(head) && ((Node) obj).tail.equals(tail) : false;
         }
     }
-
-    private static class PersistentListIterator<T> extends ReadOnlyIterator<T> {
-        private PersistentList<T> list;
-
-        public PersistentListIterator(PersistentList<T> list) {
-            this.list = list;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return !list.isEmpty();
-        }
-
-        @Override
-        public T next() {
-            final T head = list.head();
-            list = list.tail();
-            return head;
-        }
-    }
-
-
 }

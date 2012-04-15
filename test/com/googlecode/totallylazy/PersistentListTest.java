@@ -1,14 +1,13 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.ReadOnlyListIterator;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import static com.googlecode.totallylazy.PersistentList.list;
+import static com.googlecode.totallylazy.PersistentSet.set;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -97,5 +96,13 @@ public class PersistentListTest {
         assertThat(iterator.hasNext(), is(true));
         assertThat(iterator.next(), is(3));
         assertThat(iterator.hasNext(), is(false));
+    }
+
+    @Test
+    public void canJoin() throws Exception {
+        PersistentList<Integer> join = list(1, 2, 3, 4).join(list(4, 3, 2, 1));
+        assertThat(join, hasExactly(1, 2, 3, 4, 4, 3, 2, 1));
+        PersistentSet<Integer> set = list(2, 1, 4, 3).join(set(3, 4));
+        assertThat(set, hasExactly(1, 2, 3, 4));
     }
 }
