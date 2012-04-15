@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.iterators.DeconstructableIterator;
+import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -10,18 +10,19 @@ import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
+import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public abstract class PersistentList<T> implements Iterable<T>, Constructable<T, PersistentList<T>>, Deconstructable<T, PersistentList<T>> {
+public abstract class PersistentList<T> implements Iterable<T>, Constructable<T, PersistentList<T>>, Segment<T, PersistentList<T>> {
     private static final Empty EMPTY = new Empty();
 
     public static <T> PersistentList<T> empty() {
         return cast(EMPTY);
     }
 
-    public static <T> Node<T> cons(T head, PersistentList<T> tail) {
+    public static <T> PersistentList<T> cons(T head, PersistentList<T> tail) {
         return new Node<T>(head, tail);
     }
 
@@ -50,7 +51,7 @@ public abstract class PersistentList<T> implements Iterable<T>, Constructable<T,
     }
 
     public static <T> PersistentList<T> list(Iterable<T> values) {
-        return sequence(values).foldRight(PersistentList.<T>empty(), PersistentList.<T>cons().flip());
+        return sequence(values).reverse().foldLeft(PersistentList.<T>empty(), PersistentList.<T>cons());
     }
 
     public abstract T head();
@@ -97,7 +98,7 @@ public abstract class PersistentList<T> implements Iterable<T>, Constructable<T,
 
     @Override
     public Iterator<T> iterator() {
-        return new DeconstructableIterator<T, PersistentList<T>>(this);
+        return new SegmentIterator<T, PersistentList<T>>(this);
     }
 
     private static class Empty<T> extends PersistentList<T> {
@@ -173,12 +174,12 @@ public abstract class PersistentList<T> implements Iterable<T>, Constructable<T,
 
         @Override
         public String toString() {
-            return String.format("%s::%s", head, tail);
+            return toSequence().toString("::");
         }
 
         @Override
         public int hashCode() {
-            return 19 * head.hashCode() * tail.hashCode();
+            return toSequence().hashCode();
         }
 
         @Override

@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public abstract class PersistentSet<T> implements Iterable<T>, Constructable<T, PersistentSet<T>>, Deconstructable<T, PersistentSet<T>> {
+public abstract class PersistentSet<T> implements Iterable<T>, Constructable<T, PersistentSet<T>>, Segment<T, PersistentSet<T>> {
     protected final Comparator<T> comparator;
 
     protected PersistentSet(Comparator<T> comparator) {

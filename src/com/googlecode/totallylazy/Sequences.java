@@ -232,6 +232,10 @@ public class Sequences {
         return tail(iterable).head();
     }
 
+    public static <T> T third(final Iterable<? extends T> iterable) {
+        return tail(iterable).tail().head();
+    }
+
     public static <T> T head(final Iterable<? extends T> iterable) {
         return Iterators.head(iterable.iterator());
     }

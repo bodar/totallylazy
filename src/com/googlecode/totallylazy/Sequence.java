@@ -15,7 +15,7 @@ import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Mappable<T, Sequence<?>>, Deconstructable<T, Sequence<T>> {
+public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Mappable<T, Sequence<?>> {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Sequence && Sequences.equalTo(this, (Sequence) obj);
@@ -86,6 +86,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, M
 
     public T second() {
         return Sequences.second(this);
+    }
+
+    @Override
+    public T third() {
+        return Sequences.third(this);
     }
 
     public T head() {
