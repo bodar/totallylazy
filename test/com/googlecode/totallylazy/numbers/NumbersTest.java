@@ -117,7 +117,7 @@ public class NumbersTest {
     public void primesIsPrettyFastAndIsMemorised() throws Exception {
         TimeReport report = new TimeReport();
         repeat(time(primes().take(1000), report)).take(1000).realise();
-        System.out.println("primes2" + report);
+        System.out.println("primes " + report);
         assertThat(report.average(), Matchers.is(lessThan(10.0)));
     }
 
