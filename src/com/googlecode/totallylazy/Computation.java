@@ -8,7 +8,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Callables.cast;
 import static com.googlecode.totallylazy.Callables.deferApply;
+import static com.googlecode.totallylazy.Callables.realise;
 import static com.googlecode.totallylazy.Function.returns;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
@@ -37,6 +39,44 @@ public class Computation<T> extends Sequence<T> implements Segment<T, Computatio
     public static <T> Computation<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {
         return computation(t, generate(callable));
     }
+
+    public static <T> Computation<T> memorise(final Iterable<? extends T> iterable) {
+        final Callable<Iterator<T>> iterator = lazyIterator(iterable);
+        return computation(lazyHead(iterator), generate(lazyTail(iterator)));
+    }
+
+    public static <T> Computation<T> memorise(final Iterator<? extends T> values) {
+        final Function<Iterator<T>> iterator = returns(Unchecked.<Iterator<T>>cast(values));
+        return computation(lazyHead(iterator), generate(lazyTail(iterator)));
+    }
+
+    private static <T> Function1<T, T> lazyTail(final Callable<? extends Iterator<? extends T>> iterator) {
+        return new Function1<T, T>() {
+            @Override
+            public T call(T t) throws Exception {
+                return iterator.call().next();
+            }
+        };
+    }
+
+    private static <T> Function<T> lazyHead(final Callable<? extends Iterator<? extends T>> iterator) {
+        return new Function<T>() {
+            @Override
+            public T call() throws Exception {
+                return iterator.call().next();
+            }
+        };
+    }
+
+    private static <T> Function<Iterator<T>> lazyIterator(final Iterable<? extends T> iterable) {
+        return new Function<Iterator<T>>() {
+            @Override
+            public Iterator<T> call() throws Exception {
+                return Unchecked.cast(iterable.iterator());
+            }
+        }.lazy();
+    }
+
 
     public static <T> Callable1<T, Computation<T>> generate(final Callable1<? super T, ? extends T> callable) {
         return new Callable1<T, Computation<T>>() {
@@ -67,7 +107,12 @@ public class Computation<T> extends Sequence<T> implements Segment<T, Computatio
 
     @Override
     public boolean isEmpty() {
-        return false;
+        try {
+            head.call();
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     @Override
