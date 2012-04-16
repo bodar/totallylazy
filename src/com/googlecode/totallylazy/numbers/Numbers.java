@@ -176,7 +176,7 @@ public class Numbers {
         };
     }
 
-    private static Computation<Number> primes = computation(2, computation(3, computation(5, generate(nextPrime()))));
+    private static Computation<Number> primes = computation(2, computation(3, generate(nextPrime())));
     public static Computation<Number> primes() {
         return primes;
     }
