@@ -28,4 +28,10 @@ public class LazyCallable<T> extends Function<T> {
         }
         return state;
     }
+
+    public void forget() {
+        synchronized (lock) {
+            state = null;
+        }
+    }
 }

@@ -8,19 +8,18 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Computation.computation;
-import static com.googlecode.totallylazy.Computation.generate;
 import static com.googlecode.totallylazy.Function.returns;
+import static com.googlecode.totallylazy.Function1.function;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
 
-public class Computation<T> extends Sequence<T> implements Segment<T, Computation<T>>{
-    private final LazyCallable<T> value;
-    private final LazyCallable1<T, Computation<T>> next;
+public class Computation<T> extends Sequence<T> implements Segment<T, Computation<T>> {
+    private final LazyCallable<T> head;
+    private final LazyCallable1<T, Computation<T>> tail;
 
-    private Computation(Callable<T> value, Callable1<T, Computation<T>> next) {
-        this.value = LazyCallable.lazy(value);
-        this.next = lazy(next);
+    private Computation(Callable<T> head, Callable1<T, Computation<T>> tail) {
+        this.head = LazyCallable.lazy(head);
+        this.tail = lazy(tail);
     }
 
     public static <T> Computation<T> computation(T value, Callable1<T, Computation<T>> next) {
@@ -43,7 +42,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T, Computatio
         return new Callable1<T, Computation<T>>() {
             @Override
             public Computation<T> call(T value) throws Exception {
-                return computation(callable.call(value), this);
+                return computation(function(callable).deferApply(value), this);
             }
         };
     }
@@ -64,12 +63,12 @@ public class Computation<T> extends Sequence<T> implements Segment<T, Computatio
 
     @Override
     public T head() {
-        return value.value();
+        return head.value();
     }
 
     @Override
     public Computation<T> tail() throws NoSuchElementException {
-        return next.apply(value.value());
+        return tail.apply(head.value());
     }
 
     @Override
@@ -78,6 +77,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T, Computatio
     }
 
     public void forget() {
-        next.forget();
+        head.forget();
+        tail.forget();
     }
 }
