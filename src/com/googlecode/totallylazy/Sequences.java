@@ -124,7 +124,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> memorise(final Iterator<? extends T> iterator) {
-        return new MemorisedSequence<T>(forwardOnly(iterator));
+        return Computation.memorise(iterator);
     }
 
     public static <T> ForwardOnlySequence<T> forwardOnly(final Iterator<? extends T> iterator) {
@@ -429,8 +429,8 @@ public class Sequences {
         };
     }
 
-    public static <T> MemorisedSequence<T> memorise(final Iterable<? extends T> iterable) {
-        return new MemorisedSequence<T>(iterable);
+    public static <T> Computation<T> memorise(final Iterable<? extends T> iterable) {
+        return Computation.memorise(iterable);
     }
 
     public static <F, S> Sequence<Pair<F, S>> zip(final Iterable<? extends F> first, final Iterable<? extends S> second) {

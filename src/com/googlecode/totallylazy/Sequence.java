@@ -261,7 +261,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.cons(t, this);
     }
 
-    public MemorisedSequence<T> memorise() {
+    public Computation<T> memorise() {
         return Sequences.memorise(this);
     }
 
