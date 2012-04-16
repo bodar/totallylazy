@@ -13,7 +13,7 @@ public class LazyCallable<T> extends Function<T> {
         this.callable = callable;
     }
 
-    public static <T> Function<T> lazy(Callable<? extends T> callable) {
+    public static <T> LazyCallable<T> lazy(Callable<? extends T> callable) {
         return new LazyCallable<T>(callable);
     }
 
