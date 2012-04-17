@@ -123,6 +123,10 @@ public class Xml {
         return nodes.map(textContent());
     }
 
+    public static Sequence<String> textContents(NodeList nodes) {
+        return Xml.textContents(Xml.sequence(nodes));
+    }
+
     public static Function1<Node, String> textContent() {
         return new Function1<Node, String>() {
             @Override

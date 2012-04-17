@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.namespace.QName;
@@ -9,60 +8,37 @@ import javax.xml.xpath.XPathFunctionException;
 import javax.xml.xpath.XPathFunctionResolver;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Unchecked.cast;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
 
 public class XPathFunctions {
-    public static final Rules<Pair<String, List<Object>>, Object> functions = Rules.rules();
+    private static final Rules<Pair<String, List<Object>>, Object> functions = Rules.rules();
 
     static {
-        functions.add(new Predicate<Pair<String, List<Object>>>() {
+        add(signature("string-join", instanceOf(NodeList.class), instanceOf(String.class)), nodeListAndString(joinStrings()));
+        add(signature("trim-and-join", instanceOf(NodeList.class), instanceOf(String.class)), nodeListAndString(trimAndJoin()));
+    }
+
+    public static Rules<Pair<String, List<Object>>, Object> add(Predicate<Pair<String, List<Object>>> signature, Function1<Second<List<Object>>, Object> callable) {
+        return functions.add(signature, callable);
+    }
+
+    private static Predicate<Pair<String, List<Object>>> signature(final String name, final Predicate<Object> first, final Predicate<Object> second) {
+        return new Predicate<Pair<String, List<Object>>>() {
             @Override
             public boolean matches(Pair<String, List<Object>> other) {
-                return other.first().equals("string-join") &&
-                        (other.second().get(0) instanceof NodeList) &&
-                        (other.second().get(1) instanceof String);
-            }
-        }, joinStrings());
-        functions.add(new Predicate<Pair<String, List<Object>>>() {
-            @Override
-            public boolean matches(Pair<String, List<Object>> other) {
-                return other.first().equals("trim-and-join") &&
-                        (other.second().get(0) instanceof NodeList) &&
-                        (other.second().get(1) instanceof String);
-            }
-        }, trimAndJoin());
-    }
-
-    private static Callable1<Pair<String, List<Object>>, String> joinStrings() {
-        return new Callable1<Pair<String, List<Object>>, String>() {
-            @Override
-            public String call(Pair<String, List<Object>> pair) throws Exception {
-                Sequence<Node> nodes = Xml.sequence((NodeList) pair.second().get(0));
-                String delimiter = unescape((String) pair.second().get(1));
-                return Xml.textContents(nodes).toString(delimiter);
+                return other.first().equals(name) &&
+                        (first.matches(other.second().get(0))) &&
+                        (second.matches(other.second().get(1)));
             }
         };
     }
 
-    private static Callable1<Pair<String, List<Object>>, String> trimAndJoin() {
-        return new Callable1<Pair<String, List<Object>>, String>() {
-            @Override
-            public String call(Pair<String, List<Object>> pair) throws Exception {
-                Sequence<Node> nodes = Xml.sequence((NodeList) pair.second().get(0));
-                String delimiter = unescape((String) pair.second().get(1));
-                return Xml.textContents(nodes).map(Strings.trim()).toString(delimiter);
-            }
-        };
+    private static String joinStrings(NodeList nodes, String delimiter) {
+        return Xml.textContents(nodes).toString(delimiter);
     }
 
-    public static Callable1<List, Object> adapt(final Callable2<Sequence<Node>, String, String> callable) {
-        return new Callable1<List, Object>() {
-            @Override
-            public Object call(List list) throws Exception {
-                return callable.call(Xml.sequence((NodeList) list.get(0)), unescape((String) list.get(1)));
-            }
-
-        };
+    private static String trimAndJoin(NodeList nodes, String delimiter) {
+        return Xml.textContents(nodes).map(Strings.trim()).toString(delimiter);
     }
 
     private static String unescape(String value) {
@@ -86,5 +62,32 @@ public class XPathFunctions {
                 };
             }
         };
+    }
+
+    private static Callable2<NodeList, String, String> trimAndJoin() {
+        return new Callable2<NodeList, String, String>() {
+            @Override
+            public String call(NodeList nodes, String delimiter) throws Exception {
+                return trimAndJoin(nodes, delimiter);
+            }
+        };
+    }
+
+    private static Callable2<NodeList, String, String> joinStrings() {
+        return new Callable2<NodeList, String, String>() {
+            @Override
+            public String call(NodeList nodes, String delimiter) throws Exception {
+                return joinStrings(nodes, delimiter);
+            }
+        };
+    }
+
+    private static Function1<Second<List<Object>>, Object> nodeListAndString(final Callable2<NodeList, String, String> callable) {
+        return Callables.<List<Object>>second().then(new Callable1<List<Object>, Object>() {
+            @Override
+            public Object call(List<Object> objects) throws Exception {
+                return callable.call((NodeList) objects.get(0), unescape((String) objects.get(1)));
+            }
+        });
     }
 }
