@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.w3c.dom.NodeList;
 
 import javax.xml.namespace.QName;
@@ -14,21 +15,19 @@ public class XPathFunctions {
     private static final Rules<Pair<String, List<Object>>, Object> functions = Rules.rules();
 
     static {
-        add(signature("string-join", instanceOf(NodeList.class), instanceOf(String.class)), nodeListAndString(joinStrings()));
-        add(signature("trim-and-join", instanceOf(NodeList.class), instanceOf(String.class)), nodeListAndString(trimAndJoin()));
+        add(signature("string-join", Predicates.<List<Object>>and(argInstanceOf(0, NodeList.class), argInstanceOf(1, String.class))), nodeListAndString(joinStrings()));
+        add(signature("trim-and-join", Predicates.<List<Object>>and(argInstanceOf(0, NodeList.class), argInstanceOf(1, String.class))), nodeListAndString(trimAndJoin()));
     }
 
     public static Rules<Pair<String, List<Object>>, Object> add(Predicate<Pair<String, List<Object>>> signature, Function1<Second<List<Object>>, Object> callable) {
         return functions.add(signature, callable);
     }
 
-    private static Predicate<Pair<String, List<Object>>> signature(final String name, final Predicate<Object> first, final Predicate<Object> second) {
+    public static Predicate<Pair<String, List<Object>>> signature(final String methodName, final Predicate<List<Object>> argsPredicate) {
         return new Predicate<Pair<String, List<Object>>>() {
             @Override
             public boolean matches(Pair<String, List<Object>> other) {
-                return other.first().equals(name) &&
-                        (first.matches(other.second().get(0))) &&
-                        (second.matches(other.second().get(1)));
+                return other.first().equals(methodName) && argsPredicate.matches(other.second());
             }
         };
     }
@@ -89,5 +88,18 @@ public class XPathFunctions {
                 return callable.call((NodeList) objects.get(0), unescape((String) objects.get(1)));
             }
         });
+    }
+
+    private static LogicalPredicate<List<Object>> argInstanceOf(int index, Class<?> clazz) {
+        return Predicates.where(arg(index), instanceOf(clazz));
+    }
+
+    private static Function1<List<Object>, Object> arg(final int index) {
+        return new Function1<List<Object>, Object>() {
+            @Override
+            public Object call(List<Object> objects) throws Exception {
+                return objects.get(index);
+            }
+        };
     }
 }
