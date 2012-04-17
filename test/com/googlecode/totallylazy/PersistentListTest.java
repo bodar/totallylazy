@@ -7,12 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.googlecode.totallylazy.PersistentList.list;
-import static com.googlecode.totallylazy.PersistentSet.set;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.UnbalancedSet.set;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 
