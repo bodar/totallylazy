@@ -263,4 +263,14 @@ public class Strings {
             }
         };
     }
+
+
+    public static Callable1<String, String> trim() {
+        return new Callable1<String, String>() {
+            @Override
+            public String call(String value) throws Exception {
+                return value.trim();
+            }
+        };
+    }
 }
