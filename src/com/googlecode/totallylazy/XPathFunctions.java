@@ -15,8 +15,8 @@ public class XPathFunctions {
     private static final Rules<Pair<String, List<Object>>, Object> functions = Rules.rules();
 
     static {
-        add(signature("string-join", Predicates.<List<Object>>and(argInstanceOf(0, NodeList.class), argInstanceOf(1, String.class))), nodeListAndString(joinStrings()));
-        add(signature("trim-and-join", Predicates.<List<Object>>and(argInstanceOf(0, NodeList.class), argInstanceOf(1, String.class))), nodeListAndString(trimAndJoin()));
+        add(signature("string-join", argumentsOf(NodeList.class, String.class)), nodeListAndString(joinStrings()));
+        add(signature("trim-and-join", argumentsOf(NodeList.class, String.class)), nodeListAndString(trimAndJoin()));
     }
 
     public static Rules<Pair<String, List<Object>>, Object> add(Predicate<Pair<String, List<Object>>> signature, Function1<Second<List<Object>>, Object> callable) {
@@ -90,15 +90,25 @@ public class XPathFunctions {
         });
     }
 
-    private static LogicalPredicate<List<Object>> argInstanceOf(int index, Class<?> clazz) {
-        return Predicates.where(arg(index), instanceOf(clazz));
-    }
-
-    private static Function1<List<Object>, Object> arg(final int index) {
+    private static Function1<List<Object>, Object> arg(final Number index) {
         return new Function1<List<Object>, Object>() {
             @Override
             public Object call(List<Object> objects) throws Exception {
-                return objects.get(index);
+                return objects.get(index.intValue());
+            }
+        };
+    }
+
+    private static Predicate<List<Object>> argumentsOf(final Class<?>... clazz) {
+        return new Predicate<List<Object>>() {
+            @Override
+            public boolean matches(final List<Object> other) {
+                return Sequences.sequence(clazz).zipWithIndex().forAll(new Predicate<Pair<Number, Class<?>>>() {
+                    @Override
+                    public boolean matches(Pair<Number, Class<?>> pair) {
+                        return Predicates.where(arg(pair.first()), instanceOf(pair.second())).matches(other);
+                    }
+                });
             }
         };
     }
