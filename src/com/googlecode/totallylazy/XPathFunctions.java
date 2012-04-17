@@ -8,20 +8,49 @@ import javax.xml.xpath.XPathFunction;
 import javax.xml.xpath.XPathFunctionException;
 import javax.xml.xpath.XPathFunctionResolver;
 import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.concurrent.ConcurrentHashMap;
+
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class XPathFunctions {
-    public static final Map<String, Callable1<List, Object>> functions = new ConcurrentHashMap<String, Callable1<List, Object>>() {{
-        put("string-join", adapt(joinStrings()));
-    }};
+    public static final Rules<Pair<String, List<Object>>, Object> functions = Rules.rules();
 
-    public static Callable2<Sequence<Node>, String, String> joinStrings() {
-        return new Callable2<Sequence<Node>, String, String>() {
+    static {
+        functions.add(new Predicate<Pair<String, List<Object>>>() {
             @Override
-            public String call(Sequence<Node> nodes, String joinWith) throws Exception {
-                return Xml.textContents(nodes).toString(joinWith);
+            public boolean matches(Pair<String, List<Object>> other) {
+                return other.first().equals("string-join") &&
+                        (other.second().get(0) instanceof NodeList) &&
+                        (other.second().get(1) instanceof String);
+            }
+        }, joinStrings());
+        functions.add(new Predicate<Pair<String, List<Object>>>() {
+            @Override
+            public boolean matches(Pair<String, List<Object>> other) {
+                return other.first().equals("trim-and-join") &&
+                        (other.second().get(0) instanceof NodeList) &&
+                        (other.second().get(1) instanceof String);
+            }
+        }, trimAndJoin());
+    }
+
+    private static Callable1<Pair<String, List<Object>>, String> joinStrings() {
+        return new Callable1<Pair<String, List<Object>>, String>() {
+            @Override
+            public String call(Pair<String, List<Object>> pair) throws Exception {
+                Sequence<Node> nodes = Xml.sequence((NodeList) pair.second().get(0));
+                String delimiter = unescape((String) pair.second().get(1));
+                return Xml.textContents(nodes).toString(delimiter);
+            }
+        };
+    }
+
+    private static Callable1<Pair<String, List<Object>>, String> trimAndJoin() {
+        return new Callable1<Pair<String, List<Object>>, String>() {
+            @Override
+            public String call(Pair<String, List<Object>> pair) throws Exception {
+                Sequence<Node> nodes = Xml.sequence((NodeList) pair.second().get(0));
+                String delimiter = unescape((String) pair.second().get(1));
+                return Xml.textContents(nodes).map(Strings.trim()).toString(delimiter);
             }
         };
     }
@@ -33,10 +62,11 @@ public class XPathFunctions {
                 return callable.call(Xml.sequence((NodeList) list.get(0)), unescape((String) list.get(1)));
             }
 
-            private String unescape(String value) {
-                return value.replace("\\n", "\n");
-            }
         };
+    }
+
+    private static String unescape(String value) {
+        return value.replace("\\n", "\n");
     }
 
     public static XPathFunctionResolver resolver() {
@@ -47,7 +77,8 @@ public class XPathFunctions {
                     @Override
                     public Object evaluate(List args) throws XPathFunctionException {
                         try {
-                            return functions.get(functionName.getLocalPart()).call(args);
+                            Pair<String, List<Object>> pair = Pair.pair(functionName.getLocalPart(), Unchecked.<List<Object>>cast(args));
+                            return functions.call(pair);
                         } catch (Exception e) {
                             throw new XPathFunctionException(e);
                         }

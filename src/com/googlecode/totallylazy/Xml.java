@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -73,11 +74,15 @@ public class Xml {
         } catch (XPathExpressionException e) {
             try {
                 String nodeAsString = (String) xpath().evaluate(expression, node, XPathConstants.STRING);
-                return Sequences.<Node>sequence(DOCUMENT.createTextNode(nodeAsString));
+                return Sequences.<Node>sequence(createTextNode(nodeAsString));
             } catch (XPathExpressionException ignore) {
                 throw LazyException.lazyException(e);
             }
         }
+    }
+
+    public static Text createTextNode(String value) {
+        return DOCUMENT.createTextNode(value);
     }
 
     public static Option<Node> selectNode(final Node node, final String expression) {
