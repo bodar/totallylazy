@@ -2,9 +2,9 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.PersistentSet.empty;
-import static com.googlecode.totallylazy.PersistentSet.node;
-import static com.googlecode.totallylazy.PersistentSet.set;
+import static com.googlecode.totallylazy.UnbalancedSet.empty;
+import static com.googlecode.totallylazy.UnbalancedSet.node;
+import static com.googlecode.totallylazy.UnbalancedSet.set;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
