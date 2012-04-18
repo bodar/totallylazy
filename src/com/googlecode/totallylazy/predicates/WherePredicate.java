@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Predicate;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
+import static java.lang.String.format;
 
 public class WherePredicate<T, R> extends LogicalPredicate<T> {
     private final Callable1<? super T, ? extends R> callable;
@@ -29,5 +30,20 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
 
     public Predicate<R> predicate() {
         return cast(predicate);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof WherePredicate && callable.equals(((WherePredicate) obj).callable()) && predicate.equals(((WherePredicate) obj).predicate());
+    }
+
+    @Override
+    public int hashCode() {
+        return 19 * callable.hashCode() * predicate.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return format("where %s %s", callable, predicate);
     }
 }

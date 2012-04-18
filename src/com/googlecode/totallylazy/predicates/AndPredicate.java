@@ -27,4 +27,20 @@ public class AndPredicate<T> extends LogicalPredicate<T> {
     public Sequence<Predicate<T>> predicates() {
         return predicates;
     }
+
+    @Override
+    public int hashCode() {
+        return 31 * predicates.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof AndPredicate && predicates.equals(((AndPredicate) obj).predicates());
+    }
+
+    @Override
+    public String toString() {
+        return predicates.toString(" and ");
+    }
+
 }

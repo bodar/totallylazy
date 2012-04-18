@@ -224,12 +224,19 @@ public final class Callables {
         return Callables.asString();
     }
 
+    private final static Function1<Object, String> AS_STRING =  new Function1<Object, String>() {
+        public final String call(final Object value) {
+            return value.toString();
+        }
+
+        @Override
+        public String toString() {
+            return "toString";
+        }
+    };
+
     public static <T> Function1<T, String> asString() {
-        return new Function1<T, String>() {
-            public final String call(final T value) {
-                return value.toString();
-            }
-        };
+        return Unchecked.cast(AS_STRING);
     }
 
     private static final Function2<Integer, Object, Integer> HASH_CODE = new Function2<Integer, Object, Integer>() {
