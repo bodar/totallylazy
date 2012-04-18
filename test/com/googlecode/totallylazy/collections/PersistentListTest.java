@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.collections;
 
 import org.junit.Test;
 
@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.googlecode.totallylazy.PersistentList.list;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.UnbalancedSet.set;
+import static com.googlecode.totallylazy.collections.LLRBTree.set;
+import static com.googlecode.totallylazy.collections.PersistentList.list;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

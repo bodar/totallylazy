@@ -1,5 +1,9 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Constructable;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Iterator;
@@ -10,7 +14,6 @@ import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
-import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Unchecked.cast;
