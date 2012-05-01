@@ -16,9 +16,6 @@ public class AndPredicate<T> extends LogicalPredicate<T> {
 
     public static <T> LogicalPredicate<T> and(Iterable<? extends Predicate<? super T>> predicates){
         Sequence<Predicate<T>> sequence = Sequences.sequence(predicates).unsafeCast();
-        if(sequence.isEmpty()){
-            return all();
-        }
         if(sequence.size().equals(1)){
             return logicalPredicate(sequence.head());
         }
