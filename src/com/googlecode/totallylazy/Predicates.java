@@ -146,11 +146,11 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second) {
-        return AndPredicate.and(Sequences.<Predicate<? super T>>sequence(first, second));
+        return and(Sequences.<Predicate<? super T>>sequence(first, second));
     }
 
     public static <T> LogicalPredicate<T> and(final Predicate<? super T>... predicates) {
-        return AndPredicate.and(sequence(predicates));    }
+        return and(sequence(predicates));    }
 
     public static <T> LogicalPredicate<T> and(final Iterable<? extends Predicate<? super T>> predicates) {
         return AndPredicate.and(predicates);
@@ -161,11 +161,15 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> or(final Predicate<? super T> first, final Predicate<? super T> second) {
-        return OrPredicate.or(Sequences.<Predicate<? super T>>sequence(first, second));
+        return or(Sequences.<Predicate<? super T>>sequence(first, second));
     }
 
     public static <T> LogicalPredicate<T> or(final Predicate<? super T>... predicates) {
-        return OrPredicate.or(sequence(predicates));
+        return or(sequence(predicates));
+    }
+
+    public static <T> LogicalPredicate<T> or(final Iterable<? extends Predicate<? super T>> predicates) {
+        return OrPredicate.or(predicates);
     }
 
     public static <T> LogicalPredicate<T> not(final T t) {

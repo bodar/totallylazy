@@ -4,6 +4,8 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
+import static com.googlecode.totallylazy.Predicates.all;
+
 public class OrPredicate<T> extends LogicalPredicate<T> {
     private final Sequence<Predicate<T>> predicates;
 
@@ -13,6 +15,9 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
 
     public static <T> LogicalPredicate<T> or(Iterable<? extends Predicate<? super T>> predicates) {
         Sequence<Predicate<T>> sequence = Sequences.sequence(predicates).unsafeCast();
+        if(sequence.isEmpty()){
+            return all();
+        }
         if(sequence.size().equals(1)){
             return logicalPredicate(sequence.head());
         }
