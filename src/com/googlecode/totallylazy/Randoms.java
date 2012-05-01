@@ -101,7 +101,7 @@ public class Randoms {
             }
 
             private Integer daysBetween(Date start, Date end) {
-                return (int) (end.getTime() - start.getTime()) / (24 * 60 * 60 * 1000);
+                return abs((int) (end.getTime() - start.getTime())) / (24 * 60 * 60 * 1000);
             }
         });
     }
