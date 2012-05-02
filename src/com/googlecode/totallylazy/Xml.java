@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.NodeIterator;
+import com.googlecode.totallylazy.iterators.PoppingIterator;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -30,6 +31,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.XPathFunctions.resolver;
@@ -50,6 +52,10 @@ public class Xml {
 
     public static Sequence<Node> selectNodes(final Node node, final String expression) {
         return internalSelectNodes(node, expression);
+    }
+
+    public static Sequence<Node> selectNodesForwardOnly(final Node node, final String expression) {
+        return Sequences.forwardOnly(new PoppingIterator<Node>(selectNodes(node, expression).toList().iterator()));
     }
 
     public static Number selectNumber(final Node node, final String expression) {
