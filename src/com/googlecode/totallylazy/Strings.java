@@ -169,7 +169,7 @@ public class Strings {
                 .toString();
     }
 
-    public static String toString(Object value) {
+    public static String asString(Object value) {
         return value == null ? "" : value.toString();
     }
 

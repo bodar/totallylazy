@@ -32,9 +32,9 @@ public class StringsTest {
     }
 
     @Test
-    public void supportsObjectToString() throws Exception {
-        assertThat(Strings.toString((Object)null), is(""));
-        assertThat(Strings.toString(("foo")), is("foo"));
+    public void supportsObjectAsString() throws Exception {
+        assertThat(Strings.asString(null), is(""));
+        assertThat(Strings.asString(("foo")), is("foo"));
     }
 
     @Test
