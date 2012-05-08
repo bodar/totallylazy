@@ -169,6 +169,10 @@ public class Strings {
                 .toString();
     }
 
+    public static String toString(Object value) {
+        return value == null ? "" : value.toString();
+    }
+
     public static String toString(byte[] bytes) {
         return toString(new ByteArrayInputStream(bytes));
     }

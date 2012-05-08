@@ -6,6 +6,7 @@ import java.io.File;
 
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.write;
+import static com.googlecode.totallylazy.Sequences.equalTo;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.lines;
 import static com.googlecode.totallylazy.Strings.replace;
@@ -28,6 +29,12 @@ public class StringsTest {
         write(input.getBytes("UTF-8"), file);
         String output = Strings.toString(file);
         assertThat(output, is(input));
+    }
+
+    @Test
+    public void supportsObjectToString() throws Exception {
+        assertThat(Strings.toString((Object)null), is(""));
+        assertThat(Strings.toString(("foo")), is("foo"));
     }
 
     @Test
