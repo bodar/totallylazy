@@ -19,6 +19,10 @@ import static java.util.UUID.randomUUID;
 public class Files {
     public static final File TEMP_DIR = new File(getProperty("java.io.tmpdir"));
 
+    public static String relativePath(File folder, File file) {
+        return folder.toURI().relativize(file.toURI()).getPath();
+    }
+
     public static Predicate<? super File> isFile() {
         return new Predicate<File>() {
             public boolean matches(File file) {
