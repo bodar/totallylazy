@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.comparators;
 
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function2;
 
-public class Minimum<T extends Comparable<? super T>>  implements Callable2<T, T, T> {
+public class Minimum<T extends Comparable<? super T>> extends Function2<T, T, T> {
     public T call(T a, T b) throws Exception {
         return minimum(a, b);
     }
@@ -11,12 +11,11 @@ public class Minimum<T extends Comparable<? super T>>  implements Callable2<T, T
         return a.compareTo(b) > 0 ? b : a;
     }
 
-    public static <T extends Comparable<? super T>>  Callable2<? super T, ? super T, T> minimum(Class<T> aClass) {
+    public static <T extends Comparable<? super T>> Function2<T, T, T> minimum(Class<T> aClass) {
         return new Minimum<T>();
     }
 
-    public static <T extends Comparable<? super T>>  Callable2<? super T, ? super T, T> minimum() {
+    public static <T extends Comparable<? super T>> Function2<T, T, T> minimum() {
         return new Minimum<T>();
     }
 }
-
