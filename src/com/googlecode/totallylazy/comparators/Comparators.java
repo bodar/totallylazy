@@ -57,23 +57,23 @@ public class Comparators {
         };
     }
 
-    public static <T> Comparator<? super T> comparators(final Comparator<? super T>  first) {
+    public static <T> Comparator<T> comparators(final Comparator<? super T>  first) {
         return comparators(Sequences.<Comparator<? super T>>sequence(first));
     }
 
-    public static <T> Comparator<? super T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second) {
+    public static <T> Comparator<T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second) {
         return comparators(Sequences.<Comparator<? super T>>sequence(first, second));
     }
 
-    public static <T> Comparator<? super T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second, final Comparator<? super T> third) {
+    public static <T> Comparator<T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second, final Comparator<? super T> third) {
         return comparators(Sequences.<Comparator<? super T>>sequence(first, second, third));
     }
 
-    public static <T> Comparator<? super T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second, final Comparator<? super T> third, final Comparator<? super T> fourth) {
+    public static <T> Comparator<T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second, final Comparator<? super T> third, final Comparator<? super T> fourth) {
         return comparators(Sequences.<Comparator<? super T>>sequence(first, second, third, fourth));
     }
 
-    public static <T> Comparator<? super T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second, final Comparator<? super T> third, final Comparator<? super T> fourth, final Comparator<? super T>  fifth) {
+    public static <T> Comparator<T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second, final Comparator<? super T> third, final Comparator<? super T> fourth, final Comparator<? super T>  fifth) {
         return comparators(Sequences.<Comparator<? super T>>sequence(first, second, third, fourth, fifth));
     }
 
