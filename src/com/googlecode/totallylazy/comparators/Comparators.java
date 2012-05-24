@@ -30,6 +30,10 @@ public class Comparators {
         return cast(ASCENDING);
     }
 
+    public static <T extends Comparable<? super T>> Comparator<T> ascending(Class<T> aClass) {
+        return Comparators.<T>ascending();
+    }
+
     @SuppressWarnings("unchecked")
     private static final Comparator<Comparable> DESCENDING = new Comparator<Comparable>() {
         public int compare(Comparable a, Comparable b) {
@@ -39,6 +43,10 @@ public class Comparators {
 
     public static <T extends Comparable<? super T>> Comparator<T> descending() {
         return cast(DESCENDING);
+    }
+
+    public static <T extends Comparable<? super T>> Comparator<T> descending(Class<T> aClass) {
+        return Comparators.<T>descending();
     }
 
     public static <T> Comparator<T> comparators(final Comparator<? super T>... comparators) {
