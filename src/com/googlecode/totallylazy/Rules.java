@@ -29,11 +29,11 @@ public class Rules<A, B> extends Function1<A, B> implements Predicate<A> {
 
     @Override
     public B call(final A instance) throws Exception {
-        return find(instance).call(instance);
+        return find(instance).get().call(instance);
     }
 
-    public Rule<A, B> find(A instance) {
-        return filter(instance).head();
+    public Option<Rule<A, B>> find(A instance) {
+        return filter(instance).headOption();
     }
 
     public Sequence<Rule<A, B>> filter(A instance) {
