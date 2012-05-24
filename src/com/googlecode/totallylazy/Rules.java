@@ -17,7 +17,7 @@ public class Rules<A, B> extends Function1<A, B> implements Predicate<A> {
         return add(rule(predicate, callable));
     }
 
-    public Rules<A, B> add(Rule<? super A, ? extends  B> rule) {
+    public Rules<A, B> add(Rule<? super A, ? extends B> rule) {
         rules.addFirst(Unchecked.<Rule<A, B>>cast(rule));
         return this;
     }
@@ -29,18 +29,24 @@ public class Rules<A, B> extends Function1<A, B> implements Predicate<A> {
 
     @Override
     public B call(final A instance) throws Exception {
+        return find(instance).call(instance);
+    }
+
+    public Rule<A, B> find(A instance) {
+        return filter(instance).head();
+    }
+
+    public Sequence<Rule<A, B>> filter(A instance) {
         return sequence(rules).
-                filter(Predicates.matches(instance)).
-                head().
-                call(instance);
+                filter(Predicates.matches(instance));
     }
 
     public static <A, B> Rules<A, B> rules() {
         return new Rules<A, B>(Sequences.<Rule<A, B>>empty());
     }
 
-    public static <A, B> Rules<A, B> rules(Sequence<Rule<A,B>> rules) {
-        return new Rules<A,B>(rules);
+    public static <A, B> Rules<A, B> rules(Sequence<Rule<A, B>> rules) {
+        return new Rules<A, B>(rules);
     }
 
 }
