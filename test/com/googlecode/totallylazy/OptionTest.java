@@ -14,6 +14,7 @@ import static com.googlecode.totallylazy.Option.applicate;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.OptionTest.Person.person;
 import static com.googlecode.totallylazy.Sequences.size;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
@@ -26,17 +27,65 @@ import static org.junit.Assert.fail;
 public class OptionTest {
     @Test
     public void supportsApplicativeUsage() throws Exception {
-        assertThat(none(Number.class).applicate(option(add(3))), is(none(Number.class)));
-        assertThat(option(9).applicate(Option.<Function1<Number, Number>>none()), is(none(Number.class)));
-        assertThat(option(9).applicate(option(add(3))), is(Option.<Number>some(12)));
+        assertThat(none(Number.class).applicate(some(add(3))), is(none(Number.class)));
+        assertThat(some(9).applicate(Option.<Function1<Number, Number>>none()), is(none(Number.class)));
+        assertThat(some(9).applicate(some(add(3))), is(Option.<Number>some(12)));
 
-        assertThat(option(5).applicate(option(3).applicate(option(add()))), is(Option.<Number>some(8)));
-        assertThat(none(Number.class).applicate(option(3).applicate(option(add()))), is(none(Number.class)));
-        assertThat(option(5).applicate(none(Number.class).applicate(option(add()))), is(none(Number.class)));
+        assertThat(some(5).applicate(some(3).applicate(some(add()))), is(Option.<Number>some(8)));
+        assertThat(none(Number.class).applicate(some(3).applicate(some(add()))), is(none(Number.class)));
+        assertThat(some(5).applicate(none(Number.class).applicate(some(add()))), is(none(Number.class)));
 
-        assertThat(applicate(applicate(option(add()), option(3)), option(5)), is(Option.<Number>some(8)));
-        assertThat(applicate(applicate(option(add()), none(Number.class)), option(5)), is(none(Number.class)));
-        assertThat(applicate(applicate(option(add()), option(3)), none(Number.class)), is(none(Number.class)));
+        assertThat(applicate(applicate(some(add()), some(3)), some(5)), is(Option.<Number>some(8)));
+        assertThat(applicate(applicate(some(add()), none(Number.class)), some(5)), is(none(Number.class)));
+        assertThat(applicate(applicate(some(add()), some(3)), none(Number.class)), is(none(Number.class)));
+    }
+
+    @Test
+    public void supportsApplicativeUsageToConstruct() throws Exception {
+        assertThat(some("Dan").applicate(some(35).applicate(some(person().flip()))), is(some(person("Dan", 35))));
+        assertThat(some("Ray").applicate(none(Integer.class).applicate(some(person().flip()))), is(none(Person.class)));
+        assertThat(none(String.class).applicate(some(100).applicate(some(person().flip()))), is(none(Person.class)));
+
+        assertThat(applicate(applicate(some(person()), some("Dan")), some(35)), is(some(person("Dan", 35))));
+        assertThat(applicate(applicate(some(person()), some("Ray")), none(Integer.class)), is(none(Person.class)));
+        assertThat(applicate(applicate(some(person()), none(String.class)), some(100)), is(none(Person.class)));
+    }
+
+    static class Person {
+        private final String name;
+        private final int age;
+
+        private Person(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        static Function2<String, Integer, Person> person() {
+            return new Function2<String, Integer, Person>() {
+                @Override
+                public Person call(String name, Integer age) throws Exception {
+                    return person(name, age);
+                }
+            };
+        }
+
+        static Person person(String name, int age) {
+            return new Person(name, age);
+        }
+
+        private Sequence<Object> values() {
+            return Sequences.<Object>sequence(name, age);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof Person && ((Person) o).values().equals(values());
+        }
+
+        @Override
+        public int hashCode() {
+            return values().hashCode();
+        }
     }
 
     @Test
