@@ -10,6 +10,7 @@ import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.ignoreAndReturn;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Function1.constant;
+import static com.googlecode.totallylazy.Option.applicate;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
@@ -28,6 +29,14 @@ public class OptionTest {
         assertThat(none(Number.class).applicate(option(add(3))), is(none(Number.class)));
         assertThat(option(9).applicate(Option.<Function1<Number, Number>>none()), is(none(Number.class)));
         assertThat(option(9).applicate(option(add(3))), is(Option.<Number>some(12)));
+
+        assertThat(option(5).applicate(option(3).applicate(option(add()))), is(Option.<Number>some(8)));
+        assertThat(none(Number.class).applicate(option(3).applicate(option(add()))), is(none(Number.class)));
+        assertThat(option(5).applicate(none(Number.class).applicate(option(add()))), is(none(Number.class)));
+
+        assertThat(applicate(applicate(option(add()), option(3)), option(5)), is(Option.<Number>some(8)));
+        assertThat(applicate(applicate(option(add()), none(Number.class)), option(5)), is(none(Number.class)));
+        assertThat(applicate(applicate(option(add()), option(3)), none(Number.class)), is(none(Number.class)));
     }
 
     @Test

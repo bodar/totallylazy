@@ -53,7 +53,11 @@ public abstract class Option<T> implements Iterable<T>, Value<T>, Functor<T, Opt
     }
 
     public <B> Option<B> applicate(Option<? extends Callable1<? super T, ? extends B>> applicator) {
+        return applicate(applicator, this);
+    }
+
+    public static <A, B> Option<B> applicate(Option<? extends Callable1<? super A, ? extends B>> applicator, Option<? extends A> option) {
         if (applicator.isEmpty()) return none();
-        return map(applicator.get());
+        return option.map(applicator.get());
     }
 }
