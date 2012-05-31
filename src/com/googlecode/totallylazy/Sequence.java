@@ -73,7 +73,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, F
     }
 
     public <B> Sequence<B> applicate(final Sequence<? extends Callable1<? super T, ? extends B>> applicator) {
-        return Sequences.apply(this, applicator);
+        return Sequences.applicate(this, applicator);
     }
 
     public T first() {

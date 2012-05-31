@@ -674,7 +674,7 @@ public class Sequences {
         return Lists.indexIn(sequence(values).toList());
     }
 
-    public static <A, B> Sequence<B> apply(Iterable<? extends A> option, final Iterable<? extends Callable1<? super A, ? extends B>> iterable) {
+    public static <A, B> Sequence<B> applicate(Iterable<? extends A> option, final Iterable<? extends Callable1<? super A, ? extends B>> iterable) {
         final Sequence<Callable1<A, B>> applicator = sequence(iterable).unsafeCast();
         if (applicator.isEmpty()) return empty();
         return sequence(option).flatMap(new Callable1<A, Sequence<B>>() {
