@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Pair.pair;
 
-public abstract class Function1<A, B> implements Callable1<A, B>, Mappable<B, Function1<A, ?>> {
+public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B, Function1<A, ?>> {
     public static <A, B> Function1<A, B> function(final Callable1<? super A, ? extends B> callable) {
         return new Function1<A, B>() {
             @Override
