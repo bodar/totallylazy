@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
 
-public abstract class Function<A> implements Callable<A>, Runnable, Mappable<A, Function<?>>, Value<A> {
+public abstract class Function<A> implements Callable<A>, Runnable, Functor<A, Function<?>>, Value<A> {
     public static <A> Function<A> function(final Callable<? extends A> callable) {
         return new Function<A>() {
             @Override

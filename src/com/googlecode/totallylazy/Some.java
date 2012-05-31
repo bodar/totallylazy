@@ -3,7 +3,6 @@ package com.googlecode.totallylazy;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Some<T> extends Option<T> {
@@ -14,7 +13,7 @@ public class Some<T> extends Option<T> {
     }
 
     public static <T> Some<T> some(T t) {
-        if(t == null){
+        if (t == null) {
             throw new IllegalArgumentException("some(T) can not be null");
         }
         return new Some<T>(t);

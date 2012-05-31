@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.matchers.NumberMatcher;
-import com.googlecode.totallylazy.numbers.Numbers;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
@@ -25,6 +24,13 @@ import static org.junit.Assert.fail;
 
 public class OptionTest {
     @Test
+    public void supportsApplicativeUsage() throws Exception {
+        assertThat(none(Number.class).applicate(option(add(3))), is(none(Number.class)));
+        assertThat(option(9).applicate(Option.<Function1<Number, Number>>none()), is(none(Number.class)));
+        assertThat(option(9).applicate(option(add(3))), is(Option.<Number>some(12)));
+    }
+
+    @Test
     public void canFold() throws Exception {
         assertThat(option(1).fold(1, add()), NumberMatcher.is(2));
         assertThat(some(1).fold(1, add()), NumberMatcher.is(2));
@@ -41,7 +47,7 @@ public class OptionTest {
 
     @Test
     public void canFlatMap() {
-        assertThat(some(number(4)).flatMap(divide(2).optional()), is(some((Number)2)) );
+        assertThat(some(number(4)).flatMap(divide(2).optional()), is(some((Number) 2)));
         assertThat(some(number(4)).flatMap(divide(0).optional()), is(none(Number.class)));
         assertThat(none(Number.class).flatMap(constant(none(Number.class))), is(none(Number.class)));
         assertThat(none(Number.class).flatMap(constant(some(number(4)))), is(none(Number.class)));
@@ -64,7 +70,7 @@ public class OptionTest {
         assertThat(some(1).get(), is(1));
     }
 
-    @Test(expected=NoSuchElementException.class)
+    @Test(expected = NoSuchElementException.class)
     public void cannotGetValueOfNone() throws Exception {
         none().get();
     }

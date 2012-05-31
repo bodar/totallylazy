@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
 import com.googlecode.totallylazy.comparators.Comparators;
+import com.googlecode.totallylazy.matchers.Matchers;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
@@ -43,6 +44,7 @@ import static com.googlecode.totallylazy.Quintuple.quintuple;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
@@ -57,6 +59,7 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
+import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
@@ -127,6 +130,15 @@ public class SequenceTest {
     @Notes("This test has a very small chance that it could fail")
     public void supportsShuffle() throws Exception {
         assertThat(range(1, 100).shuffle(), is(not(range(1, 100))));
+    }
+
+    @Test
+    public void supportsApplicativeUsage() throws Exception {
+        assertThat(empty(Number.class).applicate(one(add(3))), Matchers.is(empty(Number.class)));
+        assertThat(numbers(9).applicate(Sequences.<Function1<Number, Number>>empty()), Matchers.is(empty(Number.class)));
+        assertThat(numbers(9).applicate(one(add(3))), Matchers.is(numbers(12)));
+        assertThat(numbers(9, 1).applicate(one(add(3))), Matchers.is(numbers(12, 4)));
+        assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 90, 4, 10)));
     }
 
     @Test
