@@ -4,60 +4,64 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public abstract class Option<T> implements Iterable<T>, Value<T>, Functor<T, Option<?>> {
-    public static <T> Option<T> option(T t) {
-        if (t == null) {
+public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A, Option<?>>, Applicative<A, Option<?>> {
+    public static <A> Option<A> option(A a) {
+        if (a == null) {
             return None.none();
         }
-        return Some.some(t);
+        return Some.some(a);
     }
 
-    public static <T> Option<T> some(T t) {
-        return Some.some(t);
+    public static <A> Option<A> some(A a) {
+        return Some.some(a);
     }
 
-    public static <T> Option<T> none() {
+    public static <A> Option<A> none() {
         return None.none();
     }
 
-    public static <T> Option<T> none(Class<T> aClass) {
+    public static <A> Option<A> none(Class<A> aClass) {
         return None.none(aClass);
     }
 
-    public T value() {
+    public A value() {
         return get();
     }
 
-    public abstract T get();
+    public abstract A get();
 
     public abstract boolean isEmpty();
 
-    public abstract T getOrElse(T other);
+    public abstract A getOrElse(A other);
 
-    public abstract T getOrElse(Callable<? extends T> callable);
+    public abstract A getOrElse(Callable<? extends A> callable);
 
-    public abstract T getOrNull();
+    public abstract A getOrNull();
 
-    public abstract <S> Option<S> map(Callable1<? super T, ? extends S> callable);
+    public abstract <B> Option<B> map(Callable1<? super A, ? extends B> callable);
 
-    public abstract <S> Option<S> flatMap(Callable1<? super T, ? extends Option<S>> callable);
+    public abstract <B> Option<B> flatMap(Callable1<? super A, ? extends Option<B>> callable);
 
-    public abstract <S> S fold(final S seed, final Callable2<? super S, ? super T, ? extends S> callable);
+    public abstract <B> B fold(final B seed, final Callable2<? super B, ? super A, ? extends B> callable);
 
-    public Sequence<T> toSequence() {
+    public Sequence<A> toSequence() {
         return sequence(this);
     }
 
-    public static <T> Option<T> flatten(Option<? extends Option<T>> option) {
-        return option.flatMap(Function1.<Option<T>>identity());
+    public static <A> Option<A> flatten(Option<? extends Option<A>> option) {
+        return option.flatMap(Function1.<Option<A>>identity());
     }
 
-    public <B> Option<B> applicate(Option<? extends Callable1<? super T, ? extends B>> applicator) {
+    public <B> Option<B> applicate(Option<? extends Callable1<? super A, ? extends B>> applicator) {
         return applicate(applicator, this);
     }
 
     public static <A, B> Option<B> applicate(Option<? extends Callable1<? super A, ? extends B>> applicator, Option<? extends A> option) {
         if (applicator.isEmpty()) return none();
         return option.map(applicator.get());
+    }
+
+    public static <A> Option<A> pure(A a){
+        return option(a);
     }
 }
