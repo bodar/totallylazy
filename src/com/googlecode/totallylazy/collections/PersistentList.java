@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.SegmentIterator;

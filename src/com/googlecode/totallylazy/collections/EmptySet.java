@@ -28,7 +28,7 @@ public class EmptySet<T> implements ImmutableSet<T> {
     }
 
     @Override
-    public ImmutableList<T> persistentList() {
+    public ImmutableList<T> immutableList() {
         return ImmutableList.constructors.empty();
     }
 
