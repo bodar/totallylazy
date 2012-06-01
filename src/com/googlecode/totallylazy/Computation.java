@@ -8,9 +8,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callables.cast;
-import static com.googlecode.totallylazy.Callables.deferApply;
-import static com.googlecode.totallylazy.Callables.realise;
 import static com.googlecode.totallylazy.Function.returns;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
@@ -103,6 +100,16 @@ public class Computation<T> extends Sequence<T> implements Segment<T, Computatio
                 return pair(current.second(), callable.call(current.first(), current.second()));
             }
         };
+    }
+
+    @Override
+    public Computation<T> cons(T t) {
+        return computation(t, this);
+    }
+
+    @Override
+    public <C extends Segment<T, C>> C join(C rest) {
+        return tail().join(rest).cons(head());
     }
 
     @Override
