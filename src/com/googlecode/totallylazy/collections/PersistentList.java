@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Constructable;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
@@ -18,90 +17,50 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public abstract class PersistentList<T> implements Iterable<T>, Constructable<T, PersistentList<T>>, Segment<T, PersistentList<T>> {
-    private static final Empty EMPTY = new Empty();
+public abstract class PersistentList<T> implements ImmutableList<T> {
+    static final Empty EMPTY = new Empty();
 
-    public static <T> PersistentList<T> empty() {
+    static <T> PersistentList<T> empty() {
         return cast(EMPTY);
     }
 
-    public static <T> PersistentList<T> cons(T head, PersistentList<T> tail) {
+    static <T> PersistentList<T> cons(T head, ImmutableList<T> tail) {
         return new Node<T>(head, tail);
     }
 
-    public static <T> PersistentList<T> list(T one) {
-        return cons(one, PersistentList.<T>empty());
-    }
-
-    public static <T> PersistentList<T> list(T one, T two) {
-        return cons(one, cons(two, PersistentList.<T>empty()));
-    }
-
-    public static <T> PersistentList<T> list(T one, T two, T three) {
-        return cons(one, cons(two, cons(three, PersistentList.<T>empty())));
-    }
-
-    public static <T> PersistentList<T> list(T one, T two, T three, T four) {
-        return cons(one, cons(two, cons(three, cons(four, PersistentList.<T>empty()))));
-    }
-
-    public static <T> PersistentList<T> list(T one, T two, T three, T four, T five) {
-        return cons(one, cons(two, cons(three, cons(four, cons(five, PersistentList.<T>empty())))));
-    }
-
-    public static <T> PersistentList<T> list(T... values) {
-        return list(sequence(values));
-    }
-
-    public static <T> PersistentList<T> list(Iterable<T> values) {
-        return sequence(values).reverse().foldLeft(PersistentList.<T>empty(), PersistentList.<T>cons());
-    }
-
-    public abstract T head();
-
-    public abstract PersistentList<T> tail();
-
-    public abstract int size();
-
-    public abstract boolean isEmpty();
-
     @Override
-    public PersistentList<T> cons(T head) {
+    public ImmutableList<T> cons(T head) {
         return cons(head, this);
     }
 
-    public PersistentList<T> remove(T value) {
-        return list(toSequence().filter(not(onlyOnce(is(value)))));
+    @Override
+    public ImmutableList<T> remove(T value) {
+        return constructors.list(toSequence().filter(not(onlyOnce(is(value)))));
     }
 
+    @Override
     public Sequence<T> toSequence() {
         return sequence(this);
     }
 
-    public PersistentList<T> removeAll(Iterable<T> values) {
-        return list(toSequence().filter(not(in(set(values)))));
+    @Override
+    public ImmutableList<T> removeAll(Iterable<T> values) {
+        return constructors.list(toSequence().filter(not(in(set(values)))));
     }
 
-    public static <T> Function2<PersistentList<T>, T, PersistentList<T>> cons() {
-        return new Function2<PersistentList<T>, T, PersistentList<T>>() {
-            @Override
-            public PersistentList<T> call(PersistentList<T> ts, T t) throws Exception {
-                return cons(t, ts);
-            }
-        };
+    @Override
+    public ImmutableList<T> add(T value) {
+        return constructors.list(toSequence().add(value));
     }
 
-    public PersistentList<T> add(T value) {
-        return list(toSequence().add(value));
-    }
-
+    @Override
     public List<T> toList() {
         return toSequence().toList();
     }
 
     @Override
     public Iterator<T> iterator() {
-        return new SegmentIterator<T, PersistentList<T>>(this);
+        return new SegmentIterator<T, ImmutableList<T>>(this);
     }
 
     private static class Empty<T> extends PersistentList<T> {
@@ -114,8 +73,13 @@ public abstract class PersistentList<T> implements Iterable<T>, Constructable<T,
         }
 
         @Override
-        public PersistentList<T> tail() {
+        public ImmutableList<T> tail() {
             throw new NoSuchElementException();
+        }
+
+        @Override
+        public <C extends Segment<T, C>> C join(C rest) {
+            return rest;
         }
 
         @Override
@@ -129,11 +93,6 @@ public abstract class PersistentList<T> implements Iterable<T>, Constructable<T,
         }
 
         @Override
-        public <C extends Constructable<T, C>> C join(C rest) {
-            return rest;
-        }
-
-        @Override
         public String toString() {
             return "[]";
         }
@@ -141,10 +100,10 @@ public abstract class PersistentList<T> implements Iterable<T>, Constructable<T,
 
     private static class Node<T> extends PersistentList<T> {
         private final T head;
-        private final PersistentList<T> tail;
+        private final ImmutableList<T> tail;
         private final int size;
 
-        private Node(T head, PersistentList<T> tail) {
+        private Node(T head, ImmutableList<T> tail) {
             this.head = head;
             this.tail = tail;
             size = 1 + tail.size();
@@ -156,8 +115,13 @@ public abstract class PersistentList<T> implements Iterable<T>, Constructable<T,
         }
 
         @Override
-        public PersistentList<T> tail() {
+        public ImmutableList<T> tail() {
             return tail;
+        }
+
+        @Override
+        public <C extends Segment<T, C>> C join(C rest) {
+            return tail.join(rest).cons(head);
         }
 
         @Override
@@ -168,11 +132,6 @@ public abstract class PersistentList<T> implements Iterable<T>, Constructable<T,
         @Override
         public boolean isEmpty() {
             return false;
-        }
-
-        @Override
-        public <C extends Constructable<T, C>> C join(C rest) {
-            return tail.join(rest).cons(head);
         }
 
         @Override
@@ -187,7 +146,7 @@ public abstract class PersistentList<T> implements Iterable<T>, Constructable<T,
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof Node ? ((Node) obj).head.equals(head) && ((Node) obj).tail.equals(tail) : false;
+            return obj instanceof Node && ((Node) obj).head.equals(head) && ((Node) obj).tail.equals(tail);
         }
     }
 }
