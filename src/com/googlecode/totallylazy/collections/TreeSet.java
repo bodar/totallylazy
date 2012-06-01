@@ -40,7 +40,7 @@ public class TreeSet<T> implements ImmutableSet<T> {
     }
 
     @Override
-    public ImmutableList<T> persistentList() {
+    public ImmutableList<T> immutableList() {
         return join(ImmutableList.constructors.<T>empty());
     }
 
@@ -97,6 +97,6 @@ public class TreeSet<T> implements ImmutableSet<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new SegmentIterator<T, ImmutableList<T>>(persistentList());
+        return new SegmentIterator<T, ImmutableList<T>>(immutableList());
     }
 }

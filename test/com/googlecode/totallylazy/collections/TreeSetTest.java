@@ -32,7 +32,7 @@ public class TreeSetTest {
 
     @Test
     public void canConvertToPersistentList() throws Exception {
-        ImmutableList<Integer> tree = set(8, 6, 4, 1, 7, 3, 5).persistentList();
+        ImmutableList<Integer> tree = set(8, 6, 4, 1, 7, 3, 5).immutableList();
         assertThat(tree, hasExactly(1, 3, 4, 5, 6, 7, 8));
     }
 

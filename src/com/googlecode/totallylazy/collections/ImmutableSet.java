@@ -9,7 +9,7 @@ import java.util.Comparator;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface ImmutableSet<T> extends Iterable<T>, Segment<T, ImmutableSet<T>>, Container<T> {
-    ImmutableList<T> persistentList();
+    ImmutableList<T> immutableList();
 
     class constructors {
         public static <T extends Comparable<? super T>> ImmutableSet<T> set(T value) {
