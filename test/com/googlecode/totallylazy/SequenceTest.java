@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;

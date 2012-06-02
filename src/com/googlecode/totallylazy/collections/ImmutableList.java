@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -55,6 +56,14 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T, ImmutableList<
 
         public static <T> ImmutableList<T> list(Iterable<T> values) {
             return sequence(values).reverse().foldLeft(constructors.<T>empty(), functions.<T, ImmutableList<T>>cons());
+        }
+
+        public static <T> ImmutableList<T> reverse(Iterator<? extends T> iterator) {
+            ImmutableList<T> reverse = empty();
+            while (iterator.hasNext()){
+                reverse = cons(iterator.next(), reverse);
+            }
+            return reverse;
         }
     }
 }
