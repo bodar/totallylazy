@@ -109,7 +109,7 @@ public class Dates {
     }
 
     public static Date stripTime(Date date) {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = calendar();
         calendar.setTime(date);
         calendar.set(HOUR_OF_DAY, 0);
         calendar.set(MINUTE, 0);

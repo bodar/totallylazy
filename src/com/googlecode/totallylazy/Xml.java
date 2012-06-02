@@ -1,12 +1,14 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.NodeIterator;
+import com.googlecode.totallylazy.iterators.PoppingIterator;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -29,6 +31,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.XPathFunctions.resolver;
@@ -49,6 +52,10 @@ public class Xml {
 
     public static Sequence<Node> selectNodes(final Node node, final String expression) {
         return internalSelectNodes(node, expression);
+    }
+
+    public static Sequence<Node> selectNodesForwardOnly(final Node node, final String expression) {
+        return Sequences.forwardOnly(new PoppingIterator<Node>(selectNodes(node, expression).toList().iterator()));
     }
 
     public static Number selectNumber(final Node node, final String expression) {
@@ -73,11 +80,15 @@ public class Xml {
         } catch (XPathExpressionException e) {
             try {
                 String nodeAsString = (String) xpath().evaluate(expression, node, XPathConstants.STRING);
-                return Sequences.<Node>sequence(DOCUMENT.createTextNode(nodeAsString));
+                return Sequences.<Node>sequence(createTextNode(nodeAsString));
             } catch (XPathExpressionException ignore) {
                 throw LazyException.lazyException(e);
             }
         }
+    }
+
+    public static Text createTextNode(String value) {
+        return DOCUMENT.createTextNode(value);
     }
 
     public static Option<Node> selectNode(final Node node, final String expression) {
@@ -116,6 +127,10 @@ public class Xml {
 
     public static Sequence<String> textContents(Sequence<Node> nodes) {
         return nodes.map(textContent());
+    }
+
+    public static Sequence<String> textContents(NodeList nodes) {
+        return Xml.textContents(Xml.sequence(nodes));
     }
 
     public static Function1<Node, String> textContent() {

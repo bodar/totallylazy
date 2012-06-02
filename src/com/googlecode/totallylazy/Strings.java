@@ -169,6 +169,10 @@ public class Strings {
                 .toString();
     }
 
+    public static String asString(Object value) {
+        return value == null ? "" : value.toString();
+    }
+
     public static String toString(byte[] bytes) {
         return toString(new ByteArrayInputStream(bytes));
     }
@@ -260,6 +264,16 @@ public class Strings {
             @Override
             public Character call(String s) throws Exception {
                 return s.charAt(index);
+            }
+        };
+    }
+
+
+    public static Callable1<String, String> trim() {
+        return new Callable1<String, String>() {
+            @Override
+            public String call(String value) throws Exception {
+                return value.trim();
             }
         };
     }

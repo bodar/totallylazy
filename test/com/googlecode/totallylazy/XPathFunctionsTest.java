@@ -9,7 +9,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class XPathFunctionsTest {
-
     @Test
     public void supportsNewLineChar() throws Exception {
         Document document = document("<root><node>hello</node><node>world</node></root>");
@@ -42,6 +41,13 @@ public class XPathFunctionsTest {
     public void supportsJoinStringsInXPathWithNestedNodes() throws Exception {
         Document document = document("<root><node><foo>hello</foo></node><node><foo>world</foo></node></root>");
         String joinedStrings = xpath().evaluate("tl:string-join(//node, '--')", document);
+        assertThat(joinedStrings, equalTo("hello--world"));
+    }
+
+    @Test
+    public void supportsStringTrimAndJoin() throws Exception {
+        Document document = document("<root><node><foo>hello </foo></node><node><foo> world</foo></node></root>");
+        String joinedStrings = xpath().evaluate("tl:trim-and-join(//node, '--')", document);
         assertThat(joinedStrings, equalTo("hello--world"));
     }
 }

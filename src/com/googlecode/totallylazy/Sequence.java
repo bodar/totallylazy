@@ -17,7 +17,7 @@ import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Mappable<T, Sequence<?>> {
+public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T, Sequence<?>> {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Sequence && Sequences.equalTo(this, (Sequence) obj);
@@ -72,6 +72,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
 
     public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<? extends S>> callable, final Executor executor) {
         return Sequences.flatMapConcurrently(this, callable, executor);
+    }
+
+    public <B> Sequence<B> applicate(final Sequence<? extends Callable1<? super T, ? extends B>> applicator) {
+        return Sequences.applicate(this, applicator);
     }
 
     public T first() {
