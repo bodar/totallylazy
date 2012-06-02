@@ -11,7 +11,7 @@ public interface Segment<T, Self extends Segment<T, Self>> {
 
     Self cons(T head);
 
-    <C extends Segment<T, C>> C join(C rest);
+    <C extends Segment<T, C>> C joinTo(C rest);
 
     class functions {
         public static <T, Self extends Segment<T, Self>> Function2<Self, T, Self> cons() {

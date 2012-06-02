@@ -33,7 +33,7 @@ public class EmptySet<T> implements ImmutableSet<T> {
     }
 
     @Override
-    public <C extends Segment<T, C>> C join(C rest) {
+    public <C extends Segment<T, C>> C joinTo(C rest) {
         return rest;
     }
 

@@ -50,7 +50,7 @@ public class TreeSetTest {
 
     @Test
     public void canJoin() throws Exception {
-        ImmutableSet<Integer> set = set(3, 2, 1, 2).join(set(4, 1, 5, 2));
+        ImmutableSet<Integer> set = set(3, 2, 1, 2).joinTo(set(4, 1, 5, 2));
         assertThat(set, hasExactly(1, 2, 3, 4, 5));
     }
 }

@@ -41,12 +41,12 @@ public class TreeSet<T> implements ImmutableSet<T> {
 
     @Override
     public ImmutableList<T> immutableList() {
-        return join(ImmutableList.constructors.<T>empty());
+        return joinTo(ImmutableList.constructors.<T>empty());
     }
 
     @Override
-    public <C extends Segment<T, C>> C join(C rest) {
-        return left.join(right.join(rest).cons(value));
+    public <C extends Segment<T, C>> C joinTo(C rest) {
+        return left.joinTo(right.joinTo(rest).cons(value));
     }
 
     @Override
@@ -92,7 +92,7 @@ public class TreeSet<T> implements ImmutableSet<T> {
 
     @Override
     public ImmutableSet<T> tail() throws NoSuchElementException {
-        return left.join(right);
+        return left.joinTo(right);
     }
 
     @Override
