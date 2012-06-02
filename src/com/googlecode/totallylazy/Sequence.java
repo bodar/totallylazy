@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.collections.ImmutableList;
+
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.Deque;
@@ -363,5 +365,9 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
 
     public Sequence<T> interruptable(){
         return Sequences.interruptable(this);
+    }
+
+    public ImmutableList<T> toImmutableList() {
+        return ImmutableList.constructors.list(this);
     }
 }
