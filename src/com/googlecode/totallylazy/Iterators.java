@@ -40,7 +40,6 @@ import static com.googlecode.totallylazy.Sequences.foldRight;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sequences.tail;
 import static com.googlecode.totallylazy.numbers.Numbers.equalTo;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
@@ -133,11 +132,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> reverse(Iterator<? extends T> iterator) {
-        ImmutableList<T> reverse = ImmutableList.constructors.empty();
-        while (iterator.hasNext()){
-            reverse = reverse.cons(iterator.next());
-        }
-        return reverse.iterator();
+        return ImmutableList.constructors.reverse(iterator).iterator();
     }
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {

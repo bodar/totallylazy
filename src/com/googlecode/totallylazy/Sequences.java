@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.collections.ImmutableList;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
@@ -552,9 +553,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> reverse(final Iterable<? extends T> iterable) {
-        final List<T> result = toList(iterable);
-        Collections.reverse(result);
-        return sequence(result);
+        return sequence(ImmutableList.constructors.reverse(iterable.iterator()));
     }
 
     public static <T> Sequence<T> cycle(final Iterable<? extends T> iterable) {
