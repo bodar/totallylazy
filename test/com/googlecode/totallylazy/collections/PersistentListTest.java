@@ -100,9 +100,9 @@ public class PersistentListTest {
 
     @Test
     public void canJoin() throws Exception {
-        ImmutableList<Integer> join = list(1, 2, 3, 4).join(list(4, 3, 2, 1));
+        ImmutableList<Integer> join = list(1, 2, 3, 4).joinTo(list(4, 3, 2, 1));
         assertThat(join, hasExactly(1, 2, 3, 4, 4, 3, 2, 1));
-        ImmutableSet<Integer> set = list(2, 1, 4, 3).join(set(3, 4));
+        ImmutableSet<Integer> set = list(2, 1, 4, 3).joinTo(set(3, 4));
         assertThat(set, hasExactly(1, 2, 3, 4));
     }
 }

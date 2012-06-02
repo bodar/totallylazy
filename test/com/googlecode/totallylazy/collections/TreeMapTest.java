@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Strings;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Option.none;
@@ -43,7 +42,7 @@ public class TreeMapTest {
 
     @Test
     public void canJoin() throws Exception {
-        ImmutableMap<Integer, String> map = map(1, "Dan", 2, "Ray").join(map(4, "Matt", 3, "Stu"));
+        ImmutableMap<Integer, String> map = map(1, "Dan", 2, "Ray").joinTo(map(4, "Matt", 3, "Stu"));
         assertThat(map, hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu"), pair(4, "Matt")));
     }
 

@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.None;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -53,7 +52,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableList<Pair<K, V>> immutableList() {
-        return join(ImmutableList.constructors.<Pair<K, V>>empty());
+        return joinTo(ImmutableList.constructors.<Pair<K, V>>empty());
     }
 
     @Override
@@ -80,12 +79,12 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     @Override
     public ImmutableMap<K, V> filterKeys(Predicate<? super K> predicate) {
         if(predicate.matches(key)) return tree(left.filterKeys(predicate), key, value, right.filterKeys(predicate), comparator);
-        return left.filterKeys(predicate).join(right.filterKeys(predicate));
+        return left.filterKeys(predicate).joinTo(right.filterKeys(predicate));
     }
 
     @Override
-    public <C extends Segment<Pair<K, V>, C>> C join(C rest) {
-        return left.join(right.join(rest).cons(Pair.pair(key, value)));
+    public <C extends Segment<Pair<K, V>, C>> C joinTo(C rest) {
+        return left.joinTo(right.joinTo(rest).cons(Pair.pair(key, value)));
     }
 
     @Override
@@ -131,7 +130,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableMap<K, V> tail() throws NoSuchElementException {
-        return left.join(right);
+        return left.joinTo(right);
     }
 
     @Override

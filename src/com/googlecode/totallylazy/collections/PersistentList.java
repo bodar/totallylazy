@@ -77,7 +77,7 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         }
 
         @Override
-        public <C extends Segment<T, C>> C join(C rest) {
+        public <C extends Segment<T, C>> C joinTo(C rest) {
             return rest;
         }
 
@@ -119,8 +119,8 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         }
 
         @Override
-        public <C extends Segment<T, C>> C join(C rest) {
-            return tail.join(rest).cons(head);
+        public <C extends Segment<T, C>> C joinTo(C rest) {
+            return tail.joinTo(rest).cons(head);
         }
 
         @Override

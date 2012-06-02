@@ -57,7 +57,7 @@ public class EmptyMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
-    public <C extends Segment<Pair<K, V>, C>> C join(C rest) {
+    public <C extends Segment<Pair<K, V>, C>> C joinTo(C rest) {
         return rest;
     }
 

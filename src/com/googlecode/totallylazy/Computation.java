@@ -108,8 +108,8 @@ public class Computation<T> extends Sequence<T> implements Segment<T, Computatio
     }
 
     @Override
-    public <C extends Segment<T, C>> C join(C rest) {
-        return tail().join(rest).cons(head());
+    public <C extends Segment<T, C>> C joinTo(C rest) {
+        return tail().joinTo(rest).cons(head());
     }
 
     @Override
