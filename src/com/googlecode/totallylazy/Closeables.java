@@ -16,6 +16,24 @@ public class Closeables {
         };
     }
 
+    public static <T> T safeClose(final T t){
+        try {
+            close(t);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static <T extends Closeable> T safeClose(final T t){
+        try {
+            close(t);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public static <T> T close(final T t) {
         if (t == null) {
             return t;
@@ -77,4 +95,12 @@ public class Closeables {
         };
     }
 
+    public static Function1<Closeable, Void> safeClose() {
+        return new Function1<Closeable, Void>() {
+            public Void call(Closeable closeable) throws IOException {
+                safeClose(closeable);
+                return VOID;
+            }
+        };
+    }
 }

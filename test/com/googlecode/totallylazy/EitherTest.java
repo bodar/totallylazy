@@ -1,12 +1,13 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.matchers.NumberMatcher;
-import com.googlecode.totallylazy.numbers.Numbers;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Either.applicate;
 import static com.googlecode.totallylazy.Left.left;
+import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Predicates.isLeft;
 import static com.googlecode.totallylazy.Predicates.isRight;
 import static com.googlecode.totallylazy.Right.right;
@@ -19,6 +20,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class EitherTest {
+    @Test
+    public void supportsApplicativeUsage() throws Exception {
+        assertThat(Either.<String, Number>left("error").applicate(Either.<String, Function1<Number, Number>>right(add(3))), is(Either.<String, Number>left("error")));
+        assertThat(Either.<String, Number>right(2).applicate(Either.<String, Function1<Number, Number>>left("error")), is(Either.<String, Number>left("error")));
+        assertThat(Either.<String, Number>right(3).applicate(Either.<String, Function1<Number, Number>>right(add(3))), is(Either.<String, Number>right(6)));
+
+        assertThat(applicate(Either.<String, Function1<Number, Number>>right(add(3)), Either.<String, Number>left("error")), is(Either.<String, Number>left("error")));
+        assertThat(applicate(Either.<String, Function1<Number, Number>>left("error"), Either.<String, Number>right(2)), is(Either.<String, Number>left("error")));
+        assertThat(applicate(Either.<String, Function1<Number, Number>>right(add(3)), Either.<String, Number>right(3)), is(Either.<String, Number>right(6)));
+    }
+
     @Test
     public void canBeUsedInFilterAndMap() throws Exception {
         final Sequence<Either<String, Integer>> eithers = sequence(Left.<String, Integer>left("error"), Right.<String, Integer>right(3));

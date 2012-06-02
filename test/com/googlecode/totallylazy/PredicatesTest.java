@@ -1,8 +1,10 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Predicates.assignableTo;
+import static com.googlecode.totallylazy.Predicates.forAll;
 import static com.googlecode.totallylazy.Predicates.setEqualityWith;
 import static com.googlecode.totallylazy.Predicates.subsetOf;
 import static com.googlecode.totallylazy.Predicates.supersetOf;
@@ -12,6 +14,18 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PredicatesTest {
+    @Test
+    @SuppressWarnings("unchecked")
+    public void andWithNoArgumentsIsAlwaysTrue() throws Exception {
+        assertThat(Predicates.<Integer>and().matches(1), is(true));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void orWithNoArgumentsIsAlwaysFalse() throws Exception {
+        assertThat(Predicates.<Integer>or().matches(1), is(false));
+    }
+
     @Test
     public void supportsClassAssignableTo() throws Exception {
         assertThat(assignableTo(Object.class).matches("aString"), is(true));

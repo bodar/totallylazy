@@ -4,6 +4,9 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
+import static com.googlecode.totallylazy.Predicates.all;
+import static com.googlecode.totallylazy.Predicates.never;
+
 public class OrPredicate<T> extends LogicalPredicate<T> {
     private final Sequence<Predicate<T>> predicates;
 
@@ -28,5 +31,20 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
 
     public Sequence<Predicate<T>> predicates() {
         return predicates;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * predicates.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof OrPredicate && predicates.equals(((OrPredicate) obj).predicates());
+    }
+
+    @Override
+    public String toString() {
+        return predicates.toString(" or ");
     }
 }

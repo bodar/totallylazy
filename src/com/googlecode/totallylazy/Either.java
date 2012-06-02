@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import java.util.NoSuchElementException;
 
-public abstract class Either<L, R> implements Mappable<R, Either<L, ?>> {
+public abstract class Either<L, R> implements Functor<R, Either<L, ?>>, Applicative<R, Either<L, ?>> {
     public static <L, R> Either<L, R> right(R value) {
         return Right.right(value);
     }
@@ -41,4 +41,13 @@ public abstract class Either<L, R> implements Mappable<R, Either<L, ?>> {
     }
 
     public abstract Object value();
+
+    public <Ro> Either<L, Ro> applicate(Either<L, ? extends Callable1<? super R, ? extends Ro>> applicator) {
+        return applicate(applicator, this);
+    }
+
+    public static <L, Ri, Ro> Either<L, Ro> applicate(Either<L, ? extends Callable1<? super Ri, ? extends Ro>> applicator, Either<L, ? extends Ri> value) {
+        if (applicator.isLeft()) return left(applicator.left());
+        return value.map(applicator.right());
+    }
 }

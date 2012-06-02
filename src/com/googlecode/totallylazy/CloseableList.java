@@ -10,7 +10,7 @@ public class CloseableList extends ArrayList<Closeable> implements Closeable {
     private static final long serialVersionUID = 6663452581122892189L;
 
     public void close() throws IOException {
-        sequence(this).each(Closeables.close());
+        sequence(this).each(Closeables.safeClose());
         clear();
     }
 
