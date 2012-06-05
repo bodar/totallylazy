@@ -1,15 +1,11 @@
-package com.googlecode.totallylazy.collections;
-
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Mappable;
-import com.googlecode.totallylazy.Value;
+package com.googlecode.totallylazy;
 
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.compose;
 import static com.googlecode.totallylazy.Callers.call;
 
-public abstract class Trampoline<T> implements Mappable<T, Trampoline<?>> {
+public abstract class Trampoline<T> implements Functor<T, Trampoline<?>> {
     public static <T> Trampoline<T> done(T value) {
         return new Done<T>(value);
     }
@@ -24,9 +20,9 @@ public abstract class Trampoline<T> implements Mappable<T, Trampoline<?>> {
 
     public static <T> T trampoline(Trampoline<? extends T> trampoline) {
         while (trampoline instanceof More) {
-            trampoline = call(((More<T>) trampoline));
+            trampoline = call((Unchecked.<More<T>>cast(trampoline)));
         }
-        return ((Done<T>) trampoline).value();
+        return Unchecked.<Done<T>>cast(trampoline).value();
     }
 
     private static class Done<T> extends Trampoline<T> implements Value<T> {
@@ -65,7 +61,7 @@ public abstract class Trampoline<T> implements Mappable<T, Trampoline<?>> {
                 public Trampoline<S> call(Trampoline<T> trampoline) throws Exception {
                     return null; //callable.call(trampoline);
                 }
-            } ));
+            }));
         }
     }
 }

@@ -83,6 +83,12 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
+    public ImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
+        if(predicate.matches(value)) return tree(left.filterValues(predicate), key, value, right.filterValues(predicate), comparator);
+        return left.filterValues(predicate).joinTo(right.filterValues(predicate));
+    }
+
+    @Override
     public <C extends Segment<Pair<K, V>, C>> C joinTo(C rest) {
         return left.joinTo(right.joinTo(rest).cons(Pair.pair(key, value)));
     }

@@ -57,6 +57,11 @@ public class EmptyMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
+    public ImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
+        return this;
+    }
+
+    @Override
     public <C extends Segment<Pair<K, V>, C>> C joinTo(C rest) {
         return rest;
     }
