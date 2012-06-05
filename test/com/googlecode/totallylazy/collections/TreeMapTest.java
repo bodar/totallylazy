@@ -75,7 +75,12 @@ public class TreeMapTest {
 
     @Test
     public void supportsFilteringByValue() throws Exception {
-        assertThat(map("Dan", 2).filterValues(Predicates.is(2)), CoreMatchers.is(ImmutableMap.constructors.map("Dan", 2)));
-        assertThat(map("Dan", 2).filterValues(Predicates.is(3)), CoreMatchers.is(ImmutableMap.constructors.<String, Integer>empty()));
+        assertThat(map("Dan", 2).filterValues(Predicates.is(2)), is(ImmutableMap.constructors.map("Dan", 2)));
+        assertThat(map("Dan", 2).filterValues(Predicates.is(3)), is(ImmutableMap.constructors.<String, Integer>empty()));
+    }
+
+    @Test
+    public void supportsMappingValues() throws Exception {
+        assertThat(map("Dan", 2).mapValues(add(2)), is(map("Dan", (Number) 4)));
     }
 }

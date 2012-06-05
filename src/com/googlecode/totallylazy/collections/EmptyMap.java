@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.None;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -11,6 +12,8 @@ import com.googlecode.totallylazy.iterators.EmptyIterator;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class EmptyMap<K, V> implements ImmutableMap<K, V> {
     final Comparator<K> comparator;
@@ -59,6 +62,11 @@ public class EmptyMap<K, V> implements ImmutableMap<K, V> {
     @Override
     public ImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
         return this;
+    }
+
+    @Override
+    public <NewV> ImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
+        return cast(this);
     }
 
     @Override
