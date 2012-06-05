@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.None;
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
@@ -16,7 +15,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class EmptyMap<K, V> implements ImmutableMap<K, V> {
-    final Comparator<K> comparator;
+    private final Comparator<K> comparator;
 
     EmptyMap(Comparator<K> comparator) {
         this.comparator = comparator;
@@ -76,7 +75,7 @@ public class EmptyMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableMap<K, V> cons(Pair<K, V> newValue) {
-        return constructors.map(comparator, newValue.first(), newValue.second());
+        return constructors.sortedMap(comparator, newValue.first(), newValue.second());
     }
 
     @Override
