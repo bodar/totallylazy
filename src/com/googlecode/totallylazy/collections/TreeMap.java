@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callers;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -29,7 +30,20 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     }
 
     static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(K key, V value) {
-        return tree(EmptyMap.<K, V>empty(), key, value, EmptyMap.<K, V>empty());
+        return tree(TreeMap.<K,V>empty(), key, value, TreeMap.<K,V>empty());
+    }
+
+    static <K extends Comparable<? super K>, V> EmptyMap<K, V> empty() {
+        return EmptyMap.<K, V>emptyMap(TreeMap.<K, V>tree());
+    }
+
+    private static <K extends Comparable<? super K>, V> Function2<K, V, ImmutableMap<K, V>> tree() {
+        return new Function2<K, V, ImmutableMap<K, V>>() {
+            @Override
+            public ImmutableMap<K, V> call(K k, V v) throws Exception {
+                return tree(k, v);
+            }
+        };
     }
 
     static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(ImmutableMap<K, V> left, Pair<K, V> pair, ImmutableMap<K, V> right) {
@@ -49,7 +63,20 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     }
 
     static <K, V> TreeMap<K, V> tree(K key, V value, Comparator<K> comparator) {
-        return tree(EmptyMap.<K, V>empty(comparator), key, value, EmptyMap.<K, V>empty(comparator), comparator);
+        return tree(TreeMap.<K, V>empty(comparator), key, value, TreeMap.<K, V>empty(comparator), comparator);
+    }
+
+    static <K,V> ImmutableMap<K, V> empty(Comparator<K> comparator) {
+        return EmptyMap.<K, V>emptyMap(TreeMap.<K, V>tree(comparator));
+    }
+
+    private static <K, V> Function2<K, V, ImmutableMap<K, V>> tree(final Comparator<K> comparator) {
+        return new Function2<K, V, ImmutableMap<K, V>>() {
+            @Override
+            public ImmutableMap<K, V> call(K k, V v) throws Exception {
+                return tree(k, v, comparator);
+            }
+        };
     }
 
     @Override
