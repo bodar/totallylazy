@@ -23,6 +23,8 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
 
     ImmutableMap<K, V> filterKeys(Predicate<? super K> predicate);
 
+    ImmutableMap<K, V> filterValues(Predicate<? super V> predicate);
+
     class constructors {
         public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> map(K key, V value) {
             return TreeMap.tree(key, value);
@@ -42,6 +44,14 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
 
         public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5) {
             return map(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
+        }
+
+        public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> map(final Pair<K, V>... values) {
+            return map(sequence(values));
+        }
+
+        public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> map(final Iterable<Pair<K, V>> values) {
+            return map(Comparators.<K>ascending(), values);
         }
 
         public static <K, V> ImmutableMap<K, V> map(Comparator<K> comparator, K key, V value) {
@@ -64,16 +74,8 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
             return map(comparator, sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
         }
 
-        public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> map(final Pair<K, V>... values) {
-            return map(sequence(values));
-        }
-
         public static <K, V> ImmutableMap<K, V> map(Comparator<K> comparator, final Pair<K, V>... values) {
             return map(comparator, sequence(values));
-        }
-
-        public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> map(final Iterable<Pair<K, V>> values) {
-            return map(Comparators.<K>ascending(), values);
         }
 
         public static <K, V> ImmutableMap<K, V> map(Comparator<K> comparator, final Iterable<Pair<K, V>> values) {

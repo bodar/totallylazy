@@ -1,16 +1,24 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicates;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
+import static com.googlecode.totallylazy.Maps.filterValues;
+import static com.googlecode.totallylazy.Maps.mapKeys;
+import static com.googlecode.totallylazy.Maps.mapValues;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.contains;
+import static com.googlecode.totallylazy.Strings.toLowerCase;
 import static com.googlecode.totallylazy.collections.ImmutableMap.constructors.map;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TreeMapTest {
@@ -63,5 +71,11 @@ public class TreeMapTest {
     public void supportsFilteringByKey() throws Exception {
         assertThat(map("Dan", 2).filterKeys(contains("a")), is(map("Dan", 2)));
         assertThat(map("Dan", 2).filterKeys(contains("b")), is(ImmutableMap.constructors.<String, Integer>empty()));
+    }
+
+    @Test
+    public void supportsFilteringByValue() throws Exception {
+        assertThat(map("Dan", 2).filterValues(Predicates.is(2)), CoreMatchers.is(ImmutableMap.constructors.map("Dan", 2)));
+        assertThat(map("Dan", 2).filterValues(Predicates.is(3)), CoreMatchers.is(ImmutableMap.constructors.<String, Integer>empty()));
     }
 }

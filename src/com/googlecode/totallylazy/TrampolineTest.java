@@ -1,12 +1,11 @@
-package com.googlecode.totallylazy.collections;
+package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.collections.Trampoline.done;
-import static com.googlecode.totallylazy.collections.Trampoline.more;
-import static com.googlecode.totallylazy.collections.Trampoline.trampoline;
+import static com.googlecode.totallylazy.Trampoline.done;
+import static com.googlecode.totallylazy.Trampoline.more;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
