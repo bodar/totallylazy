@@ -28,6 +28,10 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
         this.comparator = comparator;
     }
 
+    static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(K key, V value) {
+        return tree(EmptyMap.<K, V>empty(), key, value, EmptyMap.<K, V>empty());
+    }
+
     static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(ImmutableMap<K, V> left, Pair<K, V> pair, ImmutableMap<K, V> right) {
         return TreeMap.<K, V>tree(left, pair.first(), pair.second(), right, Comparators.<K>ascending());
     }
@@ -42,10 +46,6 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     static <K, V> TreeMap<K, V> tree(ImmutableMap<K, V> left, Pair<K, V> pair, ImmutableMap<K, V> right, Comparator<K> comparator) {
         return new TreeMap<K, V>(left, pair.first(), pair.second(), right, comparator);
-    }
-
-    static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(K key, V value) {
-        return tree(EmptyMap.<K, V>empty(), key, value, EmptyMap.<K, V>empty());
     }
 
     static <K, V> TreeMap<K, V> tree(K key, V value, Comparator<K> comparator) {
