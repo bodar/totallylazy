@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -86,6 +88,11 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     public ImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
         if(predicate.matches(value)) return tree(left.filterValues(predicate), key, value, right.filterValues(predicate), comparator);
         return left.filterValues(predicate).joinTo(right.filterValues(predicate));
+    }
+
+    @Override
+    public <NewV> ImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
+        return tree(left.mapValues(transformer), key, Callers.call(transformer, value), right.mapValues(transformer), comparator);
     }
 
     @Override
