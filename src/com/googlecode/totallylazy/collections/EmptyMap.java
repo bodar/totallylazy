@@ -1,6 +1,9 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callers;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.None;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -15,22 +18,14 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class EmptyMap<K, V> implements ImmutableMap<K, V> {
-    private final Comparator<K> comparator;
+    protected final Function2<K, V, ImmutableMap<K,V>> creator;
 
-    EmptyMap(Comparator<K> comparator) {
-        this.comparator = comparator;
+    protected EmptyMap(Function2<K, V, ImmutableMap<K, V>> creator) {
+        this.creator = creator;
     }
 
-    public static <K extends Comparable<? super K>, V> EmptyMap<K, V> empty(Class<K> keyClass, Class<V> valueClass) {
-        return EmptyMap.<K, V>empty();
-    }
-
-    public static <K extends Comparable<? super K>, V> EmptyMap<K, V> empty() {
-        return empty(Comparators.<K>ascending());
-    }
-
-    public static <K, V> EmptyMap<K, V> empty(Comparator<K> comparator) {
-        return new EmptyMap<K, V>(comparator);
+    public static <K, V> EmptyMap<K, V> emptyMap(Callable2<K, V, ImmutableMap<K, V>> creator) {
+        return new EmptyMap<K, V>(Function2.function(creator));
     }
 
     @Override
@@ -75,7 +70,7 @@ public class EmptyMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableMap<K, V> cons(Pair<K, V> newValue) {
-        return constructors.sortedMap(comparator, newValue.first(), newValue.second());
+        return creator.apply(newValue.first(), newValue.second());
     }
 
     @Override

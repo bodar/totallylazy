@@ -62,7 +62,7 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
         }
 
         public static <K, V> ImmutableMap<K, V> sortedMap(Comparator<K> comparator) {
-            return EmptyMap.<K, V>empty(comparator);
+            return TreeMap.<K, V>empty(comparator);
         }
 
         public static <K, V> ImmutableMap<K, V> sortedMap(Comparator<K> comparator, K key, V value) {
