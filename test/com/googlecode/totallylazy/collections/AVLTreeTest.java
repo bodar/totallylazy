@@ -44,6 +44,12 @@ public class AVLTreeTest {
     }
 
     @Test
+    public void balancesDeletion() throws Exception {
+        final ImmutableMap<Integer, Object> map = node(0, null).put(1, null).put(2, null).put(3, null).put(4, null).put(5, null).put(6, null);
+        assertThat(map.remove(3).toString(), is("((( 0 ) 1 ) 2 (( 4 ) 5 ( 6 )))"));
+    }
+
+    @Test
     @Ignore("Manual")
     public void performanceDoesNotSuck() throws Exception {
 //
@@ -132,7 +138,11 @@ public class AVLTreeTest {
         }).call();
 
 
-        Files.write(("<html><head><style>td { text-align: center; border: 1px solid gray; }</style></head><body>" + new ImmutableMapRenderer().render((AVLTree<?, ?>) map) + "</body></html>").getBytes(), new File("/home/dev/tree.html"));
+        render((AVLTree<?, ?>) map);
+    }
+
+    private void render(AVLTree<?, ?> map) {
+        Files.write(("<html><head><style>td { text-align: center; border: 1px solid gray; }</style></head><body>" + new ImmutableMapRenderer().render(map) + "</body></html>").getBytes(), new File("/home/dev/tree.html"));
     }
 
 

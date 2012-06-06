@@ -28,6 +28,8 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
 
     <NewV> ImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer);
 
+    ImmutableMap<K, V> remove(K key);
+
     class constructors {
         public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> sortedMap() {
             return constructors.<K, V>sortedMap(Comparators.<K>ascending());
