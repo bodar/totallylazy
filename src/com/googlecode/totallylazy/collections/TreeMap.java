@@ -31,7 +31,11 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
         this.comparator = comparator;
     }
 
-    <K,V> TreeMap<K, V> create(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
+    <K,V> TreeMap<K, V> balance(TreeMap<K, V> map) {
+        return map;
+    }
+
+    <K, V> TreeMap<K, V> create(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
         return tree(left, key, value, right, comparator);
     }
 
@@ -113,39 +117,47 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableMap<K, V> filterKeys(Predicate<? super K> predicate) {
-        if(predicate.matches(key)) return create(left.filterKeys(predicate), key, value, right.filterKeys(predicate), comparator);
+        if(predicate.matches(key)) return balance(create(left.filterKeys(predicate), key, value, right.filterKeys(predicate), comparator));
         return left.filterKeys(predicate).joinTo(right.filterKeys(predicate));
     }
 
     @Override
     public ImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
-        if(predicate.matches(value)) return create(left.filterValues(predicate), key, value, right.filterValues(predicate), comparator);
+        if(predicate.matches(value)) return balance(create(left.filterValues(predicate), key, value, right.filterValues(predicate), comparator));
         return left.filterValues(predicate).joinTo(right.filterValues(predicate));
     }
 
     @Override
     public <NewV> ImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
-        return create(left.mapValues(transformer), key, Callers.call(transformer, value), right.mapValues(transformer), comparator);
+        return balance(create(left.mapValues(transformer), key, Callers.call(transformer, value), right.mapValues(transformer), comparator));
     }
 
     @Override
     public ImmutableMap<K, V> remove(K key) {
-        if(comparator.compare(this.key, key) == 0) return left.joinTo(right);
-        return create(left.remove(key), this.key, value, right.remove(key), comparator);
+        int difference = comparator.compare(key, this.key);
+        if(difference == 0) {
+            if(left.isEmpty()) return right;
+            Pair<ImmutableMap<K, V>, Pair<K, V>> pair = left.removeMaximum();
+            ImmutableMap<K, V> newLeft = pair.first();
+            Pair<K, V> newRoot = pair.second();
+            return create(newLeft, newRoot.first(), newRoot.second(), right, comparator);
+        }
+        if(difference < 0) return create(left.remove(key), this.key, value, right, comparator);
+        return create(left, this.key, value, right.remove(key), comparator);
     }
 
     @Override
     public Pair<ImmutableMap<K, V>, Pair<K,V>>  removeMinimum() {
         if(left.isEmpty()) return pair(right, pair(key, value));
         final Pair<ImmutableMap<K, V>, Pair<K, V>> newLeft = left.removeMinimum();
-        return Pair.<ImmutableMap<K, V>, Pair<K, V>>pair(create(newLeft.first(), key, value, right, comparator), newLeft.second());
+        return Pair.<ImmutableMap<K, V>, Pair<K, V>>pair(balance(create(newLeft.first(), key, value, right, comparator)), newLeft.second());
     }
 
     @Override
     public Pair<ImmutableMap<K, V>, Pair<K,V>> removeMaximum() {
-        if(right.isEmpty()) return pair(left, pair(key, value));;
+        if(right.isEmpty()) return pair(left, pair(key, value));
         final Pair<ImmutableMap<K, V>, Pair<K, V>> newRight = right.removeMaximum();
-        return Pair.<ImmutableMap<K, V>, Pair<K, V>>pair(create(left, key, value, newRight.first(), comparator), newRight.second());
+        return Pair.<ImmutableMap<K, V>, Pair<K, V>>pair(balance(create(left, key, value, newRight.first(), comparator)), newRight.second());
     }
 
     @Override
@@ -156,9 +168,9 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     @Override
     public ImmutableMap<K, V> cons(Pair<K, V> newValue) {
         int difference = comparator.compare(newValue.first(), key);
-        if (difference == 0) return create(left, newValue.first(), newValue.second(), right, comparator);
-        if (difference < 0) return create(left.cons(newValue), key, value, right, comparator);
-        return create(left, key, value, right.cons(newValue), comparator);
+        if (difference == 0) return balance(create(left, newValue.first(), newValue.second(), right, comparator));
+        if (difference < 0) return balance(create(left.cons(newValue), key, value, right, comparator));
+        return balance(create(left, key, value, right.cons(newValue), comparator));
     }
 
     @Override

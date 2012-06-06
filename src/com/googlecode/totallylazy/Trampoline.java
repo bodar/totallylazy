@@ -20,7 +20,7 @@ public abstract class Trampoline<T> implements Functor<T, Trampoline<?>> {
 
     public static <T> T trampoline(Trampoline<? extends T> trampoline) {
         while (trampoline instanceof More) {
-            trampoline = call((Unchecked.<More<T>>cast(trampoline)));
+            trampoline = call(Unchecked.<More<T>>cast(trampoline));
         }
         return Unchecked.<Done<T>>cast(trampoline).value();
     }

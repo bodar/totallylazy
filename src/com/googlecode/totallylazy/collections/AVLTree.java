@@ -6,7 +6,6 @@ import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
 
-import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public interface AVLTree<K, V> extends ImmutableMap<K, V> {
@@ -48,11 +47,16 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
 
         @Override
         <K, V> Node<K, V> create(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
-            return balance(node(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator));
+            return node(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator);
+        }
+
+        @Override
+        <K, V> TreeMap<K, V> balance(TreeMap<K, V> map) {
+            return balanceNodes(Unchecked.<Node<K, V>>cast(map));
         }
 
         // http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/AVL_Tree_Rebalancing.svg/350px-AVL_Tree_Rebalancing.svg.png
-        private static <K, V> Node<K, V> balance(Node<K, V> parent) {
+        private static <K, V> Node<K, V> balanceNodes(Node<K, V> parent) {
             if (parent.balance() == -2) {
                 if (parent.right.balance() == 1) {
                     return balanceRightLeft(parent);
@@ -60,11 +64,11 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
                 if (parent.right.balance() == -1) {
                     return balanceRightRight(parent);
                 }
-            } else if(parent.balance() == 2) {
-                if(parent.left.balance() == -1){
+            } else if (parent.balance() == 2) {
+                if (parent.left.balance() == -1) {
                     return balanceLeftRight(parent);
                 }
-                if(parent.left.balance() == 1){
+                if (parent.left.balance() == 1) {
                     return balanceLeftLeft(parent);
                 }
             }
