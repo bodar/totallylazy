@@ -11,9 +11,7 @@ import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListMap;
 
@@ -49,9 +47,12 @@ public class AVLTreeTest {
         assertThat(map.remove(3).toString(), is("((( 0 ) 1 ) 2 (( 4 ) 5 ( 6 )))"));
     }
 
+    final Sequence<Integer> range = range(1, 10000).safeCast(Integer.class).realise();
+    final Sequence<Integer> keys = Randoms.between(0, 10000);
+
     @Test
     @Ignore("Manual")
-    public void performanceDoesNotSuck() throws Exception {
+    public void getIsPrettyQuick() throws Exception {
 //
 //        BEGIN MUTABLE
 //        Elapsed time: 1.323778 msecs
@@ -62,64 +63,29 @@ public class AVLTreeTest {
 //        Elapsed msecs for 1001 runs:	Avg:4.6022222222222205E-4	Min:2.06E-4	Max:0.013102	Total:0.49465499999999996
 //        END IMMUTABLE
 
-
-        final Sequence<Integer> range = range(1, 10000).safeCast(Integer.class).realise();
-        final Sequence<Integer> keys = Randoms.between(0, 10000);
-
-
         for (int i = 0; i < 10; i++) {
-
             System.out.println("BEGIN MUTABLE");
-            final Map<Integer, String> mutable = TimeCallable.time(new Callable<Map<Integer, String>>() {
-                @Override
-                public Map<Integer, String> call() throws Exception {
-                    return range.fold(new TreeMap<Integer, String>() {{
-                                          put(0, "0");
-                                      }}, new Callable2<Map<Integer, String>, Integer, Map<Integer, String>>() {
-                                          @Override
-                                          public Map<Integer, String> call(Map<Integer, String> map, Integer integer) throws Exception {
-                                              map.put(integer, integer.toString());
-                                              return map;
-                                          }
-                                      }
-                    );
-                }
-            }).call();
-
-            TimeReport time2 = TimeReport.time(1000, new Callable<Object>() {
+            final Map<Integer, String> mutable = createMutable(range);
+            System.out.println(TimeReport.time(1000, new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
                     Integer key = keys.head();
                     Option<String> value = Maps.get(mutable, key);
                     return value;
                 }
-            });
-            System.out.println(time2);
+            }));
             System.out.println("END MUTABLE");
 
-
             System.out.println("BEGIN IMMUTABLE");
-            final ImmutableMap<Integer, String> map = TimeCallable.time(new Callable<ImmutableMap<Integer, String>>() {
-                @Override
-                public ImmutableMap<Integer, String> call() throws Exception {
-                    return range.fold(node(0, "0"), new Callable2<ImmutableMap<Integer, String>, Integer, ImmutableMap<Integer, String>>() {
-                        @Override
-                        public ImmutableMap<Integer, String> call(ImmutableMap<Integer, String> node, Integer integer) throws Exception {
-                            return node.put(integer, integer.toString());
-                        }
-                    });
-                }
-            }).call();
-
-            TimeReport time = TimeReport.time(1000, new Callable<Object>() {
+            final ImmutableMap<Integer, String> map = createImmutable(range);
+            System.out.println(TimeReport.time(1000, new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
                     Integer key = keys.head();
                     Option<String> value = map.get(key);
                     return value;
                 }
-            });
-            System.out.println(time);
+            }));
             System.out.println("END IMMUTABLE");
 
         }
@@ -141,8 +107,68 @@ public class AVLTreeTest {
         render((AVLTree<?, ?>) map);
     }
 
+    private Map<Integer, String> createMutable(final Sequence<Integer> range) throws Exception {
+        return TimeCallable.time(new Callable<Map<Integer, String>>() {
+            @Override
+            public Map<Integer, String> call() throws Exception {
+                return range.fold(new ConcurrentSkipListMap<Integer, String>() {{
+                                      put(0, "0");
+                                  }}, new Callable2<Map<Integer, String>, Integer, Map<Integer, String>>() {
+                                      @Override
+                                      public Map<Integer, String> call(Map<Integer, String> map, Integer integer) throws Exception {
+                                          map.put(integer, integer.toString());
+                                          return map;
+                                      }
+                                  }
+                );
+            }
+        }).call();
+    }
+
+    @Test
+    @Ignore
+    public void removeIsQuick() throws Exception {
+        for (int i = 0; i < 10; i++) {
+
+            System.out.println("BEGIN MUTABLE");
+            final Map<Integer, String> map = createMutable(range);
+            System.out.println(TimeReport.time(1000, new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    return map.remove(keys.head());
+                }
+            }));
+            System.out.println("END MUTABLE");
+
+            System.out.println("BEGIN IMMUTABLE");
+            final ImmutableMap<Integer, String> immutable = createImmutable(range);
+            System.out.println(TimeReport.time(1000, new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    return immutable.remove(keys.head());
+                }
+            }));
+            System.out.println("END IMMUTABLE");
+
+        }
+    }
+
+    private ImmutableMap<Integer, String> createImmutable(final Sequence<Integer> range) throws Exception {
+        return TimeCallable.time(new Callable<ImmutableMap<Integer, String>>() {
+            @Override
+            public ImmutableMap<Integer, String> call() throws Exception {
+                return range.fold(node(0, "0"), new Callable2<ImmutableMap<Integer, String>, Integer, ImmutableMap<Integer, String>>() {
+                    @Override
+                    public ImmutableMap<Integer, String> call(ImmutableMap<Integer, String> node, Integer integer) throws Exception {
+                        return node.put(integer, integer.toString());
+                    }
+                });
+            }
+        }).call();
+    }
+
     private void render(AVLTree<?, ?> map) {
-        Files.write(("<html><head><style>td { text-align: center; border: 1px solid gray; }</style></head><body>" + new ImmutableMapRenderer().render(map) + "</body></html>").getBytes(), new File("/home/dev/tree.html"));
+        Files.write(("<html><head><style>td { text-align: center; border: 1px solid gray; }</style></head><body>" + new ImmutableMapRenderer().render(map) + "</body></html>").getBytes(), Files.temporaryFile());
     }
 
 
