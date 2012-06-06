@@ -47,12 +47,7 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
 
         @Override
         <K, V> Node<K, V> create(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
-            return node(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator);
-        }
-
-        @Override
-        <K, V> TreeMap<K, V> balance(TreeMap<K, V> map) {
-            return balanceNodes(Unchecked.<Node<K, V>>cast(map));
+            return balanceNodes(node(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator));
         }
 
         // http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/AVL_Tree_Rebalancing.svg/350px-AVL_Tree_Rebalancing.svg.png
