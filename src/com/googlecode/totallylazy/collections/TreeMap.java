@@ -15,11 +15,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class TreeMap<K, V> implements ImmutableMap<K, V> {
-    private final ImmutableMap<K, V> left;
-    private final K key;
-    private final V value;
-    private final ImmutableMap<K, V> right;
-    private final Comparator<K> comparator;
+    protected final ImmutableMap<K, V> left;
+    protected final K key;
+    protected final V value;
+    protected final ImmutableMap<K, V> right;
+    protected final Comparator<K> comparator;
 
     TreeMap(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
         this.left = left;
