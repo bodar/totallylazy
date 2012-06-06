@@ -81,7 +81,7 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
             AVLTree<K, V> b = asNode(asNode(parent.left).right).left;
             Node<K, V> three = asNode(parent.left).right(b);
             Node<K, V> four = asNode(asNode(parent.left).right).left(three);
-            return balance(parent.left(four));
+            return balanceLeftLeft(parent.left(four));
         }
 
         private static <K, V> Node<K, V> balanceRightRight(Node<K, V> parent) {
@@ -94,7 +94,7 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
             AVLTree<K, V> c = asNode(asNode(parent.right).left).right;
             Node<K, V> five = asNode(parent.right).left(c);
             Node<K, V> four = asNode(asNode(parent.right).left).right(five);
-            return balance(parent.right(four));
+            return balanceRightRight(parent.right(four));
         }
 
         private static <K, V> Node<K, V> asNode(AVLTree<K, V> node) {
