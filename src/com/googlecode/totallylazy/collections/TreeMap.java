@@ -29,6 +29,10 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
         this.comparator = comparator;
     }
 
+    <K,V> TreeMap<K, V> create(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
+        return tree(left, key, value, right, comparator);
+    }
+
     static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(K key, V value) {
         return tree(TreeMap.<K,V>empty(), key, value, TreeMap.<K,V>empty());
     }
@@ -107,19 +111,19 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableMap<K, V> filterKeys(Predicate<? super K> predicate) {
-        if(predicate.matches(key)) return tree(left.filterKeys(predicate), key, value, right.filterKeys(predicate), comparator);
+        if(predicate.matches(key)) return create(left.filterKeys(predicate), key, value, right.filterKeys(predicate), comparator);
         return left.filterKeys(predicate).joinTo(right.filterKeys(predicate));
     }
 
     @Override
     public ImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
-        if(predicate.matches(value)) return tree(left.filterValues(predicate), key, value, right.filterValues(predicate), comparator);
+        if(predicate.matches(value)) return create(left.filterValues(predicate), key, value, right.filterValues(predicate), comparator);
         return left.filterValues(predicate).joinTo(right.filterValues(predicate));
     }
 
     @Override
     public <NewV> ImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
-        return tree(left.mapValues(transformer), key, Callers.call(transformer, value), right.mapValues(transformer), comparator);
+        return create(left.mapValues(transformer), key, Callers.call(transformer, value), right.mapValues(transformer), comparator);
     }
 
     @Override
@@ -130,9 +134,9 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     @Override
     public ImmutableMap<K, V> cons(Pair<K, V> newValue) {
         int difference = comparator.compare(newValue.first(), key);
-        if (difference == 0) return tree(left, newValue, right, comparator);
-        if (difference < 0) return tree(left.cons(newValue), key, value, right, comparator);
-        return tree(left, key, value, right.cons(newValue), comparator);
+        if (difference == 0) return create(left, newValue.first(), newValue.second(), right, comparator);
+        if (difference < 0) return create(left.cons(newValue), key, value, right, comparator);
+        return create(left, key, value, right.cons(newValue), comparator);
     }
 
     @Override
@@ -155,7 +159,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public String toString() {
-        return String.format("(%s %s %s)", left, value, right);
+        return String.format("(%s %s %s)", left, key, right);
     }
 
     @Override

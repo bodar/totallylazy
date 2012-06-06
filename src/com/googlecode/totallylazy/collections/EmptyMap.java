@@ -20,12 +20,12 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 public class EmptyMap<K, V> implements ImmutableMap<K, V> {
     protected final Function2<K, V, ImmutableMap<K,V>> creator;
 
-    protected EmptyMap(Function2<K, V, ImmutableMap<K, V>> creator) {
-        this.creator = creator;
+    protected EmptyMap(Callable2<? super K, ? super V, ? extends ImmutableMap<K, V>> creator) {
+        this.creator = Function2.function(creator);
     }
 
     public static <K, V> EmptyMap<K, V> emptyMap(Callable2<K, V, ImmutableMap<K, V>> creator) {
-        return new EmptyMap<K, V>(Function2.function(creator));
+        return new EmptyMap<K, V>(creator);
     }
 
     @Override
