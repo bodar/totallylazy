@@ -14,6 +14,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Pair.pair;
+
 public class TreeMap<K, V> implements ImmutableMap<K, V> {
     protected final ImmutableMap<K, V> left;
     protected final K key;
@@ -98,7 +100,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableMap<K, V> put(K key, V value) {
-        return cons(Pair.pair(key, value));
+        return cons(pair(key, value));
     }
 
     @Override
@@ -133,8 +135,22 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
+    public Pair<ImmutableMap<K, V>, Pair<K,V>>  removeMinimum() {
+        if(left.isEmpty()) return pair(right, pair(key, value));
+        final Pair<ImmutableMap<K, V>, Pair<K, V>> newLeft = left.removeMinimum();
+        return Pair.<ImmutableMap<K, V>, Pair<K, V>>pair(create(newLeft.first(), key, value, right, comparator), newLeft.second());
+    }
+
+    @Override
+    public Pair<ImmutableMap<K, V>, Pair<K,V>> removeMaximum() {
+        if(right.isEmpty()) return pair(left, pair(key, value));;
+        final Pair<ImmutableMap<K, V>, Pair<K, V>> newRight = right.removeMaximum();
+        return Pair.<ImmutableMap<K, V>, Pair<K, V>>pair(create(left, key, value, newRight.first(), comparator), newRight.second());
+    }
+
+    @Override
     public <C extends Segment<Pair<K, V>, C>> C joinTo(C rest) {
-        return left.joinTo(right.joinTo(rest).cons(Pair.pair(key, value)));
+        return left.joinTo(right.joinTo(rest).cons(pair(key, value)));
     }
 
     @Override
@@ -175,7 +191,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public Pair<K, V> head() throws NoSuchElementException {
-        return Pair.pair(key, value);
+        return pair(key, value);
     }
 
     @Override

@@ -30,6 +30,10 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
 
     ImmutableMap<K, V> remove(K key);
 
+    Pair<ImmutableMap<K, V>, Pair<K,V>> removeMinimum();
+
+    Pair<ImmutableMap<K, V>, Pair<K,V>> removeMaximum();
+
     class constructors {
         public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> sortedMap() {
             return constructors.<K, V>sortedMap(Comparators.<K>ascending());

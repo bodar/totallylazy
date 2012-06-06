@@ -69,6 +69,16 @@ public class EmptyMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
+    public Pair<ImmutableMap<K, V>, Pair<K,V>>  removeMinimum() {
+        throw new NoSuchElementException();
+    }
+
+    @Override
+    public Pair<ImmutableMap<K, V>, Pair<K,V>>  removeMaximum() {
+        throw new NoSuchElementException();
+    }
+
+    @Override
     public <C extends Segment<Pair<K, V>, C>> C joinTo(C rest) {
         return rest;
     }

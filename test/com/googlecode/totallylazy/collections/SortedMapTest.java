@@ -17,13 +17,27 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SortedMapTest {
     @Test
-    public void canRemove() throws Exception {
-        assertThat(sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").remove(4), hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
+    public void canRemoveMinimum() throws Exception {
+        final Pair<ImmutableMap<Integer, String>, Pair<Integer, String>> result = sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").removeMinimum();
+        assertThat(result.first(), hasExactly(pair(2, "Ray"), pair(3, "Stu"), pair(4, "Alex")));
+        assertThat(result.second(), is(pair(1, "Dan")));
     }
 
     @Test
-    public void canRemoveIsNotBuggy() throws Exception {
-        assertThat(sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").remove(2), hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(4, "Alex")));
+    public void canRemoveMaximum() throws Exception {
+        final Pair<ImmutableMap<Integer, String>, Pair<Integer, String>> result = sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").removeMaximum();
+        assertThat(result.first(), hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
+        assertThat(result.second(), is(pair(4, "Alex")));
+    }
+
+    @Test
+    public void canRemove() throws Exception {
+        final ImmutableMap<Integer, String> map = sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray");
+        assertThat(map.remove(4), hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
+        assertThat(map.remove(3), hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(4, "Alex")));
+        assertThat(map.remove(2), hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(4, "Alex")));
+        assertThat(map.remove(1), hasExactly(pair(2, "Ray"), pair(3, "Stu"), pair(4, "Alex")));
+        assertThat(map.remove(0), is(map));
     }
 
     @Test
