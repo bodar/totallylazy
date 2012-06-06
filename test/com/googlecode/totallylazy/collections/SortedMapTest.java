@@ -17,6 +17,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SortedMapTest {
     @Test
+    public void canRemove() throws Exception {
+        assertThat(sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").remove(4), hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
+    }
+
+    @Test
+    public void canRemoveIsNotBuggy() throws Exception {
+        assertThat(sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").remove(2), hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(4, "Alex")));
+    }
+
+    @Test
     public void canPut() throws Exception {
         ImmutableMap<Integer, String> map = sortedMap(1, "Dan").put(3, "Stu").put(2, "Ray");
         assertThat(map, hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));

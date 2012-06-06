@@ -127,6 +127,12 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
+    public ImmutableMap<K, V> remove(K key) {
+        if(comparator.compare(this.key, key) == 0) return left.joinTo(right);
+        return create(left.remove(key), this.key, value, right.remove(key), comparator);
+    }
+
+    @Override
     public <C extends Segment<Pair<K, V>, C>> C joinTo(C rest) {
         return left.joinTo(right.joinTo(rest).cons(Pair.pair(key, value)));
     }
