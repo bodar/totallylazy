@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.node;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -55,7 +56,7 @@ public class AVLTreeTest {
 //        Elapsed msecs for 1001 runs:	Avg:4.6022222222222205E-4	Min:2.06E-4	Max:0.013102	Total:0.49465499999999996
 //        END IMMUTABLE
 
-        
+
         final Sequence<Integer> range = range(1, 10000).safeCast(Integer.class).realise();
         final Sequence<Integer> keys = Randoms.between(0, 10000);
 
@@ -118,7 +119,20 @@ public class AVLTreeTest {
         }
 
 
-//        Files.write(("<html><head><style>td { text-align: center; border: 1px solid gray; }</style></head><body>" + new ImmutableMapRenderer().render((AVLTree<?, ?>) map) + "</body></html>").getBytes(), new File("/home/dev/tree.html"));
+        final ImmutableMap<Integer, String> map = TimeCallable.time(new Callable<ImmutableMap<Integer, String>>() {
+            @Override
+            public ImmutableMap<Integer, String> call() throws Exception {
+                return range.fold(node(0, "0"), new Callable2<ImmutableMap<Integer, String>, Integer, ImmutableMap<Integer, String>>() {
+                    @Override
+                    public ImmutableMap<Integer, String> call(ImmutableMap<Integer, String> node, Integer integer) throws Exception {
+                        return node.put(integer, integer.toString());
+                    }
+                });
+            }
+        }).call();
+
+
+        Files.write(("<html><head><style>td { text-align: center; border: 1px solid gray; }</style></head><body>" + new ImmutableMapRenderer().render((AVLTree<?, ?>) map) + "</body></html>").getBytes(), new File("/home/dev/tree.html"));
     }
 
 
