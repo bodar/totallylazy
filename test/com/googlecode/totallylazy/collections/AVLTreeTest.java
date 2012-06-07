@@ -11,6 +11,7 @@ import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -168,7 +169,9 @@ public class AVLTreeTest {
     }
 
     private void render(AVLTree<?, ?> map) {
-        Files.write(("<html><head><style>td { text-align: center; border: 1px solid gray; }</style></head><body>" + new ImmutableMapRenderer().render(map) + "</body></html>").getBytes(), Files.temporaryFile());
+        final File file = new File(Files.temporaryDirectory(), getClass().getSimpleName() + ".html");
+        Files.write(("<html><head><style>td { text-align: center; border: 1px solid gray; }</style></head><body>" + new ImmutableMapRenderer().render(map) + "</body></html>").getBytes(), file);
+        System.out.println("tree = " + file);
     }
 
 
