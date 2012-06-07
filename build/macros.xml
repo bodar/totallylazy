@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
+
+    <macrodef name="requires">
+        <attribute name="java.version"/>
+        <sequential>
+            <fail message="Requires Java version: @{java.version}. Found ${java.version}">
+                <condition>
+                    <not>
+                        <matches string="${java.version}" pattern="^@{java.version}"/>
+                    </not>
+                </condition>
+            </fail>
+        </sequential>
+    </macrodef>
+
     <macrodef name="compile.and.jar">
         <attribute name="src"/>
         <attribute name="jar"/>
