@@ -1,49 +1,83 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.None;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.iterators.EmptyIterator;
 
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class EmptySet<T> implements ImmutableSet<T> {
-    final Comparator<T> comparator;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
-    EmptySet(Comparator<T> comparator) {
-        this.comparator = comparator;
+public class EmptySet<A> implements ImmutableSet<A> {
+    protected final Function1<A, ImmutableSet<A>> creator;
+
+    protected EmptySet(Callable1<? super A, ? extends ImmutableSet<A>> creator) {
+        this.creator = Function1.function(creator);
     }
 
-    public static <T extends Comparable<? super T>> EmptySet<T> empty(Class<T> aClass) {
-        return EmptySet.<T>empty();
-    }
-
-    public static <T extends Comparable<? super T>> EmptySet<T> empty() {
-        return empty(Comparators.<T>ascending());
-    }
-
-    public static <T> EmptySet<T> empty(Comparator<T> comparator) {
-        return new EmptySet<T>(comparator);
+    public static <A> EmptySet<A> emptySet(Callable1<? super A, ? extends ImmutableSet<A>> creator) {
+        return new EmptySet<A>(creator);
     }
 
     @Override
-    public ImmutableList<T> immutableList() {
+    public ImmutableList<A> immutableList() {
         return ImmutableList.constructors.empty();
     }
 
     @Override
-    public <C extends Segment<T, C>> C joinTo(C rest) {
+    public ImmutableSet<A> put(A value) {
+        return cons(value);
+    }
+
+    @Override
+    public None<A> find(Predicate<? super A> predicate) {
+        return None.none();
+    }
+
+    @Override
+    public ImmutableSet<A> filter(Predicate<? super A> predicate) {
+        return this;
+    }
+
+    @Override
+    public <NewV> ImmutableSet<NewV> map(Callable1<? super A, ? extends NewV> transformer) {
+        return cast(this);
+    }
+
+    @Override
+    public ImmutableSet<A> remove(A value) {
+        return this;
+    }
+
+    @Override
+    public Pair<ImmutableSet<A>, A>  removeMinimum() {
+        throw new NoSuchElementException();
+    }
+
+    @Override
+    public Pair<ImmutableSet<A>, A>  removeMaximum() {
+        throw new NoSuchElementException();
+    }
+
+    @Override
+    public <C extends Segment<A, C>> C joinTo(C rest) {
         return rest;
     }
 
     @Override
-    public ImmutableSet<T> cons(T newValue) {
-        return ImmutableSet.constructors.set(newValue, comparator);
+    public ImmutableSet<A> cons(A newValue) {
+        return creator.apply(newValue);
     }
 
     @Override
-    public boolean contains(T other) {
+    public boolean contains(A other) {
         return false;
     }
 
@@ -68,17 +102,17 @@ public class EmptySet<T> implements ImmutableSet<T> {
     }
 
     @Override
-    public T head() throws NoSuchElementException {
+    public A head() throws NoSuchElementException {
         throw new NoSuchElementException();
     }
 
     @Override
-    public ImmutableSet<T> tail() throws NoSuchElementException {
+    public ImmutableSet<A> tail() throws NoSuchElementException {
         throw new NoSuchElementException();
     }
 
     @Override
-    public Iterator<T> iterator() {
-        return new EmptyIterator<T>();
+    public Iterator<A> iterator() {
+        return new EmptyIterator<A>();
     }
 }

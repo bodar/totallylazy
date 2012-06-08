@@ -8,7 +8,7 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
-import static com.googlecode.totallylazy.collections.ImmutableSet.constructors.set;
+import static com.googlecode.totallylazy.collections.ImmutableSet.constructors.sortedSet;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -102,7 +102,7 @@ public class PersistentListTest {
     public void canJoin() throws Exception {
         ImmutableList<Integer> join = list(1, 2, 3, 4).joinTo(list(4, 3, 2, 1));
         assertThat(join, hasExactly(1, 2, 3, 4, 4, 3, 2, 1));
-        ImmutableSet<Integer> set = list(2, 1, 4, 3).joinTo(set(3, 4));
+        ImmutableSet<Integer> set = list(2, 1, 4, 3).joinTo(sortedSet(3, 4));
         assertThat(set, hasExactly(1, 2, 3, 4));
     }
 }
