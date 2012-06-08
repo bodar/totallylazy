@@ -92,7 +92,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public Option<V> get(K other) {
-        int difference = comparator.compare(other, key);
+        int difference = difference(other);
         if (difference == 0) return Option.option(value);
         if (difference < 0) return left.get(other);
         return right.get(other);
@@ -132,7 +132,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableMap<K, V> remove(K key) {
-        int difference = comparator.compare(key, this.key);
+        int difference = difference(key);
         if (difference == 0) {
             if (left.isEmpty()) return right;
             Pair<ImmutableMap<K, V>, Pair<K, V>> pair = left.removeMaximum();
@@ -142,6 +142,10 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
         }
         if (difference < 0) return create(left.remove(key), this.key, value, right, comparator);
         return create(left, this.key, value, right.remove(key), comparator);
+    }
+
+    private int difference(K key) {
+        return comparator.compare(key, this.key);
     }
 
     @Override
@@ -165,7 +169,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableMap<K, V> cons(Pair<K, V> newValue) {
-        int difference = comparator.compare(newValue.first(), key);
+        int difference = difference(newValue.first());
         if (difference == 0) return create(left, newValue.first(), newValue.second(), right, comparator);
         if (difference < 0) return create(left.cons(newValue), key, value, right, comparator);
         return create(left, key, value, right.cons(newValue), comparator);
@@ -173,7 +177,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public boolean contains(K other) {
-        int difference = comparator.compare(other, key);
+        int difference = difference(other);
         if (difference == 0) return key.equals(other);
         if (difference < 0) return left.contains(other);
         return right.contains(other);
