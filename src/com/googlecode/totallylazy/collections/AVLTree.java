@@ -47,27 +47,38 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
 
         @Override
         <K, V> Node<K, V> create(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
-            return balanceNodes(node(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator));
+            return balance(node(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator));
         }
 
         // http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/AVL_Tree_Rebalancing.svg/350px-AVL_Tree_Rebalancing.svg.png
-        private static <K, V> Node<K, V> balanceNodes(Node<K, V> parent) {
-            if (parent.balance() == -2) {
-                if (parent.right.balance() == 1) {
-                    return balanceRightLeft(parent);
-                }
-                if (parent.right.balance() == -1) {
-                    return balanceRightRight(parent);
-                }
-            } else if (parent.balance() == 2) {
-                if (parent.left.balance() == -1) {
-                    return balanceLeftRight(parent);
-                }
-                if (parent.left.balance() == 1) {
-                    return balanceLeftLeft(parent);
-                }
+        private static <K, V> Node<K, V> balance(Node<K, V> node) {
+            if (node.balance() == -2) {
+                return balanceRight(node);
             }
-            return parent;
+            if (node.balance() == 2) {
+                return balanceLeft(node);
+            }
+            return node;
+        }
+
+        private static <K, V> Node<K, V> balanceLeft(Node<K, V> node) {
+            if (node.left.balance() == -1) {
+                return balanceLeftRight(node);
+            }
+            if (node.left.balance() == 1) {
+                return balanceLeftLeft(node);
+            }
+            return node;
+        }
+
+        private static <K, V> Node<K, V> balanceRight(Node<K, V> node) {
+            if (node.right.balance() == 1) {
+                return balanceRightLeft(node);
+            }
+            if (node.right.balance() == -1) {
+                return balanceRightRight(node);
+            }
+            return node;
         }
 
         private static <K, V> Node<K, V> balanceLeftLeft(Node<K, V> parent) {
