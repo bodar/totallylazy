@@ -10,7 +10,6 @@ import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
 
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface ImmutableSet<T> extends Iterable<T>, Segment<T, ImmutableSet<T>>, Container<T> {
