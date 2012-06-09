@@ -16,12 +16,32 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import static com.googlecode.totallylazy.collections.AVLTree.Node.asNode;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.node;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AVLTreeTest {
+    private Sequence<Integer> integers(final int start, final int end) {
+        return range(start, end).safeCast(Integer.class);
+    }
+
+    @Test
+    public void canGetByIndex() throws Exception {
+        AVLTree.Node<Integer, Integer> map = asNode(node(4, 4).put(5, 5).put(3, 3).put(2, 2).put(6, 6));
+        assertThat(map.index(0), is(2));
+        assertThat(map.index(1), is(3));
+        assertThat(map.index(2), is(4));
+        assertThat(map.index(3), is(5));
+        assertThat(map.index(4), is(6));
+    }
+
+    @Test
+    public void canCalculateSize() throws Exception {
+        assertThat(asNode(node(4, null).put(5, null).put(3, null).put(2, null).put(6, null)).size(), is(5));
+    }
+
     @Test
     public void balancesRightRightCase() throws Exception {
         assertThat(node(3, null).put(4, null).put(5, null).toString(), is("(( 3 ) 4 ( 5 ))"));
@@ -168,7 +188,7 @@ public class AVLTreeTest {
         }).call();
     }
 
-    private void render(AVLTree<?, ?> map) {
+    private void render(ImmutableMap<?, ?> map) {
         final File file = new File(Files.temporaryDirectory(), getClass().getSimpleName() + ".html");
         Files.write(("<html><head><style>td { text-align: center; border: 1px solid gray; }</style></head><body>" + new ImmutableMapRenderer().render(map) + "</body></html>").getBytes(), file);
         System.out.println("tree = " + file);
@@ -176,7 +196,7 @@ public class AVLTreeTest {
 
 
     private class ImmutableMapRenderer {
-        public String render(AVLTree<?, ?> map) {
+        public String render(ImmutableMap<?, ?> map) {
             if (map instanceof AVLTree.Node) {
                 return "<table>" + "<tr><td colspan='2'>" + ((AVLTree.Node) map).key + "</td></tr>" +
                         "<tr><td  valign='top'>" + render(((AVLTree.Node) map).left) + "</td><td valign='top'>" + render(((AVLTree.Node) map).right) + "</td></tr></table>";
