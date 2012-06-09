@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -12,6 +13,10 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
     int height();
 
     int balance();
+
+    int size();
+
+    V index(int i);
 
     class Empty<K, V> extends EmptyMap<K, V> implements AVLTree<K, V> {
         protected Empty(final Function2<K, V, AVLTree<K, V>> creator) {
@@ -27,18 +32,30 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
         public int balance() {
             return 0;
         }
+
+        @Override
+        public int size() {
+            return 0;
+        }
+
+        @Override
+        public V index(int i) {
+            throw new IndexOutOfBoundsException();
+        }
     }
 
     class Node<K, V> extends TreeMap<K, V> implements AVLTree<K, V> {
         private final int height;
         final AVLTree<K, V> left;
         final AVLTree<K, V> right;
+        private final int size;
 
         private Node(AVLTree<K, V> left, K key, V value, AVLTree<K, V> right, Comparator<K> comparator) {
             super(left, key, value, right, comparator);
             this.left = left;
             this.right = right;
             height = Math.max(left.height(), right.height()) + 1;
+            size = left.size() + right.size() + 1;
         }
 
         static <K, V> Node<K, V> node(AVLTree<K, V> left, K key, V value, AVLTree<K, V> right, Comparator<K> comparator) {
@@ -107,7 +124,7 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
             return balanceRightRight(parent.right(four));
         }
 
-        private static <K, V> Node<K, V> asNode(AVLTree<K, V> node) {
+        public static <K, V> Node<K, V> asNode(ImmutableMap<K, V> node) {
             return cast(node);
         }
 
@@ -119,6 +136,18 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
         @Override
         public int balance() {
             return left.height() - right.height();
+        }
+
+        @Override
+        public int size() {
+            return size;
+        }
+
+        @Override
+        public V index(int i) {
+            if (left.size() == i) return value;
+            if (i < left.size()) return left.index(i);
+            return right.index(i - left.size() - 1);
         }
 
         private Node<K, V> left(AVLTree<K, V> newLeft) {
