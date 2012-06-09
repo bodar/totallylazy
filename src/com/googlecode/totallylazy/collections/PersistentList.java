@@ -59,7 +59,7 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new SegmentIterator<T, ImmutableList<T>>(this);
+        return new SegmentIterator<T>(this);
     }
 
     private static class Empty<T> extends PersistentList<T> {
@@ -77,7 +77,7 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         }
 
         @Override
-        public <C extends Segment<T, C>> C joinTo(C rest) {
+        public <C extends Segment<T>> C joinTo(C rest) {
             return rest;
         }
 
@@ -119,8 +119,8 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         }
 
         @Override
-        public <C extends Segment<T, C>> C joinTo(C rest) {
-            return tail.joinTo(rest).cons(head);
+        public <C extends Segment<T>> C joinTo(C rest) {
+            return cast(tail.joinTo(rest).cons(head));
         }
 
         @Override

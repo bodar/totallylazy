@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.comparators.Comparators;
@@ -8,17 +9,13 @@ import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public interface AVLTree<K, V> extends ImmutableMap<K, V> {
+public interface AVLTree<K, V> extends SortedImmutableMap<K, V> {
     int height();
 
     int balance();
 
-    int size();
-
-    V index(int i);
-
     class Empty<K, V> extends EmptyMap<K, V> implements AVLTree<K, V> {
-        protected Empty(final Function2<K, V, AVLTree<K, V>> creator) {
+        protected Empty(final Callable2<? super K, ? super V, ? extends SortedImmutableMap<K, V>> creator) {
             super(creator);
         }
 
@@ -60,7 +57,7 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
         }
 
         @Override
-        <K, V> Node<K, V> create(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
+        <K, V> Node<K, V> create(SortedImmutableMap<K, V> left, K key, V value, SortedImmutableMap<K, V> right, Comparator<K> comparator) {
             return balance(node(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator));
         }
 

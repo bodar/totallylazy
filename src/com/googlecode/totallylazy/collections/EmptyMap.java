@@ -14,14 +14,14 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class EmptyMap<K, V> implements ImmutableMap<K, V> {
-    protected final Function2<K, V, ImmutableMap<K,V>> creator;
+public class EmptyMap<K, V> implements SortedImmutableMap<K, V> {
+    protected final Function2<K, V, SortedImmutableMap<K,V>> creator;
 
-    protected EmptyMap(Callable2<? super K, ? super V, ? extends ImmutableMap<K, V>> creator) {
+    protected EmptyMap(Callable2<? super K, ? super V, ? extends SortedImmutableMap<K, V>> creator) {
         this.creator = Function2.function(creator);
     }
 
-    public static <K, V> EmptyMap<K, V> emptyMap(Callable2<K, V, ImmutableMap<K, V>> creator) {
+    public static <K, V> EmptyMap<K, V> emptyMap(Callable2<? super K, ? super V, ? extends SortedImmutableMap<K, V>> creator) {
         return new EmptyMap<K, V>(creator);
     }
 
@@ -36,7 +36,7 @@ public class EmptyMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
-    public ImmutableMap<K, V> put(K key, V value) {
+    public SortedImmutableMap<K, V> put(K key, V value) {
         return cons(Pair.pair(key, value));
     }
 
@@ -46,42 +46,42 @@ public class EmptyMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
-    public ImmutableMap<K, V> filterKeys(Predicate<? super K> predicate) {
+    public SortedImmutableMap<K, V> filterKeys(Predicate<? super K> predicate) {
         return this;
     }
 
     @Override
-    public ImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
+    public SortedImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
         return this;
     }
 
     @Override
-    public <NewV> ImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> SortedImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
         return cast(this);
     }
 
     @Override
-    public ImmutableMap<K, V> remove(K key) {
+    public SortedImmutableMap<K, V> remove(K key) {
         return this;
     }
 
     @Override
-    public Pair<ImmutableMap<K, V>, Pair<K,V>>  removeMinimum() {
+    public Pair<SortedImmutableMap<K, V>, Pair<K,V>>  removeMinimum() {
         throw new NoSuchElementException();
     }
 
     @Override
-    public Pair<ImmutableMap<K, V>, Pair<K,V>>  removeMaximum() {
+    public Pair<SortedImmutableMap<K, V>, Pair<K,V>>  removeMaximum() {
         throw new NoSuchElementException();
     }
 
     @Override
-    public <C extends Segment<Pair<K, V>, C>> C joinTo(C rest) {
+    public <C extends Segment<Pair<K, V>>> C joinTo(C rest) {
         return rest;
     }
 
     @Override
-    public ImmutableMap<K, V> cons(Pair<K, V> newValue) {
+    public SortedImmutableMap<K, V> cons(Pair<K, V> newValue) {
         return creator.apply(newValue.first(), newValue.second());
     }
 

@@ -21,7 +21,7 @@
     <import file="${build}/macros.xml"/>
     <import file="${build}/shavenmaven.xml"/>
 
-    <requires java.version="1.7"/>
+    <requires java.version="1\.[67]"/>
 
     <path id="all.dependancies">
         <fileset dir="${build.dependencies.dir}" includes="**/*.jar"/>

@@ -12,7 +12,7 @@ import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableSet<T> extends Iterable<T>, Segment<T, ImmutableSet<T>>, Container<T> {
+public interface ImmutableSet<T> extends Iterable<T>, Segment<T>, Container<T> {
     ImmutableList<T> immutableList();
 
     ImmutableSet<T> put(T value);
@@ -29,6 +29,8 @@ public interface ImmutableSet<T> extends Iterable<T>, Segment<T, ImmutableSet<T>
 
     Pair<ImmutableSet<T>, T> removeMaximum();
 
+    @Override
+    ImmutableSet<T> cons(T head);
 
     class constructors {
         public static <A extends Comparable<? super A>> ImmutableSet<A> sortedSet() {
