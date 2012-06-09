@@ -124,4 +124,15 @@ public class EmptyMap<K, V> implements ImmutableMap<K, V> {
     public Iterator<Pair<K, V>> iterator() {
         return new EmptyIterator<Pair<K, V>>();
     }
+
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public V index(int i) {
+        throw new IndexOutOfBoundsException();
+    }
+
 }

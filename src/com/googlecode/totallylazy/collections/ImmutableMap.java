@@ -30,9 +30,13 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
 
     ImmutableMap<K, V> remove(K key);
 
+    int size();
+
     Pair<ImmutableMap<K, V>, Pair<K,V>> removeMinimum();
 
-    Pair<ImmutableMap<K, V>, Pair<K,V>> removeMaximum();
+    Pair<ImmutableMap<K, V>, Pair<K, V>> removeMaximum();
+
+    V index(int i);
 
     class constructors {
         public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> sortedMap() {
@@ -40,7 +44,7 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
         }
 
         public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> sortedMap(K key, V value) {
-            return TreeMap.tree(key, value);
+            return AVLTree.constructors.node(key, value);
         }
 
         public static <K extends Comparable<? super K>, V> ImmutableMap<K, V> sortedMap(K key1, V value1, K key2, V value2) {
@@ -68,11 +72,11 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
         }
 
         public static <K, V> ImmutableMap<K, V> sortedMap(Comparator<K> comparator) {
-            return TreeMap.<K, V>empty(comparator);
+            return AVLTree.constructors.<K, V>empty(comparator);
         }
 
         public static <K, V> ImmutableMap<K, V> sortedMap(Comparator<K> comparator, K key, V value) {
-            return TreeMap.tree(key, value, comparator);
+            return AVLTree.constructors.node(key, value, comparator);
         }
 
         public static <K, V> ImmutableMap<K, V> sortedMap(Comparator<K> comparator, K key1, V value1, K key2, V value2) {
@@ -98,7 +102,5 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
         public static <K, V> ImmutableMap<K, V> sortedMap(Comparator<K> comparator, final Iterable<Pair<K, V>> values) {
             return sequence(values).fold(constructors.<K, V>sortedMap(comparator), functions.<Pair<K, V>, ImmutableMap<K, V>>cons());
         }
-
-
     }
 }

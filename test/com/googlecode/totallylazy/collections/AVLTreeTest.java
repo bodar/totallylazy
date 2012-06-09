@@ -197,9 +197,9 @@ public class AVLTreeTest {
 
     private class ImmutableMapRenderer {
         public String render(ImmutableMap<?, ?> map) {
-            if (map instanceof AVLTree.Node) {
-                return "<table>" + "<tr><td colspan='2'>" + ((AVLTree.Node) map).key + "</td></tr>" +
-                        "<tr><td  valign='top'>" + render(((AVLTree.Node) map).left) + "</td><td valign='top'>" + render(((AVLTree.Node) map).right) + "</td></tr></table>";
+            if (map instanceof TreeMap) {
+                return "<table>" + "<tr><td colspan='2'>" + ((TreeMap) map).key + "</td></tr>" +
+                        "<tr><td  valign='top'>" + render(((TreeMap) map).left()) + "</td><td valign='top'>" + render(((AVLTree.Node) map).right()) + "</td></tr></table>";
             }
             return "";
         }

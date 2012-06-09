@@ -17,11 +17,12 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Pair.pair;
 
 public class TreeMap<K, V> implements ImmutableMap<K, V> {
-    protected final ImmutableMap<K, V> left;
+    private final ImmutableMap<K, V> left;
     protected final K key;
     protected final V value;
-    protected final ImmutableMap<K, V> right;
+    private final ImmutableMap<K, V> right;
     protected final Comparator<K> comparator;
+    protected final int size;
 
     TreeMap(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
         this.left = left;
@@ -29,6 +30,15 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
         this.value = value;
         this.right = right;
         this.comparator = comparator;
+        size = left.size() + right.size() + 1;
+    }
+
+    public ImmutableMap<K, V> left() {
+        return left;
+    }
+
+    public ImmutableMap<K, V> right() {
+        return right;
     }
 
     <K, V> TreeMap<K, V> create(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
@@ -52,20 +62,12 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
         };
     }
 
-    static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(ImmutableMap<K, V> left, Pair<K, V> pair, ImmutableMap<K, V> right) {
-        return TreeMap.<K, V>tree(left, pair.first(), pair.second(), right, Comparators.<K>ascending());
-    }
-
     static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right) {
         return new TreeMap<K, V>(left, key, value, right, Comparators.<K>ascending());
     }
 
     static <K, V> TreeMap<K, V> tree(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
         return new TreeMap<K, V>(left, key, value, right, comparator);
-    }
-
-    static <K, V> TreeMap<K, V> tree(ImmutableMap<K, V> left, Pair<K, V> pair, ImmutableMap<K, V> right, Comparator<K> comparator) {
-        return new TreeMap<K, V>(left, pair.first(), pair.second(), right, comparator);
     }
 
     static <K, V> TreeMap<K, V> tree(K key, V value, Comparator<K> comparator) {
@@ -216,5 +218,17 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     @Override
     public Iterator<Pair<K, V>> iterator() {
         return new SegmentIterator<Pair<K, V>, ImmutableList<Pair<K, V>>>(immutableList());
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public V index(int i) {
+        if (left.size() == i) return value;
+        if (i < left.size()) return left.index(i);
+        return right.index(i - left.size() - 1);
     }
 }
