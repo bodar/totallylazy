@@ -2,23 +2,35 @@ package com.googlecode.totallylazy;
 
 import java.util.NoSuchElementException;
 
-public interface Segment<T, Self extends Segment<T, Self>> {
+import static com.googlecode.totallylazy.Unchecked.cast;
+
+public interface Segment<T> {
     boolean isEmpty();
 
     T head() throws NoSuchElementException;
 
-    Self tail() throws NoSuchElementException;
+    Segment<T> tail() throws NoSuchElementException;
 
-    Self cons(T head);
+    Segment<T> cons(T head);
 
-    <C extends Segment<T, C>> C joinTo(C rest);
+    <C extends Segment<T>> C joinTo(C rest);
+
+    class methods {
+        public static <T, S extends Segment<T>> S cons(T head, S segment){
+            return cast(segment.cons(head));
+        }
+
+        public static <T, A extends Segment<T>, B extends Segment<T>> B joinTo(A source, B destination){
+            return cast(source.joinTo(destination));
+        }
+    }
 
     class functions {
-        public static <T, Self extends Segment<T, Self>> Function2<Self, T, Self> cons() {
+        public static <T, Self extends Segment<T>> Function2<Self, T, Self> cons() {
             return new Function2<Self, T, Self>() {
                 @Override
                 public Self call(Self set, T t) throws Exception {
-                    return set.cons(t);
+                    return cast(set.cons(t));
                 }
             };
         }

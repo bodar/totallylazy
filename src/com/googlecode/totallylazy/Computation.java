@@ -10,9 +10,10 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Function.returns;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
 
-public class Computation<T> extends Sequence<T> implements Segment<T, Computation<T>> {
+public class Computation<T> extends Sequence<T> implements Segment<T> {
     private final LazyCallable<T> head;
     private final LazyCallable1<T, Computation<T>> tail;
 
@@ -108,8 +109,8 @@ public class Computation<T> extends Sequence<T> implements Segment<T, Computatio
     }
 
     @Override
-    public <C extends Segment<T, C>> C joinTo(C rest) {
-        return tail().joinTo(rest).cons(head());
+    public <C extends Segment<T>> C joinTo(C rest) {
+        return cast(tail().joinTo(rest).cons(head()));
     }
 
     @Override
@@ -134,7 +135,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T, Computatio
 
     @Override
     public Iterator<T> iterator() {
-        return new SegmentIterator<T, Computation<T>>(this);
+        return new SegmentIterator<T>(this);
     }
 
     public void forget() {

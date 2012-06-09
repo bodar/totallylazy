@@ -8,7 +8,7 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableList<T> extends Iterable<T>, Segment<T, ImmutableList<T>> {
+public interface ImmutableList<T> extends Iterable<T>, Segment<T> {
     ImmutableList<T> add(T value);
 
     ImmutableList<T> remove(T value);
@@ -20,6 +20,9 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T, ImmutableList<
     List<T> toList();
 
     Sequence<T> toSequence();
+
+    @Override
+    ImmutableList<T> cons(T head);
 
     class constructors {
         public static <T> ImmutableList<T> empty() {

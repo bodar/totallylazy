@@ -15,16 +15,17 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class TreeMap<K, V> implements ImmutableMap<K, V> {
-    private final ImmutableMap<K, V> left;
+public class TreeMap<K, V> implements SortedImmutableMap<K, V> {
+    private final SortedImmutableMap<K, V> left;
     protected final K key;
     protected final V value;
-    private final ImmutableMap<K, V> right;
+    private final SortedImmutableMap<K, V> right;
     protected final Comparator<K> comparator;
     protected final int size;
 
-    TreeMap(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
+    TreeMap(SortedImmutableMap<K, V> left, K key, V value, SortedImmutableMap<K, V> right, Comparator<K> comparator) {
         this.left = left;
         this.key = key;
         this.value = value;
@@ -41,7 +42,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
         return right;
     }
 
-    <K, V> TreeMap<K, V> create(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
+    <K, V> TreeMap<K, V> create(SortedImmutableMap<K, V> left, K key, V value, SortedImmutableMap<K, V> right, Comparator<K> comparator) {
         return tree(left, key, value, right, comparator);
     }
 
@@ -53,20 +54,20 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
         return EmptyMap.<K, V>emptyMap(TreeMap.<K, V>tree());
     }
 
-    private static <K extends Comparable<? super K>, V> Function2<K, V, ImmutableMap<K, V>> tree() {
-        return new Function2<K, V, ImmutableMap<K, V>>() {
+    private static <K extends Comparable<? super K>, V> Function2<K, V, TreeMap<K, V>> tree() {
+        return new Function2<K, V, TreeMap<K, V>>() {
             @Override
-            public ImmutableMap<K, V> call(K k, V v) throws Exception {
+            public TreeMap<K, V> call(K k, V v) throws Exception {
                 return tree(k, v);
             }
         };
     }
 
-    static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right) {
+    static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(SortedImmutableMap<K, V> left, K key, V value, SortedImmutableMap<K, V> right) {
         return new TreeMap<K, V>(left, key, value, right, Comparators.<K>ascending());
     }
 
-    static <K, V> TreeMap<K, V> tree(ImmutableMap<K, V> left, K key, V value, ImmutableMap<K, V> right, Comparator<K> comparator) {
+    static <K, V> TreeMap<K, V> tree(SortedImmutableMap<K, V> left, K key, V value, SortedImmutableMap<K, V> right, Comparator<K> comparator) {
         return new TreeMap<K, V>(left, key, value, right, comparator);
     }
 
@@ -74,14 +75,14 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
         return tree(TreeMap.<K, V>empty(comparator), key, value, TreeMap.<K, V>empty(comparator), comparator);
     }
 
-    static <K, V> ImmutableMap<K, V> empty(Comparator<K> comparator) {
+    static <K, V> SortedImmutableMap<K, V> empty(Comparator<K> comparator) {
         return EmptyMap.<K, V>emptyMap(TreeMap.<K, V>tree(comparator));
     }
 
-    private static <K, V> Function2<K, V, ImmutableMap<K, V>> tree(final Comparator<K> comparator) {
-        return new Function2<K, V, ImmutableMap<K, V>>() {
+    private static <K, V> Function2<K, V, TreeMap<K, V>> tree(final Comparator<K> comparator) {
+        return new Function2<K, V, TreeMap<K, V>>() {
             @Override
-            public ImmutableMap<K, V> call(K k, V v) throws Exception {
+            public TreeMap<K, V> call(K k, V v) throws Exception {
                 return tree(k, v, comparator);
             }
         };
@@ -101,7 +102,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
-    public ImmutableMap<K, V> put(K key, V value) {
+    public SortedImmutableMap<K, V> put(K key, V value) {
         return cons(pair(key, value));
     }
 
@@ -114,31 +115,33 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
-    public ImmutableMap<K, V> filterKeys(Predicate<? super K> predicate) {
+    public SortedImmutableMap<K, V> filterKeys(Predicate<? super K> predicate) {
         if (predicate.matches(key))
             return create(left.filterKeys(predicate), key, value, right.filterKeys(predicate), comparator);
-        return left.filterKeys(predicate).joinTo(right.filterKeys(predicate));
+        SortedImmutableMap<K, V> rest = right.filterKeys(predicate);
+        SortedImmutableMap<K, V> pairs = left.filterKeys(predicate);
+        return pairs.joinTo(rest);
     }
 
     @Override
-    public ImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
+    public SortedImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
         if (predicate.matches(value))
             return create(left.filterValues(predicate), key, value, right.filterValues(predicate), comparator);
         return left.filterValues(predicate).joinTo(right.filterValues(predicate));
     }
 
     @Override
-    public <NewV> ImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> SortedImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
         return create(left.mapValues(transformer), key, Callers.call(transformer, value), right.mapValues(transformer), comparator);
     }
 
     @Override
-    public ImmutableMap<K, V> remove(K key) {
+    public SortedImmutableMap<K, V> remove(K key) {
         int difference = difference(key);
         if (difference == 0) {
             if (left.isEmpty()) return right;
-            Pair<ImmutableMap<K, V>, Pair<K, V>> pair = left.removeMaximum();
-            ImmutableMap<K, V> newLeft = pair.first();
+            Pair<SortedImmutableMap<K, V>, Pair<K, V>> pair = left.removeMaximum();
+            SortedImmutableMap<K, V> newLeft = pair.first();
             Pair<K, V> newRoot = pair.second();
             return create(newLeft, newRoot.first(), newRoot.second(), right, comparator);
         }
@@ -151,26 +154,26 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
-    public Pair<ImmutableMap<K, V>, Pair<K, V>> removeMinimum() {
+    public Pair<SortedImmutableMap<K, V>, Pair<K, V>> removeMinimum() {
         if (left.isEmpty()) return pair(right, pair(key, value));
-        final Pair<ImmutableMap<K, V>, Pair<K, V>> newLeft = left.removeMinimum();
-        return Pair.<ImmutableMap<K, V>, Pair<K, V>>pair(create(newLeft.first(), key, value, right, comparator), newLeft.second());
+        final Pair<SortedImmutableMap<K, V>, Pair<K, V>> newLeft = left.removeMinimum();
+        return Pair.<SortedImmutableMap<K, V>, Pair<K, V>>pair(create(newLeft.first(), key, value, right, comparator), newLeft.second());
     }
 
     @Override
-    public Pair<ImmutableMap<K, V>, Pair<K, V>> removeMaximum() {
+    public Pair<SortedImmutableMap<K, V>, Pair<K, V>> removeMaximum() {
         if (right.isEmpty()) return pair(left, pair(key, value));
-        final Pair<ImmutableMap<K, V>, Pair<K, V>> newRight = right.removeMaximum();
-        return Pair.<ImmutableMap<K, V>, Pair<K, V>>pair(create(left, key, value, newRight.first(), comparator), newRight.second());
+        final Pair<SortedImmutableMap<K, V>, Pair<K, V>> newRight = right.removeMaximum();
+        return Pair.<SortedImmutableMap<K, V>, Pair<K, V>>pair(create(left, key, value, newRight.first(), comparator), newRight.second());
     }
 
     @Override
-    public <C extends Segment<Pair<K, V>, C>> C joinTo(C rest) {
-        return left.joinTo(right.joinTo(rest).cons(pair(key, value)));
+    public <C extends Segment<Pair<K, V>>> C joinTo(C rest) {
+        return cast(left.joinTo(right.joinTo(rest).cons(pair(key, value))));
     }
 
     @Override
-    public ImmutableMap<K, V> cons(Pair<K, V> newValue) {
+    public SortedImmutableMap<K, V> cons(Pair<K, V> newValue) {
         int difference = difference(newValue.first());
         if (difference == 0) return create(left, newValue.first(), newValue.second(), right, comparator);
         if (difference < 0) return create(left.cons(newValue), key, value, right, comparator);
@@ -217,7 +220,7 @@ public class TreeMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public Iterator<Pair<K, V>> iterator() {
-        return new SegmentIterator<Pair<K, V>, ImmutableList<Pair<K, V>>>(immutableList());
+        return new SegmentIterator<Pair<K, V>>(immutableList());
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class TreeSet<A> implements ImmutableSet<A> {
     protected final ImmutableSet<A> left;
@@ -138,8 +139,8 @@ public class TreeSet<A> implements ImmutableSet<A> {
     }
 
     @Override
-    public <C extends Segment<A, C>> C joinTo(C rest) {
-        return left.joinTo(right.joinTo(rest).cons(value));
+    public <C extends Segment<A>> C joinTo(C rest) {
+        return cast(left.joinTo(right.joinTo(rest).cons(value)));
     }
 
     @Override

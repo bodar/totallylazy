@@ -65,7 +65,7 @@ public class EmptySet<A> implements ImmutableSet<A> {
     }
 
     @Override
-    public <C extends Segment<A, C>> C joinTo(C rest) {
+    public <C extends Segment<A>> C joinTo(C rest) {
         return rest;
     }
 

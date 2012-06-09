@@ -17,7 +17,7 @@ import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T, Sequence<?>> {
+public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T, Sequence<?>>, Segment<T> {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Sequence && Sequences.equalTo(this, (Sequence) obj);
@@ -261,6 +261,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
 
     public Sequence<T> join(final Iterable<? extends T> iterable) {
         return Sequences.join(this, iterable);
+    }
+
+    @Override
+    public <C extends Segment<T>> C joinTo(C rest) {
+        throw new UnsupportedOperationException();
     }
 
     public Sequence<T> cons(final T t) {
