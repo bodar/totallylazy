@@ -5,7 +5,6 @@ import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
-import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -32,30 +31,28 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
         public int balance() {
             return 0;
         }
-
-        @Override
-        public int size() {
-            return 0;
-        }
-
-        @Override
-        public V index(int i) {
-            throw new IndexOutOfBoundsException();
-        }
     }
 
     class Node<K, V> extends TreeMap<K, V> implements AVLTree<K, V> {
         private final int height;
-        final AVLTree<K, V> left;
-        final AVLTree<K, V> right;
-        private final int size;
+        private final AVLTree<K, V> left;
+        private final AVLTree<K, V> right;
 
         private Node(AVLTree<K, V> left, K key, V value, AVLTree<K, V> right, Comparator<K> comparator) {
             super(left, key, value, right, comparator);
             this.left = left;
             this.right = right;
             height = Math.max(left.height(), right.height()) + 1;
-            size = left.size() + right.size() + 1;
+        }
+
+        @Override
+        public AVLTree<K, V> left() {
+            return left;
+        }
+
+        @Override
+        public AVLTree<K, V> right() {
+            return right;
         }
 
         static <K, V> Node<K, V> node(AVLTree<K, V> left, K key, V value, AVLTree<K, V> right, Comparator<K> comparator) {
@@ -79,48 +76,48 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
         }
 
         private static <K, V> Node<K, V> balanceLeft(Node<K, V> node) {
-            if (node.left.balance() == -1) {
+            if (node.left().balance() == -1) {
                 return balanceLeftRight(node);
             }
-            if (node.left.balance() == 1) {
+            if (node.left().balance() == 1) {
                 return balanceLeftLeft(node);
             }
             return node;
         }
 
         private static <K, V> Node<K, V> balanceRight(Node<K, V> node) {
-            if (node.right.balance() == 1) {
+            if (node.right().balance() == 1) {
                 return balanceRightLeft(node);
             }
-            if (node.right.balance() == -1) {
+            if (node.right().balance() == -1) {
                 return balanceRightRight(node);
             }
             return node;
         }
 
         private static <K, V> Node<K, V> balanceLeftLeft(Node<K, V> parent) {
-            AVLTree<K, V> c = asNode(parent.left).right;
+            AVLTree<K, V> c = asNode(parent.left()).right();
             Node<K, V> five = parent.left(c);
-            return asNode(parent.left).right(five);
+            return asNode(parent.left()).right(five);
         }
 
         private static <K, V> Node<K, V> balanceLeftRight(Node<K, V> parent) {
-            AVLTree<K, V> b = asNode(asNode(parent.left).right).left;
-            Node<K, V> three = asNode(parent.left).right(b);
-            Node<K, V> four = asNode(asNode(parent.left).right).left(three);
+            AVLTree<K, V> b = asNode(asNode(parent.left()).right()).left();
+            Node<K, V> three = asNode(parent.left()).right(b);
+            Node<K, V> four = asNode(asNode(parent.left()).right()).left(three);
             return balanceLeftLeft(parent.left(four));
         }
 
         private static <K, V> Node<K, V> balanceRightRight(Node<K, V> parent) {
-            AVLTree<K, V> b = asNode(parent.right).left;
+            AVLTree<K, V> b = asNode(parent.right()).left();
             Node<K, V> three = parent.right(b);
-            return asNode(parent.right).left(three);
+            return asNode(parent.right()).left(three);
         }
 
         private static <K, V> Node<K, V> balanceRightLeft(Node<K, V> parent) {
-            AVLTree<K, V> c = asNode(asNode(parent.right).left).right;
-            Node<K, V> five = asNode(parent.right).left(c);
-            Node<K, V> four = asNode(asNode(parent.right).left).right(five);
+            AVLTree<K, V> c = asNode(asNode(parent.right()).left()).right();
+            Node<K, V> five = asNode(parent.right()).left(c);
+            Node<K, V> four = asNode(asNode(parent.right()).left()).right(five);
             return balanceRightRight(parent.right(four));
         }
 
@@ -135,27 +132,15 @@ public interface AVLTree<K, V> extends ImmutableMap<K, V> {
 
         @Override
         public int balance() {
-            return left.height() - right.height();
-        }
-
-        @Override
-        public int size() {
-            return size;
-        }
-
-        @Override
-        public V index(int i) {
-            if (left.size() == i) return value;
-            if (i < left.size()) return left.index(i);
-            return right.index(i - left.size() - 1);
+            return left().height() - right().height();
         }
 
         private Node<K, V> left(AVLTree<K, V> newLeft) {
-            return node(newLeft, key, value, right, comparator);
+            return node(newLeft, key, value, right(), comparator);
         }
 
         private Node<K, V> right(AVLTree<K, V> newRight) {
-            return node(left, key, value, newRight, comparator);
+            return node(left(), key, value, newRight, comparator);
         }
     }
 
