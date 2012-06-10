@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
@@ -8,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
@@ -24,7 +27,7 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
     }
 
     static <T> PersistentList<T> cons(T head, ImmutableList<T> tail) {
-        return new Node<T>(head, tail);
+        return Node.node(head, tail);
     }
 
     @Override
@@ -87,6 +90,11 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         }
 
         @Override
+        public <S> ImmutableList<S> map(Callable1<? super T, ? extends S> callable) {
+            return cast(this);
+        }
+
+        @Override
         public boolean isEmpty() {
             return true;
         }
@@ -108,6 +116,10 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
             size = 1 + tail.size();
         }
 
+        private static <T> Node<T> node(T head, ImmutableList<T> tail) {
+            return new Node<T>(head, tail);
+        }
+
         @Override
         public T head() {
             return head;
@@ -126,6 +138,11 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         @Override
         public int size() {
             return size;
+        }
+
+        @Override
+        public <S> ImmutableList<S> map(Callable1<? super T, ? extends S> callable) {
+            return node(call(callable, head), tail().map(callable));
         }
 
         @Override

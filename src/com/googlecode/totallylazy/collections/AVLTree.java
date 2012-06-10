@@ -30,7 +30,7 @@ public interface AVLTree<K, V> extends ImmutableSortedMap<K, V> {
         }
     }
 
-    class Node<K, V> extends TreeSortedMap<K, V> implements AVLTree<K, V> {
+    class Node<K, V> extends TreeMap<K, V> implements AVLTree<K, V> {
         private final int height;
         private final AVLTree<K, V> left;
         private final AVLTree<K, V> right;

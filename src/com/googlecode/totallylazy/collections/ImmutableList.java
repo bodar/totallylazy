@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 
@@ -8,7 +10,7 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableList<T> extends Iterable<T>, Segment<T> {
+public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T, ImmutableList<?>> {
     ImmutableList<T> add(T value);
 
     ImmutableList<T> remove(T value);
@@ -23,6 +25,9 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T> {
 
     @Override
     ImmutableList<T> cons(T head);
+
+    @Override
+    <S> ImmutableList<S> map(Callable1<? super T, ? extends S> callable);
 
     class constructors {
         public static <T> ImmutableList<T> empty() {
