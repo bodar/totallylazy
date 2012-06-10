@@ -28,7 +28,6 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
         return Pair.pair(treeSet(pair.first()), pair.second().first());
     }
 
-
     @Override
     public ImmutableList<T> immutableList() {
         return map.immutableList().map(Callables.<T>first());

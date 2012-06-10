@@ -73,7 +73,7 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
             return methods.balance(new Node<K, V>(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator));
         }
 
-        public static <K extends Comparable<? super K>, V> AVLTree<K, V> node(K key, V value) {
+        public static <K extends Comparable<? super K>, V> AVLTree<K, V> avlTree(K key, V value) {
             return factory.create(Comparators.<K>ascending(), key, value);
         }
     }
