@@ -9,13 +9,14 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.contains;
-import static com.googlecode.totallylazy.collections.ImmutableMap.constructors.sortedMap;
+import static com.googlecode.totallylazy.collections.SortedImmutableMap.constructors.emptySortedMap;
+import static com.googlecode.totallylazy.collections.SortedImmutableMap.constructors.sortedMap;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class SortedMapTest {
+public class SortedImmutableMapTest {
     @Test
     public void canRemoveMinimum() throws Exception {
         final Pair<SortedImmutableMap<Integer, String>, Pair<Integer, String>> result = sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").removeMinimum();
@@ -88,13 +89,13 @@ public class SortedMapTest {
     @Test
     public void supportsFilteringByKey() throws Exception {
         assertThat(sortedMap("Dan", 2).filterKeys(contains("a")), is(sortedMap("Dan", 2)));
-        assertThat(sortedMap("Dan", 2).filterKeys(contains("b")), is(ImmutableMap.constructors.<String, Integer>sortedMap()));
+        assertThat(sortedMap("Dan", 2).filterKeys(contains("b")), is(emptySortedMap(String.class, Integer.class)));
     }
 
     @Test
     public void supportsFilteringByValue() throws Exception {
         assertThat(sortedMap("Dan", 2).filterValues(Predicates.is(2)), is(sortedMap("Dan", 2)));
-        assertThat(sortedMap("Dan", 2).filterValues(Predicates.is(3)), is(ImmutableMap.constructors.<String, Integer>sortedMap()));
+        assertThat(sortedMap("Dan", 2).filterValues(Predicates.is(3)), is(emptySortedMap(String.class, Integer.class)));
     }
 
     @Test
