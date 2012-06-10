@@ -66,12 +66,12 @@ public class EmptySortedMap<K, V> implements ImmutableSortedMap<K, V> {
     }
 
     @Override
-    public Pair<ImmutableSortedMap<K, V>, Pair<K,V>>  removeMinimum() {
+    public Pair<ImmutableSortedMap<K, V>, Pair<K,V>> removeFirst() {
         throw new NoSuchElementException();
     }
 
     @Override
-    public Pair<ImmutableSortedMap<K, V>, Pair<K,V>>  removeMaximum() {
+    public Pair<ImmutableSortedMap<K, V>, Pair<K,V>> removeLast() {
         throw new NoSuchElementException();
     }
 
@@ -131,7 +131,7 @@ public class EmptySortedMap<K, V> implements ImmutableSortedMap<K, V> {
     }
 
     @Override
-    public V index(int i) {
+    public Pair<K, V> index(int i) {
         throw new IndexOutOfBoundsException();
     }
 

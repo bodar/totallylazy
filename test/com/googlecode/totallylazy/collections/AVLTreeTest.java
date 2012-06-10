@@ -30,11 +30,11 @@ public class AVLTreeTest {
     @Test
     public void canGetByIndex() throws Exception {
         AVLTree.Node<Integer, Integer> map = asNode(node(4, 4).put(5, 5).put(3, 3).put(2, 2).put(6, 6));
-        assertThat(map.index(0), is(2));
-        assertThat(map.index(1), is(3));
-        assertThat(map.index(2), is(4));
-        assertThat(map.index(3), is(5));
-        assertThat(map.index(4), is(6));
+        assertThat(map.index(0).first(), is(2));
+        assertThat(map.index(1).first(), is(3));
+        assertThat(map.index(2).first(), is(4));
+        assertThat(map.index(3).first(), is(5));
+        assertThat(map.index(4).first(), is(6));
     }
 
     @Test

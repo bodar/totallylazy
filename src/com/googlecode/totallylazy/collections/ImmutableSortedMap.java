@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
@@ -12,7 +11,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V> {
+public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pair<K, V>> {
     @Override
     ImmutableSortedMap<K, V> cons(Pair<K, V> head);
 
@@ -31,14 +30,17 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V> {
     @Override
     <NewV> ImmutableSortedMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer);
 
-    Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeMinimum();
-
-    Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeMaximum();
-
-    V index(int i);
+    @Override
+    Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeFirst();
 
     @Override
-    ImmutableSortedMap<K,V> tail() throws NoSuchElementException;
+    Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeLast();
+
+    @Override
+    Pair<K, V> index(int i);
+
+    @Override
+    ImmutableSortedMap<K, V> tail() throws NoSuchElementException;
 
     class constructors {
         public static <K extends Comparable<? super K>, V> ImmutableSortedMap<K, V> emptySortedMap(Class<K> kClass, Class<V> vClass) {

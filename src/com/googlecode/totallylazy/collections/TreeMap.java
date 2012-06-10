@@ -138,7 +138,7 @@ public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
         int difference = difference(key);
         if (difference == 0) {
             if (left.isEmpty()) return right;
-            Pair<ImmutableSortedMap<K, V>, Pair<K, V>> pair = left.removeMaximum();
+            Pair<ImmutableSortedMap<K, V>, Pair<K, V>> pair = left.removeLast();
             ImmutableSortedMap<K, V> newLeft = pair.first();
             Pair<K, V> newRoot = pair.second();
             return create(newLeft, newRoot.first(), newRoot.second(), right, comparator);
@@ -152,16 +152,16 @@ public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
     }
 
     @Override
-    public Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeMinimum() {
+    public Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeFirst() {
         if (left.isEmpty()) return pair(right, pair(key, value));
-        final Pair<ImmutableSortedMap<K, V>, Pair<K, V>> newLeft = left.removeMinimum();
+        final Pair<ImmutableSortedMap<K, V>, Pair<K, V>> newLeft = left.removeFirst();
         return Pair.<ImmutableSortedMap<K, V>, Pair<K, V>>pair(create(newLeft.first(), key, value, right, comparator), newLeft.second());
     }
 
     @Override
-    public Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeMaximum() {
+    public Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeLast() {
         if (right.isEmpty()) return pair(left, pair(key, value));
-        final Pair<ImmutableSortedMap<K, V>, Pair<K, V>> newRight = right.removeMaximum();
+        final Pair<ImmutableSortedMap<K, V>, Pair<K, V>> newRight = right.removeLast();
         return Pair.<ImmutableSortedMap<K, V>, Pair<K, V>>pair(create(left, key, value, newRight.first(), comparator), newRight.second());
     }
 
@@ -227,8 +227,8 @@ public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
     }
 
     @Override
-    public V index(int i) {
-        if (left.size() == i) return value;
+    public Pair<K, V> index(int i) {
+        if (left.size() == i) return Pair.pair(key, value);
         if (i < left.size()) return left.index(i);
         return right.index(i - left.size() - 1);
     }
