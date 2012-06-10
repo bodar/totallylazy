@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -14,6 +13,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -34,11 +34,11 @@ public class TreeMap<K, V> implements SortedImmutableMap<K, V> {
         size = left.size() + right.size() + 1;
     }
 
-    public ImmutableMap<K, V> left() {
+    public SortedImmutableMap<K, V> left() {
         return left;
     }
 
-    public ImmutableMap<K, V> right() {
+    public SortedImmutableMap<K, V> right() {
         return right;
     }
 
@@ -71,7 +71,7 @@ public class TreeMap<K, V> implements SortedImmutableMap<K, V> {
         return new TreeMap<K, V>(left, key, value, right, comparator);
     }
 
-    static <K, V> TreeMap<K, V> tree(K key, V value, Comparator<K> comparator) {
+    static <K, V> TreeMap<K, V> tree(Comparator<K> comparator, K key, V value) {
         return tree(TreeMap.<K, V>empty(comparator), key, value, TreeMap.<K, V>empty(comparator), comparator);
     }
 
@@ -83,7 +83,7 @@ public class TreeMap<K, V> implements SortedImmutableMap<K, V> {
         return new Function2<K, V, TreeMap<K, V>>() {
             @Override
             public TreeMap<K, V> call(K k, V v) throws Exception {
-                return tree(k, v, comparator);
+                return tree(comparator, k, v);
             }
         };
     }
@@ -118,9 +118,7 @@ public class TreeMap<K, V> implements SortedImmutableMap<K, V> {
     public SortedImmutableMap<K, V> filterKeys(Predicate<? super K> predicate) {
         if (predicate.matches(key))
             return create(left.filterKeys(predicate), key, value, right.filterKeys(predicate), comparator);
-        SortedImmutableMap<K, V> rest = right.filterKeys(predicate);
-        SortedImmutableMap<K, V> pairs = left.filterKeys(predicate);
-        return pairs.joinTo(rest);
+        return left.filterKeys(predicate).joinTo(right.filterKeys(predicate));
     }
 
     @Override
@@ -132,7 +130,7 @@ public class TreeMap<K, V> implements SortedImmutableMap<K, V> {
 
     @Override
     public <NewV> SortedImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
-        return create(left.mapValues(transformer), key, Callers.call(transformer, value), right.mapValues(transformer), comparator);
+        return create(left.mapValues(transformer), key, call(transformer, value), right.mapValues(transformer), comparator);
     }
 
     @Override
@@ -183,7 +181,7 @@ public class TreeMap<K, V> implements SortedImmutableMap<K, V> {
     @Override
     public boolean contains(K other) {
         int difference = difference(other);
-        if (difference == 0) return key.equals(other);
+        if (difference == 0) return true;
         if (difference < 0) return left.contains(other);
         return right.contains(other);
     }
