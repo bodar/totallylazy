@@ -24,7 +24,7 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
         return new TreeSet<T>(map);
     }
 
-    private Pair<ImmutableSortedSet<T>, T> treeSet(Pair<ImmutableSortedMap<T, T>, Pair<T, T>> pair) {
+    private Pair<ImmutableSortedSet<T>, T> treeSet(Pair<? extends ImmutableSortedMap<T, T>, Pair<T, T>> pair) {
         return Pair.pair(treeSet(pair.first()), pair.second().first());
     }
 

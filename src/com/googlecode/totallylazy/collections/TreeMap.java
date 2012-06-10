@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callers.call;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
@@ -138,7 +137,7 @@ public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
         int difference = difference(key);
         if (difference == 0) {
             if (left.isEmpty()) return right;
-            Pair<ImmutableSortedMap<K, V>, Pair<K, V>> pair = left.removeLast();
+            Pair<? extends ImmutableSortedMap<K, V>, Pair<K, V>> pair = left.removeLast();
             ImmutableSortedMap<K, V> newLeft = pair.first();
             Pair<K, V> newRoot = pair.second();
             return create(newLeft, newRoot.first(), newRoot.second(), right, comparator);
@@ -153,27 +152,27 @@ public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
 
     @Override
     public Pair<K, V> first() throws NoSuchElementException {
-        if(left.isEmpty()) return pair();
+        if (left.isEmpty()) return pair();
         return left.first();
     }
 
     @Override
     public Pair<K, V> last() throws NoSuchElementException {
-        if(right.isEmpty()) return pair();
+        if (right.isEmpty()) return pair();
         return right.last();
     }
 
     @Override
     public Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeFirst() {
         if (left.isEmpty()) return Pair.pair(right, pair());
-        final Pair<ImmutableSortedMap<K, V>, Pair<K, V>> newLeft = left.removeFirst();
+        final Pair<? extends ImmutableSortedMap<K, V>, Pair<K, V>> newLeft = left.removeFirst();
         return Pair.<ImmutableSortedMap<K, V>, Pair<K, V>>pair(create(newLeft.first(), key, value, right, comparator), newLeft.second());
     }
 
     @Override
     public Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeLast() {
         if (right.isEmpty()) return Pair.pair(left, pair());
-        final Pair<ImmutableSortedMap<K, V>, Pair<K, V>> newRight = right.removeLast();
+        final Pair<? extends ImmutableSortedMap<K, V>, Pair<K, V>> newRight = right.removeLast();
         return Pair.<ImmutableSortedMap<K, V>, Pair<K, V>>pair(create(left, key, value, newRight.first(), comparator), newRight.second());
     }
 
