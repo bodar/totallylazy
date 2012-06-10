@@ -66,6 +66,16 @@ public class EmptySortedMap<K, V> implements ImmutableSortedMap<K, V> {
     }
 
     @Override
+    public Pair<K, V> first() throws NoSuchElementException {
+        throw new NoSuchElementException();
+    }
+
+    @Override
+    public Pair<K, V> last() throws NoSuchElementException {
+        throw new NoSuchElementException();
+    }
+
+    @Override
     public Pair<ImmutableSortedMap<K, V>, Pair<K,V>> removeFirst() {
         throw new NoSuchElementException();
     }

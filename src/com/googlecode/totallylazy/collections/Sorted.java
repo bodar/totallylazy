@@ -2,10 +2,16 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Pair;
 
+import java.util.NoSuchElementException;
+
 public interface Sorted<T> {
-    Pair<? extends Sorted<T>, T> removeFirst();
+    T first() throws NoSuchElementException;
 
-    Pair<? extends Sorted<T>, T> removeLast();
+    T last() throws NoSuchElementException;
 
-    T index(int i);
+    Pair<? extends Sorted<T>, T> removeFirst() throws NoSuchElementException;
+
+    Pair<? extends Sorted<T>, T> removeLast() throws NoSuchElementException;
+
+    T index(int i) throws IndexOutOfBoundsException;
 }

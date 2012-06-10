@@ -9,11 +9,18 @@ import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K, V>>, Container<K> {
+    @Override
+    ImmutableMap<K, V> cons(Pair<K, V> head);
+
+    @Override
+    ImmutableMap<K, V> tail() throws NoSuchElementException;
+
     Option<V> get(K key);
 
     Option<V> find(Predicate<? super K> predicate);
