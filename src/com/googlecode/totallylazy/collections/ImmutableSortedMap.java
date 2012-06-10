@@ -34,10 +34,10 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
     <NewV> ImmutableSortedMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer);
 
     @Override
-    Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeFirst();
+    Pair<? extends ImmutableSortedMap<K, V>, Pair<K, V>> removeFirst();
 
     @Override
-    Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeLast();
+    Pair<? extends ImmutableSortedMap<K, V>, Pair<K, V>> removeLast();
 
     @Override
     Pair<K, V> index(int i);
