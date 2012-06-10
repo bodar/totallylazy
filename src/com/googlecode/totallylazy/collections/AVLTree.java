@@ -1,22 +1,115 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
 
-import static com.googlecode.totallylazy.Unchecked.cast;
-
-public interface AVLTree<K, V> extends ImmutableSortedMap<K, V> {
+public interface AVLTree<K, V> extends TreeMap<K, V> {
     int height();
 
     int balance();
 
-    class Empty<K, V> extends EmptySortedMap<K, V> implements AVLTree<K, V> {
-        protected Empty(final Callable2<? super K, ? super V, ? extends ImmutableSortedMap<K, V>> creator) {
-            super(creator);
+    @Override
+    AVLTree<K, V> put(K key, V value);
+
+    @Override
+    AVLTree<K, V> left();
+
+    @Override
+    AVLTree<K, V> left(TreeMap<K, V> newLeft);
+
+    @Override
+    AVLTree<K, V> right();
+
+    @Override
+    AVLTree<K, V> right(TreeMap<K, V> newRight);
+
+    enum constructors implements TreeFactory {
+        factory;
+
+        @Override
+        public <K, V> AVLTree<K, V> create(Comparator<K> comparator) {
+            return new Empty<K, V>(comparator);
+        }
+
+        @Override
+        public <K, V> AVLTree<K, V> create(Comparator<K> comparator, K key, V value) {
+            return create(comparator, this.<K, V>create(comparator), key, value, this.<K, V>create(comparator));
+        }
+
+        @Override
+        public <K, V> AVLTree<K, V> create(Comparator<K> comparator, TreeMap<K, V> left, K key, V value, TreeMap<K, V> right) {
+            return methods.balance(new Node<K, V>(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator));
+        }
+
+        public static <K extends Comparable<? super K>, V> AVLTree<K, V> node(K key, V value) {
+            return factory.create(Comparators.<K>ascending(), key, value);
+        }
+    }
+
+    class methods {
+        // http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/AVL_Tree_Rebalancing.svg/350px-AVL_Tree_Rebalancing.svg.png
+        private static <K, V> AVLTree<K, V> balance(AVLTree<K, V> node) {
+            if (node.balance() == -2) {
+                return balanceRight(node);
+            }
+            if (node.balance() == 2) {
+                return balanceLeft(node);
+            }
+            return node;
+        }
+
+        private static <K, V> AVLTree<K, V> balanceLeft(AVLTree<K, V> node) {
+            if (node.left().balance() == -1) {
+                return balanceLeftRight(node);
+            }
+            if (node.left().balance() == 1) {
+                return balanceLeftLeft(node);
+            }
+            return node;
+        }
+
+        private static <K, V> AVLTree<K, V> balanceRight(AVLTree<K, V> node) {
+            if (node.right().balance() == 1) {
+                return balanceRightLeft(node);
+            }
+            if (node.right().balance() == -1) {
+                return balanceRightRight(node);
+            }
+            return node;
+        }
+
+        private static <K, V> AVLTree<K, V> balanceLeftLeft(AVLTree<K, V> parent) {
+            AVLTree<K, V> c = parent.left().right();
+            AVLTree<K, V> five = parent.left(c);
+            return parent.left().right(five);
+        }
+
+        private static <K, V> AVLTree<K, V> balanceLeftRight(AVLTree<K, V> parent) {
+            AVLTree<K, V> b = parent.left().right().left();
+            AVLTree<K, V> three = parent.left().right(b);
+            AVLTree<K, V> four = parent.left().right().left(three);
+            return balanceLeftLeft(parent.left(four));
+        }
+
+        private static <K, V> AVLTree<K, V> balanceRightRight(AVLTree<K, V> parent) {
+            AVLTree<K, V> b = parent.right().left();
+            AVLTree<K, V> three = parent.right(b);
+            return parent.right().left(three);
+        }
+
+        private static <K, V> AVLTree<K, V> balanceRightLeft(AVLTree<K, V> parent) {
+            AVLTree<K, V> c = parent.right().left().right();
+            AVLTree<K, V> five = parent.right().left(c);
+            AVLTree<K, V> four = parent.right().left().right(five);
+            return balanceRightRight(parent.right(four));
+        }
+    }
+
+    final class Empty<K, V> extends AbstractEmptyTreeMap<K, V, AVLTree<K, V>> implements AVLTree<K, V> {
+        public Empty(Comparator<K> comparator) {
+            super(comparator, AVLTree.constructors.factory);
         }
 
         @Override
@@ -30,96 +123,12 @@ public interface AVLTree<K, V> extends ImmutableSortedMap<K, V> {
         }
     }
 
-    class Node<K, V> extends TreeMap<K, V> implements AVLTree<K, V> {
+    final class Node<K, V> extends AbstractTreeMap<K, V, AVLTree<K, V>> implements AVLTree<K, V> {
         private final int height;
-        private final AVLTree<K, V> left;
-        private final AVLTree<K, V> right;
 
         private Node(AVLTree<K, V> left, K key, V value, AVLTree<K, V> right, Comparator<K> comparator) {
-            super(left, key, value, right, comparator);
-            this.left = left;
-            this.right = right;
+            super(left, key, value, right, comparator, AVLTree.constructors.factory);
             height = Math.max(left.height(), right.height()) + 1;
-        }
-
-        @Override
-        public AVLTree<K, V> left() {
-            return left;
-        }
-
-        @Override
-        public AVLTree<K, V> right() {
-            return right;
-        }
-
-        static <K, V> Node<K, V> node(AVLTree<K, V> left, K key, V value, AVLTree<K, V> right, Comparator<K> comparator) {
-            return new Node<K, V>(left, key, value, right, comparator);
-        }
-
-        @Override
-        <K, V> Node<K, V> create(ImmutableSortedMap<K, V> left, K key, V value, ImmutableSortedMap<K, V> right, Comparator<K> comparator) {
-            return balance(node(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator));
-        }
-
-        // http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/AVL_Tree_Rebalancing.svg/350px-AVL_Tree_Rebalancing.svg.png
-        private static <K, V> Node<K, V> balance(Node<K, V> node) {
-            if (node.balance() == -2) {
-                return balanceRight(node);
-            }
-            if (node.balance() == 2) {
-                return balanceLeft(node);
-            }
-            return node;
-        }
-
-        private static <K, V> Node<K, V> balanceLeft(Node<K, V> node) {
-            if (node.left().balance() == -1) {
-                return balanceLeftRight(node);
-            }
-            if (node.left().balance() == 1) {
-                return balanceLeftLeft(node);
-            }
-            return node;
-        }
-
-        private static <K, V> Node<K, V> balanceRight(Node<K, V> node) {
-            if (node.right().balance() == 1) {
-                return balanceRightLeft(node);
-            }
-            if (node.right().balance() == -1) {
-                return balanceRightRight(node);
-            }
-            return node;
-        }
-
-        private static <K, V> Node<K, V> balanceLeftLeft(Node<K, V> parent) {
-            AVLTree<K, V> c = asNode(parent.left()).right();
-            Node<K, V> five = parent.left(c);
-            return asNode(parent.left()).right(five);
-        }
-
-        private static <K, V> Node<K, V> balanceLeftRight(Node<K, V> parent) {
-            AVLTree<K, V> b = asNode(asNode(parent.left()).right()).left();
-            Node<K, V> three = asNode(parent.left()).right(b);
-            Node<K, V> four = asNode(asNode(parent.left()).right()).left(three);
-            return balanceLeftLeft(parent.left(four));
-        }
-
-        private static <K, V> Node<K, V> balanceRightRight(Node<K, V> parent) {
-            AVLTree<K, V> b = asNode(parent.right()).left();
-            Node<K, V> three = parent.right(b);
-            return asNode(parent.right()).left(three);
-        }
-
-        private static <K, V> Node<K, V> balanceRightLeft(Node<K, V> parent) {
-            AVLTree<K, V> c = asNode(asNode(parent.right()).left()).right();
-            Node<K, V> five = asNode(parent.right()).left(c);
-            Node<K, V> four = asNode(asNode(parent.right()).left()).right(five);
-            return balanceRightRight(parent.right(four));
-        }
-
-        public static <K, V> Node<K, V> asNode(ImmutableMap<K, V> node) {
-            return cast(node);
         }
 
         @Override
@@ -130,47 +139,6 @@ public interface AVLTree<K, V> extends ImmutableSortedMap<K, V> {
         @Override
         public int balance() {
             return left().height() - right().height();
-        }
-
-        private Node<K, V> left(AVLTree<K, V> newLeft) {
-            return node(newLeft, key, value, right(), comparator);
-        }
-
-        private Node<K, V> right(AVLTree<K, V> newRight) {
-            return node(left(), key, value, newRight, comparator);
-        }
-    }
-
-    class constructors {
-        public static <K extends Comparable<? super K>, V> Empty<K, V> empty() {
-            return empty(Comparators.<K>ascending());
-        }
-
-        public static <K extends Comparable<? super K>, V> AVLTree<K, V> node(K k, V v) {
-            return node(Comparators.<K>ascending(), k, v);
-        }
-
-        public static <K, V> Empty<K, V> empty(Comparator<K> comparator) {
-            return new Empty<K, V>(functions.<K, V>creator(comparator));
-        }
-
-        public static <K, V> Node<K, V> node(Comparator<K> comparator, K k, V v) {
-            return node(comparator, constructors.<K, V>empty(comparator), k, v, constructors.<K, V>empty(comparator));
-        }
-
-        public static <K, V> Node<K, V> node(final Comparator<K> comparator, AVLTree<K, V> left, K k, V v, AVLTree<K, V> right) {
-            return Node.node(left, k, v, right, comparator);
-        }
-    }
-
-    class functions {
-        public static <K, V> Function2<K, V, AVLTree<K, V>> creator(final Comparator<K> comparator) {
-            return new Function2<K, V, AVLTree<K, V>>() {
-                @Override
-                public AVLTree<K, V> call(K k, V v) throws Exception {
-                    return constructors.node(comparator, k, v);
-                }
-            };
         }
     }
 }

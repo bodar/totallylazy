@@ -84,11 +84,11 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
         }
 
         public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator) {
-            return AVLTree.constructors.<K, V>empty(comparator);
+            return AVLTree.constructors.factory.create(comparator);
         }
 
         public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator, K key, V value) {
-            return AVLTree.constructors.node(comparator, key, value);
+            return AVLTree.constructors.factory.create(comparator, key, value);
         }
 
         public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator, K key1, V value1, K key2, V value2) {
