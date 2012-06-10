@@ -17,7 +17,7 @@ import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class TreeSortedMap<K, V> implements ImmutableSortedMap<K, V> {
+public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
     private final ImmutableSortedMap<K, V> left;
     protected final K key;
     protected final V value;
@@ -25,7 +25,7 @@ public class TreeSortedMap<K, V> implements ImmutableSortedMap<K, V> {
     protected final Comparator<K> comparator;
     protected final int size;
 
-    TreeSortedMap(ImmutableSortedMap<K, V> left, K key, V value, ImmutableSortedMap<K, V> right, Comparator<K> comparator) {
+    TreeMap(ImmutableSortedMap<K, V> left, K key, V value, ImmutableSortedMap<K, V> right, Comparator<K> comparator) {
         this.left = left;
         this.key = key;
         this.value = value;
@@ -42,47 +42,47 @@ public class TreeSortedMap<K, V> implements ImmutableSortedMap<K, V> {
         return right;
     }
 
-    <K, V> TreeSortedMap<K, V> create(ImmutableSortedMap<K, V> left, K key, V value, ImmutableSortedMap<K, V> right, Comparator<K> comparator) {
+    <K, V> TreeMap<K, V> create(ImmutableSortedMap<K, V> left, K key, V value, ImmutableSortedMap<K, V> right, Comparator<K> comparator) {
         return tree(left, key, value, right, comparator);
     }
 
-    static <K extends Comparable<? super K>, V> TreeSortedMap<K, V> tree(K key, V value) {
-        return tree(TreeSortedMap.<K, V>empty(), key, value, TreeSortedMap.<K, V>empty());
+    static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(K key, V value) {
+        return tree(TreeMap.<K, V>empty(), key, value, TreeMap.<K, V>empty());
     }
 
     static <K extends Comparable<? super K>, V> EmptySortedMap<K, V> empty() {
-        return EmptySortedMap.<K, V>emptyMap(TreeSortedMap.<K, V>tree());
+        return EmptySortedMap.<K, V>emptyMap(TreeMap.<K, V>tree());
     }
 
-    private static <K extends Comparable<? super K>, V> Function2<K, V, TreeSortedMap<K, V>> tree() {
-        return new Function2<K, V, TreeSortedMap<K, V>>() {
+    private static <K extends Comparable<? super K>, V> Function2<K, V, TreeMap<K, V>> tree() {
+        return new Function2<K, V, TreeMap<K, V>>() {
             @Override
-            public TreeSortedMap<K, V> call(K k, V v) throws Exception {
+            public TreeMap<K, V> call(K k, V v) throws Exception {
                 return tree(k, v);
             }
         };
     }
 
-    static <K extends Comparable<? super K>, V> TreeSortedMap<K, V> tree(ImmutableSortedMap<K, V> left, K key, V value, ImmutableSortedMap<K, V> right) {
-        return new TreeSortedMap<K, V>(left, key, value, right, Comparators.<K>ascending());
+    static <K extends Comparable<? super K>, V> TreeMap<K, V> tree(ImmutableSortedMap<K, V> left, K key, V value, ImmutableSortedMap<K, V> right) {
+        return new TreeMap<K, V>(left, key, value, right, Comparators.<K>ascending());
     }
 
-    static <K, V> TreeSortedMap<K, V> tree(ImmutableSortedMap<K, V> left, K key, V value, ImmutableSortedMap<K, V> right, Comparator<K> comparator) {
-        return new TreeSortedMap<K, V>(left, key, value, right, comparator);
+    static <K, V> TreeMap<K, V> tree(ImmutableSortedMap<K, V> left, K key, V value, ImmutableSortedMap<K, V> right, Comparator<K> comparator) {
+        return new TreeMap<K, V>(left, key, value, right, comparator);
     }
 
-    static <K, V> TreeSortedMap<K, V> tree(Comparator<K> comparator, K key, V value) {
-        return tree(TreeSortedMap.<K, V>empty(comparator), key, value, TreeSortedMap.<K, V>empty(comparator), comparator);
+    static <K, V> TreeMap<K, V> tree(Comparator<K> comparator, K key, V value) {
+        return tree(TreeMap.<K, V>empty(comparator), key, value, TreeMap.<K, V>empty(comparator), comparator);
     }
 
     static <K, V> ImmutableSortedMap<K, V> empty(Comparator<K> comparator) {
-        return EmptySortedMap.<K, V>emptyMap(TreeSortedMap.<K, V>tree(comparator));
+        return EmptySortedMap.<K, V>emptyMap(TreeMap.<K, V>tree(comparator));
     }
 
-    private static <K, V> Function2<K, V, TreeSortedMap<K, V>> tree(final Comparator<K> comparator) {
-        return new Function2<K, V, TreeSortedMap<K, V>>() {
+    private static <K, V> Function2<K, V, TreeMap<K, V>> tree(final Comparator<K> comparator) {
+        return new Function2<K, V, TreeMap<K, V>>() {
             @Override
-            public TreeSortedMap<K, V> call(K k, V v) throws Exception {
+            public TreeMap<K, V> call(K k, V v) throws Exception {
                 return tree(comparator, k, v);
             }
         };
@@ -193,7 +193,7 @@ public class TreeSortedMap<K, V> implements ImmutableSortedMap<K, V> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof TreeSortedMap && value.equals(((TreeSortedMap) obj).value) && left.equals(((TreeSortedMap) obj).left) && right.equals(((TreeSortedMap) obj).right);
+        return obj instanceof TreeMap && value.equals(((TreeMap) obj).value) && left.equals(((TreeMap) obj).left) && right.equals(((TreeMap) obj).right);
     }
 
     @Override
@@ -212,7 +212,7 @@ public class TreeSortedMap<K, V> implements ImmutableSortedMap<K, V> {
     }
 
     @Override
-    public ImmutableMap<K, V> tail() throws NoSuchElementException {
+    public ImmutableSortedMap<K, V> tail() throws NoSuchElementException {
         return left.joinTo(right);
     }
 

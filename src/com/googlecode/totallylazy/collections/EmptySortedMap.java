@@ -116,7 +116,7 @@ public class EmptySortedMap<K, V> implements ImmutableSortedMap<K, V> {
     }
 
     @Override
-    public ImmutableMap<K, V> tail() throws NoSuchElementException {
+    public ImmutableSortedMap<K, V> tail() throws NoSuchElementException {
         throw new NoSuchElementException();
     }
 

@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
