@@ -18,17 +18,17 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
 
     Option<V> get(K key);
 
-    SortedImmutableMap<K, V> put(K key, V value);
+    ImmutableMap<K, V> put(K key, V value);
 
     Option<V> find(Predicate<? super K> predicate);
 
-    SortedImmutableMap<K, V> filterKeys(Predicate<? super K> predicate);
+    ImmutableMap<K, V> filterKeys(Predicate<? super K> predicate);
 
-    SortedImmutableMap<K, V> filterValues(Predicate<? super V> predicate);
+    ImmutableMap<K, V> filterValues(Predicate<? super V> predicate);
 
-    <NewV> SortedImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer);
+    <NewV> ImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer);
 
-    SortedImmutableMap<K, V> remove(K key);
+    ImmutableMap<K, V> remove(K key);
 
     int size();
 
@@ -38,7 +38,7 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
         }
 
         public static <K extends Comparable<? super K>, V> SortedImmutableMap<K, V> sortedMap(K key, V value) {
-            return AVLTree.constructors.node(key, value);
+            return constructors.<K, V>sortedMap(Comparators.<K>ascending(), key, value);
         }
 
         public static <K extends Comparable<? super K>, V> SortedImmutableMap<K, V> sortedMap(K key1, V value1, K key2, V value2) {
@@ -70,7 +70,7 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
         }
 
         public static <K, V> SortedImmutableMap<K, V> sortedMap(Comparator<K> comparator, K key, V value) {
-            return AVLTree.constructors.node(key, value, comparator);
+            return AVLTree.constructors.node(comparator, key, value);
         }
 
         public static <K, V> SortedImmutableMap<K, V> sortedMap(Comparator<K> comparator, K key1, V value1, K key2, V value2) {

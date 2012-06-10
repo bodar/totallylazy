@@ -147,18 +147,18 @@ public interface AVLTree<K, V> extends SortedImmutableMap<K, V> {
         }
 
         public static <K extends Comparable<? super K>, V> AVLTree<K, V> node(K k, V v) {
-            return node(k, v, Comparators.<K>ascending());
+            return node(Comparators.<K>ascending(), k, v);
         }
 
         public static <K, V> Empty<K, V> empty(Comparator<K> comparator) {
             return new Empty<K, V>(functions.<K, V>creator(comparator));
         }
 
-        public static <K, V> Node<K, V> node(K k, V v, Comparator<K> comparator) {
-            return node(constructors.<K, V>empty(comparator), k, v, constructors.<K, V>empty(comparator), comparator);
+        public static <K, V> Node<K, V> node(Comparator<K> comparator, K k, V v) {
+            return node(comparator, constructors.<K, V>empty(comparator), k, v, constructors.<K, V>empty(comparator));
         }
 
-        public static <K, V> Node<K, V> node(AVLTree<K, V> left, K k, V v, AVLTree<K, V> right, final Comparator<K> comparator) {
+        public static <K, V> Node<K, V> node(final Comparator<K> comparator, AVLTree<K, V> left, K k, V v, AVLTree<K, V> right) {
             return Node.node(left, k, v, right, comparator);
         }
     }
@@ -168,7 +168,7 @@ public interface AVLTree<K, V> extends SortedImmutableMap<K, V> {
             return new Function2<K, V, AVLTree<K, V>>() {
                 @Override
                 public AVLTree<K, V> call(K k, V v) throws Exception {
-                    return constructors.node(k, v, comparator);
+                    return constructors.node(comparator, k, v);
                 }
             };
         }
