@@ -103,7 +103,7 @@ public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
 
     @Override
     public ImmutableSortedMap<K, V> put(K key, V value) {
-        return cons(pair(key, value));
+        return cons(Pair.pair(key, value));
     }
 
     @Override
@@ -152,22 +152,34 @@ public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
     }
 
     @Override
+    public Pair<K, V> first() throws NoSuchElementException {
+        if(left.isEmpty()) return pair();
+        return left.first();
+    }
+
+    @Override
+    public Pair<K, V> last() throws NoSuchElementException {
+        if(right.isEmpty()) return pair();
+        return right.last();
+    }
+
+    @Override
     public Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeFirst() {
-        if (left.isEmpty()) return pair(right, pair(key, value));
+        if (left.isEmpty()) return Pair.pair(right, pair());
         final Pair<ImmutableSortedMap<K, V>, Pair<K, V>> newLeft = left.removeFirst();
         return Pair.<ImmutableSortedMap<K, V>, Pair<K, V>>pair(create(newLeft.first(), key, value, right, comparator), newLeft.second());
     }
 
     @Override
     public Pair<ImmutableSortedMap<K, V>, Pair<K, V>> removeLast() {
-        if (right.isEmpty()) return pair(left, pair(key, value));
+        if (right.isEmpty()) return Pair.pair(left, pair());
         final Pair<ImmutableSortedMap<K, V>, Pair<K, V>> newRight = right.removeLast();
         return Pair.<ImmutableSortedMap<K, V>, Pair<K, V>>pair(create(left, key, value, newRight.first(), comparator), newRight.second());
     }
 
     @Override
     public <C extends Segment<Pair<K, V>>> C joinTo(C rest) {
-        return cast(left.joinTo(right.joinTo(rest).cons(pair(key, value))));
+        return cast(left.joinTo(right.joinTo(rest).cons(pair())));
     }
 
     @Override
@@ -208,7 +220,7 @@ public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
 
     @Override
     public Pair<K, V> head() throws NoSuchElementException {
-        return pair(key, value);
+        return pair();
     }
 
     @Override
@@ -228,8 +240,12 @@ public class TreeMap<K, V> implements ImmutableSortedMap<K, V> {
 
     @Override
     public Pair<K, V> index(int i) {
-        if (left.size() == i) return Pair.pair(key, value);
+        if (left.size() == i) return pair();
         if (i < left.size()) return left.index(i);
         return right.index(i - left.size() - 1);
+    }
+
+    public Pair<K, V> pair() {
+        return Pair.pair(key, value);
     }
 }

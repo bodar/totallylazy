@@ -13,18 +13,18 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class TreeSet<T> implements ImmutableSet<T> {
+public class TreeSet<T> implements ImmutableSortedSet<T> {
     private final ImmutableSortedMap<T,T> map;
 
     private TreeSet(ImmutableSortedMap<T, T> map) {
         this.map = map;
     }
 
-    public static <T> ImmutableSet<T> treeSet(ImmutableSortedMap<T, T> map) {
+    public static <T> ImmutableSortedSet<T> treeSet(ImmutableSortedMap<T, T> map) {
         return new TreeSet<T>(map);
     }
 
-    private Pair<ImmutableSet<T>, T> treeSet(Pair<ImmutableSortedMap<T, T>, Pair<T, T>> pair) {
+    private Pair<ImmutableSortedSet<T>, T> treeSet(Pair<ImmutableSortedMap<T, T>, Pair<T, T>> pair) {
         return Pair.pair(treeSet(pair.first()), pair.second().first());
     }
 
@@ -35,7 +35,7 @@ public class TreeSet<T> implements ImmutableSet<T> {
     }
 
     @Override
-    public ImmutableSet<T> put(T value) {
+    public ImmutableSortedSet<T> put(T value) {
         return treeSet(map.put(value, value));
     }
 
@@ -45,27 +45,37 @@ public class TreeSet<T> implements ImmutableSet<T> {
     }
 
     @Override
-    public ImmutableSet<T> filter(Predicate<? super T> predicate) {
+    public ImmutableSortedSet<T> filter(Predicate<? super T> predicate) {
         return treeSet(map.filterKeys(predicate));
     }
 
     @Override
-    public <NewT> ImmutableSet<NewT> map(Callable1<? super T, ? extends NewT> transformer) {
+    public <NewT> ImmutableSortedSet<NewT> map(Callable1<? super T, ? extends NewT> transformer) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ImmutableSet<T> remove(T value) {
+    public ImmutableSortedSet<T> remove(T value) {
         return treeSet(map.remove(value));
     }
 
     @Override
-    public Pair<ImmutableSet<T>, T> removeFirst() {
+    public T first() throws NoSuchElementException {
+        return map.first().first();
+    }
+
+    @Override
+    public T last() throws NoSuchElementException {
+        return map.last().first();
+    }
+
+    @Override
+    public Pair<ImmutableSortedSet<T>, T> removeFirst() {
         return treeSet(map.removeFirst());
     }
 
     @Override
-    public Pair<ImmutableSet<T>, T> removeLast() {
+    public Pair<ImmutableSortedSet<T>, T> removeLast() {
         return treeSet(map.removeLast());
     }
 
@@ -90,7 +100,7 @@ public class TreeSet<T> implements ImmutableSet<T> {
     }
 
     @Override
-    public ImmutableSet<T> cons(T head) {
+    public ImmutableSortedSet<T> cons(T head) {
         return treeSet(map.cons(Pair.pair(head, head)));
     }
 

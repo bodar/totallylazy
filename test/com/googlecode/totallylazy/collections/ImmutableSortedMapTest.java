@@ -18,14 +18,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ImmutableSortedMapTest {
     @Test
-    public void canRemoveMinimum() throws Exception {
+    public void canGetFirst() throws Exception {
+        assertThat(sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").first(), is(pair(1, "Dan")));
+    }
+
+    @Test
+    public void canRemoveFirst() throws Exception {
         final Pair<ImmutableSortedMap<Integer, String>, Pair<Integer, String>> result = sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").removeFirst();
         assertThat(result.first(), hasExactly(pair(2, "Ray"), pair(3, "Stu"), pair(4, "Alex")));
         assertThat(result.second(), is(pair(1, "Dan")));
     }
 
     @Test
-    public void canRemoveMaximum() throws Exception {
+    public void canGetLast() throws Exception {
+        assertThat(sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").last(), is(pair(4, "Alex")));
+    }
+
+    @Test
+    public void canRemoveLast() throws Exception {
         final Pair<ImmutableSortedMap<Integer, String>, Pair<Integer, String>> result = sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").removeLast();
         assertThat(result.first(), hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
         assertThat(result.second(), is(pair(4, "Alex")));

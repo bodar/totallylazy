@@ -16,6 +16,9 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
     ImmutableSortedMap<K, V> cons(Pair<K, V> head);
 
     @Override
+    ImmutableSortedMap<K, V> tail() throws NoSuchElementException;
+
+    @Override
     ImmutableSortedMap<K, V> put(K key, V value);
 
     @Override
@@ -38,9 +41,6 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
 
     @Override
     Pair<K, V> index(int i);
-
-    @Override
-    ImmutableSortedMap<K, V> tail() throws NoSuchElementException;
 
     class constructors {
         public static <K extends Comparable<? super K>, V> ImmutableSortedMap<K, V> emptySortedMap(Class<K> kClass, Class<V> vClass) {

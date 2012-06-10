@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.collections;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.collections.ImmutableSet.constructors.sortedSet;
+import static com.googlecode.totallylazy.collections.ImmutableSortedSet.constructors.sortedSet;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -11,22 +11,22 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ImmutableSortedSetTest {
     @Test
     public void canInsertAnElement() throws Exception {
-        ImmutableSet<Integer> actual = sortedSet(1).cons(2).cons(3);
+        ImmutableSortedSet<Integer> actual = sortedSet(1).cons(2).cons(3);
         assertThat(actual, hasExactly(1,2,3));
     }
 
     @Test
     public void canCheckContains() throws Exception {
-        ImmutableSet<Integer> set = sortedSet(2, 1, 3);
-        assertThat(set.contains(2), is(true));
-        assertThat(set.contains(4), is(false));
+        ImmutableSortedSet<Integer> sortedSet = sortedSet(2, 1, 3);
+        assertThat(sortedSet.contains(2), is(true));
+        assertThat(sortedSet.contains(4), is(false));
     }
 
     @Test
     public void canCreateATreeFromAnIterable() throws Exception {
-        ImmutableSet<Integer> set = sortedSet(sequence(8, 6, 4, 1, 7, 3, 5));
-        assertThat(set.contains(7), is(true));
-        assertThat(set.contains(9), is(false));
+        ImmutableSortedSet<Integer> sortedSet = sortedSet(sequence(8, 6, 4, 1, 7, 3, 5));
+        assertThat(sortedSet.contains(7), is(true));
+        assertThat(sortedSet.contains(9), is(false));
     }
 
     @Test
@@ -37,19 +37,19 @@ public class ImmutableSortedSetTest {
 
     @Test
     public void isIterableAndOrdered() throws Exception {
-        ImmutableSet<Integer> set = sortedSet(8, 6, 4, 1, 7, 3, 5);
-        assertThat(set, hasExactly(1, 3, 4, 5, 6, 7, 8));
+        ImmutableSortedSet<Integer> sortedSet = sortedSet(8, 6, 4, 1, 7, 3, 5);
+        assertThat(sortedSet, hasExactly(1, 3, 4, 5, 6, 7, 8));
     }
 
     @Test
     public void isASet() throws Exception {
-        ImmutableSet<Integer> set = sortedSet(3, 2, 1, 2, 1, 3);
-        assertThat(set, hasExactly(1, 2, 3));
+        ImmutableSortedSet<Integer> sortedSet = sortedSet(3, 2, 1, 2, 1, 3);
+        assertThat(sortedSet, hasExactly(1, 2, 3));
     }
 
     @Test
     public void canJoin() throws Exception {
-        ImmutableSet<Integer> set = sortedSet(3, 2, 1, 2).joinTo(sortedSet(4, 1, 5, 2));
-        assertThat(set, hasExactly(1, 2, 3, 4, 5));
+        ImmutableSortedSet<Integer> sortedSet = sortedSet(3, 2, 1, 2).joinTo(sortedSet(4, 1, 5, 2));
+        assertThat(sortedSet, hasExactly(1, 2, 3, 4, 5));
     }
 }
