@@ -9,13 +9,13 @@ import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public interface AVLTree<K, V> extends SortedImmutableMap<K, V> {
+public interface AVLTree<K, V> extends ImmutableSortedMap<K, V> {
     int height();
 
     int balance();
 
-    class Empty<K, V> extends EmptyMap<K, V> implements AVLTree<K, V> {
-        protected Empty(final Callable2<? super K, ? super V, ? extends SortedImmutableMap<K, V>> creator) {
+    class Empty<K, V> extends EmptySortedMap<K, V> implements AVLTree<K, V> {
+        protected Empty(final Callable2<? super K, ? super V, ? extends ImmutableSortedMap<K, V>> creator) {
             super(creator);
         }
 
@@ -30,7 +30,7 @@ public interface AVLTree<K, V> extends SortedImmutableMap<K, V> {
         }
     }
 
-    class Node<K, V> extends TreeMap<K, V> implements AVLTree<K, V> {
+    class Node<K, V> extends TreeSortedMap<K, V> implements AVLTree<K, V> {
         private final int height;
         private final AVLTree<K, V> left;
         private final AVLTree<K, V> right;
@@ -57,7 +57,7 @@ public interface AVLTree<K, V> extends SortedImmutableMap<K, V> {
         }
 
         @Override
-        <K, V> Node<K, V> create(SortedImmutableMap<K, V> left, K key, V value, SortedImmutableMap<K, V> right, Comparator<K> comparator) {
+        <K, V> Node<K, V> create(ImmutableSortedMap<K, V> left, K key, V value, ImmutableSortedMap<K, V> right, Comparator<K> comparator) {
             return balance(node(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator));
         }
 

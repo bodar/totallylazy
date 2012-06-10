@@ -14,15 +14,15 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class EmptyMap<K, V> implements SortedImmutableMap<K, V> {
-    protected final Function2<K, V, SortedImmutableMap<K,V>> creator;
+public class EmptySortedMap<K, V> implements ImmutableSortedMap<K, V> {
+    protected final Function2<K, V, ImmutableSortedMap<K,V>> creator;
 
-    protected EmptyMap(Callable2<? super K, ? super V, ? extends SortedImmutableMap<K, V>> creator) {
+    protected EmptySortedMap(Callable2<? super K, ? super V, ? extends ImmutableSortedMap<K, V>> creator) {
         this.creator = Function2.function(creator);
     }
 
-    public static <K, V> EmptyMap<K, V> emptyMap(Callable2<? super K, ? super V, ? extends SortedImmutableMap<K, V>> creator) {
-        return new EmptyMap<K, V>(creator);
+    public static <K, V> EmptySortedMap<K, V> emptyMap(Callable2<? super K, ? super V, ? extends ImmutableSortedMap<K, V>> creator) {
+        return new EmptySortedMap<K, V>(creator);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class EmptyMap<K, V> implements SortedImmutableMap<K, V> {
     }
 
     @Override
-    public SortedImmutableMap<K, V> put(K key, V value) {
+    public ImmutableSortedMap<K, V> put(K key, V value) {
         return cons(Pair.pair(key, value));
     }
 
@@ -46,32 +46,32 @@ public class EmptyMap<K, V> implements SortedImmutableMap<K, V> {
     }
 
     @Override
-    public SortedImmutableMap<K, V> filterKeys(Predicate<? super K> predicate) {
+    public ImmutableSortedMap<K, V> filterKeys(Predicate<? super K> predicate) {
         return this;
     }
 
     @Override
-    public SortedImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
+    public ImmutableSortedMap<K, V> filterValues(Predicate<? super V> predicate) {
         return this;
     }
 
     @Override
-    public <NewV> SortedImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> ImmutableSortedMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
         return cast(this);
     }
 
     @Override
-    public SortedImmutableMap<K, V> remove(K key) {
+    public ImmutableSortedMap<K, V> remove(K key) {
         return this;
     }
 
     @Override
-    public Pair<SortedImmutableMap<K, V>, Pair<K,V>>  removeMinimum() {
+    public Pair<ImmutableSortedMap<K, V>, Pair<K,V>>  removeMinimum() {
         throw new NoSuchElementException();
     }
 
     @Override
-    public Pair<SortedImmutableMap<K, V>, Pair<K,V>>  removeMaximum() {
+    public Pair<ImmutableSortedMap<K, V>, Pair<K,V>>  removeMaximum() {
         throw new NoSuchElementException();
     }
 
@@ -81,7 +81,7 @@ public class EmptyMap<K, V> implements SortedImmutableMap<K, V> {
     }
 
     @Override
-    public SortedImmutableMap<K, V> cons(Pair<K, V> newValue) {
+    public ImmutableSortedMap<K, V> cons(Pair<K, V> newValue) {
         return creator.apply(newValue.first(), newValue.second());
     }
 
@@ -97,7 +97,7 @@ public class EmptyMap<K, V> implements SortedImmutableMap<K, V> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof EmptyMap;
+        return obj instanceof EmptySortedMap;
     }
 
     @Override
