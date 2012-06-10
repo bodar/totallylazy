@@ -13,7 +13,7 @@ import java.util.Comparator;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.TreeSet.treeSet;
 
-public interface ImmutableSet<T> extends Iterable<T>, Segment<T>, Container<T> {
+public interface ImmutableSet<T> extends Iterable<T>, Segment<T>, Container<T>, Sorted<T> {
     ImmutableList<T> immutableList();
 
     ImmutableSet<T> put(T value);
@@ -26,9 +26,11 @@ public interface ImmutableSet<T> extends Iterable<T>, Segment<T>, Container<T> {
 
     ImmutableSet<T> remove(T value);
 
-    Pair<ImmutableSet<T>, T> removeMinimum();
+    @Override
+    Pair<ImmutableSet<T>, T> removeFirst();
 
-    Pair<ImmutableSet<T>, T> removeMaximum();
+    @Override
+    Pair<ImmutableSet<T>, T> removeLast();
 
     @Override
     ImmutableSet<T> cons(T head);

@@ -60,13 +60,18 @@ public class TreeSet<T> implements ImmutableSet<T> {
     }
 
     @Override
-    public Pair<ImmutableSet<T>, T> removeMinimum() {
-        return treeSet(map.removeMinimum());
+    public Pair<ImmutableSet<T>, T> removeFirst() {
+        return treeSet(map.removeFirst());
     }
 
     @Override
-    public Pair<ImmutableSet<T>, T> removeMaximum() {
-        return treeSet(map.removeMaximum());
+    public Pair<ImmutableSet<T>, T> removeLast() {
+        return treeSet(map.removeLast());
+    }
+
+    @Override
+    public T index(int i) {
+        return map.index(i).first();
     }
 
     @Override
