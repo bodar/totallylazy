@@ -25,6 +25,11 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     }
 
     @Override
+    public Comparator<K> comparator() {
+        return comparator;
+    }
+
+    @Override
     public ImmutableList<Pair<K, V>> immutableList() {
         return ImmutableList.constructors.empty();
     }
