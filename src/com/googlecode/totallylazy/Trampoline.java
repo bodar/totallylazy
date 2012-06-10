@@ -5,7 +5,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Callables.compose;
 import static com.googlecode.totallylazy.Callers.call;
 
-public abstract class Trampoline<T> implements Functor<T, Trampoline<?>> {
+public abstract class Trampoline<T> implements Functor<T> {
     public static <T> Trampoline<T> done(T value) {
         return new Done<T>(value);
     }

@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T, ImmutableList<?>> {
+public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T> {
     ImmutableList<T> add(T value);
 
     ImmutableList<T> remove(T value);
