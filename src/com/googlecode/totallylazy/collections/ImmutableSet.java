@@ -9,9 +9,9 @@ import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
-import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.collections.TreeSet.treeSet;
 
 public interface ImmutableSet<T> extends Iterable<T>, Segment<T>, Container<T> {
     ImmutableList<T> immutableList();
@@ -39,7 +39,7 @@ public interface ImmutableSet<T> extends Iterable<T>, Segment<T>, Container<T> {
         }
 
         public static <A extends Comparable<? super A>> ImmutableSet<A> sortedSet(A value) {
-            return TreeSet.tree(value);
+            return sortedSet(Comparators.<A>ascending(), value);
         }
 
         public static <A extends Comparable<? super A>> ImmutableSet<A> sortedSet(A value1, A value2) {
@@ -67,11 +67,11 @@ public interface ImmutableSet<T> extends Iterable<T>, Segment<T>, Container<T> {
         }
 
         public static <A> ImmutableSet<A> sortedSet(Comparator<A> comparator) {
-            return TreeSet.<A>empty(comparator);
+            return treeSet(ImmutableSortedMap.constructors.<A, A>sortedMap(comparator));
         }
 
         public static <A> ImmutableSet<A> sortedSet(Comparator<A> comparator, A value) {
-            return TreeSet.tree(value, comparator);
+            return treeSet(ImmutableSortedMap.constructors.<A, A>sortedMap(comparator, value, value));
         }
 
         public static <A> ImmutableSet<A> sortedSet(Comparator<A> comparator, A value1, A value2) {

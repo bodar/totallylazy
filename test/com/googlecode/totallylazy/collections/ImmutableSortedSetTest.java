@@ -4,15 +4,14 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.ImmutableSet.constructors.sortedSet;
-import static com.googlecode.totallylazy.collections.TreeSet.tree;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class TreeSetTest {
+public class ImmutableSortedSetTest {
     @Test
     public void canInsertAnElement() throws Exception {
-        ImmutableSet<Integer> actual = tree(1).cons(2).cons(3);
+        ImmutableSet<Integer> actual = sortedSet(1).cons(2).cons(3);
         assertThat(actual, hasExactly(1,2,3));
     }
 
