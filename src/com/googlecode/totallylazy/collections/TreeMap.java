@@ -7,18 +7,20 @@ import com.googlecode.totallylazy.Predicate;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Callers.call;
+
 public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
     K key();
 
     V value();
 
-    TreeMap<K,V> left();
+    TreeMap<K, V> left();
 
-    TreeMap<K,V> left(TreeMap<K,V> newLeft);
+    TreeMap<K, V> left(TreeMap<K, V> newLeft);
 
-    TreeMap<K,V> right();
+    TreeMap<K, V> right();
 
-    TreeMap<K,V> right(TreeMap<K,V> newRight);
+    TreeMap<K, V> right(TreeMap<K, V> newRight);
 
     @Override
     TreeMap<K, V> cons(Pair<K, V> head);
@@ -47,6 +49,8 @@ public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
     @Override
     Pair<? extends TreeMap<K, V>, Pair<K, V>> removeLast();
 
+    Comparator<K> comparator();
+
     enum constructors implements TreeFactory {
         factory;
 
@@ -65,6 +69,12 @@ public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
         public <K, V> TreeMap<K, V> create(Comparator<K> comparator, TreeMap<K, V> left, K key, V value, TreeMap<K, V> right) {
             return new AbstractTreeMap<K, V, TreeMap<K, V>>(left, key, value, right, comparator, constructors.factory) {
             };
+        }
+    }
+
+    class methods {
+        public static <K, V, NewV> TreeMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer, final TreeFactory factory, final TreeMap<K, V> treeMap) {
+            return factory.create(treeMap.comparator(), treeMap.left().mapValues(transformer), treeMap.key(), call(transformer, treeMap.value()), treeMap.right().mapValues(transformer));
         }
     }
 }

@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implements TreeMap<K, V> {
@@ -33,8 +34,9 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
         size = left.size() + right.size() + 1;
     }
 
-    protected Self self(TreeMap<K,V> treeMap) {
-        return cast(treeMap);
+    @Override
+    public Comparator<K> comparator() {
+        return comparator;
     }
 
     @Override
@@ -96,24 +98,20 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     @Override
     public Self filterKeys(Predicate<? super K> predicate) {
         if (predicate.matches(key))
-            return createSelf(left.filterKeys(predicate), key, value, right.filterKeys(predicate), comparator);
+            return create(left.filterKeys(predicate), key, value, right.filterKeys(predicate), comparator);
         return left.filterKeys(predicate).joinTo(self(right.filterKeys(predicate)));
-    }
-
-    private Self createSelf(TreeMap<K, V> left, K key, V value, TreeMap<K, V> right, Comparator<K> comparator) {
-        return self(factory.create(comparator, left, key, value, right));
     }
 
     @Override
     public Self filterValues(Predicate<? super V> predicate) {
         if (predicate.matches(value))
-            return createSelf(left.filterValues(predicate), key, value, right.filterValues(predicate), comparator);
+            return create(left.filterValues(predicate), key, value, right.filterValues(predicate), comparator);
         return left.filterValues(predicate).joinTo(self(right.filterValues(predicate)));
     }
 
     @Override
     public <NewV> TreeMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
-        return factory.create(comparator, left.mapValues(transformer), key, call(transformer, value), right.mapValues(transformer));
+        return methods.mapValues(transformer, factory, this);
     }
 
     @Override
@@ -122,16 +120,12 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
         if (difference == 0) {
             if (left.isEmpty()) return right;
             Pair<? extends TreeMap<K, V>, Pair<K, V>> pair = left.removeLast();
-            Self newLeft = self(pair.first());
+            TreeMap<K, V> newLeft = pair.first();
             Pair<K, V> newRoot = pair.second();
-            return createSelf(newLeft, newRoot.first(), newRoot.second(), right, comparator);
+            return create(newLeft, newRoot.first(), newRoot.second(), right, comparator);
         }
-        if (difference < 0) return createSelf(left.remove(key), this.key, value, right, comparator);
-        return createSelf(left, this.key, value, right.remove(key), comparator);
-    }
-
-    private int difference(K key) {
-        return comparator.compare(key, this.key);
+        if (difference < 0) return create(left.remove(key), this.key, value, right, comparator);
+        return create(left, this.key, value, right.remove(key), comparator);
     }
 
     @Override
@@ -150,14 +144,14 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     public Pair<Self, Pair<K, V>> removeFirst() {
         if (left.isEmpty()) return Pair.pair(right, pair());
         final Pair<? extends TreeMap<K, V>, Pair<K, V>> newLeft = left.removeFirst();
-        return Pair.<Self, Pair<K, V>>pair(createSelf(newLeft.first(), key, value, right, comparator), newLeft.second());
+        return Pair.pair(create(newLeft.first(), key, value, right, comparator), newLeft.second());
     }
 
     @Override
     public Pair<Self, Pair<K, V>> removeLast() {
         if (right.isEmpty()) return Pair.pair(left, pair());
         final Pair<? extends TreeMap<K, V>, Pair<K, V>> newRight = right.removeLast();
-        return Pair.<Self, Pair<K, V>>pair(createSelf(left, key, value, newRight.first(), comparator), newRight.second());
+        return Pair.pair(create(left, key, value, newRight.first(), comparator), newRight.second());
     }
 
     @Override
@@ -168,9 +162,9 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     @Override
     public Self cons(Pair<K, V> newValue) {
         int difference = difference(newValue.first());
-        if (difference == 0) return createSelf(left, newValue.first(), newValue.second(), right, comparator);
-        if (difference < 0) return createSelf(left.cons(newValue), key, value, right, comparator);
-        return createSelf(left, key, value, right.cons(newValue), comparator);
+        if (difference == 0) return create(left, newValue.first(), newValue.second(), right, comparator);
+        if (difference < 0) return create(left.cons(newValue), key, value, right, comparator);
+        return create(left, key, value, right.cons(newValue), comparator);
     }
 
     @Override
@@ -228,7 +222,19 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
         return right.index(i - left.size() - 1);
     }
 
-    public Pair<K, V> pair() {
+    protected Pair<K, V> pair() {
         return Pair.pair(key, value);
+    }
+
+    protected int difference(K key) {
+        return comparator.compare(key, this.key);
+    }
+
+    protected Self self(TreeMap<K,V> treeMap) {
+        return cast(treeMap);
+    }
+
+    protected Self create(TreeMap<K, V> left, K key, V value, TreeMap<K, V> right, Comparator<K> comparator) {
+        return self(factory.create(comparator, left, key, value, right));
     }
 }

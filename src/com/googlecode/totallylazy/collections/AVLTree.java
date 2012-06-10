@@ -1,9 +1,15 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
+
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public interface AVLTree<K, V> extends TreeMap<K, V> {
     int height();
@@ -11,7 +17,31 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
     int balance();
 
     @Override
+    AVLTree<K, V> cons(Pair<K, V> head);
+
+    @Override
+    AVLTree<K, V> tail() throws NoSuchElementException;
+
+    @Override
     AVLTree<K, V> put(K key, V value);
+
+    @Override
+    AVLTree<K, V> remove(K key);
+
+    @Override
+    AVLTree<K, V> filterKeys(Predicate<? super K> predicate);
+
+    @Override
+    AVLTree<K, V> filterValues(Predicate<? super V> predicate);
+
+    @Override
+    <NewV> AVLTree<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer);
+
+    @Override
+    Pair<AVLTree<K, V>, Pair<K, V>> removeFirst();
+
+    @Override
+    Pair<AVLTree<K, V>, Pair<K, V>> removeLast();
 
     @Override
     AVLTree<K, V> left();
@@ -121,6 +151,11 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         public int balance() {
             return 0;
         }
+
+        @Override
+        public <NewV> AVLTree<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
+            return cast(this);
+        }
     }
 
     final class Node<K, V> extends AbstractTreeMap<K, V, AVLTree<K, V>> implements AVLTree<K, V> {
@@ -139,6 +174,11 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         @Override
         public int balance() {
             return left().height() - right().height();
+        }
+
+        @Override
+        public <NewV> AVLTree<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
+            return cast(TreeMap.methods.mapValues(transformer, factory, this));
         }
     }
 }
