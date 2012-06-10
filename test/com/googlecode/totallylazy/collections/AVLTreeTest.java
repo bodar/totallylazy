@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import static com.googlecode.totallylazy.collections.AVLTree.Node.asNode;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.node;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
@@ -29,7 +28,7 @@ public class AVLTreeTest {
 
     @Test
     public void canGetByIndex() throws Exception {
-        AVLTree.Node<Integer, Integer> map = asNode(node(4, 4).put(5, 5).put(3, 3).put(2, 2).put(6, 6));
+        AVLTree<Integer, Integer> map = node(4, 4).put(5, 5).put(3, 3).put(2, 2).put(6, 6);
         assertThat(map.index(0).first(), is(2));
         assertThat(map.index(1).first(), is(3));
         assertThat(map.index(2).first(), is(4));
@@ -39,7 +38,7 @@ public class AVLTreeTest {
 
     @Test
     public void canCalculateSize() throws Exception {
-        assertThat(asNode(node(4, null).put(5, null).put(3, null).put(2, null).put(6, null)).size(), is(5));
+        assertThat(node(4, null).put(5, null).put(3, null).put(2, null).put(6, null).size(), is(5));
     }
 
     @Test
@@ -198,7 +197,7 @@ public class AVLTreeTest {
     private class ImmutableMapRenderer {
         public String render(ImmutableMap<?, ?> map) {
             if (map instanceof TreeMap) {
-                return "<table>" + "<tr><td colspan='2'>" + ((TreeMap) map).key + "</td></tr>" +
+                return "<table>" + "<tr><td colspan='2'>" + ((TreeMap) map).key() + "</td></tr>" +
                         "<tr><td  valign='top'>" + render(((TreeMap) map).left()) + "</td><td valign='top'>" + render(((AVLTree.Node) map).right()) + "</td></tr></table>";
             }
             return "";

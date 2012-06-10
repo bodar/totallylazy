@@ -9,19 +9,20 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.iterators.EmptyIterator;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public abstract class AbstractEmptyTreeMap<K, V, Self extends ImmutableSortedMap<K, V>> implements ImmutableSortedMap<K, V> {
-    protected final Function2<K, V, Self> creator;
+public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> implements TreeMap<K, V> {
+    protected final Comparator<K> comparator;
+    protected final TreeFactory treeFactory;
 
-    protected AbstractEmptyTreeMap(Callable2<? super K, ? super V, ? extends Self> creator) {
-        this.creator = Function2.function(creator);
+    protected AbstractEmptyTreeMap(Comparator<K> comparator, TreeFactory treeFactory) {
+        this.treeFactory = treeFactory;
+        this.comparator = comparator;
     }
-
-    protected abstract Self self();
 
     @Override
     public ImmutableList<Pair<K, V>> immutableList() {
@@ -45,22 +46,22 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends ImmutableSortedMap
 
     @Override
     public Self filterKeys(Predicate<? super K> predicate) {
-        return self();
+        return cast(this);
     }
 
     @Override
     public Self filterValues(Predicate<? super V> predicate) {
-        return self();
+        return cast(this);
     }
 
     @Override
-    public <NewV> ImmutableSortedMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> TreeMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
         return cast(this);
     }
 
     @Override
     public Self remove(K key) {
-        return self();
+        return cast(this);
     }
 
     @Override
@@ -90,7 +91,7 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends ImmutableSortedMap
 
     @Override
     public Self cons(Pair<K, V> newValue) {
-        return creator.apply(newValue.first(), newValue.second());
+        return cast(treeFactory.create(comparator, newValue.first(), newValue.second()));
     }
 
     @Override
@@ -143,4 +144,33 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends ImmutableSortedMap
         throw new IndexOutOfBoundsException();
     }
 
+    @Override
+    public K key() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public V value() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Self left() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Self left(TreeMap<K, V> newLeft) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Self right() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Self right(TreeMap<K, V> newRight) {
+        throw new UnsupportedOperationException();
+    }
 }
