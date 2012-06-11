@@ -318,6 +318,12 @@ public class Sequences {
         return Iterators.toList(iterable.iterator());
     }
 
+    public static <T> List<T> toSortedList(final Iterable<? extends T> iterable, final Comparator<? super T> comparator) {
+        List<T> result = toList(iterable);
+        Collections.sort(result, comparator);
+        return result;
+    }
+
     public static <T> Deque<T> toDeque(final Iterable<? extends T> iterable) {
         return Iterators.toDeque(iterable.iterator());
     }
@@ -515,9 +521,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> sortBy(final Iterable<? extends T> iterable, final Comparator<? super T> comparator) {
-        List<T> result = sequence(iterable).toList();
-        Collections.sort(result, comparator);
-        return sequence(result);
+        return sequence(toSortedList(iterable, comparator));
     }
 
     public static <T extends Comparable<? super T>> Sequence<T> sort(final Iterable<? extends T> iterable) {

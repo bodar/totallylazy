@@ -1,8 +1,13 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Test;
+
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -14,9 +19,36 @@ import static com.googlecode.totallylazy.collections.ImmutableSortedMap.construc
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
+import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ImmutableSortedMapTest {
+    @Test
+    public void creatingASortedMapFromAnIterableIsFast() throws Exception {
+        //in order - fold / cons Elapsed msecs for 11 runs:	Avg:13.460369555555555	Min:8.874518	Max:99.661891	Total:229.67973499999997
+        //in order - sorted list Elapsed msecs for 11 runs:	Avg:11.016874222222222	Min:6.171428	Max:101.041891	Total:206.36518700000005
+        // shuffle - fold / cons Elapsed msecs for 11 runs:	Avg:19.289151888888888	Min:13.316564	Max:113.912953	Total:300.831884
+        // shuffle - sorted list Elapsed msecs for 11 runs:	Avg:15.702062000000002	Min:8.892117	Max:125.818735	Total:276.02941000000004
+        final Sequence<Integer> integers = range(0, 10000).safeCast(Integer.class).shuffle();
+        TimeReport time = TimeReport.time(10, new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return sortedMap(integers.map(asPair()));
+            }
+        });
+        System.out.println(time);
+    }
+
+    public static Callable1<Integer, Pair<Integer, String>> asPair() {
+        return new Callable1<Integer, Pair<Integer, String>>() {
+            @Override
+            public Pair<Integer, String> call(Integer integer) throws Exception {
+                return Pair.pair(integer, integer.toString());
+            }
+        };
+    }
+
+
     @Test
     public void canGetFirst() throws Exception {
         assertThat(sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").first(), is(pair(1, "Dan")));

@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
+import static com.googlecode.totallylazy.collections.ImmutableSortedMapTest.asPair;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -67,7 +68,7 @@ public class AVLTreeTest {
         assertThat(map.remove(3).toString(), is("((( 0 ) 1 ) 2 (( 4 ) 5 ( 6 )))"));
     }
 
-    final Sequence<Integer> range = range(1, 10000).safeCast(Integer.class).realise();
+    final Sequence<Integer> range = range(0, 10000).safeCast(Integer.class).realise();
     final Sequence<Integer> keys = Randoms.between(0, 10000);
 
     @Test
@@ -83,7 +84,7 @@ public class AVLTreeTest {
 //        Elapsed msecs for 1001 runs:	Avg:4.6022222222222205E-4	Min:2.06E-4	Max:0.013102	Total:0.49465499999999996
 //        END IMMUTABLE
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             System.out.println("BEGIN MUTABLE");
             final Map<Integer, String> mutable = createMutable(range);
             System.out.println(TimeReport.time(1000, new Callable<Object>() {
@@ -131,9 +132,7 @@ public class AVLTreeTest {
         return TimeCallable.time(new Callable<Map<Integer, String>>() {
             @Override
             public Map<Integer, String> call() throws Exception {
-                return range.fold(new ConcurrentSkipListMap<Integer, String>() {{
-                                      put(0, "0");
-                                  }}, new Callable2<Map<Integer, String>, Integer, Map<Integer, String>>() {
+                return range.fold(new ConcurrentSkipListMap<Integer, String>(), new Callable2<Map<Integer, String>, Integer, Map<Integer, String>>() {
                                       @Override
                                       public Map<Integer, String> call(Map<Integer, String> map, Integer integer) throws Exception {
                                           map.put(integer, integer.toString());
@@ -177,12 +176,7 @@ public class AVLTreeTest {
         return TimeCallable.time(new Callable<ImmutableMap<Integer, String>>() {
             @Override
             public ImmutableMap<Integer, String> call() throws Exception {
-                return range.fold(avlTree(0, "0"), new Callable2<ImmutableMap<Integer, String>, Integer, ImmutableMap<Integer, String>>() {
-                    @Override
-                    public ImmutableMap<Integer, String> call(ImmutableMap<Integer, String> node, Integer integer) throws Exception {
-                        return node.put(integer, integer.toString());
-                    }
-                });
+                return ImmutableSortedMap.constructors.sortedMap(range.map(asPair()));
             }
         }).call();
     }

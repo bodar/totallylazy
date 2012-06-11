@@ -195,6 +195,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.toList(this);
     }
 
+    public List<T> toSortedList(Comparator<T> comparator) {
+        return Sequences.toSortedList(this, comparator);
+    }
+
     public Deque<T> toDeque() {
         return Sequences.toDeque(this);
     }
