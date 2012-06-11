@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.comparators.Comparators;
@@ -43,6 +44,8 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
     Pair<K, V> index(int i);
 
     class constructors {
+        private static TreeFactory factory = AVLTree.constructors.factory;
+
         public static <K extends Comparable<? super K>, V> ImmutableSortedMap<K, V> emptySortedMap(Class<K> kClass, Class<V> vClass) {
             return constructors.<K, V>sortedMap();
         }
@@ -84,11 +87,11 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
         }
 
         public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator) {
-            return AVLTree.constructors.factory.create(comparator);
+            return factory.create(comparator);
         }
 
         public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator, K key, V value) {
-            return AVLTree.constructors.factory.create(comparator, key, value);
+            return factory.create(comparator, key, value);
         }
 
         public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator, K key1, V value1, K key2, V value2) {
@@ -112,7 +115,7 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
         }
 
         public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator, final Iterable<Pair<K, V>> values) {
-            return sequence(values).fold(constructors.<K, V>sortedMap(comparator), functions.<Pair<K, V>, ImmutableSortedMap<K, V>>cons());
+            return TreeMap.methods.treeMap(factory, comparator, sequence(values).toSortedList(Comparators.<Pair<K, V>, K>where(Callables.<K>first(), comparator)));
         }
     }
 }
