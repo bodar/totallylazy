@@ -1,7 +1,10 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Callers;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
@@ -15,6 +18,7 @@ import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -37,7 +41,7 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
 
     @Override
     public ImmutableList<T> remove(T value) {
-        return constructors.list(toSequence().filter(not(onlyOnce(is(value)))));
+        return filter(not(onlyOnce(is(value))));
     }
 
     @Override
@@ -47,7 +51,7 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
 
     @Override
     public ImmutableList<T> removeAll(Iterable<T> values) {
-        return constructors.list(toSequence().filter(not(in(set(values)))));
+        return filter(not(in(set(values))));
     }
 
     @Override
@@ -92,6 +96,26 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         @Override
         public <S> ImmutableList<S> map(Callable1<? super T, ? extends S> callable) {
             return cast(this);
+        }
+
+        @Override
+        public Option<T> find(Predicate<? super T> predicate) {
+            return Option.none();
+        }
+
+        @Override
+        public ImmutableList<T> filter(Predicate<? super T> predicate) {
+            return this;
+        }
+
+        @Override
+        public boolean contains(T other) {
+            return false;
+        }
+
+        @Override
+        public boolean exists(Predicate<? super T> predicate) {
+            return false;
         }
 
         @Override
@@ -143,6 +167,26 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         @Override
         public <S> ImmutableList<S> map(Callable1<? super T, ? extends S> callable) {
             return node(call(callable, head), tail().map(callable));
+        }
+
+        @Override
+        public Option<T> find(Predicate<? super T> predicate) {
+            return toSequence().find(predicate);
+        }
+
+        @Override
+        public ImmutableList<T> filter(Predicate<? super T> predicate) {
+            return constructors.list(toSequence().filter(predicate));
+        }
+
+        @Override
+        public boolean contains(T other) {
+            return toSequence().contains(other);
+        }
+
+        @Override
+        public boolean exists(Predicate<? super T> predicate) {
+            return toSequence().exists(predicate);
         }
 
         @Override

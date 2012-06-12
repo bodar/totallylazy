@@ -1,12 +1,17 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.First;
 import com.googlecode.totallylazy.Functor;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -27,7 +32,18 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T> {
     ImmutableList<T> cons(T head);
 
     @Override
+    ImmutableList<T> tail() throws NoSuchElementException;
+
+    @Override
     <S> ImmutableList<S> map(Callable1<? super T, ? extends S> callable);
+
+    Option<T> find(Predicate<? super T> predicate);
+
+    ImmutableList<T> filter(Predicate<? super T> predicate);
+
+    boolean contains(T other);
+
+    boolean exists(Predicate<? super T> predicate);
 
     class constructors {
         public static <T> ImmutableList<T> empty() {
