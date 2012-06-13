@@ -436,7 +436,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Computation<T> memorise(final Iterable<? extends T> iterable) {
+    public static <T> Sequence<T> memorise(final Iterable<? extends T> iterable) {
         return Computation.memorise(iterable);
     }
 

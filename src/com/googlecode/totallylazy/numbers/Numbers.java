@@ -199,7 +199,7 @@ public class Numbers {
     }
 
     public static Sequence<Number> powersOf(Number amount) {
-        return iterate(multiply(amount), 1);
+        return Computation.iterate(multiply(amount), 1);
     }
 
     public static <T> Operators<Number> operatorsFor(Class<T> numberClass) {
