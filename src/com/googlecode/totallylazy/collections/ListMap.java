@@ -17,6 +17,7 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Sequences.filter;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.reverse;
@@ -70,7 +71,16 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableMap<K, V> cons(Pair<K, V> head) {
-        return listMap(list.cons(head));
+        return contains(head.first()) ? listMap(list.map(replace(head))) : listMap(list.cons(head));
+    }
+
+    private Callable1<Pair<K, V>, Pair<K, V>> replace(final Pair<K, V> newValue) {
+        return new Callable1<Pair<K, V>, Pair<K, V>>() {
+            @Override
+            public Pair<K, V> call(Pair<K, V> oldValue) throws Exception {
+                return oldValue.first().equals(newValue.first()) ? newValue : oldValue;
+            }
+        };
     }
 
     @Override
@@ -110,7 +120,7 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableMap<K, V> remove(K key) {
-        return listMap(list.filter(not(onlyOnce(key(key)))));
+        return filterKeys(is(not(key)));
     }
 
     @Override
@@ -148,11 +158,11 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
         return immutableList().iterator();
     }
 
-    private LogicalPredicate<First<K>> key(Predicate<? super K> predicate) {
+    private Predicate<First<K>> key(Predicate<? super K> predicate) {
         return where(Callables.<K>first(), predicate);
     }
 
-    private LogicalPredicate<First<K>> key(K key) {
+    private Predicate<First<K>> key(K key) {
         return key(is(key));
     }
 
@@ -168,6 +178,6 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public String toString() {
-        return list.toString();
+        return immutableList().toString();
     }
 }

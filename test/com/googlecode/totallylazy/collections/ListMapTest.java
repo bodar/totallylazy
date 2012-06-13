@@ -1,10 +1,14 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Map;
+
+import static com.googlecode.totallylazy.Maps.pairs;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -37,6 +41,12 @@ public class ListMapTest {
     public void canPut() throws Exception {
         ImmutableMap<Integer, String> map = listMap(1, "Dan").put(3, "Stu").put(2, "Ray");
         assertThat(map, hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
+    }
+
+    @Test
+    public void putReplacesValuesWithSameKey() throws Exception {
+        ImmutableMap<Integer, String> map = listMap(1, "Dan").put(3, "Stu").put(1, "Ray");
+        assertThat(map, hasExactly(pair(1, "Ray"), pair(3, "Stu")));
     }
 
     @Test
