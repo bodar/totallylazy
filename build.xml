@@ -13,21 +13,20 @@
     <property name="release.pom" value="${release.name}.pom"/>
     <property name="release.src" value="${release.name}-sources.jar"/>
     <property name="release.jar.path" value="${artifacts}/${release.jar}"/>
-    <property name="test.jar" value="${release.name}.test.jar"/>
-    <property name="test.jar.path" value="${artifacts}/${test.jar}"/>
+    <property name="test.jar.path" value="${artifacts}/${release.name}.test.jar"/>
     <property name="build.dependencies.dir" value="lib/build"/>
     <property name="runtime.dependencies.dir" value="lib/runtime"/>
     <property name="optional.dependencies.dir" value="lib/optional"/>
-    <property name="manual.dependencies.dir" value="lib/manual"/>
 
     <import file="${build}/macros.xml"/>
     <import file="${build}/shavenmaven.xml"/>
+
+    <requires java.version="1\.[67]"/>
 
     <path id="all.dependancies">
         <fileset dir="${build.dependencies.dir}" includes="**/*.jar"/>
         <fileset dir="${runtime.dependencies.dir}" includes="*.jar"/>
         <fileset dir="${optional.dependencies.dir}" includes="*.jar"/>
-        <fileset dir="${manual.dependencies.dir}" includes="*.jar"/>
     </path>
 
     <path id="all.jars">
@@ -55,9 +54,7 @@
     <target name="compile">
         <compile.and.jar src="${src}" jar="${release.jar.path}" classpathref="all.dependancies"
                          version="${release.version}"/>
-        <create.lambda jar="${release.jar}" packages="com.googlecode.totallylazy"/>
         <compile.and.jar src="${test}" jar="${test.jar.path}" classpathref="all.jars" version="${release.version}"/>
-        <create.lambda jar="${test.jar}" packages="com.googlecode.totallylazy"/>
     </target>
 
     <target name="test">
@@ -94,6 +91,15 @@
 
     </target>
 
-    <target name="build" depends="update, clean, compile, test, package" description="build all"/>
-
+    <target name="build" description="build all">
+        <parallel>
+           <antcall target="update"/>
+           <antcall target="clean"/>
+        </parallel>
+        <antcall target="compile"/>
+        <parallel>
+           <antcall target="test"/>
+           <antcall target="package"/>
+        </parallel>
+    </target>
 </project>

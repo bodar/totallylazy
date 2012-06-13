@@ -7,19 +7,64 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.googlecode.totallylazy.Maps.filterKeys;
+import static com.googlecode.totallylazy.Maps.filterValues;
+import static com.googlecode.totallylazy.Maps.find;
+import static com.googlecode.totallylazy.Maps.get;
+import static com.googlecode.totallylazy.Maps.map;
+import static com.googlecode.totallylazy.Maps.mapKeys;
+import static com.googlecode.totallylazy.Maps.mapValues;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
+import static com.googlecode.totallylazy.Strings.contains;
+import static com.googlecode.totallylazy.Strings.toLowerCase;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
 
 public class MapsTest {
+    @Test
+    public void supportsGettingAValueAsAnOption() throws Exception {
+        assertThat(get(map(pair("Dan", 2)), "Dan"), is(some(2)));
+        assertThat(get(map(pair("Dan", 2)), "Matt"), is(none(Integer.class)));
+    }
+
+    @Test
+    public void supportsFindingAValueAsAnOption() throws Exception {
+        assertThat(find(map(pair("Dan", 2)), contains("a")), is(some(2)));
+        assertThat(find(map(pair("Dan", 2)), contains("b")), is(none(Integer.class)));
+    }
+
+    @Test
+    public void supportsFilteringByKey() throws Exception {
+        assertThat(filterKeys(map(pair("Dan", 2)), contains("a")), is(map(pair("Dan", 2))));
+        assertThat(filterKeys(map(pair("Dan", 2)), contains("b")), is(Maps.<String, Integer>map()));
+    }
+
+    @Test
+    public void supportsFilteringByValue() throws Exception {
+        assertThat(filterValues(map(pair("Dan", 2)), Predicates.is(2)), is(map(pair("Dan", 2))));
+        assertThat(filterValues(map(pair("Dan", 2)), Predicates.is(3)), is(Maps.<String, Integer>map()));
+    }
+
+    @Test
+    public void supportsMappingKeys() throws Exception {
+        assertThat(mapKeys(map(pair("Dan", 2)), toLowerCase()), is(map(pair("dan", 2))));
+    }
+
+    @Test
+    public void supportsMappingValues() throws Exception {
+        assertThat(mapValues(map(pair("Dan", 2)), add(2)), is(map(pair("Dan", (Number)4))));
+    }
 
     @Test
     public void maintainsMapEntriesOrder() throws Exception {
-        Map<String,String> map = Maps.map(Pair.pair("name", "Dan"), Pair.pair("tel", "123432"));
+        Map<String, String> map = map(Pair.pair("name", "Dan"), Pair.pair("tel", "123432"));
         assertThat(map.keySet().iterator().next(), is("name"));
     }
 
@@ -45,7 +90,7 @@ public class MapsTest {
 
     @Test
     public void supportsConvertingMapEntriesToPairs() throws Exception {
-        Map<String, Integer> map = Maps.map();
+        Map<String, Integer> map = map();
         map.put("Dan", 2);
 
         assertThat(sequence(Maps.pairs(map)), hasExactly(pair("Dan", 2)));

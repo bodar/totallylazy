@@ -2,58 +2,66 @@ package com.googlecode.totallylazy;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public abstract class Option<T> implements Iterable<T>, Value<T> {
-    public static <T> Option<T> option(T t) {
-        if (t == null) {
-            return none();
+public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Applicative<A> {
+    public static <A> Option<A> option(A a) {
+        if (a == null) {
+            return None.none();
         }
-        return new Some<T>(t);
+        return Some.some(a);
     }
 
-    public static <T> Some<T> some(T t) {
-        return new Some<T>(t);
+    public static <A> Option<A> some(A a) {
+        return Some.some(a);
     }
 
-    public static <T> None<T> none() {
-        return new None<T>();
+    public static <A> Option<A> none() {
+        return None.none();
     }
 
-    public static <T> None<T> none(Class<T> aClass) {
-        return none();
+    public static <A> Option<A> none(Class<A> aClass) {
+        return None.none(aClass);
     }
 
-    public abstract T get();
-
-    public abstract boolean isEmpty();
-
-    public T value() {
+    public A value() {
         return get();
     }
 
-    public final T getOrElse(T other){
-        return isEmpty() ? other : get();
-    }
+    public abstract A get();
 
-    public final T getOrElse(Callable<T> callable){
-        return isEmpty() ? call(callable) : get();
-    }
+    public abstract boolean isEmpty();
 
-    public final T getOrNull(){
-        return isEmpty() ? null : get();
-    }
+    public abstract A getOrElse(A other);
 
-    public final <S> Option<S> map(Callable1<? super T, S> callable) {
-        return isEmpty() ? Option.<S>none() : some(Callers.call(callable, get()));
-    }
+    public abstract A getOrElse(Callable<? extends A> callable);
 
-    public <S> S fold(final S seed, final Callable2<? super S, ? super T, S> callable) {
-        return isEmpty() ? seed : Callers.call(callable, seed, get());
-    }
+    public abstract A getOrNull();
 
-    public Sequence<T> toSequence() {
+    public abstract <B> Option<B> map(Callable1<? super A, ? extends B> callable);
+
+    public abstract <B> Option<B> flatMap(Callable1<? super A, ? extends Option<B>> callable);
+
+    public abstract <B> B fold(final B seed, final Callable2<? super B, ? super A, ? extends B> callable);
+
+    public Sequence<A> toSequence() {
         return sequence(this);
+    }
+
+    public static <A> Option<A> flatten(Option<? extends Option<A>> option) {
+        return option.flatMap(Function1.<Option<A>>identity());
+    }
+
+    public <B> Option<B> applicate(Option<? extends Callable1<? super A, ? extends B>> applicator) {
+        return applicate(applicator, this);
+    }
+
+    public static <A, B> Option<B> applicate(Option<? extends Callable1<? super A, ? extends B>> applicator, Option<? extends A> option) {
+        if (applicator.isEmpty()) return none();
+        return option.map(applicator.get());
+    }
+
+    public static <A> Option<A> pure(A a){
+        return option(a);
     }
 }

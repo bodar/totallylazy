@@ -8,12 +8,12 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Callers.call;
 
 public class LazyEqualsMatcher<T> extends TypeSafeMatcher<T> {
-    private final Callable<T> expectedLoader;
+    private final Callable<? extends T> expectedLoader;
     private final String descriptionText;
     private T actual;
     private T expected;
 
-    private LazyEqualsMatcher(String descriptionText, Callable<T> expectedLoader) {
+    private LazyEqualsMatcher(String descriptionText, Callable<? extends T> expectedLoader) {
         this.expectedLoader = expectedLoader;
         this.descriptionText = descriptionText;
     }
@@ -34,7 +34,7 @@ public class LazyEqualsMatcher<T> extends TypeSafeMatcher<T> {
         return expected != null ? String.format(descriptionText + " [expected: %s, actual: %s]", expected, actual) : descriptionText;
     }
 
-    public static <E> LazyEqualsMatcher<E> lazyEqualTo(String descriptionText, Callable<E> expectedLoader) {
+    public static <E> LazyEqualsMatcher<E> lazyEqualTo(String descriptionText, Callable<? extends E> expectedLoader) {
         return new LazyEqualsMatcher<E>(descriptionText, expectedLoader);
     }
 }

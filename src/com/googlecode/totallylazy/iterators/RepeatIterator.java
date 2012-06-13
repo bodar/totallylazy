@@ -5,9 +5,9 @@ import com.googlecode.totallylazy.Callers;
 import java.util.concurrent.Callable;
 
 public final class RepeatIterator<T> extends ReadOnlyIterator<T> {
-    private final Callable<T>  callable;
+    private final Callable<? extends T>  callable;
 
-    public RepeatIterator(final Callable<T> callable) {
+    public RepeatIterator(final Callable<? extends T> callable) {
         this.callable = callable;
     }
 

@@ -8,12 +8,30 @@ import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Runnables.VOID;
 
 public class Closeables {
-    public static <T extends Closeable> Callable1<? super T, Void> closeAfter(final Callable1<? super T, Void> callable) {
-        return new Callable1<T, Void>() {
+    public static <T extends Closeable> Function1<T, Void> closeAfter(final Callable1<? super T, Void> callable) {
+        return new Function1<T, Void>() {
             public Void call(T t) throws Exception {
                 return using(t, callable);
             }
         };
+    }
+
+    public static <T> T safeClose(final T t){
+        try {
+            close(t);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static <T extends Closeable> T safeClose(final T t){
+        try {
+            close(t);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static <T> T close(final T t) {
@@ -38,12 +56,12 @@ public class Closeables {
         try {
             t.close();
         } catch (IOException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
         return t;
     }
 
-    public static <T extends Closeable, R> R using(T t, Callable1<? super T, R> callable) {
+    public static <T extends Closeable, R> R using(T t, Callable1<? super T, ? extends R> callable) {
         try {
             return call(callable, t);
         } finally {
@@ -51,7 +69,7 @@ public class Closeables {
         }
     }
 
-    public static <T, R> R using(T instanceWithCloseMethod, Callable1<? super T, R> callable) {
+    public static <T, R> R using(T instanceWithCloseMethod, Callable1<? super T, ? extends R> callable) {
         try {
             return call(callable, instanceWithCloseMethod);
         } finally {
@@ -59,8 +77,8 @@ public class Closeables {
         }
     }
 
-    public static <T> Callable1<T, Void> reflectiveClose() {
-        return new Callable1<T, Void>() {
+    public static <T> Function1<T, Void> reflectiveClose() {
+        return new Function1<T, Void>() {
             public Void call(T instanceWithCloseMethod) throws Exception {
                 close(instanceWithCloseMethod);
                 return VOID;
@@ -68,8 +86,8 @@ public class Closeables {
         };
     }
 
-    public static Callable1<Closeable, Void> close() {
-        return new Callable1<Closeable, Void>() {
+    public static Function1<Closeable, Void> close() {
+        return new Function1<Closeable, Void>() {
             public Void call(Closeable closeable) throws IOException {
                 close(closeable);
                 return VOID;
@@ -77,4 +95,12 @@ public class Closeables {
         };
     }
 
+    public static Function1<Closeable, Void> safeClose() {
+        return new Function1<Closeable, Void>() {
+            public Void call(Closeable closeable) throws IOException {
+                safeClose(closeable);
+                return VOID;
+            }
+        };
+    }
 }

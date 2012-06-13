@@ -1,15 +1,16 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public final class CountingCallable1<T,R> implements Callable1<T,R> {
+public final class CountingCallable1<T,R> extends Function1<T,R> {
     private final Map<T, Integer> count = new HashMap<T, Integer>();
-    private final Callable1<T, R> callable;
+    private final Callable1<? super T, ? extends R> callable;
 
-    private CountingCallable1(Callable1<T,R> callable) {
+    private CountingCallable1(Callable1<? super T, ? extends R> callable) {
         this.callable = callable;
     }
 
@@ -25,7 +26,7 @@ public final class CountingCallable1<T,R> implements Callable1<T,R> {
         return count.get(t);
     }
 
-    public static <T,R> CountingCallable1<T,R> counting(Callable1<T,R> callable) {
+    public static <T,R> CountingCallable1<T,R> counting(Callable1<? super T,? extends R> callable) {
         return new CountingCallable1<T,R>(callable);
     }
 }

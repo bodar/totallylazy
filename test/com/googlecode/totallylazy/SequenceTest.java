@@ -1,15 +1,18 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.comparators.Comparators;
+import com.googlecode.totallylazy.matchers.Matchers;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
+import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -23,55 +26,138 @@ import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.length;
+import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Callables.size;
+import static com.googlecode.totallylazy.Functions.and;
+import static com.googlecode.totallylazy.Functions.or;
+import static com.googlecode.totallylazy.Lists.indexIn;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.greaterThan;
 import static com.googlecode.totallylazy.Predicates.lessThan;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
+import static com.googlecode.totallylazy.Quintuple.quintuple;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.totallylazy.Sequences.one;
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
+import static com.googlecode.totallylazy.Sequences.splitOn;
 import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.comparators.Comparators.comparators;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
+import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
+import static java.lang.Thread.currentThread;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
 
 @RunWith(SpecRunner.class)
 public class SequenceTest {
     @Test
+    @Notes("Eagerly return the first element of a sequence, throws NoSuchElementException if empty.")
+    public void head() throws Exception {
+        assertThat(sequence(1, 2).head(), is(1));
+    }
+
+    @Test
+    @Notes("Eagerly return the first element of a sequence wrapped in a some, returns none if empty.")
+    public void headOption() throws Exception {
+        assertThat(sequence(1).headOption(), is(some(1)));
+        assertThat(empty().headOption(), is(none()));
+    }
+
+    @Test
+    @Notes("Eagerly return the last element of a finite sequence, throws NoSuchElementException if empty.")
+    public void last() throws Exception {
+        assertThat(sequence(1, 2, 3).last(), is(3));
+    }
+
+    @Test
+    @Notes("Eagerly return the last element of a finite sequence wrapped in a some, returns none if empty.")
+    public void lastOption() throws Exception {
+        assertThat(sequence(1, 2, 3).lastOption(), is(some(3)));
+        assertThat(empty().lastOption(), is(none()));
+    }
+
+    @Test
+    @Notes("Lazily returns the elements after the head of the sequence. Lazily throws NoSuchElementException if empty. Works with infinite sequences.")
+    public void tail() throws Exception {
+        assertThat(sequence(1, 2, 3).tail(), hasExactly(2, 3));
+        assertThat(sequence(1).tail().isEmpty(), is(true));
+        try {
+            empty().tail().isEmpty();
+            fail("Should have thrown NoSuchElementException");
+        } catch (NoSuchElementException e) {
+            // all good
+        }
+    }
+
+    @Test
+    @Notes("Lazily returns all the elements of a finite sequence except the last one. Lazily throws NoSuchElementException if empty.s")
+    public void init() throws Exception {
+        assertThat(sequence(1, 2, 3).init(), hasExactly(1, 2));
+        assertThat(sequence(1).init().isEmpty(), is(true));
+        try {
+            empty().init().isEmpty();
+            fail("Should have thrown NoSuchElementException");
+        } catch (NoSuchElementException e) {
+            // all good
+        }
+    }
+
+    @Test
+    @Notes("This test has a very small chance that it could fail")
+    public void supportsShuffle() throws Exception {
+        assertThat(range(1, 100).shuffle(), is(not(range(1, 100))));
+    }
+
+    @Test
+    public void supportsApplicativeUsage() throws Exception {
+        assertThat(empty(Number.class).applicate(one(add(3))), Matchers.is(empty(Number.class)));
+        assertThat(numbers(9).applicate(Sequences.<Function1<Number, Number>>empty()), Matchers.is(empty(Number.class)));
+        assertThat(numbers(9).applicate(one(add(3))), Matchers.is(numbers(12)));
+        assertThat(numbers(9, 1).applicate(one(add(3))), Matchers.is(numbers(12, 4)));
+        assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 90, 4, 10)));
+    }
+
+    @Test
     public void recursiveCallOnlyEndsWhenThereIsNoRemainder() throws Exception {
-        assertThat(numbers(1, 3, 0, 0, 2).recursive(Sequences.<Number>splitOn(0)),
-                is(sequence(numbers(1, 3), Sequences.<Number>empty(), numbers(2))));
+        assertThat(sequence(1, 3, 0, 0, 2).recursive(splitOn(0)),
+                is(sequence(sequence(1, 3), empty(Integer.class), sequence(2))));
     }
 
     @Test
     public void supportsRecursiveSplitOn() throws Exception {
-        assertThat(numbers(1, 3, -4, 0, 7, -9, 0, 2).recursive(Sequences.<Number>splitOn(0)),
-                is(sequence(numbers(1, 3, -4), numbers(7, -9), numbers(2))));
+        assertThat(sequence(1, 3, -4, 0, 7, -9, 0, 2).recursive(splitOn(0)),
+                is(sequence(sequence(1, 3, -4), sequence(7, -9), sequence(2))));
     }
 
     @Test
     public void supportsSplitOn() throws Exception {
-        assertThat(numbers(1, 3, -4, 0, 7, -9, 0, 2).splitOn(0), is(pair(numbers(1, 3, -4), numbers(7, -9, 0, 2))));
+        assertThat(sequence(1, 3, -4, 0, 7, -9, 0, 2).splitOn(0),
+                is(pair(sequence(1, 3, -4), sequence(7, -9, 0, 2))));
     }
 
     @Test
@@ -82,7 +168,8 @@ public class SequenceTest {
 
     @Test
     public void supportsSplitWhen() throws Exception {
-        assertThat(numbers(1, 3, -4, 5, 7, -9, 0, 2).splitWhen(Numbers.lessThan(0)), is(pair(numbers(1, 3), numbers(5, 7, -9, 0, 2))));
+        assertThat(numbers(1, 3, -4, 5, 7, -9, 0, 2).splitWhen(Numbers.lessThan(0)),
+                is(pair(numbers(1, 3), numbers(5, 7, -9, 0, 2))));
     }
 
     @Test
@@ -96,10 +183,23 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsFoldRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs() throws Exception {
+        assertThat(repeat(false).foldRight(false, and()), is(false));
+    }
+
+    @Test
+    public void supportsReduceRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs() throws Exception {
+        assertThat(repeat(true).reduceRight(or()), is(true));
+    }
+
+    @Test
     public void supportsBreak() throws Exception {
-        assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).breakOn(Predicates.greaterThan(3)), is(pair(sequence(1, 2, 3), sequence(4, 1, 2, 3, 4))));
-        assertThat(sequence(1, 2, 3).breakOn(lessThan(9)), is(pair(Sequences.<Integer>empty(), sequence(1, 2, 3))));
-        assertThat(sequence(1, 2, 3).breakOn(Predicates.greaterThan(9)), is(pair(sequence(1, 2, 3), Sequences.<Integer>empty())));
+        assertThat(sequence(1, 2, 3, 4, 1, 2, 3, 4).breakOn(greaterThan(3)),
+                is(pair(sequence(1, 2, 3), sequence(4, 1, 2, 3, 4))));
+        assertThat(sequence(1, 2, 3).breakOn(lessThan(9)),
+                is(pair(empty(Integer.class), sequence(1, 2, 3))));
+        assertThat(sequence(1, 2, 3).breakOn(greaterThan(9)),
+                is(pair(sequence(1, 2, 3), empty(Integer.class))));
     }
 
     @Test
@@ -190,24 +290,13 @@ public class SequenceTest {
     }
 
     @Test
-    public void supportsLast() throws Exception {
-        assertThat(sequence(1, 2, 3).last(), is(3));
-    }
-
-    @Test
-    public void supportsLastOrOption() throws Exception {
-        assertThat(sequence(1, 2, 3).lastOption(), is((Option<Integer>) Option.<Integer>some(3)));
-        assertThat(Sequences.<Number>sequence().lastOption(), is((Option<Number>) Option.<Number>none()));
-    }
-
-    @Test
     public void supportsReverse() throws Exception {
         assertThat(sequence(1, 2, 3).reverse(), hasExactly(3, 2, 1));
     }
 
     @Test
     public void supportsSize() throws Exception {
-        assertThat(range(10000000000L, 10000000100L).size(), NumberMatcher.is(100));
+        assertThat(range(10000000000L, 10000000099L).size(), NumberMatcher.is(100));
     }
 
     @Test
@@ -220,6 +309,18 @@ public class SequenceTest {
         assertThat(counting.count(), is(2));
         assertThat(realised, hasExactly(1));
         assertThat(realised, hasExactly(1));
+    }
+
+    @Test
+    public void supportsUnsafeCast() throws Exception {
+        Sequence<? extends Predicate<?>> wild = sequence(wildCard());
+        Sequence<Predicate<Object>> boring = wild.unsafeCast();
+        assertThat(boring.head().matches(new Cat()), is(true));
+        assertThat(boring.head().matches(null), is(false));
+    }
+
+    private Predicate<?> wildCard() {
+        return Predicates.notNullValue();
     }
 
     @Test
@@ -249,6 +350,11 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsUniqueWithCallable() throws Exception {
+        assertThat(sequence("Matt", "Dan", "Dominic", "Mary").unique(Strings.characterAt(0)), hasExactly("Matt", "Dan"));
+    }
+
+    @Test
     public void supportsSort() throws Exception {
         assertThat(sort(sequence(5, 6, 1, 3, 4, 2)), hasExactly(1, 2, 3, 4, 5, 6));
         assertThat(sort(sequence("Matt", "Dan", "Bob")), hasExactly("Bob", "Dan", "Matt"));
@@ -271,6 +377,23 @@ public class SequenceTest {
         assertThat(unsorted.sortBy(length()), hasExactly(small, medium, large));
         assertThat(unsorted.sortBy(ascending(length())), hasExactly(small, medium, large));
         assertThat(unsorted.sortBy(descending(length())), hasExactly(large, medium, small));
+    }
+
+    @Test
+    @Notes("This behaviour is like SQL order by, not 100% convinced this is correct so please give feedback")
+    public void whenSortingWithNullsTheyAlwaysComeLast() throws Exception {
+        Sequence<Integer> unsorted = sequence(2, null, 1);
+        assertThat(unsorted.sortBy(returnArgument(Integer.class)), hasExactly(1, 2, null));
+        assertThat(unsorted.sortBy(ascending(returnArgument(Integer.class))), hasExactly(1, 2, null));
+        assertThat(unsorted.sortBy(descending(returnArgument(Integer.class))), hasExactly(2, 1, null));
+    }
+
+    @Test
+    public void supportsSortByWithCompositeComparator() throws Exception {
+        Sequence<String> unsorted = Sequences.sequence("dan", "tom", "mateusz", "stuart");
+        final Sequence<String> sorted = unsorted.sortBy(comparators(descending(length()), ascending(Callables.<String>returnArgument())));
+
+        assertThat(sorted, hasExactly("mateusz", "stuart", "dan", "tom"));
     }
 
     @Test
@@ -379,6 +502,12 @@ public class SequenceTest {
     }
 
     @Test
+    public void canConvertToDeque() throws Exception {
+        final Deque<Integer> aList = sequence(1, 2).toDeque();
+        assertThat(aList, hasExactly(1, 2));
+    }
+
+    @Test
     public void supportsIsEmpty() throws Exception {
         assertThat(sequence().isEmpty(), is(true));
         assertThat(sequence(1).isEmpty(), is(false));
@@ -411,42 +540,6 @@ public class SequenceTest {
         assertThat(sequence(1, 2, 3).fold(0, sum()), NumberMatcher.is(6));
         assertThat(sequence(1, 2, 3).foldLeft(0, sum()), NumberMatcher.is(6));
     }
-
-    @Test
-    public void supportsTail() throws Exception {
-        assertThat(sequence(1, 2, 3).tail(), hasExactly(2, 3));
-        assertThat(sequence(1).tail().isEmpty(), Matchers.is(true));
-        try {
-            Sequences.<Object>empty().tail().isEmpty();
-            fail("Should have thrown NoSuchElementException");
-        } catch (NoSuchElementException e) {
-            // all good
-        }
-    }
-
-    @Test
-    public void supportsInit() throws Exception {
-        assertThat(sequence(1, 2, 3).init(), hasExactly(1, 2));
-        assertThat(Sequences.init(sequence(1, 2, 3)), hasExactly(1, 2));
-        try {
-            Sequences.<Object>empty().init().isEmpty();
-            fail("Should have thrown NoSuchElementException");
-        } catch (NoSuchElementException e) {
-            // all good
-        }
-    }
-
-    @Test
-    public void supportsHead() throws Exception {
-        assertThat(sequence(1, 2).head(), is(1));
-    }
-
-    @Test
-    public void supportsHeadOrOption() throws Exception {
-        assertThat(sequence(1).headOption(), is((Option<Integer>) Option.<Integer>some(1)));
-        assertThat(Sequences.<Number>sequence().headOption(), is((Option<Number>) Option.<Number>none()));
-    }
-
 
     @Test
     public void supportsForEach() throws Exception {
@@ -509,6 +602,26 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsConcurrentFlatMap() throws Exception {
+        Sequence<Character> characters = sequence("Hello").flatMapConcurrently(toCharacters());
+        assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
+    }
+
+    @Test
+    public void supportsConcurrentFlatMapWithCustomExecutor() throws Exception {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        Sequence<Character> characters = sequence("Hello").flatMapConcurrently(toCharacters(), executorService);
+        assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
+        executorService.shutdown();
+    }
+
+    @Test
+    public void supportsFlatten() throws Exception {
+        Sequence<Character> characters = Sequences.flatten(sequence("Hello").map(toCharacters()));
+        assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
+    }
+
+    @Test
     public void supportsTake() throws Exception {
         final Sequence<Integer> sequence = sequence(1, 2, 3).take(2);
         assertThat(sequence, hasExactly(1, 2));
@@ -562,10 +675,15 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsZipToQuintuple() {
+        assertThat(zip(sequence(1, 3, 5), sequence(2, 4, 6, 8), sequence("car", "cat"), sequence('C'), sequence('D')), hasExactly(quintuple(1, 2, "car", 'C', 'D')));
+        assertThat(sequence(1, 3, 5).zip(sequence(2, 4, 6, 8), sequence("car", "cat"), sequence('C'), sequence('D')), hasExactly(quintuple(1, 2, "car", 'C', 'D')));
+    }
+
+    @Test
     public void supportsZipWithIndex() {
         assertThat(sequence("Dan", "Matt", "Bob").zipWithIndex(), hasExactly(pair((Number) 0, "Dan"), pair((Number) 1, "Matt"), pair((Number) 2, "Bob")));
     }
-
 
     @Test
     public void supportsForwardOnly() throws Exception {
@@ -573,5 +691,33 @@ public class SequenceTest {
 
         assertThat(sequence.headOption(), is(option(1)));
         assertThat(sequence.headOption(), is(option(2)));
+    }
+
+    @Test
+    public void supportsInterruption() throws Exception {
+        final int[] count = new int[]{0};
+        Sequence<Integer> interruptable = repeat(new Function<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                if (++count[0] == 5) {
+                    currentThread().interrupt();
+                }
+                return count[0];
+            }
+        }).interruptable();
+
+        try {
+            interruptable.realise();
+        } catch (LazyException e) {
+            assertThat(e.getCause(), instanceOf(InterruptedException.class));
+            assertThat(count[0], is(5));
+        }
+    }
+
+    @Test
+    public void supportsSortingByOtherIterableOrder() throws Exception {
+        assertThat(sequence('D', 'E', 'F').sortBy(indexIn(list('F', 'E', 'D'))), hasExactly('F', 'E', 'D'));
+        assertThat(sequence(pair("Dan", 'D'), pair("Ray", 'R'), pair("Tom", 'T')).sortBy(second(Character.class).then(indexIn(list('T', 'R', 'D')))),
+                hasExactly(pair("Tom", 'T'), pair("Ray", 'R'), pair("Dan", 'D')));
     }
 }

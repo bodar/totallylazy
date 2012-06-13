@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
-
-public class EndsWithPredicate implements Predicate<String> {
+public class EndsWithPredicate extends LogicalPredicate<String> {
     private final String value;
 
     public EndsWithPredicate(String value) {

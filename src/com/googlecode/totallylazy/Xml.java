@@ -1,12 +1,14 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.records.xml.NodeIterator;
+import com.googlecode.totallylazy.iterators.NodeIterator;
+import com.googlecode.totallylazy.iterators.PoppingIterator;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -27,9 +29,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.googlecode.totallylazy.Runnables.VOID;
+import static com.googlecode.totallylazy.XPathFunctions.resolver;
 
 public class Xml {
     public static final Escaper DEFAULT_ESCAPER = new Escaper().
@@ -39,33 +44,69 @@ public class Xml {
             withRule('\'', "&#39;").
             withRule('"', "&quot;").
             withRule(Strings.unicodeControlOrUndefinedCharacter(), toXmlEntity());
+    private static final Document DOCUMENT = document("<totallylazy/>");
 
     public static String selectContents(final Node node, final String expression) {
-        return contents(selectNodes(node, expression));
+        return contents(internalSelectNodes(node, expression));
     }
 
     public static Sequence<Node> selectNodes(final Node node, final String expression) {
+        return internalSelectNodes(node, expression);
+    }
+
+    public static Sequence<Node> selectNodesForwardOnly(final Node node, final String expression) {
+        return Sequences.forwardOnly(new PoppingIterator<Node>(selectNodes(node, expression).toList().iterator()));
+    }
+
+    public static Number selectNumber(final Node node, final String expression) {
         try {
-            return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
+            return (Number) xpath().evaluate(expression, node, XPathConstants.NUMBER);
         } catch (XPathExpressionException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
-    public static Node selectNode(final Node node, final String expression){
-        return selectNodes(node, expression).head();
+    public static boolean matches(final Node node, final String expression) {
+        try {
+            return (Boolean) xpath().evaluate(expression, node, XPathConstants.BOOLEAN);
+        } catch (XPathExpressionException e) {
+            throw LazyException.lazyException(e);
+        }
     }
 
-    public static Sequence<Element> selectElements(final Node node, final String expression){
+    private static Sequence<Node> internalSelectNodes(final Node node, final String expression) {
+        try {
+            return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
+        } catch (XPathExpressionException e) {
+            try {
+                String nodeAsString = (String) xpath().evaluate(expression, node, XPathConstants.STRING);
+                return Sequences.<Node>sequence(createTextNode(nodeAsString));
+            } catch (XPathExpressionException ignore) {
+                throw LazyException.lazyException(e);
+            }
+        }
+    }
+
+    public static Text createTextNode(String value) {
+        return DOCUMENT.createTextNode(value);
+    }
+
+    public static Option<Node> selectNode(final Node node, final String expression) {
+        return selectNodes(node, expression).headOption();
+    }
+
+    public static Sequence<Element> selectElements(final Node node, final String expression) {
         return selectNodes(node, expression).safeCast(Element.class);
     }
 
-    public static Element selectElement(final Node node, final String expression){
-        return selectElements(node, expression).head();
+    public static Option<Element> selectElement(final Node node, final String expression) {
+        return selectElements(node, expression).headOption();
     }
 
     public static XPath xpath() {
-        return XPathFactory.newInstance().newXPath();
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        xPath.setXPathFunctionResolver(resolver());
+        return xPath;
     }
 
     public static Sequence<Node> sequence(final NodeList nodes) {
@@ -77,11 +118,32 @@ public class Xml {
     }
 
     public static String contents(Sequence<Node> nodes) {
-        return nodes.map(contents()).toString("");
+        return contentsSequence(nodes).toString("");
     }
 
-    public static Callable1<Element, Void> removeAttribute(final String name) {
-        return new Callable1<Element, Void>() {
+    public static Sequence<String> contentsSequence(Sequence<Node> nodes) {
+        return nodes.map(contents());
+    }
+
+    public static Sequence<String> textContents(Sequence<Node> nodes) {
+        return nodes.map(textContent());
+    }
+
+    public static Sequence<String> textContents(NodeList nodes) {
+        return Xml.textContents(Xml.sequence(nodes));
+    }
+
+    public static Function1<Node, String> textContent() {
+        return new Function1<Node, String>() {
+            @Override
+            public String call(Node node) throws Exception {
+                return node.getTextContent();
+            }
+        };
+    }
+
+    public static Function1<Element, Void> removeAttribute(final String name) {
+        return new Function1<Element, Void>() {
             public Void call(Element element) throws Exception {
                 element.removeAttribute(name);
                 return VOID;
@@ -89,8 +151,8 @@ public class Xml {
         };
     }
 
-    public static Callable1<? super Node, String> contents() {
-        return new Callable1<Node, String>() {
+    public static Function1<Node, String> contents() {
+        return new Function1<Node, String>() {
             public String call(Node node) throws Exception {
                 return contents(node);
             }
@@ -138,7 +200,16 @@ public class Xml {
         return writer.toString();
     }
 
+    @SuppressWarnings("unchecked")
+    public static Transformer transformer() throws TransformerConfigurationException {
+        return internalTransformer();
+    }
+
     public static Transformer transformer(Pair<String, Object>... attributes) throws TransformerConfigurationException {
+        return internalTransformer(attributes);
+    }
+
+    private static Transformer internalTransformer(Pair<String, Object>... attributes) throws TransformerConfigurationException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         for (Pair<String, Object> attribute : attributes) {
             transformerFactory.setAttribute(attribute.first(), attribute.second());
@@ -146,6 +217,13 @@ public class Xml {
         return transformerFactory.newTransformer();
     }
 
+    public static Document document(byte[] bytes) {
+        try {
+            return document(new String(bytes, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw LazyException.lazyException(e);
+        }
+    }
 
     public static Document document(String xml) {
         try {
@@ -155,7 +233,7 @@ public class Xml {
             documentBuilder.setErrorHandler(null);
             return documentBuilder.parse(new ByteArrayInputStream(xml.getBytes()));
         } catch (Exception e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -175,14 +253,15 @@ public class Xml {
         return nodes.map(remove()).realise();
     }
 
-    private static Callable1<Node, Node> remove() {
-        return new Callable1<Node, Node>() {
+    private static Function1<Node, Node> remove() {
+        return new Function1<Node, Node>() {
             public Node call(Node node) throws Exception {
                 return node.getParentNode().removeChild(node);
             }
         };
     }
 
+    @SuppressWarnings("unchecked")
     public static String format(final Node node) throws Exception {
         return format(node, Pair.<String, Object>pair("indent-number", 4));
     }
@@ -201,16 +280,16 @@ public class Xml {
                 escape(value);
     }
 
-    public static Callable1<Object, String> escape() {
-        return new Callable1<Object, String>() {
+    public static Function1<Object, String> escape() {
+        return new Function1<Object, String>() {
             public String call(Object value) throws Exception {
                 return escape(value);
             }
         };
     }
 
-    public static Callable1<Character, String> toXmlEntity() {
-        return new Callable1<Character, String>() {
+    public static Function1<Character, String> toXmlEntity() {
+        return new Function1<Character, String>() {
             public String call(Character character) throws Exception {
                 return String.format("&#%s;", Integer.toString(character, 10));
             }

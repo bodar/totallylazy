@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Unchecked;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,8 +36,7 @@ public class Invocation<T, R> implements Callable1<T, R> {
         return method.getName() + sequence(arguments).toString("(", ",", ")");
     }
 
-    @SuppressWarnings("unchecked")
     public R call(T instance) throws InvocationTargetException, IllegalAccessException {
-        return (R) method.invoke(instance, arguments);
+        return Unchecked.cast(method.invoke(instance, arguments));
     }
 }

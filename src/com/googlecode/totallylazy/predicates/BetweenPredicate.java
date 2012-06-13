@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.predicates;
 import static com.googlecode.totallylazy.Predicates.greaterThanOrEqualTo;
 import static com.googlecode.totallylazy.Predicates.lessThanOrEqualTo;
 
-public class BetweenPredicate<T extends Comparable<T>> extends LogicalPredicate<T> implements Between<T> {
+public class BetweenPredicate<T extends Comparable<? super T>> extends LogicalPredicate<T> implements Between<T> {
     private final T lower;
     private final T upper;
 

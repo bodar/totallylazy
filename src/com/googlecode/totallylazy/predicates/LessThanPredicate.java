@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
-public class LessThanPredicate<T extends Comparable<T>> extends LogicalPredicate<T> implements LessThan<T> {
+public class LessThanPredicate<T extends Comparable<? super T>> extends LogicalPredicate<T> implements LessThan<T> {
     private final T comparable;
 
     public LessThanPredicate(T comparable) {

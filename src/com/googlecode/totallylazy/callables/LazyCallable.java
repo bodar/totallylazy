@@ -1,31 +1,37 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Function;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
-
-public final class LazyCallable<T> implements Callable<T> {
-    private final Callable<T> callable;
+public class LazyCallable<T> extends Function<T> {
+    private final Callable<? extends T> callable;
     private final Object lock = new Object();
-    private Option<T> state = none();
+    private volatile T state;
 
-    private LazyCallable(Callable<T> callable) {
+    private LazyCallable(Callable<? extends T> callable) {
         this.callable = callable;
     }
 
-    public static <T> Callable<T> lazy(Callable<T> callable) {
+    public static <T> LazyCallable<T> lazy(Callable<? extends T> callable) {
         return new LazyCallable<T>(callable);
     }
 
+    // Thread-safe double check idiom (Effective Java 2nd edition p.283)
     public final T call() throws Exception {
-        synchronized (lock) {
-            if (state.isEmpty()) {
-                state = some(callable.call());
+        if (state == null) {
+            synchronized (lock) {
+                if (state == null) {
+                    state = callable.call();
+                }
             }
-            return state.get();
+        }
+        return state;
+    }
+
+    public void forget() {
+        synchronized (lock) {
+            state = null;
         }
     }
 }
