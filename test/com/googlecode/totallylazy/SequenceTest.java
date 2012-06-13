@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
-import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.matchers.Matchers;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
@@ -261,7 +260,7 @@ public class SequenceTest {
 
     @Test
     public void supportsGroupByAndPreservesOrder() throws Exception {
-        Sequence<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(remainder(2));
+        Sequence<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(Numbers.mod(2));
         assertThat(groups.first().key(), NumberMatcher.is(1));
         assertThat(groups.first(), hasExactly(1, 3));
         assertThat(groups.second().key(), NumberMatcher.is(0));
@@ -270,7 +269,7 @@ public class SequenceTest {
 
     @Test
     public void supportsToMapAndPreservesOrder() throws Exception {
-        Map<Number, List<Integer>> groups = sequence(1, 4, 2, 3).toMap(remainder(2));
+        Map<Number, List<Integer>> groups = sequence(1, 4, 2, 3).toMap(Numbers.mod(2));
         assertThat(groups.get(0), hasExactly(4, 2));
         assertThat(groups.get(1), hasExactly(1, 3));
     }

@@ -17,6 +17,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
@@ -38,16 +39,15 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.first;
-import static com.googlecode.totallylazy.Callables.reduceAndShift;
+import static com.googlecode.totallylazy.Computation.computation;
 import static com.googlecode.totallylazy.Computation.generate;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Computation.computation;
+import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 
 public class Numbers {
     public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
@@ -57,12 +57,12 @@ public class Numbers {
     }
 
     public static Sequence<Number> range(final Number start, final Number end) {
-        if(lessThan(end, start)) return range(start, end, -1);
+        if (lessThan(end, start)) return range(start, end, -1);
         return range(start).takeWhile(lessThanOrEqualTo(end));
     }
 
     public static Sequence<Number> range(final Number start, final Number end, final Number step) {
-        if(lessThan(end, start)) return iterate(add(step), start).takeWhile(greaterThanOrEqualTo(end));
+        if (lessThan(end, start)) return iterate(add(step), start).takeWhile(greaterThanOrEqualTo(end));
         return iterate(add(step), start).takeWhile(lessThanOrEqualTo(end));
     }
 
@@ -139,22 +139,13 @@ public class Numbers {
     }
 
     public static boolean isPrime(Number candidate) {
-        return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(remainderIsZero(candidate).not());
+        return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(not(where(remainderDividingInto(candidate), isZero())));
     }
-
 
     public static LogicalPredicate<Number> primeSquaredLessThan(final Number candidate) {
         return new LogicalPredicate<Number>() {
             public final boolean matches(final Number prime) {
                 return Numbers.lessThanOrEqualTo(squared(prime), candidate);
-            }
-        };
-    }
-
-    public static LogicalPredicate<Number> remainderIsZero(final Number dividend) {
-        return new LogicalPredicate<Number>() {
-            public final boolean matches(Number divisor) {
-                return Numbers.isZero(remainder(dividend, divisor));
             }
         };
     }
@@ -177,6 +168,7 @@ public class Numbers {
     }
 
     private static Computation<Number> primes = computation(2, computation(3, generate(nextPrime())));
+
     public static Computation<Number> primes() {
         return primes;
     }
@@ -195,7 +187,7 @@ public class Numbers {
     }
 
     public static Sequence<Number> fibonacci() {
-        return computation(Pair.<Number, Number>pair(0,1), generate(sum())).map(first(Number.class));
+        return computation(Pair.<Number, Number>pair(0, 1), generate(sum())).map(first(Number.class));
     }
 
     public static Sequence<Number> powersOf(Number amount) {
@@ -254,6 +246,15 @@ public class Numbers {
 
     public static Number decrement(Number value) {
         return operatorsFor(value).decrement(value);
+    }
+
+    public static LogicalPredicate<Number> isZero() {
+        return new LogicalPredicate<Number>() {
+            @Override
+            public boolean matches(Number other) {
+                return isZero(other);
+            }
+        };
     }
 
     public static boolean isZero(Number value) {
@@ -419,6 +420,27 @@ public class Numbers {
         return reduce(operatorsFor(x, y).quotient(x, y));
     }
 
+    public static Function2<Number, Number, Number> remainder() {
+        return new Function2<Number, Number, Number>() {
+            @Override
+            public Number call(Number dividend, Number divisor) throws Exception {
+                return remainder(dividend, divisor);
+            }
+        };
+    }
+
+    public static Function1<Number, Number> mod(final Number divisor) {
+        return mod().apply(divisor);
+    }
+
+    public static Function2<Number, Number, Number> mod() {
+        return remainder().flip();
+    }
+
+    public static Function1<Number, Number> remainderDividingInto(final Number dividend) {
+        return remainder().apply(dividend);
+    }
+
     public static Number remainder(Number dividend, Number divisor) {
         throwIfZero(divisor);
         return reduce(operatorsFor(dividend, divisor).remainder(dividend, divisor));
@@ -459,20 +481,6 @@ public class Numbers {
         };
     }
 
-    public static Function2<Number, Number, Number> remainder() {
-        return new Function2<Number, Number, Number>() {
-            @Override
-            public Number call(Number dividend, Number divisor) throws Exception {
-                return remainder(dividend, divisor);
-            }
-        };
-    }
-
-
-    public static Function1<Number, Number> remainder(final Number divisor) {
-        return remainder().flip().apply(divisor);
-    }
-
     public static String toLexicalString(Number value, final Number minValue, final Number maxValue) {
         String offset = add(value, negate(minValue)).toString();
         int maxSize = add(maxValue, negate(minValue)).toString().length();
@@ -481,5 +489,14 @@ public class Numbers {
 
     public static Number parseLexicalString(String value, final Number minValue) {
         return add(valueOf(value).get(), minValue);
+    }
+
+    public static Callable2<Number, Number, Number> maximum() {
+        return new Callable2<Number, Number, Number>() {
+            @Override
+            public Number call(Number a, Number b) throws Exception {
+                return compare(a, b) > 0 ? a : b;
+            }
+        };
     }
 }
