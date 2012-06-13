@@ -97,6 +97,13 @@ public class ImmutableSortedMapTest {
     }
 
     @Test
+    public void supportsExists() throws Exception {
+        ImmutableMap<Integer, String> map = sortedMap(1, "Dan", 2, "Ray", 3, "Stu");
+        assertThat(map.exists(Predicates.is(2)), is(true));
+        assertThat(map.exists(Predicates.is(4)), is(false));
+    }
+
+    @Test
     public void canCreateATreeFromAnIterable() throws Exception {
         ImmutableMap<Integer, String> map = sortedMap(sequence(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
         assertThat(map.contains(2), is(true));
