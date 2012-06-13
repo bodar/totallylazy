@@ -1,13 +1,11 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.First;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.Iterator;
 import java.util.List;
@@ -78,13 +76,17 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T> {
             return list(sequence(values));
         }
 
-        public static <T> ImmutableList<T> list(Iterable<T> values) {
+        public static <T> ImmutableList<T> list(Iterable<? extends T> values) {
             return sequence(values).reverse().foldLeft(constructors.<T>empty(), functions.<T, ImmutableList<T>>cons());
+        }
+
+        public static <T> ImmutableList<T> reverse(Iterable<? extends T> values) {
+            return reverse(values.iterator());
         }
 
         public static <T> ImmutableList<T> reverse(Iterator<? extends T> iterator) {
             ImmutableList<T> reverse = empty();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 reverse = cons(iterator.next(), reverse);
             }
             return reverse;

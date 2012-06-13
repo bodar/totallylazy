@@ -17,7 +17,9 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
+import static com.googlecode.totallylazy.collections.ImmutableList.constructors.reverse;
 
 public class ListMap<K, V> implements ImmutableMap<K, V> {
     private ImmutableList<Pair<K, V>> list;
@@ -39,23 +41,23 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
     }
 
     public static <K, V> ImmutableMap<K, V> listMap(K key1, V value1, K key2, V value2) {
-        return listMap(list(pair(key1, value1), pair(key2, value2)));
+        return listMap(sequence(pair(key1, value1), pair(key2, value2)));
     }
 
     public static <K, V> ImmutableMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3) {
-        return listMap(list(pair(key1, value1), pair(key2, value2), pair(key3, value3)));
+        return listMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3)));
     }
 
     public static <K, V> ImmutableMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
-        return listMap(list(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4)));
+        return listMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4)));
     }
 
     public static <K, V> ImmutableMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5) {
-        return listMap(list(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
+        return listMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
     }
 
     public static <K, V> ImmutableMap<K, V> listMap(Iterable<Pair<K, V>> pairs) {
-        return listMap(list(pairs));
+        return listMap(reverse(sequence((pairs))));
     }
 
     public static <K, V> ImmutableMap<K, V> listMap(Pair<K, V> pair) {
@@ -133,7 +135,7 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public ImmutableList<Pair<K, V>> immutableList() {
-        return list;
+        return reverse(list);
     }
 
     @Override
@@ -143,7 +145,7 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public Iterator<Pair<K, V>> iterator() {
-        return list.iterator();
+        return immutableList().iterator();
     }
 
     private LogicalPredicate<First<K>> key(Predicate<? super K> predicate) {

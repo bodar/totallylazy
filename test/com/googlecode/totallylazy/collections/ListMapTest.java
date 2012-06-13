@@ -34,7 +34,6 @@ public class ListMapTest {
     }
 
     @Test
-    @Ignore("WIP")
     public void canPut() throws Exception {
         ImmutableMap<Integer, String> map = listMap(1, "Dan").put(3, "Stu").put(2, "Ray");
         assertThat(map, hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
@@ -64,7 +63,7 @@ public class ListMapTest {
     @Ignore("WIP")
     public void canJoin() throws Exception {
         ImmutableMap<Integer, String> map = listMap(1, "Dan", 2, "Ray").joinTo(listMap(4, "Matt", 3, "Stu"));
-        assertThat(map, hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu"), pair(4, "Matt")));
+        assertThat(map, hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(4, "Matt"), pair(3, "Stu")));
     }
 
     @Test
