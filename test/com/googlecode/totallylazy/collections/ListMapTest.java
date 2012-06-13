@@ -60,10 +60,9 @@ public class ListMapTest {
     }
 
     @Test
-    @Ignore("WIP")
     public void canJoin() throws Exception {
-        ImmutableMap<Integer, String> map = listMap(1, "Dan", 2, "Ray").joinTo(listMap(4, "Matt", 3, "Stu"));
-        assertThat(map, hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(4, "Matt"), pair(3, "Stu")));
+        ImmutableMap<Integer, String> map = listMap(3, "Stu", 4, "Matt").joinTo(listMap(1, "Dan", 2, "Ray"));
+        assertThat(map, is(listMap(1, "Dan", 2, "Ray", 3, "Stu", 4, "Matt")));
     }
 
     @Test
