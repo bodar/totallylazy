@@ -1,26 +1,34 @@
 package com.googlecode.totallylazy;
 
+import java.util.concurrent.Callable;
+
+import static com.googlecode.totallylazy.Function.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
 public class Pair<F, S> implements First<F>, Second<S> {
-    protected final F first;
-    protected final S second;
+    private final Value<? extends F> first;
+    private final Value<? extends S> second;
 
-    public Pair(final F first, final S second) {
-        this.second = second;
-        this.first = first;
+    protected Pair(final Callable<? extends F> first, final Callable<? extends S> second) {
+        this.first = lazy(first);
+        this.second = lazy(second);
     }
 
     public static <F, S> Pair<F, S> pair(final F first, final S second) {
+        return new Pair<F, S>(returns(first), returns(second));
+    }
+
+    public static <F, S> Pair<F, S> pair(final Callable<? extends F> first, final Callable<? extends S> second) {
         return new Pair<F, S>(first, second);
     }
 
     public final F first() {
-        return first;
+        return first.value();
     }
 
     public final S second() {
-        return second;
+        return second.value();
     }
 
     @Override
@@ -37,7 +45,7 @@ public class Pair<F, S> implements First<F>, Second<S> {
     }
 
     public Sequence<Object> values() {
-        return sequence(first, second);
+        return sequence(first(), second());
     }
 
     @Override

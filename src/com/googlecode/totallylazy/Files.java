@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
+import static com.googlecode.totallylazy.Bytes.bytes;
 import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
@@ -17,10 +19,22 @@ import static java.util.UUID.randomUUID;
 public class Files {
     public static final File TEMP_DIR = new File(getProperty("java.io.tmpdir"));
 
+    public static String relativePath(File folder, File file) {
+        return folder.toURI().relativize(file.toURI()).getPath();
+    }
+
     public static Predicate<? super File> isFile() {
         return new Predicate<File>() {
             public boolean matches(File file) {
                 return file.isFile();
+            }
+        };
+    }
+
+    public static Predicate<? super File> hasSuffix(final String suffix) {
+        return new Predicate<File>() {
+            public boolean matches(File file) {
+                return file.getName().endsWith("." + suffix);
             }
         };
     }
@@ -33,24 +47,24 @@ public class Files {
         };
     }
 
-    public static Callable1<File, String> name() {
-        return new Callable1<File, String>() {
+    public static Function1<File, String> name() {
+        return new Function1<File, String>() {
             public String call(File file) throws Exception {
                 return file.getName();
             }
         };
     }
 
-    public static Callable1<? super File, String> path() {
-        return new Callable1<File, String>() {
+    public static Function1<File, String> path() {
+        return new Function1<File, String>() {
             public String call(File file) throws Exception {
                 return file.getPath();
             }
         };
     }
 
-    public static Callable1<? super File, File> parent() {
-        return new Callable1<File, File>() {
+    public static Function1<File, File> parent() {
+        return new Function1<File, File>() {
             public File call(File file) throws Exception {
                 return file.getParentFile();
             }
@@ -58,10 +72,14 @@ public class Files {
     }
 
     public static File temporaryDirectory() {
-        return temporaryDirectory(randomFilename());
+        return TEMP_DIR;
     }
 
     public static File temporaryDirectory(String name) {
+        return directory(TEMP_DIR, name);
+    }
+
+    public static File emptyTemporaryDirectory(String name) {
         File directory = directory(TEMP_DIR, name);
         delete(directory);
         return directory;
@@ -82,7 +100,7 @@ public class Files {
             file.createNewFile();
             return file;
         } catch (IOException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -102,33 +120,50 @@ public class Files {
         return files(directory).flatMap(recursiveFiles());
     }
 
-    public static Callable1<File, Iterable<File>> recursiveFiles() {
-        return new Callable1<File, Iterable<File>>() {
+    public static Function1<File, Iterable<File>> recursiveFiles() {
+        return new Function1<File, Iterable<File>>() {
             public Iterable<File> call(File file) throws Exception {
                 return file.isDirectory() ? recursiveFiles(file).add(file) : sequence(file);
             }
         };
     }
 
-    @SuppressWarnings("unchecked")
     public static File write(byte[] bytes, File file) {
+        return write(bytes, file, false);
+    }
+
+    public static File append(byte[] bytes, File file) {
+        return write(bytes, file, true);
+    }
+
+    public static File write(byte[] bytes, File file, boolean append) {
         try {
-            return using(new FileOutputStream(file), doThen(Runnables.write(bytes), returns(file)));
+            return using(new FileOutputStream(file, append), doThen(Runnables.write(bytes), returns(file)));
         } catch (FileNotFoundException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
-    public static Callable1<? super File, Boolean> delete() {
-        return new Callable1<File, Boolean>() {
+    public static Function1<InputStream, Void> write(final File output) {
+        return new Function1<InputStream, Void>() {
+            @Override
+            public Void call(InputStream inputStream) throws Exception {
+                write(bytes(inputStream), output);
+                return null;
+            }
+        };
+    }
+
+    public static Function1<File, Boolean> delete() {
+        return new Function1<File, Boolean>() {
             public Boolean call(File file) throws Exception {
                 return file.delete();
             }
         };
     }
 
-    public static Callable1<? super String, File> asFile() {
-        return new Callable1<String, File>() {
+    public static Function1<String, File> asFile() {
+        return new Function1<String, File>() {
             public File call(String name) throws Exception {
                 return new File(name);
             }
@@ -149,7 +184,7 @@ public class Files {
         try {
             child.createNewFile();
         } catch (IOException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
         return child;
     }

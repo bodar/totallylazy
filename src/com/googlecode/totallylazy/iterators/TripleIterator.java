@@ -6,11 +6,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public final class TripleIterator<F, S, T> extends ReadOnlyIterator<Triple<F, S, T>> {
-    private final Iterator<F> first;
-    private final Iterator<S> second;
-    private final Iterator<T> third;
+    private final Iterator<? extends F> first;
+    private final Iterator<? extends S> second;
+    private final Iterator<? extends T> third;
 
-    public TripleIterator(final Iterator<F> first, final Iterator<S> second, final Iterator<T> third) {
+    public TripleIterator(final Iterator<? extends F> first, final Iterator<? extends S> second, final Iterator<? extends T> third) {
         this.first = first;
         this.second = second;
         this.third = third;

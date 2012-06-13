@@ -6,12 +6,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public final class QuadrupleIterator<F, S, T, Fo> extends ReadOnlyIterator<Quadruple<F, S, T, Fo>> {
-    private final Iterator<F> first;
-    private final Iterator<S> second;
-    private final Iterator<T> third;
-    private final Iterator<Fo> fourth;
+    private final Iterator<? extends F> first;
+    private final Iterator<? extends S> second;
+    private final Iterator<? extends T> third;
+    private final Iterator<? extends Fo> fourth;
 
-    public QuadrupleIterator(final Iterator<F> first, final Iterator<S> second, final Iterator<T> third, final Iterator<Fo> fourth) {
+    public QuadrupleIterator(final Iterator<? extends F> first, final Iterator<? extends S> second, final Iterator<? extends T> third, final Iterator<? extends Fo> fourth) {
         this.first = first;
         this.second = second;
         this.third = third;

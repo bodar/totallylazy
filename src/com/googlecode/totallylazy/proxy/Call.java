@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
+import com.googlecode.totallylazy.Unchecked;
 import net.sf.cglib.proxy.InvocationHandler;
 
 import java.lang.reflect.Method;
@@ -21,6 +22,6 @@ public class Call<T,R> implements InvocationHandler{
     }
 
     public static <T, S> Invocation<T, S> method(S value){
-        return invocation.get();
+        return Unchecked.cast(invocation.get());
     }
 }

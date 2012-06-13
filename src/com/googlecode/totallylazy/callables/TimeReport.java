@@ -2,21 +2,25 @@ package com.googlecode.totallylazy.callables;
 
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Runnables;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.ascending;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 
-public class TimeReport implements Callable1<Double, Void> {
+public class TimeReport implements Callable1<Number, Void> {
     private final List<Number> times = new ArrayList<Number>();
 
-    public Void call(Double time) {
+    public Void call(Number time) {
         this.times.add(time);
         return Runnables.VOID;
     }
@@ -48,7 +52,8 @@ public class TimeReport implements Callable1<Double, Void> {
                 drop(tenPercent()).
                 reverse().
                 drop(tenPercent()).
-                reduce(Numbers.average()).doubleValue();
+                reduce(Numbers.average()).
+                doubleValue();
     }
 
     private int tenPercent() {
@@ -59,7 +64,19 @@ public class TimeReport implements Callable1<Double, Void> {
         return times.size();
     }
 
-    public Number total() {
-        return sequence(times).reduce(add());
+    public double total() {
+        return sequence(times).reduce(add()).doubleValue();
+    }
+
+    public static TimeReport time(int numberOfCalls, Sequence<?> sequence) {
+        TimeReport report = new TimeReport();
+        repeat(TimeCallable.time(sequence, report)).take(numberOfCalls).realise();
+        return report;
+    }
+
+    public static TimeReport time(int numberOfCalls, Callable<?> callable) {
+        TimeReport report = new TimeReport();
+        repeat(TimeCallable.time(callable, report)).take(numberOfCalls).realise();
+        return report;
     }
 }

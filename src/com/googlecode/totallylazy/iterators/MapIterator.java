@@ -7,10 +7,10 @@ import java.util.Iterator;
 import static com.googlecode.totallylazy.Callers.call;
 
 public final class MapIterator<T, S> extends ReadOnlyIterator<S> {
-    private final Iterator<T> iterator;
-    private final Callable1<? super T, S> callable;
+    private final Iterator<? extends T> iterator;
+    private final Callable1<? super T, ? extends S> callable;
 
-    public MapIterator(final Iterator<T> iterator, final Callable1<? super T, S> callable) {
+    public MapIterator(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends S> callable) {
         this.iterator = iterator;
         this.callable = callable;
     }

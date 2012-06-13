@@ -28,7 +28,7 @@ public class Proxy {
         Object instance = instantiator.newInstance();
         Factory factory = (Factory) instance;
         factory.setCallbacks(callbacks);
-        return (T) instance;
+        return aClass.cast(instance);
     }
 
     private ObjectInstantiator get(final Class<?> aClass, final Callback[] callbacks) {

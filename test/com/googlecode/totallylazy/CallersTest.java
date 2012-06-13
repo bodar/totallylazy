@@ -23,8 +23,8 @@ public class CallersTest {
         assertThat(sequence.first(), is(not(sequence.second())));
     }
 
-    private static Callable<String> currentThreadName() {
-        return new Callable<String>() {
+    private static Function<String> currentThreadName() {
+        return new Function<String>() {
             @Override
             public String call() throws Exception {
                 return currentThread().getName();

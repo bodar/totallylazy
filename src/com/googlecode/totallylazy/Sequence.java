@@ -1,7 +1,10 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.collections.ImmutableList;
+
 import java.lang.reflect.Array;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,24 +13,31 @@ import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.ascending;
+import static com.googlecode.totallylazy.Callables.returnArgument;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
+public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T> {
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Sequence && Sequences.equalTo(this, (Iterable) obj);
+        return obj instanceof Sequence && Sequences.equalTo(this, (Sequence) obj);
     }
 
+    // Thread-safe Racy Single Check Idiom (Effective Java 2nd Edition p.284)
+    private int hashCode;
     @Override
     public int hashCode() {
-        return fold(31, asHashCode());
+        if (hashCode == 0) {
+            hashCode = fold(31, asHashCode());
+        }
+        return hashCode;
     }
 
-    public void each(final Callable1<T,Void> runnable) {
+    public void each(final Callable1<? super T, ?> runnable) {
         forEach(runnable);
     }
 
-    public void forEach(final Callable1<T,Void> runnable) {
+    public void forEach(final Callable1<? super T, ?> runnable) {
         Sequences.forEach(this, runnable);
     }
 
@@ -39,7 +49,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.mapConcurrently(this, callable, executor);
     }
 
-    public <S> Sequence<S> map(final Callable1<? super T, S> callable) {
+    @Override
+    public <S> Sequence<S> map(final Callable1<? super T, ? extends S> callable) {
         return Sequences.map(this, callable);
     }
 
@@ -51,8 +62,20 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.filter(this, predicate);
     }
 
-    public <S> Sequence<S> flatMap(final Callable1<? super T, ? extends Iterable<S>> callable) {
+    public <S> Sequence<S> flatMap(final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
         return Sequences.flatMap(this, callable);
+    }
+
+    public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
+        return Sequences.flatMapConcurrently(this, callable);
+    }
+
+    public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<? extends S>> callable, final Executor executor) {
+        return Sequences.flatMapConcurrently(this, callable, executor);
+    }
+
+    public <B> Sequence<B> applicate(final Sequence<? extends Callable1<? super T, ? extends B>> applicator) {
+        return Sequences.applicate(this, applicator);
     }
 
     public T first() {
@@ -71,6 +94,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.second(this);
     }
 
+    @Override
+    public T third() {
+        return Sequences.third(this);
+    }
+
     public T head() {
         return Sequences.head(this);
     }
@@ -87,27 +115,35 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.init(this);
     }
 
-    public <S> S fold(final S seed, final Callable2<? super S, ? super T, S> callable) {
+    public <S> S fold(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         return Sequences.fold(this, seed, callable);
     }
 
-    public <S> S foldLeft(final S seed, final Callable2<? super S, ? super T, S> callable) {
+    public <S> S foldLeft(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
         return Sequences.foldLeft(this, seed, callable);
     }
 
-    public <S> S foldRight(final S seed, final Callable2<? super T, ? super S, S> callable) {
+    public <S> S foldRight(final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
         return Sequences.foldRight(this, seed, callable);
     }
 
-    public <S> S reduce(final Callable2<? super S, ? super T, S> callable) {
+    public <S> S foldRight(final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+        return Sequences.foldRight(this, seed, callable);
+    }
+
+    public <S> S reduce(final Callable2<? super S, ? super T, ? extends S> callable) {
         return Sequences.reduce(this, callable);
     }
 
-    public <S> S reduceLeft(final Callable2<? super S, ? super T, S> callable) {
+    public <S> S reduceLeft(final Callable2<? super S, ? super T, ? extends S> callable) {
         return Sequences.reduceLeft(this, callable);
     }
 
-    public <S> S reduceRight(final Callable2<? super T, ? super S, S> callable) {
+    public <S> S reduceRight(final Callable2<? super T, ? super S, ? extends S> callable) {
+        return Sequences.reduceRight(this, callable);
+    }
+
+    public <S> S reduceRight(final Callable1<? super Pair<T, S>, ? extends S> callable) {
         return Sequences.reduceRight(this, callable);
     }
 
@@ -132,7 +168,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Set<T> intersection(final Iterable<? extends T> other) {
-        return Sets.intersection(toSet(), Sets.set(other));
+        return Sets.intersection(sequence(toSet(), Sets.set(other)));
     }
 
     public <S extends Set<T>> S toSet(S set) {
@@ -144,7 +180,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
     }
 
     public Sequence<T> unique() {
-        return Sequences.sequence(toSet());
+        return unique(returnArgument());
+    }
+
+    public <S> Sequence<T> unique(Callable1<? super T, ? extends S> callable) {
+        return Sequences.unique(this, callable);
     }
 
     public boolean isEmpty() {
@@ -155,8 +195,16 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.toList(this);
     }
 
-    public T[] toArray(final Class<T> aClass) {
-        return toArray((T[]) Array.newInstance(aClass, 0));
+    public List<T> toSortedList(Comparator<T> comparator) {
+        return Sequences.toSortedList(this, comparator);
+    }
+
+    public Deque<T> toDeque() {
+        return Sequences.toDeque(this);
+    }
+
+    public T[] toArray(final Class<?> aClass) {
+        return toArray(Unchecked.<T[]>cast(Array.newInstance(aClass, 0)));
     }
 
     public T[] toArray(T[] array) {
@@ -203,11 +251,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.find(this, predicate);
     }
 
-    public <S> Option<S> tryPick(final Callable1<T, Option<S>> callable) {
+    public <S> Option<S> tryPick(final Callable1<? super T, ? extends Option<? extends S>> callable) {
         return Sequences.tryPick(this, callable);
     }
 
-    public <S> S pick(final Callable1<T, Option<S>> callable) {
+    public <S> S pick(final Callable1<? super T, ? extends Option<? extends S>> callable) {
         return Sequences.pick(this, callable);
     }
 
@@ -219,11 +267,16 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.join(this, iterable);
     }
 
+    @Override
+    public <C extends Segment<T>> C joinTo(C rest) {
+        throw new UnsupportedOperationException();
+    }
+
     public Sequence<T> cons(final T t) {
         return Sequences.cons(t, this);
     }
 
-    public MemorisedSequence<T> memorise() {
+    public Computation<T> memorise() {
         return Sequences.memorise(this);
     }
 
@@ -231,31 +284,35 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.forwardOnly(this);
     }
 
-    public <S> Sequence<Pair<T, S>> zip(final Iterable<S> second) {
+    public <S> Sequence<Pair<T, S>> zip(final Iterable<? extends S> second) {
         return Sequences.zip(this, second);
     }
 
-    public Sequence<Sequence<T>> transpose(final Iterable<T>... iterables){
-        return transpose(Sequences.sequence(iterables));
+    public Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables){
+        return transpose(sequence(iterables));
     }
 
-    public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<T>> iterables){
-        return Sequences.transpose(((Sequence) Sequences.sequence(iterables)).cons(this));
+    public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<? extends T>> iterables){
+        return Sequences.transpose(Sequences.cons(this, sequence(iterables).<Iterable<T>>unsafeCast()));
     }
 
-    public <S, Th> Sequence<Triple<T, S, Th>> zip(final Iterable<S> second, final Iterable<Th> third) {
+    public <S, Th> Sequence<Triple<T, S, Th>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third) {
         return Sequences.zip(this, second, third);
     }
 
-    public <S, Th, Fo> Sequence<Quadruple<T, S, Th, Fo>> zip(final Iterable<S> second, final Iterable<Th> third, final Iterable<Fo> fourth) {
+    public <S, Th, Fo> Sequence<Quadruple<T, S, Th, Fo>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third, final Iterable<? extends Fo> fourth) {
         return Sequences.zip(this, second, third, fourth);
+    }
+
+    public <S, Th, Fo, Fi> Sequence<Quintuple<T, S, Th, Fo, Fi>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third, final Iterable<? extends Fo> fourth, final Iterable<? extends Fi> fifth) {
+        return Sequences.zip(this, second, third, fourth, fifth);
     }
 
     public Sequence<Pair<Number, T>> zipWithIndex() {
         return Sequences.zipWithIndex(this);
     }
 
-    public Sequence<T> sortBy(final Callable1<? super T, ? extends Comparable> callable) {
+    public <R extends Comparable<? super R>> Sequence<T> sortBy(final Callable1<? super T, ? extends R> callable) {
         return sortBy(ascending(callable));
     }
 
@@ -263,8 +320,12 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.sortBy(this, comparator);
     }
 
-    public <S> Sequence<S> safeCast(final Class<S> aClass) {
+    public <S> Sequence<S> safeCast(final Class<? extends S> aClass) {
         return Sequences.safeCast(this, aClass);
+    }
+
+    public <S> Sequence<S> unsafeCast() {
+        return Sequences.unsafeCast(this);
     }
 
     public Sequence<T> realise() {
@@ -279,11 +340,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
         return Sequences.cycle(this);
     }
 
-    public <Key> Map<Key,List<T>> toMap(final Callable1<? super T,Key> callable) {
+    public <K> Map<K,List<T>> toMap(final Callable1<? super T, ? extends K> callable) {
         return Maps.multiMap(this, callable);
     }
 
-    public  <Key> Sequence<Group<Key, T>> groupBy(final Callable1<? super T, Key> callable) {
+    public  <K> Sequence<Group<K, T>> groupBy(final Callable1<? super T, ? extends K> callable) {
         return Sequences.groupBy(this, callable);
     }
 
@@ -309,5 +370,17 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T> {
 
     public Pair<Sequence<T>,Sequence<T>> breakOn(final Predicate<? super T> predicate) {
         return Sequences.breakOn(this, predicate);
+    }
+
+    public Sequence<T> shuffle() {
+        return Sequences.shuffle(this);
+    }
+
+    public Sequence<T> interruptable(){
+        return Sequences.interruptable(this);
+    }
+
+    public ImmutableList<T> toImmutableList() {
+        return ImmutableList.constructors.list(this);
     }
 }

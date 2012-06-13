@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
 import com.googlecode.totallylazy.predicates.EndsWithPredicate;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 
 import java.io.BufferedReader;
@@ -12,7 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
@@ -22,8 +22,8 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 public class Strings {
     public static final String EMPTY = "";
 
-    public static Callable1<? super String, Boolean> asBoolean() {
-        return new Callable1<String, Boolean>() {
+    public static Function1<String, Boolean> asBoolean() {
+        return new Function1<String, Boolean>() {
             public Boolean call(String value) throws Exception {
                 return Boolean.parseBoolean(value);
             }
@@ -34,7 +34,7 @@ public class Strings {
         try {
             return lines(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -46,8 +46,8 @@ public class Strings {
         return repeat(readLine(new BufferedReader(reader))).takeWhile(notNullValue(String.class)).memorise();
     }
 
-    public static Callable<String> readLine(final BufferedReader reader) {
-        return new Callable<String>() {
+    public static Function<String> readLine(final BufferedReader reader) {
+        return new Function<String>() {
             public String call() throws Exception {
                 String result = reader.readLine();
                 if (result == null) {
@@ -58,52 +58,84 @@ public class Strings {
         };
     }
 
-    public static Callable1<String, String> toLowerCase() {
-        return new Callable1<String, String>() {
+    public static Function1<String, String> toLowerCase() {
+        return new Function1<String, String>() {
             public String call(String value) throws Exception {
                 return value.toLowerCase();
             }
         };
     }
 
-    public static Callable1<String, String> toUpperCase() {
-        return new Callable1<String, String>() {
+    public static Function1<String, String> replace(final char oldChar, final char newChar) {
+        return new Function1<String, String>() {
+            public String call(String value) throws Exception {
+                return value.replace(oldChar, newChar);
+            }
+        };
+    }
+
+    public static Function1<String, String> replace(final CharSequence target, final CharSequence replacement) {
+        return new Function1<String, String>() {
+            public String call(String value) throws Exception {
+                return value.replace(target, replacement);
+            }
+        };
+    }
+
+    public static Function1<String, String> replaceAll(final String regex, final String replacement) {
+        return new Function1<String, String>() {
+            public String call(String value) throws Exception {
+                return value.replaceAll(regex, replacement);
+            }
+        };
+    }
+
+    public static Function1<String, String> replaceFirst(final String regex, final String replacement) {
+        return new Function1<String, String>() {
+            public String call(String value) throws Exception {
+                return value.replaceFirst(regex, replacement);
+            }
+        };
+    }
+
+    public static Function1<String, String> toUpperCase() {
+        return new Function1<String, String>() {
             public String call(String value) throws Exception {
                 return value.toUpperCase();
             }
         };
     }
 
-    public static Predicate<String> startsWith(final String value) {
+    public static LogicalPredicate<String> startsWith(final String value) {
         return new StartsWithPredicate(value);
     }
 
-    public static Predicate<String> endsWith(final String value) {
+    public static LogicalPredicate<String> endsWith(final String value) {
         return new EndsWithPredicate(value);
     }
 
-    public static Predicate<String> contains(final String value) {
+    public static LogicalPredicate<String> contains(final String value) {
         return new ContainsPredicate(value);
     }
 
-    public static Callable1<String, Predicate<String>> equalIgnoringCase() {
-        return new Callable1<String, Predicate<String>>() {
+    public static Function1<String, Predicate<String>> equalIgnoringCase() {
+        return new Function1<String, Predicate<String>>() {
             public Predicate<String> call(String expected) throws Exception {
                 return equalIgnoringCase(expected);
             }
         };
     }
 
-    public static Predicate<String> equalIgnoringCase(final String expected) {
-        return new Predicate<String>() {
+    public static LogicalPredicate<String> equalIgnoringCase(final String expected) {
+        return new LogicalPredicate<String>() {
             public boolean matches(String actual) {
                 return expected.equalsIgnoreCase(actual);
             }
         };
     }
 
-    public static Predicate<? super String> empty() {
-        return new Predicate<String>() {
+    public static LogicalPredicate<String> empty() {
+        return new LogicalPredicate<String>() {
             public boolean matches(String value) {
                 return isEmpty(value);
             }
@@ -113,9 +145,13 @@ public class Strings {
     public static boolean isEmpty(String value) {
         return value == null || value.equals(EMPTY);
     }
+    
+    public static boolean isBlank(String value) {
+        return isEmpty(value) || isEmpty(value.trim());
+    }
 
-    public static Predicate<? super Character> unicodeControlOrUndefinedCharacter() {
-        return new Predicate<Character>() {
+    public static LogicalPredicate<Character> unicodeControlOrUndefinedCharacter() {
+        return new LogicalPredicate<Character>() {
             public boolean matches(Character character) {
                 return character > 0x7F;
             }
@@ -133,6 +169,10 @@ public class Strings {
                 .toString();
     }
 
+    public static String asString(Object value) {
+        return value == null ? "" : value.toString();
+    }
+
     public static String toString(byte[] bytes) {
         return toString(new ByteArrayInputStream(bytes));
     }
@@ -141,7 +181,7 @@ public class Strings {
         try {
             return toString(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            throw new LazyException(e);
+            throw LazyException.lazyException(e);
         }
     }
 
@@ -165,32 +205,32 @@ public class Strings {
         });
     }
 
-    public static Callable1<Object, String> format(final String format) {
-        return new Callable1<Object, String>() {
+    public static Function1<Object, String> format(final String format) {
+        return new Function1<Object, String>() {
             public String call(Object value) throws Exception {
                 return String.format(format, value);
             }
         };
     }
 
-    public static Callable1<? super CharSequence, Sequence<Character>> toCharacters() {
-        return new Callable1<CharSequence, Sequence<Character>>() {
+    public static Function1<CharSequence, Sequence<Character>> toCharacters() {
+        return new Function1<CharSequence, Sequence<Character>>() {
             public Sequence<Character> call(CharSequence value) throws Exception {
                 return characters(value);
             }
         };
     }
 
-    public static Callable1<String, String> reverse() {
-        return new Callable1<String, String>() {
+    public static Function1<String, String> reverse() {
+        return new Function1<String, String>() {
             public String call(String value) throws Exception {
                 return reverse(value);
             }
         };
     }
 
-    public static Callable1<String, String> substring(final int beginIndex, final int endIndex) {
-        return new Callable1<String, String>() {
+    public static Function1<String, String> substring(final int beginIndex, final int endIndex) {
+        return new Function1<String, String>() {
             public String call(String value) throws Exception {
                 return substring(value, beginIndex, endIndex);
             }
@@ -217,5 +257,24 @@ public class Strings {
             return stringLength + index;
         }
         return index;
+    }
+
+    public static Function1<String, Character> characterAt(final int index) {
+        return new Function1<String, Character>() {
+            @Override
+            public Character call(String s) throws Exception {
+                return s.charAt(index);
+            }
+        };
+    }
+
+
+    public static Callable1<String, String> trim() {
+        return new Callable1<String, String>() {
+            @Override
+            public String call(String value) throws Exception {
+                return value.trim();
+            }
+        };
     }
 }

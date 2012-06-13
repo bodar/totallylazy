@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.time;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -17,17 +18,24 @@ import static java.util.Calendar.YEAR;
 
 public class Dates {
     public static final String RFC3339 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String RFC3339_WITH_MILLISECONDS = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final String RFC822 = "EEE, dd MMM yyyy HH:mm:ss zzz";
     public static final String JAVA_UTIL_DATE_TO_STRING = "EEE MMM dd HH:mm:ss zzz yyyy";
+    public static final String LUCENE = "yyyyMMddHHmmssSSS";
     public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 
-    public static DateFormat RFC3339() {
-        return format(RFC3339);
+    public static DateFormat LUCENE() {
+        return format(LUCENE);
     }
 
-    private static SimpleDateFormat format(final String pattern) {
+    public static DateFormatConverter RFC3339() {
+        return new DateFormatConverter(RFC3339_WITH_MILLISECONDS, RFC3339);
+    }
+
+    public static SimpleDateFormat format(final String pattern) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
         simpleDateFormat.setTimeZone(UTC);
+        simpleDateFormat.setLenient(false);
         return simpleDateFormat;
     }
 
@@ -37,6 +45,14 @@ public class Dates {
 
     public static DateFormat javaUtilDateToString() {
         return format(JAVA_UTIL_DATE_TO_STRING);
+    }
+
+    public static Date parse(String value){
+        return date(value);
+    }
+
+    public static Date date(String value){
+        return DateFormatConverter.defaultConverter().parse(value);
     }
 
     public static Date date(int year, int month, int day) {
@@ -67,19 +83,38 @@ public class Dates {
         return calendar.getTime();
     }
 
+    @Deprecated
     public static Date addSeconds(Date date, int amount) {
-        GregorianCalendar calendar = calendar(date);
-        calendar.add(SECOND, amount);
-        return calendar.getTime();
+        return Seconds.add(date, amount);
     }
 
-    private static GregorianCalendar calendar() {
+    public static GregorianCalendar calendar() {
         return new GregorianCalendar(UTC);
     }
 
-    private static GregorianCalendar calendar(Date date) {
+    public static GregorianCalendar calendar(Date date) {
         GregorianCalendar calendar = calendar();
         calendar.setTime(date);
         return calendar;
+    }
+
+    public static Date add(Date date, int timeUnit, int amount) {
+        GregorianCalendar calendar = Dates.calendar(date);
+        calendar.add(timeUnit, amount);
+        return calendar.getTime();
+    }
+
+    public static Date subtract(Date date, int timeUnit, int amount) {
+        return add(date, timeUnit, -amount);
+    }
+
+    public static Date stripTime(Date date) {
+        Calendar calendar = calendar();
+        calendar.setTime(date);
+        calendar.set(HOUR_OF_DAY, 0);
+        calendar.set(MINUTE, 0);
+        calendar.set(SECOND, 0);
+        calendar.set(MILLISECOND, 0);
+        return calendar.getTime();
     }
 }

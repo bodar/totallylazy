@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
 
-    <macrodef name="create.lambda">
-        <attribute name="jar"/>
-        <attribute name="classpathref" default="all.jars"/>
-        <attribute name="packages"/>
+    <macrodef name="requires">
+        <attribute name="java.version"/>
         <sequential>
-            <java fork="yes" classname="lambda.weaving.LambdaCompiler" failonerror="yes">
-                <arg value="build/artifacts/@{jar}"/>
-                <sysproperty key="lambda.weaving.debug" value="false"/>
-                <sysproperty key="lambda.weaving.include.packages" value="@{packages}"/>
-                <classpath refid="@{classpathref}"/>
-            </java>
+            <fail message="Requires Java version: @{java.version}. Found ${java.version}">
+                <condition>
+                    <not>
+                        <matches string="${java.version}" pattern="^@{java.version}"/>
+                    </not>
+                </condition>
+            </fail>
         </sequential>
     </macrodef>
 
@@ -27,7 +26,10 @@
             <mkdir dir="@{classes}"/>
             <javac srcdir="@{src}" destdir="@{classes}" classpathref="@{classpathref}"
                    bootclasspath="${java.home}/lib/rt.jar" target="1.6" source="1.6" debug="true"
-                   includeantruntime="false"/>
+                   includeantruntime="false" encoding="UTF-8">
+                <compilerarg value="-Xlint:unchecked"/>
+                <compilerarg value="-Werror"/>
+            </javac>
             <copy todir="@{classes}">
                 <fileset dir="@{src}">
                     <exclude name="**/*.java"/>
@@ -49,7 +51,7 @@
 
             <jar destfile="@{jar}" basedir="@{classes}" manifest="${manifest}"/>
 
-            <delete file="$manifest"/>
+            <delete file="${manifest}"/>
             <delete dir="@{classes}"/>
         </sequential>
     </macrodef>

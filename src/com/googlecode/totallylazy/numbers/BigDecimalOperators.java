@@ -47,39 +47,45 @@ public final class BigDecimalOperators implements Operators<BigDecimal> {
     }
 
     public final boolean equalTo(Number x, Number y) {
-        return x.equals(toBigDecimal(y));
+        return x.equals(decimal(y));
     }
 
     public final boolean lessThan(Number x, Number y) {
-        return toBigDecimal(x).compareTo(toBigDecimal(y)) < 0;
+        return decimal(x).compareTo(decimal(y)) < 0;
     }
 
     public final Number add(Number x, Number y) {
-        return toBigDecimal(x).add(toBigDecimal(y));
+        return decimal(x).add(decimal(y));
     }
 
     public final Number multiply(Number x, Number y) {
-        return toBigDecimal(x).multiply(toBigDecimal(y));
+        return decimal(x).multiply(decimal(y));
     }
 
     public final Number divide(Number x, Number y) {
-        return toBigDecimal(x).divide(toBigDecimal(y));
+        return decimal(x).divide(decimal(y));
     }
 
     public final Number quotient(Number x, Number y) {
-        return toBigDecimal(x).divideToIntegralValue(toBigDecimal(y));
+        return decimal(x).divideToIntegralValue(decimal(y));
     }
 
     public final Number remainder(Number x, Number y) {
-        return toBigDecimal(x).remainder(toBigDecimal(y));
+        return decimal(x).remainder(decimal(y));
     }
 
-    public static BigDecimal toBigDecimal(Number number) {
+    public static BigDecimal decimal(Number number) {
+        if (number instanceof Ratio)
+            return ((Ratio) number).decimalValue();
         if (number instanceof BigDecimal)
             return (BigDecimal) number;
         if (number instanceof BigInteger)
             return new BigDecimal((BigInteger) number);
-        return BigDecimal.valueOf((number).longValue());
+        if (number instanceof Float)
+            return BigDecimal.valueOf((Float) number);
+        if (number instanceof Double)
+            return BigDecimal.valueOf((Double) number);
+        return BigDecimal.valueOf(number.longValue());
     }
 
     public static Number rationalize(BigDecimal number) {

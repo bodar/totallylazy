@@ -17,15 +17,16 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Iterators;
-import com.googlecode.totallylazy.MemorisedSequence;
+import com.googlecode.totallylazy.Computation;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
@@ -36,44 +37,41 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Callables.curry;
+import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Callables.reduceAndShift;
+import static com.googlecode.totallylazy.Computation.generate;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Computation.computation;
 
 public class Numbers {
-    public static Sequence<Number> range(final Number end) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(end);
-            }
-        };
+    public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
+
+    public static Sequence<Number> range(final Number start) {
+        return iterate(increment(), start);
     }
 
     public static Sequence<Number> range(final Number start, final Number end) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(start, end);
-            }
-        };
+        if(lessThan(end, start)) return range(start, end, -1);
+        return range(start).takeWhile(lessThanOrEqualTo(end));
     }
 
     public static Sequence<Number> range(final Number start, final Number end, final Number step) {
-        return new Sequence<Number>() {
-            public final Iterator<Number> iterator() {
-                return Iterators.range(start, end, step);
-            }
-        };
+        if(lessThan(end, start)) return iterate(add(step), start).takeWhile(greaterThanOrEqualTo(end));
+        return iterate(add(step), start).takeWhile(lessThanOrEqualTo(end));
     }
 
-    public static Number valueOf(String string) {
-        return reduce(new BigInteger(string));
-    }
-
-    public static Sequence<Number> integersStartingFrom(final int value) {
-        return iterate(increment(), value);
+    public static Option<Number> valueOf(String string) {
+        try {
+            return some(reduce(new BigDecimal(string)));
+        } catch (Exception e) {
+            return none(Number.class);
+        }
     }
 
     public static Sequence<Number> numbers(Number... numbers) {
@@ -112,31 +110,40 @@ public class Numbers {
         return multiply(value, value);
     }
 
-    public static LogicalPredicate<? super Number> not(Number value) {
+    public static LogicalPredicate<Number> not(Number value) {
         return Predicates.not(value);
     }
 
-    public static LogicalPredicate<? super Number> not(Predicate<? super Number> predicate) {
+    public static LogicalPredicate<Number> not(Predicate<? super Number> predicate) {
         return Predicates.not(predicate);
     }
 
-    public static LogicalPredicate<? super Number> even() {
+    public static LogicalPredicate<Number> even() {
         return remainderIs(2, 0);
     }
 
-    public static LogicalPredicate<? super Number> odd() {
+    public static LogicalPredicate<Number> odd() {
         return remainderIs(2, 1);
     }
 
-    public static LogicalPredicate<? super Number> prime() {
+    public static LogicalPredicate<Number> prime() {
+        return isPrime();
+    }
+
+    public static LogicalPredicate<Number> isPrime() {
         return new LogicalPredicate<Number>() {
             public final boolean matches(final Number candidate) {
-                return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(not(remainderIsZero(candidate)));
+                return isPrime(candidate);
             }
         };
     }
 
-    public static LogicalPredicate<? super Number> primeSquaredLessThan(final Number candidate) {
+    public static boolean isPrime(Number candidate) {
+        return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(remainderIsZero(candidate).not());
+    }
+
+
+    public static LogicalPredicate<Number> primeSquaredLessThan(final Number candidate) {
         return new LogicalPredicate<Number>() {
             public final boolean matches(final Number prime) {
                 return Numbers.lessThanOrEqualTo(squared(prime), candidate);
@@ -144,7 +151,7 @@ public class Numbers {
         };
     }
 
-    public static LogicalPredicate<? super Number> remainderIsZero(final Number dividend) {
+    public static LogicalPredicate<Number> remainderIsZero(final Number dividend) {
         return new LogicalPredicate<Number>() {
             public final boolean matches(Number divisor) {
                 return Numbers.isZero(remainder(dividend, divisor));
@@ -152,25 +159,54 @@ public class Numbers {
         };
     }
 
-    public static LogicalPredicate<? super Number> remainderIs(final Number divisor, final Number remainder) {
+    public static LogicalPredicate<Number> remainderIs(final Number divisor, final Number remainder) {
         return new RemainderIs(divisor, remainder);
     }
 
-    private static final MemorisedSequence<Number> primes = Sequences.<Number>sequence(2).join(iterate(add(2), 3).filter(prime())).memorise();
+    public static Sequence<Number> probablePrimes() {
+        return iterate(nextProbablePrime(), BigInteger.valueOf(2)).map(reduce());
+    }
 
-    public static MemorisedSequence<Number> primes() {
+    private static Function1<BigInteger, BigInteger> nextProbablePrime() {
+        return new Function1<BigInteger, BigInteger>() {
+            @Override
+            public BigInteger call(BigInteger bigInteger) throws Exception {
+                return bigInteger.nextProbablePrime();
+            }
+        };
+    }
+
+    private static Computation<Number> primes = computation(2, computation(3, generate(nextPrime())));
+    public static Computation<Number> primes() {
         return primes;
     }
 
+    public static Number nextPrime(Number number) {
+        return Computation.iterate(add(2), number).filter(isPrime()).second();
+    }
+
+    public static Function1<Number, Number> nextPrime() {
+        return new Function1<Number, Number>() {
+            @Override
+            public Number call(Number number) throws Exception {
+                return nextPrime(number);
+            }
+        };
+    }
+
     public static Sequence<Number> fibonacci() {
-        return iterate(reduceAndShift(sum()), numbers(0, 1)).map(Callables.first(Number.class));
+        return computation(Pair.<Number, Number>pair(0,1), generate(sum())).map(first(Number.class));
     }
 
     public static Sequence<Number> powersOf(Number amount) {
         return iterate(multiply(amount), 1);
     }
 
-    public static <T> Operators operatorsFor(Class<T> numberClass) {
+    public static <T> Operators<Number> operatorsFor(Class<T> numberClass) {
+        return Unchecked.cast(internalOperatorsFor(numberClass));
+    }
+
+    private static <T> Operators<? extends Number> internalOperatorsFor(Class<T> numberClass) {
         if (numberClass == Integer.class) return IntegerOperators.Instance;
         if (numberClass == Long.class) return LongOperators.Instance;
         if (numberClass == BigInteger.class) return BigIntegerOperators.Instance;
@@ -181,54 +217,54 @@ public class Numbers {
         throw new UnsupportedOperationException("Unsupported number class " + numberClass);
     }
 
-    public static <T extends Number> Operators<T> operatorsFor(T number) {
-        return (Operators<T>) operatorsFor(number.getClass());
+    public static Operators<Number> operatorsFor(Number number) {
+        return operatorsFor(number.getClass());
     }
 
-    public static <T extends Number> Operators<T> operatorsFor(T a, T b) {
-        Operators aOperators = operatorsFor(a.getClass());
-        Operators bOperators = operatorsFor(b.getClass());
+    public static Operators<Number> operatorsFor(Number a, Number b) {
+        Operators<Number> aOperators = operatorsFor(a.getClass());
+        Operators<Number> bOperators = operatorsFor(b.getClass());
 
         return aOperators.priority() > bOperators.priority() ? aOperators : bOperators;
     }
 
-    public static <T extends Number> Number negate(T value) {
+    public static Number negate(Number value) {
         return operatorsFor(value).negate(value);
     }
 
-    public static Callable1<Number, Number> increment() {
-        return new Callable1<Number, Number>() {
+    public static Function1<Number, Number> increment() {
+        return new Function1<Number, Number>() {
             public Number call(Number number) throws Exception {
                 return Numbers.increment(number);
             }
         };
     }
 
-    public static <T extends Number> Number increment(T value) {
+    public static Number increment(Number value) {
         return operatorsFor(value).increment(value);
     }
 
-    public static Callable1<Number, Number> decrement() {
-        return new Callable1<Number, Number>() {
+    public static Function1<Number, Number> decrement() {
+        return new Function1<Number, Number>() {
             public Number call(Number number) throws Exception {
                 return Numbers.decrement(number);
             }
         };
     }
 
-    public static <T extends Number> Number decrement(T value) {
+    public static Number decrement(Number value) {
         return operatorsFor(value).decrement(value);
     }
 
-    public static <T extends Number> boolean isZero(T value) {
+    public static boolean isZero(Number value) {
         return operatorsFor(value).isZero(value);
     }
 
-    public static <T extends Number> boolean isPositive(T value) {
+    public static boolean isPositive(Number value) {
         return operatorsFor(value).isPositive(value);
     }
 
-    public static <T extends Number> boolean isNegative(T value) {
+    public static boolean isNegative(Number value) {
         return operatorsFor(value).isNegative(value);
     }
 
@@ -236,7 +272,7 @@ public class Numbers {
         return operatorsFor(x, y).equalTo(x, y);
     }
 
-    public static Predicate<Number> lessThan(final Number value) {
+    public static LogicalPredicate<Number> lessThan(final Number value) {
         return new LessThanPredicate(value);
     }
 
@@ -244,7 +280,7 @@ public class Numbers {
         return operatorsFor(x, y).lessThan(x, y);
     }
 
-    public static LogicalPredicate<? super Number> lessThanOrEqualTo(final Number value) {
+    public static LogicalPredicate<Number> lessThanOrEqualTo(final Number value) {
         return new LessThanOrEqualToPredicate(value);
     }
 
@@ -252,7 +288,7 @@ public class Numbers {
         return !operatorsFor(x, y).lessThan(y, x);
     }
 
-    public static LogicalPredicate<? super Number> greaterThan(final Number value) {
+    public static LogicalPredicate<Number> greaterThan(final Number value) {
         return new GreaterThanPredicate(value);
     }
 
@@ -260,7 +296,7 @@ public class Numbers {
         return operatorsFor(x, y).lessThan(y, x);
     }
 
-    public static LogicalPredicate<? super Number> greaterThanOrEqualTo(final Number value) {
+    public static LogicalPredicate<Number> greaterThanOrEqualTo(final Number value) {
         return new GreaterThanOrEqualToPredicate(value);
     }
 
@@ -268,7 +304,7 @@ public class Numbers {
         return !operatorsFor(x, y).lessThan(x, y);
     }
 
-    public static LogicalPredicate<? super Number> between(final Number a, final Number b) {
+    public static LogicalPredicate<Number> between(final Number a, final Number b) {
         return new BetweenPredicate(a, b);
     }
 
@@ -297,109 +333,105 @@ public class Numbers {
         };
     }
 
-    public static Callable1<Iterable<Number>, Number> sumIterable() {
-        return new Callable1<Iterable<Number>, Number>() {
+    public static Function1<Iterable<Number>, Number> sumIterable() {
+        return new Function1<Iterable<Number>, Number>() {
             public Number call(Iterable<Number> numbers) throws Exception {
                 return Sequences.reduceLeft(numbers, sum());
             }
         };
     }
 
-    public static <T extends Number> Callable2<T, T, Number> average() {
-        return new Average<T>();
+    public static Function2<Number, Number, Number> average() {
+        return new Average();
     }
 
-    public static <T extends Number> Callable2<T, T, Number> sum() {
-        return new Sum<T>();
+    public static Function2<Number, Number, Number> sum() {
+        return new Sum();
     }
 
-    public static <T extends Number> Callable2<T, T, Number> add() {
-        return new Sum<T>();
+    public static Function2<Number, Number, Number> add() {
+        return new Sum();
     }
 
-    public static Callable1<Number, Number> add(final Number amount) {
-        return curry(add(), amount);
+    public static Function1<Number, Number> add(final Number amount) {
+        return add().apply(amount);
     }
 
-    public static <X extends Number, Y extends Number> Number add(X x, Y y) {
+    public static Number add(Number x, Number y) {
         return operatorsFor(x, y).add(x, y);
     }
 
-    public static <T extends Number> Callable2<T, T, Number> subtract() {
-        return new Callable2<T, T, Number>() {
-            public Number call(T a, T b) {
+    public static Function2<Number, Number, Number> subtract() {
+        return new Function2<Number, Number, Number>() {
+            public Number call(Number a, Number b) {
                 return Numbers.subtract(a, b);
             }
         };
     }
 
-    public static Callable1<Number, Number> subtract(final Number amount) {
-        return new Callable1<Number, Number>() {
-            public Number call(Number number) throws Exception {
-                return Numbers.subtract(number, amount);
-            }
-        };
+    public static Function1<Number, Number> subtract(final Number amount) {
+        return subtract().flip().apply(amount);
     }
 
-    public static <X extends Number, Y extends Number> Number subtract(X x, Y y) {
+    public static Number subtract(Number x, Number y) {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
-    public static <T extends Number> Callable2<T, T, Number> product() {
+    public static Function2<Number, Number, Number> product() {
         return multiply();
     }
 
-    public static <T extends Number> Callable2<T, T, Number> multiply() {
-        return new Callable2<T, T, Number>() {
-            public Number call(T multiplicand, T multiplier) throws Exception {
+    public static Function2<Number, Number, Number> multiply() {
+        return new Function2<Number, Number, Number>() {
+            public Number call(Number multiplicand, Number multiplier) throws Exception {
                 return multiply(multiplicand, multiplier);
             }
         };
     }
 
-    public static <T extends Number> Callable1<T, Number> multiply(final T multiplicand) {
-        return curry(Numbers.<T>multiply(), multiplicand);
+    public static Function1<Number, Number> multiply(final Number multiplicand) {
+        return Numbers.multiply().apply(multiplicand);
     }
 
-    public static <X extends Number, Y extends Number> Number multiply(X x, Y y) {
+    public static Number multiply(Number x, Number y) {
         return operatorsFor(x, y).multiply(x, y);
     }
 
-    public static <X extends Number, Y extends Number> Number divide(X x, Y y) {
+    public static Number divide(Number x, Number y) {
         throwIfZero(y);
         return operatorsFor(x, y).divide(x, y);
     }
 
-    public static <X extends Number> Callable1<Number, Number> divide(final X divisor) {
-        return new Callable1<Number, Number>() {
-            public Number call(Number dividend) throws Exception {
+    public static Function1<Number, Number> divide(final Number divisor) {
+        return divide().flip().apply(divisor);
+    }
+
+    public static Function2<Number, Number, Number> divide() {
+        return new Function2<Number, Number, Number>() {
+            public Number call(Number dividend, Number divisor) throws Exception {
                 return divide(dividend, divisor);
             }
         };
     }
 
-    public static <T extends Number> Callable2<T, T, Number> divide() {
-        return new Callable2<T, T, Number>() {
-            public Number call(T dividend, T divisor) throws Exception {
-                return divide(dividend, divisor);
-            }
-        };
-    }
-
-    public static <X extends Number, Y extends Number> Number quotient(X x, Y y) {
+    public static Number quotient(Number x, Number y) {
         throwIfZero(y);
         return reduce(operatorsFor(x, y).quotient(x, y));
     }
 
-    public static <X extends Number, Y extends Number> Number remainder(X dividend, Y divisor) {
+    public static Number remainder(Number dividend, Number divisor) {
         throwIfZero(divisor);
         return reduce(operatorsFor(dividend, divisor).remainder(dividend, divisor));
     }
 
-    private static <T extends Number> void throwIfZero(T value) {
+    private static void throwIfZero(Number value) {
         if (operatorsFor(value).isZero(value)) {
-            throw new ArithmeticException("Divide by zero");
+            throw DIVIDE_BY_ZERO;
         }
+    }
+
+    public static Number number(Number value) {
+        return reduce(value);
     }
 
     public static Number reduce(Number value) {
@@ -410,20 +442,35 @@ public class Numbers {
         return value;
     }
 
-    public static Callable1<Number, Character> toCharacter() {
-        return new Callable1<Number, Character>() {
+    public static Function1<Number, Number> reduce() {
+        return new Function1<Number, Number>() {
+            @Override
+            public Number call(Number number) throws Exception {
+                return reduce(number);
+            }
+        };
+    }
+
+    public static Function1<Number, Character> toCharacter() {
+        return new Function1<Number, Character>() {
             public Character call(Number number) throws Exception {
                 return (char) number.shortValue();
             }
         };
     }
 
-    public static Callable1<Number, Number> remainder(final Number divisor) {
-        return new Callable1<Number, Number>() {
-            public Number call(Number dividend) throws Exception {
+    public static Function2<Number, Number, Number> remainder() {
+        return new Function2<Number, Number, Number>() {
+            @Override
+            public Number call(Number dividend, Number divisor) throws Exception {
                 return remainder(dividend, divisor);
             }
         };
+    }
+
+
+    public static Function1<Number, Number> remainder(final Number divisor) {
+        return remainder().flip().apply(divisor);
     }
 
     public static String toLexicalString(Number value, final Number minValue, final Number maxValue) {
@@ -433,6 +480,6 @@ public class Numbers {
     }
 
     public static Number parseLexicalString(String value, final Number minValue) {
-        return add(valueOf(value), minValue);
+        return add(valueOf(value).get(), minValue);
     }
 }
