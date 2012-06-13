@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Container;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
@@ -13,7 +14,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T> {
+public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, Container<T> {
     ImmutableList<T> add(T value);
 
     ImmutableList<T> remove(T value);
@@ -38,10 +39,6 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T> {
     Option<T> find(Predicate<? super T> predicate);
 
     ImmutableList<T> filter(Predicate<? super T> predicate);
-
-    boolean contains(T other);
-
-    boolean exists(Predicate<? super T> predicate);
 
     class constructors {
         public static <T> ImmutableList<T> empty() {

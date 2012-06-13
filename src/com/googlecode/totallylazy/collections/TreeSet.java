@@ -115,6 +115,11 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
     }
 
     @Override
+    public boolean exists(Predicate<? super T> predicate) {
+        return map.exists(predicate);
+    }
+
+    @Override
     public Iterator<T> iterator() {
         return new SegmentIterator<T>(immutableList());
     }

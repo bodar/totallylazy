@@ -105,6 +105,11 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     }
 
     @Override
+    public boolean exists(Predicate<? super K> predicate) {
+        return false;
+    }
+
+    @Override
     public int hashCode() {
         return 31;
     }

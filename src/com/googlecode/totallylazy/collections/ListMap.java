@@ -154,6 +154,11 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
+    public boolean exists(Predicate<? super K> predicate) {
+        return list.exists(key(predicate));
+    }
+
+    @Override
     public Iterator<Pair<K, V>> iterator() {
         return immutableList().iterator();
     }

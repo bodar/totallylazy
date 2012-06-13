@@ -176,6 +176,11 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     }
 
     @Override
+    public boolean exists(Predicate<? super K> predicate) {
+        return predicate.matches(key) || left.exists(predicate) || right.exists(predicate);
+    }
+
+    @Override
     public int hashCode() {
         return 19 * value.hashCode() * left.hashCode() * right.hashCode();
     }
