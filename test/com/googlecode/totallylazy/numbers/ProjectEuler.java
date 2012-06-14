@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
@@ -21,6 +23,8 @@ import static com.googlecode.totallylazy.numbers.Numbers.mod;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.primeFactorsOf;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
+import static com.googlecode.totallylazy.numbers.Numbers.squared;
+import static com.googlecode.totallylazy.numbers.Numbers.subtract;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -52,4 +56,10 @@ public class ProjectEuler {
     public void problem5() throws Exception {
         assertThat(range(1, 20).reduce(lcm()), is(232792560));
     }
+
+    @Test
+    public void problem6() throws Exception {
+        assertThat(subtract(squared(range(1, 100).reduce(sum())), range(1, 100).map(squared()).reduce(sum())), is(25164150));
+    }
+
 }

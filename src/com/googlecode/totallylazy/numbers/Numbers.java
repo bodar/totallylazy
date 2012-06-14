@@ -106,7 +106,16 @@ public class Numbers {
         return sequence(factors).sortBy(ascending());
     }
 
-    private static Number squared(Number value) {
+    public static Function1<Number, Number> squared() {
+        return new Function1<Number, Number>() {
+            @Override
+            public Number call(Number number) throws Exception {
+                return squared(number);
+            }
+        };
+    }
+
+    public static Number squared(Number value) {
         return multiply(value, value);
     }
 
