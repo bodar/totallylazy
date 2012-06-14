@@ -10,6 +10,8 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.or;
+import static com.googlecode.totallylazy.Sequences.characters;
+import static com.googlecode.totallylazy.Sequences.reduce;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.isPalindrome;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
@@ -22,6 +24,8 @@ import static com.googlecode.totallylazy.numbers.Numbers.maximum;
 import static com.googlecode.totallylazy.numbers.Numbers.mod;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.primeFactorsOf;
+import static com.googlecode.totallylazy.numbers.Numbers.primes;
+import static com.googlecode.totallylazy.numbers.Numbers.product;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.squared;
 import static com.googlecode.totallylazy.numbers.Numbers.subtract;
@@ -62,4 +66,8 @@ public class ProjectEuler {
         assertThat(subtract(squared(range(1, 100).reduce(sum())), range(1, 100).map(squared()).reduce(sum())), is(25164150));
     }
 
+    @Test
+    public void problem7() throws Exception {
+        assertThat(primes().drop(10000).head(), is(104743));
+    }
 }
