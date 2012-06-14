@@ -23,6 +23,15 @@ public class Pair<F, S> implements First<F>, Second<S> {
         return new Pair<F, S>(first, second);
     }
 
+    public static <F, S> Function2<F,S, Pair<F,S>> pair() {
+        return new Function2<F, S, Pair<F, S>>() {
+            @Override
+            public Pair<F, S> call(F f, S s) throws Exception {
+                return Pair.pair(f, s);
+            }
+        };
+    }
+
     public final F first() {
         return first.value();
     }

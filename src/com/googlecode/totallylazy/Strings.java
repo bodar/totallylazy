@@ -277,4 +277,13 @@ public class Strings {
             }
         };
     }
+
+    public static LogicalPredicate<String> isPalindrome() {
+        return new LogicalPredicate<String>() {
+            @Override
+            public boolean matches(String other) {
+                return other.equals(reverse(other));
+            }
+        };
+    }
 }
