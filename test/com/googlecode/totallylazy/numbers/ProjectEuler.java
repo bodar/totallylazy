@@ -1,15 +1,12 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.or;
-import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Strings.isPalindrome;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
 import static com.googlecode.totallylazy.numbers.Numbers.fibonacci;
 import static com.googlecode.totallylazy.numbers.Numbers.isZero;
@@ -42,21 +39,7 @@ public class ProjectEuler {
 
     @Test
     public void problem4() throws Exception {
-        final Sequence<Number> range = range(999, 100);
-        assertThat(range.flatMap(new Callable1<Number, Sequence<Number>>() {
-            @Override
-            public Sequence<Number> call(Number number) throws Exception {
-                return range.map(multiply(number));
-            }
-        }).filter(where(asString(), isPalindrome())).reduce(maximum()), NumberMatcher.is(906609));
-    }
-
-    public static LogicalPredicate<String> isPalindrome() {
-        return new LogicalPredicate<String>() {
-            @Override
-            public boolean matches(String other) {
-                return characters(other).equals(characters(other).reverse());
-            }
-        };
+        assertThat(range(999, 100).cartesianProduct().map(multiply().pair()).
+                filter(where(asString(), isPalindrome())).reduce(maximum()), NumberMatcher.is(906609));
     }
 }

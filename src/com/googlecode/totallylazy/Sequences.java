@@ -692,4 +692,17 @@ public class Sequences {
             }
         });
     }
+
+    public static <A> Sequence<Pair<A, A>> cartesianProduct(final Iterable<? extends A> a) {
+        return cartesianProduct(a, a);
+    }
+
+    public static <A, B> Sequence<Pair<A, B>> cartesianProduct(final Iterable<? extends A> a, final Iterable<? extends B> b) {
+        return sequence(b).flatMap(new Callable1<B, Sequence<Pair<A, B>>>() {
+            @Override
+            public Sequence<Pair<A, B>> call(final B b) throws Exception {
+                return sequence(a).map(Pair.<A, B>pair()).map(Callables.<B, Pair<A, B>>callWith(b));
+            }
+        });
+    }
 }

@@ -25,6 +25,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
 
     // Thread-safe Racy Single Check Idiom (Effective Java 2nd Edition p.284)
     private int hashCode;
+
     @Override
     public int hashCode() {
         if (hashCode == 0) {
@@ -280,7 +281,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.memorise(this);
     }
 
-    public ForwardOnlySequence<T> forwardOnly(){
+    public ForwardOnlySequence<T> forwardOnly() {
         return Sequences.forwardOnly(this);
     }
 
@@ -288,11 +289,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.zip(this, second);
     }
 
-    public Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables){
+    public Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables) {
         return transpose(sequence(iterables));
     }
 
-    public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<? extends T>> iterables){
+    public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<? extends T>> iterables) {
         return Sequences.transpose(Sequences.cons(this, sequence(iterables).<Iterable<T>>unsafeCast()));
     }
 
@@ -340,35 +341,35 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.cycle(this);
     }
 
-    public <K> Map<K,List<T>> toMap(final Callable1<? super T, ? extends K> callable) {
+    public <K> Map<K, List<T>> toMap(final Callable1<? super T, ? extends K> callable) {
         return Maps.multiMap(this, callable);
     }
 
-    public  <K> Sequence<Group<K, T>> groupBy(final Callable1<? super T, ? extends K> callable) {
+    public <K> Sequence<Group<K, T>> groupBy(final Callable1<? super T, ? extends K> callable) {
         return Sequences.groupBy(this, callable);
     }
 
-    public Sequence<Sequence<T>> recursive(final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable){
+    public Sequence<Sequence<T>> recursive(final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
         return Sequences.recursive(this, callable);
     }
 
-    public Pair<Sequence<T>,Sequence<T>> splitAt(final Number index) {
+    public Pair<Sequence<T>, Sequence<T>> splitAt(final Number index) {
         return Sequences.splitAt(this, index);
     }
 
-    public Pair<Sequence<T>,Sequence<T>> splitWhen(final Predicate<? super T> predicate) {
+    public Pair<Sequence<T>, Sequence<T>> splitWhen(final Predicate<? super T> predicate) {
         return Sequences.splitWhen(this, predicate);
     }
 
-    public Pair<Sequence<T>,Sequence<T>> splitOn(final T instance) {
+    public Pair<Sequence<T>, Sequence<T>> splitOn(final T instance) {
         return Sequences.splitOn(this, instance);
     }
 
-    public Pair<Sequence<T>,Sequence<T>> span(final Predicate<? super T> predicate) {
+    public Pair<Sequence<T>, Sequence<T>> span(final Predicate<? super T> predicate) {
         return Sequences.span(this, predicate);
     }
 
-    public Pair<Sequence<T>,Sequence<T>> breakOn(final Predicate<? super T> predicate) {
+    public Pair<Sequence<T>, Sequence<T>> breakOn(final Predicate<? super T> predicate) {
         return Sequences.breakOn(this, predicate);
     }
 
@@ -376,11 +377,20 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.shuffle(this);
     }
 
-    public Sequence<T> interruptable(){
+    public Sequence<T> interruptable() {
         return Sequences.interruptable(this);
     }
 
     public ImmutableList<T> toImmutableList() {
         return ImmutableList.constructors.list(this);
     }
+
+    public Sequence<Pair<T, T>> cartesianProduct() {
+        return Sequences.cartesianProduct(this);
+    }
+
+    public <S> Sequence<Pair<T, S>> cartesianProduct(final Iterable<? extends S> other) {
+        return Sequences.cartesianProduct(this, other);
+    }
+
 }
