@@ -499,4 +499,36 @@ public class Numbers {
             }
         };
     }
+
+    public static Function2<Number, Number, Number> lcm() {
+        return new Function2<Number, Number, Number>() {
+            @Override
+            public Number call(Number x, Number y) throws Exception {
+                return lcm(x, y);
+            }
+        };
+    }
+
+    public static Number lcm(Number x, Number y){
+        return integralOperatorsFor(x, y).lcm(x, y);
+    }
+
+    private static IntegralOperators integralOperatorsFor(Number x, Number y) {
+        Operators<?> numberOperators = operatorsFor(x, y);
+        if (numberOperators instanceof IntegralOperators) return (IntegralOperators) numberOperators;
+        throw new UnsupportedOperationException();
+    }
+
+    public static Function2<Number, Number, Number> gcd() {
+        return new Function2<Number, Number, Number>() {
+            @Override
+            public Number call(Number x, Number y) throws Exception {
+                return gcd(x, y);
+            }
+        };
+    }
+
+    public static Number gcd(Number x, Number y) {
+        return integralOperatorsFor(x, y).gcd(x, y);
+    }
 }

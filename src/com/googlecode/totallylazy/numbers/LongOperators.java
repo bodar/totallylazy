@@ -8,10 +8,11 @@ import static java.lang.Long.MAX_VALUE;
 import static java.lang.Long.MIN_VALUE;
 import static java.math.BigInteger.valueOf;
 
-public final class LongOperators implements Operators<Long> {
+public final class LongOperators implements Operators<Long>, IntegralOperators {
     public static LongOperators Instance = new LongOperators();
 
-    private LongOperators() {}
+    private LongOperators() {
+    }
 
     public final Class<Long> forClass() {
         return Long.class;
@@ -103,11 +104,30 @@ public final class LongOperators implements Operators<Long> {
     }
 
     public final Number quotient(Number x, Number y) {
-        return x.longValue() / y.longValue();
+        return quotient(x.longValue(), y.longValue());
+    }
+
+    public static long quotient(long x, long y) {
+        return x / y;
     }
 
     public final Number remainder(Number x, Number y) {
         return x.longValue() % y.longValue();
+    }
+
+    @Override
+    public Number gcd(Number x, Number y) {
+        return gcd(x.longValue(), y.longValue());
+    }
+
+    @Override
+    public Number lcm(Number x, Number y) {
+        return lcm(x.longValue(), y.longValue());
+    }
+
+    public static long lcm(long x, long y){
+        if(x == 0 || y == 0) return 0;
+        return Math.abs(y * quotient(x, gcd(x, y)));
     }
 
     public static Number reduce(long value) {
@@ -116,5 +136,5 @@ public final class LongOperators implements Operators<Long> {
         else
             return value;
     }
-    
+
 }

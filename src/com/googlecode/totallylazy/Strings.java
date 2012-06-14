@@ -282,8 +282,12 @@ public class Strings {
         return new LogicalPredicate<String>() {
             @Override
             public boolean matches(String other) {
-                return other.equals(reverse(other));
+                return Strings.isPalindrome(other);
             }
         };
+    }
+
+    public static boolean isPalindrome(String other) {
+        return other.equals(reverse(other));
     }
 }
