@@ -392,5 +392,4 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
     public <S> Sequence<Pair<T, S>> cartesianProduct(final Iterable<? extends S> other) {
         return Sequences.cartesianProduct(this, other);
     }
-
 }

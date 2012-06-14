@@ -28,9 +28,11 @@ import static com.googlecode.totallylazy.Callables.flip;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Trampoline.done;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
+import static com.googlecode.totallylazy.numbers.Numbers.reduce;
 import static java.nio.CharBuffer.wrap;
 
 public class Sequences {
@@ -277,6 +279,19 @@ public class Sequences {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
     }
 
+    public static <T, S> Function2<Sequence<T>, Callable2<S, T, S>, S> reduce() {
+        return new Function2<Sequence<T>, Callable2<S, T, S>, S>() {
+            @Override
+            public S call(Sequence<T> sequence, Callable2<S, T, S> callable) throws Exception {
+                return sequence.reduce(callable);
+            }
+        };
+    }
+
+    public <T, S> Function1<Sequence<T>, S> reduce(final Callable2<S, T, S> callable) {
+        return Sequences.<T,S>reduce().flip().apply(callable);
+    }
+
     public static <T, S> S reduce(final Iterable<? extends T> iterable, final Callable2<? super S, ? super T, ? extends S> callable) {
         return Iterators.reduce(iterable.iterator(), callable);
     }
@@ -337,6 +352,19 @@ public class Sequences {
 
     public static <T> Number size(final Iterable<? extends T> iterable) {
         return Iterators.size(iterable.iterator());
+    }
+
+    public static <T> Function2<Sequence<T>, Integer, Sequence<T>> take() {
+        return new Function2<Sequence<T>, Integer, Sequence<T>>() {
+            @Override
+            public Sequence<T> call(Sequence<T> ts, Integer size) throws Exception {
+                return take(ts, size);
+            }
+        };
+    }
+
+    public static <T> Function1<Sequence<T>, Sequence<T>> take(int count) {
+        return Sequences.<T>take().flip().apply(count);
     }
 
     public static <T> Sequence<T> take(final Iterable<? extends T> iterable, final int count) {
