@@ -30,6 +30,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class NumbersTest {
     @Test
+    public void supportLcmOnIntegrals() throws Exception {
+        assertThat(Numbers.lcm(3, 5), NumberMatcher.is(15));
+        assertThat(Numbers.lcm(3L, 5L), NumberMatcher.is(15L));
+        assertThat(Numbers.lcm(bigInteger(3), bigInteger(5)), NumberMatcher.is(bigInteger(15)));
+    }
+
+    @Test
+    public void supportGcdOnIntegrals() throws Exception {
+        assertThat(Numbers.gcd(54, 24), NumberMatcher.is(6));
+        assertThat(Numbers.gcd(54L, 24L), NumberMatcher.is(6L));
+        assertThat(Numbers.gcd(bigInteger(54), bigInteger(24)), NumberMatcher.is(bigInteger(6)));
+    }
+
+    @Test
     public void supportsDivide() throws Exception {
         assertThat(sequence(200, 400, 600).map(divide(100)), hasExactly(2, 4, 6));
     }

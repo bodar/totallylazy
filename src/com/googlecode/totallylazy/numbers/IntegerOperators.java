@@ -8,7 +8,7 @@ import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 import static java.math.BigInteger.valueOf;
 
-public final class IntegerOperators implements Operators<Integer> {
+public final class IntegerOperators implements Operators<Integer>, IntegralOperators {
     public static IntegerOperators Instance = new IntegerOperators();
 
     private IntegerOperators() {}
@@ -73,6 +73,20 @@ public final class IntegerOperators implements Operators<Integer> {
         return ret;
     }
 
+    @Override
+    public final Number gcd(Number x, Number y) {
+        return gcd(x.intValue(), y.intValue());
+    }
+
+    public Number lcm(Number x, Number y) {
+        return lcm(x.intValue(), y.intValue());
+    }
+
+    public static int lcm(int x, int y) {
+        if(x == 0 || y == 0) return 0;
+        return Math.abs(y * quotient(x, gcd(x, y)));
+    }
+
     public static int gcd(int u, int v) {
         while (v != 0) {
             int r = u % v;
@@ -101,7 +115,11 @@ public final class IntegerOperators implements Operators<Integer> {
     }
 
     public final Number quotient(Number x, Number y) {
-        return x.intValue() / y.intValue();
+        return quotient(x.intValue(), y.intValue());
+    }
+
+    public static int quotient(int x, int y) {
+        return x / y;
     }
 
     public final Number remainder(Number x, Number y) {
