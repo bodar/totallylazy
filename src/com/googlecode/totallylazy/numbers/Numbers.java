@@ -29,16 +29,13 @@ import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.iterators.SegmentIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Computation.computation;
@@ -48,11 +45,10 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.reduceLeftShift;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Segment.constructors.segment;
+import static com.googlecode.totallylazy.Segment.constructors.unique;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
-import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.repeat;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 
 public class Numbers {
@@ -92,35 +88,14 @@ public class Numbers {
         };
     }
 
-    // TODO: Try to convert to lazy sequence again!
-    public static Sequence<Number> primeFactorsOf(Number value) {
-        Set<Number> factors = new HashSet<Number>();
-        Number ceiling = value;
-        Number possibleFactor = 2;
-
-        while (lessThanOrEqualTo(squared(possibleFactor), ceiling)) {
-            if (isZero(remainder(ceiling, possibleFactor))) {
-                factors.add(possibleFactor);
-                ceiling = divide(ceiling, possibleFactor);
-            } else {
-                possibleFactor = increment(possibleFactor);
-            }
-        }
-        if (!equalTo(ceiling, 1)) {
-            factors.add(ceiling);
-        }
-        return sequence(factors).sortBy(ascending());
-    }
-
-    // Remove duplicates
-    public static Sequence<Number> primeFactorsOfWIP(final Number number) {
+    public static Sequence<Number> primeFactors(final Number number) {
         return Segment.methods.sequence(factor(primes(), number));
     }
 
     static Segment<Number> factor(Segment<Number> primes, Number number) {
         Number prime = primes.head();
         if (greaterThan(squared(prime), number)) return segment(number);
-        if (isZero(remainder(number, prime))) return segment(prime, factor(primes, quotient(number, prime)));
+        if (isZero(remainder(number, prime))) return unique(prime, factor(primes, quotient(number, prime)));
         return factor(primes.tail(), number);
     }
 

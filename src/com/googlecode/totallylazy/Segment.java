@@ -31,6 +31,9 @@ public interface Segment<T> {
             return new OneSegment<T>(head, empty);
         }
 
+        public static <T> Segment<T> unique(T head, Segment<T> tail) {
+            return segment(head, tail.head().equals(head) ? tail.tail() : tail);
+        }
     }
 
     class methods {
