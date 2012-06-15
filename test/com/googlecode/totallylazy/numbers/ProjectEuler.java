@@ -15,7 +15,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.lessThanOrEqualTo;
 import static com.googlecode.totallylazy.numbers.Numbers.maximum;
 import static com.googlecode.totallylazy.numbers.Numbers.mod;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
-import static com.googlecode.totallylazy.numbers.Numbers.primeFactorsOf;
+import static com.googlecode.totallylazy.numbers.Numbers.primeFactors;
 import static com.googlecode.totallylazy.numbers.Numbers.primes;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.squared;
@@ -37,7 +37,7 @@ public class ProjectEuler {
 
     @Test
     public void problem3() throws Exception {
-        assertThat(primeFactorsOf(600851475143L).last(), is(6857));
+        assertThat(primeFactors(600851475143L).last(), is(6857));
     }
 
     @Test

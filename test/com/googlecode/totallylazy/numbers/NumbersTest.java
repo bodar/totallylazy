@@ -19,12 +19,11 @@ import static com.googlecode.totallylazy.numbers.Numbers.fibonacci;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.powersOf;
-import static com.googlecode.totallylazy.numbers.Numbers.primeFactorsOf;
+import static com.googlecode.totallylazy.numbers.Numbers.primeFactors;
 import static com.googlecode.totallylazy.numbers.Numbers.primes;
 import static com.googlecode.totallylazy.numbers.Numbers.probablePrimes;
 import static com.googlecode.totallylazy.numbers.Numbers.product;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
-import static com.googlecode.totallylazy.numbers.Numbers.squared;
 import static com.googlecode.totallylazy.numbers.Numbers.sumIterable;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -96,12 +95,12 @@ public class NumbersTest {
 
     @Test
     public void supportsPrimeFactorsOfLargeNumbers() throws Exception {
-        assertThat(primeFactorsOf(600851475143L), hasExactly(71, 839, 1471, 6857));
+        assertThat(primeFactors(600851475143L), hasExactly(71, 839, 1471, 6857));
     }
 
     @Test
     public void primeFactorsOfLargeNumbersIsPrettyFast() throws Exception {
-        TimeReport report = TimeReport.time(100, primeFactorsOf(600851475143L));
+        TimeReport report = TimeReport.time(100, primeFactors(600851475143L));
         System.out.println(report);
         assertThat(report.maximum(), is(lessThan(20.0)));
         assertThat(report.average(), is(lessThan(1.0)));
@@ -109,12 +108,12 @@ public class NumbersTest {
 
     @Test
     public void supportsPrimeFactors() throws Exception {
-        assertThat(primeFactorsOf(13195), hasExactly(5, 7, 13, 29));
+        assertThat(primeFactors(13195), hasExactly(5, 7, 13, 29));
     }
 
     @Test
     public void supportsPrimeFactorsOfSmallNumbers() throws Exception {
-        assertThat(primeFactorsOf(300), hasExactly(2, 3, 5));
+        assertThat(primeFactors(300), hasExactly(2, 3, 5));
     }
 
     @Test
