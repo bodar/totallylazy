@@ -43,6 +43,8 @@ import static com.googlecode.totallylazy.Computation.computation;
 import static com.googlecode.totallylazy.Computation.generate;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Pair.reduceLeftShift;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
@@ -148,15 +150,7 @@ public class Numbers {
     }
 
     public static boolean isPrime(Number candidate) {
-        return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(not(where(remainderDividingInto(candidate), isZero())));
-    }
-
-    public static LogicalPredicate<Number> primeSquaredLessThan(final Number candidate) {
-        return new LogicalPredicate<Number>() {
-            public final boolean matches(final Number prime) {
-                return Numbers.lessThanOrEqualTo(squared(prime), candidate);
-            }
-        };
+        return primes().takeWhile(where(squared(), lessThanOrEqualTo(candidate))).forAll(where(remainder(candidate), is(not(zero()))));
     }
 
     public static LogicalPredicate<Number> remainderIs(final Number divisor, final Number remainder) {
@@ -178,12 +172,12 @@ public class Numbers {
 
     private static Computation<Number> primes = computation(2, computation(3, generate(nextPrime())));
 
-    public static Computation<Number> primes() {
+    public static Sequence<Number> primes() {
         return primes;
     }
 
     public static Number nextPrime(Number number) {
-        return Computation.iterate(add(2), number).filter(isPrime()).second();
+        return iterate(add(2), number).filter(isPrime()).second();
     }
 
     public static Function1<Number, Number> nextPrime() {
@@ -196,7 +190,7 @@ public class Numbers {
     }
 
     public static Sequence<Number> fibonacci() {
-        return computation(Pair.<Number, Number>pair(0, 1), generate(sum())).map(first(Number.class));
+        return computation(Pair.<Number, Number>pair(0, 1), generate(reduceLeftShift(sum()))).map(first(Number.class));
     }
 
     public static Sequence<Number> powersOf(Number amount) {
@@ -255,6 +249,10 @@ public class Numbers {
 
     public static Number decrement(Number value) {
         return operatorsFor(value).decrement(value);
+    }
+
+    public static LogicalPredicate<Number> zero() {
+        return isZero();
     }
 
     public static LogicalPredicate<Number> isZero() {
@@ -429,6 +427,14 @@ public class Numbers {
         return reduce(operatorsFor(x, y).quotient(x, y));
     }
 
+    public static Function1<Number, Number> mod(final Number divisor) {
+        return mod().apply(divisor);
+    }
+
+    public static Function2<Number, Number, Number> mod() {
+        return remainder().flip();
+    }
+
     public static Function2<Number, Number, Number> remainder() {
         return new Function2<Number, Number, Number>() {
             @Override
@@ -438,15 +444,7 @@ public class Numbers {
         };
     }
 
-    public static Function1<Number, Number> mod(final Number divisor) {
-        return mod().apply(divisor);
-    }
-
-    public static Function2<Number, Number, Number> mod() {
-        return remainder().flip();
-    }
-
-    public static Function1<Number, Number> remainderDividingInto(final Number dividend) {
+    public static Function1<Number, Number> remainder(final Number dividend) {
         return remainder().apply(dividend);
     }
 
@@ -518,7 +516,7 @@ public class Numbers {
         };
     }
 
-    public static Number lcm(Number x, Number y){
+    public static Number lcm(Number x, Number y) {
         return integralOperatorsFor(x, y).lcm(x, y);
     }
 

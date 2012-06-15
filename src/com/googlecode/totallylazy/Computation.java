@@ -9,6 +9,8 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Function.returns;
+import static com.googlecode.totallylazy.Function2.function;
+import static com.googlecode.totallylazy.Pair.leftShift;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
@@ -81,24 +83,6 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
             @Override
             public Computation<T> call(T value) throws Exception {
                 return computation(Callables.deferApply(callable, value), this);
-            }
-        };
-    }
-
-    public static <T> Callable1<Pair<T, T>, Computation<Pair<T, T>>> generate(final Callable2<? super T, ? super T, ? extends T> callable) {
-        return new Callable1<Pair<T, T>, Computation<Pair<T, T>>>() {
-            @Override
-            public Computation<Pair<T, T>> call(final Pair<T, T> p) throws Exception {
-                return computation(deferApply(callable, p), this);
-            }
-        };
-    }
-
-    private static <T> Callable<Pair<T, T>> deferApply(final Callable2<? super T, ? super T, ? extends T> callable, final Pair<T, T> current) {
-        return new Callable<Pair<T, T>>() {
-            @Override
-            public Pair<T, T> call() throws Exception {
-                return pair(current.second(), callable.call(current.first(), current.second()));
             }
         };
     }
