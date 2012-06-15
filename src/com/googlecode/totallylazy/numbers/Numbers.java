@@ -25,9 +25,11 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.iterators.SegmentIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
@@ -45,8 +47,10 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.reduceLeftShift;
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Segment.constructors.segment;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
@@ -106,6 +110,18 @@ public class Numbers {
             factors.add(ceiling);
         }
         return sequence(factors).sortBy(ascending());
+    }
+
+    // Remove duplicates
+    public static Sequence<Number> primeFactorsOfWIP(final Number number) {
+        return Segment.methods.sequence(factor(primes(), number));
+    }
+
+    static Segment<Number> factor(Segment<Number> primes, Number number) {
+        Number prime = primes.head();
+        if (greaterThan(squared(prime), number)) return segment(number);
+        if (isZero(remainder(number, prime))) return segment(prime, factor(primes, quotient(number, prime)));
+        return factor(primes.tail(), number);
     }
 
     public static Function1<Number, Number> squared() {
