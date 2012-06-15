@@ -24,6 +24,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.primes;
 import static com.googlecode.totallylazy.numbers.Numbers.probablePrimes;
 import static com.googlecode.totallylazy.numbers.Numbers.product;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
+import static com.googlecode.totallylazy.numbers.Numbers.squared;
 import static com.googlecode.totallylazy.numbers.Numbers.sumIterable;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -100,8 +101,7 @@ public class NumbersTest {
 
     @Test
     public void primeFactorsOfLargeNumbersIsPrettyFast() throws Exception {
-        TimeReport report = new TimeReport();
-        repeat(time(primeFactorsOf(600851475143L), report)).take(100).realise();
+        TimeReport report = TimeReport.time(100, primeFactorsOf(600851475143L));
         System.out.println(report);
         assertThat(report.maximum(), is(lessThan(20.0)));
         assertThat(report.average(), is(lessThan(1.0)));

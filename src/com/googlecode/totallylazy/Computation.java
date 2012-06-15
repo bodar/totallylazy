@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Function.returns;
+import static com.googlecode.totallylazy.Function1.constant;
 import static com.googlecode.totallylazy.Function2.function;
 import static com.googlecode.totallylazy.Pair.leftShift;
 import static com.googlecode.totallylazy.Pair.pair;
