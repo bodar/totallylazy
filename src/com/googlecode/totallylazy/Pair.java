@@ -2,6 +2,8 @@ package com.googlecode.totallylazy;
 
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Function.function;
 import static com.googlecode.totallylazy.Function.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
@@ -65,5 +67,35 @@ public class Pair<F, S> implements First<F>, Second<S> {
     @Override
     public final int hashCode() {
         return values().hashCode();
+    }
+
+    public static <A, B, C> Function2<Pair<A, B>, C, Pair<B, C>> leftShift() {
+        return new Function2<Pair<A, B>, C, Pair<B, C>>() {
+            @Override
+            public Pair<B, C> call(Pair<A, B> pair, C c) throws Exception {
+                return leftShift(pair, c);
+            }
+        };
+    }
+
+    public static <A, B, C> Pair<B, C> leftShift(Pair<? extends A, ? extends B> pair, C c) {
+        return Pair.pair(pair.second(), c);
+    }
+
+    public static <A, B, C> Pair<B, C> reduceLeftShift(final Pair<? extends A, ? extends B> pair, final Callable2<? super A, ? super B, ? extends C> callable) {
+        return Pair.leftShift(pair, call(callable, pair.first(), pair.second()));
+    }
+
+    public static <A, B, C> Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>> reduceLeftShift()  {
+        return new Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>>() {
+            @Override
+            public Pair<B, C> call(Pair<A, B> pair, Callable2<A, B, C> callable) throws Exception {
+                return reduceLeftShift(pair, callable);
+            }
+        };
+    }
+
+    public static <A,B,C> Function1<Pair<A, B>, Pair<B, C>> reduceLeftShift(Callable2<A, B, C> callable) {
+        return Pair.<A,B,C>reduceLeftShift().flip().apply(callable);
     }
 }

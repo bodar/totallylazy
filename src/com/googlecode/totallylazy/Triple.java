@@ -29,4 +29,19 @@ public class Triple<F, S, T> extends Pair<F, S> implements Third<T> {
     public Sequence<Object> values() {
         return super.values().add(third());
     }
+
+    public static <A, B, C, D>  Function2<Triple<A, B, C>, D, Triple<B, C, D>> leftShift() {
+        return new Function2<Triple<A, B, C>, D, Triple<B, C, D>>() {
+            @Override
+            public Triple<B, C, D> call(Triple<A, B, C> triple, D d) throws Exception {
+                return leftShift(triple, d);
+            }
+        };
+    }
+
+    public static <A, B, C, D> Triple<B, C, D> leftShift(Triple<A, B, C> triple, D d) {
+        return Triple.triple(triple.second(), triple.third(), d);
+    }
+
+
 }
