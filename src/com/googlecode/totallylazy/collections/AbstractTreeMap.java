@@ -16,20 +16,20 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implements TreeMap<K, V> {
-    protected final Self left;
+    protected final Comparator<K> comparator;
     protected final K key;
     protected final V value;
+    protected final Self left;
     protected final Self right;
-    protected final Comparator<K> comparator;
-    protected final int size;
     protected final TreeFactory factory;
+    protected final int size;
 
-    protected AbstractTreeMap(Self left, K key, V value, Self right, Comparator<K> comparator, TreeFactory factory) {
-        this.left = left;
+    protected AbstractTreeMap(Comparator<K> comparator, K key, V value, Self left, Self right, TreeFactory factory) {
+        this.comparator = comparator;
         this.key = key;
         this.value = value;
+        this.left = left;
         this.right = right;
-        this.comparator = comparator;
         this.factory = factory;
         size = left.size() + right.size() + 1;
     }
@@ -56,7 +56,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
 
     @Override
     public Self left(TreeMap<K,V> newLeft) {
-        return cast(factory.create(comparator, newLeft, key, value, right()));
+        return cast(factory.create(comparator, key, value, newLeft, right()));
     }
 
     @Override
@@ -66,7 +66,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
 
     @Override
     public Self right(TreeMap<K,V> newRight) {
-        return cast(factory.create(comparator, left(), key, value, newRight));
+        return cast(factory.create(comparator, key, value, left(), newRight));
     }
 
     @Override
@@ -248,6 +248,6 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     }
 
     protected Self create(TreeMap<K, V> left, K key, V value, TreeMap<K, V> right, Comparator<K> comparator) {
-        return self(factory.create(comparator, left, key, value, right));
+        return self(factory.create(comparator, key, value, left, right));
     }
 }

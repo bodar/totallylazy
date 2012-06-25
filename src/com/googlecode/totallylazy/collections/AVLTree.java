@@ -65,12 +65,12 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
 
         @Override
         public <K, V> AVLTree<K, V> create(Comparator<K> comparator, K key, V value) {
-            return create(comparator, this.<K, V>create(comparator), key, value, this.<K, V>create(comparator));
+            return create(comparator, key, value, this.<K, V>create(comparator), this.<K, V>create(comparator));
         }
 
         @Override
-        public <K, V> AVLTree<K, V> create(Comparator<K> comparator, TreeMap<K, V> left, K key, V value, TreeMap<K, V> right) {
-            return methods.balance(new Node<K, V>(Unchecked.<AVLTree<K, V>>cast(left), key, value, Unchecked.<AVLTree<K, V>>cast(right), comparator));
+        public <K, V> AVLTree<K, V> create(Comparator<K> comparator, K key, V value, TreeMap<K, V> left, TreeMap<K, V> right) {
+            return methods.balance(new Node<K, V>(comparator, key, value, Unchecked.<AVLTree<K, V>>cast(left), Unchecked.<AVLTree<K, V>>cast(right)));
         }
 
         public static <K extends Comparable<? super K>, V> AVLTree<K, V> avlTree(K key, V value) {
@@ -161,8 +161,8 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
     final class Node<K, V> extends AbstractTreeMap<K, V, AVLTree<K, V>> implements AVLTree<K, V> {
         private final int height;
 
-        private Node(AVLTree<K, V> left, K key, V value, AVLTree<K, V> right, Comparator<K> comparator) {
-            super(left, key, value, right, comparator, AVLTree.constructors.factory);
+        private Node(Comparator<K> comparator, K key, V value, AVLTree<K, V> left, AVLTree<K, V> right) {
+            super(comparator, key, value, left, right, AVLTree.constructors.factory);
             height = Math.max(left.height(), right.height()) + 1;
         }
 
