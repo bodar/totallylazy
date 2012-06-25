@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Container;
+import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -14,7 +15,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K, V>>, Container<K> {
+public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K, V>>, Container<K>, Functor<V> {
     @Override
     ImmutableMap<K, V> cons(Pair<K, V> head);
 
@@ -33,7 +34,8 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
 
     ImmutableMap<K, V> filterValues(Predicate<? super V> predicate);
 
-    <NewV> ImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer);
+    @Override
+    <NewV> ImmutableMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
 
     int size();
 

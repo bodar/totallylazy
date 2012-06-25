@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeReport;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.Callable;
@@ -14,7 +15,6 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.contains;
-import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
 import static com.googlecode.totallylazy.collections.ImmutableSortedMap.constructors.emptySortedMap;
 import static com.googlecode.totallylazy.collections.ImmutableSortedMap.constructors.sortedMap;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
@@ -27,12 +27,12 @@ public class ImmutableSortedMapTest {
     @Test
     public void supportsIndexOf() throws Exception {
         ImmutableSortedMap<Integer, Integer> map = sortedMap(4, 4, 5, 5, 3, 3, 2, 2, 6, 6);
-        assertThat(map.indexOf(pair(1,1)), is(-1));
-        assertThat(map.indexOf(pair(2,2)), is(0));
-        assertThat(map.indexOf(pair(3,3)), is(1));
-        assertThat(map.indexOf(pair(4,4)), is(2));
-        assertThat(map.indexOf(pair(5,5)), is(3));
-        assertThat(map.indexOf(pair(6,6)), is(4));
+        assertThat(map.indexOf(pair(1, 1)), is(-1));
+        assertThat(map.indexOf(pair(2, 2)), is(0));
+        assertThat(map.indexOf(pair(3, 3)), is(1));
+        assertThat(map.indexOf(pair(4, 4)), is(2));
+        assertThat(map.indexOf(pair(5, 5)), is(3));
+        assertThat(map.indexOf(pair(6, 6)), is(4));
     }
 
     @Test
@@ -51,6 +51,7 @@ public class ImmutableSortedMapTest {
     }
 
     @Test
+    @Ignore("Manual")
     public void creatingASortedMapFromAnIterableIsFast() throws Exception {
         //in order - fold / cons Elapsed msecs for 11 runs:	Avg:13.460369555555555	Min:8.874518	Max:99.661891	Total:229.67973499999997
         //in order - sorted list Elapsed msecs for 11 runs:	Avg:11.016874222222222	Min:6.171428	Max:101.041891	Total:206.36518700000005
@@ -74,7 +75,6 @@ public class ImmutableSortedMapTest {
             }
         };
     }
-
 
     @Test
     public void canGetFirst() throws Exception {
@@ -176,6 +176,6 @@ public class ImmutableSortedMapTest {
 
     @Test
     public void supportsMappingValues() throws Exception {
-        assertThat(sortedMap("Dan", 2).mapValues(add(2)), is(sortedMap("Dan", (Number) 4)));
+        assertThat(sortedMap("Dan", 2).map(add(2)), is(sortedMap("Dan", (Number) 4)));
     }
 }

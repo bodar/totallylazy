@@ -1,14 +1,9 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Map;
-
-import static com.googlecode.totallylazy.Maps.pairs;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -102,7 +97,7 @@ public class ListMapTest {
 
     @Test
     public void supportsMappingValues() throws Exception {
-        assertThat(listMap("Dan", 2).mapValues(add(2)), is(listMap("Dan", (Number) 4)));
+        assertThat(listMap("Dan", 2).map(add(2)), is(listMap("Dan", (Number) 4)));
     }
 
 }

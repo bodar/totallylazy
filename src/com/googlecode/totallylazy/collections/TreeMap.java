@@ -42,7 +42,7 @@ public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
     TreeMap<K, V> filterValues(Predicate<? super V> predicate);
 
     @Override
-    <NewV> TreeMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer);
+    <NewV> TreeMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
 
     @Override
     Pair<? extends TreeMap<K, V>, Pair<K, V>> removeFirst();
@@ -73,8 +73,8 @@ public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
     }
 
     class methods {
-        public static <K, V, NewV> TreeMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer, final TreeFactory factory, final TreeMap<K, V> treeMap) {
-            return factory.create(treeMap.comparator(), treeMap.key(), call(transformer, treeMap.value()), treeMap.left().mapValues(transformer), treeMap.right().mapValues(transformer));
+        public static <K, V, NewV> TreeMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer, final TreeFactory factory, final TreeMap<K, V> treeMap) {
+            return factory.create(treeMap.comparator(), treeMap.key(), call(transformer, treeMap.value()), treeMap.left().map(transformer), treeMap.right().map(transformer));
         }
 
         public static <K, V> TreeMap<K, V> treeMap(final TreeFactory factory, final Comparator<K> comparator, final List<Pair<K, V>> sortedList) {
