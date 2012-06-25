@@ -60,7 +60,7 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     }
 
     @Override
-    public <NewV> TreeMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> TreeMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
         return cast(this);
     }
 

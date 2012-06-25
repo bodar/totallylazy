@@ -134,7 +134,7 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
-    public <NewV> ImmutableMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> ImmutableMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
         return listMap(list.map(Callables.<K, V, NewV>second(transformer)));
     }
 

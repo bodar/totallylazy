@@ -32,7 +32,7 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
     ImmutableSortedMap<K, V> filterValues(Predicate<? super V> predicate);
 
     @Override
-    <NewV> ImmutableSortedMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer);
+    <NewV> ImmutableSortedMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
 
     @Override
     Pair<? extends ImmutableSortedMap<K, V>, Pair<K, V>> removeFirst();

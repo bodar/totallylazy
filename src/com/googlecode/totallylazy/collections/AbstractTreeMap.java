@@ -110,8 +110,8 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     }
 
     @Override
-    public <NewV> TreeMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer) {
-        return methods.mapValues(transformer, factory, this);
+    public <NewV> TreeMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
+        return methods.map(transformer, factory, this);
     }
 
     @Override
