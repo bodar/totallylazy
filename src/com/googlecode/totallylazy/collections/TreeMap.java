@@ -63,19 +63,18 @@ public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
 
         @Override
         public <K, V> TreeMap<K, V> create(Comparator<K> comparator, K key, V value) {
-            return create(comparator, this.<K, V>create(comparator), key, value, this.<K, V>create(comparator));
+            return create(comparator, key, value, this.<K, V>create(comparator), this.<K, V>create(comparator));
         }
 
         @Override
-        public <K, V> TreeMap<K, V> create(Comparator<K> comparator, TreeMap<K, V> left, K key, V value, TreeMap<K, V> right) {
-            return new AbstractTreeMap<K, V, TreeMap<K, V>>(left, key, value, right, comparator, constructors.factory) {
-            };
+        public <K, V> TreeMap<K, V> create(Comparator<K> comparator, K key, V value, TreeMap<K, V> left, TreeMap<K, V> right) {
+            return new AbstractTreeMap<K, V, TreeMap<K, V>>(comparator, key, value, left, right, constructors.factory) {};
         }
     }
 
     class methods {
         public static <K, V, NewV> TreeMap<K, NewV> mapValues(Callable1<? super V, ? extends NewV> transformer, final TreeFactory factory, final TreeMap<K, V> treeMap) {
-            return factory.create(treeMap.comparator(), treeMap.left().mapValues(transformer), treeMap.key(), call(transformer, treeMap.value()), treeMap.right().mapValues(transformer));
+            return factory.create(treeMap.comparator(), treeMap.key(), call(transformer, treeMap.value()), treeMap.left().mapValues(transformer), treeMap.right().mapValues(transformer));
         }
 
         public static <K, V> TreeMap<K, V> treeMap(final TreeFactory factory, final Comparator<K> comparator, final List<Pair<K, V>> sortedList) {
@@ -84,7 +83,7 @@ public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
             Pair<K, V> pair = sortedList.get(middle);
             TreeMap<K, V> left = treeMap(factory, comparator, sortedList.subList(0, middle));
             TreeMap<K, V> right = treeMap(factory, comparator, sortedList.subList(middle + 1, sortedList.size()));
-            return factory.create(comparator, left, pair.first(), pair.second(), right);
+            return factory.create(comparator, pair.first(), pair.second(), left, right);
         }
     }
 }
