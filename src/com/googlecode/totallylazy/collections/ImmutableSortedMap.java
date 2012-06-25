@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pair<K, V>> {
+public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pair<K, V>>, Indexed<Pair<K, V>> {
     @Override
     ImmutableSortedMap<K, V> cons(Pair<K, V> head);
 

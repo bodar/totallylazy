@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.TreeSet.treeSet;
 
-public interface ImmutableSortedSet<T> extends ImmutableSet<T>, Sorted<T> {
+public interface ImmutableSortedSet<T> extends ImmutableSet<T>, Sorted<T>, Indexed<T> {
     @Override
     ImmutableSortedSet<T> cons(T head);
 
