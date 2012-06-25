@@ -40,9 +40,6 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
     @Override
     Pair<? extends ImmutableSortedMap<K, V>, Pair<K, V>> removeLast();
 
-    @Override
-    Pair<K, V> index(int i);
-
     class constructors {
         private static TreeFactory factory = AVLTree.constructors.factory;
 

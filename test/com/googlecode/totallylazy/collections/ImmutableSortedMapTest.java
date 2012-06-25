@@ -14,6 +14,7 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.contains;
+import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
 import static com.googlecode.totallylazy.collections.ImmutableSortedMap.constructors.emptySortedMap;
 import static com.googlecode.totallylazy.collections.ImmutableSortedMap.constructors.sortedMap;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
@@ -23,6 +24,32 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ImmutableSortedMapTest {
+    @Test
+    public void supportsIndexOf() throws Exception {
+        ImmutableSortedMap<Integer, Integer> map = sortedMap(4, 4, 5, 5, 3, 3, 2, 2, 6, 6);
+        assertThat(map.indexOf(pair(1,1)), is(-1));
+        assertThat(map.indexOf(pair(2,2)), is(0));
+        assertThat(map.indexOf(pair(3,3)), is(1));
+        assertThat(map.indexOf(pair(4,4)), is(2));
+        assertThat(map.indexOf(pair(5,5)), is(3));
+        assertThat(map.indexOf(pair(6,6)), is(4));
+    }
+
+    @Test
+    public void canGetByIndex() throws Exception {
+        ImmutableSortedMap<Integer, Integer> map = sortedMap(4, 4, 5, 5, 3, 3, 2, 2, 6, 6);
+        assertThat(map.index(0), is(pair(2,2)));
+        assertThat(map.index(1), is(pair(3,3)));
+        assertThat(map.index(2), is(pair(4,4)));
+        assertThat(map.index(3), is(pair(5,5)));
+        assertThat(map.index(4), is(pair(6,6)));
+    }
+
+    @Test
+    public void canCalculateSize() throws Exception {
+        assertThat(sortedMap(4, 4, 5, 5, 3, 3, 2, 2, 6, 6).size(), is(5));
+    }
+
     @Test
     public void creatingASortedMapFromAnIterableIsFast() throws Exception {
         //in order - fold / cons Elapsed msecs for 11 runs:	Avg:13.460369555555555	Min:8.874518	Max:99.661891	Total:229.67973499999997
