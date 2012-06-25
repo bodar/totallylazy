@@ -8,6 +8,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.not;
 
 public class CountLatchTest {
     @Test
@@ -25,7 +26,7 @@ public class CountLatchTest {
             }
         }));
 
-        assertThat(number.get(), is(0));
+        assertThat(number.get(), not(5));
         assertThat(latch.count(), greaterThan(1));
 
         latch.countDown();
