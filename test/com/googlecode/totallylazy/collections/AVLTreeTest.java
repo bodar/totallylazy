@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Files;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Randoms;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeCallable;
@@ -23,25 +24,6 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AVLTreeTest {
-    private Sequence<Integer> integers(final int start, final int end) {
-        return range(start, end).safeCast(Integer.class);
-    }
-
-    @Test
-    public void canGetByIndex() throws Exception {
-        AVLTree<Integer, Integer> map = avlTree(4, 4).put(5, 5).put(3, 3).put(2, 2).put(6, 6);
-        assertThat(map.index(0).first(), is(2));
-        assertThat(map.index(1).first(), is(3));
-        assertThat(map.index(2).first(), is(4));
-        assertThat(map.index(3).first(), is(5));
-        assertThat(map.index(4).first(), is(6));
-    }
-
-    @Test
-    public void canCalculateSize() throws Exception {
-        assertThat(avlTree(4, null).put(5, null).put(3, null).put(2, null).put(6, null).size(), is(5));
-    }
-
     @Test
     public void balancesRightRightCase() throws Exception {
         assertThat(avlTree(3, null).put(4, null).put(5, null).toString(), is("(( 3 ) 4 ( 5 ))"));

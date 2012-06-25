@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class TreeSet<T> implements ImmutableSortedSet<T> {
-    private final ImmutableSortedMap<T,T> map;
+    private final ImmutableSortedMap<T, T> map;
 
     private TreeSet(ImmutableSortedMap<T, T> map) {
         this.map = map;
@@ -84,6 +84,11 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
     }
 
     @Override
+    public int indexOf(T t) {
+        return map.indexOf(pair(t));
+    }
+
+    @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }
@@ -100,12 +105,12 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
 
     @Override
     public ImmutableSortedSet<T> cons(T head) {
-        return treeSet(map.cons(Pair.pair(head, head)));
+        return treeSet(map.cons(pair(head)));
     }
 
     @Override
     public <C extends Segment<T>> C joinTo(C rest) {
-        if(map.isEmpty()) return rest;
+        if (map.isEmpty()) return rest;
         return cast(tail().joinTo(rest).cons(head()));
     }
 
@@ -122,5 +127,9 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
     @Override
     public Iterator<T> iterator() {
         return new SegmentIterator<T>(immutableList());
+    }
+
+    private Pair<T, T> pair(T head) {
+        return Pair.pair(head, head);
     }
 }

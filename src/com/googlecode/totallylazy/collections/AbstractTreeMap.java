@@ -227,6 +227,14 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
         return right.index(i - left.size() - 1);
     }
 
+    @Override
+    public int indexOf(Pair<K, V> pair) {
+        int difference = difference(pair.first());
+        if(difference == 0) return left.size();
+        if(difference < 0) return left.indexOf(pair);
+        return 1 + left.size() + right.indexOf(pair);
+    }
+
     protected Pair<K, V> pair() {
         return Pair.pair(key, value);
     }

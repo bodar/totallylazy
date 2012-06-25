@@ -155,6 +155,11 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     }
 
     @Override
+    public int indexOf(Pair<K, V> pair) {
+        return -1;
+    }
+
+    @Override
     public K key() {
         throw new UnsupportedOperationException();
     }
