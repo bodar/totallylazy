@@ -24,11 +24,9 @@ import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.deferReturn;
-import static com.googlecode.totallylazy.Callables.flip;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Trampoline.done;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
@@ -352,6 +350,10 @@ public class Sequences {
 
     public static <T> int size(final Iterable<? extends T> iterable) {
         return Iterators.size(iterable.iterator());
+    }
+
+    public static <T> Number number(final Iterable<? extends T> iterable) {
+        return Iterators.number(iterable.iterator());
     }
 
     public static <T> Function2<Sequence<T>, Integer, Sequence<T>> take() {

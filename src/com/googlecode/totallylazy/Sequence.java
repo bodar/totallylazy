@@ -221,6 +221,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.size(this);
     }
 
+    public Number number() {
+        return Sequences.number(this);
+    }
+
     public Sequence<T> take(final int count) {
         return Sequences.take(this, count);
     }
