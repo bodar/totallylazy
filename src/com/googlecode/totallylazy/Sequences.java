@@ -350,7 +350,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Number size(final Iterable<? extends T> iterable) {
+    public static <T> int size(final Iterable<? extends T> iterable) {
         return Iterators.size(iterable.iterator());
     }
 

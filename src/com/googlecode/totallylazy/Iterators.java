@@ -339,11 +339,11 @@ public class Iterators {
         return map(iterator, Callables.<T, S>cast());
     }
 
-    public static <T> Number size(final Iterator<? extends T> iterator) {
-        Number count = 0;
+    public static <T> int size(final Iterator<? extends T> iterator) {
+        int count = 0;
         while (iterator.hasNext()) {
             iterator.next();
-            count = increment(count);
+            count++;
         }
         return count;
     }
