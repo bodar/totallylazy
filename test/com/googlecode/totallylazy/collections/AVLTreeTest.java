@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Files;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Randoms;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeCallable;
@@ -92,22 +91,6 @@ public class AVLTreeTest {
             System.out.println("END IMMUTABLE");
 
         }
-
-
-        final ImmutableMap<Integer, String> map = TimeCallable.time(new Callable<ImmutableMap<Integer, String>>() {
-            @Override
-            public ImmutableMap<Integer, String> call() throws Exception {
-                return range.fold(avlTree(0, "0"), new Callable2<ImmutableMap<Integer, String>, Integer, ImmutableMap<Integer, String>>() {
-                    @Override
-                    public ImmutableMap<Integer, String> call(ImmutableMap<Integer, String> node, Integer integer) throws Exception {
-                        return node.put(integer, integer.toString());
-                    }
-                });
-            }
-        }).call();
-
-
-        render((AVLTree<?, ?>) map);
     }
 
     private Map<Integer, String> createMutable(final Sequence<Integer> range) throws Exception {
@@ -115,12 +98,12 @@ public class AVLTreeTest {
             @Override
             public Map<Integer, String> call() throws Exception {
                 return range.fold(new ConcurrentSkipListMap<Integer, String>(), new Callable2<Map<Integer, String>, Integer, Map<Integer, String>>() {
-                                      @Override
-                                      public Map<Integer, String> call(Map<Integer, String> map, Integer integer) throws Exception {
-                                          map.put(integer, integer.toString());
-                                          return map;
-                                      }
-                                  }
+                    @Override
+                    public Map<Integer, String> call(Map<Integer, String> map, Integer integer) throws Exception {
+                        map.put(integer, integer.toString());
+                        return map;
+                    }
+                }
                 );
             }
         }).call();
@@ -154,27 +137,39 @@ public class AVLTreeTest {
         }
     }
 
-    private ImmutableMap<Integer, String> createImmutable(final Sequence<Integer> range) throws Exception {
-        return TimeCallable.time(new Callable<ImmutableMap<Integer, String>>() {
+    private ImmutableSortedMap<Integer, String> createImmutable(final Sequence<Integer> range) throws Exception {
+        return TimeCallable.time(new Callable<ImmutableSortedMap<Integer, String>>() {
             @Override
-            public ImmutableMap<Integer, String> call() throws Exception {
+            public ImmutableSortedMap<Integer, String> call() throws Exception {
                 return ImmutableSortedMap.constructors.sortedMap(range.map(asPair()));
             }
         }).call();
     }
 
+    @Test
+    @Ignore("Manual")
+    public void canVisualiseTree() throws Exception {
+        render((TreeMap<?, ?>) createImmutable(range));
+    }
+
     private void render(TreeMap<?, ?> map) {
         final File file = new File(Files.temporaryDirectory(), getClass().getSimpleName() + ".html");
-        Files.write(("<html><head><style>td { text-align: center; border: 1px solid gray; }</style></head><body>" + new ImmutableMapRenderer().render(map) + "</body></html>").getBytes(), file);
+        Files.write(("<html><head><style>" +
+                ".tree { border: 1px solid grey; padding: 0 1px; } " +
+                ".key { text-align: center; } " +
+                ".tree, .left, .right { display: table-cell; }" +
+                "</style></head><body>" + new TreeMapRenderer().render(map) + "</body></html>").getBytes(), file);
         System.out.println("tree = " + file);
     }
 
-
-    private class ImmutableMapRenderer {
+    private class TreeMapRenderer {
         public String render(TreeMap<?, ?> map) {
-            if(map.isEmpty()) return "";
-                return "<table>" + "<tr><td colspan='2'>" + map.key() + "</td></tr>" +
-                        "<tr><td  valign='top'>" + render(map.left()) + "</td><td valign='top'>" + render(map.right()) + "</td></tr></table>";
+            if (map.isEmpty()) return "";
+            return "<div class='tree'>" +
+                    "<div class='key'>" + map.key() + "</div>" +
+                    "<div class='left'>" + render(map.left()) + "</div>" +
+                    "<div class='right'>" + render(map.right()) + "</div>" +
+                    "</div>";
         }
     }
 }
