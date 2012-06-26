@@ -125,6 +125,11 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
     }
 
     @Override
+    public int size() {
+        return map.size();
+    }
+
+    @Override
     public Iterator<T> iterator() {
         return new SegmentIterator<T>(immutableList());
     }

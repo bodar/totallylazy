@@ -216,7 +216,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.remove(this, t);
     }
 
-    public Number size() {
+    @Override
+    public int size() {
         return Sequences.size(this);
     }
 
