@@ -348,6 +348,15 @@ public class Iterators {
         return count;
     }
 
+    public static <T> Number number(final Iterator<? extends T> iterator) {
+        Number count = 0;
+        while (iterator.hasNext()) {
+            iterator.next();
+            count = increment(count);
+        }
+        return count;
+    }
+
     public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         final Queue<T> matchedQueue = new LinkedList<T>();
         final Queue<T> unmatchedUnmatched = new LinkedList<T>();
