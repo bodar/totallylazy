@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.collections.ImmutableMap;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Iterator;
