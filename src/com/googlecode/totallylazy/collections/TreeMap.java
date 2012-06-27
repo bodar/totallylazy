@@ -11,6 +11,8 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Callers.call;
 
 public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
+    Comparator<K> comparator();
+
     K key();
 
     V value();
@@ -49,8 +51,6 @@ public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
 
     @Override
     Pair<? extends TreeMap<K, V>, Pair<K, V>> removeLast();
-
-    Comparator<K> comparator();
 
     enum constructors implements TreeFactory {
         factory;
