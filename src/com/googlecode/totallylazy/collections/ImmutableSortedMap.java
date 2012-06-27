@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.comparators.Comparators;
@@ -115,4 +116,16 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
             return TreeMap.methods.treeMap(factory, comparator, sequence(values).toSortedList(Comparators.<Pair<K, V>, K>where(Callables.<K>first(), comparator)));
         }
     }
+
+    class functions{
+        public static <K, V> Function1<ImmutableSortedMap<K, V>, ImmutableSortedMap<K, V>> remove(final K key) {
+            return new Function1<ImmutableSortedMap<K, V>, ImmutableSortedMap<K, V>>() {
+                @Override
+                public ImmutableSortedMap<K, V> call(ImmutableSortedMap<K, V> map) throws Exception {
+                    return map.remove(key);
+                }
+            };
+        }
+    }
+
 }

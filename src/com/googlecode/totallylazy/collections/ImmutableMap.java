@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Container;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -40,4 +41,15 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
     int size();
 
     ImmutableList<Pair<K, V>> immutableList();
+
+    class functions{
+        public static <K, V> Function1<ImmutableMap<K, V>, ImmutableMap<K, V>> remove(final K key) {
+            return new Function1<ImmutableMap<K, V>, ImmutableMap<K, V>>() {
+                @Override
+                public ImmutableMap<K, V> call(ImmutableMap<K, V> map) throws Exception {
+                    return map.remove(key);
+                }
+            };
+        }
+    }
 }
