@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
@@ -24,7 +25,7 @@ public class ManyParser<A> extends BaseParser<Sequence<A>>{
     }
 
     @Override
-    public Result<Sequence<A>> parse(Sequence<Character> sequence) throws Exception {
+    public Result<Sequence<A>> parse(Segment<Character> sequence) throws Exception {
         return parser.then(returns(this)).
                 map(cons()).
                 or(ReturnsParser.returns(Sequences.<A>empty())).

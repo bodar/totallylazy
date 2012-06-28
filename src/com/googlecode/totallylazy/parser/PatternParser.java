@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.regex.Matches;
 import com.googlecode.totallylazy.regex.Regex;
 
@@ -29,7 +29,7 @@ public class PatternParser extends BaseParser<String>{
     }
 
     @Override
-    public Result<String> parse(Sequence<Character> characters) throws Exception {
+    public Result<String> parse(Segment<Character> characters) throws Exception {
         Matches matches = regex.findMatches(characters.toString("", "", "", Integer.MAX_VALUE));
         if(matches.isEmpty()) {
             return fail();

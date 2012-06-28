@@ -1,11 +1,9 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Segment;
 
-import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.parser.ReturnsParser.returns;
-import static com.googlecode.totallylazy.parser.Success.success;
 
 public class OptionalParser<A> extends BaseParser<Option<A>> {
     private final BaseParser<? extends A> parserA;
@@ -24,7 +22,7 @@ public class OptionalParser<A> extends BaseParser<Option<A>> {
     }
 
     @Override
-    public Result<Option<A>> parse(Sequence<Character> characters) throws Exception {
+    public Result<Option<A>> parse(Segment<Character> characters) throws Exception {
         return parserA.map(Option.<A>option()).
                 or(returns(Option.<A>none())).
                 parse(characters);

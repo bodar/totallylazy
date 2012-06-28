@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -19,7 +19,7 @@ public class MappingParser<A, B> extends BaseParser<B> {
     }
 
     @Override
-    public Result<B> parse(Sequence<Character> characters) throws Exception {
+    public Result<B> parse(Segment<Character> characters) throws Exception {
         return cast(source.parse(characters).map(callable));
     }
 

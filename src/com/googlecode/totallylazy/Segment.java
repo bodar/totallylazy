@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.iterators.SegmentIterator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public interface Segment<T> {
@@ -53,6 +54,10 @@ public interface Segment<T> {
                     return new SegmentIterator<T>(segments);
                 }
             };
+        }
+
+        public static <T> Option<T> headOption(Segment<T> segment) {
+            return segment.isEmpty() ? Option.<T>none() : some(segment.head());
         }
     }
 

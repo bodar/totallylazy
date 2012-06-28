@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Segment;
 
 public class ReturnsParser<A> extends BaseParser<A>{
     private final A a;
@@ -19,7 +19,7 @@ public class ReturnsParser<A> extends BaseParser<A>{
     }
 
     @Override
-    public Result<A> parse(Sequence<Character> sequence) throws Exception {
+    public Result<A> parse(Segment<Character> sequence) throws Exception {
         return Success.success(a, sequence);
     }
 }
