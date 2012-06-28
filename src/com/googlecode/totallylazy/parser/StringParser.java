@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.parser.Success.success;
@@ -17,7 +18,7 @@ public class StringParser extends BaseParser<String> {
     }
 
     @Override
-    public Result<String> parse(Sequence<Character> input) {
+    public Result<String> parse(Segment<Character> input) {
         Pair<Sequence<Character>, Sequence<Character>> pair = input.splitAt(expected.length());
         String actual = pair.first().toString("");
         if (actual.equals(expected)) {
