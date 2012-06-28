@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
 
-public abstract class Function<A> implements Callable<A>, Runnable, Mappable<A, Function<?>>, Value<A> {
+public abstract class Function<A> implements Callable<A>, Runnable, Functor<A>, Value<A> {
     public static <A> Function<A> function(final Callable<? extends A> callable) {
         return new Function<A>() {
             @Override
@@ -52,7 +52,7 @@ public abstract class Function<A> implements Callable<A>, Runnable, Mappable<A, 
         return Sequences.repeat(this);
     }
 
-    public Function<A> time(Callable1<? super Double, Void> report) {
+    public Function<A> time(Callable1<? super Number, ?> report) {
         return TimeCallable.time(this, report);
     }
 

@@ -1,27 +1,31 @@
 package com.googlecode.totallylazy;
 
 import java.util.Iterator;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Some<T> extends Option<T> {
-    private final T t;
+    private final T value;
 
-    public Some(T t) {
-        this.t = t;
+    private Some(T value) {
+        this.value = value;
     }
 
     public static <T> Some<T> some(T t) {
+        if (t == null) {
+            throw new IllegalArgumentException("some(T) can not be null");
+        }
         return new Some<T>(t);
     }
 
     public Iterator<T> iterator() {
-        return sequence(t).iterator();
+        return sequence(value).iterator();
     }
 
     @Override
     public T get() {
-        return t;
+        return value;
     }
 
     @Override
@@ -30,24 +34,47 @@ public class Some<T> extends Option<T> {
     }
 
     @Override
+    public T getOrElse(T other) {
+        return get();
+    }
+
+    @Override
+    public T getOrElse(Callable<? extends T> callable) {
+        return get();
+    }
+
+    @Override
+    public T getOrNull() {
+        return get();
+    }
+
+    @Override
+    public <S> Option<S> map(Callable1<? super T, ? extends S> callable) {
+        return option(Callers.call(callable, get()));
+    }
+
+    @Override
+    public <S> Option<S> flatMap(Callable1<? super T, ? extends Option<S>> callable) {
+        return Callers.call(callable, get());
+    }
+
+    @Override
+    public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
+        return Callers.call(callable, seed, get());
+    }
+
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Some some = (Some) o;
-
-        if (t != null ? !t.equals(some.t) : some.t != null) return false;
-
-        return true;
+        return o instanceof Some && ((Some) o).value().equals(value());
     }
 
     @Override
     public int hashCode() {
-        return t != null ? t.hashCode() : 0;
+        return value.hashCode();
     }
 
     @Override
     public String toString() {
-        return "some(" + t + ")";
+        return "some(" + value + ")";
     }
 }

@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
 import com.googlecode.totallylazy.comparators.Comparators;
+import com.googlecode.totallylazy.matchers.Matchers;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
@@ -26,9 +27,11 @@ import static com.googlecode.totallylazy.Callables.descending;
 import static com.googlecode.totallylazy.Callables.length;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Functions.and;
 import static com.googlecode.totallylazy.Functions.or;
+import static com.googlecode.totallylazy.Lists.indexIn;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
@@ -41,6 +44,7 @@ import static com.googlecode.totallylazy.Quintuple.quintuple;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
@@ -50,12 +54,12 @@ import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.callables.CountNotNull.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
-import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.comparators.Comparators.comparators;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
+import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
@@ -126,6 +130,15 @@ public class SequenceTest {
     @Notes("This test has a very small chance that it could fail")
     public void supportsShuffle() throws Exception {
         assertThat(range(1, 100).shuffle(), is(not(range(1, 100))));
+    }
+
+    @Test
+    public void supportsApplicativeUsage() throws Exception {
+        assertThat(empty(Number.class).applicate(one(add(3))), Matchers.is(empty(Number.class)));
+        assertThat(numbers(9).applicate(Sequences.<Function1<Number, Number>>empty()), Matchers.is(empty(Number.class)));
+        assertThat(numbers(9).applicate(one(add(3))), Matchers.is(numbers(12)));
+        assertThat(numbers(9, 1).applicate(one(add(3))), Matchers.is(numbers(12, 4)));
+        assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 90, 4, 10)));
     }
 
     @Test
@@ -247,7 +260,7 @@ public class SequenceTest {
 
     @Test
     public void supportsGroupByAndPreservesOrder() throws Exception {
-        Sequence<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(remainder(2));
+        Sequence<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(Numbers.mod(2));
         assertThat(groups.first().key(), NumberMatcher.is(1));
         assertThat(groups.first(), hasExactly(1, 3));
         assertThat(groups.second().key(), NumberMatcher.is(0));
@@ -256,7 +269,7 @@ public class SequenceTest {
 
     @Test
     public void supportsToMapAndPreservesOrder() throws Exception {
-        Map<Number, List<Integer>> groups = sequence(1, 4, 2, 3).toMap(remainder(2));
+        Map<Number, List<Integer>> groups = sequence(1, 4, 2, 3).toMap(Numbers.mod(2));
         assertThat(groups.get(0), hasExactly(4, 2));
         assertThat(groups.get(1), hasExactly(1, 3));
     }
@@ -692,20 +705,18 @@ public class SequenceTest {
             }
         }).interruptable();
 
-        try{
+        try {
             interruptable.realise();
-        } catch (LazyException e){
+        } catch (LazyException e) {
             assertThat(e.getCause(), instanceOf(InterruptedException.class));
             assertThat(count[0], is(5));
         }
     }
 
     @Test
-    public void supportsGetWithIndex() throws Exception {
-        Sequence<Integer> counting = sequence(3,2,1);
-        assertThat(counting.get(0), is(3));
-        assertThat(counting.get(1), is(2));
-        assertThat(counting.get(2), is(1));
+    public void supportsSortingByOtherIterableOrder() throws Exception {
+        assertThat(sequence('D', 'E', 'F').sortBy(indexIn(list('F', 'E', 'D'))), hasExactly('F', 'E', 'D'));
+        assertThat(sequence(pair("Dan", 'D'), pair("Ray", 'R'), pair("Tom", 'T')).sortBy(second(Character.class).then(indexIn(list('T', 'R', 'D')))),
+                hasExactly(pair("Tom", 'T'), pair("Ray", 'R'), pair("Dan", 'D')));
     }
-
 }

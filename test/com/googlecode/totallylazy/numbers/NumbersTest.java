@@ -9,6 +9,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.NumberMatcher.lessThan;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.BigIntegerOperators.bigInteger;
 import static com.googlecode.totallylazy.numbers.Numbers.average;
@@ -18,7 +19,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.fibonacci;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.powersOf;
-import static com.googlecode.totallylazy.numbers.Numbers.primeFactorsOf;
+import static com.googlecode.totallylazy.numbers.Numbers.primeFactors;
 import static com.googlecode.totallylazy.numbers.Numbers.primes;
 import static com.googlecode.totallylazy.numbers.Numbers.probablePrimes;
 import static com.googlecode.totallylazy.numbers.Numbers.product;
@@ -26,9 +27,22 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sumIterable;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.lessThan;
 
 public class NumbersTest {
+    @Test
+    public void supportLcmOnIntegrals() throws Exception {
+        assertThat(Numbers.lcm(3, 5), NumberMatcher.is(15));
+        assertThat(Numbers.lcm(3L, 5L), NumberMatcher.is(15L));
+        assertThat(Numbers.lcm(bigInteger(3), bigInteger(5)), NumberMatcher.is(bigInteger(15)));
+    }
+
+    @Test
+    public void supportGcdOnIntegrals() throws Exception {
+        assertThat(Numbers.gcd(54, 24), NumberMatcher.is(6));
+        assertThat(Numbers.gcd(54L, 24L), NumberMatcher.is(6L));
+        assertThat(Numbers.gcd(bigInteger(54), bigInteger(24)), NumberMatcher.is(bigInteger(6)));
+    }
+
     @Test
     public void supportsDivide() throws Exception {
         assertThat(sequence(200, 400, 600).map(divide(100)), hasExactly(2, 4, 6));
@@ -71,7 +85,7 @@ public class NumbersTest {
         TimeReport report = new TimeReport();
         repeat(time(sumIterable(), range(0, 10000), report)).take(100).realise();
         System.out.println(report);
-        assertThat(report.average(), is(lessThan(20.0)));
+        assertThat(report.average(), is(lessThan(20)));
     }
 
     @Test
@@ -81,13 +95,12 @@ public class NumbersTest {
 
     @Test
     public void supportsPrimeFactorsOfLargeNumbers() throws Exception {
-        assertThat(primeFactorsOf(600851475143L), hasExactly(71, 839, 1471, 6857));
+        assertThat(primeFactors(600851475143L), hasExactly(71, 839, 1471, 6857));
     }
 
     @Test
     public void primeFactorsOfLargeNumbersIsPrettyFast() throws Exception {
-        TimeReport report = new TimeReport();
-        repeat(time(primeFactorsOf(600851475143L), report)).take(100).realise();
+        TimeReport report = TimeReport.time(100, primeFactors(600851475143L));
         System.out.println(report);
         assertThat(report.maximum(), is(lessThan(20.0)));
         assertThat(report.average(), is(lessThan(1.0)));
@@ -95,12 +108,12 @@ public class NumbersTest {
 
     @Test
     public void supportsPrimeFactors() throws Exception {
-        assertThat(primeFactorsOf(13195), hasExactly(5, 7, 13, 29));
+        assertThat(primeFactors(13195), hasExactly(5, 7, 13, 29));
     }
 
     @Test
     public void supportsPrimeFactorsOfSmallNumbers() throws Exception {
-        assertThat(primeFactorsOf(300), hasExactly(2, 3, 5));
+        assertThat(primeFactors(300), hasExactly(2, 3, 5));
     }
 
     @Test
@@ -115,12 +128,10 @@ public class NumbersTest {
 
     @Test
     public void primesIsPrettyFastAndIsMemorised() throws Exception {
-        TimeReport report = new TimeReport();
-        repeat(time(primes().take(1000), report)).take(1000).realise();
-        System.out.println(report);
+        TimeReport report = TimeReport.time(1000, primes().take(1000));
+        System.out.println("primes " + report);
         assertThat(report.average(), Matchers.is(lessThan(10.0)));
     }
-
 
     @Test
     public void supportsFibonacci() throws Exception {

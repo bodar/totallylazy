@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Unchecked;
@@ -23,4 +24,14 @@ public abstract class LogicalPredicate<T> implements Predicate<T> {
     public LogicalPredicate<T> not() {
         return Predicates.<T>not(this);
     }
+
+    public Function1<T, Boolean> asCallable() {
+        return new Function1<T, Boolean>() {
+            @Override
+            public Boolean call(T instance) throws Exception {
+                return matches(instance);
+            }
+        };
+    }
+
 }

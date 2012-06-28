@@ -21,6 +21,10 @@ public final class Callables {
         };
     }
 
+    public static <T> Function1<Value<T>, T> value(Class<T> aClass) {
+        return value();
+    }
+
     public static <T, R> Function1<T, R> asCallable1(final Callable<? extends R> callable) {
         return new Function1<T, R>() {
             public R call(T t) throws Exception {
@@ -220,12 +224,19 @@ public final class Callables {
         return Callables.asString();
     }
 
+    private final static Function1<Object, String> AS_STRING =  new Function1<Object, String>() {
+        public final String call(final Object value) {
+            return value.toString();
+        }
+
+        @Override
+        public String toString() {
+            return "toString";
+        }
+    };
+
     public static <T> Function1<T, String> asString() {
-        return new Function1<T, String>() {
-            public final String call(final T value) {
-                return value.toString();
-            }
-        };
+        return Unchecked.cast(AS_STRING);
     }
 
     private static final Function2<Integer, Object, Integer> HASH_CODE = new Function2<Integer, Object, Integer>() {
@@ -274,11 +285,7 @@ public final class Callables {
     }
 
     public static <T> Function1<T, T> returnArgument() {
-        return new Function1<T, T>() {
-            public final T call(final T value) {
-                return value;
-            }
-        };
+        return Function1.identity();
     }
 
     public static <T> Function1<T, T> returnArgument(final Class<T> aClass) {

@@ -19,10 +19,22 @@ import static java.util.UUID.randomUUID;
 public class Files {
     public static final File TEMP_DIR = new File(getProperty("java.io.tmpdir"));
 
+    public static String relativePath(File folder, File file) {
+        return folder.toURI().relativize(file.toURI()).getPath();
+    }
+
     public static Predicate<? super File> isFile() {
         return new Predicate<File>() {
             public boolean matches(File file) {
                 return file.isFile();
+            }
+        };
+    }
+
+    public static Predicate<? super File> hasSuffix(final String suffix) {
+        return new Predicate<File>() {
+            public boolean matches(File file) {
+                return file.getName().endsWith("." + suffix);
             }
         };
     }
@@ -60,10 +72,14 @@ public class Files {
     }
 
     public static File temporaryDirectory() {
-        return temporaryDirectory(randomFilename());
+        return TEMP_DIR;
     }
 
     public static File temporaryDirectory(String name) {
+        return directory(TEMP_DIR, name);
+    }
+
+    public static File emptyTemporaryDirectory(String name) {
         File directory = directory(TEMP_DIR, name);
         delete(directory);
         return directory;

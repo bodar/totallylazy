@@ -6,7 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Maps {
@@ -20,6 +22,10 @@ public class Maps {
 
     public static <K, V> Map<K, V> map() {
         return new LinkedHashMap<K, V>();
+    }
+
+    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first) {
+        return map(sequence(first));
     }
 
     public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second) {
@@ -64,7 +70,7 @@ public class Maps {
     public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Key> callable) {
         while (iterator.hasNext()) {
             final T next = iterator.next();
-            final Key key = Callers.call(callable, next);
+            final Key key = call(callable, next);
             seed.put(key, next);
         }
         return seed;
@@ -123,7 +129,7 @@ public class Maps {
     public static <V, K> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterator<? extends V> iterator, final Callable1<? super V, ? extends K> callable) {
         while (iterator.hasNext()) {
             final V value = iterator.next();
-            final K key = Callers.call(callable, value);
+            final K key = call(callable, value);
             if (!seed.containsKey(key)) {
                 seed.put(key, new ArrayList<V>());
             }
@@ -193,7 +199,31 @@ public class Maps {
         return entryToPair();
     }
 
-    private static class PairEntry<K, V> implements Map.Entry<K, V> {
+    public static <K, V> Option<V> get(Map<K, V> map, K key) {
+        return Option.option(map.get(key));
+    }
+
+    public static <K, V> Option<V> find(Map<K, V> map, Predicate<? super K> predicate) {
+        return pairs(map).find(where(Callables.<K>first(), predicate)).map(Callables.<V>second());
+    }
+
+    public static <K, V> Map<K, V> filterKeys(Map<K, V> map, Predicate<? super K> predicate) {
+        return map(pairs(map).filter(where(Callables.<K>first(), predicate)));
+    }
+
+    public static <K, V> Map<K, V> filterValues(Map<K, V> map, Predicate<? super V> predicate) {
+        return map(pairs(map).filter(where(Callables.<V>second(), predicate)));
+    }
+
+    public static <K, V, NewK> Map<NewK, V> mapKeys(Map<K, V> map, Callable1<? super K, ? extends NewK> transformer) {
+        return map(pairs(map).map(Callables.<K, V, NewK>first(transformer)));
+    }
+
+    public static <K, V, NewV> Map<K, NewV> mapValues(Map<K, V> map, Callable1<? super V, ? extends NewV> transformer) {
+        return map(pairs(map).map(Callables.<K, V, NewV>second(transformer)));
+    }
+
+    public static class PairEntry<K, V> implements Map.Entry<K, V> {
         private final Pair<K, V> pair;
 
         public PairEntry(Pair<K, V> pair) {

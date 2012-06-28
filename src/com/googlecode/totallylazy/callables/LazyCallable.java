@@ -1,10 +1,11 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Memory;
 
 import java.util.concurrent.Callable;
 
-public final class LazyCallable<T> extends Function<T> {
+public class LazyCallable<T> extends Function<T> implements Memory {
     private final Callable<? extends T> callable;
     private final Object lock = new Object();
     private volatile T state;
@@ -13,7 +14,7 @@ public final class LazyCallable<T> extends Function<T> {
         this.callable = callable;
     }
 
-    public static <T> Function<T> lazy(Callable<? extends T> callable) {
+    public static <T> LazyCallable<T> lazy(Callable<? extends T> callable) {
         return new LazyCallable<T>(callable);
     }
 
@@ -27,5 +28,11 @@ public final class LazyCallable<T> extends Function<T> {
             }
         }
         return state;
+    }
+
+    public void forget() {
+        synchronized (lock) {
+            state = null;
+        }
     }
 }

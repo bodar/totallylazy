@@ -6,6 +6,7 @@ import java.io.File;
 
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.write;
+import static com.googlecode.totallylazy.Sequences.equalTo;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.lines;
 import static com.googlecode.totallylazy.Strings.replace;
@@ -28,6 +29,12 @@ public class StringsTest {
         write(input.getBytes("UTF-8"), file);
         String output = Strings.toString(file);
         assertThat(output, is(input));
+    }
+
+    @Test
+    public void supportsObjectAsString() throws Exception {
+        assertThat(Strings.asString(null), is(""));
+        assertThat(Strings.asString(("foo")), is("foo"));
     }
 
     @Test
@@ -81,4 +88,19 @@ public class StringsTest {
     public void supportsReverse() throws Exception {
         assertThat(sequence("abc").map(reverse()), hasExactly("cba"));
     }
+
+    @Test
+    public void supportsIsBlank() throws Exception {
+        assertThat(Strings.isBlank(null), is(true));
+        assertThat(Strings.isBlank(""), is(true));
+        assertThat(Strings.isBlank(" "), is(true));
+        assertThat(Strings.isBlank("\t"), is(true));
+        assertThat(Strings.isBlank("\n"), is(true));
+        assertThat(Strings.isBlank("\r\n"), is(true));
+
+        assertThat(Strings.isBlank(" din"), is(false));
+        assertThat(Strings.isBlank("\tdin"), is(false));
+        assertThat(Strings.isBlank("\rdin"), is(false));
+    }
+
 }

@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
+
+    <macrodef name="requires">
+        <attribute name="java.version"/>
+        <sequential>
+            <fail message="Requires Java version: @{java.version}. Found ${java.version}">
+                <condition>
+                    <not>
+                        <matches string="${java.version}" pattern="^@{java.version}"/>
+                    </not>
+                </condition>
+            </fail>
+        </sequential>
+    </macrodef>
+
     <macrodef name="compile.and.jar">
         <attribute name="src"/>
         <attribute name="jar"/>
@@ -12,7 +26,7 @@
             <mkdir dir="@{classes}"/>
             <javac srcdir="@{src}" destdir="@{classes}" classpathref="@{classpathref}"
                    bootclasspath="${java.home}/lib/rt.jar" target="1.6" source="1.6" debug="true"
-                   includeantruntime="false">
+                   includeantruntime="false" encoding="UTF-8">
                 <compilerarg value="-Xlint:unchecked"/>
                 <compilerarg value="-Werror"/>
             </javac>
@@ -37,7 +51,7 @@
 
             <jar destfile="@{jar}" basedir="@{classes}" manifest="${manifest}"/>
 
-            <delete file="$manifest"/>
+            <delete file="${manifest}"/>
             <delete dir="@{classes}"/>
         </sequential>
     </macrodef>
