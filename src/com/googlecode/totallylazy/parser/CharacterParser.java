@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
@@ -21,6 +22,15 @@ public class CharacterParser extends BaseParser<Character> {
 
     public static CharacterParser character(char value) {
         return character(is(value));
+    }
+
+    public static Function1<Character, Parser<Character>> characterParser() {
+        return new Function1<Character, Parser<Character>>() {
+            @Override
+            public Parser<Character> call(Character character) throws Exception {
+                return character(character);
+            }
+        };
     }
 
     @Override

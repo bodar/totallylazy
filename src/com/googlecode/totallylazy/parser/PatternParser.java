@@ -30,12 +30,13 @@ public class PatternParser extends BaseParser<String>{
 
     @Override
     public Result<String> parse(Segment<Character> characters) throws Exception {
-        Matches matches = regex.findMatches(characters.toString("", "", "", Integer.MAX_VALUE));
+        CharacterSequence sequence = CharacterSequence.charSequence(characters);
+        Matches matches = regex.findMatches(sequence);
         if(matches.isEmpty()) {
             return fail();
         }
         MatchResult result = matches.head();
-        return success(result.group(), characters.drop(result.end()));
+        return success(result.group(), sequence.current().tail());
     }
 
 }

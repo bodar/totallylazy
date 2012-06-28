@@ -21,6 +21,10 @@ public interface Segment<T> {
     <C extends Segment<T>> C joinTo(C rest);
 
     class constructors {
+        public static <T> Segment<T> emptySegment(Class<T> aClass) {
+            return new EmptySegment<T>();
+        }
+
         public static <T> Segment<T> emptySegment() {
             return new EmptySegment<T>();
         }
@@ -35,6 +39,10 @@ public interface Segment<T> {
 
         public static <T> Segment<T> unique(T head, Segment<T> tail) {
             return segment(head, tail.head().equals(head) ? tail.tail() : tail);
+        }
+
+        public static Segment<Character> characters(String s) {
+            return Sequences.characters(s);
         }
     }
 
@@ -131,6 +139,21 @@ public interface Segment<T> {
         @Override
         public <C extends Segment<T>> C joinTo(C rest) {
             return rest;
+        }
+
+        @Override
+        public int hashCode() {
+            return 31;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Segment && ((Segment) obj).isEmpty();
+        }
+
+        @Override
+        public String toString() {
+            return "";
         }
     }
 
