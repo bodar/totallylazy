@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Segment;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.characters;
@@ -20,7 +20,7 @@ public class CharacterParserTest {
     public void canParseACharacter() throws Exception {
         Success<Character> result = cast(character('A').parse(characters("ABC")));
         assertThat(result.value(), is('A'));
-        assertThat(result.remainder(), is(characters("BC")));
+        assertThat(result.remainder(), is(Segment.constructors.characters("BC")));
     }
 
     @Test

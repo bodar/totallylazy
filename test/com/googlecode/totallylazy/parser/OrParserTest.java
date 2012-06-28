@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.parser;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Sequences.characters;
+import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.OrParser.or;
