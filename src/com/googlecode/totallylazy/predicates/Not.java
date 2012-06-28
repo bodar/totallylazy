@@ -16,4 +16,19 @@ public class Not<T> extends LogicalPredicate<T> {
     public Predicate<? super T> predicate() {
         return predicate;
     }
+
+    @Override
+    public int hashCode() {
+        return 31 * predicate.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Not && predicate.equals(((Not) obj).predicate());
+    }
+
+    @Override
+    public String toString() {
+        return "not " + predicate().toString();
+    }
 }

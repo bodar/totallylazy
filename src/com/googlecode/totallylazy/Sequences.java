@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.collections.ImmutableList;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
@@ -23,13 +24,13 @@ import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.deferReturn;
-import static com.googlecode.totallylazy.Callables.flip;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
+import static com.googlecode.totallylazy.numbers.Numbers.reduce;
 import static java.nio.CharBuffer.wrap;
 
 public class Sequences {
@@ -124,7 +125,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> memorise(final Iterator<? extends T> iterator) {
-        return new MemorisedSequence<T>(forwardOnly(iterator));
+        return Computation.memorise(iterator);
     }
 
     public static <T> ForwardOnlySequence<T> forwardOnly(final Iterator<? extends T> iterator) {
@@ -232,6 +233,10 @@ public class Sequences {
         return tail(iterable).head();
     }
 
+    public static <T> T third(final Iterable<? extends T> iterable) {
+        return tail(iterable).tail().head();
+    }
+
     public static <T> T head(final Iterable<? extends T> iterable) {
         return Iterators.head(iterable.iterator());
     }
@@ -270,6 +275,19 @@ public class Sequences {
 
     public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
+    }
+
+    public static <T, S> Function2<Sequence<T>, Callable2<S, T, S>, S> reduce() {
+        return new Function2<Sequence<T>, Callable2<S, T, S>, S>() {
+            @Override
+            public S call(Sequence<T> sequence, Callable2<S, T, S> callable) throws Exception {
+                return sequence.reduce(callable);
+            }
+        };
+    }
+
+    public <T, S> Function1<Sequence<T>, S> reduce(final Callable2<S, T, S> callable) {
+        return Sequences.<T,S>reduce().flip().apply(callable);
     }
 
     public static <T, S> S reduce(final Iterable<? extends T> iterable, final Callable2<? super S, ? super T, ? extends S> callable) {
@@ -312,6 +330,12 @@ public class Sequences {
         return Iterators.toList(iterable.iterator());
     }
 
+    public static <T> List<T> toSortedList(final Iterable<? extends T> iterable, final Comparator<? super T> comparator) {
+        List<T> result = toList(iterable);
+        Collections.sort(result, comparator);
+        return result;
+    }
+
     public static <T> Deque<T> toDeque(final Iterable<? extends T> iterable) {
         return Iterators.toDeque(iterable.iterator());
     }
@@ -324,8 +348,25 @@ public class Sequences {
         };
     }
 
-    public static <T> Number size(final Iterable<? extends T> iterable) {
+    public static <T> int size(final Iterable<? extends T> iterable) {
         return Iterators.size(iterable.iterator());
+    }
+
+    public static <T> Number number(final Iterable<? extends T> iterable) {
+        return Iterators.number(iterable.iterator());
+    }
+
+    public static <T> Function2<Sequence<T>, Integer, Sequence<T>> take() {
+        return new Function2<Sequence<T>, Integer, Sequence<T>>() {
+            @Override
+            public Sequence<T> call(Sequence<T> ts, Integer size) throws Exception {
+                return take(ts, size);
+            }
+        };
+    }
+
+    public static <T> Function1<Sequence<T>, Sequence<T>> take(int count) {
+        return Sequences.<T>take().flip().apply(count);
     }
 
     public static <T> Sequence<T> take(final Iterable<? extends T> iterable, final int count) {
@@ -424,8 +465,8 @@ public class Sequences {
         };
     }
 
-    public static <T> MemorisedSequence<T> memorise(final Iterable<? extends T> iterable) {
-        return new MemorisedSequence<T>(iterable);
+    public static <T> Sequence<T> memorise(final Iterable<? extends T> iterable) {
+        return Computation.memorise(iterable);
     }
 
     public static <F, S> Sequence<Pair<F, S>> zip(final Iterable<? extends F> first, final Iterable<? extends S> second) {
@@ -509,9 +550,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> sortBy(final Iterable<? extends T> iterable, final Comparator<? super T> comparator) {
-        List<T> result = sequence(iterable).toList();
-        Collections.sort(result, comparator);
-        return sequence(result);
+        return sequence(toSortedList(iterable, comparator));
     }
 
     public static <T extends Comparable<? super T>> Sequence<T> sort(final Iterable<? extends T> iterable) {
@@ -547,9 +586,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> reverse(final Iterable<? extends T> iterable) {
-        final List<T> result = toList(iterable);
-        Collections.reverse(result);
-        return sequence(result);
+        return sequence(ImmutableList.constructors.reverse(iterable.iterator()));
     }
 
     public static <T> Sequence<T> cycle(final Iterable<? extends T> iterable) {
@@ -668,5 +705,33 @@ public class Sequences {
                 return Iterators.unfoldRight(callable, seed);
             }
         };
+    }
+
+    public static <T> Function1<T, Integer> indexIn(final Iterable<? extends T> values){
+        return Lists.indexIn(sequence(values).toList());
+    }
+
+    public static <A, B> Sequence<B> applicate(final Iterable<? extends A> iterable, final Iterable<? extends Callable1<? super A, ? extends B>> applicatorIterable) {
+        final Sequence<Callable1<A, B>> applicator = sequence(applicatorIterable).unsafeCast();
+        if (applicator.isEmpty()) return empty();
+        return sequence(iterable).flatMap(new Callable1<A, Sequence<B>>() {
+            @Override
+            public Sequence<B> call(final A a) throws Exception {
+                return applicator.map(Callables.<A, B>callWith(a));
+            }
+        });
+    }
+
+    public static <A> Sequence<Pair<A, A>> cartesianProduct(final Iterable<? extends A> a) {
+        return cartesianProduct(a, a);
+    }
+
+    public static <A, B> Sequence<Pair<A, B>> cartesianProduct(final Iterable<? extends A> a, final Iterable<? extends B> b) {
+        return sequence(b).flatMap(new Callable1<B, Sequence<Pair<A, B>>>() {
+            @Override
+            public Sequence<Pair<A, B>> call(final B b) throws Exception {
+                return sequence(a).map(Pair.<A, B>pair()).map(Callables.<B, Pair<A, B>>callWith(b));
+            }
+        });
     }
 }

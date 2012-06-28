@@ -30,4 +30,11 @@ public class TupleTest {
         assertThat(quadruple(1, "Blah", 3L, 'C').hashCode() == quadruple(1, "Blah", 3L, 'C').hashCode(), is(true));
         assertThat(quadruple(1, "Blah", 3L, 'C').hashCode() == quadruple(1, "Blah", 3L, 'D').hashCode(), is(false));
     }
+
+    @Test
+    public void canLeftShift() throws Exception {
+        assertThat(Pair.leftShift(pair(1, 2), 3), is(pair(2, 3)));
+        assertThat(Triple.leftShift(triple(1, 2, 3), 4), is(triple(2, 3, 4)));
+    }
+
 }

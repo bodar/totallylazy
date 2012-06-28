@@ -17,14 +17,15 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
-import com.googlecode.totallylazy.MemorisedSequence;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
@@ -34,31 +35,36 @@ import com.googlecode.totallylazy.predicates.RemainderIs;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.first;
-import static com.googlecode.totallylazy.Callables.reduceAndShift;
+import static com.googlecode.totallylazy.Computation.computation;
+import static com.googlecode.totallylazy.Computation.generate;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Pair.reduceLeftShift;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Segment.constructors.segment;
+import static com.googlecode.totallylazy.Segment.constructors.unique;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.repeat;
-import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 
 public class Numbers {
+    public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
+
     public static Sequence<Number> range(final Number start) {
         return iterate(increment(), start);
     }
 
     public static Sequence<Number> range(final Number start, final Number end) {
-        if(lessThan(end, start)) return range(start, end, -1);
+        if (lessThan(end, start)) return range(start, end, -1);
         return range(start).takeWhile(lessThanOrEqualTo(end));
     }
 
     public static Sequence<Number> range(final Number start, final Number end, final Number step) {
-        if(lessThan(end, start)) return iterate(add(step), start).takeWhile(greaterThanOrEqualTo(end));
+        if (lessThan(end, start)) return iterate(add(step), start).takeWhile(greaterThanOrEqualTo(end));
         return iterate(add(step), start).takeWhile(lessThanOrEqualTo(end));
     }
 
@@ -82,27 +88,27 @@ public class Numbers {
         };
     }
 
-    // TODO: Try to convert to lazy sequence again!
-    public static Sequence<Number> primeFactorsOf(Number value) {
-        Set<Number> factors = new HashSet<Number>();
-        Number ceiling = value;
-        Number possibleFactor = 2;
-
-        while (lessThanOrEqualTo(squared(possibleFactor), ceiling)) {
-            if (isZero(remainder(ceiling, possibleFactor))) {
-                factors.add(possibleFactor);
-                ceiling = divide(ceiling, possibleFactor);
-            } else {
-                possibleFactor = increment(possibleFactor);
-            }
-        }
-        if (!equalTo(ceiling, 1)) {
-            factors.add(ceiling);
-        }
-        return sequence(factors).sortBy(ascending());
+    public static Sequence<Number> primeFactors(final Number number) {
+        return Segment.methods.sequence(factor(primes(), number));
     }
 
-    private static Number squared(Number value) {
+    static Segment<Number> factor(Segment<Number> primes, Number number) {
+        Number prime = primes.head();
+        if (greaterThan(squared(prime), number)) return segment(number);
+        if (isZero(remainder(number, prime))) return unique(prime, factor(primes, quotient(number, prime)));
+        return factor(primes.tail(), number);
+    }
+
+    public static Function1<Number, Number> squared() {
+        return new Function1<Number, Number>() {
+            @Override
+            public Number call(Number number) throws Exception {
+                return squared(number);
+            }
+        };
+    }
+
+    public static Number squared(Number value) {
         return multiply(value, value);
     }
 
@@ -123,27 +129,19 @@ public class Numbers {
     }
 
     public static LogicalPredicate<Number> prime() {
+        return isPrime();
+    }
+
+    public static LogicalPredicate<Number> isPrime() {
         return new LogicalPredicate<Number>() {
             public final boolean matches(final Number candidate) {
-                return primes().takeWhile(primeSquaredLessThan(candidate)).forAll(remainderIsZero(candidate).not());
+                return isPrime(candidate);
             }
         };
     }
 
-    public static LogicalPredicate<Number> primeSquaredLessThan(final Number candidate) {
-        return new LogicalPredicate<Number>() {
-            public final boolean matches(final Number prime) {
-                return Numbers.lessThanOrEqualTo(squared(prime), candidate);
-            }
-        };
-    }
-
-    public static LogicalPredicate<Number> remainderIsZero(final Number dividend) {
-        return new LogicalPredicate<Number>() {
-            public final boolean matches(Number divisor) {
-                return Numbers.isZero(remainder(dividend, divisor));
-            }
-        };
+    public static boolean isPrime(Number candidate) {
+        return primes().takeWhile(where(squared(), lessThanOrEqualTo(candidate))).forAll(where(remainder(candidate), is(not(zero()))));
     }
 
     public static LogicalPredicate<Number> remainderIs(final Number divisor, final Number remainder) {
@@ -163,18 +161,31 @@ public class Numbers {
         };
     }
 
-    private static final MemorisedSequence<Number> primes = Sequences.<Number>sequence(2).join(iterate(add(2), 3).filter(prime())).memorise();
+    private static Computation<Number> primes = computation(2, computation(3, generate(nextPrime())));
 
-    public static MemorisedSequence<Number> primes() {
+    public static Sequence<Number> primes() {
         return primes;
     }
 
+    public static Number nextPrime(Number number) {
+        return iterate(add(2), number).filter(isPrime()).second();
+    }
+
+    public static Function1<Number, Number> nextPrime() {
+        return new Function1<Number, Number>() {
+            @Override
+            public Number call(Number number) throws Exception {
+                return nextPrime(number);
+            }
+        };
+    }
+
     public static Sequence<Number> fibonacci() {
-        return iterate(reduceAndShift(sum()), numbers(0, 1)).map(first(Number.class));
+        return computation(Pair.<Number, Number>pair(0, 1), generate(reduceLeftShift(sum()))).map(first(Number.class));
     }
 
     public static Sequence<Number> powersOf(Number amount) {
-        return iterate(multiply(amount), 1);
+        return Computation.iterate(multiply(amount), 1);
     }
 
     public static <T> Operators<Number> operatorsFor(Class<T> numberClass) {
@@ -229,6 +240,19 @@ public class Numbers {
 
     public static Number decrement(Number value) {
         return operatorsFor(value).decrement(value);
+    }
+
+    public static LogicalPredicate<Number> zero() {
+        return isZero();
+    }
+
+    public static LogicalPredicate<Number> isZero() {
+        return new LogicalPredicate<Number>() {
+            @Override
+            public boolean matches(Number other) {
+                return isZero(other);
+            }
+        };
     }
 
     public static boolean isZero(Number value) {
@@ -394,6 +418,27 @@ public class Numbers {
         return reduce(operatorsFor(x, y).quotient(x, y));
     }
 
+    public static Function1<Number, Number> mod(final Number divisor) {
+        return mod().apply(divisor);
+    }
+
+    public static Function2<Number, Number, Number> mod() {
+        return remainder().flip();
+    }
+
+    public static Function2<Number, Number, Number> remainder() {
+        return new Function2<Number, Number, Number>() {
+            @Override
+            public Number call(Number dividend, Number divisor) throws Exception {
+                return remainder(dividend, divisor);
+            }
+        };
+    }
+
+    public static Function1<Number, Number> remainder(final Number dividend) {
+        return remainder().apply(dividend);
+    }
+
     public static Number remainder(Number dividend, Number divisor) {
         throwIfZero(divisor);
         return reduce(operatorsFor(dividend, divisor).remainder(dividend, divisor));
@@ -401,8 +446,12 @@ public class Numbers {
 
     private static void throwIfZero(Number value) {
         if (operatorsFor(value).isZero(value)) {
-            throw new ArithmeticException("Divide by zero");
+            throw DIVIDE_BY_ZERO;
         }
+    }
+
+    public static Number number(Number value) {
+        return reduce(value);
     }
 
     public static Number reduce(Number value) {
@@ -430,20 +479,6 @@ public class Numbers {
         };
     }
 
-    public static Function2<Number, Number, Number> remainder() {
-        return new Function2<Number, Number, Number>() {
-            @Override
-            public Number call(Number dividend, Number divisor) throws Exception {
-                return remainder(dividend, divisor);
-            }
-        };
-    }
-
-
-    public static Function1<Number, Number> remainder(final Number divisor) {
-        return remainder().flip().apply(divisor);
-    }
-
     public static String toLexicalString(Number value, final Number minValue, final Number maxValue) {
         String offset = add(value, negate(minValue)).toString();
         int maxSize = add(maxValue, negate(minValue)).toString().length();
@@ -452,5 +487,46 @@ public class Numbers {
 
     public static Number parseLexicalString(String value, final Number minValue) {
         return add(valueOf(value).get(), minValue);
+    }
+
+    public static Callable2<Number, Number, Number> maximum() {
+        return new Callable2<Number, Number, Number>() {
+            @Override
+            public Number call(Number a, Number b) throws Exception {
+                return compare(a, b) > 0 ? a : b;
+            }
+        };
+    }
+
+    public static Function2<Number, Number, Number> lcm() {
+        return new Function2<Number, Number, Number>() {
+            @Override
+            public Number call(Number x, Number y) throws Exception {
+                return lcm(x, y);
+            }
+        };
+    }
+
+    public static Number lcm(Number x, Number y) {
+        return integralOperatorsFor(x, y).lcm(x, y);
+    }
+
+    private static IntegralOperators integralOperatorsFor(Number x, Number y) {
+        Operators<?> numberOperators = operatorsFor(x, y);
+        if (numberOperators instanceof IntegralOperators) return (IntegralOperators) numberOperators;
+        throw new UnsupportedOperationException();
+    }
+
+    public static Function2<Number, Number, Number> gcd() {
+        return new Function2<Number, Number, Number>() {
+            @Override
+            public Number call(Number x, Number y) throws Exception {
+                return gcd(x, y);
+            }
+        };
+    }
+
+    public static Number gcd(Number x, Number y) {
+        return integralOperatorsFor(x, y).gcd(x, y);
     }
 }

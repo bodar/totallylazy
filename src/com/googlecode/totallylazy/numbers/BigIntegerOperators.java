@@ -10,7 +10,7 @@ import static java.math.BigInteger.ONE;
 import static java.math.BigInteger.ZERO;
 import static java.math.BigInteger.valueOf;
 
-public final class BigIntegerOperators implements Operators<BigInteger> {
+public final class BigIntegerOperators implements Operators<BigInteger>, IntegralOperators {
     public static BigIntegerOperators Instance = new BigIntegerOperators();
 
     private BigIntegerOperators() {}
@@ -103,11 +103,36 @@ public final class BigIntegerOperators implements Operators<BigInteger> {
     }
 
     public final Number quotient(Number x, Number y) {
-        return bigInteger(x).divide(bigInteger(y));
+        BigInteger bigInteger = bigInteger(x);
+        BigInteger val = bigInteger(y);
+        return quotient(bigInteger, val);
+    }
+
+    public static BigInteger quotient(BigInteger x, BigInteger y) {
+        return x.divide(y);
     }
 
     public final Number remainder(Number x, Number y) {
         return bigInteger(x).remainder(bigInteger(y));
+    }
+
+    @Override
+    public Number gcd(Number x, Number y) {
+        return gcd(bigInteger(x), bigInteger(y));
+    }
+
+    public static BigInteger gcd(BigInteger bigInteger, BigInteger val) {
+        return bigInteger.gcd(val);
+    }
+
+    @Override
+    public Number lcm(Number x, Number y) {
+        return lcm(bigInteger(x), bigInteger(y));
+    }
+
+    public static BigInteger lcm(BigInteger x, BigInteger y) {
+        if(x.signum() == 0 || y.signum() == 0) return ZERO;
+        return y.multiply(quotient(x, gcd(x, y))).abs();
     }
 
     public static BigInteger bigInteger(Number value) {

@@ -145,6 +145,10 @@ public class Strings {
     public static boolean isEmpty(String value) {
         return value == null || value.equals(EMPTY);
     }
+    
+    public static boolean isBlank(String value) {
+        return isEmpty(value) || isEmpty(value.trim());
+    }
 
     public static LogicalPredicate<Character> unicodeControlOrUndefinedCharacter() {
         return new LogicalPredicate<Character>() {
@@ -163,6 +167,10 @@ public class Strings {
                 .append(Character.toTitleCase(value.charAt(0)))
                 .append(value.substring(1))
                 .toString();
+    }
+
+    public static String asString(Object value) {
+        return value == null ? "" : value.toString();
     }
 
     public static String toString(byte[] bytes) {
@@ -258,5 +266,28 @@ public class Strings {
                 return s.charAt(index);
             }
         };
+    }
+
+
+    public static Callable1<String, String> trim() {
+        return new Callable1<String, String>() {
+            @Override
+            public String call(String value) throws Exception {
+                return value.trim();
+            }
+        };
+    }
+
+    public static LogicalPredicate<String> isPalindrome() {
+        return new LogicalPredicate<String>() {
+            @Override
+            public boolean matches(String other) {
+                return Strings.isPalindrome(other);
+            }
+        };
+    }
+
+    public static boolean isPalindrome(String other) {
+        return other.equals(reverse(other));
     }
 }

@@ -21,6 +21,8 @@
     <import file="${build}/macros.xml"/>
     <import file="${build}/shavenmaven.xml"/>
 
+    <requires java.version="1\.[67]"/>
+
     <path id="all.dependancies">
         <fileset dir="${build.dependencies.dir}" includes="**/*.jar"/>
         <fileset dir="${runtime.dependencies.dir}" includes="*.jar"/>
@@ -89,6 +91,15 @@
 
     </target>
 
-    <target name="build" depends="update, clean, compile, test, package" description="build all"/>
-
+    <target name="build" description="build all">
+        <parallel>
+           <antcall target="update"/>
+           <antcall target="clean"/>
+        </parallel>
+        <antcall target="compile"/>
+        <parallel>
+           <antcall target="test"/>
+           <antcall target="package"/>
+        </parallel>
+    </target>
 </project>

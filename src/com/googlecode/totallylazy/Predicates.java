@@ -23,7 +23,9 @@ import com.googlecode.totallylazy.predicates.WhileTrue;
 
 import java.util.Collection;
 
+import static com.googlecode.totallylazy.Function1.function;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Sets.*;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;
 
 public class Predicates {
@@ -67,18 +69,30 @@ public class Predicates {
         };
     }
 
-    public static <T> LogicalPredicate<Iterable<T>> subsetOf(final Iterable<? extends T> superset) {
+    public static <T> LogicalPredicate<Iterable<T>> forAll(final Predicate<? super T> predicate) {
         return new LogicalPredicate<Iterable<T>>() {
-            public boolean matches(Iterable<T> subset) {
-                return sequence(subset).forAll(in(superset));
+            public boolean matches(Iterable<T> iterable) {
+                return sequence(iterable).forAll(predicate);
             }
         };
+    }
+
+    public static <T> LogicalPredicate<Iterable<T>> subsetOf(final Iterable<? extends T> superset) {
+        return forAll(in(superset));
     }
 
     public static <T> LogicalPredicate<Iterable<T>> supersetOf(final Iterable<? extends T> subset) {
         return new LogicalPredicate<Iterable<T>>() {
             public boolean matches(Iterable<T> superset) {
                 return sequence(subset).forAll(in(superset));
+            }
+        };
+    }
+
+    public static <T> LogicalPredicate<Iterable<T>> setEqualityWith(final Iterable<? extends T> other) {
+        return new LogicalPredicate<Iterable<T>>() {
+            public boolean matches(Iterable<T> iterable) {
+                return set(iterable).equals(set(other));
             }
         };
     }
@@ -132,11 +146,11 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second) {
-        return AndPredicate.and(Sequences.<Predicate<? super T>>sequence(first, second));
+        return and(Sequences.<Predicate<? super T>>sequence(first, second));
     }
 
     public static <T> LogicalPredicate<T> and(final Predicate<? super T>... predicates) {
-        return AndPredicate.and(sequence(predicates));    }
+        return and(sequence(predicates));    }
 
     public static <T> LogicalPredicate<T> and(final Iterable<? extends Predicate<? super T>> predicates) {
         return AndPredicate.and(predicates);
@@ -147,11 +161,15 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> or(final Predicate<? super T> first, final Predicate<? super T> second) {
-        return OrPredicate.or(Sequences.<Predicate<? super T>>sequence(first, second));
+        return or(Sequences.<Predicate<? super T>>sequence(first, second));
     }
 
     public static <T> LogicalPredicate<T> or(final Predicate<? super T>... predicates) {
-        return OrPredicate.or(sequence(predicates));
+        return or(sequence(predicates));
+    }
+
+    public static <T> LogicalPredicate<T> or(final Iterable<? extends Predicate<? super T>> predicates) {
+        return OrPredicate.or(predicates);
     }
 
     public static <T> LogicalPredicate<T> not(final T t) {
@@ -274,6 +292,16 @@ public class Predicates {
 
     public static <T> LogicalPredicate<Sequence<T>> empty(Class<T> aClass) {
         return empty();
+    }
+
+    public static <T> LogicalPredicate<T> predicate(final Callable1<T, Boolean> callable) {
+        return new LogicalPredicate<T>() {
+            @Override
+            public boolean matches(T other) {
+                Boolean result = function(callable).apply(other);
+                return result == null ? false : result;
+            }
+        };
     }
 
 }

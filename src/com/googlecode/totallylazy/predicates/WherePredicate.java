@@ -1,10 +1,14 @@
 package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callers;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Predicate;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
+import static java.lang.String.format;
 
 public class WherePredicate<T, R> extends LogicalPredicate<T> {
     private final Callable1<? super T, ? extends R> callable;
@@ -19,6 +23,15 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
         return new WherePredicate<T, R>(callable, predicate);
     }
 
+    public static <T, R> Function1<T, Predicate<T>> where(final Callable2<? super T, ? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+        return new Function1<T, Predicate<T>>() {
+            @Override
+            public Predicate<T> call(T t) throws Exception {
+                return where(Function2.function(callable).apply(t), predicate);
+            }
+        };
+    }
+
     public boolean matches(T o) {
         return predicate.matches(Callers.call(callable, o));
     }
@@ -29,5 +42,20 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
 
     public Predicate<R> predicate() {
         return cast(predicate);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof WherePredicate && callable.equals(((WherePredicate) obj).callable()) && predicate.equals(((WherePredicate) obj).predicate());
+    }
+
+    @Override
+    public int hashCode() {
+        return 19 * callable.hashCode() * predicate.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return format("where %s %s", callable, predicate);
     }
 }

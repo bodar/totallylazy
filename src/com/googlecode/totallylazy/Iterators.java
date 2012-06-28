@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.collections.ImmutableList;
 import com.googlecode.totallylazy.iterators.FilterIterator;
 import com.googlecode.totallylazy.iterators.FlattenIterator;
 import com.googlecode.totallylazy.iterators.InitIterator;
@@ -9,6 +10,8 @@ import com.googlecode.totallylazy.iterators.PartitionIterator;
 import com.googlecode.totallylazy.iterators.PeekingIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
+import com.googlecode.totallylazy.iterators.SegmentIterator;
+import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
@@ -28,8 +31,11 @@ import static com.googlecode.totallylazy.Callables.nullGuard;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Computation.computation;
+import static com.googlecode.totallylazy.Computation.generate;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
@@ -39,7 +45,6 @@ import static com.googlecode.totallylazy.Sequences.foldRight;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sequences.tail;
 import static com.googlecode.totallylazy.numbers.Numbers.equalTo;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
@@ -123,7 +128,16 @@ public class Iterators {
     }
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
-        return foldRight(iterator, seed, Function2.<T, S, S>function(callable).pair());
+        Iterator<T> reversed = reverse(iterator);
+        S accumilator = seed;
+        while (reversed.hasNext()){
+            accumilator = call(callable, reversed.next(), accumilator);
+        }
+        return accumilator;
+    }
+
+    public static <T> Iterator<T> reverse(Iterator<? extends T> iterator) {
+        return ImmutableList.constructors.reverse(iterator).iterator();
     }
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
@@ -325,7 +339,16 @@ public class Iterators {
         return map(iterator, Callables.<T, S>cast());
     }
 
-    public static <T> Number size(final Iterator<? extends T> iterator) {
+    public static <T> int size(final Iterator<? extends T> iterator) {
+        int count = 0;
+        while (iterator.hasNext()) {
+            iterator.next();
+            count++;
+        }
+        return count;
+    }
+
+    public static <T> Number number(final Iterator<? extends T> iterator) {
         Number count = 0;
         while (iterator.hasNext()) {
             iterator.next();

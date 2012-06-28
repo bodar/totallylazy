@@ -8,6 +8,7 @@ import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FunctionsTest {
@@ -31,6 +32,11 @@ public class FunctionsTest {
         assertThat(addThenMultiple().apply(10).apply(2).apply(3), is(36));
         assertThat(addThenMultiple().apply(10, 2).apply(3), is(36));
         assertThat(addThenMultiple().apply(10, 2, 3), is(36));
+    }
+
+    @Test
+    public void canCaptureArgument() throws Exception {
+        assertThat(multiply(10).capturing().apply(1), equalTo(Pair.<Number,Number>pair(1, 10)));
     }
 
     private Function3<Number, Number, Number, Number> addThenMultiple() {

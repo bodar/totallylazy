@@ -9,6 +9,7 @@ import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Runnables.doNothing;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.memorise;
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
@@ -26,11 +27,11 @@ public class MemoriseTest {
     @Test
     public void canForget() throws Exception {
         CountingCallable<Integer> counting = counting();
-        MemorisedSequence<Integer> memory = sequence(counting).map(call(Integer.class)).memorise();
+        Sequence<Integer> memory = repeat(counting).memorise();
         assertThat(memory.head(), is(0));
         assertThat(counting.count(), is(1));
         
-        memory.forget();
+        ((Memory) memory).forget();
         assertThat(memory.head(), is(1));
         assertThat(memory.head(), is(1));
         assertThat(counting.count(), is(2));
@@ -46,7 +47,7 @@ public class MemoriseTest {
     @Test
     public void memoriseIsThreadSafe() throws Exception {
         CountingCallable<Integer> counting = counting();
-        final Sequence<Integer> number = sequence(counting.sleep(10)).map(call(Integer.class)).memorise();
+        final Sequence<Integer> number = repeat(counting.sleep(10)).memorise();
 
         Sequence<Integer> result = callConcurrently(callHead(number).sleep(10), callHead(number).sleep(10));
 
@@ -66,7 +67,7 @@ public class MemoriseTest {
     @Test
     public void supportsMemorise() throws Exception {
         CountingCallable<Integer> counting = counting();
-        Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
+        Sequence<Integer> sequence = repeat(counting).memorise();
         assertThat(sequence.head(), is(0));
         assertThat(sequence.head(), is(0));
         assertThat(counting.count(), is(1));
