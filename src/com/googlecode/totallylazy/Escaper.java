@@ -23,7 +23,7 @@ public class Escaper {
     }
 
     public String escape(Object value) {
-        return value == null ? null : characters(value.toString()).map(escape()).toString("", "", "", Long.MAX_VALUE);
+        return value == null ? null : characters(value.toString()).map(escape()).toString("");
     }
 
     private Function1<Character, String> escape() {

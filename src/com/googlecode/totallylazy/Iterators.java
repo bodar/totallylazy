@@ -42,9 +42,12 @@ import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Sequences.foldRight;
+import static com.googlecode.totallylazy.Sequences.init;
+import static com.googlecode.totallylazy.Sequences.lastOption;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Sequences.take;
 import static com.googlecode.totallylazy.numbers.Numbers.equalTo;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
@@ -101,6 +104,14 @@ public class Iterators {
 
     public static <T> Option<T> headOption(final Iterator<? extends T> iterator) {
         return iterator.hasNext() ? some(iterator.next()) : Option.<T>none();
+    }
+
+    public static <T> T last(final Iterator<? extends T> iterator) {
+        return head(reverse(iterator));
+    }
+
+    public static <T> Option<T> lastOption(final Iterator<? extends T> iterator) {
+        return headOption(reverse(iterator));
     }
 
     public static <T> Iterator<T> tail(final Iterator<? extends T> iterator) {
@@ -166,30 +177,18 @@ public class Iterators {
         return foldRight(iterator, Unchecked.<S>cast(iterator.next()), callable);
     }
 
-    public static String toString(final Iterator iterator) {
-        return toString(iterator, ",");
-    }
-
-    public static String toString(final Iterator iterator, final String separator) {
+    public static String toString(final Iterator<?> iterator, final String separator) {
         return toString(iterator, "", separator, "");
     }
 
-    public static String toString(final Iterator iterator, final String start, final String separator, final String end) {
-        return toString(iterator, start, separator, end, 100);
-    }
-
-    public static String toString(final Iterator iterator, final String start, final String separator, final String end, final Number limit) {
-        Number count = 0;
+    public static String toString(final Iterator<?> iterator, final String start, final String separator, final String end) {
         StringBuilder builder = new StringBuilder();
         builder.append(start);
         if (iterator.hasNext()) builder.append(iterator.next());
-        count = increment(count);
-        while (iterator.hasNext() && lessThan(count, limit)) {
-            count = increment(count);
+        while (iterator.hasNext()) {
             builder.append(separator);
             builder.append(iterator.next());
         }
-        if (equalTo(count, limit)) builder.append("...");
         builder.append(end);
         return builder.toString();
     }

@@ -160,10 +160,6 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.toString(this, start, separator, end);
     }
 
-    public String toString(final String start, final String separator, final String end, final Number limit) {
-        return Sequences.toString(this, start, separator, end, limit);
-    }
-
     public Set<T> union(final Iterable<? extends T> other) {
         return Sets.union(toSet(), Sets.set(other));
     }

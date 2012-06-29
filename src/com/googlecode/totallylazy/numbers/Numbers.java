@@ -482,7 +482,7 @@ public class Numbers {
     public static String toLexicalString(Number value, final Number minValue, final Number maxValue) {
         String offset = add(value, negate(minValue)).toString();
         int maxSize = add(maxValue, negate(minValue)).toString().length();
-        return repeat('0').take(maxSize - offset.length()).join(characters(offset)).toString("", "", "", Integer.MAX_VALUE);
+        return repeat('0').take(maxSize - offset.length()).join(characters(offset)).toString("");
     }
 
     public static Number parseLexicalString(String value, final Number minValue) {
