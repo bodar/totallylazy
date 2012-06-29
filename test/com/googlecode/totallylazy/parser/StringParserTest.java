@@ -2,6 +2,11 @@ package com.googlecode.totallylazy.parser;
 
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -21,5 +26,15 @@ public class StringParserTest {
         Success<String> result = (Success<String>) string("ABC").parse(characters("ABCDEF"));
         assertThat(result.value(), is("ABC"));
         assertThat(result.remainder(), is(characters("DEF")));
+    }
+
+    @Test
+    public void canLazilyParseAStream() throws Exception {
+        InputStream stream = new ByteArrayInputStream("ABCDEF".getBytes("UTF-8"));
+        Reader reader = new InputStreamReader(stream, "UTF-8");
+        Success<String> result = (Success<String>) string("ABC").parse(characters(reader));
+        assertThat(result.value(), is("ABC"));
+        char next = (char)reader.read();
+        assertThat(next, is('D'));
     }
 }

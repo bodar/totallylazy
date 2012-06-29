@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Segment;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Segment.constructors.characters;

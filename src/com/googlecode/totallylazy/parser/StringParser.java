@@ -8,15 +8,15 @@ import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.parser.SequenceParser.sequenceOf;
 
 public class StringParser extends BaseParser<String> {
-    private final String expected;
+    private final CharSequence expected;
     private final SequenceParser<Character> parser;
 
-    private StringParser(String expected) {
+    private StringParser(CharSequence expected) {
         this.expected = expected;
         parser = sequenceOf(characters(expected).map(CharacterParser.characterParser()));
     }
 
-    public static StringParser string(String value) {
+    public static StringParser string(CharSequence value) {
         return new StringParser(value);
     }
 
@@ -32,6 +32,6 @@ public class StringParser extends BaseParser<String> {
 
     @Override
     public String toString() {
-        return expected;
+        return expected.toString();
     }
 }
