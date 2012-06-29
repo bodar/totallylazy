@@ -17,6 +17,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Function1;
@@ -161,7 +162,8 @@ public class Numbers {
         };
     }
 
-    private static Computation<Number> primes = computation(2, computation(3, generate(nextPrime())));
+    private static Computation<Number> primes = computation(2, computation(3, nextPrime()));
+
 
     public static Sequence<Number> primes() {
         return primes;
@@ -181,7 +183,7 @@ public class Numbers {
     }
 
     public static Sequence<Number> fibonacci() {
-        return computation(Pair.<Number, Number>pair(0, 1), generate(reduceLeftShift(sum()))).map(first(Number.class));
+        return computation(Pair.<Number, Number>pair(0, 1), reduceLeftShift(sum())).map(first(Number.class));
     }
 
     public static Sequence<Number> powersOf(Number amount) {

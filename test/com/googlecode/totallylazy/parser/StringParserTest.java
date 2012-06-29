@@ -29,7 +29,7 @@ public class StringParserTest {
     }
 
     @Test
-    public void canLazilyParseAStream() throws Exception {
+    public void doesNotReadMoreThanItNeeds() throws Exception {
         InputStream stream = new ByteArrayInputStream("ABCDEF".getBytes("UTF-8"));
         Reader reader = new InputStreamReader(stream, "UTF-8");
         Success<String> result = (Success<String>) string("ABC").parse(characters(reader));

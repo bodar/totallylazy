@@ -7,7 +7,6 @@ import com.googlecode.totallylazy.segments.CharacterSegment;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -49,7 +48,7 @@ public interface Segment<T> {
         }
 
         public static Computation<Character> characters(final Reader reader) {
-            return Computation.computation(read(reader), new Callable1<Character, Computation<Character>>() {
+            return Computation.computation1(read(reader), new Callable1<Character, Computation<Character>>() {
                 @Override
                 public Computation<Character> call(Character character) throws Exception {
                     return characters(reader);
@@ -89,6 +88,10 @@ public interface Segment<T> {
 
         public static <T> Option<T> headOption(Segment<T> segment) {
             return segment.isEmpty() ? Option.<T>none() : some(segment.head());
+        }
+
+        public static boolean equalTo(Segment<?> a, Segment<?> b) {
+            return Sequences.equalTo(methods.sequence(a), methods.sequence(b));
         }
     }
 
