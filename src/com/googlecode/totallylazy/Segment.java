@@ -4,8 +4,10 @@ import com.googlecode.totallylazy.iterators.SegmentIterator;
 import com.googlecode.totallylazy.segments.AbstractSegment;
 import com.googlecode.totallylazy.segments.CharacterSegment;
 
+import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -44,6 +46,26 @@ public interface Segment<T> {
 
         public static Segment<Character> characters(CharSequence charSequence) {
             return CharacterSegment.characterSegment(charSequence);
+        }
+
+        public static Computation<Character> characters(final Reader reader) {
+            return Computation.computation(read(reader), new Callable1<Character, Computation<Character>>() {
+                @Override
+                public Computation<Character> call(Character character) throws Exception {
+                    return characters(reader);
+                }
+            });
+        }
+
+        private static Function<Character> read(final Reader reader) {
+            return new Function<Character>() {
+                @Override
+                public Character call() throws Exception {
+                    int read = reader.read();
+                    if(read == -1) throw new NoSuchElementException();
+                    return (char) read;
+                }
+            };
         }
     }
 
