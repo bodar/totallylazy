@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 
 import java.util.concurrent.Callable;
@@ -40,7 +41,7 @@ public abstract class BaseParser<A> implements Parser<A> {
         return OptionalParser.optional(this);
     }
     
-    public BaseParser<Sequence<A>> many() {
+    public BaseParser<Segment<A>> many() {
         return ManyParser.many(this);
     }
 }

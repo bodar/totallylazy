@@ -44,7 +44,7 @@ public class CharacterSequence implements CharSequence {
         return builder.toString() + current.head();
     }
 
-    public Segment<Character> current() {
-        return current;
+    public Segment<Character> remainder() {
+        return current.tail();
     }
 }

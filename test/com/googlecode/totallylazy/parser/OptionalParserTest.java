@@ -16,7 +16,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OptionalParserTest {
     @Test
-    @Ignore("WIP")
     public void isOptional() throws Exception {
         OptionalParser<String> parser = optional(string("foo"));
         Success<Option<String>> result = cast(parser.parse(characters("foo")));

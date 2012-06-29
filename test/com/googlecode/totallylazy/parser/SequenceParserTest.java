@@ -20,7 +20,6 @@ public class SequenceParserTest {
     }
 
     @Test
-    @Ignore("WIP")
     public void canCombineThreeParsers() throws Exception {
         Success<Sequence<Character>> result = (Success<Sequence<Character>>) SequenceParser.sequenceOf(character('A'), character('B'), character('C')).
                 parse(characters("ABC"));
