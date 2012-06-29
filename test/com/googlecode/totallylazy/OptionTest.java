@@ -10,6 +10,7 @@ import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.ignoreAndReturn;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Function1.constant;
+import static com.googlecode.totallylazy.Objects.equalTo;
 import static com.googlecode.totallylazy.Option.applicate;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
@@ -25,6 +26,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
 public class OptionTest {
+    @Test
+    public void supportsApplicativeEquality() throws Exception {
+        assertThat(applicate(applicate(some(equalTo()), some(3)), some(5)), is(some(false)));
+        assertThat(applicate(applicate(some(equalTo()), some(3)), some(3)), is(some(true)));
+        assertThat(applicate(applicate(some(equalTo()), none(Integer.class)), some(3)), is(none(Boolean.class)));
+        assertThat(applicate(applicate(some(equalTo()), some(3)), none(Integer.class)), is(none(Boolean.class)));
+    }
+
     @Test
     public void supportsApplicativeUsage() throws Exception {
         assertThat(none(Number.class).applicate(some(add(3))), is(none(Number.class)));
