@@ -1,0 +1,45 @@
+package com.googlecode.totallylazy.segments;
+
+import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.iterators.SegmentIterator;
+
+import java.util.Iterator;
+
+import static com.googlecode.totallylazy.Unchecked.cast;
+
+public abstract class AbstractSegment<T> implements Segment<T>, Iterable<T>{
+    @Override
+    public Segment<T> cons(T head) {
+        return Segment.constructors.segment(head, this);
+    }
+
+    @Override
+    public <C extends Segment<T>> C joinTo(C rest) {
+        return cast(tail().joinTo(rest).cons(head()));
+    }
+
+    @Override
+    public String toString() {
+        return sequence().toString();
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new SegmentIterator<T>(this);
+    }
+
+    public Sequence<T> sequence() {
+        return methods.sequence(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return sequence().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Segment && methods.sequence((Segment<?>)obj).equals(sequence());
+    }
+}

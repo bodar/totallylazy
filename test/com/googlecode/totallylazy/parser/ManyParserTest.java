@@ -16,7 +16,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ManyParserTest {
     @Test
-    @Ignore("WIP")
     public void doesNotThrowIfItConsumesAllCharacters() throws Exception {
         Success<Sequence<Character>> result = cast(many(character('C')).parse(characters("CCCCC")));
         assertThat(result.value(), is(characters("CCCCC")));

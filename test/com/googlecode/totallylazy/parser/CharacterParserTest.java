@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.parser;
 import com.googlecode.totallylazy.Segment;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Sequences.characters;
+import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
@@ -20,7 +20,7 @@ public class CharacterParserTest {
     public void canParseACharacter() throws Exception {
         Success<Character> result = cast(character('A').parse(characters("ABC")));
         assertThat(result.value(), is('A'));
-        assertThat(result.remainder(), is(Segment.constructors.characters("BC")));
+        assertThat(result.remainder(), is(characters("BC")));
     }
 
     @Test

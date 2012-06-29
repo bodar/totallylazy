@@ -36,7 +36,7 @@ public class PatternParser extends BaseParser<String>{
             return fail();
         }
         MatchResult result = matches.head();
-        return success(result.group(), sequence.current().tail());
+        return success(result.group(), sequence.remainder());
     }
 
 }

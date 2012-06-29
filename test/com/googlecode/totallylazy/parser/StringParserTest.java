@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.parser;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Segment.constructors.characters;
@@ -11,7 +10,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class StringParserTest {
     @Test
-    @Ignore("WIP")
     public void canParseAString() throws Exception {
         Success<String> result = (Success<String>) string("ABC").parse(characters("ABC"));
         assertThat(result.value(), is("ABC"));

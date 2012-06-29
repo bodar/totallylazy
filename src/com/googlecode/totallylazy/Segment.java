@@ -1,7 +1,8 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.collections.ImmutableMap;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
+import com.googlecode.totallylazy.segments.AbstractSegment;
+import com.googlecode.totallylazy.segments.CharacterSegment;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -33,16 +34,16 @@ public interface Segment<T> {
             return segment(head, constructors.<T>emptySegment());
         }
 
-        public static <T> OneSegment<T> segment(T head, Segment<T> empty) {
-            return new OneSegment<T>(head, empty);
+        public static <T> Segment<T> segment(T head, Segment<T> empty) {
+            return ASegment.segment(head, empty);
         }
 
         public static <T> Segment<T> unique(T head, Segment<T> tail) {
             return segment(head, tail.head().equals(head) ? tail.tail() : tail);
         }
 
-        public static Segment<Character> characters(String s) {
-            return Sequences.characters(s);
+        public static Segment<Character> characters(CharSequence charSequence) {
+            return CharacterSegment.characterSegment(charSequence);
         }
     }
 
@@ -80,13 +81,17 @@ public interface Segment<T> {
         }
     }
 
-    class OneSegment<T> implements Segment<T> {
+    class ASegment<T> extends AbstractSegment<T> {
         private final T head;
         private final Segment<T> tail;
 
-        public OneSegment(T head, Segment<T> tail) {
+        private ASegment(T head, Segment<T> tail) {
             this.head = head;
             this.tail = tail;
+        }
+
+        static <T> ASegment<T> segment(T head, Segment<T> tail) {
+            return new ASegment<T>(head, tail);
         }
 
         @Override
@@ -104,18 +109,9 @@ public interface Segment<T> {
             return tail;
         }
 
-        @Override
-        public Segment<T> cons(T head) {
-            return constructors.segment(head, this);
-        }
-
-        @Override
-        public <C extends Segment<T>> C joinTo(C rest) {
-            return cast(tail().joinTo(rest).cons(head()));
-        }
     }
 
-    class EmptySegment<T> implements Segment<T> {
+    class EmptySegment<T> extends AbstractSegment<T> {
         @Override
         public boolean isEmpty() {
             return true;
@@ -132,28 +128,8 @@ public interface Segment<T> {
         }
 
         @Override
-        public Segment<T> cons(T head) {
-            return constructors.segment((T) head);
-        }
-
-        @Override
         public <C extends Segment<T>> C joinTo(C rest) {
             return rest;
-        }
-
-        @Override
-        public int hashCode() {
-            return 31;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof Segment && ((Segment) obj).isEmpty();
-        }
-
-        @Override
-        public String toString() {
-            return "";
         }
     }
 

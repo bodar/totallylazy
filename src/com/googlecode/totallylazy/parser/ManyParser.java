@@ -8,7 +8,7 @@ import com.googlecode.totallylazy.Sequences;
 
 import static com.googlecode.totallylazy.Function.returns;
 
-public class ManyParser<A> extends BaseParser<Sequence<A>>{
+public class ManyParser<A> extends BaseParser<Segment<A>>{
     private final BaseParser<A> parser;
 
     private ManyParser(Parser<? extends A> parser) {
@@ -25,17 +25,17 @@ public class ManyParser<A> extends BaseParser<Sequence<A>>{
     }
 
     @Override
-    public Result<Sequence<A>> parse(Segment<Character> sequence) throws Exception {
+    public Result<Segment<A>> parse(Segment<Character> sequence) throws Exception {
         return parser.then(returns(this)).
                 map(cons()).
-                or(ReturnsParser.returns(Sequences.<A>empty())).
+                or(ReturnsParser.returns(Segment.constructors.<A>emptySegment())).
                 parse(sequence);
     }
 
-    private Callable1<Pair<A, Sequence<A>>, Sequence<A>> cons() {
-        return new Callable1<Pair<A, Sequence<A>>, Sequence<A>>() {
+    private Callable1<Pair<A, Segment<A>>, Segment<A>> cons() {
+        return new Callable1<Pair<A, Segment<A>>, Segment<A>>() {
             @Override
-            public Sequence<A> call(Pair<A, Sequence<A>> pair) throws Exception {
+            public Segment<A> call(Pair<A, Segment<A>> pair) throws Exception {
                 return pair.second().cons(pair.first());
             }
         };
