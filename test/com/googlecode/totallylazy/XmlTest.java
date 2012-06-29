@@ -36,7 +36,7 @@ public class XmlTest {
     }
 
     private String longStringWithoutEncodedChars() {
-        return repeat("A").take(100).toString("", "", "", Long.MAX_VALUE);
+        return repeat("A").take(100).toString("");
     }
 
     @Test

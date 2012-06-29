@@ -517,7 +517,6 @@ public class SequenceTest {
         assertThat(sequence(1, 2, 3).toString(), is("1,2,3"));
         assertThat(sequence(1, 2, 3).toString(":"), is("1:2:3"));
         assertThat(sequence(1, 2, 3).toString("(", ", ", ")"), is("(1, 2, 3)"));
-        assertThat(sequence(1, 2, 3).toString("(", ", ", ")", 2), is("(1, 2...)"));
     }
 
     @Test

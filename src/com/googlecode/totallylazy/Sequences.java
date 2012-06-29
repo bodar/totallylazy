@@ -225,7 +225,7 @@ public class Sequences {
         return head(reverse(iterable));
     }
 
-    public static <T> Option<T>  lastOption(final Iterable<? extends T> iterable) {
+    public static <T> Option<T> lastOption(final Iterable<? extends T> iterable) {
         return headOption(reverse(iterable));
     }
 
@@ -306,8 +306,10 @@ public class Sequences {
         return Iterators.reduceRight(iterable.iterator(), callable);
     }
 
-    public static String toString(final Iterable iterable) {
-        return Iterators.toString(iterable.iterator());
+    public static String toString(final Iterable<?> iterable) {
+        Sequence<?> sequence = sequence(iterable).take(101);
+        if(sequence.size() < 101 ) return Iterators.toString(sequence.iterator(), ",");
+        return Iterators.toString(sequence.init().iterator(), ",");
     }
 
     public static String toString(final Iterable iterable, final String separator) {
@@ -316,10 +318,6 @@ public class Sequences {
 
     public static String toString(final Iterable iterable, final String start, final String separator, final String end) {
         return Iterators.toString(iterable.iterator(), start, separator, end);
-    }
-
-    public static String toString(final Iterable iterable, final String start, final String separator, final String end, final Number limit) {
-        return Iterators.toString(iterable.iterator(), start, separator, end, limit);
     }
 
     public static boolean isEmpty(final Iterable<?> iterable) {
