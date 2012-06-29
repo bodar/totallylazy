@@ -141,7 +141,7 @@ public class Iterators {
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
         Iterator<T> reversed = reverse(iterator);
         S accumilator = seed;
-        while (reversed.hasNext()){
+        while (reversed.hasNext()) {
             accumilator = call(callable, reversed.next(), accumilator);
         }
         return accumilator;
@@ -152,7 +152,7 @@ public class Iterators {
     }
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
-        if(!iterator.hasNext()) return seed;
+        if (!iterator.hasNext()) return seed;
         return Callers.call(callable, Pair.pair(returns(head(iterator)), new Function<S>() {
             @Override
             public S call() throws Exception {
@@ -422,7 +422,7 @@ public class Iterators {
         return map(iterator, Callables.<T>returnArgument().interruptable());
     }
 
-    public static <A,B> Iterator<A> unfoldRight(Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, B seed) {
-        return new UnfoldRightIterator<A,B>(callable, seed);
+    public static <A, B> Iterator<A> unfoldRight(Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, B seed) {
+        return new UnfoldRightIterator<A, B>(callable, seed);
     }
 }

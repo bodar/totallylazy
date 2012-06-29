@@ -20,7 +20,8 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, Container<T> {
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Sequence && Sequences.equalTo(this, (Sequence) obj);
+        if(obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
+        return obj instanceof Segment && methods.equalTo(this, (Segment<?>) obj);
     }
 
     // Thread-safe Racy Single Check Idiom (Effective Java 2nd Edition p.284)

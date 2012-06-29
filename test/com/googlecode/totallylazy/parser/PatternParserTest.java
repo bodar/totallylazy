@@ -30,7 +30,7 @@ public class PatternParserTest {
     }
 
     @Test
-    public void canLazilyParseAStream() throws Exception {
+    public void doesNotReadMoreThanItNeeds() throws Exception {
         InputStream stream = new ByteArrayInputStream("1977/1/10ABC".getBytes("UTF-8"));
         Reader reader = new InputStreamReader(stream, "UTF-8");
         Success<String> result = (Success<String>) pattern("\\d{4}/\\d{1,2}/\\d{1,2}").parse(characters(reader));
