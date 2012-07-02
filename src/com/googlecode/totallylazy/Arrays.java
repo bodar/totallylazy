@@ -30,4 +30,12 @@ public class Arrays {
     public static <T> boolean containsIndex(T[] array, int index) {
         return index < array.length;
     }
+
+    public static <T> T[] array(T ... values) {
+        return values;
+    }
+
+    public static <T> boolean equalTo(Third<T> ts, Iterable<?> obj) {
+        throw new UnsupportedOperationException();
+    }
 }

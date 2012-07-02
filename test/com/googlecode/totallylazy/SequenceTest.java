@@ -18,6 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.googlecode.totallylazy.Arrays.array;
 import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Callables.ascending;
@@ -229,7 +230,7 @@ public class SequenceTest {
         assertThat(sequence(1, 2, 3).equals(sequence("1", "2", "3")), is(false));
         assertThat(sequence(1, 2).equals(sequence(1, 2, 3)), is(false));
         assertThat(sequence(1, 2, 3).equals(sequence(1, 2)), is(false));
-        assertThat(sequence(1, 2, 3).equals(list(1, 2, 3)), is(false));
+        assertThat(sequence(1, 2, 3).equals(list(1, 2, 3)), is(true));
         assertThat(sequence(Dates.date(2000, 1, 1), 1).equals(sequence(Dates.date(2000, 1, 1), 1)), is(true));
         assertThat(sequence(Dates.date(2000, 1, 1), 1).equals(sequence(null, 1)), is(false));
         assertThat(sequence(null, 1).equals(sequence(Dates.date(2000, 1, 1), 1)), is(false));
