@@ -48,6 +48,10 @@ public abstract class AbstractParser<A> implements Parser<A> {
         return between(parser, parser);
     }
 
+    public <B> AbstractParser<Segment<A>> separatedBy(Parser<?> parser){
+        return then(OptionalParser.optional(parser)).map(Callables.<A>first()).many();
+    }
+
     public AbstractParser<A> or(Parser<? extends A> parser){
         return OrParser.or(this, parser);
     }
