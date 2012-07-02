@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
+import com.googlecode.totallylazy.Segment;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Segment.constructors.characters;
@@ -34,5 +35,12 @@ public class ParsersTest {
         Success<Character> result = (Success<Character>) character('B').surroundedBy(character('$')).parse(characters("$B$D"));
         assertThat(result.value(), is('B'));
         assertThat(result.remainder().head(), is('D'));
+    }
+
+    @Test
+    public void supportsSeparatedBy() throws Exception {
+        Success<Segment<Character>> result = (Success<Segment<Character>>) character('A').separatedBy(character(',')).parse(characters("A,A,ABC"));
+        assertThat(result.value(), is(characters("AAA")));
+        assertThat(result.remainder().head(), is('B'));
     }
 }
