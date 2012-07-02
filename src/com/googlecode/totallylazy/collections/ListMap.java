@@ -10,6 +10,7 @@ import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
@@ -146,6 +147,11 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
     @Override
     public ImmutableList<Pair<K, V>> immutableList() {
         return reverse(list);
+    }
+
+    @Override
+    public Map<K, V> toMap() {
+        return ImmutableMap.methods.toMap(this);
     }
 
     @Override
