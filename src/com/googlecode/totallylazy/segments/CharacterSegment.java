@@ -15,11 +15,12 @@ public class CharacterSegment extends AbstractSegment<Character> {
         this.offset = offset;
     }
 
-    public static CharacterSegment characterSegment(CharSequence charSequence) {
+    public static Segment<Character> characterSegment(CharSequence charSequence) {
         return characterSegment(charSequence, 0);
     }
 
-    public static CharacterSegment characterSegment(CharSequence charSequence, int offset) {
+    public static Segment<Character> characterSegment(CharSequence charSequence, int offset) {
+//        if(charSequence.length() == offset) return Segment.constructors.emptySegment();
         return new CharacterSegment(charSequence, offset);
     }
 

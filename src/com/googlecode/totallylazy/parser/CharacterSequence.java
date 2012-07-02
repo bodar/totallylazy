@@ -24,6 +24,7 @@ public class CharacterSequence implements CharSequence {
         if (index < builder.length()) return builder.charAt(index);
 
         for (int i = 0; i < index - builder.length(); i++) {
+            if(current.tail().isEmpty()) return (char) -1;
             builder.append(current.head());
             current = current.tail();
         }

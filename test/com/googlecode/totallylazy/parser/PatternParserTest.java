@@ -39,4 +39,11 @@ public class PatternParserTest {
         assertThat(next, is('A'));
     }
 
+
+    @Test
+    public void doesNotBlow() throws Exception {
+        Success<String> result = cast(pattern("[a-zA-Z][_0-9a-zA-Z]*").parse(characters("hello")));
+        assertThat(result.value(), is("hello"));
+        assertThat(result.remainder(), is(emptySegment(Character.class)));
+    }
 }
