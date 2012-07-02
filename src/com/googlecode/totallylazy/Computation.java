@@ -134,19 +134,4 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         head.forget();
         tail.forget();
     }
-
-    @Override
-    public String toString() {
-        return "";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
 }
