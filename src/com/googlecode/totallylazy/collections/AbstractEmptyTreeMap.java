@@ -11,6 +11,7 @@ import com.googlecode.totallylazy.iterators.EmptyIterator;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -32,6 +33,11 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     @Override
     public ImmutableList<Pair<K, V>> immutableList() {
         return ImmutableList.constructors.empty();
+    }
+
+    @Override
+    public Map<K, V> toMap() {
+        return ImmutableMap.methods.toMap(this);
     }
 
     @Override

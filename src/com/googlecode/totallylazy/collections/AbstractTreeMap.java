@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callers.call;
@@ -72,6 +73,11 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     @Override
     public ImmutableList<Pair<K, V>> immutableList() {
         return joinTo(ImmutableList.constructors.<Pair<K, V>>empty());
+    }
+
+    @Override
+    public Map<K, V> toMap() {
+        return ImmutableMap.methods.toMap(this);
     }
 
     @Override
