@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.parser.SequenceParser.sequenceOf;
 
-public class StringParser extends BaseParser<String> {
+public class StringParser extends AbstractParser<String> {
     private final CharSequence expected;
     private final SequenceParser<Character> parser;
 

@@ -4,12 +4,12 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class CharacterParser extends BaseParser<Character> {
+public class CharacterParser extends AbstractParser<Character> {
     private final Predicate<Character> value;
 
     private CharacterParser(Predicate<Character> value) {
@@ -18,6 +18,14 @@ public class CharacterParser extends BaseParser<Character> {
 
     public static CharacterParser character(Predicate<Character> value) {
         return new CharacterParser(value);
+    }
+
+    public static CharacterParser isChar(char value) {
+        return character(value);
+    }
+
+    public static CharacterParser notChar(char value) {
+        return character(not(value));
     }
 
     public static CharacterParser character(char value) {

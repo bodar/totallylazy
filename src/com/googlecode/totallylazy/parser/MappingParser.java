@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class MappingParser<A, B> extends BaseParser<B> {
+public class MappingParser<A, B> extends AbstractParser<B> {
     private final Parser<? extends A> source;
     private final Callable1<? super A, ? extends B> callable;
 

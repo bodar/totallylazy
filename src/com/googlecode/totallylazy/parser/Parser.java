@@ -21,4 +21,8 @@ public interface Parser<A> extends Functor<A> {
             };
         }
     }
+
+    class methods {
+
+    }
 }
