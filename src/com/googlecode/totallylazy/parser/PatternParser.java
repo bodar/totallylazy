@@ -9,7 +9,7 @@ import java.util.regex.MatchResult;
 import static com.googlecode.totallylazy.parser.CharacterSequence.charSequence;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class PatternParser extends BaseParser<String> {
+public class PatternParser extends AbstractParser<String> {
     private final Regex regex;
 
     private PatternParser(Regex regex) {

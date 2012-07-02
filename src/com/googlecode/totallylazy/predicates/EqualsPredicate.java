@@ -29,7 +29,7 @@ public class EqualsPredicate<T> extends LogicalPredicate<T> implements Value<T> 
 
     @Override
     public String toString() {
-        return "is " + value;
+        return String.valueOf(value);
     }
 }
 

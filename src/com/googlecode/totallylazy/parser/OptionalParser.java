@@ -5,8 +5,8 @@ import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.parser.ReturnsParser.returns;
 
-public class OptionalParser<A> extends BaseParser<Option<A>> {
-    private final BaseParser<? extends A> parserA;
+public class OptionalParser<A> extends AbstractParser<Option<A>> {
+    private final AbstractParser<? extends A> parserA;
 
     private OptionalParser(Parser<? extends A> parserA) {
         this.parserA = parser(parserA);

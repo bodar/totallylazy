@@ -17,6 +17,6 @@ public class NotNullPredicate<T> extends LogicalPredicate<T> {
 
     @Override
     public String toString() {
-        return "is not null";
+        return "not null";
     }
 }

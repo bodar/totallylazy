@@ -15,7 +15,7 @@ public class NotEqualsPredicateTest {
 
     @Test
     public void supportsToString() throws Exception {
-        assertThat(new NotEqualsPredicate<Integer>(2).toString(), is("is not 2"));
+        assertThat(new NotEqualsPredicate<Integer>(2).toString(), is("not 2"));
     }
 
 }

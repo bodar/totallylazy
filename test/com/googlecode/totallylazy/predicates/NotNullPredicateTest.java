@@ -15,6 +15,6 @@ public class NotNullPredicateTest {
 
     @Test
     public void supportsToString() throws Exception {
-        assertThat(new NotNullPredicate<Integer>().toString(), is("is not null"));
+        assertThat(new NotNullPredicate<Integer>().toString(), is("not null"));
     }
 }

@@ -29,6 +29,6 @@ public class NotEqualsPredicate<T> extends LogicalPredicate<T> implements Value<
 
     @Override
     public String toString() {
-        return "is not " + value;
+        return "not " + value;
     }
 }

@@ -7,8 +7,8 @@ import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Function.returns;
 
-public class ManyParser<A> extends BaseParser<Segment<A>> {
-    private final BaseParser<A> parser;
+public class ManyParser<A> extends AbstractParser<Segment<A>> {
+    private final AbstractParser<A> parser;
     private final Function1<Result<A>, Segment<Character>> remainder = Success.functions.<A>remainder();
     private final Function1<Segment<Character>, Result<A>> parse;
 

@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class OrParser<A> extends BaseParser<A> {
+public class OrParser<A> extends AbstractParser<A> {
     private final Parser<? extends A> parserA;
     private final Parser<? extends A> parserB;
 
