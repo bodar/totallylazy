@@ -22,12 +22,16 @@ public class StringParser extends AbstractParser<String> {
 
     @Override
     public Result<String> parse(Segment<Character> input) throws Exception {
-        return parser.parse(input).map(new Function1<Sequence<Character>, String>() {
+        return parser.parse(input).map(asString(""));
+    }
+
+    public static Function1<Sequence<Character>, String> asString(final String separator) {
+        return new Function1<Sequence<Character>, String>() {
             @Override
             public String call(Sequence<Character> characters) throws Exception {
-                return characters.toString("");
+                return characters.toString(separator);
             }
-        });
+        };
     }
 
     @Override

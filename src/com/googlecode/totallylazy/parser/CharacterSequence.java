@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.parser;
 import com.googlecode.totallylazy.Segment;
 
 public class CharacterSequence implements CharSequence {
-    private final StringBuilder builder = new StringBuilder();
+    private final StringBuilder buffer = new StringBuilder();
     private Segment<Character> current;
 
     public CharacterSequence(Segment<Character> characters) {
@@ -21,31 +21,32 @@ public class CharacterSequence implements CharSequence {
 
     @Override
     public char charAt(int index) {
-        if (index < builder.length()) return builder.charAt(index);
+        if (contains(index)) return buffer.charAt(index);
 
-        for (int i = 0; i < index - builder.length(); i++) {
-            if(current.tail().isEmpty()) return (char) -1;
-            builder.append(current.head());
+        for (int i = buffer.length(); i < index + 1; i++) {
+            buffer.append(current.head());
             current = current.tail();
         }
-        return current.head();
+        return buffer.charAt(index);
     }
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        StringBuilder result = new StringBuilder();
-        for (int i = start; i < end; i++) {
-            result.append(charAt(i));
-        }
-        return result.toString();
+        int index = end - 1;
+        if(!contains(index)) charAt(index);
+        return buffer.subSequence(start, end);
     }
 
     @Override
     public String toString() {
-        return builder.toString() + current.head();
+        return buffer.toString();
     }
 
     public Segment<Character> remainder() {
-        return current.tail();
+        return current;
+    }
+
+    private boolean contains(int index) {
+        return index < buffer.length();
     }
 }

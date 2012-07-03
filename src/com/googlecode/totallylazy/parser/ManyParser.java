@@ -45,12 +45,12 @@ public class ManyParser<A> extends AbstractParser<Segment<A>> {
     //Eager version
     public Result<Segment<A>> parse(Segment<Character> sequence) throws Exception {
         return parser.then(returns(this)).
-                map(cons()).
+                map(ManyParser.<A>cons()).
                 or(ReturnsParser.returns(Segment.constructors.<A>emptySegment())).
                 parse(sequence);
     }
 
-    private Callable1<Pair<A, Segment<A>>, Segment<A>> cons() {
+    public static <A> Callable1<Pair<A, Segment<A>>, Segment<A>> cons() {
         return new Callable1<Pair<A, Segment<A>>, Segment<A>>() {
             @Override
             public Segment<A> call(Pair<A, Segment<A>> pair) throws Exception {

@@ -43,4 +43,11 @@ public class ParsersTest {
         assertThat(result.value(), is(characters("AAA")));
         assertThat(result.remainder().head(), is('B'));
     }
+
+    @Test
+    public void supportsIdentifier() throws Exception {
+        Success<String> result = (Success<String>) Parsers.INDENTIFIER.parse(characters("sayHello()"));
+        assertThat(result.value(), is("sayHello"));
+        assertThat(result.remainder(), is(characters("()")));
+    }
 }
