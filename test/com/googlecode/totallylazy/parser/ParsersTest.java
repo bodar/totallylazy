@@ -46,7 +46,7 @@ public class ParsersTest {
 
     @Test
     public void supportsIdentifier() throws Exception {
-        Success<String> result = (Success<String>) Parsers.INDENTIFIER.parse(characters("sayHello()"));
+        Success<String> result = (Success<String>) Parsers.IDENTIFIER.parse(characters("sayHello()"));
         assertThat(result.value(), is("sayHello"));
         assertThat(result.remainder(), is(characters("()")));
     }
