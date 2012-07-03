@@ -10,7 +10,7 @@ import com.googlecode.totallylazy.iterators.SegmentIterator;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
 
 public class Parsers {
-    public static AbstractParser<String> INDENTIFIER =
+    public static AbstractParser<String> IDENTIFIER =
             character(isJavaIdentifierStart()).
             then(character(isJavaIdentifierPart()).many()).
                     map(ManyParser.<Character>cons()).map(asString());
