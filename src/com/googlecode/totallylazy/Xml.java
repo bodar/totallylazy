@@ -295,4 +295,15 @@ public class Xml {
             }
         };
     }
+
+    public static class functions {
+        public static Function2<Node, String, String> selectContents() {
+            return new Function2<Node, String, String>() {
+                @Override
+                public String call(Node node, String expression) throws Exception {
+                    return Xml.selectContents(node, expression);
+                }
+            };
+        }
+    }
 }
