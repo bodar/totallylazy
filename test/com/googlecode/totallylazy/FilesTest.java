@@ -45,10 +45,11 @@ public class FilesTest {
     public void canDeleteNonEmptyDirectory() throws Exception {
         File parent = directory(TEMP_DIR, randomFilename());
         file(parent, "a");
-        File childb = directory(parent, "b");
+        File childB = directory(parent, "b");
         file(parent, "c");
-        file(childb, "c");
+        file(childB, "c");
         assertThat(Files.delete(parent), is(true));
+        assertThat(parent.exists(), is(false));
     }
 
     @Test
