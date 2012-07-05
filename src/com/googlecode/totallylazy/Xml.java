@@ -314,5 +314,14 @@ public class Xml {
                 }
             };
         }
+
+        public static Function1<String, Document> document() {
+            return new Function1<String, Document>() {
+                @Override
+                public Document call(String value) throws Exception {
+                    return Xml.document(value);
+                }
+            };
+        }
     }
 }
