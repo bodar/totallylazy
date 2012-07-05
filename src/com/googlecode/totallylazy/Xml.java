@@ -305,5 +305,14 @@ public class Xml {
                 }
             };
         }
+
+        public static Function2<Node, String, Sequence<Node>> selectNodes() {
+            return new Function2<Node, String, Sequence<Node>>() {
+                @Override
+                public Sequence<Node> call(final Node node, final String expression) throws Exception {
+                    return Xml.selectNodes(node, expression);
+                }
+            };
+        }
     }
 }
