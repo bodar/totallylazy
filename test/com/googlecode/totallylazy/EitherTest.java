@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Either.applicate;
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.isLeft;
 import static com.googlecode.totallylazy.Predicates.isRight;
 import static com.googlecode.totallylazy.Right.right;
@@ -82,6 +83,16 @@ public class EitherTest {
         assertThat(either.isLeft(), is(true));
 
         assertThat(either.left(), is(exception));
+    }
+
+    @Test
+    public void canMapToLeft() throws Exception {
+        assertThat(Option.<String>some("Foo").map(Either.functions.<String, String>asLeft()).get(), is(Either.<String, String>left("Foo")));
+    }
+
+    @Test
+    public void canMapToRight() throws Exception {
+        assertThat(Option.<String>some("Bar").map(Either.functions.<String, String>asRight()).get(), is(Either.<String, String>right("Bar")));
     }
 
     @Test(expected = NoSuchElementException.class)
