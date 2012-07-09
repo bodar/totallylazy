@@ -50,4 +50,23 @@ public abstract class Either<L, R> implements Functor<R>, Applicative<R> {
         if (applicator.isLeft()) return left(applicator.left());
         return value.map(applicator.right());
     }
+
+    public static class functions {
+        public static <L, R> Function1<L, Either<L, R>> asLeft() {
+            return new Function1<L, Either<L, R>>() {
+                @Override
+                public Either<L, R> call(L value) throws Exception {
+                    return left(value);
+                }
+            };
+        }
+        public static <L, R> Function1<R, Either<L, R>> asRight() {
+            return new Function1<R, Either<L, R>>() {
+                @Override
+                public Either<L, R> call(R value) throws Exception {
+                    return right(value);
+                }
+            };
+        }
+    }
 }
