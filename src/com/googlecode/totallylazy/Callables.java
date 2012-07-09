@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.comparators.AscendingComparator;
 import com.googlecode.totallylazy.comparators.DescendingComparator;
+import com.googlecode.totallylazy.predicates.WherePredicate;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -481,5 +482,13 @@ public final class Callables {
 
     public static <A, B, C, D> Function3<A, B, C, D> untriple(final Callable1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> callable) {
         return Function3.untriple(callable);
+    }
+
+    public static <L, R> Function1<L, Either<L, R>> asLeft() {
+        return Either.functions.asLeft();
+    }
+
+    public static <L, R> Function1<R, Either<L, R>> asRight() {
+        return Either.functions.asRight();
     }
 }
