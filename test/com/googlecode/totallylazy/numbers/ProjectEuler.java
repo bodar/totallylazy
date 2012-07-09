@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.predicates.WherePredicate;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.asString;
@@ -21,13 +22,14 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.squared;
 import static com.googlecode.totallylazy.numbers.Numbers.subtract;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
+import static com.googlecode.totallylazy.predicates.WherePredicate.asWhere;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ProjectEuler {
     @Test
     public void problem1() throws Exception {
-        assertThat(range(1, 999).filter(or(sequence(3, 5).map(where(mod(), isZero())))).reduce(sum()), is(233168));
+        assertThat(range(1, 999).filter(or(sequence(3, 5).map(asWhere(mod(), isZero())))).reduce(sum()), is(233168));
     }
 
     @Test

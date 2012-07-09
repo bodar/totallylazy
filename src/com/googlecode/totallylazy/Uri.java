@@ -183,4 +183,15 @@ public class Uri {
     public boolean isRelative() {
         return !isAbsolute();
     }
+
+    public static class functions {
+        public static Function1<String, Uri> uri() {
+            return new Function1<String, Uri>() {
+                @Override
+                public Uri call(String value) throws Exception {
+                    return Uri.uri(value);
+                }
+            };
+        }
+    }
 }
