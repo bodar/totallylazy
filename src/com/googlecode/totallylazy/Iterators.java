@@ -10,8 +10,6 @@ import com.googlecode.totallylazy.iterators.PartitionIterator;
 import com.googlecode.totallylazy.iterators.PeekingIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
-import com.googlecode.totallylazy.iterators.SegmentIterator;
-import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
@@ -20,7 +18,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -28,29 +25,18 @@ import java.util.Queue;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.nullGuard;
-import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
-import static com.googlecode.totallylazy.Computation.computation;
-import static com.googlecode.totallylazy.Computation.generate;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
-import static com.googlecode.totallylazy.Sequences.foldRight;
-import static com.googlecode.totallylazy.Sequences.init;
-import static com.googlecode.totallylazy.Sequences.lastOption;
-import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sequences.take;
-import static com.googlecode.totallylazy.numbers.Numbers.equalTo;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 
 public class Iterators {
     public static boolean equalsTo(Iterator<?> a, Iterator<?> b) {
@@ -357,10 +343,10 @@ public class Iterators {
     }
 
     public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
-        final Queue<T> matchedQueue = new LinkedList<T>();
-        final Queue<T> unmatchedUnmatched = new LinkedList<T>();
-        return Pair.pair(memorise(new PartitionIterator<T>(iterator, predicate, matchedQueue, unmatchedUnmatched)),
-                memorise(new PartitionIterator<T>(iterator, Predicates.<T>not(predicate), unmatchedUnmatched, matchedQueue)));
+        final Queue<T> matchedQueue = new ArrayDeque<T>();
+        final Queue<T> unmatchedUnmatched = new ArrayDeque<T>();
+        return Pair.pair(Sequences.memorise(new PartitionIterator<T>(iterator, predicate, matchedQueue, unmatchedUnmatched)),
+                Sequences.memorise(new PartitionIterator<T>(iterator, Predicates.<T>not(predicate), unmatchedUnmatched, matchedQueue)));
     }
 
     public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterator<? extends T> iterator, final Number index) {
@@ -424,5 +410,9 @@ public class Iterators {
 
     public static <A, B> Iterator<A> unfoldRight(Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, B seed) {
         return new UnfoldRightIterator<A, B>(callable, seed);
+    }
+
+    public static <T> Iterator<T> memorise(final Iterator<? extends T> iterator) {
+        return Computation.memorise(iterator).iterator();
     }
 }
