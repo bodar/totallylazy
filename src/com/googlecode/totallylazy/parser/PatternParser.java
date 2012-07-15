@@ -33,7 +33,7 @@ public class PatternParser extends AbstractParser<String> {
     public Result<String> parse(Segment<Character> characters) throws Exception {
         CharacterSequence sequence = charSequence(characters);
         Matches matches = regex.findMatches(sequence);
-        if (matches.isEmpty()) return fail();
+        if (matches.isEmpty()) return fail(regex, sequence);
         return success(matches.head().group(), sequence.remainder());
     }
 }
