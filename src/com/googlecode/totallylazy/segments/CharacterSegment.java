@@ -20,13 +20,18 @@ public class CharacterSegment extends AbstractSegment<Character> {
     }
 
     public static Segment<Character> characterSegment(CharSequence charSequence, int offset) {
-//        if(charSequence.length() == offset) return Segment.constructors.emptySegment();
+        if(offset < 0) throw new IllegalArgumentException("offset can not be negative");
+        if(isEmpty(charSequence, offset)) return Segment.constructors.emptySegment();
         return new CharacterSegment(charSequence, offset);
     }
 
     @Override
     public boolean isEmpty() {
-        return offset == charSequence.length();
+        return isEmpty(charSequence, offset);
+    }
+
+    private static boolean isEmpty(CharSequence charSequence, int offset) {
+        return offset >= charSequence.length();
     }
 
     @Override

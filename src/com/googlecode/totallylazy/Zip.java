@@ -49,6 +49,7 @@ public class Zip {
     }
 
     public static Number unzip(final File folder, InputStream in) {
+        if(!folder.exists()) folder.mkdir();
         return using(new ZipInputStream(in), new Callable1<ZipInputStream, Number>() {
             @Override
             public Number call(final ZipInputStream input) throws Exception {

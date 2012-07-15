@@ -482,4 +482,12 @@ public final class Callables {
     public static <A, B, C, D> Function3<A, B, C, D> untriple(final Callable1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> callable) {
         return Function3.untriple(callable);
     }
+
+    public static <L, R> Function1<L, Either<L, R>> asLeft() {
+        return Either.functions.asLeft();
+    }
+
+    public static <L, R> Function1<R, Either<L, R>> asRight() {
+        return Either.functions.asRight();
+    }
 }
