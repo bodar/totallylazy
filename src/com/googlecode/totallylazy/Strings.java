@@ -159,14 +159,8 @@ public class Strings {
     }
 
     public static String capitalise(String value) {
-        int strLen;
-        if (value == null || (strLen = value.length()) == 0) {
-            return value;
-        }
-        return new StringBuffer(strLen)
-                .append(Character.toTitleCase(value.charAt(0)))
-                .append(value.substring(1))
-                .toString();
+        if (isEmpty(value)) return value;
+        return String.valueOf(Character.toTitleCase(value.charAt(0))) + value.substring(1);
     }
 
     public static String asString(Object value) {

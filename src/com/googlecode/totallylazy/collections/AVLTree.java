@@ -81,32 +81,20 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
     class methods {
         // http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/AVL_Tree_Rebalancing.svg/350px-AVL_Tree_Rebalancing.svg.png
         private static <K, V> AVLTree<K, V> balance(AVLTree<K, V> node) {
-            if (node.balance() == -2) {
-                return balanceRight(node);
-            }
-            if (node.balance() == 2) {
-                return balanceLeft(node);
-            }
+            if (node.balance() == -2) return balanceRight(node);
+            if (node.balance() == 2) return balanceLeft(node);
             return node;
         }
 
         private static <K, V> AVLTree<K, V> balanceLeft(AVLTree<K, V> node) {
-            if (node.left().balance() == -1) {
-                return balanceLeftRight(node);
-            }
-            if (node.left().balance() == 1) {
-                return balanceLeftLeft(node);
-            }
+            if (node.left().balance() == -1) return balanceLeftRight(node);
+            if (node.left().balance() == 1) return balanceLeftLeft(node);
             return node;
         }
 
         private static <K, V> AVLTree<K, V> balanceRight(AVLTree<K, V> node) {
-            if (node.right().balance() == 1) {
-                return balanceRightLeft(node);
-            }
-            if (node.right().balance() == -1) {
-                return balanceRightRight(node);
-            }
+            if (node.right().balance() == 1) return balanceRightLeft(node);
+            if (node.right().balance() == -1) return balanceRightRight(node);
             return node;
         }
 
