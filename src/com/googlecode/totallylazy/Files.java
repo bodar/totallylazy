@@ -81,11 +81,15 @@ public class Files {
 
     public static File emptyTemporaryDirectory(String name) {
         File directory = directory(TEMP_DIR, name);
-        delete(directory);
+        deleteFiles(directory);
         return directory;
     }
 
     public static boolean delete(File file) {
+        return deleteFiles(file) && file.delete();
+    }
+
+    public static boolean deleteFiles(File file) {
         return recursiveFiles(file).map(delete()).forAll(is(true));
     }
 

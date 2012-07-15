@@ -19,16 +19,11 @@ public class PartitionIterator<T> extends StatefulIterator<T> {
     }
 
     protected T getNext() throws Exception {
-        if (!matched.isEmpty()) {
-            return matched.remove();
-        }
-        if (!underlyingIterator.hasNext()) {
-            return finished();
-        }
+        if (!matched.isEmpty()) return matched.remove();
+        if (!underlyingIterator.hasNext()) return finished();
+
         T t = underlyingIterator.next();
-        if (predicate.matches(t)) {
-            return t;
-        }
+        if (predicate.matches(t)) return t;
         unmatched.add(t);
         return getNext();
     }

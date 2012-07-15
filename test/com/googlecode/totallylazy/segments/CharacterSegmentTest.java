@@ -28,4 +28,13 @@ public class CharacterSegmentTest {
         assertThat(segment.tail().tail().tail().tail().isEmpty(), is(false));
         assertThat(segment.tail().tail().tail().tail().tail().isEmpty(), is(true));
     }
+
+    @Test
+    public void ifOffsetIsGreaterOrEqualThanLengthReturnEmpty() throws Exception {
+        assertThat(characterSegment("", 0).isEmpty(), is(true));
+        assertThat(characterSegment("", 1).isEmpty(), is(true));
+        assertThat(characterSegment("a", 1).isEmpty(), is(true));
+        assertThat(characterSegment("a", 2).isEmpty(), is(true));
+        assertThat(characterSegment("a", 0).isEmpty(), is(false));
+    }
 }

@@ -295,4 +295,33 @@ public class Xml {
             }
         };
     }
+
+    public static class functions {
+        public static Function2<Node, String, String> selectContents() {
+            return new Function2<Node, String, String>() {
+                @Override
+                public String call(Node node, String expression) throws Exception {
+                    return Xml.selectContents(node, expression);
+                }
+            };
+        }
+
+        public static Function2<Node, String, Sequence<Node>> selectNodes() {
+            return new Function2<Node, String, Sequence<Node>>() {
+                @Override
+                public Sequence<Node> call(final Node node, final String expression) throws Exception {
+                    return Xml.selectNodes(node, expression);
+                }
+            };
+        }
+
+        public static Function1<String, Document> document() {
+            return new Function1<String, Document>() {
+                @Override
+                public Document call(String value) throws Exception {
+                    return Xml.document(value);
+                }
+            };
+        }
+    }
 }
