@@ -12,7 +12,7 @@ public class CharacterParserTest {
     @Test
     public void doesNotThrowIfItRunsOutOfCharacters() throws Exception {
         Failure<Character> result = cast(character('A').parse(characters("")));
-        assertThat(result.message(), is("A expected"));
+        assertThat(result.message(), is("'A' expected"));
     }
 
     @Test
@@ -25,6 +25,6 @@ public class CharacterParserTest {
     @Test
     public void handlesNoMatch() throws Exception {
         Failure<Character> result = cast(character('A').parse(characters("CBA")));
-        assertThat(result.message(), is("A expected"));
+        assertThat(result.message(), is("'A' expected 'C' actual"));
     }
 }

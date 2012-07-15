@@ -52,9 +52,10 @@ public class CharacterParser extends AbstractParser<Character> {
         return new Callable1<Character, Result<Character>>() {
             @Override
             public Result<Character> call(Character character) throws Exception {
-                return value.matches(character) ? success(character, characters.tail()) : fail();
-                }
-            };
+                return value.matches(character) ? success(character, characters.tail()) :
+                        fail(value, character);
+            }
+        };
     }
 
     @Override

@@ -4,13 +4,18 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 
 import java.util.concurrent.Callable;
 
 public abstract class AbstractParser<A> implements Parser<A> {
     protected Failure<A> fail() {
-        return Failure.failure(String.format("%s expected", toString()));
+        return Failure.failure(String.format("'%s' expected", toString()));
+    }
+
+    protected Failure<A> fail(Object expected, Object actual) {
+        return Failure.failure(String.format("'%s' expected '%s' actual", expected, actual));
     }
 
     public abstract String toString();
@@ -63,4 +68,5 @@ public abstract class AbstractParser<A> implements Parser<A> {
     public AbstractParser<Segment<A>> many() {
         return ManyParser.many(this);
     }
+
 }
