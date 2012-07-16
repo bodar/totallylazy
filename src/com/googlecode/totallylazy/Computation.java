@@ -109,8 +109,11 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         try {
             head.call();
             return false;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return true;
+        }
+        catch (Exception e) {
+            throw LazyException.lazyException(e);
         }
     }
 
