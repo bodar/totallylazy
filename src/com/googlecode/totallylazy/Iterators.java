@@ -411,8 +411,4 @@ public class Iterators {
     public static <A, B> Iterator<A> unfoldRight(Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, B seed) {
         return new UnfoldRightIterator<A, B>(callable, seed);
     }
-
-    public static <T> Iterator<T> memorise(final Iterator<? extends T> iterator) {
-        return Computation.memorise(iterator).iterator();
-    }
 }
