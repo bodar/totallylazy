@@ -6,7 +6,7 @@ public interface Atomic<T> extends Value<T> {
     Atomic<T> modify(Callable1<? super T, ? extends T> callable);
 
     class constructors {
-        static <T> Atomic<T> atomic(final T t) {
+        public static <T> Atomic<T> atomic(final T t) {
             return new Atomic<T>() {
                 private final AtomicReference<T> reference = new AtomicReference<T>(t);
 

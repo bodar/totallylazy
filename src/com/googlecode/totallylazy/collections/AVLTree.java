@@ -80,44 +80,44 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
 
     class methods {
         // http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/AVL_Tree_Rebalancing.svg/350px-AVL_Tree_Rebalancing.svg.png
-        private static <K, V> AVLTree<K, V> balance(AVLTree<K, V> node) {
+        static <K, V> AVLTree<K, V> balance(AVLTree<K, V> node) {
             if (node.balance() == -2) return balanceRight(node);
             if (node.balance() == 2) return balanceLeft(node);
             return node;
         }
 
-        private static <K, V> AVLTree<K, V> balanceLeft(AVLTree<K, V> node) {
+        static <K, V> AVLTree<K, V> balanceLeft(AVLTree<K, V> node) {
             if (node.left().balance() == -1) return balanceLeftRight(node);
             if (node.left().balance() == 1) return balanceLeftLeft(node);
             return node;
         }
 
-        private static <K, V> AVLTree<K, V> balanceRight(AVLTree<K, V> node) {
+        static <K, V> AVLTree<K, V> balanceRight(AVLTree<K, V> node) {
             if (node.right().balance() == 1) return balanceRightLeft(node);
             if (node.right().balance() == -1) return balanceRightRight(node);
             return node;
         }
 
-        private static <K, V> AVLTree<K, V> balanceLeftLeft(AVLTree<K, V> parent) {
+        static <K, V> AVLTree<K, V> balanceLeftLeft(AVLTree<K, V> parent) {
             AVLTree<K, V> c = parent.left().right();
             AVLTree<K, V> five = parent.left(c);
             return parent.left().right(five);
         }
 
-        private static <K, V> AVLTree<K, V> balanceLeftRight(AVLTree<K, V> parent) {
+        static <K, V> AVLTree<K, V> balanceLeftRight(AVLTree<K, V> parent) {
             AVLTree<K, V> b = parent.left().right().left();
             AVLTree<K, V> three = parent.left().right(b);
             AVLTree<K, V> four = parent.left().right().left(three);
             return balanceLeftLeft(parent.left(four));
         }
 
-        private static <K, V> AVLTree<K, V> balanceRightRight(AVLTree<K, V> parent) {
+        static <K, V> AVLTree<K, V> balanceRightRight(AVLTree<K, V> parent) {
             AVLTree<K, V> b = parent.right().left();
             AVLTree<K, V> three = parent.right(b);
             return parent.right().left(three);
         }
 
-        private static <K, V> AVLTree<K, V> balanceRightLeft(AVLTree<K, V> parent) {
+        static <K, V> AVLTree<K, V> balanceRightLeft(AVLTree<K, V> parent) {
             AVLTree<K, V> c = parent.right().left().right();
             AVLTree<K, V> five = parent.right().left(c);
             AVLTree<K, V> four = parent.right().left().right(five);
