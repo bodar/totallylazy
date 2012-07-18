@@ -1,29 +1,49 @@
 package com.googlecode.totallylazy;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Predicates.always;
 
 public interface Atomic<T> extends Value<T> {
     Atomic<T> modify(Callable1<? super T, ? extends T> callable);
 
     class constructors {
         public static <T> Atomic<T> atomic(final T t) {
-            return new Atomic<T>() {
-                private final AtomicReference<T> reference = new AtomicReference<T>(t);
+            return atomic(t, returns(always(Integer.class)));
+        }
 
-                @Override
-                public Atomic<T> modify(Callable1<? super T, ? extends T> callable) {
-                    while (true){
-                        T current = reference.get();
-                        T modified = Callers.call(callable, current);
-                        if(reference.compareAndSet(current, modified)) return this;
-                    }
-                }
+        public static <T> Atomic<T> atomic(final T t, final Callable<? extends Predicate<? super Integer>> retryPredicate) {
+            return new RetryingAtomic<T>(t, retryPredicate);
+        }
+    }
 
-                @Override
-                public T value() {
-                    return reference.get();
-                }
-            };
+    static class RetryingAtomic<T> implements Atomic<T> {
+        private final AtomicReference<T> reference;
+        private final Callable<? extends Predicate<? super Integer>> retryPredicate;
+
+        public RetryingAtomic(T t, Callable<? extends Predicate<? super Integer>> retryPredicate) {
+            this.retryPredicate = retryPredicate;
+            reference = new AtomicReference<T>(t);
+        }
+
+        @Override
+        public Atomic<T> modify(Callable1<? super T, ? extends T> callable) {
+            Predicate<? super Integer> retry = call(retryPredicate);
+            for (int i = 0; retry.matches(i); i++) {
+                T current = reference.get();
+                T modified = call(callable, current);
+                if (reference.compareAndSet(current, modified)) return this;
+            }
+            throw new RejectedExecutionException(String.format("Atomic operation could not be applied due to %s", retry));
+        }
+
+        @Override
+        public T value() {
+            return reference.get();
         }
     }
 }
