@@ -77,6 +77,12 @@ public class Exceptions {
         };
     }
 
+    public static String asString(Exception e) {
+        StringPrintStream stream = new StringPrintStream();
+        e.printStackTrace(stream);
+        return stream.toString();
+    }
+
     private static <T> Predicate<? super Predicate<? super T>> matches(final T instance) {
         return new Predicate<Predicate<? super T>>() {
             @Override
