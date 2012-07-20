@@ -3,17 +3,16 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Files;
 import com.googlecode.totallylazy.Maps;
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Randoms;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
@@ -49,101 +48,123 @@ public class AVLTreeTest {
         assertThat(map.remove(3).toString(), is("((( 0 ) 1 ) 2 (( 4 ) 5 ( 6 )))"));
     }
 
-    final Sequence<Integer> range = range(0, 10000).safeCast(Integer.class).realise();
-    final Sequence<Integer> keys = Randoms.between(0, 10000);
+    static final Sequence<Integer> range = range(0, 100000).safeCast(Integer.class).realise();
+    static final Sequence<Integer> keys_ = range.shuffle().cycle().memorise();
 
     @Test
     @Ignore("Manual")
     public void getIsPrettyQuick() throws Exception {
-//
-//        BEGIN MUTABLE
-//        Elapsed time: 1.323778 msecs
-//        Elapsed msecs for 1001 runs:	Avg:5.320724094881408E-4	Min:3.48E-4	Max:0.021052	Total:0.5585599999999998
-//        END MUTABLE
-//        BEGIN IMMUTABLE
-//        Elapsed time: 4.220562 msecs
-//        Elapsed msecs for 1001 runs:	Avg:4.6022222222222205E-4	Min:2.06E-4	Max:0.013102	Total:0.49465499999999996
-//        END IMMUTABLE
-
         for (int i = 0; i < 100; i++) {
-            System.out.println("BEGIN MUTABLE");
-            final Map<Integer, String> mutable = createMutable(range);
-            System.out.println(TimeReport.time(1000, new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    Integer key = keys.head();
-                    Option<String> value = Maps.get(mutable, key);
-                    return value;
-                }
-            }));
-            System.out.println("END MUTABLE");
-
-            System.out.println("BEGIN IMMUTABLE");
-            final ImmutableMap<Integer, String> map = createImmutable(range);
-            System.out.println(TimeReport.time(1000, new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    Integer key = keys.head();
-                    Option<String> value = map.get(key);
-                    return value;
-                }
-            }));
-            System.out.println("END IMMUTABLE");
-
+            System.out.println(TimeReport.time(10000, mutableGet(createMutable(range, new HashMap<Integer, String>()))));
+            System.out.println(TimeReport.time(10000, mutableGet(createMutable(range, new java.util.TreeMap<Integer, String>()))));
+            System.out.println(TimeReport.time(10000, mutableGet(createMutable(range, new ConcurrentSkipListMap<Integer, String>(), "CSLMap "))));
+            System.out.println(TimeReport.time(10000, immutableGet(createImmutable(range))));
+            System.out.println("");
         }
     }
 
-    private Map<Integer, String> createMutable(final Sequence<Integer> range) throws Exception {
-        return TimeCallable.time(new Callable<Map<Integer, String>>() {
+    @SuppressWarnings("unchecked")
+    private Callable<Object> immutableGet(final ImmutableMap<Integer, String> map) {
+        return new Callable<Object>() {
             @Override
-            public Map<Integer, String> call() throws Exception {
-                return range.fold(new ConcurrentSkipListMap<Integer, String>(), new Callable2<Map<Integer, String>, Integer, Map<Integer, String>>() {
-                    @Override
-                    public Map<Integer, String> call(Map<Integer, String> map, Integer integer) throws Exception {
-                        map.put(integer, integer.toString());
-                        return map;
-                    }
-                }
-                );
+            public Object call() throws Exception {
+                return map.get(keys().head());
             }
-        }).call();
+        };
+    }
+
+    private Sequence<Integer> keys() {
+        return keys_.forwardOnly();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Callable<Object> mutableGet(final Map<Integer, String> mutable) {
+        return new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return Maps.get(mutable, keys().head());
+            }
+        };
+    }
+
+    private Map<Integer, String> createMutable(final Sequence<Integer> range, final Map<Integer, String> emptyMap) throws Exception {
+        return createMutable(range, emptyMap, emptyMap.getClass().getSimpleName());
+    }
+
+    private Map<Integer, String> createMutable(Sequence<Integer> range, Map<Integer, String> emptyMap, String name) {
+        System.out.print(name + ":\t");
+        return range.fold(emptyMap, new Callable2<Map<Integer, String>, Integer, Map<Integer, String>>() {
+            @Override
+            public Map<Integer, String> call(Map<Integer, String> map, Integer integer) throws Exception {
+                map.put(integer, integer.toString());
+                return map;
+            }
+        });
     }
 
     @Test
     @Ignore
     public void removeIsQuick() throws Exception {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
 
-            System.out.println("BEGIN MUTABLE");
-            final Map<Integer, String> map = createMutable(range);
-            System.out.println(TimeReport.time(1000, new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    return map.remove(keys.head());
-                }
-            }));
-            System.out.println("END MUTABLE");
+            System.out.println(TimeReport.time(10000, mutableRemove(createMutable(range, new HashMap<Integer, String>()))));
+            System.out.println(TimeReport.time(10000, mutableRemove(createMutable(range, new java.util.TreeMap<Integer, String>()))));
+            System.out.println(TimeReport.time(10000, mutableRemove(createMutable(range, new ConcurrentSkipListMap<Integer, String>(), "CSLMap "))));
 
-            System.out.println("BEGIN IMMUTABLE");
             final ImmutableMap<Integer, String> immutable = createImmutable(range);
-            System.out.println(TimeReport.time(1000, new Callable<Object>() {
+            System.out.println(TimeReport.time(10000, new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
-                    return immutable.remove(keys.head());
+                    return immutable.remove(keys().head());
                 }
             }));
-            System.out.println("END IMMUTABLE");
 
+            System.out.println("");
         }
     }
 
-    private ImmutableSortedMap<Integer, String> createImmutable(final Sequence<Integer> range) throws Exception {
-        return TimeCallable.time(new Callable<ImmutableSortedMap<Integer, String>>() {
+    private Callable<Object> mutableRemove(final Map<Integer, String> map) {
+        return new Callable<Object>() {
             @Override
-            public ImmutableSortedMap<Integer, String> call() throws Exception {
-                return ImmutableSortedMap.constructors.sortedMap(range.map(asPair()));
+            public Object call() throws Exception {
+                return map.remove(keys().head());
             }
-        }).call();
+        };
+    }
+
+    @Test
+    @Ignore
+    public void putIsQuick() throws Exception {
+        for (int i = 0; i < 100; i++) {
+            System.out.println(TimeReport.time(10000, mutablePut(createMutable(range, new HashMap<Integer, String>()))));
+            System.out.println(TimeReport.time(10000, mutablePut(createMutable(range, new java.util.TreeMap<Integer, String>()))));
+            System.out.println(TimeReport.time(10000, mutablePut(createMutable(range, new ConcurrentSkipListMap<Integer, String>(), "CSLMap "))));
+
+            final ImmutableMap<Integer, String> immutable = createImmutable(range);
+            System.out.println(TimeReport.time(10000, new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    return immutable.put(keys().head(), "Hello");
+                }
+            }));
+
+            System.out.println();
+        }
+    }
+
+    private Callable<Object> mutablePut(final Map<Integer, String> map) {
+        return new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return map.put(keys().head(), "Hello");
+            }
+        };
+    }
+
+    private ImmutableSortedMap<Integer, String> createImmutable(final Sequence<Integer> range) throws Exception {
+        ImmutableSortedMap<Integer, String> map = ImmutableSortedMap.constructors.sortedMap(range.map(asPair()));
+        System.out.print("AVLTree:\t");
+        return map;
     }
 
     @Test

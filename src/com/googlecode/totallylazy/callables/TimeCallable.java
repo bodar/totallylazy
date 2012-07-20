@@ -31,7 +31,11 @@ public final class TimeCallable<T> extends Function<T> {
     }
 
     public static double calculateMilliseconds(long start, long end) {
-        return (end - start) / 1000000.0;
+        return calculateNanoseconds(start, end) / 1000000.0;
+    }
+
+    public static long calculateNanoseconds(long start, long end) {
+        return (end - start);
     }
 
     public static <T> TimeCallable<T> time(Callable<? extends T> callable){
