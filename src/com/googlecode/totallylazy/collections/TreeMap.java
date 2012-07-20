@@ -57,8 +57,7 @@ public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
 
         @Override
         public <K, V> TreeMap<K, V> create(Comparator<K> comparator) {
-            return new AbstractEmptyTreeMap<K, V, TreeMap<K, V>>(comparator, this) {
-            };
+            return new AbstractEmptyTreeMap<K, V, TreeMap<K, V>>(comparator, this) {};
         }
 
         @Override

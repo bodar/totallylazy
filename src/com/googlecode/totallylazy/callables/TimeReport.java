@@ -35,7 +35,7 @@ public class TimeReport implements Callable1<Number, Void> {
 
     @Override
     public String toString() {
-        return String.format("Elapsed msecs for %s runs:\tAvg:%s\tMin:%s\tMax:%s\tTotal:%s", runs(), average(), minimum(), maximum(), total());
+        return String.format("Elapsed msecs for %s runs:\tAvg:%.5f\tMin:%.5f\tMax:%.5f\tTotal:%.5f", runs(), average(), minimum(), maximum(), total());
     }
 
     public double minimum() {
