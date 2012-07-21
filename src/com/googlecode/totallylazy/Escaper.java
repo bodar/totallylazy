@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import static com.googlecode.totallylazy.Callables.asString;
+import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Function1.returns1;
 import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Predicates.is;
@@ -10,7 +10,7 @@ public class Escaper {
     private final Rules<Character, String> rules = Rules.rules();
 
     public Escaper() {
-        rules.add(always(Character.class), asString(Character.class));
+        rules.add(always(Character.class), toString);
     }
 
     public Escaper withRule(Character appliesTo, final String result) {

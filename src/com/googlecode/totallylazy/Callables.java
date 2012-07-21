@@ -220,11 +220,7 @@ public final class Callables {
         };
     }
 
-    public static <T> Function1<T, String> asString(Class<T> aClass) {
-        return Callables.asString();
-    }
-
-    private final static Function1<Object, String> AS_STRING =  new Function1<Object, String>() {
+    public final static Function1<Object, String> toString =  new Function1<Object, String>() {
         public final String call(final Object value) {
             return value.toString();
         }
@@ -235,11 +231,11 @@ public final class Callables {
         }
     };
 
-    public static <T> Function1<T, String> asString() {
-        return Unchecked.cast(AS_STRING);
+    public static <T> Function1<Object, String> asString() {
+        return toString;
     }
 
-    private static final Function2<Integer, Object, Integer> HASH_CODE = new Function2<Integer, Object, Integer>() {
+    public static final Function2<Integer, Object, Integer> hashCode = new Function2<Integer, Object, Integer>() {
         public Integer call(Integer hash, Object value) throws Exception {
             if (value == null) return hash * 19;
             int current = value.hashCode();
@@ -248,7 +244,7 @@ public final class Callables {
     };
 
     public static Function2<Integer, Object, Integer> asHashCode() {
-        return HASH_CODE;
+        return hashCode;
     }
 
 

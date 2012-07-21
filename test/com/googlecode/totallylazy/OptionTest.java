@@ -5,10 +5,10 @@ import org.junit.Test;
 
 import java.util.NoSuchElementException;
 
-import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.ignoreAndReturn;
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Function1.constant;
 import static com.googlecode.totallylazy.Objects.equalTo;
 import static com.googlecode.totallylazy.Option.applicate;
@@ -106,9 +106,9 @@ public class OptionTest {
 
     @Test
     public void canMap() throws Exception {
-        assertThat(option(1).map(asString()), is(option("1")));
-        assertThat(some(2).map(asString()), is(some("2")));
-        assertThat(none().map(asString()), is(none(String.class)));
+        assertThat(option(1).map(toString), is(option("1")));
+        assertThat(some(2).map(toString), is(some("2")));
+        assertThat(none().map(toString), is(none(String.class)));
         assertThat(some(2).map(ignoreAndReturn(null)), is(none()));
     }
 

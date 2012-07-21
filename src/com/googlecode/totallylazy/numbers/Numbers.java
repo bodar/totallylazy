@@ -17,7 +17,6 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Function1;
@@ -40,7 +39,6 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Computation.computation;
-import static com.googlecode.totallylazy.Computation.generate;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.reduceLeftShift;
@@ -90,7 +88,7 @@ public class Numbers {
     }
 
     public static Sequence<Number> primeFactors(final Number number) {
-        return Segment.methods.sequence(factor(primes(), number));
+        return Segment.methods.sequence(factor(primes, number));
     }
 
     static Segment<Number> factor(Segment<Number> primes, Number number) {
@@ -100,13 +98,15 @@ public class Numbers {
         return factor(primes.tail(), number);
     }
 
+    public static Function1<Number, Number> squared = new Function1<Number, Number>() {
+        @Override
+        public Number call(Number number) throws Exception {
+            return squared(number);
+        }
+    };
+
     public static Function1<Number, Number> squared() {
-        return new Function1<Number, Number>() {
-            @Override
-            public Number call(Number number) throws Exception {
-                return squared(number);
-            }
-        };
+        return squared;
     }
 
     public static Number squared(Number value) {
@@ -121,12 +121,16 @@ public class Numbers {
         return Predicates.not(predicate);
     }
 
+    public static LogicalPredicate<Number> even = remainderIs(2, 0);
+
     public static LogicalPredicate<Number> even() {
-        return remainderIs(2, 0);
+        return even;
     }
 
+    public static LogicalPredicate<Number> odd = remainderIs(2, 1);
+
     public static LogicalPredicate<Number> odd() {
-        return remainderIs(2, 1);
+        return odd;
     }
 
     public static LogicalPredicate<Number> prime() {
@@ -162,8 +166,7 @@ public class Numbers {
         };
     }
 
-    private static Computation<Number> primes = computation(2, computation(3, nextPrime()));
-
+    public static Computation<Number> primes = computation(2, computation(3, nextPrime()));
 
     public static Sequence<Number> primes() {
         return primes;
@@ -244,17 +247,21 @@ public class Numbers {
         return operatorsFor(value).decrement(value);
     }
 
+    public static LogicalPredicate<Number> zero = new LogicalPredicate<Number>() {
+        @Override
+        public boolean matches(Number other) {
+            return isZero(other);
+        }
+    };
+
     public static LogicalPredicate<Number> zero() {
-        return isZero();
+        return zero;
     }
 
+    public static LogicalPredicate<Number> isZero = zero;
+
     public static LogicalPredicate<Number> isZero() {
-        return new LogicalPredicate<Number>() {
-            @Override
-            public boolean matches(Number other) {
-                return isZero(other);
-            }
-        };
+        return zero;
     }
 
     public static boolean isZero(Number value) {
@@ -346,12 +353,16 @@ public class Numbers {
         return new Average();
     }
 
+    public static final Sum sum = new Sum();
+
     public static Function2<Number, Number, Number> sum() {
-        return new Sum();
+        return sum;
     }
 
+    public static final Sum add = sum;
+
     public static Function2<Number, Number, Number> add() {
-        return new Sum();
+        return add;
     }
 
     public static Function1<Number, Number> add(final Number amount) {
@@ -382,12 +393,14 @@ public class Numbers {
         return multiply();
     }
 
+    public static Function2<Number, Number, Number> multiply = new Function2<Number, Number, Number>() {
+        public Number call(Number multiplicand, Number multiplier) throws Exception {
+            return multiply(multiplicand, multiplier);
+        }
+    };
+
     public static Function2<Number, Number, Number> multiply() {
-        return new Function2<Number, Number, Number>() {
-            public Number call(Number multiplicand, Number multiplier) throws Exception {
-                return multiply(multiplicand, multiplier);
-            }
-        };
+        return multiply;
     }
 
     public static Function1<Number, Number> multiply(final Number multiplicand) {
@@ -424,17 +437,21 @@ public class Numbers {
         return mod().apply(divisor);
     }
 
-    public static Function2<Number, Number, Number> mod() {
-        return remainder().flip();
-    }
+    public static Function2<Number, Number, Number> remainder = new Function2<Number, Number, Number>() {
+        @Override
+        public Number call(Number dividend, Number divisor) throws Exception {
+            return remainder(dividend, divisor);
+        }
+    };
 
     public static Function2<Number, Number, Number> remainder() {
-        return new Function2<Number, Number, Number>() {
-            @Override
-            public Number call(Number dividend, Number divisor) throws Exception {
-                return remainder(dividend, divisor);
-            }
-        };
+        return remainder;
+    }
+
+    public static Function2<Number, Number, Number> mod = remainder.flip();
+
+    public static Function2<Number, Number, Number> mod() {
+        return remainder().flip();
     }
 
     public static Function1<Number, Number> remainder(final Number dividend) {
@@ -491,22 +508,26 @@ public class Numbers {
         return add(valueOf(value).get(), minValue);
     }
 
+    public static Callable2<Number, Number, Number> maximum = new Callable2<Number, Number, Number>() {
+        @Override
+        public Number call(Number a, Number b) throws Exception {
+            return compare(a, b) > 0 ? a : b;
+        }
+    };
+
     public static Callable2<Number, Number, Number> maximum() {
-        return new Callable2<Number, Number, Number>() {
-            @Override
-            public Number call(Number a, Number b) throws Exception {
-                return compare(a, b) > 0 ? a : b;
-            }
-        };
+        return maximum;
     }
 
+    public static Function2<Number, Number, Number> lcm = new Function2<Number, Number, Number>() {
+        @Override
+        public Number call(Number x, Number y) throws Exception {
+            return lcm(x, y);
+        }
+    };
+
     public static Function2<Number, Number, Number> lcm() {
-        return new Function2<Number, Number, Number>() {
-            @Override
-            public Number call(Number x, Number y) throws Exception {
-                return lcm(x, y);
-            }
-        };
+        return lcm;
     }
 
     public static Number lcm(Number x, Number y) {
