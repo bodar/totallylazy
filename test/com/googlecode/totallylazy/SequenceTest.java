@@ -18,9 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.googlecode.totallylazy.Arrays.array;
 import static com.googlecode.totallylazy.Arrays.list;
-import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callables.callThrows;
@@ -30,6 +28,7 @@ import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Callables.size;
+import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Functions.and;
 import static com.googlecode.totallylazy.Functions.or;
 import static com.googlecode.totallylazy.Lists.indexIn;
@@ -555,20 +554,20 @@ public class SequenceTest {
 
     @Test
     public void supportsMap() throws Exception {
-        Sequence<String> strings = sequence(1, 2).map(asString());
+        Sequence<String> strings = sequence(1, 2).map(toString);
         assertThat(strings, hasExactly("1", "2"));
     }
 
     @Test
     public void supportsConcurrentMap() throws Exception {
-        Iterable<String> strings = sequence(1, 2).mapConcurrently(asString());
+        Iterable<String> strings = sequence(1, 2).mapConcurrently(toString);
         assertThat(strings, hasExactly("1", "2"));
     }
 
     @Test
     public void supportsConcurrentMapWithCustomExecutor() throws Exception {
         ExecutorService executorService = Executors.newCachedThreadPool();
-        Iterable<String> strings = sequence(1, 2).mapConcurrently(asString(), executorService);
+        Iterable<String> strings = sequence(1, 2).mapConcurrently(toString, executorService);
         assertThat(strings, hasExactly("1", "2"));
         executorService.shutdown();
     }

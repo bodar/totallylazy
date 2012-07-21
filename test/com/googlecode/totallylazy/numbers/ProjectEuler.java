@@ -1,9 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.predicates.WherePredicate;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.asString;
+import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Predicates.or;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.isPalindrome;
@@ -29,12 +28,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ProjectEuler {
     @Test
     public void problem1() throws Exception {
-        assertThat(range(1, 999).filter(or(sequence(3, 5).map(asWhere(mod(), isZero())))).reduce(sum()), is(233168));
+        assertThat(range(1, 999).filter(or(sequence(3, 5).map(asWhere(mod, isZero)))).reduce(sum), is(233168));
     }
 
     @Test
     public void problem2() throws Exception {
-        assertThat(fibonacci().takeWhile(lessThanOrEqualTo(4000000)).filter(even()).reduce(sum()), is(4613732));
+        assertThat(fibonacci().takeWhile(lessThanOrEqualTo(4000000)).filter(even).reduce(sum), is(4613732));
     }
 
     @Test
@@ -44,22 +43,22 @@ public class ProjectEuler {
 
     @Test
     public void problem4() throws Exception {
-        assertThat(range(999, 100).cartesianProduct().map(multiply().pair()).
-                filter(where(asString(), isPalindrome())).reduce(maximum()), is(906609));
+        assertThat(range(999, 100).cartesianProduct().map(multiply.pair()).
+                filter(where(toString, isPalindrome())).reduce(maximum), is(906609));
     }
 
     @Test
     public void problem5() throws Exception {
-        assertThat(range(1, 20).reduce(lcm()), is(232792560));
+        assertThat(range(1, 20).reduce(lcm), is(232792560));
     }
 
     @Test
     public void problem6() throws Exception {
-        assertThat(subtract(squared(range(1, 100).reduce(sum())), range(1, 100).map(squared()).reduce(sum())), is(25164150));
+        assertThat(subtract(squared(range(1, 100).reduce(sum)), range(1, 100).map(squared).reduce(sum)), is(25164150));
     }
 
     @Test
     public void problem7() throws Exception {
-        assertThat(primes().drop(10000).head(), is(104743));
+        assertThat(primes.drop(10000).head(), is(104743));
     }
 }

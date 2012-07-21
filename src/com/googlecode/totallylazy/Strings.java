@@ -272,13 +272,15 @@ public class Strings {
         };
     }
 
+    public static LogicalPredicate<String> palindrome = new LogicalPredicate<String>() {
+        @Override
+        public boolean matches(String other) {
+            return Strings.isPalindrome(other);
+        }
+    };
+
     public static LogicalPredicate<String> isPalindrome() {
-        return new LogicalPredicate<String>() {
-            @Override
-            public boolean matches(String other) {
-                return Strings.isPalindrome(other);
-            }
-        };
+        return palindrome;
     }
 
     public static boolean isPalindrome(String other) {
