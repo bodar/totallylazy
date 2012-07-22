@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class LazyCallable1Test {
     @Test
     public void isThreadSafe() throws Exception {
-        CountingCallable1<Number, Number> counting = counting(increment());
+        CountingCallable1<Number, Number> counting = counting(increment);
         Function1<Number, Number> lazyCallable1 = counting.sleep(10).lazy();
 
         Sequence<Number> result = callConcurrently(
@@ -29,7 +29,7 @@ public class LazyCallable1Test {
 
     @Test
     public void onlyCallsUnderlyingCallableOnce() throws Exception {
-        CountingCallable1<Number, Number> counting = counting(increment());
+        CountingCallable1<Number, Number> counting = counting(increment);
         Function1<Number, Number> lazyCallable = lazy(counting);
 
         assertThat(lazyCallable.call(0), is(1));
