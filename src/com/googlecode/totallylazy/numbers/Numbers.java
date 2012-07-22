@@ -55,7 +55,7 @@ public class Numbers {
     public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
 
     public static Sequence<Number> range(final Number start) {
-        return iterate(increment(), start);
+        return iterate(increment, start);
     }
 
     public static Sequence<Number> range(final Number start, final Number end) {
@@ -141,20 +141,22 @@ public class Numbers {
         return odd;
     }
 
+    public static LogicalPredicate<Number> prime = new LogicalPredicate<Number>() {
+        public final boolean matches(final Number candidate) {
+            return isPrime(candidate);
+        }
+    };
+
     public static LogicalPredicate<Number> prime() {
-        return isPrime();
+        return prime;
     }
 
     public static LogicalPredicate<Number> isPrime() {
-        return new LogicalPredicate<Number>() {
-            public final boolean matches(final Number candidate) {
-                return isPrime(candidate);
-            }
-        };
+        return prime;
     }
 
     public static boolean isPrime(Number candidate) {
-        return primes().takeWhile(where(squared(), lessThanOrEqualTo(candidate))).forAll(where(remainder(candidate), is(not(zero()))));
+        return primes().takeWhile(where(squared, lessThanOrEqualTo(candidate))).forAll(where(remainder(candidate), is(not(zero))));
     }
 
     public static LogicalPredicate<Number> remainderIs(final Number divisor, final Number remainder) {
@@ -174,23 +176,25 @@ public class Numbers {
         };
     }
 
-    public static Computation<Number> primes = computation(2, computation(3, nextPrime()));
+    public static Function1<Number, Number> nextPrime = new Function1<Number, Number>() {
+        @Override
+        public Number call(Number number) throws Exception {
+            return nextPrime(number);
+        }
+    };
+
+    public static Computation<Number> primes = computation(2, computation(3, nextPrime));
 
     public static Sequence<Number> primes() {
         return primes;
     }
 
     public static Number nextPrime(Number number) {
-        return iterate(add(2), number).filter(isPrime()).second();
+        return iterate(add(2), number).filter(prime).second();
     }
 
     public static Function1<Number, Number> nextPrime() {
-        return new Function1<Number, Number>() {
-            @Override
-            public Number call(Number number) throws Exception {
-                return nextPrime(number);
-            }
-        };
+        return nextPrime;
     }
 
     public static Sequence<Number> fibonacci() {
@@ -231,24 +235,28 @@ public class Numbers {
         return operatorsFor(value).negate(value);
     }
 
+    public static Function1<Number, Number> increment = new Function1<Number, Number>() {
+        public Number call(Number number) throws Exception {
+            return Numbers.increment(number);
+        }
+    };
+
     public static Function1<Number, Number> increment() {
-        return new Function1<Number, Number>() {
-            public Number call(Number number) throws Exception {
-                return Numbers.increment(number);
-            }
-        };
+        return increment;
     }
 
     public static Number increment(Number value) {
         return operatorsFor(value).increment(value);
     }
 
-    public static Function1<Number, Number> decrement() {
-        return new Function1<Number, Number>() {
+    public static Function1<Number, Number> decrement = new Function1<Number, Number>() {
             public Number call(Number number) throws Exception {
                 return Numbers.decrement(number);
             }
         };
+
+    public static Function1<Number, Number> decrement() {
+        return decrement;
     }
 
     public static Number decrement(Number value) {
@@ -478,7 +486,6 @@ public class Numbers {
             throw DIVIDE_BY_ZERO;
         }
     }
-
 
 
     public static Number number(Number value) {

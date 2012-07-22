@@ -204,7 +204,7 @@ public class Iterators {
     }
 
     public static Iterator<Number> range(final Number start) {
-        return iterate(increment(), start);
+        return iterate(increment, start);
     }
 
     public static Iterator<Number> range(final Number start, final Number end) {
