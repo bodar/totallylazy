@@ -734,12 +734,12 @@ public class Sequences {
     }
 
     public static <T> Sequence<Sequence<T>> windowed(final Iterable<? extends T> sequence, int size) {
-        return internalWindowed(memorise(sequence), size);
+        return internalWindowed(memorise(sequence), size).toSequence();
     }
 
-    private static <T> Sequence<Sequence<T>> internalWindowed(final Sequence<T> sequence, int size) {
+    private static <T> ImmutableList<Sequence<T>> internalWindowed(final Sequence<T> sequence, int size) {
         Sequence<T> take = sequence.take(size);
-        if(take.size() == size) return cons(take, internalWindowed(sequence.tail(), size));
-        return empty();
+        if(take.size() == size) return ImmutableList.constructors.cons(take, internalWindowed(sequence.tail(), size));
+        return ImmutableList.constructors.empty();
     }
 }
