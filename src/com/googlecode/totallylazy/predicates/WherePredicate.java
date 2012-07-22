@@ -23,7 +23,7 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
         return new WherePredicate<T, R>(callable, predicate);
     }
 
-    public static <T, R> Function1<T, Predicate<T>> asWhere(final Callable2<? super T, ? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> Function1<T, Predicate<T>> predicateWhere(final Callable2<? super T, ? super T, ? extends R> callable, final Predicate<? super R> predicate) {
         return new Function1<T, Predicate<T>>() {
             @Override
             public Predicate<T> call(T t) throws Exception {

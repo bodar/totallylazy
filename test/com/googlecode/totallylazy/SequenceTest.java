@@ -718,4 +718,9 @@ public class SequenceTest {
         assertThat(sequence(pair("Dan", 'D'), pair("Ray", 'R'), pair("Tom", 'T')).sortBy(second(Character.class).then(indexIn(list('T', 'R', 'D')))),
                 hasExactly(pair("Tom", 'T'), pair("Ray", 'R'), pair("Dan", 'D')));
     }
+
+    @Test
+    public void supportsWindowed() throws Exception {
+        assertThat(sequence(1, 2, 3, 4, 5).windowed(3), is(sequence(sequence(1, 2, 3), sequence(2, 3, 4), sequence(3, 4, 5))));
+    }
 }

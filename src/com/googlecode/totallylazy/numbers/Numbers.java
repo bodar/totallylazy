@@ -17,6 +17,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Function1;
@@ -74,6 +75,13 @@ public class Numbers {
             return none(Number.class);
         }
     }
+
+    public static Callable1<Object, Number> valueOf = new Callable1<Object, Number>() {
+        @Override
+        public Number call(Object value) throws Exception {
+            return Numbers.valueOf(value.toString()).get();
+        }
+    };
 
     public static Sequence<Number> numbers(Number... numbers) {
         return Sequences.sequence(numbers);
@@ -186,7 +194,7 @@ public class Numbers {
     }
 
     public static Sequence<Number> fibonacci() {
-        return computation(Pair.<Number, Number>pair(0, 1), reduceLeftShift(sum())).map(first(Number.class));
+        return computation(Pair.<Number, Number>pair(0, 1), reduceLeftShift(sum)).map(first(Number.class));
     }
 
     public static Sequence<Number> powersOf(Number amount) {
@@ -389,10 +397,6 @@ public class Numbers {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
-    public static Function2<Number, Number, Number> product() {
-        return multiply();
-    }
-
     public static Function2<Number, Number, Number> multiply = new Function2<Number, Number, Number>() {
         public Number call(Number multiplicand, Number multiplier) throws Exception {
             return multiply(multiplicand, multiplier);
@@ -401,6 +405,12 @@ public class Numbers {
 
     public static Function2<Number, Number, Number> multiply() {
         return multiply;
+    }
+
+    public static Function2<Number, Number, Number> product = multiply;
+
+    public static Function2<Number, Number, Number> product() {
+        return product;
     }
 
     public static Function1<Number, Number> multiply(final Number multiplicand) {
@@ -468,6 +478,8 @@ public class Numbers {
             throw DIVIDE_BY_ZERO;
         }
     }
+
+
 
     public static Number number(Number value) {
         return reduce(value);
