@@ -286,7 +286,7 @@ public class Sequences {
         };
     }
 
-    public <T, S> Function1<Sequence<T>, S> reduce(final Callable2<S, T, S> callable) {
+    public static <T, S> Function1<Sequence<T>, S> reduce(final Callable2<S, T, S> callable) {
         return Sequences.<T,S>reduce().flip().apply(callable);
     }
 
@@ -731,5 +731,15 @@ public class Sequences {
                 return sequence(a).map(Pair.<A, B>pair()).map(Callables.<B, Pair<A, B>>callWith(b));
             }
         });
+    }
+
+    public static <T> Sequence<Sequence<T>> windowed(final Iterable<? extends T> sequence, int size) {
+        return internalWindowed(memorise(sequence), size);
+    }
+
+    private static <T> Sequence<Sequence<T>> internalWindowed(final Sequence<T> sequence, int size) {
+        Sequence<T> take = sequence.take(size);
+        if(take.size() == size) return cons(take, internalWindowed(sequence.tail(), size));
+        return empty();
     }
 }

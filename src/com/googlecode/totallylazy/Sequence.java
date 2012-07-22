@@ -398,4 +398,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
     public T get(int index) {
         return drop(index).head();
     }
+
+    public Sequence<Sequence<T>> windowed(int size) {
+        return Sequences.windowed(this, size);
+    }
 }
