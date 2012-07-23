@@ -370,6 +370,7 @@ public class Numbers {
     }
 
     public static final Sum sum = new Sum();
+    public static final Sum Σ = sum;
 
     public static Function2<Number, Number, Number> sum() {
         return sum;
