@@ -237,6 +237,15 @@ public class Predicates {
         return aClass.isAssignableFrom(o.getClass());
     }
 
+    public static LogicalPredicate<Class<?>> classAssignableTo(final Class<?> aClass) {
+        return new LogicalPredicate<Class<?>>() {
+            @Override
+            public boolean matches(Class<?> other) {
+                return aClass.isAssignableFrom(other);
+            }
+        };
+    }
+
     public static <T, R> LogicalPredicate<T> where(final Callable1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
         return WherePredicate.where(callable, predicate);
     }
