@@ -3,7 +3,10 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
+import java.io.Serializable;
+
 import static com.googlecode.totallylazy.Predicates.assignableTo;
+import static com.googlecode.totallylazy.Predicates.classAssignableTo;
 import static com.googlecode.totallylazy.Predicates.forAll;
 import static com.googlecode.totallylazy.Predicates.setEqualityWith;
 import static com.googlecode.totallylazy.Predicates.subsetOf;
@@ -38,6 +41,13 @@ public class PredicatesTest {
         assertThat(assignableTo("aString").matches(String.class), is(true));
         assertThat(assignableTo(new SequenceTest.Dog()).matches(SequenceTest.Animal.class), is(true));
         assertThat(assignableTo(new SequenceTest.Dog()).matches(SequenceTest.Cat.class), is(false));
+    }
+
+    @Test
+    public void supportsClassAssignableToClass() {
+        assertThat(classAssignableTo(Serializable.class).matches(Number.class), is(true));
+        assertThat(classAssignableTo(SequenceTest.Animal.class).matches(SequenceTest.Dog.class), is(true));
+        assertThat(classAssignableTo(SequenceTest.Dog.class).matches(SequenceTest.Cat.class), is(false));
     }
 
     @Test
