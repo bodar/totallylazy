@@ -7,12 +7,13 @@ import java.util.zip.ZipOutputStream;
 public class ZipDestination implements Destination {
     private final ZipOutputStream zipOutputStream;
 
-    private ZipDestination(OutputStream outputStream) {
-        zipOutputStream = new ZipOutputStream(outputStream);
+    private ZipDestination(final ZipOutputStream zipOutputStream) {
+        this.zipOutputStream = zipOutputStream;
     }
 
     public static ZipDestination zipDestination(OutputStream outputStream) {
-        return new ZipDestination(outputStream);
+        return new ZipDestination(outputStream instanceof ZipOutputStream ? (ZipOutputStream) outputStream :
+                new ZipOutputStream(outputStream));
     }
 
     @Override
