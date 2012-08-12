@@ -7,7 +7,6 @@ import java.io.File;
 import static com.googlecode.totallylazy.Files.emptyTemporaryDirectory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.temporaryFile;
-import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
