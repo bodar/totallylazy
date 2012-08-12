@@ -186,6 +186,7 @@ public class Files {
             throw new IllegalArgumentException(format("%s is a directory", child));
         }
         try {
+            child.getParentFile().mkdirs();
             child.createNewFile();
         } catch (IOException e) {
             throw LazyException.lazyException(e);

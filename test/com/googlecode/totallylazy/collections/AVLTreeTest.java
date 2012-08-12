@@ -1,9 +1,12 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Files;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,9 +15,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
 import static com.googlecode.totallylazy.collections.ImmutableSortedMapTest.asPair;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -48,23 +51,25 @@ public class AVLTreeTest {
         assertThat(map.remove(3).toString(), is("((( 0 ) 1 ) 2 (( 4 ) 5 ( 6 )))"));
     }
 
-    static final Sequence<Integer> range = range(0, 100000).safeCast(Integer.class).realise();
+    public static final int SIZE = 100000;
+    public static final int NUMBER_OF_CALLS = 50000;
+    static final Sequence<Integer> range = range(1, SIZE).safeCast(Integer.class).realise();
     static final Sequence<Integer> keys_ = range.shuffle().cycle().memorise();
 
     @Test
     @Ignore("Manual")
     public void getIsPrettyQuick() throws Exception {
-        for (int i = 0; i < 100; i++) {
-            System.out.println(TimeReport.time(10000, mutableGet(createMutable(range, new HashMap<Integer, String>()))));
-            System.out.println(TimeReport.time(10000, mutableGet(createMutable(range, new java.util.TreeMap<Integer, String>()))));
-            System.out.println(TimeReport.time(10000, mutableGet(createMutable(range, new ConcurrentSkipListMap<Integer, String>(), "CSLMap "))));
-            System.out.println(TimeReport.time(10000, immutableGet(createImmutable(range))));
+        for (int i = 0; i < 10; i++) {
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, immutableGet(createImmutable(range))));
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new HashMap<Integer, Integer>()))));
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new java.util.TreeMap<Integer, Integer>()))));
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap "))));
             System.out.println("");
         }
     }
 
     @SuppressWarnings("unchecked")
-    private Callable<Object> immutableGet(final ImmutableMap<Integer, String> map) {
+    private Callable<Object> immutableGet(final ImmutableMap<Integer, Integer> map) {
         return new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -78,7 +83,7 @@ public class AVLTreeTest {
     }
 
     @SuppressWarnings("unchecked")
-    private Callable<Object> mutableGet(final Map<Integer, String> mutable) {
+    private Callable<Object> mutableGet(final Map<Integer, Integer> mutable) {
         return new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -87,16 +92,16 @@ public class AVLTreeTest {
         };
     }
 
-    private Map<Integer, String> createMutable(final Sequence<Integer> range, final Map<Integer, String> emptyMap) throws Exception {
+    private Map<Integer, Integer> createMutable(final Sequence<Integer> range, final Map<Integer, Integer> emptyMap) throws Exception {
         return createMutable(range, emptyMap, emptyMap.getClass().getSimpleName());
     }
 
-    private Map<Integer, String> createMutable(Sequence<Integer> range, Map<Integer, String> emptyMap, String name) {
+    private Map<Integer, Integer> createMutable(Sequence<Integer> range, Map<Integer, Integer> emptyMap, String name) {
         System.out.print(name + ":\t");
-        return range.fold(emptyMap, new Callable2<Map<Integer, String>, Integer, Map<Integer, String>>() {
+        return range.fold(emptyMap, new Callable2<Map<Integer, Integer>, Integer, Map<Integer, Integer>>() {
             @Override
-            public Map<Integer, String> call(Map<Integer, String> map, Integer integer) throws Exception {
-                map.put(integer, integer.toString());
+            public Map<Integer, Integer> call(Map<Integer, Integer> map, Integer integer) throws Exception {
+                map.put(integer, integer);
                 return map;
             }
         });
@@ -105,28 +110,82 @@ public class AVLTreeTest {
     @Test
     @Ignore
     public void removeIsQuick() throws Exception {
+        System.out.println("SIZE = " + SIZE);
+        TimeReport hashMapReport = new TimeReport();
+        TimeReport treeMapReport = new TimeReport();
+        TimeReport cslMapReport = new TimeReport();
+        TimeReport avlTreeReport = new TimeReport();
+
+        Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
+        Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
+        Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
+        ImmutableMap<Integer, Integer> avlTree = createImmutable(range);
+
         for (int i = 0; i < 100; i++) {
-
-            System.out.println(TimeReport.time(10000, mutableRemove(createMutable(range, new HashMap<Integer, String>()))));
-            System.out.println(TimeReport.time(10000, mutableRemove(createMutable(range, new java.util.TreeMap<Integer, String>()))));
-            System.out.println(TimeReport.time(10000, mutableRemove(createMutable(range, new ConcurrentSkipListMap<Integer, String>(), "CSLMap "))));
-
-            final ImmutableMap<Integer, String> immutable = createImmutable(range);
-            System.out.println(TimeReport.time(10000, new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    return immutable.remove(keys().head());
-                }
-            }));
-
-            System.out.println("");
+            timeRemove(NUMBER_OF_CALLS, hashMap, hashMapReport);
+            timeRemove(NUMBER_OF_CALLS, treeMap, treeMapReport);
+            timeRemove(NUMBER_OF_CALLS, cslMap, cslMapReport);
+            time(NUMBER_OF_CALLS, removeImmutable(avlTree), avlTreeReport);
         }
+
+        assertThat(hashMap.size(), is(SIZE));
+        assertThat(treeMap.size(), is(SIZE));
+        assertThat(cslMap.size(), is(SIZE));
+        assertThat(avlTree.size(), is(SIZE));
+        System.out.println();
+        System.out.println("HashMap: " + hashMapReport);
+        System.out.println("TreeMap: " + treeMapReport);
+        System.out.println("CSLMap: " + cslMapReport);
+        System.out.println("AvlTree: " + avlTreeReport);
     }
 
-    private Callable<Object> mutableRemove(final Map<Integer, String> map) {
-        return new Callable<Object>() {
+    private Callable<ImmutableMap<Integer, Integer>> removeImmutable(final ImmutableMap<Integer, Integer> immutable) {
+        return new Callable<ImmutableMap<Integer, Integer>>() {
             @Override
-            public Object call() throws Exception {
+            public ImmutableMap<Integer, Integer> call() throws Exception {
+                return immutable.remove(keys().head());
+            }
+        };
+    }
+
+    public static TimeReport time(int numberOfCalls, Callable<?> callable, final TimeReport report) {
+        repeat(TimeCallable.time(callable, report)).take(numberOfCalls).realise();
+        return report;
+    }
+
+
+    private TimeReport timeRemove(int count, final Map<Integer, Integer> map, final TimeReport report) {
+        repeat(mutableRemove(map).time(report).then(putValueBack(map))).take(count).realise();
+        return report;
+    }
+
+    private TimeReport timePut(int count, final Map<Integer, Integer> map, final TimeReport report) {
+        repeat(mutablePut(map).time(report).then(remove(map))).take(count).realise();
+        return report;
+    }
+
+    private Callable1<Integer, Integer> remove(final Map<Integer, Integer> map) {
+        return new Callable1<Integer, Integer>() {
+            @Override
+            public Integer call(Integer integer) throws Exception {
+                return map.remove(integer);
+            }
+        };
+    }
+
+    private Callable1<Integer, Integer> putValueBack(final Map<Integer, Integer> map) {
+        return new Callable1<Integer, Integer>() {
+            @Override
+            public Integer call(Integer key) throws Exception {
+                return map.put(key, key);
+            }
+        };
+    }
+
+    private Function<Integer> mutableRemove(final Map<Integer, Integer> map) {
+        return new Function<Integer>() {
+            @Override
+            public Integer call() throws Exception {
                 return map.remove(keys().head());
             }
         };
@@ -135,34 +194,58 @@ public class AVLTreeTest {
     @Test
     @Ignore
     public void putIsQuick() throws Exception {
-        for (int i = 0; i < 100; i++) {
-            System.out.println(TimeReport.time(10000, mutablePut(createMutable(range, new HashMap<Integer, String>()))));
-            System.out.println(TimeReport.time(10000, mutablePut(createMutable(range, new java.util.TreeMap<Integer, String>()))));
-            System.out.println(TimeReport.time(10000, mutablePut(createMutable(range, new ConcurrentSkipListMap<Integer, String>(), "CSLMap "))));
+            System.out.println("SIZE = " + SIZE);
+            TimeReport hashMapReport = new TimeReport();
+            TimeReport treeMapReport = new TimeReport();
+            TimeReport cslMapReport = new TimeReport();
+            TimeReport avlTreeReport = new TimeReport();
 
-            final ImmutableMap<Integer, String> immutable = createImmutable(range);
-            System.out.println(TimeReport.time(10000, new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    return immutable.put(keys().head(), "Hello");
-                }
-            }));
+            Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
+            Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
+            Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
+            ImmutableMap<Integer, Integer> avlTree = createImmutable(range);
 
+            for (int i = 0; i < 100; i++) {
+                timePut(NUMBER_OF_CALLS, hashMap, hashMapReport);
+                timePut(NUMBER_OF_CALLS, treeMap, treeMapReport);
+                timePut(NUMBER_OF_CALLS, cslMap, cslMapReport);
+                time(NUMBER_OF_CALLS, immutablePut(avlTree), avlTreeReport);
+            }
+
+            assertThat(hashMap.size(), is(SIZE));
+            assertThat(treeMap.size(), is(SIZE));
+            assertThat(cslMap.size(), is(SIZE));
+            assertThat(avlTree.size(), is(SIZE));
             System.out.println();
-        }
+            System.out.println("HashMap: " + hashMapReport);
+            System.out.println("TreeMap: " + treeMapReport);
+            System.out.println("CSLMap: " + cslMapReport);
+            System.out.println("AvlTree: " + avlTreeReport);
     }
 
-    private Callable<Object> mutablePut(final Map<Integer, String> map) {
-        return new Callable<Object>() {
+    private Callable<ImmutableMap<Integer, Integer>> immutablePut(final ImmutableMap<Integer, Integer> avlTree) {
+        return new Callable<ImmutableMap<Integer, Integer>>() {
             @Override
-            public Object call() throws Exception {
-                return map.put(keys().head(), "Hello");
+            public ImmutableMap<Integer, Integer> call() throws Exception {
+                Integer head = keys().head();
+                return avlTree.put(head, head);
             }
         };
     }
 
-    private ImmutableSortedMap<Integer, String> createImmutable(final Sequence<Integer> range) throws Exception {
-        ImmutableSortedMap<Integer, String> map = ImmutableSortedMap.constructors.sortedMap(range.map(asPair()));
+    private Function<Integer> mutablePut(final Map<Integer, Integer> map) {
+        return new Function<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                Integer head = SIZE + 1;
+                map.put(head, head);
+                return head;
+            }
+        };
+    }
+
+    private ImmutableSortedMap<Integer, Integer> createImmutable(final Sequence<Integer> range) throws Exception {
+        ImmutableSortedMap<Integer, Integer> map = ImmutableSortedMap.constructors.sortedMap(range.map(asPair()));
         System.out.print("AVLTree:\t");
         return map;
     }
