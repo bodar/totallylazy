@@ -7,20 +7,29 @@ import java.io.InputStream;
 
 public class FileSource implements Source {
     private final CloseableList closeables;
-    private final File folder;
+    private final Sequence<Pair<String, InputStream>> sources;
 
-    private FileSource(File folder) {
-        this.folder = folder;
+    private FileSource(final Sequence<Pair<String, File>> sources) {
         closeables = new CloseableList();
+        this.sources = sources.map(Callables.<String, File, InputStream>second(new Function1<File, InputStream>() {
+            @Override
+            public InputStream call(File file) throws Exception {
+                return closeables.manage(new FileInputStream(file));
+            }
+        }));
     }
 
     public static FileSource fileSource(File folder) {
-        return new FileSource(folder);
+        return fileSource(folder, Files.recursiveFiles(folder));
+    }
+
+    public static FileSource fileSource(File folder, Sequence<File> files) {
+        return new FileSource(files.filter(Files.isFile()).map(relativeTo(folder)));
     }
 
     @Override
     public Sequence<Pair<String, InputStream>> sources() {
-        return Files.recursiveFiles(folder).filter(Files.isFile()).map(relativeTo(folder));
+        return sources;
     }
 
     @Override
@@ -28,12 +37,11 @@ public class FileSource implements Source {
         closeables.close();
     }
 
-    private Function1<File, Pair<String, InputStream>> relativeTo(final File folder) {
-        return new Function1<File, Pair<String, InputStream>>() {
+    public static Function1<File, Pair<String, File>> relativeTo(final File folder) {
+        return new Function1<File, Pair<String, File>>() {
             @Override
-            public Pair<String, InputStream> call(File file) throws Exception {
-                return Pair.<String, InputStream>pair(Files.relativePath(folder, file),
-                        closeables.manage(new FileInputStream(file)));
+            public Pair<String, File> call(File file) throws Exception {
+                return Pair.pair(Files.relativePath(folder, file), file);
             }
         };
     }
