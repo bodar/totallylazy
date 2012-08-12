@@ -24,16 +24,17 @@ import static com.googlecode.totallylazy.numbers.Numbers.product;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.squared;
 import static com.googlecode.totallylazy.numbers.Numbers.subtract;
+import static com.googlecode.totallylazy.numbers.Numbers.zero;
 import static com.googlecode.totallylazy.numbers.Numbers.Σ;
 import static com.googlecode.totallylazy.numbers.Numbers.valueOf;
-import static com.googlecode.totallylazy.predicates.WherePredicate.predicateWhere;
+import static com.googlecode.totallylazy.predicates.WherePredicate.asWhere;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ProjectEuler {
     @Test
     public void problem1() throws Exception {
-        assertThat(range(1, 999).filter(or(sequence(3, 5).map(predicateWhere(mod, isZero)))).reduce(Σ), is(233168));
+        assertThat(range(1, 999).filter(or(sequence(3, 5).map(asWhere(mod, zero)))).reduce(Σ), is(233168));
     }
 
     @Test

@@ -67,11 +67,11 @@ public class ImmutableSortedMapTest {
         System.out.println(time);
     }
 
-    public static Callable1<Integer, Pair<Integer, String>> asPair() {
-        return new Callable1<Integer, Pair<Integer, String>>() {
+    public static Callable1<Integer, Pair<Integer, Integer>> asPair() {
+        return new Callable1<Integer, Pair<Integer, Integer>>() {
             @Override
-            public Pair<Integer, String> call(Integer integer) throws Exception {
-                return Pair.pair(integer, integer.toString());
+            public Pair<Integer, Integer> call(Integer integer) throws Exception {
+                return Pair.pair(integer, integer);
             }
         };
     }

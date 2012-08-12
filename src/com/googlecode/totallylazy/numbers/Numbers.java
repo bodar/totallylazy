@@ -470,7 +470,7 @@ public class Numbers {
     public static Function2<Number, Number, Number> mod = remainder.flip();
 
     public static Function2<Number, Number, Number> mod() {
-        return remainder().flip();
+        return mod;
     }
 
     public static Function1<Number, Number> remainder(final Number dividend) {
