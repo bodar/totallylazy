@@ -32,6 +32,7 @@ import java.io.StringWriter;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Runnables.VOID;
+import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.string;
 import static com.googlecode.totallylazy.XPathFunctions.resolver;
 
@@ -226,7 +227,7 @@ public class Xml {
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             documentBuilder.setEntityResolver(ignoreEntities());
             documentBuilder.setErrorHandler(null);
-            return documentBuilder.parse(new ByteArrayInputStream(xml.getBytes()));
+            return documentBuilder.parse(new ByteArrayInputStream(bytes(xml)));
         } catch (Exception e) {
             throw LazyException.lazyException(e);
         }
