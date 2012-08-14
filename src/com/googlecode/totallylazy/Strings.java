@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
@@ -21,6 +22,8 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 
 public class Strings {
     public static final String EMPTY = "";
+
+    public static final Charset UTF8 = Charset.forName("UTF-8");
 
     public static Function1<String, Boolean> asBoolean() {
         return new Function1<String, Boolean>() {
@@ -145,7 +148,7 @@ public class Strings {
     public static boolean isEmpty(String value) {
         return value == null || value.equals(EMPTY);
     }
-    
+
     public static boolean isBlank(String value) {
         return isEmpty(value) || isEmpty(value.trim());
     }
@@ -285,5 +288,13 @@ public class Strings {
 
     public static boolean isPalindrome(String other) {
         return other.equals(reverse(other));
+    }
+
+    public static byte[] bytes(String value) {
+        return value.getBytes(UTF8);
+    }
+
+    public static String string(byte[] value) {
+        return new String(value, UTF8);
     }
 }

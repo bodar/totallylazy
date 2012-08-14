@@ -9,6 +9,7 @@ import java.io.Reader;
 
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
+import static com.googlecode.totallylazy.Strings.UTF8;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.StringParser.string;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,11 +31,11 @@ public class StringParserTest {
 
     @Test
     public void doesNotReadMoreThanItNeeds() throws Exception {
-        InputStream stream = new ByteArrayInputStream("ABCDEF".getBytes("UTF-8"));
-        Reader reader = new InputStreamReader(stream, "UTF-8");
+        InputStream stream = new ByteArrayInputStream("ABCDEF".getBytes(UTF8));
+        Reader reader = new InputStreamReader(stream, UTF8);
         Success<String> result = (Success<String>) string("ABC").parse(characters(reader));
         assertThat(result.value(), is("ABC"));
-        char next = (char)reader.read();
+        char next = (char) reader.read();
         assertThat(next, is('D'));
     }
 }

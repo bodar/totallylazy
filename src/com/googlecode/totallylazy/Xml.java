@@ -29,11 +29,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.List;
 
 import static com.googlecode.totallylazy.Runnables.VOID;
+import static com.googlecode.totallylazy.Strings.string;
 import static com.googlecode.totallylazy.XPathFunctions.resolver;
 
 public class Xml {
@@ -218,11 +217,7 @@ public class Xml {
     }
 
     public static Document document(byte[] bytes) {
-        try {
-            return document(new String(bytes, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            throw LazyException.lazyException(e);
-        }
+        return document(string(bytes));
     }
 
     public static Document document(String xml) {
