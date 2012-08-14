@@ -6,8 +6,8 @@ import java.io.File;
 
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.write;
-import static com.googlecode.totallylazy.Sequences.equalTo;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Strings.UTF8;
 import static com.googlecode.totallylazy.Strings.lines;
 import static com.googlecode.totallylazy.Strings.replace;
 import static com.googlecode.totallylazy.Strings.replaceAll;
@@ -26,7 +26,7 @@ public class StringsTest {
     public void supportsToString() throws Exception {
         File file = temporaryFile();
         String input = "1\r\n2";
-        write(input.getBytes("UTF-8"), file);
+        write(input.getBytes(UTF8), file);
         String output = Strings.toString(file);
         assertThat(output, is(input));
     }
@@ -40,7 +40,7 @@ public class StringsTest {
     @Test
     public void parsesLines() throws Exception {
         File file = temporaryFile();
-        write("1\r\n2".getBytes("UTF-8"), file);
+        write("1\r\n2".getBytes(UTF8), file);
         Sequence<String> lines = lines(file);
         assertThat(lines, hasExactly("1", "2"));
     }
@@ -81,7 +81,8 @@ public class StringsTest {
         try {
             Strings.substring("abc", -4, -1);
             fail();
-        } catch(IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+        }
     }
 
     @Test
