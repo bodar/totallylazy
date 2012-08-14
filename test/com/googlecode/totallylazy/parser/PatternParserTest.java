@@ -11,6 +11,7 @@ import java.io.Reader;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
 import static com.googlecode.totallylazy.Strings.UTF8;
+import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.PatternParser.pattern;
@@ -33,7 +34,7 @@ public class PatternParserTest {
 
     @Test
     public void doesNotReadMoreThanItNeeds() throws Exception {
-        InputStream stream = new ByteArrayInputStream("1977/1/10ABC".getBytes(UTF8));
+        InputStream stream = new ByteArrayInputStream(bytes("1977/1/10ABC"));
         Reader reader = new InputStreamReader(stream, UTF8);
         Success<String> result = (Success<String>) pattern("\\d{4}/\\d{1,2}/\\d{1,2}").parse(characters(reader));
         assertThat(result.value(), is("1977/1/10"));

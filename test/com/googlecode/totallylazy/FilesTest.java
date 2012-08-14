@@ -22,6 +22,7 @@ import static com.googlecode.totallylazy.Files.write;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -89,8 +90,8 @@ public class FilesTest {
     @Test
     public void appendToAFile() throws Exception {
        File aFile = temporaryFile();
-       write("a".getBytes(), aFile);
-       append("b".getBytes(), aFile);
+       write(bytes("a"), aFile);
+       append(bytes("b"), aFile);
 
        assertThat(Strings.lines(aFile).first(), is("ab"));
     }

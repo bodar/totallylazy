@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
 import static com.googlecode.totallylazy.collections.ImmutableSortedMapTest.asPair;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -258,11 +259,11 @@ public class AVLTreeTest {
 
     private void render(TreeMap<?, ?> map) {
         final File file = new File(Files.temporaryDirectory(), getClass().getSimpleName() + ".html");
-        Files.write(("<html><head><style>" +
+        Files.write(bytes("<html><head><style>" +
                 ".tree { border: 1px solid grey; padding: 0 1px; } " +
                 ".key { text-align: center; } " +
                 ".tree, .left, .right { display: table-cell; }" +
-                "</style></head><body>" + new TreeMapRenderer().render(map) + "</body></html>").getBytes(), file);
+                "</style></head><body>" + new TreeMapRenderer().render(map) + "</body></html>"), file);
         System.out.println("tree = " + file);
     }
 
