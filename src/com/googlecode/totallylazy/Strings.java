@@ -119,10 +119,14 @@ public class Strings {
         return new EndsWithPredicate(value);
     }
 
-    public static LogicalPredicate<String> endsWithOneOf(String... suffix) {
-        return or(sequence(suffix).map(new Function1<String, Predicate<String>>() {
+    public static Function1<String, Predicate<String>> endsWith() {
+        return new Function1<String, Predicate<String>>() {
             public Predicate<String> call(String value) throws Exception { return endsWith(value); }
-        }));
+        };
+    }
+
+    public static LogicalPredicate<String> endsWith(String first, String... rest) {
+        return or(sequence(rest).cons(first).map(endsWith()));
     }
 
     public static LogicalPredicate<String> contains(final String value) {
