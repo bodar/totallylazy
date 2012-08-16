@@ -1,14 +1,11 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Memory;
+import com.googlecode.totallylazy.Lazy;
 
 import java.util.concurrent.Callable;
 
-public class LazyCallable<T> extends Function<T> implements Memory {
+public class LazyCallable<T> extends Lazy<T> {
     private final Callable<? extends T> callable;
-    private final Object lock = new Object();
-    private volatile T state;
 
     private LazyCallable(Callable<? extends T> callable) {
         this.callable = callable;
@@ -18,21 +15,7 @@ public class LazyCallable<T> extends Function<T> implements Memory {
         return new LazyCallable<T>(callable);
     }
 
-    // Thread-safe double check idiom (Effective Java 2nd edition p.283)
-    public final T call() throws Exception {
-        if (state == null) {
-            synchronized (lock) {
-                if (state == null) {
-                    state = callable.call();
-                }
-            }
-        }
-        return state;
-    }
-
-    public void forget() {
-        synchronized (lock) {
-            state = null;
-        }
+    public final T get() throws Exception {
+        return callable.call();
     }
 }
