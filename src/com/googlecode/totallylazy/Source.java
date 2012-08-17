@@ -10,15 +10,10 @@ public interface Source extends Closeable {
 
     class methods {
         public static int copyAndClose(Source source, final Destination destination) {
-            return using(source, new Function1<Source, Integer>() {
+            return using(source, destination, new Function2<Source, Destination, Integer>() {
                 @Override
-                public Integer call(final Source source) throws Exception {
-                    return using(destination, new Callable1<Destination, Integer>() {
-                        @Override
-                        public Integer call(final Destination destination) throws Exception {
-                            return copy(source, destination);
-                        }
-                    });
+                public Integer call(Source source, Destination destination) throws Exception {
+                    return copy(source, destination);
                 }
             });
         }

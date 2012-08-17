@@ -16,7 +16,7 @@ public class Closeables {
         };
     }
 
-    public static <T> T safeClose(final T t){
+    public static <T> T safeClose(final T t) {
         try {
             close(t);
             return null;
@@ -25,7 +25,7 @@ public class Closeables {
         }
     }
 
-    public static <T extends Closeable> T safeClose(final T t){
+    public static <T extends Closeable> T safeClose(final T t) {
         try {
             close(t);
             return null;
@@ -66,6 +66,18 @@ public class Closeables {
             return call(callable, t);
         } finally {
             call(close(), t);
+        }
+    }
+
+    public static <A extends Closeable, B extends Closeable, R> R using(A a, B b, Callable2<? super A, ? super B, ? extends R> callable) {
+        try {
+            return call(callable, a, b);
+        } finally {
+            try {
+                call(close(), a);
+            } finally {
+                call(close(), b);
+            }
         }
     }
 
