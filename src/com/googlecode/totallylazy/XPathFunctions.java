@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.w3c.dom.NodeList;
 
 import javax.xml.namespace.QName;
@@ -17,7 +16,18 @@ public class XPathFunctions {
     static {
         add(signature("string-join", argumentsOf(NodeList.class, String.class)), nodeListAndString(joinStrings()));
         add(signature("trim-and-join", argumentsOf(NodeList.class, String.class)), nodeListAndString(trimAndJoin()));
+        add(signature("if", argumentsOf(NodeList.class, Object.class, Object.class)), threeNodeLists(ifElse()));
     }
+
+    private static Function3<NodeList, Object, Object, Object> ifElse() {
+        return new Function3<NodeList, Object, Object, Object>() {
+            @Override
+            public Object call(NodeList nodeList, Object matched, Object notMatched) throws Exception {
+                return nodeList.getLength() > 0 ? matched : notMatched;
+            }
+        };
+    }
+
 
     public static Rules<Pair<String, List<Object>>, Object> add(Predicate<Pair<String, List<Object>>> signature, Function1<Second<List<Object>>, Object> callable) {
         return functions.add(signature, callable);
@@ -86,6 +96,15 @@ public class XPathFunctions {
             @Override
             public Object call(List<Object> objects) throws Exception {
                 return callable.call((NodeList) objects.get(0), unescape((String) objects.get(1)));
+            }
+        });
+    }
+
+    private static Function1<Second<List<Object>>, Object> threeNodeLists(final Callable3<NodeList, Object, Object, Object> callable) {
+        return Callables.<List<Object>>second().then(new Callable1<List<Object>, Object>() {
+            @Override
+            public Object call(List<Object> objects) throws Exception {
+                return callable.call((NodeList) objects.get(0), objects.get(1), objects.get(2));
             }
         });
     }

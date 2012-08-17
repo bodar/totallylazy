@@ -50,4 +50,12 @@ public class XPathFunctionsTest {
         String joinedStrings = xpath().evaluate("tl:trim-and-join(//node, '--')", document);
         assertThat(joinedStrings, equalTo("hello--world"));
     }
+
+    @Test
+    public void supportsIf() throws Exception {
+        Document document = document("<root><note>Hello Dan</note><other>Hello Tom</other></root>");
+        assertThat(xpath().evaluate("tl:if(//note[text() = 'Hello Dan'], 'Matched', 'Not Matched' )", document), equalTo("Matched"));
+        assertThat(xpath().evaluate("tl:if(//note[not(text() = 'Hello Dan')], 'Matched', //other )", document), equalTo("Hello Tom"));
+    }
+
 }
