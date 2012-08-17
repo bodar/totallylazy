@@ -17,8 +17,10 @@ import java.nio.charset.Charset;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.Predicates.or;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Strings {
     public static final String EMPTY = "";
@@ -115,6 +117,16 @@ public class Strings {
 
     public static LogicalPredicate<String> endsWith(final String value) {
         return new EndsWithPredicate(value);
+    }
+
+    public static Function1<String, Predicate<String>> endsWith() {
+        return new Function1<String, Predicate<String>>() {
+            public Predicate<String> call(String value) throws Exception { return endsWith(value); }
+        };
+    }
+
+    public static LogicalPredicate<String> endsWith(String first, String... rest) {
+        return or(sequence(rest).cons(first).map(endsWith()));
     }
 
     public static LogicalPredicate<String> contains(final String value) {

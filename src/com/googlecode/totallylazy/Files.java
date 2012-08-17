@@ -109,7 +109,7 @@ public class Files {
     }
 
     public static File workingDirectory() {
-        return new File(".");
+        return new File(getProperty("user.dir"));
     }
 
     public static String randomFilename() {
