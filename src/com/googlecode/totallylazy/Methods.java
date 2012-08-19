@@ -13,6 +13,32 @@ import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Methods {
+    public static Function1<Method, String> methodName() {
+        return new Function1<Method, String>() {
+            @Override
+            public String call(Method method) throws Exception {
+                return method.getName();
+            }
+        };
+    }
+
+    public static Function1<Method,? extends Class<?>> returnType() {
+        return new Function1<Method, Class<?>>() {
+            @Override
+            public Class<?> call(Method method) throws Exception {
+                return method.getReturnType();
+            }
+        };
+    }
+
+    public static Function1<Method, Class<?>[]> parameterTypes() {
+        return new Function1<Method, Class<?>[]>() {
+            public Class<?>[] call(Method method) throws Exception {
+                return method.getParameterTypes();
+            }
+        };
+    }
+
     public static <T extends Annotation> Function1<Method, T> annotation(final Class<T> annotationClass) {
         return new Function1<Method, T>() {
             public T call(Method method) throws Exception {
