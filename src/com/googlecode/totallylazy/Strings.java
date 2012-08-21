@@ -123,7 +123,7 @@ public class Strings {
         };
     }
 
-    private LogicalPredicate<String> startsWith(String first, String... rest) {
+    public LogicalPredicate<String> startsWith(String first, String... rest) {
         return or(sequence(rest).cons(first).map(startsWith()));
     }
 
