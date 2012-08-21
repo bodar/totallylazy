@@ -115,13 +115,27 @@ public class Strings {
         return new StartsWithPredicate(value);
     }
 
+    public static Function1<String, Predicate<String>> startsWith() {
+        return new Function1<String, Predicate<String>>() {
+            public Predicate<String> call(String value) throws Exception {
+                return startsWith(value);
+            }
+        };
+    }
+
+    private LogicalPredicate<String> startsWith(String first, String... rest) {
+        return or(sequence(rest).cons(first).map(startsWith()));
+    }
+
     public static LogicalPredicate<String> endsWith(final String value) {
         return new EndsWithPredicate(value);
     }
 
     public static Function1<String, Predicate<String>> endsWith() {
         return new Function1<String, Predicate<String>>() {
-            public Predicate<String> call(String value) throws Exception { return endsWith(value); }
+            public Predicate<String> call(String value) throws Exception {
+                return endsWith(value);
+            }
         };
     }
 
