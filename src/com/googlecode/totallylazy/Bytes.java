@@ -12,12 +12,7 @@ public class Bytes {
         }
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[512];
-            int read = stream.read(buffer);
-            while (read > 0) {
-                outputStream.write(buffer, 0, read);
-                read = stream.read(buffer);
-            }
+            Streams.copy(stream, outputStream);
             return outputStream.toByteArray();
         } catch (IOException e) {
             throw LazyException.lazyException(e);
@@ -33,5 +28,13 @@ public class Bytes {
             throw LazyException.lazyException(e);
         }
     }
-    
+
+    public static Function1<OutputStream, OutputStream> write(final byte[] value) {
+        return new Function1<OutputStream,OutputStream>() {
+            @Override
+            public OutputStream call(OutputStream outputStream) throws Exception {
+                return write(value, outputStream);
+            }
+        };
+    }
 }
