@@ -13,12 +13,32 @@ public class Rules<A, B> extends Function1<A, B> implements Predicate<A> {
         this.rules.addAll(rules.toList());
     }
 
+    @Deprecated
     public Rules<A, B> add(final Predicate<? super A> predicate, final Callable1<? super A, ? extends B> callable) {
-        return add(rule(predicate, callable));
+        return addFirst(predicate, callable);
     }
 
+    @Deprecated
     public Rules<A, B> add(Rule<? super A, ? extends B> rule) {
+        addFirst(Unchecked.<Rule<A, B>>cast(rule));
+        return this;
+    }
+
+    public Rules<A, B> addFirst(final Predicate<? super A> predicate, final Callable1<? super A, ? extends B> callable) {
+        return addFirst(rule(predicate, callable));
+    }
+
+    public Rules<A, B> addFirst(Rule<? super A, ? extends B> rule) {
         rules.addFirst(Unchecked.<Rule<A, B>>cast(rule));
+        return this;
+    }
+
+    public Rules<A, B> addLast(final Predicate<? super A> predicate, final Callable1<? super A, ? extends B> callable) {
+        return addLast(rule(predicate, callable));
+    }
+
+    public Rules<A, B> addLast(Rule<? super A, ? extends B> rule) {
+        rules.addLast(Unchecked.<Rule<A, B>>cast(rule));
         return this;
     }
 
