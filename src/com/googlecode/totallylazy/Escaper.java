@@ -10,7 +10,7 @@ public class Escaper {
     private final Rules<Character, String> rules = Rules.rules();
 
     public Escaper() {
-        rules.add(always(Character.class), toString);
+        rules.addLast(always(Character.class), toString);
     }
 
     public Escaper withRule(Character appliesTo, final String result) {
@@ -18,7 +18,7 @@ public class Escaper {
     }
 
     public Escaper withRule(Predicate<? super Character> appliesTo, Callable1<? super Character, ? extends String> action) {
-        rules.add(appliesTo, action);
+        rules.addFirst(appliesTo, action);
         return this;
     }
 

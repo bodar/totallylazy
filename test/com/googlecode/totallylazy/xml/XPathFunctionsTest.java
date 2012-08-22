@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.xml;
 
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -68,7 +68,6 @@ public class XPathFunctionsTest {
         assertThat(xpath().evaluate("tl:or(//notPresent, //other)", document), equalTo("Hello Tom"));
         assertThat(xpath().evaluate("tl:or(//user/text(), //note, //other)", document), equalTo("Hello Dan"));
     }
-
 
     @Test
     public void supportsTokenize() throws Exception {
