@@ -9,6 +9,9 @@ import javax.xml.xpath.XPathFunctionResolver;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.nullValue;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class XPathFunctions {
     private static final Rules<Pair<String, List<Object>>, Object> functions = Rules.rules();
@@ -17,6 +20,21 @@ public class XPathFunctions {
         add(signature("string-join", argumentsOf(NodeList.class, String.class)), nodeListAndString(joinStrings()));
         add(signature("trim-and-join", argumentsOf(NodeList.class, String.class)), nodeListAndString(trimAndJoin()));
         add(signature("if", argumentsOf(NodeList.class, Object.class, Object.class)), threeNodeLists(ifElse()));
+        add(signature("or", Predicates.<List<Object>>all()), returnFirstNonNullOrEmpty());
+    }
+
+    private static Function1<List<Object>, Object> returnFirstNonNullOrEmpty() {
+        return new Function1<List<Object>, Object>() {
+            @Override
+            public Object call(List<Object> arguments) throws Exception {
+                return sequence(arguments).find(not(nullValue()).and(new Predicate<Object>() {
+                    @Override
+                    public boolean matches(Object other) {
+                        return !(other instanceof NodeList) || ((NodeList) other).getLength() != 0;
+                    }
+                })).getOrNull();
+            }
+        };
     }
 
     private static Function3<NodeList, Object, Object, Object> ifElse() {
@@ -28,9 +46,13 @@ public class XPathFunctions {
         };
     }
 
-
-    public static Rules<Pair<String, List<Object>>, Object> add(Predicate<Pair<String, List<Object>>> signature, Function1<Second<List<Object>>, Object> callable) {
-        return functions.add(signature, callable);
+    public static Rules<Pair<String, List<Object>>, Object> add(Predicate<Pair<String, List<Object>>> signature, final Function1<List<Object>, Object> callable) {
+        return functions.add(signature, new Function1<Pair<String, List<Object>>, Object>() {
+            @Override
+            public Object call(Pair<String, List<Object>> pair) throws Exception {
+                return callable.call(pair.second());
+            }
+        });
     }
 
     public static Predicate<Pair<String, List<Object>>> signature(final String methodName, final Predicate<List<Object>> argsPredicate) {
@@ -91,22 +113,22 @@ public class XPathFunctions {
         };
     }
 
-    private static Function1<Second<List<Object>>, Object> nodeListAndString(final Callable2<NodeList, String, String> callable) {
-        return Callables.<List<Object>>second().then(new Callable1<List<Object>, Object>() {
+    private static Function1<List<Object>, Object> nodeListAndString(final Callable2<NodeList, String, String> callable) {
+        return new Function1<List<Object>, Object>() {
             @Override
             public Object call(List<Object> objects) throws Exception {
                 return callable.call((NodeList) objects.get(0), unescape((String) objects.get(1)));
             }
-        });
+        };
     }
 
-    private static Function1<Second<List<Object>>, Object> threeNodeLists(final Callable3<NodeList, Object, Object, Object> callable) {
-        return Callables.<List<Object>>second().then(new Callable1<List<Object>, Object>() {
+    private static Function1<List<Object>, Object> threeNodeLists(final Callable3<NodeList, Object, Object, Object> callable) {
+        return new Function1<List<Object>, Object>() {
             @Override
             public Object call(List<Object> objects) throws Exception {
                 return callable.call((NodeList) objects.get(0), objects.get(1), objects.get(2));
             }
-        });
+        };
     }
 
     private static Function1<List<Object>, Object> arg(final Number index) {
