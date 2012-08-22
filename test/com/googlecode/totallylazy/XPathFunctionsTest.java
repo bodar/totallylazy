@@ -58,4 +58,12 @@ public class XPathFunctionsTest {
         assertThat(xpath().evaluate("tl:if(//note[not(text() = 'Hello Dan')], 'Matched', //other )", document), equalTo("Hello Tom"));
     }
 
+    @Test
+    public void supportsOr() throws Exception {
+        Document document = document("<root><note>Hello Dan</note><other>Hello Tom</other><user></user></root>");
+        assertThat(xpath().evaluate("tl:or(//note, //other)", document), equalTo("Hello Dan"));
+        assertThat(xpath().evaluate("tl:or(//notPresent, //other)", document), equalTo("Hello Tom"));
+        assertThat(xpath().evaluate("tl:or(//user/text(), //note, //other)", document), equalTo("Hello Dan"));
+    }
+
 }
