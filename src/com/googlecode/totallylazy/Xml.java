@@ -2,6 +2,8 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.NodeIterator;
 import com.googlecode.totallylazy.iterators.PoppingIterator;
+import com.googlecode.totallylazy.xml.FunctionResolver;
+import com.googlecode.totallylazy.xml.XPathFunctions;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -34,7 +36,7 @@ import java.util.Iterator;
 import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.string;
-import static com.googlecode.totallylazy.XPathFunctions.resolver;
+import static com.googlecode.totallylazy.xml.FunctionResolver.resolver;
 
 public class Xml {
     public static final Escaper DEFAULT_ESCAPER = new Escaper().
@@ -103,9 +105,13 @@ public class Xml {
         return selectElements(node, expression).headOption();
     }
 
+    static {
+        FunctionResolver.add(XPathFunctions.class);
+    }
+
     public static XPath xpath() {
         XPath xPath = XPathFactory.newInstance().newXPath();
-        xPath.setXPathFunctionResolver(resolver());
+        xPath.setXPathFunctionResolver(resolver);
         return xPath;
     }
 
