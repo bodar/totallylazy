@@ -20,18 +20,22 @@ import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class XPathFunctions {
+    @XPathFunction("trim-and-join")
     public static String trimAndJoin(NodeList nodes, String delimiter) {
         return Xml.textContents(nodes).map(Strings.trim()).toString(unescape(delimiter));
     }
 
+    @XPathFunction("string-join")
     public static String stringJoin(NodeList nodes, String delimiter) {
         return Xml.textContents(nodes).toString(unescape(delimiter));
     }
 
+    @XPathFunction("if")
     public static Object IF(NodeList nodeList, Object matched, Object notMatched) {
         return nodeList.getLength() > 0 ? matched : notMatched;
     }
 
+    @XPathFunction("or")
     public static Object or(List<Object> arguments) {
         return sequence(arguments).find(not(nullValue()).and(new Predicate<Object>() {
             @Override
@@ -41,6 +45,7 @@ public class XPathFunctions {
         })).getOrNull();
     }
 
+    @XPathFunction("tokenize")
     public static NodeArrayList<Text> tokenize(NodeList input, String pattern) {
         return new NodeArrayList<Text>(Xml.sequence(input).flatMap(split(pattern)));
     }
