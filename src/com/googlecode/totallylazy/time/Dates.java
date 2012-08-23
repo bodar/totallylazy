@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.time;
 
+import com.googlecode.totallylazy.Function1;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,6 +29,7 @@ public class Dates {
 
     public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 
+    @Deprecated
     public static DateFormat LUCENE() {
         return format(LUCENE);
     }
@@ -42,6 +45,15 @@ public class Dates {
         return simpleDateFormat;
     }
 
+    public static Function1<Date, String> format(final DateFormat format) {
+        return new Function1<Date, String>() {
+            @Override
+            public String call(Date value) throws Exception {
+                return format.format(value);
+            }
+        };
+    }
+
     public static DateFormat LEXICAL() {
         return format(LEXICAL);
     }
@@ -54,11 +66,20 @@ public class Dates {
         return format(JAVA_UTIL_DATE_TO_STRING);
     }
 
-    public static Date parse(String value){
+    public static Date parse(String value) {
         return date(value);
     }
 
-    public static Date date(String value){
+    public static Function1<String, Date> parse(final DateFormat format) {
+        return new Function1<String, Date>() {
+            @Override
+            public Date call(String value) throws Exception {
+                return format.parse(value);
+            }
+        };
+    }
+
+    public static Date date(String value) {
         return DateFormatConverter.defaultConverter().parse(value);
     }
 
@@ -124,4 +145,5 @@ public class Dates {
         calendar.set(MILLISECOND, 0);
         return calendar.getTime();
     }
+
 }
