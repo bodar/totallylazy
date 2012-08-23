@@ -105,10 +105,6 @@ public class Xml {
         return selectElements(node, expression).headOption();
     }
 
-    static {
-        FunctionResolver.add(XPathFunctions.class);
-    }
-
     public static XPath xpath() {
         XPath xPath = XPathFactory.newInstance().newXPath();
         xPath.setXPathFunctionResolver(resolver);

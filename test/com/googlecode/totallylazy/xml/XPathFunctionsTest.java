@@ -76,5 +76,4 @@ public class XPathFunctionsTest {
         assertThat(xpath().evaluate("tl:tokenize(//note, '\\s')[2]", document), equalTo("Dan"));
         assertThat(xpath().evaluate("tl:tokenize(//text(), '\\s')[4]", document), equalTo("Tom"));
     }
-
 }
