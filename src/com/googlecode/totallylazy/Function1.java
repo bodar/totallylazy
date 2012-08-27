@@ -104,6 +104,10 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B> {
         };
     }
 
+    public static <A> Function1<A, A> identity(Class<A> aClass) {
+        return identity();
+    }
+
     public Function1<A,B> time() {
         return TimeCallable1.time1(this);
     }
