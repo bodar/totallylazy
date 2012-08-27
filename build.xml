@@ -54,10 +54,10 @@
     <target name="compile">
         <compile.and.jar src="${src}" jar="${release.jar.path}" classpathref="all.dependancies"
                          version="${release.version}"/>
-        <compile.and.jar src="${test}" jar="${test.jar.path}" classpathref="all.jars" version="${release.version}"/>
     </target>
 
     <target name="test">
+        <compile.and.jar src="${test}" jar="${test.jar.path}" classpathref="all.jars" version="${release.version}"/>
         <test jar="${test.jar.path}" classpathref="all.jars" reports="${reports}"/>
     </target>
 
