@@ -8,9 +8,9 @@ import static com.googlecode.totallylazy.Function.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
-public class Pair<F, S> implements First<F>, Second<S>, Value<F> {
-    private final Value<? extends F> first;
-    private final Value<? extends S> second;
+public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
+    private final Lazy<F> first;
+    private final Lazy<S> second;
 
     protected Pair(final Callable<? extends F> first, final Callable<? extends S> second) {
         this.first = lazy(first);
@@ -102,5 +102,11 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F> {
 
     public static <A,B,C> Function1<Pair<A, B>, Pair<B, C>> reduceLeftShift(Callable2<A, B, C> callable) {
         return Pair.<A,B,C>reduceLeftShift().flip().apply(callable);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <NewF> Pair<NewF, S> map(final Callable1<? super F, ? extends NewF> callable) {
+        return Pair.pair(first.map(callable), second);
     }
 }
