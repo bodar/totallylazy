@@ -3,11 +3,13 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
@@ -84,6 +86,10 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
             return sortedMap(Comparators.<K>ascending(), values);
         }
 
+        public static <K extends Comparable<? super K>, V> ImmutableSortedMap<K, V> sortedMap(final Map<K, V> values) {
+            return sortedMap(Maps.pairs(values));
+        }
+
         public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator) {
             return factory.create(comparator);
         }
@@ -114,6 +120,10 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
 
         public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator, final Iterable<? extends Pair<K, V>> values) {
             return TreeMap.methods.treeMap(factory, comparator, sequence(values).toSortedList(Comparators.<Pair<K, V>, K>where(Callables.<K>first(), comparator)));
+        }
+
+        public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator, final Map<K, V> values) {
+            return sortedMap(comparator, Maps.pairs(values));
         }
     }
 
