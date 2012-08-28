@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
@@ -24,6 +25,22 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ImmutableSortedMapTest {
+    @Test
+    public void canPutAndReturnOldValue() throws Exception {
+        ImmutableSortedMap<Integer, String> pairs = sortedMap(4, "Four", 5, "Five", 3, "Three", 2, "Two", 6, "Six");
+        Pair<ImmutableSortedMap<Integer, String>, Option<String>> result = ImmutableMap.methods.put(pairs, 4, "NewFour");
+        assertThat(result.first().get(4).get(), is("NewFour"));
+        assertThat(result.second().get(), is("Four"));
+    }
+
+    @Test
+    public void canRemoveAndReturnOldValue() throws Exception {
+        ImmutableSortedMap<Integer, String> pairs = sortedMap(4, "Four", 5, "Five", 3, "Three", 2, "Two", 6, "Six");
+        Pair<ImmutableSortedMap<Integer, String>, Option<String>> result = ImmutableMap.methods.remove(pairs, 4);
+        assertThat(result.first().get(4).isEmpty(), is(true));
+        assertThat(result.second().get(), is("Four"));
+    }
+
     @Test
     public void supportsIndexOf() throws Exception {
         ImmutableSortedMap<Integer, Integer> map = sortedMap(4, 4, 5, 5, 3, 3, 2, 2, 6, 6);
