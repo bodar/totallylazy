@@ -152,7 +152,12 @@ public class Iterators {
     }
 
     public static <T, S> S reduceLeft(final Iterator<? extends T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
-        return foldLeft(iterator, Unchecked.<S>cast(iterator.next()), callable);
+        return foldLeft(iterator, seed(iterator, callable), callable);
+    }
+
+    private static <T, S> S seed(Iterator<? extends T> iterator, Callable2<? super S, ? super T, ? extends S> callable) {
+        if(callable instanceof Identity) return Unchecked.<Identity<S>>cast(callable).identity();
+        return Unchecked.<S>cast(iterator.next());
     }
 
     public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Callable2<? super T, ? super S, ? extends S> callable) {
