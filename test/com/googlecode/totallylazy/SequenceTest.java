@@ -349,6 +349,17 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsUniqueAndCanBeIteratedMultipleTimes() throws Exception {
+        Sequence<String> unique = sequence("Matt", "Dan", "Matt", "Bob").unique();
+        assertThat(unique, hasExactly("Matt", "Dan", "Bob"));
+        assertThat(unique, hasExactly("Matt", "Dan", "Bob"));
+
+        Sequence<String> uniqueWithCallable = sequence("Matt", "Dan", "Dominic", "Mary").unique(Strings.characterAt(0));
+        assertThat(uniqueWithCallable, hasExactly("Matt", "Dan"));
+        assertThat(uniqueWithCallable, hasExactly("Matt", "Dan"));
+    }
+
+    @Test
     public void supportsUniqueWithCallable() throws Exception {
         assertThat(sequence("Matt", "Dan", "Dominic", "Mary").unique(Strings.characterAt(0)), hasExactly("Matt", "Dan"));
     }

@@ -683,7 +683,12 @@ public class Sequences {
     }
 
     public static <T, S> Sequence<T> unique(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends S> callable) {
-        return sequence(iterable).filter(new UniquePredicate<T, S>(callable));
+        return new Sequence<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return Iterators.filter(iterable.iterator(), new UniquePredicate<T,S>(callable));
+            }
+        };
     }
 
     public static <T> Sequence<T> flatten(final Iterable<? extends Iterable<? extends T>> iterable) {
