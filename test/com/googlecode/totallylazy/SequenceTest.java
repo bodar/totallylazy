@@ -52,7 +52,7 @@ import static com.googlecode.totallylazy.Sequences.splitOn;
 import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
-import static com.googlecode.totallylazy.callables.CountNotNull.count;
+import static com.googlecode.totallylazy.callables.Count.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.comparators.Comparators.comparators;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
