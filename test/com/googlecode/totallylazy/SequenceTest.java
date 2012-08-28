@@ -133,6 +133,11 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsReduceWithIdentityFunction() throws Exception {
+        assertThat(sequence("one", "two", "three").reduce(count()), NumberMatcher.is(3));
+    }
+
+    @Test
     public void supportsApplicativeUsage() throws Exception {
         assertThat(empty(Number.class).applicate(one(add(3))), Matchers.is(empty(Number.class)));
         assertThat(numbers(9).applicate(Sequences.<Function1<Number, Number>>empty()), Matchers.is(empty(Number.class)));
