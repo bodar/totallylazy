@@ -108,7 +108,15 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> sequence(final Enumeration<T> enumeration) {
+    public static <T> Sequence<T> memorise(final Enumeration<T> enumeration) {
+        return memorise(new EnumerationIterator<T>(enumeration));
+    }
+
+    public static <T> Sequence<T> memorise(final Enumeration enumeration, final Class<T> aClass) {
+        return memorise(new EnumerationIterator<T>(Unchecked.<Enumeration<T>>cast(enumeration)));
+    }
+
+    public static <T> Sequence<T> forwardOnly(final Enumeration<T> enumeration) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return new EnumerationIterator<T>(enumeration);
@@ -116,7 +124,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> sequence(final Enumeration enumeration, final Class<T> aClass) {
+    public static <T> Sequence<T> forwardOnly(final Enumeration enumeration, final Class<T> aClass) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return new EnumerationIterator<T>(Unchecked.<Enumeration<T>>cast(enumeration));
