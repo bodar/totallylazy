@@ -80,7 +80,7 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
             return sortedMap(sequence(tail).cons(head));
         }
 
-        public static <K extends Comparable<? super K>, V> ImmutableSortedMap<K, V> sortedMap(final Iterable<Pair<K, V>> values) {
+        public static <K extends Comparable<? super K>, V> ImmutableSortedMap<K, V> sortedMap(final Iterable<? extends Pair<K, V>> values) {
             return sortedMap(Comparators.<K>ascending(), values);
         }
 
@@ -112,7 +112,7 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V>, Sorted<Pai
             return sortedMap(comparator, sequence(tail).cons(head));
         }
 
-        public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator, final Iterable<Pair<K, V>> values) {
+        public static <K, V> ImmutableSortedMap<K, V> sortedMap(Comparator<K> comparator, final Iterable<? extends Pair<K, V>> values) {
             return TreeMap.methods.treeMap(factory, comparator, sequence(values).toSortedList(Comparators.<Pair<K, V>, K>where(Callables.<K>first(), comparator)));
         }
     }
