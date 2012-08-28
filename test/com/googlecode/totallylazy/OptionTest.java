@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.ignoreAndReturn;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callables.toString;
-import static com.googlecode.totallylazy.Function1.constant;
+import static com.googlecode.totallylazy.Functions.constant;
 import static com.googlecode.totallylazy.Objects.equalTo;
 import static com.googlecode.totallylazy.Option.applicate;
 import static com.googlecode.totallylazy.Option.none;

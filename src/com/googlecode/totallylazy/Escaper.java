@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
 import static com.googlecode.totallylazy.Callables.toString;
-import static com.googlecode.totallylazy.Function1.returns1;
+import static com.googlecode.totallylazy.Functions.returns1;
 import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.characters;

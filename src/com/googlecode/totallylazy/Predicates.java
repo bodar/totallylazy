@@ -23,7 +23,7 @@ import com.googlecode.totallylazy.predicates.WhileTrue;
 
 import java.util.Collection;
 
-import static com.googlecode.totallylazy.Function1.function;
+import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.*;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;

@@ -3,8 +3,7 @@ package com.googlecode.totallylazy;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.call;
-import static com.googlecode.totallylazy.Function.function;
-import static com.googlecode.totallylazy.Function.returns;
+import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 

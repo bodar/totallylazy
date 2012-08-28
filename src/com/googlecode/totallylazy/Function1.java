@@ -6,29 +6,11 @@ import com.googlecode.totallylazy.callables.TimeCallable1;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Pair.pair;
 
 public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B> {
-    public static <A, B> Function1<A, B> function(final Callable1<? super A, ? extends B> callable) {
-        return new Function1<A, B>() {
-            @Override
-            public B call(A a) throws Exception {
-                return callable.call(a);
-            }
-        };
-    }
-
     public B apply(final A a) {
-        return Function1.call(this, a);
-    }
-
-    public static <A, B> B call(final Callable1<? super A, ? extends B> callable, final A a) {
-        try {
-            return callable.call(a);
-        } catch (Exception e) {
-            throw lazyException(e);
-        }
+        return Functions.call(this, a);
     }
 
     public Function<B> deferApply(final A a) {
@@ -82,30 +64,6 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B> {
                 return pair(original, Function1.this.apply(original));
             }
         };
-    }
-
-    public static <A,B> Function1<A, B> returns1(final B result) {
-        return constant(result);
-    }
-
-    public static <A, B> Function1<A, B> constant(final B result) {
-        return new Function1<A, B>() {
-            public B call(A ignore) throws Exception {
-                return result;
-            }
-        };
-    }
-
-    public static <A> Function1<A, A> identity() {
-        return new Function1<A, A>() {
-            public A call(A self) throws Exception {
-                return self;
-            }
-        };
-    }
-
-    public static <A> Function1<A, A> identity(Class<A> aClass) {
-        return identity();
     }
 
     public Function1<A,B> time() {
