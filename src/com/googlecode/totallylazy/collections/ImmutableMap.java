@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Unchecked;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -55,6 +56,14 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
     class methods {
         public static <K,V> Map<K,V> toMap(ImmutableMap<K,V> source) {
             return Maps.map(source);
+        }
+
+        public static <K, V, M extends ImmutableMap<K,V>> Pair<M,Option<V>> put(M map, K key, V newValue) {
+            return Pair.pair(Unchecked.<M>cast(map.put(key, newValue)),map.get(key));
+        }
+
+        public static <K, V, M extends ImmutableMap<K,V>> Pair<M,Option<V>> remove(M map, K key) {
+            return Pair.pair(Unchecked.<M>cast(map.remove(key)),map.get(key));
         }
     }
 }
