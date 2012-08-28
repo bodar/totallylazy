@@ -11,8 +11,8 @@ import static org.hamcrest.Matchers.is;
 
 public class DatesTest {
     @Test
-    public void canParseALuceneDate() throws Exception{
-        Date result = Dates.LUCENE().parse("20110908071414123");
+    public void canParseALexicalDate() throws Exception{
+        Date result = Dates.LEXICAL().parse("20110908071414123");
         assertThat(result, Matchers.is(date(2011, 9, 8, 7, 14, 14, 123)));
     }
 

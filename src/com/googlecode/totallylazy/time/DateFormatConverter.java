@@ -41,7 +41,7 @@ public class DateFormatConverter implements DateConverter {
     }
 
     public static DateFormatConverter defaultConverter() {
-        return new DateFormatConverter(Dates.RFC3339().formats().join(sequence(Dates.RFC822(), Dates.javaUtilDateToString(), Dates.LUCENE())));
+        return new DateFormatConverter(Dates.RFC3339().formats().join(sequence(Dates.RFC822(), Dates.javaUtilDateToString(), Dates.LEXICAL())));
     }
 
     public String format(final Date value) {
