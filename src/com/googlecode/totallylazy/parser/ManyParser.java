@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
 
-import static com.googlecode.totallylazy.Function.returns;
+import static com.googlecode.totallylazy.Functions.returns;
 
 public class ManyParser<A> extends AbstractParser<Segment<A>> {
     private final AbstractParser<A> parser;

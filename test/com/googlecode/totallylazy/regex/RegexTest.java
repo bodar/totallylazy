@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.regex;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Function1.returns1;
+import static com.googlecode.totallylazy.Functions.returns1;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.regex.Regex.regex;
 import static org.hamcrest.MatcherAssert.assertThat;

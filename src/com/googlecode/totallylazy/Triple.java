@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Function.returns;
+import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
 public class Triple<F, S, T> extends Pair<F, S> implements Third<T> {

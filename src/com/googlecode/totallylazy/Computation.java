@@ -8,8 +8,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Function.returns;
-import static com.googlecode.totallylazy.Function2.function;
+import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Pair.leftShift;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -41,7 +40,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     }
 
     public static <T> Computation<T> computation(T value, Computation<T> next) {
-        return computation1(returns(value), Function1.<T, Computation<T>>constant(next));
+        return computation1(returns(value), Functions.<T, Computation<T>>constant(next));
     }
 
     public static <T> Computation<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {

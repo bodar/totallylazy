@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.Triple;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Function.returns;
+import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 

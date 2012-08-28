@@ -49,7 +49,7 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
     }
 
     public static <A> Option<A> flatten(Option<? extends Option<A>> option) {
-        return option.flatMap(Function1.<Option<A>>identity());
+        return option.flatMap(Functions.<Option<A>>identity());
     }
 
     public <B> Option<B> applicate(Option<? extends Callable1<? super A, ? extends B>> applicator) {

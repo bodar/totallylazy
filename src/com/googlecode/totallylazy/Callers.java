@@ -8,7 +8,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
-import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callers {
@@ -82,26 +81,26 @@ public final class Callers {
     }
 
     public static <T> T call(final Callable<? extends T> callable) {
-        return Function.call(callable);
+        return Functions.call(callable);
     }
 
     public static <A, B> B call(final Callable1<? super A, ? extends B> callable, final A a) {
-        return Function1.call(callable, a);
+        return Functions.call(callable, a);
     }
 
     public static <A, B, C> C call(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
-        return Function2.call(callable, a, b);
+        return Functions.call(callable, a, b);
     }
 
     public static <A, B, C, D> D call(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A a, final B b, final C c) {
-        return Function3.call(callable, a, b, c);
+        return Functions.call(callable, a, b, c);
     }
 
     public static <A, B, C, D, E> E call(final Callable4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A a, final B b, final C c, final D d) {
-        return Function4.call(callable, a, b, c, d);
+        return Functions.call(callable, a, b, c, d);
     }
 
     public static <A, B, C, D, E, F> F call(final Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A a, final B b, final C c, final D d, final E e) {
-        return Function5.call(callable, a, b, c, d, e);
+        return Functions.call(callable, a, b, c, d, e);
     }
 }

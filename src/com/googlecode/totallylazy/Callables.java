@@ -265,7 +265,7 @@ public final class Callables {
     }
 
     public static <T> Function<T> returns(final T t) {
-        return Function.returns(t);
+        return Functions.returns(t);
     }
 
     public static <T, R> Function1<T, R> ignoreAndReturn(final R r) {
@@ -273,15 +273,15 @@ public final class Callables {
     }
 
     public static <A, B> Function1<A, B> returns1(B result) {
-        return Function1.returns1(result);
+        return Functions.returns1(result);
     }
 
     public static <A, B, C> Function2<A, B, C> returns2(C result) {
-        return Function2.returns2(result);
+        return Functions.returns2(result);
     }
 
     public static <T> Function1<T, T> returnArgument() {
-        return Function1.identity();
+        return Functions.identity();
     }
 
     public static <T> Function1<T, T> returnArgument(final Class<T> aClass) {
@@ -354,27 +354,27 @@ public final class Callables {
     }
 
     public static <A, B, C> Function1<B, C> apply(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
-        return Function2.apply(callable, value);
+        return Functions.apply(callable, value);
     }
 
     public static <A, B, C, D> Function2<B, C, D> apply(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
-        return Function3.apply(callable, value);
+        return Functions.apply(callable, value);
     }
 
     public static <A, B, C> Function1<A, Function1<B, C>> curry(final Callable2<? super A, ? super B, ? extends C> callable) {
-        return Function2.function(callable);
+        return Functions.function(callable);
     }
 
     public static <A, B, C, D> Function1<A, Function1<B, Function1<C, D>>> curry(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
-        return Function3.function(callable);
+        return Functions.function(callable);
     }
 
     public static <A, B, C> Function2<A, B, C> uncurry2(final Callable1<? super A, ? extends Callable1<? super B, ? extends C>> callable) {
-        return Function2.uncurry2(callable);
+        return Functions.uncurry2(callable);
     }
 
     public static <A, B, C, D> Function3<A, B, C, D> uncurry3(final Callable1<? super A, ? extends Callable1<? super B, ? extends Callable1<? super C, ? extends D>>> callable) {
-        return Function3.uncurry3(callable);
+        return Functions.uncurry3(callable);
     }
 
     public static <L> Function1<Either<L, ?>, L> left(Class<L> aClass) {
@@ -454,29 +454,19 @@ public final class Callables {
     }
 
     public static <A, B, C> Function1<Pair<A, B>, C> pair(final Callable2<? super A, ? super B, ? extends C> function) {
-        return new Function1<Pair<A, B>, C>() {
-            @Override
-            public C call(Pair<A, B> pair) throws Exception {
-                return function.call(pair.first(), pair.second());
-            }
-        };
+        return Functions.pair(function);
     }
 
     public static <A, B, C> Function2<A, B, C> unpair(final Callable1<? super Pair<? extends A, ? extends B>, ? extends C> function) {
-        return new Function2<A, B, C>() {
-            @Override
-            public C call(A a, B b) throws Exception {
-                return function.call(Pair.pair(a, b));
-            }
-        };
+        return Functions.unpair(function);
     }
 
     public static <A, B, C, D>Function1<Triple<A, B, C>, D> triple(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
-        return Function3.triple(callable);
+        return Functions.triple(callable);
     }
 
     public static <A, B, C, D> Function3<A, B, C, D> untriple(final Callable1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> callable) {
-        return Function3.untriple(callable);
+        return Functions.untriple(callable);
     }
 
     public static <L, R> Function1<L, Either<L, R>> asLeft() {

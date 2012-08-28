@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Predicate;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -27,7 +27,7 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
         return new Function1<T, Predicate<T>>() {
             @Override
             public Predicate<T> call(T t) throws Exception {
-                return where(Function2.function(callable).apply(t), predicate);
+                return where(Functions.function(callable).apply(t), predicate);
             }
         };
     }
