@@ -107,9 +107,25 @@ public class SequencesTest {
         Vector<String> vector = new Vector<String>();
         vector.add("foo");
         Enumeration enumeration = vector.elements();
-        assertThat(sequence(enumeration, String.class).head(), is("foo"));
-        Enumeration<String> typeSafeEnumeration = vector.elements();
-        assertThat(sequence(typeSafeEnumeration).head(), is("foo"));
+        Sequence<String> forwardOnly = Sequences.forwardOnly(enumeration, String.class);
+        assertThat(forwardOnly.headOption().isEmpty(), is(false));
+        assertThat(forwardOnly.headOption().isEmpty(), is(true));
+        Sequence<String> forwardOnlyWithType = Sequences.forwardOnly(vector.elements());
+        assertThat(forwardOnlyWithType.headOption().isEmpty(), is(false));
+        assertThat(forwardOnlyWithType.headOption().isEmpty(), is(true));
+    }
+
+    @Test
+    public void supportsMemorisingAnEnumeration() throws Exception {
+        Vector<String> vector = new Vector<String>();
+        vector.add("foo");
+        Enumeration enumeration = vector.elements();
+        Sequence<String> memorise = Sequences.memorise(enumeration, String.class);
+        assertThat(memorise.headOption().isEmpty(), is(false));
+        assertThat(memorise.headOption().isEmpty(), is(false));
+        Sequence<String> memorisedWithType = Sequences.memorise(vector.elements());
+        assertThat(memorisedWithType.headOption().isEmpty(), is(false));
+        assertThat(memorisedWithType.headOption().isEmpty(), is(false));
     }
 
     @Test

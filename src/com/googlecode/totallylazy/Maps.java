@@ -52,7 +52,7 @@ public class Maps {
         return map(seed, sequence(entries));
     }
 
-    public static <K, V> Map<K, V> map(final Iterable<? extends Pair<? extends K, ? extends V>> entries) {
+    public static <K, V> Map<K, V>  map(final Iterable<? extends Pair<? extends K, ? extends V>> entries) {
         return map(new LinkedHashMap<K, V>(), entries);
     }
 
