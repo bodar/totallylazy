@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -56,6 +57,7 @@ import static com.googlecode.totallylazy.callables.Count.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.comparators.Comparators.comparators;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
@@ -738,5 +740,14 @@ public class SequenceTest {
     @Test
     public void supportsWindowed() throws Exception {
         assertThat(sequence(1, 2, 3, 4, 5).windowed(3), is(sequence(sequence(1, 2, 3), sequence(2, 3, 4), sequence(3, 4, 5))));
+    }
+
+    @Test
+    public void supportsIntersperse() {
+        assertThat(sequence("a", "b", "c").intersperse("x"), hasExactly("a", "x", "b", "x", "c"));
+        assertThat(sequence("a").intersperse("x"), hasExactly("a"));
+        assertThat(sequence().intersperse("x"), isEmpty());
+        assertThat(repeat(1).intersperse(0).take(5), hasExactly(1, 0, 1, 0, 1));
+        assertThat(repeat(1).intersperse(0).take(6), hasExactly(1, 0, 1, 0, 1, 0));
     }
 }

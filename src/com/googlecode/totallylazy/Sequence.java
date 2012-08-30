@@ -402,4 +402,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
     public Sequence<Sequence<T>> windowed(int size) {
         return Sequences.windowed(this, size);
     }
+
+    public Sequence<T> intersperse(T separator) {
+        return Sequences.intersperse(this, separator);
+    }
 }
