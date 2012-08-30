@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.collections.ImmutableList;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
+import com.googlecode.totallylazy.iterators.IntersperseIterator;
 import com.googlecode.totallylazy.iterators.EmptyIterator;
 import com.googlecode.totallylazy.iterators.EnumerationIterator;
 import com.googlecode.totallylazy.iterators.PairIterator;
@@ -686,7 +687,7 @@ public class Sequences {
         return new Sequence<T>() {
             @Override
             public Iterator<T> iterator() {
-                return Iterators.filter(iterable.iterator(), new UniquePredicate<T,S>(callable));
+                return Iterators.filter(iterable.iterator(), new UniquePredicate<T, S>(callable));
             }
         };
     }
@@ -754,5 +755,14 @@ public class Sequences {
         Sequence<T> take = sequence.take(size);
         if(take.size() == size) return ImmutableList.constructors.cons(take, internalWindowed(sequence.tail(), size));
         return ImmutableList.constructors.empty();
+    }
+
+    public static <T> Sequence<T> intersperse(final Iterable<? extends T> iterable, final T separator) {
+        return new Sequence<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return new IntersperseIterator<T>(iterable.iterator(), separator);
+            }
+        };
     }
 }
