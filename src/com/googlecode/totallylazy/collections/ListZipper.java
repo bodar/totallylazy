@@ -9,12 +9,12 @@ public class ListZipper<T> {
         this.breadcrumbs = breadcrumbs;
     }
 
-    public static <T> ListZipper<T> listZipper(ImmutableList<T> focus, ImmutableList<T> breadcrumbs) {
-        return new ListZipper<T>(focus, breadcrumbs);
+    public static <T> ListZipper<T> listZipper(ImmutableList<T> focus) {
+        return listZipper(focus, ImmutableList.constructors.<T>empty());
     }
 
-    public static <T> ListZipper<T> listZipper(ImmutableList<T> focus) {
-        return new ListZipper<T>(focus, ImmutableList.constructors.<T>empty());
+    public static <T> ListZipper<T> listZipper(ImmutableList<T> focus, ImmutableList<T> breadcrumbs) {
+        return new ListZipper<T>(focus, breadcrumbs);
     }
 
     public ListZipper<T> forward() {
