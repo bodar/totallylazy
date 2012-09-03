@@ -34,8 +34,8 @@ public class ListZipper<T> {
     }
 
     public static <T> ListZipper<T> toStart(ListZipper<T> zipper) {
-        if(zipper.breadcrumbs().isEmpty()) return zipper;
-        return toStart(zipper.backward());
+        while(!zipper.breadcrumbs().isEmpty()) zipper = zipper.backward();
+        return zipper;
     }
 
     @Override
