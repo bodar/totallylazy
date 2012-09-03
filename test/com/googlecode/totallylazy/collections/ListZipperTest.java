@@ -33,7 +33,7 @@ public class ListZipperTest {
     }
 
     @Test //use case
-    public void canUseZipperToUpdateAddElementInMiddleOfList() {
+    public void canUseZipperToAddElementInMiddleOfList() {
         ListZipper<String> zipper = listZipper(list("A", "B", "C", "D"));
         final ListZipper<String> newZipper = zipper.forward().forward();
         final ListZipper<String> result = toStart(listZipper(newZipper.focus().cons("Z"), newZipper.breadcrumbs()));
