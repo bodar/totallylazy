@@ -68,7 +68,7 @@ public class PersistentListTest {
     @Ignore
     public void supportsFilterIsPrettyFast() throws Exception {
         final ImmutableList<Number> range = range(1, 1000).toImmutableList();
-        TimeReport report = TimeReport.time(1000, new Function<ImmutableList<Number>>() {
+        TimeReport report = TimeReport.time(100000, new Function<ImmutableList<Number>>() {
             @Override
             public ImmutableList<Number> call() throws Exception {
                 return range.filter(Predicates.<Number>is(3));
@@ -87,7 +87,7 @@ public class PersistentListTest {
     @Ignore
     public void removeIsPrettyFast() throws Exception {
         final ImmutableList<Number> range = range(1, 1000).toImmutableList();
-        TimeReport report = TimeReport.time(1000, new Function<ImmutableList<Number>>() {
+        TimeReport report = TimeReport.time(1000000, new Function<ImmutableList<Number>>() {
             @Override
             public ImmutableList<Number> call() throws Exception {
                 return range.remove(3);

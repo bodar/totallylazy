@@ -163,6 +163,10 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
 
         @Override
         public ImmutableList<T> remove(T value) {
+            if(useRecursion()){
+                if(head.equals(value)) return tail;
+                return cons(head, tail.remove(value));
+            }
             ListZipper<T> zipper = zipper(this);
             while (!zipper.atEnd()){
                 if(zipper.current().equals(value)) return zipper.delete().toList();
@@ -188,7 +192,15 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
 
         @Override
         public ImmutableList<T> filter(Predicate<? super T> predicate) {
+            if(useRecursion()) {
+                if(predicate.matches(head)) return cons(head, tail().filter(predicate));
+                return tail().filter(predicate);
+            }
             return constructors.list(toSequence().filter(predicate));
+        }
+
+        protected boolean useRecursion() {
+            return size < 1024;
         }
 
         @Override
