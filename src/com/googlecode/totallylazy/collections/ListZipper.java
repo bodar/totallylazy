@@ -35,8 +35,13 @@ public class ListZipper<T> {
     }
 
     public static <T> ListZipper<T> toStart(ListZipper<T> zipper) {
-        while (!zipper.breadcrumbs.isEmpty()) zipper = zipper.left();
-        return zipper;
+        ImmutableList<T> focus = zipper.focus;
+        ImmutableList<T> breadcrumbs = zipper.breadcrumbs;
+        while (!breadcrumbs.isEmpty()) {
+            focus = focus.cons(breadcrumbs.head());
+            breadcrumbs = breadcrumbs.tail();
+        }
+        return listZipper(focus, breadcrumbs);
     }
 
     @Override
