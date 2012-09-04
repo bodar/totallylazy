@@ -20,8 +20,10 @@ import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Unchecked.cast;
+import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 
 public abstract class PersistentList<T> implements ImmutableList<T> {
     static final Empty EMPTY = new Empty();
@@ -37,11 +39,6 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
     @Override
     public ImmutableList<T> cons(T head) {
         return cons(head, this);
-    }
-
-    @Override
-    public ImmutableList<T> remove(T value) {
-        return filter(not(onlyOnce(is(value))));
     }
 
     @Override
@@ -86,6 +83,11 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         @Override
         public <C extends Segment<T>> C joinTo(C rest) {
             return rest;
+        }
+
+        @Override
+        public ImmutableList<T> remove(T value) {
+            return this;
         }
 
         @Override
@@ -157,6 +159,16 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         @Override
         public <C extends Segment<T>> C joinTo(C rest) {
             return cast(tail.joinTo(rest).cons(head));
+        }
+
+        @Override
+        public ImmutableList<T> remove(T value) {
+            ListZipper<T> zipper = zipper(this);
+            while (!zipper.atEnd()){
+                if(zipper.current().equals(value)) return zipper.delete().toList();
+                zipper = zipper.right();
+            }
+            return this;
         }
 
         @Override

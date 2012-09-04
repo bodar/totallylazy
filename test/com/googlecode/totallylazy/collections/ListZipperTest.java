@@ -49,4 +49,26 @@ public class ListZipperTest {
         final ImmutableList<String> deleted = zipper(list("A", "B", "C", "D")).right().right().delete().toList();
         assertThat(deleted, is(list("A", "B", "D")));
     }
+
+    @Test
+    public void supportsCurrent() {
+        ListZipper<String> zipper = zipper(list("A", "B"));
+        assertThat(zipper.current(), is("A"));
+        assertThat(zipper.right().current(), is("B"));
+    }
+
+    @Test
+    public void supportsAtEnd() {
+        ListZipper<String> zipper = zipper(list("A", "B"));
+        assertThat(zipper.atEnd(), is(false));
+        assertThat(zipper.right().right().atEnd(), is(true));
+    }
+
+    @Test
+    public void supportsAtStart() {
+        ListZipper<String> zipper = zipper(list("A", "B"));
+        assertThat(zipper.atStart(), is(true));
+        assertThat(zipper.right().atStart(), is(false));
+    }
+
 }
