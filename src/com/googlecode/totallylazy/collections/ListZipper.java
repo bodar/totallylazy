@@ -66,7 +66,23 @@ public class ListZipper<T> {
         return modify(functions.cons(instance));
     }
 
+    public ListZipper<T> remove() {
+        return delete();
+    }
+
     public ListZipper<T> delete() {
         return modify(functions.<T>tail());
+    }
+
+    public T current() {
+        return focus.head();
+    }
+
+    public boolean atEnd() {
+        return focus.isEmpty();
+    }
+
+    public boolean atStart() {
+        return breadcrumbs.isEmpty();
     }
 }
