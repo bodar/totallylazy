@@ -61,7 +61,7 @@ public interface Segment<T> {
                 @Override
                 public Character call() throws Exception {
                     int read = reader.read();
-                    if(read == -1) throw new NoSuchElementException();
+                    if (read == -1) throw new NoSuchElementException();
                     return (char) read;
                 }
             };
@@ -104,6 +104,11 @@ public interface Segment<T> {
                 }
             };
         }
+
+        public static <T, Self extends Segment<T>> Function1<Self, Self> cons(T t) {
+            return functions.<T, Self>cons().flip().apply(t);
+        }
+
     }
 
     class ASegment<T> extends AbstractSegment<T> {
