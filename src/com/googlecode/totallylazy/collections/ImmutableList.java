@@ -2,6 +2,8 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Container;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
@@ -45,6 +47,10 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, C
             return PersistentList.empty();
         }
 
+        public static <T> ImmutableList<T> empty(Class<T> aClass) {
+            return empty();
+        }
+
         public static <T> ImmutableList<T> cons(T head, ImmutableList<T> tail) {
             return PersistentList.cons(head, tail);
         }
@@ -74,7 +80,7 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, C
         }
 
         public static <T> ImmutableList<T> list(Iterable<? extends T> values) {
-            return sequence(values).reverse().foldLeft(constructors.<T>empty(), functions.<T, ImmutableList<T>>cons());
+            return sequence(values).reverse().foldLeft(constructors.<T>empty(), functions.<T>cons());
         }
 
         public static <T> ImmutableList<T> reverse(Iterable<? extends T> values) {
@@ -87,6 +93,29 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, C
                 reverse = cons(iterator.next(), reverse);
             }
             return reverse;
+        }
+    }
+
+    class functions {
+        public static <T> Function2<ImmutableList<T>, T, ImmutableList<T>> cons() {
+            return Segment.functions.cons();
+        }
+
+        public static <T> Function1<ImmutableList<T>, ImmutableList<T>> cons(T t) {
+            return Segment.functions.cons(t);
+        }
+
+        public static <T> Function1<ImmutableList<T>, ImmutableList<T>> tail() {
+            return new Function1<ImmutableList<T>, ImmutableList<T>>() {
+                @Override
+                public ImmutableList<T> call(ImmutableList<T> list) throws Exception {
+                    return list.tail();
+                }
+            };
+        }
+
+        public static <T> Function1<ImmutableList<T>, ImmutableList<T>> tail(Class<T> aClass) {
+            return tail();
         }
     }
 }
