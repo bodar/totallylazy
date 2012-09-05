@@ -6,6 +6,7 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
+import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
 import static com.googlecode.totallylazy.collections.TreeZipper.Breadcrumb.breadcrumb;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.left;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.right;
@@ -21,7 +22,7 @@ public class TreeZipperTest {
 
         final TreeZipper<Integer, Integer> newZipper = zipper.left().left();
         assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(0, 0)));
-        assertThat(newZipper.breadcrumbs, is(sequence(
+        assertThat(newZipper.breadcrumbs, is(list(
                 breadcrumb(left, pair(1, 1), avlTree(2, 2)),
                 breadcrumb(left, pair(3, 3), avlTree(4, 4).put(5, 5).put(6, 6)))));
     }
@@ -33,7 +34,7 @@ public class TreeZipperTest {
 
         final TreeZipper<Integer, Integer> newZipper = zipper.right().right();
         assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(6, 6)));
-        assertThat(newZipper.breadcrumbs, is(sequence(
+        assertThat(newZipper.breadcrumbs, is(list(
                 breadcrumb(right, pair(5, 5), avlTree(4, 4)),
                 breadcrumb(right, pair(3, 3), avlTree(0, 0).put(1, 1).put(2, 2)))));
     }
@@ -45,7 +46,7 @@ public class TreeZipperTest {
 
         final TreeZipper<Integer, Integer> newZipper = zipper.right().right().up();
         assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(4, 4).put(5, 5).put(6, 6)));
-        assertThat(newZipper.breadcrumbs, is(sequence(
+        assertThat(newZipper.breadcrumbs, is(list(
                 breadcrumb(right, pair(3, 3), avlTree(0, 0).put(1, 1).put(2, 2)))));
     }
 
@@ -56,7 +57,7 @@ public class TreeZipperTest {
 
         final TreeZipper<Integer, Integer> newZipper = zipper.left().left().up();
         assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(0, 0).put(1, 1).put(2, 2)));
-        assertThat(newZipper.breadcrumbs, is(sequence(
+        assertThat(newZipper.breadcrumbs, is(list(
                 breadcrumb(left, pair(3, 3), avlTree(4, 4).put(5, 5).put(6, 6)))));
     }
 
@@ -67,6 +68,6 @@ public class TreeZipperTest {
 
         final TreeZipper<Integer, Integer> newZipper = zipper.left().left().toStart();
         assertThat(newZipper.focus, is(zipper.focus));
-        assertThat(newZipper.breadcrumbs, is(Sequences.<TreeZipper.Breadcrumb<Integer, Integer>>empty()));
+        assertThat(newZipper.breadcrumbs, is(ImmutableList.constructors.<TreeZipper.Breadcrumb<Integer, Integer>>empty()));
     }
 }

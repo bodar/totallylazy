@@ -12,18 +12,18 @@ import static java.lang.String.format;
 
 public class TreeZipper<K, V> {
     public final TreeMap<K, V> focus;
-    public final Sequence<Breadcrumb<K,V>> breadcrumbs;
+    public final ImmutableList<Breadcrumb<K,V>> breadcrumbs;
 
-    private TreeZipper(TreeMap<K, V> focus, Sequence<Breadcrumb<K, V>> breadcrumbs) {
+    private TreeZipper(TreeMap<K, V> focus, ImmutableList<Breadcrumb<K, V>> breadcrumbs) {
         this.focus = focus;
         this.breadcrumbs = breadcrumbs;
     }
 
     public static <K, V> TreeZipper<K,V> zipper(TreeMap<K, V> focus) {
-        return new TreeZipper<K, V>(focus, Sequences.<Breadcrumb<K,V>>empty());
+        return new TreeZipper<K, V>(focus, ImmutableList.constructors.<Breadcrumb<K,V>>empty());
     }
 
-    private static <K, V> TreeZipper<K,V> zipper(TreeMap<K, V> focus, Sequence<Breadcrumb<K, V>> crumbs) {
+    private static <K, V> TreeZipper<K,V> zipper(TreeMap<K, V> focus, ImmutableList<Breadcrumb<K, V>> crumbs) {
         return new TreeZipper<K, V>(focus, crumbs);
     }
 
