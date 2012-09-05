@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
@@ -51,6 +54,14 @@ public class TreeZipper<K, V> {
         return toStart().focus;
     }
 
+    public TreeZipper<K, V> modify(Callable1<? super TreeMap<K,V>, ? extends TreeMap<K,V>> callable) {
+        return zipper(Functions.call(callable, focus), breadcrumbs).toStart();
+    }
+
+    public TreeZipper<K, V> replace(K key, V value) {
+        return modify(functions.replace(key, value));
+    }
+
     public enum Direction {
         left, right
     }
@@ -86,6 +97,17 @@ public class TreeZipper<K, V> {
                     ((Breadcrumb) obj).direction.equals(direction) &&
                     ((Breadcrumb) obj).parent.equals(parent) &&
                     ((Breadcrumb) obj).other.equals(other);
+        }
+    }
+
+    static class functions {
+        public static <K,V> Function1<TreeMap<K,V>, TreeMap<K,V>> replace(final K key, final V value) {
+            return new Function1<TreeMap<K,V>, TreeMap<K,V>>() {
+                @Override
+                public TreeMap<K,V> call(TreeMap<K,V> focus) throws Exception {
+                    return focus.factory().create(focus.comparator(), key, value, focus.left(), focus.right());
+                }
+            };
         }
     }
 }
