@@ -34,6 +34,11 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     }
 
     @Override
+    public TreeFactory factory() {
+        return factory;
+    }
+
+    @Override
     public Comparator<K> comparator() {
         return comparator;
     }

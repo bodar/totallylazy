@@ -18,11 +18,17 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 
 public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> implements TreeMap<K, V> {
     protected final Comparator<K> comparator;
+
     protected final TreeFactory treeFactory;
 
     protected AbstractEmptyTreeMap(Comparator<K> comparator, TreeFactory treeFactory) {
         this.treeFactory = treeFactory;
         this.comparator = comparator;
+    }
+
+    @Override
+    public TreeFactory factory() {
+        return treeFactory;
     }
 
     @Override
