@@ -52,6 +52,8 @@ public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
     @Override
     Pair<? extends TreeMap<K, V>, Pair<K, V>> removeLast();
 
+    TreeFactory factory();
+
     enum constructors implements TreeFactory {
         factory;
 

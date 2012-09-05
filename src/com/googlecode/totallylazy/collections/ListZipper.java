@@ -15,19 +15,19 @@ public class ListZipper<T> {
     }
 
     public static <T> ListZipper<T> zipper(ImmutableList<T> focus) {
-        return listZipper(focus, ImmutableList.constructors.<T>empty());
+        return zipper(focus, ImmutableList.constructors.<T>empty());
     }
 
-    public static <T> ListZipper<T> listZipper(ImmutableList<T> focus, ImmutableList<T> breadcrumbs) {
+    private static <T> ListZipper<T> zipper(ImmutableList<T> focus, ImmutableList<T> breadcrumbs) {
         return new ListZipper<T>(focus, breadcrumbs);
     }
 
     public ListZipper<T> right() {
-        return listZipper(focus.tail(), breadcrumbs.cons(focus.head()));
+        return zipper(focus.tail(), breadcrumbs.cons(focus.head()));
     }
 
     public ListZipper<T> left() {
-        return listZipper(focus.cons(breadcrumbs.head()), breadcrumbs.tail());
+        return zipper(focus.cons(breadcrumbs.head()), breadcrumbs.tail());
     }
 
     public ListZipper<T> toStart() {
@@ -41,7 +41,7 @@ public class ListZipper<T> {
             focus = focus.cons(breadcrumbs.head());
             breadcrumbs = breadcrumbs.tail();
         }
-        return listZipper(focus, breadcrumbs);
+        return zipper(focus, breadcrumbs);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ListZipper<T> {
     }
 
     public ListZipper<T> modify(Callable1<? super ImmutableList<T>, ? extends ImmutableList<T>> callable) {
-        return listZipper(Functions.call(callable, focus), breadcrumbs).toStart();
+        return zipper(Functions.call(callable, focus), breadcrumbs).toStart();
     }
 
     public ImmutableList<T> toList() {
