@@ -1,8 +1,9 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.TreeZipper.Breadcrumb.breadcrumb;
@@ -12,18 +13,18 @@ import static java.lang.String.format;
 
 public class TreeZipper<K, V> {
     public final TreeMap<K, V> focus;
-    public final ImmutableList<Breadcrumb<K,V>> breadcrumbs;
+    public final ImmutableList<Breadcrumb<K, V>> breadcrumbs;
 
     private TreeZipper(TreeMap<K, V> focus, ImmutableList<Breadcrumb<K, V>> breadcrumbs) {
         this.focus = focus;
         this.breadcrumbs = breadcrumbs;
     }
 
-    public static <K, V> TreeZipper<K,V> zipper(TreeMap<K, V> focus) {
-        return new TreeZipper<K, V>(focus, ImmutableList.constructors.<Breadcrumb<K,V>>empty());
+    public static <K, V> TreeZipper<K, V> zipper(TreeMap<K, V> focus) {
+        return new TreeZipper<K, V>(focus, ImmutableList.constructors.<Breadcrumb<K, V>>empty());
     }
 
-    private static <K, V> TreeZipper<K,V> zipper(TreeMap<K, V> focus, ImmutableList<Breadcrumb<K, V>> crumbs) {
+    private static <K, V> TreeZipper<K, V> zipper(TreeMap<K, V> focus, ImmutableList<Breadcrumb<K, V>> crumbs) {
         return new TreeZipper<K, V>(focus, crumbs);
     }
 
@@ -43,22 +44,30 @@ public class TreeZipper<K, V> {
     }
 
     public TreeZipper<K, V> toStart() {
-        if(breadcrumbs.isEmpty()) return this;
+        if (breadcrumbs.isEmpty()) return this;
         return up().toStart();
     }
 
-    public TreeMap<K,V> toTreeMap() {
+    public TreeMap<K, V> toTreeMap() {
         return toStart().focus;
+    }
+
+    public TreeZipper<K, V> modify(Callable1<? super TreeMap<K, V>, ? extends TreeMap<K, V>> callable) {
+        return zipper(Functions.call(callable, focus), breadcrumbs).toStart();
+    }
+
+    public TreeZipper<K, V> replace(K key, V value) {
+        return modify(functions.replace(key, value));
     }
 
     public enum Direction {
         left, right
     }
 
-    public static final class Breadcrumb<K,V> {
+    public static final class Breadcrumb<K, V> {
         public final Direction direction;
-        public final Pair<K,V> parent;
-        public final TreeMap<K,V> other;
+        public final Pair<K, V> parent;
+        public final TreeMap<K, V> other;
 
         private Breadcrumb(Direction direction, Pair<K, V> parent, TreeMap<K, V> other) {
             this.parent = parent;
@@ -86,6 +95,17 @@ public class TreeZipper<K, V> {
                     ((Breadcrumb) obj).direction.equals(direction) &&
                     ((Breadcrumb) obj).parent.equals(parent) &&
                     ((Breadcrumb) obj).other.equals(other);
+        }
+    }
+
+    static class functions {
+        public static <K, V> Function1<TreeMap<K, V>, TreeMap<K, V>> replace(final K key, final V value) {
+            return new Function1<TreeMap<K, V>, TreeMap<K, V>>() {
+                @Override
+                public TreeMap<K, V> call(TreeMap<K, V> focus) throws Exception {
+                    return focus.factory().create(focus.comparator(), key, value, focus.left(), focus.right());
+                }
+            };
         }
     }
 }
