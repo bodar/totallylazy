@@ -11,6 +11,7 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
+import static com.googlecode.totallylazy.collections.TreeMap.constructors.factory;
 import static com.googlecode.totallylazy.collections.TreeZipper.Breadcrumb.breadcrumb;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.left;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.right;
@@ -74,5 +75,23 @@ public class TreeZipperTest {
         final TreeZipper<Integer, Integer> newZipper = zipper.left().left().toStart();
         assertThat(newZipper.focus, is(zipper.focus));
         assertThat(newZipper.breadcrumbs, is(ImmutableList.constructors.<TreeZipper.Breadcrumb<Integer, Integer>>empty()));
+    }
+
+    @Test
+    public void canReplaceElementInMiddleOfTree() {
+        final Comparator<Integer> comparator = Comparators.<Integer>ascending();
+        TreeMap<Integer, Integer> treeMap =
+                factory.create(comparator, 0, 0,
+                        factory.create(comparator, 2, 2,
+                                factory.create(comparator, 3, 3), factory.<Integer, Integer>create(comparator)),
+                        factory.create(comparator, 4, 4));
+        final TreeMap<Integer, Integer> newTreeMap = zipper(treeMap).left().modify(replace(9, 9)).toTreeMap();
+        final TreeMap<Integer, Integer> expected =
+                factory.create(comparator, 0, 0,
+                        factory.create(comparator, 9, 9,
+                                factory.create(comparator, 3, 3), factory.<Integer, Integer>create(comparator)),
+                        factory.create(comparator, 4, 4));
+        assertThat(newTreeMap, is(expected));
+        assertThat(zipper(treeMap).left().replace(9, 9).toTreeMap(), is(expected));
     }
 }
