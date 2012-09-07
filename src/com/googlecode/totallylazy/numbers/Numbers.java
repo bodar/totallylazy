@@ -250,10 +250,10 @@ public class Numbers {
     }
 
     public static Function1<Number, Number> decrement = new Function1<Number, Number>() {
-            public Number call(Number number) throws Exception {
-                return Numbers.decrement(number);
-            }
-        };
+        public Number call(Number number) throws Exception {
+            return Numbers.decrement(number);
+        }
+    };
 
     public static Function1<Number, Number> decrement() {
         return decrement;
@@ -390,12 +390,14 @@ public class Numbers {
         return operatorsFor(x, y).add(x, y);
     }
 
+    public static Function2<Number, Number, Number> subtract = new Function2<Number, Number, Number>() {
+        public Number call(Number a, Number b) {
+            return Numbers.subtract(a, b);
+        }
+    };
+
     public static Function2<Number, Number, Number> subtract() {
-        return new Function2<Number, Number, Number>() {
-            public Number call(Number a, Number b) {
-                return Numbers.subtract(a, b);
-            }
-        };
+        return subtract;
     }
 
     public static Function1<Number, Number> subtract(final Number amount) {
@@ -439,12 +441,14 @@ public class Numbers {
         return divide().flip().apply(divisor);
     }
 
+    public static Function2<Number, Number, Number> divide = new Function2<Number, Number, Number>() {
+        public Number call(Number dividend, Number divisor) throws Exception {
+            return divide(dividend, divisor);
+        }
+    };
+
     public static Function2<Number, Number, Number> divide() {
-        return new Function2<Number, Number, Number>() {
-            public Number call(Number dividend, Number divisor) throws Exception {
-                return divide(dividend, divisor);
-            }
-        };
+        return divide;
     }
 
     public static Number quotient(Number x, Number y) {
