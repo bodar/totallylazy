@@ -2,33 +2,32 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Lens.lens;
+import static com.googlecode.totallylazy.Lense.lense;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class LensTest {
+public class LenseTest {
     final Person originalBarry = new Person("Barry", 40, new Address("123 Elm St", new Postcode("E1", "1AB")));
 
     @Test
     public void getValueViewedThroughLens() throws Exception {
-        Lens<Person, Number> personAge = lens(Person.functions.age, Person.functions.setAge);
+        Lense<Person, Number> personAge = lense(Person.functions.age, Person.functions.setAge);
 
         assertThat(personAge.get(originalBarry).intValue(), is(40));
     }
 
     @Test
     public void setValueViewedThroughLens() throws Exception {
-        Lens<Person, Number> personAge = lens(Person.functions.age, Person.functions.setAge);
+        Lense<Person, Number> personAge = lense(Person.functions.age, Person.functions.setAge);
 
-        Person olderBarry = personAge.set(originalBarry, 45);
-
+        Person olderBarry = personAge.set(45, originalBarry);
         assertThat(olderBarry.age.intValue(), is(45));
     }
 
     @Test
     public void modifyValueViewThroughLens() throws Exception {
-        Lens<Person, Number> personAge = lens(Person.functions.age, Person.functions.setAge);
+        Lense<Person, Number> personAge = lense(Person.functions.age, Person.functions.setAge);
 
         Person oneYearOlderBarry = personAge.modify(originalBarry, increment());
 
@@ -38,9 +37,9 @@ public class LensTest {
 
     @Test
     public void lensCanBeComposed() throws Exception {
-        Lens<Person, Postcode> personPostcode = Person.lenses.address.then(Address.lenses.postcode);
+        Lense<Person, Postcode> personPostcode = Person.lenses.address.then(Address.lenses.postcode);
 
-        Person movedBarry = personPostcode.set(originalBarry, new Postcode("SE1", "1AA"));
+        Person movedBarry = personPostcode.set(new Postcode("SE1", "1AA"), originalBarry);
 
         assertThat(movedBarry.address.postcode.asString(), is("SE1 1AA"));
     }
@@ -60,8 +59,9 @@ public class LensTest {
             return name + ": age=" + age + ", address=" + address;
         }
 
+
         public static class lenses {
-            public static final Lens<Person,Address> address = lens(functions.address, functions.setAddress);
+            public static final Lense<Person,Address> address = lense(functions.address, functions.setAddress);
         }
 
         public static class functions {
@@ -70,8 +70,8 @@ public class LensTest {
                     return person.age;
                 }
             };
-            public static final Function2<Person, Number, Person> setAge = new Function2<Person, Number, Person>() {
-                public Person call(Person person, Number newAge) throws Exception {
+            public static final Function2<Number, Person, Person> setAge = new Function2<Number, Person, Person>() {
+                public Person call(Number newAge, Person person) throws Exception {
                     return new Person(person.name, newAge, person.address);
                 }
             };
@@ -80,8 +80,8 @@ public class LensTest {
                     return person.address;
                 }
             };
-            public static final Function2<Person, Address, Person> setAddress = new Function2<Person, Address, Person>() {
-                public Person call(Person person, Address newAddress) throws Exception {
+            public static final Function2<Address, Person, Person> setAddress = new Function2<Address, Person, Person>() {
+                public Person call(Address newAddress, Person person) throws Exception {
                     return new Person(person.name, person.age, newAddress);
                 }
             };
@@ -102,7 +102,7 @@ public class LensTest {
         }
 
         public static class lenses {
-            public static final Lens<Address,Postcode> postcode = lens(functions.postcode, functions.setPostcode);
+            public static final Lense<Address,Postcode> postcode = lense(functions.postcode, functions.setPostcode);
         }
 
         public static class functions {
@@ -111,8 +111,8 @@ public class LensTest {
                     return address.postcode;
                 }
             };
-            public static final Function2<Address, Postcode, Address> setPostcode = new Function2<Address, Postcode, Address>() {
-                public Address call(Address address, Postcode newPostcode) throws Exception {
+            public static final Function2<Postcode, Address, Address> setPostcode = new Function2<Postcode, Address, Address>() {
+                public Address call(Postcode newPostcode, Address address) throws Exception {
                     return new Address(address.street, newPostcode);
                 }
             };
@@ -136,6 +136,4 @@ public class LensTest {
             return asString();
         }
     }
-
 }
-
