@@ -6,7 +6,7 @@ public class CharacterSequence implements CharSequence {
     private final StringBuilder buffer = new StringBuilder();
     private Segment<Character> current;
 
-    public CharacterSequence(Segment<Character> characters) {
+    private CharacterSequence(Segment<Character> characters) {
         this.current = characters;
     }
 

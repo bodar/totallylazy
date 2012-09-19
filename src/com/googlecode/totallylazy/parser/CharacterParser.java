@@ -20,16 +20,20 @@ public class CharacterParser extends Parser<Character> {
         return new CharacterParser(value);
     }
 
+    public static CharacterParser character(char value) {
+        return character(is(value));
+    }
+
+    public static CharacterParser isChar(Predicate<Character> value) {
+        return character(value);
+    }
+
     public static CharacterParser isChar(char value) {
         return character(value);
     }
 
     public static CharacterParser notChar(char value) {
         return character(not(value));
-    }
-
-    public static CharacterParser character(char value) {
-        return character(is(value));
     }
 
     public static Function1<Character, Parser<Character>> characterParser() {
