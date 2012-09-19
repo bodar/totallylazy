@@ -7,17 +7,17 @@ import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Functions.returns;
 
-public class ManyParser<A> extends AbstractParser<Segment<A>> {
-    private final AbstractParser<A> parser;
+public class ManyParser<A> extends Parser<Segment<A>> {
+    private final Parser<A> parser;
     private final Function1<Result<A>, Segment<Character>> remainder = Success.functions.<A>remainder();
     private final Function1<Segment<Character>, Result<A>> parse;
 
-    private ManyParser(Parser<? extends A> parser) {
-        this.parser = parser(parser);
+    private ManyParser(Parse<? extends A> parser) {
+        this.parser = Parsers.parser(parser);
         parse = functions.parse(this.parser);
     }
 
-    public static <A> ManyParser<A> many(Parser<? extends A> parser) {
+    public static <A> ManyParser<A> many(Parse<? extends A> parser) {
         return new ManyParser<A>(parser);
     }
 
