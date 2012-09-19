@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Segment;
 
 public class Failure<A> implements Result<A>{
     private final String message;
@@ -19,11 +20,20 @@ public class Failure<A> implements Result<A>{
     }
 
     @Override
+    public Segment<Character> remainder() {
+        throw fail();
+    }
+
+    @Override
     public A value() {
-        throw new RuntimeException(message);
+        throw fail();
     }
 
     public String message() {
         return message;
+    }
+
+    private RuntimeException fail() {
+        return new RuntimeException(message);
     }
 }

@@ -4,12 +4,10 @@ import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.regex.Matches;
 import com.googlecode.totallylazy.regex.Regex;
 
-import java.util.regex.MatchResult;
-
 import static com.googlecode.totallylazy.parser.CharacterSequence.charSequence;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class PatternParser extends AbstractParser<String> {
+public class PatternParser extends Parser<String> {
     private final Regex regex;
 
     private PatternParser(Regex regex) {

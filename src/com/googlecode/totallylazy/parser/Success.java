@@ -28,6 +28,7 @@ public class Success<A> extends Pair<A, Segment<Character>> implements Result<A>
         return success(Functions.call(callable, value()), second());
     }
 
+    @Override
     public Segment<Character> remainder() {
         return second();
     }

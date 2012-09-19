@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Option;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Option.none;
@@ -18,15 +17,15 @@ public class OptionalParserTest {
     @Test
     public void isOptional() throws Exception {
         OptionalParser<String> parser = optional(string("foo"));
-        Success<Option<String>> result = cast(parser.parse(characters("foo")));
+        Result<Option<String>> result = parser.parse(characters("foo"));
         assertThat(result.value(), is(some("foo")));
         assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
 
     @Test
     public void canChain() throws Exception {
-        Parser<Option<String>> parser = string("foo").optional();
-        Success<Option<String>> result = cast(parser.parse(characters("bob")));
+        Parse<Option<String>> parser = string("foo").optional();
+        Result<Option<String>> result = parser.parse(characters("bob"));
         assertThat(result.value(), is(none(String.class)));
         assertThat(result.remainder(), is(characters("bob")));
     }
