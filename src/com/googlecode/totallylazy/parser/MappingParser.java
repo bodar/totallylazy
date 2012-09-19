@@ -5,16 +5,16 @@ import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class MappingParser<A, B> extends AbstractParser<B> {
-    private final Parser<? extends A> source;
+public class MappingParser<A, B> extends Parser<B> {
+    private final Parse<? extends A> source;
     private final Callable1<? super A, ? extends B> callable;
 
-    private MappingParser(Parser<? extends A> source, Callable1<? super A, ? extends B> callable) {
+    private MappingParser(Parse<? extends A> source, Callable1<? super A, ? extends B> callable) {
         this.source = source;
         this.callable = callable;
     }
 
-    public static <A, B> MappingParser<A, B> map(Parser<? extends A> source, Callable1<? super A, ? extends B> callable) {
+    public static <A, B> MappingParser<A, B> map(Parse<? extends A> source, Callable1<? super A, ? extends B> callable) {
         return new MappingParser<A, B>(source, callable);
     }
 

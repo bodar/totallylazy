@@ -10,30 +10,30 @@ import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
-public class TripleParser<A, B, C> extends AbstractParser<Triple<A, B, C>> {
-    private final Function<? extends Parser<? extends A>> parserA;
-    private final Function<? extends Parser<? extends B>> parserB;
-    private final Function<? extends Parser<? extends C>> parserC;
+public class TripleParser<A, B, C> extends Parser<Triple<A, B, C>> {
+    private final Function<? extends Parse<? extends A>> parserA;
+    private final Function<? extends Parse<? extends B>> parserB;
+    private final Function<? extends Parse<? extends C>> parserC;
 
-    private TripleParser(Callable<? extends Parser<? extends A>> parserA, Callable<? extends Parser<? extends B>> parserB, Callable<? extends Parser<? extends C>> parserC) {
+    private TripleParser(Callable<? extends Parse<? extends A>> parserA, Callable<? extends Parse<? extends B>> parserB, Callable<? extends Parse<? extends C>> parserC) {
         this.parserA = lazy(parserA);
         this.parserB = lazy(parserB);
         this.parserC = lazy(parserC);
     }
 
-    public static <A, B, C> TripleParser<A, B, C> tripleOf(final Parser<? extends A> parserA, final Parser<? extends B> parserB, final Parser<? extends C> parserC) {
+    public static <A, B, C> TripleParser<A, B, C> tripleOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Parse<? extends C> parserC) {
         return tripleOf(parserA, parserB, returns(parserC));
     }
 
-    public static <A, B, C> TripleParser<A, B, C> tripleOf(final Parser<? extends A> parserA, final Parser<? extends B> parserB, final Callable<? extends Parser<? extends C>> parserC) {
+    public static <A, B, C> TripleParser<A, B, C> tripleOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Callable<? extends Parse<? extends C>> parserC) {
         return tripleOf(parserA, returns(parserB), parserC);
     }
 
-    public static <A, B, C> TripleParser<A, B, C> tripleOf(final Parser<? extends A> parserA, final Callable<? extends Parser<? extends B>> parserB, final Callable<? extends Parser<? extends C>> parserC) {
+    public static <A, B, C> TripleParser<A, B, C> tripleOf(final Parse<? extends A> parserA, final Callable<? extends Parse<? extends B>> parserB, final Callable<? extends Parse<? extends C>> parserC) {
         return tripleOf(returns(parserA), parserB, parserC);
     }
 
-    public static <A, B, C> TripleParser<A, B, C> tripleOf(final Callable<? extends Parser<? extends A>> parserA, final Callable<? extends Parser<? extends B>> parserB, final Callable<? extends Parser<? extends C>> parserC) {
+    public static <A, B, C> TripleParser<A, B, C> tripleOf(final Callable<? extends Parse<? extends A>> parserA, final Callable<? extends Parse<? extends B>> parserB, final Callable<? extends Parse<? extends C>> parserC) {
         return new TripleParser<A, B, C>(parserA, parserB, parserC);
     }
 

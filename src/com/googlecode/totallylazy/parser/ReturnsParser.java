@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Segment;
 
-public class ReturnsParser<A> extends AbstractParser<A> {
+public class ReturnsParser<A> extends Parser<A> {
     private final A a;
 
     private ReturnsParser(A a) {

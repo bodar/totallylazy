@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Option;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Option.none;
@@ -25,7 +24,7 @@ public class OptionalParserTest {
 
     @Test
     public void canChain() throws Exception {
-        Parser<Option<String>> parser = string("foo").optional();
+        Parse<Option<String>> parser = string("foo").optional();
         Success<Option<String>> result = cast(parser.parse(characters("bob")));
         assertThat(result.value(), is(none(String.class)));
         assertThat(result.remainder(), is(characters("bob")));
