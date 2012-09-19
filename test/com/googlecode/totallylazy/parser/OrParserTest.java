@@ -13,7 +13,7 @@ public class OrParserTest {
     @Test
     public void canMatchOneParser() throws Exception {
         OrParser<String> parser = or(string("foo"), string("bar"));
-        Success<String> result = cast(parser.parse(characters("food")));
+        Result<String> result = parser.parse(characters("food"));
         assertThat(result.value(), is("foo"));
         assertThat(result.remainder(), is(characters("d")));
     }
@@ -21,7 +21,7 @@ public class OrParserTest {
     @Test
     public void supportsChaining() throws Exception {
         Parse<String> parser = string("foo").or(string("bar"));
-        Success<String> result1 = cast(parser.parse(characters("bart")));
+        Result<String> result1 = parser.parse(characters("bart"));
         assertThat(result1.value(), is("bar"));
         assertThat(result1.remainder(), is(characters("t")));
     }

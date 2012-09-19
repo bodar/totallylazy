@@ -40,12 +40,10 @@ public class PairParser<A,B> extends Parser<Pair<A,B>> {
     public Result<Pair<A, B>> parse(Segment<Character> characters) throws Exception {
         Result<? extends A> resultA = parserA.value().parse(characters);
         if (resultA instanceof Failure) return cast(resultA);
-        Success<A> successA = cast(resultA);
 
-        Result<? extends B> resultB = parserB.value().parse(successA.remainder());
+        Result<? extends B> resultB = parserB.value().parse(resultA.remainder());
         if (resultB instanceof Failure) return cast(resultB);
-        Success<B> successB = cast(resultB);
 
-        return Success.success(Pair.pair(successA.value(), successB.value()), successB.remainder());
+        return Success.success(Pair.pair(resultA.value(), resultB.value()), resultB.remainder());
     }
 }

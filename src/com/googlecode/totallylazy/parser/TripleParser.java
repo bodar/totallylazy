@@ -46,16 +46,13 @@ public class TripleParser<A, B, C> extends Parser<Triple<A, B, C>> {
     public Result<Triple<A, B, C>> parse(Segment<Character> characters) throws Exception {
         Result<? extends A> resultA = parserA.value().parse(characters);
         if (resultA instanceof Failure) return cast(resultA);
-        Success<A> successA = cast(resultA);
 
-        Result<? extends B> resultB = parserB.value().parse(successA.remainder());
+        Result<? extends B> resultB = parserB.value().parse(resultA.remainder());
         if (resultB instanceof Failure) return cast(resultB);
-        Success<B> successB = cast(resultB);
 
-        Result<? extends C> resultC = parserC.value().parse(successB.remainder());
+        Result<? extends C> resultC = parserC.value().parse(resultB.remainder());
         if (resultC instanceof Failure) return cast(resultC);
-        Success<C> successC = cast(resultC);
 
-        return Success.success(Triple.triple(successA.value(), successB.value(), successC.value()), successC.remainder());
+        return Success.success(Triple.triple(resultA.value(), resultB.value(), resultC.value()), resultC.remainder());
     }
 }

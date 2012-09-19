@@ -17,7 +17,7 @@ public class CharacterParserTest {
 
     @Test
     public void canParseACharacter() throws Exception {
-        Success<Character> result = cast(character('A').parse(characters("ABC")));
+        Result<Character> result = character('A').parse(characters("ABC"));
         assertThat(result.value(), is('A'));
         assertThat(result.remainder(), is(characters("BC")));
     }
