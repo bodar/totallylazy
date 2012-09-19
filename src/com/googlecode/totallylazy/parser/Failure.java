@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.parser;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Segment;
 
-public class Failure<A> implements Result<A>{
+public class Failure<A> implements Result<A> {
     private final String message;
 
     private Failure(String message) {

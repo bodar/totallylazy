@@ -5,8 +5,12 @@ import com.googlecode.totallylazy.Segment;
 public class SegmentIterator<T> extends ReadOnlyIterator<T> {
     private Segment<T> segment;
 
-    public SegmentIterator(Segment<T> segment) {
+    private SegmentIterator(Segment<T> segment) {
         this.segment = segment;
+    }
+
+    public static <T> SegmentIterator<T> iterator(Segment<T> segment) {
+        return new SegmentIterator<T>(segment);
     }
 
     @Override

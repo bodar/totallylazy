@@ -131,7 +131,7 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new SegmentIterator<T>(immutableList());
+        return SegmentIterator.iterator(immutableList());
     }
 
     private Pair<T, T> pair(T head) {

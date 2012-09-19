@@ -10,7 +10,7 @@ import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
-public class PairParser<A,B> extends Parser<Pair<A,B>> {
+public class PairParser<A, B> extends Parser<Pair<A, B>> {
     private final Function<? extends Parse<? extends A>> parserA;
     private final Function<? extends Parse<? extends B>> parserB;
 

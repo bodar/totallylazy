@@ -222,7 +222,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
 
     @Override
     public Iterator<Pair<K, V>> iterator() {
-        return new SegmentIterator<Pair<K, V>>(immutableList());
+        return SegmentIterator.iterator(immutableList());
     }
 
     @Override

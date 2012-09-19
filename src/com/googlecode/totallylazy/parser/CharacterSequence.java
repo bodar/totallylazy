@@ -33,7 +33,7 @@ public class CharacterSequence implements CharSequence {
     @Override
     public CharSequence subSequence(int start, int end) {
         int index = end - 1;
-        if(!contains(index)) charAt(index);
+        if (!contains(index)) charAt(index);
         return buffer.subSequence(start, end);
     }
 
