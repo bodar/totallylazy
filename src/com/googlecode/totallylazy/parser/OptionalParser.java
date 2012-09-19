@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.parser.ReturnsParser.returns;
+import static java.lang.String.format;
 
 public class OptionalParser<A> extends Parser<Option<A>> {
     private final Parser<? extends A> parserA;
@@ -18,7 +19,7 @@ public class OptionalParser<A> extends Parser<Option<A>> {
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException();
+        return format("optional(%s)", parserA.toString());
     }
 
     @Override

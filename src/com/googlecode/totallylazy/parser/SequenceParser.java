@@ -53,9 +53,8 @@ public class SequenceParser<A> extends Parser<Sequence<A>> {
         for (Parse<? extends A> parser : parsers) {
             Result<? extends A> result = parser.parse(state);
             if (result instanceof Failure) return cast(result);
-            Success<A> success = cast(result);
-            parsed.add(success.value());
-            state = success.remainder();
+            parsed.add(result.value());
+            state = result.remainder();
         }
         return success(sequence(parsed), state);
     }

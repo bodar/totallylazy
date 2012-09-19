@@ -20,14 +20,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class PatternParserTest {
     @Test
     public void canParseUsingRegex() throws Exception {
-        Success<String> result = cast(pattern("\\d{4}/\\d{1,2}/\\d{1,2}").parse(characters("1977/1/10ABC")));
+        Result<String> result = pattern("\\d{4}/\\d{1,2}/\\d{1,2}").parse(characters("1977/1/10ABC"));
         assertThat(result.value(), is("1977/1/10"));
         assertThat(result.remainder(), is(characters("ABC")));
     }
 
     @Test
     public void canParseToEnd() throws Exception {
-        Success<String> result = cast(pattern("\\d{4}/\\d{1,2}/\\d{1,2}").parse(characters("1977/1/10")));
+        Result<String> result = pattern("\\d{4}/\\d{1,2}/\\d{1,2}").parse(characters("1977/1/10"));
         assertThat(result.value(), is("1977/1/10"));
         assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
@@ -45,7 +45,7 @@ public class PatternParserTest {
     @Test
     @Ignore("Not sure if this possible")
     public void canWorkWithPatternsEndingWithStar() throws Exception {
-        Success<String> result = cast(pattern("[a-zA-Z][_0-9a-zA-Z]*").parse(characters("hello")));
+        Result<String> result = pattern("[a-zA-Z][_0-9a-zA-Z]*").parse(characters("hello"));
         assertThat(result.value(), is("hello"));
         assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
@@ -53,7 +53,7 @@ public class PatternParserTest {
     @Test
     @Ignore("Not sure if this possible")
     public void doesNotConsumeMoreThanItShouldWithStar() throws Exception {
-        Success<String> result = cast(pattern("[a-zA-Z][_0-9a-zA-Z]*").parse(characters("hello world")));
+        Result<String> result = pattern("[a-zA-Z][_0-9a-zA-Z]*").parse(characters("hello world"));
         assertThat(result.value(), is("hello"));
         assertThat(result.remainder(), is(characters(" world")));
     }

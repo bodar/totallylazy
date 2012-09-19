@@ -17,7 +17,7 @@ public class OptionalParserTest {
     @Test
     public void isOptional() throws Exception {
         OptionalParser<String> parser = optional(string("foo"));
-        Success<Option<String>> result = cast(parser.parse(characters("foo")));
+        Result<Option<String>> result = parser.parse(characters("foo"));
         assertThat(result.value(), is(some("foo")));
         assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
@@ -25,7 +25,7 @@ public class OptionalParserTest {
     @Test
     public void canChain() throws Exception {
         Parse<Option<String>> parser = string("foo").optional();
-        Success<Option<String>> result = cast(parser.parse(characters("bob")));
+        Result<Option<String>> result = parser.parse(characters("bob"));
         assertThat(result.value(), is(none(String.class)));
         assertThat(result.remainder(), is(characters("bob")));
     }
