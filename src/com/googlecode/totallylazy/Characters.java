@@ -30,23 +30,41 @@ public class Characters {
         };
     }
 
-    public static LogicalPredicate<Character> identifierStart() {
+    public static LogicalPredicate<Character> identifierStart = new LogicalPredicate<Character>() {
+        @Override
+        public boolean matches(Character other) {
+            return Character.isJavaIdentifierStart(other);
+        }
+    };
+
+    public static LogicalPredicate<Character> identifierPart = new LogicalPredicate<Character>() {
+        @Override
+        public boolean matches(Character other) {
+            return Character.isJavaIdentifierPart(other);
+        }
+    };
+
+    public static LogicalPredicate<Character> letter = new LogicalPredicate<Character>() {
+        public boolean matches(Character other) {
+            return Character.isLetter(other);
+        }
+    };
+
+    public static LogicalPredicate<Character> digit = new LogicalPredicate<Character>() {
+        public boolean matches(Character other) {
+            return Character.isDigit(other);
+        }
+    };
+
+    public static LogicalPredicate<Character> between(final char start, final char end){
         return new LogicalPredicate<Character>() {
-            @Override
             public boolean matches(Character other) {
-                return Character.isJavaIdentifierStart(other);
+                return other >= start && other <= end;
             }
         };
     }
 
-    public static LogicalPredicate<Character> identifierPart() {
-        return new LogicalPredicate<Character>() {
-            @Override
-            public boolean matches(Character other) {
-                return Character.isJavaIdentifierPart(other);
-            }
-        };
-    }
+    public static LogicalPredicate<Character> alphaNumeric = between('A', 'Z').or(between('a', 'z')).or(between('0', '9'));
 
     public static Sequence<Character> range(char start, char end) {
         return Numbers.range((int) start, (int) end).map(new Callable1<Number, Character>() {
