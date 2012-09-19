@@ -128,7 +128,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
 
     @Override
     public Iterator<T> iterator() {
-        return new SegmentIterator<T>(this);
+        return SegmentIterator.iterator(this);
     }
 
     @Override

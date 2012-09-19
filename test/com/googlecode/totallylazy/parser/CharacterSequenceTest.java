@@ -20,10 +20,10 @@ public class CharacterSequenceTest {
     @Test
     public void subSequence() throws Exception {
         CharacterSequence word = CharacterSequence.charSequence(Segment.constructors.characters("Hello"));
-        assertThat(word.subSequence(0, 1), is((CharSequence)"H"));
-        assertThat(word.subSequence(0, 2), is((CharSequence)"He"));
-        assertThat(word.subSequence(0, 3), is((CharSequence)"Hel"));
-        assertThat(word.subSequence(0, 4), is((CharSequence)"Hell"));
-        assertThat(word.subSequence(0, 5), is((CharSequence)"Hello"));
+        assertThat(word.subSequence(0, 1), is((CharSequence) "H"));
+        assertThat(word.subSequence(0, 2), is((CharSequence) "He"));
+        assertThat(word.subSequence(0, 3), is((CharSequence) "Hel"));
+        assertThat(word.subSequence(0, 4), is((CharSequence) "Hell"));
+        assertThat(word.subSequence(0, 5), is((CharSequence) "Hello"));
     }
 }

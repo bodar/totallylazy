@@ -81,7 +81,7 @@ public interface Segment<T> {
             return new Sequence<T>() {
                 @Override
                 public Iterator<T> iterator() {
-                    return new SegmentIterator<T>(segments);
+                    return SegmentIterator.iterator(segments);
                 }
             };
         }
@@ -92,6 +92,10 @@ public interface Segment<T> {
 
         public static boolean equalTo(Segment<?> a, Segment<?> b) {
             return Sequences.equalTo(methods.sequence(a), methods.sequence(b));
+        }
+
+        public static String toString(Segment<?> segment, String separator) {
+            return Iterators.toString(SegmentIterator.iterator(segment), separator);
         }
     }
 

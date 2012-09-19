@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
@@ -15,12 +13,8 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Predicates.in;
-import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.onlyOnce;
-import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.collections.ListZipper.zipper;
@@ -63,7 +57,7 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new SegmentIterator<T>(this);
+        return SegmentIterator.iterator(this);
     }
 
     private static class Empty<T> extends PersistentList<T> {
