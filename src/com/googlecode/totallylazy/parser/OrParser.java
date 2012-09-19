@@ -4,16 +4,16 @@ import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class OrParser<A> extends AbstractParser<A> {
-    private final Parser<? extends A> parserA;
-    private final Parser<? extends A> parserB;
+public class OrParser<A> extends Parser<A> {
+    private final Parse<? extends A> parserA;
+    private final Parse<? extends A> parserB;
 
-    private OrParser(Parser<? extends A> parserA, Parser<? extends A> parserB) {
+    private OrParser(Parse<? extends A> parserA, Parse<? extends A> parserB) {
         this.parserA = parserA;
         this.parserB = parserB;
     }
 
-    public static <A> OrParser<A> or(Parser<? extends A> parserA, Parser<? extends A> parserB) {
+    public static <A> OrParser<A> or(Parse<? extends A> parserA, Parse<? extends A> parserB) {
         return new OrParser<A>(parserA, parserB);
     }
 

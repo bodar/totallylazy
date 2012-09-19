@@ -42,7 +42,7 @@ public class CharactersTest {
     @Test
     @Ignore
     public void canDetectValidJavaIdentifier() throws Exception {
-        String chars = characters(UTF16).filter(Characters.identifierStart()).toString(" ");
+        String chars = characters(UTF16).filter(Characters.identifierStart).toString(" ");
         Files.write(chars.getBytes(UTF16), file(workingDirectory(), "javaidentifiers.txt"));
     }
 }
