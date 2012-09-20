@@ -124,6 +124,19 @@ public final class Callables {
         };
     }
 
+    public static <T> Function1<Iterable<T>, T> last(Class<T> t) {
+        return last();
+    }
+
+    public static <T> Function1<Iterable<T>, T> last() {
+        return new Function1<Iterable<T>, T>() {
+            @Override
+            public T call(Iterable<T> ts) throws Exception {
+                return Sequences.last(ts);
+            }
+        };
+    }
+
     public static <F, S, R> Function1<Pair<F, S>, Pair<R, S>> first(final Callable1<? super F, ? extends R> firstCallable) {
         return new Function1<Pair<F, S>, Pair<R, S>>() {
             public Pair<R, S> call(Pair<F, S> pair) throws Exception {

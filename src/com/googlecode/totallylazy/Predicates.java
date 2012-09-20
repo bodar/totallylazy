@@ -315,15 +315,15 @@ public class Predicates {
         };
     }
 
-    public static <T> LogicalPredicate<Sequence<T>> empty() {
-        return new LogicalPredicate<Sequence<T>>() {
-            public boolean matches(Sequence<T> other) {
-                return other.isEmpty();
+    public static <T> LogicalPredicate<Iterable<T>> empty() {
+        return new LogicalPredicate<Iterable<T>>() {
+            public boolean matches(Iterable<T> other) {
+                return sequence(other).isEmpty();
             }
         };
     }
 
-    public static <T> LogicalPredicate<Sequence<T>> empty(Class<T> aClass) {
+    public static <T> LogicalPredicate<Iterable<T>> empty(Class<T> aClass) {
         return empty();
     }
 
