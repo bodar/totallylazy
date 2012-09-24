@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.compose;
+import static com.googlecode.totallylazy.Callables.uncurry3;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
@@ -12,6 +13,12 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FunctionsTest {
+    @Test
+    public void canComposeCurriedFunctions() throws Exception {
+        assertThat(add().then(multiply()).apply(2).apply(10).apply(3), is(36));
+        assertThat(add().then(multiply().then(add().then(multiply()))).apply(2).apply(10).apply(3).apply(2).apply(10), is(380));
+    }
+
     @Test
     public void canComposeFunctions() throws Exception {
         assertThat(compose(add(10), multiply(3)).apply(2), is(36));
@@ -40,11 +47,6 @@ public class FunctionsTest {
     }
 
     private Function3<Number, Number, Number, Number> addThenMultiple() {
-        return new Function3<Number, Number, Number, Number>() {
-            @Override
-            public Number call(Number a, Number b, Number c) throws Exception {
-                return multiply(add(a, b), c);
-            }
-        };
+        return uncurry3(add().then(multiply()));
     }
 }
