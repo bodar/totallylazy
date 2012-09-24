@@ -23,4 +23,12 @@ public abstract class Function2<A, B, C> extends Function1<A, Function1<B, C>> i
         return Callables.pair(this);
     }
 
+    public <D, E> Function3<A, B, D, E> then(final Callable2<? super C, ? super D, ? extends E> callable) {
+        return new Function3<A, B, D, E>() {
+            @Override
+            public E call(A a, B b, D d) throws Exception {
+                return callable.call(Function2.this.call(a, b), d);
+            }
+        };
+    }
 }
