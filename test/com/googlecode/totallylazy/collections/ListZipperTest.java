@@ -51,6 +51,12 @@ public class ListZipperTest {
     }
 
     @Test
+    public void canPerformMultipleModifications() throws Exception {
+        final ImmutableList<String> modified = zipper(list("A", "B", "C", "D")).right().delete().delete().toList();
+        assertThat(modified, is(list("A", "D")));
+    }
+
+    @Test
     public void supportsCurrent() {
         ListZipper<String> zipper = zipper(list("A", "B"));
         assertThat(zipper.current(), is("A"));
@@ -70,5 +76,4 @@ public class ListZipperTest {
         assertThat(zipper.atStart(), is(true));
         assertThat(zipper.right().atStart(), is(false));
     }
-
 }

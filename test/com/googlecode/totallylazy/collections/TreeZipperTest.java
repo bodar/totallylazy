@@ -2,13 +2,15 @@ package com.googlecode.totallylazy.collections;
 
 import org.junit.Test;
 
+import java.util.NoSuchElementException;
+
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
+import static com.googlecode.totallylazy.collections.TreeMap.functions.replace;
 import static com.googlecode.totallylazy.collections.TreeZipper.Breadcrumb.breadcrumb;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.left;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.right;
-import static com.googlecode.totallylazy.collections.TreeZipper.functions.replace;
 import static com.googlecode.totallylazy.collections.TreeZipper.zipper;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -76,8 +78,33 @@ public class TreeZipperTest {
                 zipper(avlTree(0, 0).put(10, 10).put(20, 20));
         final TreeZipper<Integer, Integer> newZipper = zipper.left().modify(replace(5, 5));
         assertThat(newZipper.toTreeMap(), is((TreeMap<Integer, Integer>) avlTree(5, 5).put(10, 10).put(20, 20)));
-        assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(5, 5).put(10, 10).put(20, 20)));
+        assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(5, 5)));
 
         assertThat(zipper.left().replace(5, 5).toTreeMap(), is((TreeMap<Integer, Integer>) avlTree(5, 5).put(10, 10).put(20, 20)));
+    }
+
+    @Test
+    public void canPerformMultipleModifications() throws Exception {
+        final TreeZipper<Integer, Integer> zipper =
+                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+        final TreeZipper<Integer, Integer> newZipper = zipper.left().left().delete().delete();
+        assertThat(newZipper.toTreeMap(), is((TreeMap<Integer, Integer>) avlTree(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6)));
+    }
+
+    @Test
+    public void canDelete() throws Exception {
+        assertThat(zipper(avlTree(0, 0).put(10, 10).put(20, 20)).left().delete().toTreeMap(),
+                is((TreeMap<Integer, Integer>) avlTree(10, 10).put(20, 20)));
+    }
+
+    @Test
+    public void canDeleteRootNode() throws Exception {
+        assertThat(zipper(avlTree(0, 0).put(10, 10).put(20, 20)).delete().toTreeMap(),
+                is((TreeMap<Integer, Integer>) avlTree(0, 0).put(20, 20)));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void throwsOnDeletingEmptyNode() throws Exception {
+        zipper(avlTree(0, 0)).delete().delete().toTreeMap();
     }
 }
