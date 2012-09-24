@@ -60,7 +60,7 @@ public class ListZipper<T> {
     }
 
     public ListZipper<T> modify(Callable1<? super ImmutableList<T>, ? extends ImmutableList<T>> callable) {
-        return zipper(Functions.call(callable, focus), breadcrumbs).toStart();
+        return zipper(Functions.call(callable, focus), breadcrumbs);
     }
 
     public ImmutableList<T> toList() {

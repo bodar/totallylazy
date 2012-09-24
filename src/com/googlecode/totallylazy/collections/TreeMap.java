@@ -89,4 +89,24 @@ public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
             return factory.create(comparator, pair.first(), pair.second(), left, right);
         }
     }
+
+    static class functions {
+        public static <K, V> Function1<TreeMap<K, V>, TreeMap<K, V>> replace(final K key, final V value) {
+            return new Function1<TreeMap<K, V>, TreeMap<K, V>>() {
+                @Override
+                public TreeMap<K, V> call(TreeMap<K, V> focus) throws Exception {
+                    return focus.factory().create(focus.comparator(), key, value, focus.left(), focus.right());
+                }
+            };
+        }
+
+        public static <K, V> Function1<TreeMap<K, V>, TreeMap<K, V>> remove() {
+            return new Function1<TreeMap<K, V>, TreeMap<K, V>>() {
+                @Override
+                public TreeMap<K, V> call(TreeMap<K, V> focus) throws Exception {
+                    return focus.remove(focus.key());
+                }
+            };
+        }
+    }
 }
