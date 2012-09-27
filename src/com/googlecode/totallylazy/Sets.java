@@ -1,9 +1,7 @@
 package com.googlecode.totallylazy;
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.size;
@@ -40,10 +38,8 @@ public class Sets {
         return result;
     }
 
-    public static <T> Set<T> fixedSizeSet(final int capacity) {
-        return newSetFromMap(new LinkedHashMap<T, Boolean>(capacity) {
-            protected boolean removeEldestEntry(Map.Entry<T, Boolean> eldest) { return size() > capacity; }
-        });
+    public static <T> Set<T> fifoSet(final int maximumElements) {
+        return newSetFromMap(Maps.<T, Boolean>fifoMap(maximumElements));
     }
 
     public static <T> Set<T> union(final Set<? extends T> first, final Set<? extends T> second) {

@@ -4,14 +4,17 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import static com.googlecode.totallylazy.Predicates.assignableTo;
 import static com.googlecode.totallylazy.Predicates.classAssignableTo;
 import static com.googlecode.totallylazy.Predicates.forAll;
+import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.setEqualityWith;
 import static com.googlecode.totallylazy.Predicates.subsetOf;
 import static com.googlecode.totallylazy.Predicates.supersetOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Sets.set;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -88,5 +91,11 @@ public class PredicatesTest {
         assertThat(setEqualityWith(sequence(1, 2, 3)).matches(sequence(1, 2)), is(false));
         assertThat(setEqualityWith(sequence(1, 1)).matches(sequence(1)), is(true));
     }
-}
 
+    @Test
+    public void supportsInCollection() throws Exception {
+        Set<Integer> values = set(1, 2, 3);
+        assertThat(sequence(2).forAll(in(values)), is(true));
+
+    }
+}
