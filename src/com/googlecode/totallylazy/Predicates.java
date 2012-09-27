@@ -105,6 +105,15 @@ public class Predicates {
         return new InPredicate<T>(sequence(values));
     }
 
+    public static <T> LogicalPredicate<T> in(final Collection<? extends T> collection) {
+        return new LogicalPredicate<T>() {
+            @Override
+            public boolean matches(T other) {
+                return collection.contains(other);
+            }
+        };
+    }
+
     public static LogicalPredicate<Either> isLeft() {
         return new LogicalPredicate<Either>() {
             public boolean matches(Either either) {
