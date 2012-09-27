@@ -1,13 +1,16 @@
 package com.googlecode.totallylazy;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Predicates.contains;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Arrays.asList;
+import static java.util.Collections.newSetFromMap;
 
 public class Sets {
     public static <T> Set<T> set(T... values) {
@@ -35,6 +38,12 @@ public class Sets {
             result.add(iterator.next());
         }
         return result;
+    }
+
+    public static <T> Set<T> fixedSizeSet(final int capacity) {
+        return newSetFromMap(new LinkedHashMap<T, Boolean>(capacity) {
+            protected boolean removeEldestEntry(Map.Entry<T, Boolean> eldest) { return size() > capacity; }
+        });
     }
 
     public static <T> Set<T> union(final Set<? extends T> first, final Set<? extends T> second) {
