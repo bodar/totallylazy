@@ -14,6 +14,7 @@ import static com.googlecode.totallylazy.collections.TreeZipper.Direction.right;
 import static com.googlecode.totallylazy.collections.TreeZipper.zipper;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 public class TreeZipperTest {
     @Test
@@ -107,4 +108,60 @@ public class TreeZipperTest {
     public void throwsOnDeletingEmptyNode() throws Exception {
         zipper(avlTree(0, 0)).delete().delete().toTreeMap();
     }
+
+    @Test
+    public void canGoToFirst() throws Exception {
+        final TreeZipper<Integer, Integer> zipper =
+                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+
+        final TreeZipper<Integer, Integer> newZipper = zipper.first();
+        assertThat(newZipper.focus.key(), is((0)));
+    }
+
+    @Test
+    public void canGoToLast() throws Exception {
+        final TreeZipper<Integer, Integer> zipper =
+                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+
+        final TreeZipper<Integer, Integer> newZipper = zipper.last();
+        assertThat(newZipper.focus.key(), is(6));
+    }
+
+    @Test
+    public void canGoToNext() throws Exception {
+        final TreeZipper<Integer, Integer> zipper =
+                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+
+        TreeZipper<Integer, Integer> first = zipper.first();
+        assertThat(first.focus.key(), is(0));
+        TreeZipper<Integer, Integer> second = first.next();
+        assertThat(second.focus.key(), is(1));
+        TreeZipper<Integer, Integer> third = second.next();
+        assertThat(third.focus.key(), is(2));
+        TreeZipper<Integer, Integer> fourth = third.next();
+        assertThat(fourth.focus.key(), is(3));
+        TreeZipper<Integer, Integer> fifth = fourth.next();
+        assertThat(fifth.focus.key(), is(4));
+        TreeZipper<Integer, Integer> sixth = fifth.next();
+        assertThat(sixth.focus.key(), is(5));
+        TreeZipper<Integer, Integer> seven = sixth.next();
+        assertThat(seven.focus.key(), is(6));
+//        try {
+//            System.out.println("next = " + seven.next().focus.key());
+//            fail();
+//        } catch (Exception e) {
+//            System.out.println("e = " + e);
+//        }
+
+    }
+
+    @Test
+    public void canGoToPrevious() throws Exception {
+        final TreeZipper<Integer, Integer> zipper =
+                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+
+        assertThat(zipper.last().previous().focus.key(), is(5));
+    }
+
+
 }

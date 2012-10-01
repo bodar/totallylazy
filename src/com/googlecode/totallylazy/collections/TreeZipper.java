@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Pair;
 
@@ -70,6 +69,35 @@ public class TreeZipper<K, V> {
 
     public TreeZipper<K, V> remove() {
         return modify(functions.<K, V>remove());
+    }
+
+    public TreeZipper<K, V> first() {
+        if(focus.left().isEmpty()) return this;
+        return left().first();
+    }
+
+    public TreeZipper<K, V> last() {
+        if(focus.right().isEmpty()) return this;
+        return right().last();
+    }
+
+    public TreeZipper<K, V> next() {
+        if(focus.right().isEmpty() && breadcrumbs.head().direction.equals(right)) return up().up();
+        if(focus.right().isEmpty()) return up();
+        return right().first();
+    }
+
+    public TreeZipper<K, V> previous() {
+        if(focus.left().isEmpty()) return up();
+        return left();
+    }
+
+    @Override
+    public String toString() {
+        return "TreeZipper{" +
+                "focus=" + focus +
+                ", breadcrumbs=" + breadcrumbs +
+                '}';
     }
 
     public enum Direction {
