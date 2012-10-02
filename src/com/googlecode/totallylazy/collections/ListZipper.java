@@ -31,17 +31,13 @@ public class ListZipper<T> {
     }
 
     public ListZipper<T> top() {
-        return top(this);
-    }
-
-    public static <T> ListZipper<T> top(ListZipper<T> zipper) {
-        ImmutableList<T> focus = zipper.focus;
-        ImmutableList<T> breadcrumbs = zipper.breadcrumbs;
-        while (!breadcrumbs.isEmpty()) {
-            focus = focus.cons(breadcrumbs.head());
-            breadcrumbs = breadcrumbs.tail();
+        ImmutableList<T> focus1 = focus;
+        ImmutableList<T> breadcrumbs1 = breadcrumbs;
+        while (!breadcrumbs1.isEmpty()) {
+            focus1 = focus1.cons(breadcrumbs1.head());
+            breadcrumbs1 = breadcrumbs1.tail();
         }
-        return zipper(focus, breadcrumbs);
+        return zipper(focus1, breadcrumbs1);
     }
 
     @Override

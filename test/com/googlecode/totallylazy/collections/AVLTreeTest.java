@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Files;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Maps;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.callables.TimeReport;
@@ -13,14 +14,19 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
 import static com.googlecode.totallylazy.collections.ImmutableSortedMapTest.asPair;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,6 +56,24 @@ public class AVLTreeTest {
     public void balancesDeletion() throws Exception {
         final ImmutableMap<Integer, Object> map = avlTree(0, null).put(1, null).put(2, null).put(3, null).put(4, null).put(5, null).put(6, null);
         assertThat(map.remove(3).toString(), is("((( 0 ) 1 ) 2 (( 4 ) 5 ( 6 )))"));
+    }
+
+    @Test
+    public void canIterate() throws Exception {
+        final Iterator<Pair<Integer, Integer>> iterator = avlTree(0, 0).put(1, 1).put(2, 2).iterator();
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next().first(), is(0));
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next().first(), is(1));
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next().first(), is(2));
+        assertThat(iterator.hasNext(), is(false));
+    }
+
+    @Test
+    @Ignore("Manual")
+    public void canIterateWorksOnLargeData() throws Exception {
+        assertThat(createImmutable(range), startsWith(sequence(pair(1, 1), pair(2, 2), pair(3, 3))));
     }
 
     public static final int SIZE = 100000;

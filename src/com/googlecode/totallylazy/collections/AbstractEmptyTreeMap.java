@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.None;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;

@@ -2,8 +2,11 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.TreeMap.functions;
 import static com.googlecode.totallylazy.collections.TreeZipper.Breadcrumb.breadcrumb;
@@ -90,9 +93,25 @@ public class TreeZipper<K, V> {
         return right().first();
     }
 
+    public Option<TreeZipper<K, V>> nextOption() {
+        try {
+            return some(next());
+        } catch (Exception e) {
+            return none();
+        }
+    }
+
     public TreeZipper<K, V> previous() {
         if(focus.left().isEmpty()) return backtrack(Direction.left).up();
         return left().last();
+    }
+
+    public Option<TreeZipper<K, V>> previousOption() {
+        try {
+            return some(previous());
+        } catch (Exception e) {
+            return none();
+        }
     }
 
     private TreeZipper<K, V> backtrack(final Direction direction) {
@@ -106,6 +125,10 @@ public class TreeZipper<K, V> {
                 "focus=" + focus +
                 ", breadcrumbs=" + breadcrumbs +
                 '}';
+    }
+
+    public Pair<K, V> pair() {
+        return Pair.pair(focus.key(), focus.value());
     }
 
     public enum Direction {
