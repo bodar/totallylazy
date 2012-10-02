@@ -30,11 +30,11 @@ public class ListZipper<T> {
         return zipper(focus.cons(breadcrumbs.head()), breadcrumbs.tail());
     }
 
-    public ListZipper<T> toStart() {
-        return toStart(this);
+    public ListZipper<T> top() {
+        return top(this);
     }
 
-    public static <T> ListZipper<T> toStart(ListZipper<T> zipper) {
+    public static <T> ListZipper<T> top(ListZipper<T> zipper) {
         ImmutableList<T> focus = zipper.focus;
         ImmutableList<T> breadcrumbs = zipper.breadcrumbs;
         while (!breadcrumbs.isEmpty()) {
@@ -64,7 +64,7 @@ public class ListZipper<T> {
     }
 
     public ImmutableList<T> toList() {
-        return toStart().focus;
+        return top().focus;
     }
 
     public ListZipper<T> insert(T instance) {
@@ -83,11 +83,11 @@ public class ListZipper<T> {
         return focus.head();
     }
 
-    public boolean atEnd() {
+    public boolean isBottom() {
         return focus.isEmpty();
     }
 
-    public boolean atStart() {
+    public boolean isTop() {
         return breadcrumbs.isEmpty();
     }
 }

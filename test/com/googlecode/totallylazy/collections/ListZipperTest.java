@@ -5,7 +5,7 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
 import static com.googlecode.totallylazy.collections.ImmutableList.functions.cons;
 import static com.googlecode.totallylazy.collections.ImmutableList.functions.tail;
-import static com.googlecode.totallylazy.collections.ListZipper.toStart;
+import static com.googlecode.totallylazy.collections.ListZipper.top;
 import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -31,7 +31,7 @@ public class ListZipperTest {
     public void canGoToStart() {
         ListZipper<String> zipper = zipper(list("A", "B", "C", "D"));
         final ListZipper<String> newZipper = zipper.right().right();
-        assertThat(toStart(newZipper), is(zipper));
+        assertThat(top(newZipper), is(zipper));
     }
 
     @Test
@@ -66,14 +66,14 @@ public class ListZipperTest {
     @Test
     public void supportsAtEnd() {
         ListZipper<String> zipper = zipper(list("A", "B"));
-        assertThat(zipper.atEnd(), is(false));
-        assertThat(zipper.right().right().atEnd(), is(true));
+        assertThat(zipper.isBottom(), is(false));
+        assertThat(zipper.right().right().isBottom(), is(true));
     }
 
     @Test
     public void supportsAtStart() {
         ListZipper<String> zipper = zipper(list("A", "B"));
-        assertThat(zipper.atStart(), is(true));
-        assertThat(zipper.right().atStart(), is(false));
+        assertThat(zipper.isTop(), is(true));
+        assertThat(zipper.right().isTop(), is(false));
     }
 }
