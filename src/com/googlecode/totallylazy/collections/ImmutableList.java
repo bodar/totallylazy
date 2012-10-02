@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Container;
+import com.googlecode.totallylazy.ImmutableCollection;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
@@ -16,14 +16,12 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, Container<T> {
+public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, ImmutableCollection<T> {
     ImmutableList<T> add(T value);
 
     ImmutableList<T> remove(T value);
 
     ImmutableList<T> removeAll(Iterable<T> values);
-
-    int size();
 
     List<T> toList();
 
