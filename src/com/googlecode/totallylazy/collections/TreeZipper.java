@@ -43,13 +43,13 @@ public class TreeZipper<K, V> {
         return zipper(focus.factory().create(focus.comparator(), breadcrumb.parent.first(), breadcrumb.parent.second(), left, right), breadcrumbs.tail());
     }
 
-    public TreeZipper<K, V> toStart() {
+    public TreeZipper<K, V> toTop() {
         if (breadcrumbs.isEmpty()) return this;
-        return up().toStart();
+        return up().toTop();
     }
 
     public TreeMap<K, V> toTreeMap() {
-        return toStart().focus;
+        return toTop().focus;
     }
 
     public TreeZipper<K, V> modify(Callable1<? super TreeMap<K, V>, ? extends TreeMap<K, V>> callable) {
