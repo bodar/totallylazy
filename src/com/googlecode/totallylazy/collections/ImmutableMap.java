@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Container;
+import com.googlecode.totallylazy.ImmutableCollection;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Maps;
@@ -14,7 +14,7 @@ import com.googlecode.totallylazy.Unchecked;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K, V>>, Container<K>, Functor<V> {
+public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K, V>>, ImmutableCollection<K>, Functor<V> {
     @Override
     ImmutableMap<K, V> cons(Pair<K, V> head);
 

@@ -53,6 +53,12 @@ import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 
 public class Numbers {
     public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
+    public static Function1<Number, Integer> intValue = new Function1<Number, Integer>() {
+        @Override
+        public Integer call(Number number) throws Exception {
+            return number.intValue();
+        }
+    };
 
     public static Sequence<Number> range(final Number start) {
         return iterate(increment, start);
