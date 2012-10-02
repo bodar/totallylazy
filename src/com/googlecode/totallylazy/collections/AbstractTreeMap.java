@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
+import com.googlecode.totallylazy.iterators.StatefulIterator;
 
 import java.util.Comparator;
 import java.util.Iterator;

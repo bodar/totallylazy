@@ -81,15 +81,26 @@ public class TreeZipper<K, V> {
         return right().last();
     }
 
+    public boolean isTop() {
+        return breadcrumbs.isEmpty();
+    }
+
     public TreeZipper<K, V> next() {
-        if(focus.right().isEmpty() && breadcrumbs.head().direction.equals(right)) return up().up();
-        if(focus.right().isEmpty()) return up();
+        if(focus.right().isEmpty()) {
+            TreeZipper<K,V> backTrack = this;
+            while (backTrack.breadcrumbs.head().direction.equals(right)) backTrack = backTrack.up();
+            return backTrack.up();
+        }
         return right().first();
     }
 
     public TreeZipper<K, V> previous() {
-        if(focus.left().isEmpty()) return up();
-        return left();
+        if(focus.left().isEmpty()) {
+            TreeZipper<K,V> backTrack = this;
+            while (backTrack.breadcrumbs.head().direction.equals(left)) backTrack = backTrack.up();
+            return backTrack.up();
+        }
+        return left().last();
     }
 
     @Override
