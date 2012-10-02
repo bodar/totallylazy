@@ -68,7 +68,7 @@ public class TreeZipperTest {
         final TreeZipper<Integer, Integer> zipper =
                 zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
 
-        final TreeZipper<Integer, Integer> newZipper = zipper.left().left().toStart();
+        final TreeZipper<Integer, Integer> newZipper = zipper.left().left().toTop();
         assertThat(newZipper.focus, is(zipper.focus));
         assertThat(newZipper.breadcrumbs, is(ImmutableList.constructors.<TreeZipper.Breadcrumb<Integer, Integer>>empty()));
     }
