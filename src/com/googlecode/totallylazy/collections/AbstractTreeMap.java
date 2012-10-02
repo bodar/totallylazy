@@ -5,8 +5,6 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.iterators.SegmentIterator;
-import com.googlecode.totallylazy.iterators.StatefulIterator;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -223,7 +221,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
 
     @Override
     public Iterator<Pair<K, V>> iterator() {
-        return SegmentIterator.iterator(immutableList());
+        return new TreeIterator<K, V>(this);
     }
 
     @Override
@@ -261,4 +259,5 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     protected Self create(Comparator<K> comparator, K key, V value, TreeMap<K, V> left, TreeMap<K, V> right) {
         return self(factory.create(comparator, key, value, left, right));
     }
+
 }

@@ -5,7 +5,6 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
 import static com.googlecode.totallylazy.collections.ImmutableList.functions.cons;
 import static com.googlecode.totallylazy.collections.ImmutableList.functions.tail;
-import static com.googlecode.totallylazy.collections.ListZipper.top;
 import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -28,10 +27,10 @@ public class ListZipperTest {
     }
 
     @Test
-    public void canGoToStart() {
+    public void canGoToTop() {
         ListZipper<String> zipper = zipper(list("A", "B", "C", "D"));
         final ListZipper<String> newZipper = zipper.right().right();
-        assertThat(top(newZipper), is(zipper));
+        assertThat(newZipper.top(), is(zipper));
     }
 
     @Test
