@@ -162,7 +162,7 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
                 return cons(head, tail.remove(value));
             }
             ListZipper<T> zipper = zipper(this);
-            while (!zipper.atEnd()){
+            while (!zipper.isBottom()){
                 if(zipper.current().equals(value)) return zipper.delete().toList();
                 zipper = zipper.right();
             }
