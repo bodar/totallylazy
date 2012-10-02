@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.iterators.SegmentIterator;
+import com.googlecode.totallylazy.iterators.ReadOnlyListIterator;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
+import static com.googlecode.totallylazy.collections.TreeZipper.zipper;
 
 public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implements TreeMap<K, V> {
     protected final Comparator<K> comparator;
@@ -222,8 +223,13 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
 
     @Override
     public Iterator<Pair<K, V>> iterator() {
-        return SegmentIterator.iterator(immutableList());
+        return listIterator()
     }
+
+    private ReadOnlyListIterator<Pair<K, V>> listIterator() {
+        return new TreeIterator<K, V>(this);
+    }
+
 
     @Override
     public int size() {
@@ -259,5 +265,43 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
 
     protected Self create(Comparator<K> comparator, K key, V value, TreeMap<K, V> left, TreeMap<K, V> right) {
         return self(factory.create(comparator, key, value, left, right));
+    }
+
+    private static class TreeIterator<K, V> extends ReadOnlyListIterator<Pair<K, V>> {
+        private TreeZipper<K, V> zipper;
+
+        public TreeIterator(TreeMap<K, V> zipper) {
+            this.zipper = zipper(zipper).first();
+        }
+
+        @Override
+        public boolean hasNext() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Pair<K, V> next() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Pair<K, V> previous() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int nextIndex() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int previousIndex() {
+            throw new UnsupportedOperationException();
+        }
     }
 }
