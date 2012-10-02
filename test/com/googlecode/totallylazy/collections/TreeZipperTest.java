@@ -132,27 +132,26 @@ public class TreeZipperTest {
         final TreeZipper<Integer, Integer> zipper =
                 zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
 
-        TreeZipper<Integer, Integer> first = zipper.first();
-        assertThat(first.focus.key(), is(0));
-        TreeZipper<Integer, Integer> second = first.next();
-        assertThat(second.focus.key(), is(1));
-        TreeZipper<Integer, Integer> third = second.next();
-        assertThat(third.focus.key(), is(2));
-        TreeZipper<Integer, Integer> fourth = third.next();
-        assertThat(fourth.focus.key(), is(3));
-        TreeZipper<Integer, Integer> fifth = fourth.next();
-        assertThat(fifth.focus.key(), is(4));
-        TreeZipper<Integer, Integer> sixth = fifth.next();
-        assertThat(sixth.focus.key(), is(5));
-        TreeZipper<Integer, Integer> seven = sixth.next();
-        assertThat(seven.focus.key(), is(6));
-//        try {
-//            System.out.println("next = " + seven.next().focus.key());
-//            fail();
-//        } catch (Exception e) {
-//            System.out.println("e = " + e);
-//        }
-
+        TreeZipper<Integer, Integer> zero = zipper.first();
+        assertThat(zero.focus.key(), is(0));
+        TreeZipper<Integer, Integer> one = zero.next();
+        assertThat(one.focus.key(), is(1));
+        TreeZipper<Integer, Integer> two = one.next();
+        assertThat(two.focus.key(), is(2));
+        TreeZipper<Integer, Integer> three = two.next();
+        assertThat(three.focus.key(), is(3));
+        TreeZipper<Integer, Integer> four = three.next();
+        assertThat(four.focus.key(), is(4));
+        TreeZipper<Integer, Integer> five = four.next();
+        assertThat(five.focus.key(), is(5));
+        TreeZipper<Integer, Integer> six = five.next();
+        assertThat(six.focus.key(), is(6));
+        try {
+            six.next();
+            fail();
+        } catch (NoSuchElementException e) {
+            // all good
+        }
     }
 
     @Test
@@ -160,7 +159,26 @@ public class TreeZipperTest {
         final TreeZipper<Integer, Integer> zipper =
                 zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
 
-        assertThat(zipper.last().previous().focus.key(), is(5));
+        TreeZipper<Integer, Integer> six = zipper.last();
+        assertThat(six.focus.key(), is(6));
+        TreeZipper<Integer, Integer> five = six.previous();
+        assertThat(five.focus.key(), is(5));
+        TreeZipper<Integer, Integer> four = five.previous();
+        assertThat(four.focus.key(), is(4));
+        TreeZipper<Integer, Integer> three = four.previous();
+        assertThat(three.focus.key(), is(3));
+        TreeZipper<Integer, Integer> two = three.previous();
+        assertThat(two.focus.key(), is(2));
+        TreeZipper<Integer, Integer> one = two.previous();
+        assertThat(one.focus.key(), is(1));
+        TreeZipper<Integer, Integer> zero = one.previous();
+        assertThat(zero.focus.key(), is(0));
+        try {
+            zero.previous();
+            fail();
+        } catch (NoSuchElementException e) {
+            // all good
+        }
     }
 
 
