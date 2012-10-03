@@ -112,6 +112,17 @@ public class Numbers {
         return factor(primes.tail(), number);
     }
 
+    public static Number squareRoot(Number number){
+        return Math.sqrt(number.doubleValue());
+    }
+
+    public static Function1<Number, Number> squareRoot = new Function1<Number, Number>() {
+        @Override
+        public Number call(Number number) throws Exception {
+            return squareRoot(number);
+        }
+    };
+
     public static Function1<Number, Number> squared = new Function1<Number, Number>() {
         @Override
         public Number call(Number number) throws Exception {
