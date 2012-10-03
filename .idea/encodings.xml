@@ -2,12 +2,6 @@
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/src/com/googlecode/totallylazy/Randoms.java" charset="UTF-8" />
-    <file url="file://$USER_HOME$/trunk/netstream/penfold" charset="UTF-8" />
-    <file url="file://$USER_HOME$/trunk/netstream/penfold/ernest" charset="UTF-8" />
-    <file url="file://$USER_HOME$/trunk/netstream/penfold/ernest/ernest-core" charset="UTF-8" />
-    <file url="file://$USER_HOME$/trunk/netstream/penfold/ernest/ernest-sql" charset="UTF-8" />
-    <file url="file://$USER_HOME$/trunk/netstream/penfold/penfold-core" charset="UTF-8" />
-    <file url="file://$USER_HOME$/trunk/netstream/penfold/penfold-webapp" charset="UTF-8" />
   </component>
 </project>
 

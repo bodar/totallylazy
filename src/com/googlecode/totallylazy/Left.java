@@ -55,7 +55,7 @@ public final class Left<L,R> extends Either<L, R> {
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value == null ? 19 : value.hashCode();
     }
 
     @Override

@@ -22,6 +22,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class EitherTest {
     @Test
+    public void eitherHashCodeDoesNotThrowNullPointer() throws Exception {
+        assertThat(left(null).hashCode(), is(19));
+        assertThat(right(null).hashCode(), is(31));
+    }
+
+    @Test
     public void supportsApplicativeUsage() throws Exception {
         assertThat(Either.<String, Number>left("error").applicate(Either.<String, Function1<Number, Number>>right(add(3))), is(Either.<String, Number>left("error")));
         assertThat(Either.<String, Number>right(2).applicate(Either.<String, Function1<Number, Number>>left("error")), is(Either.<String, Number>left("error")));
