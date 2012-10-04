@@ -1,18 +1,39 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.matchers.Matchers;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.compose;
 import static com.googlecode.totallylazy.Callables.uncurry3;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
+import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FunctionsTest {
+    @Test
+    public void supportsApplicativeUsageWithOption() throws Exception {
+        assertThat(add(3).$(some(3)), Matchers.is(some((Number)6)));
+    }
+
+    @Test
+    public void supportsApplicativeUsageWithEither() throws Exception {
+        assertThat(add(3).$(Either.<String, Number>right(3)), CoreMatchers.is(Either.<String, Number>right(6)));
+    }
+
+    @Test
+    public void supportsApplicativeUsageWithSequence() throws Exception {
+        assertThat(add(3).$(numbers(9, 1)), Matchers.is(numbers(12, 4)));
+    }
+
     @Test
     public void canComposeCurriedFunctions() throws Exception {
         assertThat(add().then(multiply()).apply(2).apply(10).apply(3), is(36));
