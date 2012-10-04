@@ -31,8 +31,7 @@ public abstract class Either<L, R> implements Functor<R>, Applicative<R> {
 
     public abstract <S> S map(final Callable1<? super L, S> left, final Callable1<? super R, ? extends S> right);
 
-    @Override
-    public abstract <S> Either<L, S> map(Callable1<? super R, ? extends S> callable);
+    @Override public abstract <S> Either<L, S> map(Callable1<? super R, ? extends S> callable);
 
     public abstract <S> Either<L, S> flatMap(Callable1<? super R, ? extends Either<L, S>> callable);
 
