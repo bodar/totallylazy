@@ -40,7 +40,7 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public abstract <B> Option<B> map(Callable1<? super A, ? extends B> callable);
 
-    public abstract <B> Option<B> flatMap(Callable1<? super A, ? extends Option<B>> callable);
+    public abstract <B> Option<B> flatMap(Callable1<? super A, ? extends Option<? extends B>> callable);
 
     public abstract <B> B fold(final B seed, final Callable2<? super B, ? super A, ? extends B> callable);
 
