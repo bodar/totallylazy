@@ -765,4 +765,12 @@ public class Sequences {
             }
         };
     }
+
+    public static <T> Function1<Iterable<T>, Iterable<T>> identity(Class<T> aClass) {
+        return identity();
+    }
+
+    public static <T> Function1<Iterable<T>, Iterable<T>> identity() {
+        return Functions.identity();
+    }
 }

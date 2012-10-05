@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Methods.method;
+import static com.googlecode.totallylazy.Option.identity;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callables {
@@ -94,8 +95,7 @@ public final class Callables {
                     return Array.getLength(instance);
                 }
                 return sequence(method(instance, "size"), method(instance, "length")).
-                        filter(Predicates.<Method>some()).
-                        map(Callables.<Method>value()).
+                        flatMap(identity(Method.class)).
                         headOption().
                         map(Methods.<Integer>invokeOn(instance)).
                         getOrElse(Callables.<Integer>callThrows(new UnsupportedOperationException("Does not support fields yet")));

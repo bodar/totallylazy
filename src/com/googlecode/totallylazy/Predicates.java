@@ -237,10 +237,12 @@ public class Predicates {
         return notNullValue();
     }
 
+    @Deprecated // will be removed after 950. Use flatMap instead.
     public static <T> LogicalPredicate<Option<T>> some(final Class<T> aClass) {
         return some();
     }
 
+    @Deprecated // will be removed after 950. Use flatMap instead.
     public static <T> LogicalPredicate<Option<T>> some() {
         return new LogicalPredicate<Option<T>>() {
             public final boolean matches(Option<T> other) {

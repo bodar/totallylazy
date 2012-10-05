@@ -8,7 +8,6 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -33,6 +32,7 @@ import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Functions.and;
 import static com.googlecode.totallylazy.Functions.or;
 import static com.googlecode.totallylazy.Lists.indexIn;
+import static com.googlecode.totallylazy.Option.identity;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
@@ -472,7 +472,11 @@ public class SequenceTest {
     public void supportsFind() throws Exception {
         assertThat(sequence(1, 3, 5).find(even()), is((Option<Integer>) none(Integer.class)));
         assertThat(sequence(1, 2, 3).find(even()), is((Option<Integer>) some(2)));
-        assertThat(sequence(none(Integer.class), some(2), some(3)).find(Predicates.<Integer>some()).get(), is((Option<Integer>) some(2)));
+    }
+
+    @Test
+    public void supportsFindingTheFirstSome() throws Exception {
+        assertThat(sequence(none(Integer.class), some(2), some(3)).flatMap(identity(Integer.class)).headOption(), is((Option<Integer>) some(2)));
     }
 
     @Test
