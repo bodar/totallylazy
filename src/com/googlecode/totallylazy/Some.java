@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Some<T> extends Option<T> {
     private final T value;
@@ -54,8 +55,8 @@ public class Some<T> extends Option<T> {
     }
 
     @Override
-    public <S> Option<S> flatMap(Callable1<? super T, ? extends Option<S>> callable) {
-        return Callers.call(callable, get());
+    public <S> Option<S> flatMap(Callable1<? super T, ? extends Option<? extends S>> callable) {
+        return cast(Callers.call(callable, get()));
     }
 
     @Override
