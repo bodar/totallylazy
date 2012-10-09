@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
+import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.Value;
 
 public class EqualsPredicate<T> extends LogicalPredicate<T> implements Value<T> {
@@ -29,7 +30,7 @@ public class EqualsPredicate<T> extends LogicalPredicate<T> implements Value<T> 
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        return Strings.asString(value);
     }
 }
 
