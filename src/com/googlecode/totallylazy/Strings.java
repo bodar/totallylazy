@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 
+import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.or;
@@ -208,9 +209,14 @@ public class Strings {
         }
     }
 
-    public static String toString(InputStream stream) {
+    public static String toString(final InputStream stream) {
         if (stream == null) return EMPTY;
-        return toString(new InputStreamReader(stream));
+        return using(stream, new Callable1<InputStream, String>() {
+            @Override
+            public String call(InputStream inputStream) throws Exception {
+                return Strings.toString(new InputStreamReader(inputStream));
+            }
+        });
     }
 
     public static String toString(Reader reader) {
