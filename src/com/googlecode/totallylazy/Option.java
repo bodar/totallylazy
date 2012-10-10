@@ -47,6 +47,10 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public abstract A getOrNull();
 
+    public A getOrThrow(Exception e) {
+        return getOrElse(Callables.<A>callThrows(e));
+    }
+
     public abstract <B> Option<B> map(Callable1<? super A, ? extends B> callable);
 
     public abstract <B> Option<B> flatMap(Callable1<? super A, ? extends Option<? extends B>> callable);
