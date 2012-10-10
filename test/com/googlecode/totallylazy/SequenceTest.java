@@ -42,6 +42,7 @@ import static com.googlecode.totallylazy.Predicates.lessThan;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Quintuple.quintuple;
+import static com.googlecode.totallylazy.Sequences.applicate;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
@@ -65,7 +66,6 @@ import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
-import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static java.lang.Thread.currentThread;
 import static org.hamcrest.CoreMatchers.is;
@@ -145,7 +145,10 @@ public class SequenceTest {
         assertThat(numbers(9).applicate(Sequences.<Function1<Number, Number>>empty()), Matchers.is(empty(Number.class)));
         assertThat(numbers(9).applicate(one(add(3))), Matchers.is(numbers(12)));
         assertThat(numbers(9, 1).applicate(one(add(3))), Matchers.is(numbers(12, 4)));
-        assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 90, 4, 10)));
+        assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 4, 90, 10)));
+
+        //http://learnyouahaskell.com/functors-applicative-functors-and-monoids#applicative-functors (Lists)
+        assertThat(applicate(applicate(sequence(add(), multiply()), numbers(1, 2)), numbers(3, 4)), Matchers.is(numbers(4, 5, 5, 6, 3, 4, 6, 8)));
     }
 
     @Test
