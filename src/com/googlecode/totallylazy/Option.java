@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Functions.identity;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Applicative<A> {
@@ -50,6 +51,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public abstract <B> Option<B> flatMap(Callable1<? super A, ? extends Option<? extends B>> callable);
 
+    public abstract Option<A> filter(Predicate<? super A> predicate);
+
     public abstract <B> B fold(final B seed, final Callable2<? super B, ? super A, ? extends B> callable);
 
     public Sequence<A> toSequence() {
@@ -80,5 +83,12 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
                 return option(a);
             }
         };
+    }
+
+    public <T> Option<T> unsafeCast() {
+        return Unchecked.cast(this);
+    }
+    public <T> Option<T> unsafeCast(Class<T> aClass) {
+        return unsafeCast();
     }
 }
