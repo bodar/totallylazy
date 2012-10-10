@@ -62,6 +62,11 @@ public class None<T> extends Option<T>{
     }
 
     @Override
+    public Option<T> filter(Predicate<? super T> predicate) {
+        return this;
+    }
+
+    @Override
     public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
         return seed;
     }

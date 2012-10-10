@@ -265,13 +265,17 @@ public class Maps {
     }
 
     public static class functions{
-        public static <K,V> Function1<Map<K,V>, V> getValue(final K key) {
+        public static <K,V> Function1<Map<K,V>, V> valueFor(final K key) {
             return new Function1<Map<K,V>, V>() {
                 @Override
                 public V call(Map<K,V> map) throws Exception {
                     return map.get(key);
                 }
             };
+        }
+
+        public static <K,V> Function1<Map<K,V>, V> valueFor(final K key, Class<V> vClass) {
+            return valueFor(key);
         }
     }
 }
