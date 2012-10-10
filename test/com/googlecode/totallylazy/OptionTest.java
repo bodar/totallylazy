@@ -178,4 +178,10 @@ public class OptionTest {
         assertThat(some(1).isEmpty(), is(false));
         assertThat(none().isEmpty(), is(true));
     }
+
+    @Test(expected = RuntimeException.class)
+    public void canThrowIfNone() {
+        assertThat(some("bob").getOrThrow(new RuntimeException()), is("bob"));
+        none().getOrThrow(new RuntimeException());
+    }
 }
