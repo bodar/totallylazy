@@ -472,6 +472,15 @@ public class Sequences {
         };
     }
 
+    public static <T> Function1<Iterable<? extends T>, Sequence<T>> cons(final T value) {
+        return new Function1<Iterable<? extends T>, Sequence<T>>() {
+            @Override
+            public Sequence<T> call(Iterable<? extends T> values) throws Exception {
+                return cons(value, sequence(values));
+            }
+        };
+    }
+
     public static <T> Sequence<T> memorise(final Iterable<? extends T> iterable) {
         return Computation.memorise(iterable);
     }
