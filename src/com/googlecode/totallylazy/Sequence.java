@@ -406,4 +406,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
     public Sequence<T> intersperse(T separator) {
         return Sequences.intersperse(this, separator);
     }
+
+    public Option<Sequence<T>> toOption() {
+        return Sequences.toOption(this);
+    }
 }

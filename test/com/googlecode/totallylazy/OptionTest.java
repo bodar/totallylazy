@@ -28,7 +28,10 @@ import static org.junit.Assert.fail;
 public class OptionTest {
     @Test
     public void supportsApplicativeEquality() throws Exception {
-        assertThat(applicate(applicate(some(equalTo()), some(3)), some(5)), is(some(false)));
+        final Option<Function2<Object, Object, Boolean>> some = some(equalTo());
+        final Option<Integer> some1 = some(3);
+        final Option<Function1<Object, Boolean>> applicate = applicate(some, some1);
+        assertThat(applicate(applicate, some(5)), is(some(false)));
         assertThat(applicate(applicate(some(equalTo()), some(3)), some(3)), is(some(true)));
         assertThat(applicate(applicate(some(equalTo()), none(Integer.class)), some(3)), is(none(Boolean.class)));
         assertThat(applicate(applicate(some(equalTo()), some(3)), none(Integer.class)), is(none(Boolean.class)));

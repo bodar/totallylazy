@@ -26,6 +26,7 @@ import java.util.concurrent.Executor;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.deferReturn;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Triple.triple;
@@ -773,5 +774,9 @@ public class Sequences {
                 return sequence(as).map(callable);
             }
         };
+    }
+
+    public static <T> Option<Sequence<T>> toOption(Iterable<? extends T> iterable) {
+        return Sequences.<T>sequence(iterable).isEmpty() ? Option.<Sequence<T>>none() : some(sequence(iterable));
     }
 }
