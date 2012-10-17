@@ -62,6 +62,10 @@ public class Dates {
         return format(RFC822);
     }
 
+    public static DateFormat RFC3339withMilliseconds() {
+        return format(RFC3339_WITH_MILLISECONDS);
+    }
+
     public static DateFormat javaUtilDateToString() {
         return format(JAVA_UTIL_DATE_TO_STRING);
     }
