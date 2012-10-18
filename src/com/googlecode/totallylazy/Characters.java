@@ -30,7 +30,21 @@ public class Characters {
         };
     }
 
-    public static LogicalPredicate<Character> identifierStart = new LogicalPredicate<Character>() {
+    public static LogicalPredicate<Character> in(final String characters) {
+        return new LogicalPredicate<Character>(){
+            @Override
+            public boolean matches(Character other) {
+                return characters.indexOf(other) != -1;
+            }
+
+            @Override
+            public String toString() {
+                return "[" + characters + "]";
+            }
+        };
+    }
+
+        public static LogicalPredicate<Character> identifierStart = new LogicalPredicate<Character>() {
         @Override
         public boolean matches(Character other) {
             return Character.isJavaIdentifierStart(other);

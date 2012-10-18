@@ -3,21 +3,42 @@ package com.googlecode.totallylazy.parser;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
-import static com.googlecode.totallylazy.Sequences.characters;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.parser.SequenceParser.sequenceOf;
 
 public class StringParser extends Parser<String> {
-    private final CharSequence expected;
     private final SequenceParser<Character> parser;
 
-    private StringParser(CharSequence expected) {
-        this.expected = expected;
-        parser = sequenceOf(characters(expected).map(CharacterParser.characterParser()));
+    private StringParser(Iterable<? extends Parse<Character>> parsers) {
+        parser = sequenceOf(parsers);
     }
 
     public static StringParser string(CharSequence value) {
-        return new StringParser(value);
+        return string(Sequences.characters(value).map(CharacterParser.characterParser()));
+    }
+
+    public static StringParser string(Iterable<? extends Parse<Character>> map) {return new StringParser(map);}
+
+    public static StringParser string(final Parse<Character> a, final Parse<Character> b) {
+        return string(sequence(a, b));
+    }
+
+    public static StringParser string(final Parse<Character> a, final Parse<Character> b, final Parse<Character> c) {
+        return string(sequence(a, b, c));
+    }
+
+    public static StringParser string(final Parse<Character> a, final Parse<Character> b, final Parse<Character> c, final Parse<Character> d) {
+        return string(sequence(a, b, c, d));
+    }
+
+    public static StringParser string(final Parse<Character> a, final Parse<Character> b, final Parse<Character> c, final Parse<Character> d, final Parse<Character> e) {
+        return string(sequence(a, b, c, d, e));
+    }
+
+    public static StringParser string(final Parse<Character>... parsers) {
+        return string(sequence(parsers));
     }
 
     @Override
@@ -36,6 +57,6 @@ public class StringParser extends Parser<String> {
 
     @Override
     public String toString() {
-        return expected.toString();
+        return parser.toString("");
     }
 }

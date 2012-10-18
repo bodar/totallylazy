@@ -99,6 +99,15 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
         };
     }
 
+    public static Function1<Pair, String> asString(final String seperator) {
+        return new Function1<Pair, String>() {
+            @Override
+            public String call(Pair pair) throws Exception {
+                return pair.toString(seperator);
+            }
+        };
+    }
+
     public static <A,B,C> Function1<Pair<A, B>, Pair<B, C>> reduceLeftShift(Callable2<A, B, C> callable) {
         return Pair.<A,B,C>reduceLeftShift().flip().apply(callable);
     }
