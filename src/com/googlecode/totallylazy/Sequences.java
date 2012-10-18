@@ -765,4 +765,22 @@ public class Sequences {
             }
         };
     }
+
+    public static Function1<Iterable<?>, String> toString(final String seperator) {
+        return new Function1<Iterable<?>, String>() {
+            @Override
+            public String call(Iterable<?> objects) throws Exception {
+                return Sequences.toString(objects, seperator);
+            }
+        };
+    }
+
+    public static Function1<Iterable<?>, String> toString(final String start, final String seperator, final String end) {
+        return new Function1<Iterable<?>, String>() {
+            @Override
+            public String call(Iterable<?> objects) throws Exception {
+                return Sequences.toString(objects, start, seperator, end);
+            }
+        };
+    }
 }
