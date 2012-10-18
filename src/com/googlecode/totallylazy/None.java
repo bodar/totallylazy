@@ -57,8 +57,13 @@ public class None<T> extends Option<T>{
     }
 
     @Override
-    public <S> Option<S> flatMap(Callable1<? super T, ? extends Option<S>> callable) {
+    public <S> Option<S> flatMap(Callable1<? super T, ? extends Option<? extends S>> callable) {
         return none();
+    }
+
+    @Override
+    public Option<T> filter(Predicate<? super T> predicate) {
+        return this;
     }
 
     @Override

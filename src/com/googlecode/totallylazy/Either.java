@@ -37,8 +37,12 @@ public abstract class Either<L, R> implements Functor<R>, Applicative<R> {
     public abstract <S> Either<L, S> flatMap(Callable1<? super R, ? extends Either<L, S>> callable);
 
     public static <L, R> Either<L, R> flatten(final Either<L, Either<L, R>> either) {
-        return either.flatMap(Functions.<Either<L, R>>identity());
+        return either.flatMap(Either.<L, R>identity());
     }
+
+    public static <L, R> Function1<Either<L, R>, Either<L, R>> identity(Class<L> lClass, Class<R> rClass) { return identity(); }
+
+    public static <L, R> Function1<Either<L, R>, Either<L, R>> identity() { return Functions.identity(); }
 
     public abstract Object value();
 
@@ -60,6 +64,7 @@ public abstract class Either<L, R> implements Functor<R>, Applicative<R> {
                 }
             };
         }
+
         public static <L, R> Function1<R, Either<L, R>> asRight() {
             return new Function1<R, Either<L, R>>() {
                 @Override

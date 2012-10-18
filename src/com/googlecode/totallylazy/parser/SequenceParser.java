@@ -13,11 +13,11 @@ import static com.googlecode.totallylazy.parser.Success.success;
 public class SequenceParser<A> extends Parser<Sequence<A>> {
     private final Sequence<? extends Parse<? extends A>> parsers;
 
-    private SequenceParser(Sequence<? extends Parse<? extends A>> parsers) {
-        this.parsers = parsers;
+    private SequenceParser(Iterable<? extends Parse<? extends A>> parsers) {
+        this.parsers = sequence(parsers);
     }
 
-    public static <A> SequenceParser<A> sequenceOf(final Sequence<? extends Parse<? extends A>> parsers) {
+    public static <A> SequenceParser<A> sequenceOf(final Iterable<? extends Parse<? extends A>> parsers) {
         return new SequenceParser<A>(parsers);
     }
 
@@ -42,11 +42,6 @@ public class SequenceParser<A> extends Parser<Sequence<A>> {
     }
 
     @Override
-    public String toString() {
-        return parsers.toString();
-    }
-
-    @Override
     public Result<Sequence<A>> parse(Segment<Character> characters) throws Exception {
         Segment<Character> state = characters;
         List<A> parsed = new ArrayList<A>();
@@ -57,5 +52,14 @@ public class SequenceParser<A> extends Parser<Sequence<A>> {
             state = result.remainder();
         }
         return success(sequence(parsed), state);
+    }
+
+    @Override
+    public String toString() {
+        return parsers.toString();
+    }
+
+    public String toString(String separator) {
+        return parsers.toString(separator);
     }
 }

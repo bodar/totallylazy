@@ -73,4 +73,16 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B> {
     public Function1<A,B> time(Callable1<? super Number, ?> reporter) {
         return TimeCallable1.time1(this, reporter);
     }
+
+    public Option<B> $(Option<? extends A> applicative) {
+        return applicative.applicate(Option.some(this));
+    }
+
+    public <L> Either<L, B> $(Either<L, ? extends A> applicative) {
+        return applicative.applicate(Either.<L, Function1<A, B>>right(this));
+    }
+
+    public Sequence<B> $(Sequence<? extends A> applicative) {
+        return applicative.applicate(Sequences.one(this));
+    }
 }

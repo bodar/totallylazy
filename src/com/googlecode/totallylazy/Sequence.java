@@ -17,10 +17,10 @@ import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, ImmutableCollection<T> {
+public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, ImmutableCollection<T>, Applicative<T> {
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
+        if (obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
         return obj instanceof Segment && methods.equalTo(this, (Segment<?>) obj);
     }
 
@@ -77,7 +77,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
     }
 
     public <B> Sequence<B> applicate(final Sequence<? extends Callable1<? super T, ? extends B>> applicator) {
-        return Sequences.applicate(this, applicator);
+        return Sequences.applicate(applicator, this);
     }
 
     public T first() {
@@ -405,5 +405,9 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
 
     public Sequence<T> intersperse(T separator) {
         return Sequences.intersperse(this, separator);
+    }
+
+    public Option<Sequence<T>> toOption() {
+        return Sequences.toOption(this);
     }
 }

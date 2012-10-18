@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Triple;
 import com.googlecode.totallylazy.regex.Regex;
 
@@ -15,6 +16,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Characters.identifierPart;
 import static com.googlecode.totallylazy.Characters.identifierStart;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Parsers {
     private static Function1<Pair<Character, ? extends Segment<Character>>, String> toString = new Function1<Pair<Character, ? extends Segment<Character>>, String>() {
@@ -51,6 +53,28 @@ public class Parsers {
 
     public static Parser<String> string(CharSequence value) {
         return StringParser.string(value);
+    }
+
+    public static Parser<String> string(Iterable<? extends Parse<Character>> map) {return StringParser.string(map);}
+
+    public static Parser<String> string(final Parse<Character> a, final Parse<Character> b) {
+        return StringParser.string(a, b);
+    }
+
+    public static Parser<String> string(final Parse<Character> a, final Parse<Character> b, final Parse<Character> c) {
+        return StringParser.string(a, b, c);
+    }
+
+    public static Parser<String> string(final Parse<Character> a, final Parse<Character> b, final Parse<Character> c, final Parse<Character> d) {
+        return StringParser.string(a, b, c, d);
+    }
+
+    public static Parser<String> string(final Parse<Character> a, final Parse<Character> b, final Parse<Character> c, final Parse<Character> d, final Parse<Character> e) {
+        return StringParser.string(a, b, c, d, e);
+    }
+
+    public static Parser<String> string(final Parse<Character>... parsers) {
+        return StringParser.string(parsers);
     }
 
     public static Parser<String> pattern(Regex regex) {

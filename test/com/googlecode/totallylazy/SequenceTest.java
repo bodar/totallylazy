@@ -8,7 +8,6 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -33,6 +32,7 @@ import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Functions.and;
 import static com.googlecode.totallylazy.Functions.or;
 import static com.googlecode.totallylazy.Lists.indexIn;
+import static com.googlecode.totallylazy.Option.identity;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
@@ -42,6 +42,7 @@ import static com.googlecode.totallylazy.Predicates.lessThan;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Quintuple.quintuple;
+import static com.googlecode.totallylazy.Sequences.applicate;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
@@ -50,6 +51,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
 import static com.googlecode.totallylazy.Sequences.splitOn;
+import static com.googlecode.totallylazy.Sequences.toOption;
 import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
@@ -65,7 +67,6 @@ import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
-import static com.googlecode.totallylazy.numbers.Numbers.remainder;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static java.lang.Thread.currentThread;
 import static org.hamcrest.CoreMatchers.is;
@@ -145,7 +146,10 @@ public class SequenceTest {
         assertThat(numbers(9).applicate(Sequences.<Function1<Number, Number>>empty()), Matchers.is(empty(Number.class)));
         assertThat(numbers(9).applicate(one(add(3))), Matchers.is(numbers(12)));
         assertThat(numbers(9, 1).applicate(one(add(3))), Matchers.is(numbers(12, 4)));
-        assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 90, 4, 10)));
+        assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 4, 90, 10)));
+
+        //http://learnyouahaskell.com/functors-applicative-functors-and-monoids#applicative-functors (Lists)
+        assertThat(applicate(applicate(sequence(add(), multiply()), numbers(1, 2)), numbers(3, 4)), Matchers.is(numbers(4, 5, 5, 6, 3, 4, 6, 8)));
     }
 
     @Test
@@ -472,7 +476,11 @@ public class SequenceTest {
     public void supportsFind() throws Exception {
         assertThat(sequence(1, 3, 5).find(even()), is((Option<Integer>) none(Integer.class)));
         assertThat(sequence(1, 2, 3).find(even()), is((Option<Integer>) some(2)));
-        assertThat(sequence(none(Integer.class), some(2), some(3)).find(Predicates.<Integer>some()).get(), is((Option<Integer>) some(2)));
+    }
+
+    @Test
+    public void supportsFindingTheFirstSome() throws Exception {
+        assertThat(sequence(none(Integer.class), some(2), some(3)).flatMap(identity(Integer.class)).headOption(), is((Option<Integer>) some(2)));
     }
 
     @Test
@@ -749,5 +757,14 @@ public class SequenceTest {
         assertThat(sequence().intersperse("x"), isEmpty());
         assertThat(repeat(1).intersperse(0).take(5), hasExactly(1, 0, 1, 0, 1));
         assertThat(repeat(1).intersperse(0).take(6), hasExactly(1, 0, 1, 0, 1, 0));
+    }
+
+    @Test
+    public void supportsToOption() {
+        assertThat(sequence("roger", "ramjet").toOption(), is(some(sequence("roger", "ramjet"))));
+        assertThat(toOption(sequence("roger", "ramjet")), is(some(sequence("roger", "ramjet"))));
+
+        assertThat(empty(String.class).toOption(), is(Option.<Sequence<String>>none()));
+        assertThat(toOption(empty(String.class)), is(Option.<Sequence<String>>none()));
     }
 }
