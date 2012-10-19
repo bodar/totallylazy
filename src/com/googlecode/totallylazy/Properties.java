@@ -45,7 +45,11 @@ public class Properties {
     }
 
     public static java.util.Properties copy(Map properties) {
-        return properties(pairs(Unchecked.<Map<String, String>>cast(properties)));
+        return properties(pairs(properties));
+    }
+
+    public static Iterable<Pair<String, String>> pairs(Map properties){
+        return Maps.pairs(Unchecked.<Map<String, String>>cast(properties));
     }
 
     public static java.util.Properties compose(java.util.Properties... properties) {
