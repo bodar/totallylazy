@@ -16,6 +16,15 @@ public class Maps {
         return entries(map).map(Maps.<K, V>entryToPair());
     }
 
+    public static <K, V> Function1<Map<K, V>, Sequence<Map.Entry<K, V>>> entries() {
+        return new Function1<Map<K, V>, Sequence<Map.Entry<K, V>>>() {
+            @Override
+            public Sequence<Map.Entry<K, V>> call(Map<K, V> map) throws Exception {
+                return entries(map);
+            }
+        };
+    }
+
     public static <K, V> Sequence<Map.Entry<K, V>> entries(final Map<K, V> map) {
         return sequence(map.entrySet());
     }
