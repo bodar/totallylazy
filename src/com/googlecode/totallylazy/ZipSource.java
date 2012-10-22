@@ -2,10 +2,11 @@ package com.googlecode.totallylazy;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ZipSource implements Source {
+public class ZipSource implements Sources {
     final ZipInputStream in;
 
     private ZipSource(InputStream inputStream) {
@@ -17,11 +18,11 @@ public class ZipSource implements Source {
     }
 
     @Override
-    public Sequence<Pair<String, InputStream>> sources() {
-        return Zip.entries(in).map(new Function1<ZipEntry, Pair<String, InputStream>>() {
+    public Sequence<Source> sources() {
+        return Zip.entries(in).map(new Function1<ZipEntry, Source>() {
             @Override
-            public Pair<String, InputStream> call(ZipEntry zipEntry) throws Exception {
-                return Pair.<String, InputStream>pair(zipEntry.getName(), new IgnoreCloseInputStream());
+            public Source call(ZipEntry zipEntry) throws Exception {
+                return new Source(zipEntry.getName(), new Date(zipEntry.getTime()), new IgnoreCloseInputStream());
             }
         });
     }

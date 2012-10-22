@@ -2,15 +2,18 @@ package com.googlecode.totallylazy;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ZipEntryOutputStream extends OutputStream {
     private final ZipOutputStream out;
 
-    public ZipEntryOutputStream(final ZipOutputStream out, String filename) throws IOException {
+    public ZipEntryOutputStream(final ZipOutputStream out, String filename, Date modified) throws IOException {
         this.out = out;
-        this.out.putNextEntry(new ZipEntry(filename));
+        ZipEntry entry = new ZipEntry(filename);
+        entry.setTime(modified.getTime());
+        this.out.putNextEntry(entry);
     }
 
     @Override
