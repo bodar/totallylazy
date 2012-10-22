@@ -1,13 +1,16 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.time.Dates;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Date;
 
 import static com.googlecode.totallylazy.Files.emptyTemporaryDirectory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.time.Dates.date;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ZipTest {
@@ -28,6 +31,24 @@ public class ZipTest {
 
         assertThat(a.exists(), is(true));
         assertThat(b.exists(), is(true));
+
+        Files.deleteFiles(playground);
+    }
+
+    @Test
+    public void preservesModifiedDate() throws Exception {
+        File playground = emptyTemporaryDirectory("totallylazy");
+        File a = file(playground, "a.txt");
+        Date date = date(2001, 1, 10);
+        a.setLastModified(date.getTime());
+        File zipFile = temporaryFile();
+
+        Zip.zip(playground, zipFile);
+        Files.deleteFiles(playground);
+        Zip.unzip(zipFile, playground);
+
+        assertThat(a.exists(), is(true));
+        assertThat(new Date(a.lastModified()), is(date));
 
         Files.deleteFiles(playground);
     }

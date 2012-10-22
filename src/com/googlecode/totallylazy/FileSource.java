@@ -4,19 +4,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
-public class FileSource implements Source {
+public class FileSource implements Sources {
     private final CloseableList closeables;
-    private final Sequence<Pair<String, InputStream>> sources;
+    private final Sequence<Source> sources;
 
     private FileSource(final Sequence<Pair<String, File>> sources) {
         closeables = new CloseableList();
-        this.sources = sources.map(Callables.<String, File, InputStream>second(new Function1<File, InputStream>() {
+        this.sources = sources.map(new Function1<Pair<String, File>, Source>() {
             @Override
-            public InputStream call(File file) throws Exception {
-                return closeables.manage(new FileInputStream(file));
+            public Source call(Pair<String, File> pair) throws Exception {
+                return new Source(pair.first(), new Date(pair.second().lastModified()), closeables.manage(new FileInputStream(pair.second())));
             }
-        }));
+        });
     }
 
     public static FileSource fileSource(File folder) {
@@ -28,7 +29,7 @@ public class FileSource implements Source {
     }
 
     @Override
-    public Sequence<Pair<String, InputStream>> sources() {
+    public Sequence<Source> sources() {
         return sources;
     }
 

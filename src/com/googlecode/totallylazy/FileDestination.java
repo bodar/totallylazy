@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 
 public class FileDestination implements Destination {
     private final CloseableList closeables;
@@ -19,10 +20,16 @@ public class FileDestination implements Destination {
     }
 
     @Override
-    public OutputStream destination(String name) throws IOException {
-        File file = new File(folder, name);
+    public OutputStream destination(String name, final Date modified) throws IOException {
+        final File file = new File(folder, name);
         file.getParentFile().mkdirs();
-        return closeables.manage(new FileOutputStream(file));
+        return closeables.manage(new FileOutputStream(file) {
+            @Override
+            public void close() throws IOException {
+                super.close();
+                file.setLastModified(modified.getTime());
+            }
+        });
     }
 
     @Override
