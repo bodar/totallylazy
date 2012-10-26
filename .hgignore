@@ -1,0 +1,12 @@
+syntax: glob
+out
+*.iws
+build/artifacts
+.idea/workspace.xml
+.ant-targets-build.xml
+*.orig
+lib/build
+lib/runtime
+lib/optional
+test/com/googlecode/totallylazy/records/simpledb/AwsCredentials.properties
+.DS_Store
