@@ -152,7 +152,7 @@ public class Files {
         return new Function1<InputStream, Void>() {
             @Override
             public Void call(InputStream inputStream) throws Exception {
-                write(bytes(inputStream), output);
+                Streams.copyAndClose(inputStream, new FileOutputStream(output));
                 return null;
             }
         };
