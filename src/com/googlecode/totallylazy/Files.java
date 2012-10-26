@@ -1,12 +1,13 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.googlecode.totallylazy.Bytes.bytes;
 import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
@@ -23,24 +24,24 @@ public class Files {
         return folder.toURI().relativize(file.toURI()).getPath();
     }
 
-    public static Predicate<? super File> isFile() {
-        return new Predicate<File>() {
+    public static LogicalPredicate<File> isFile() {
+        return new LogicalPredicate<File>() {
             public boolean matches(File file) {
                 return file.isFile();
             }
         };
     }
 
-    public static Predicate<? super File> hasSuffix(final String suffix) {
-        return new Predicate<File>() {
+    public static LogicalPredicate<File> hasSuffix(final String suffix) {
+        return new LogicalPredicate<File>() {
             public boolean matches(File file) {
                 return file.getName().endsWith("." + suffix);
             }
         };
     }
 
-    public static Predicate<? super File> isDirectory() {
-        return new Predicate<File>() {
+    public static LogicalPredicate<File> isDirectory() {
+        return new LogicalPredicate<File>() {
             public boolean matches(File file) {
                 return file.isDirectory();
             }
