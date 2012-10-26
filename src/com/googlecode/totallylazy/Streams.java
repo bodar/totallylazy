@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -59,4 +60,7 @@ public class Streams {
         };
     }
 
+    public static InputStreamReader inputStreamReader(InputStream stream) {
+        return new InputStreamReader(stream, Strings.UTF8);
+    }
 }
