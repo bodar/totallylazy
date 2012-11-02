@@ -72,6 +72,16 @@ public class None<T> extends Option<T>{
     }
 
     @Override
+    public boolean contains(T instance) {
+        return false;
+    }
+
+    @Override
+    public boolean exists(Predicate<? super T> predicate) {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "none()";
     }

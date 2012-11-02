@@ -27,6 +27,18 @@ import static org.junit.Assert.fail;
 
 public class OptionTest {
     @Test
+    public void supportsContains() throws Exception {
+        assertThat(option(1).contains(1), is(true));
+        assertThat(option(1).contains(2), is(false));
+    }
+
+    @Test
+    public void supportsExists() throws Exception {
+        assertThat(option(1).exists(Predicates.is(1)), is(true));
+        assertThat(option(1).exists(Predicates.is(2)), is(false));
+    }
+
+    @Test
     public void supportsApplicativeEquality() throws Exception {
         final Option<Function2<Object, Object, Boolean>> some = some(equalTo());
         final Option<Integer> some1 = some(3);

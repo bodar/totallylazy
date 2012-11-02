@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import org.hamcrest.Matcher;
+
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Functions.identity;
@@ -95,4 +97,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
     public <T> Option<T> unsafeCast(Class<T> aClass) {
         return unsafeCast();
     }
+
+    public abstract boolean contains(A instance);
+
+    public abstract boolean exists(Predicate<? super A> predicate);
 }

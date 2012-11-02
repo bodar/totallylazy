@@ -70,6 +70,16 @@ public class Some<T> extends Option<T> {
     }
 
     @Override
+    public boolean contains(T instance) {
+        return value.equals(instance);
+    }
+
+    @Override
+    public boolean exists(Predicate<? super T> predicate) {
+        return predicate.matches(value);
+    }
+
+    @Override
     public boolean equals(Object o) {
         return o instanceof Some && ((Some) o).value().equals(value());
     }
