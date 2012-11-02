@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
+import com.googlecode.totallylazy.Streams;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -9,6 +10,7 @@ import java.io.Reader;
 
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
+import static com.googlecode.totallylazy.Streams.inputStreamReader;
 import static com.googlecode.totallylazy.Strings.UTF8;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -41,7 +43,7 @@ public class StringParserTest {
     @Test
     public void doesNotReadMoreThanItNeeds() throws Exception {
         InputStream stream = new ByteArrayInputStream(bytes("ABCDEF"));
-        Reader reader = new InputStreamReader(stream, UTF8);
+        Reader reader = inputStreamReader(stream);
         Result<String> result = string("ABC").parse(characters(reader));
         assertThat(result.value(), is("ABC"));
         char next = (char) reader.read();

@@ -4,7 +4,6 @@ import org.hamcrest.Matcher;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Functions.identity;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Applicative<A> {
@@ -94,6 +93,7 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
     public <T> Option<T> unsafeCast() {
         return Unchecked.cast(this);
     }
+
     public <T> Option<T> unsafeCast(Class<T> aClass) {
         return unsafeCast();
     }
@@ -101,4 +101,24 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
     public abstract boolean contains(A instance);
 
     public abstract boolean exists(Predicate<? super A> predicate);
+
+    public static class functions {
+        public static <T> Function1<Option<T>, T> getOrElse(final T t) {
+            return new Function1<Option<T>, T>() {
+                @Override
+                public T call(Option<T> ts) throws Exception {
+                    return ts.getOrElse(t);
+                }
+            };
+        }
+
+        public static <T> Function1<Option<T>, T> getOrElse(final Callable<? extends T> callable) {
+            return new Function1<Option<T>, T>() {
+                @Override
+                public T call(Option<T> ts) throws Exception {
+                    return ts.getOrElse(callable);
+                }
+            };
+        }
+    }
 }

@@ -11,17 +11,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 
-import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.or;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Streams.inputStreamReader;
 
 public class Strings {
     public static final String EMPTY = "";
@@ -45,7 +44,7 @@ public class Strings {
     }
 
     public static Sequence<String> lines(InputStream stream) {
-        return lines(new InputStreamReader(stream));
+        return lines(inputStreamReader(stream));
     }
 
     public static Sequence<String> lines(Reader reader) {
@@ -214,7 +213,7 @@ public class Strings {
         return using(stream, new Callable1<InputStream, String>() {
             @Override
             public String call(InputStream inputStream) throws Exception {
-                return Strings.toString(new InputStreamReader(inputStream));
+                return Strings.toString(inputStreamReader(inputStream));
             }
         });
     }
