@@ -13,6 +13,7 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Quintuple.quintuple;
 import static com.googlecode.totallylazy.Sequences.characters;
+import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.join;
 import static com.googlecode.totallylazy.Sequences.repeat;
@@ -32,6 +33,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class SequencesTest {
+    @Test
+    public void shouldCreateEmptySequenceWhenIterableIsNull() throws Exception {
+        assertThat(sequence((Iterable<Object>) null), is(empty()));
+        assertThat(sequence((Object[]) null), is(empty(Object.class)));
+    }
+
     @Test
     @SuppressWarnings("unchecked")
     public void supportsTranspose() {
