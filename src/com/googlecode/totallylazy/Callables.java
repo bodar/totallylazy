@@ -493,4 +493,13 @@ public final class Callables {
     public static <L, R> Function1<R, Either<L, R>> asRight() {
         return Either.functions.asRight();
     }
+
+    public static <T> Function1<T, T> replace(final Predicate<? super T> predicate, final Callable1<? super T, ? extends T> callable) {
+        return new Function1<T, T>() {
+            @Override
+            public T call(T value) throws Exception {
+                return predicate.matches(value) ? callable.call(value) : value;
+            }
+        };
+    }
 }
