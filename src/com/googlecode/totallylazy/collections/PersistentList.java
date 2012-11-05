@@ -123,6 +123,16 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         public String toString() {
             return "[]";
         }
+
+        @Override
+        public T index(int i) throws IndexOutOfBoundsException {
+            throw new IndexOutOfBoundsException();
+        }
+
+        @Override
+        public int indexOf(T t) {
+            return -1;
+        }
     }
 
     private static class Node<T> extends PersistentList<T> {
@@ -225,6 +235,18 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Node && ((Node) obj).head.equals(head) && ((Node) obj).tail.equals(tail);
+        }
+
+        @Override
+        public T index(int i) throws IndexOutOfBoundsException {
+            if(i == 0) return head;
+            return tail().index(i -1);
+        }
+
+        @Override
+        public int indexOf(T t) {
+            if(t.equals(head)) return 0;
+            return 1 + tail.indexOf(t);
         }
     }
 }

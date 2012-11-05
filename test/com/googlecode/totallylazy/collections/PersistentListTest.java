@@ -24,6 +24,18 @@ import static org.hamcrest.Matchers.not;
 
 public class PersistentListTest {
     @Test
+    public void canLookupIndexOf() throws Exception {
+        assertThat(list("Dan", "Matt").indexOf("Dan"), is(0));
+        assertThat(list("Dan", "Matt").indexOf("Matt"), is(1));
+    }
+
+    @Test
+    public void canLookupByIndex() throws Exception {
+        assertThat(list("Dan", "Matt").index(0), is("Dan"));
+        assertThat(list("Dan", "Matt").index(1), is("Matt"));
+    }
+
+    @Test
     public void supportsOneElement() throws Exception {
         assertThat(list(1), hasExactly(1));
     }

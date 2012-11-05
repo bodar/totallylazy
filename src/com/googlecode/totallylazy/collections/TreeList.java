@@ -12,23 +12,57 @@ import com.googlecode.totallylazy.Sequence;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.RandomAccess;
 
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
-import static com.googlecode.totallylazy.collections.ImmutableVector.constructors.vector;
+import static com.googlecode.totallylazy.numbers.Numbers.intValue;
 
-public class TreeVector<T> implements ImmutableVector<T> {
+public class TreeList<T> implements ImmutableList<T>, RandomAccess {
     private final ImmutableSortedMap<Integer, T> map;
 
-    private TreeVector(ImmutableSortedMap<Integer, T> map) {this.map = map;}
+    private TreeList(ImmutableSortedMap<Integer, T> map) {this.map = map;}
 
-    public static <T> TreeVector<T> treeVector(ImmutableSortedMap<Integer, T> map) {return new TreeVector<T>(map);}
+    public static <T> TreeList<T> treeList(ImmutableSortedMap<Integer, T> map) {return new TreeList<T>(map);}
+
+    public static <T> TreeList<T> treeList() {
+        return treeList(ImmutableSortedMap.constructors.<Integer, T>emptySortedMap());
+    }
+
+    public static <T> TreeList<T> treeList(T first) {
+        return treeList(sequence(first));
+    }
+
+    public static <T> TreeList<T> treeList(T first, T second) {
+        return treeList(sequence(first, second));
+    }
+
+    public static <T> TreeList<T> treeList(T first, T second, T third) {
+        return treeList(sequence(first, second, third));
+    }
+
+    public static <T> TreeList<T> treeList(T first, T second, T third, T fourth) {
+        return treeList(sequence(first, second, third, fourth));
+    }
+
+    public static <T> TreeList<T> treeList(T first, T second, T third, T fourth, T fifth) {
+        return treeList(sequence(first, second, third, fourth, fifth));
+    }
+
+    public static <T> TreeList<T> treeList(T... values) {
+        return treeList(sequence(values));
+    }
+
+    public static <T> TreeList<T> treeList(Iterable<? extends T> iterable) {
+        return treeList(ImmutableSortedMap.constructors.<Integer, T>sortedMap(sequence(iterable).
+                zipWithIndex().map(Callables.<Number, T, Integer>first(intValue))));
+    }
 
     @Override
-    public <S> ImmutableVector<S> map(Callable1<? super T, ? extends S> callable) {
-        return vector(toSequence().map(callable));
+    public <S> TreeList<S> map(Callable1<? super T, ? extends S> callable) {
+        return treeList(toSequence().map(callable));
     }
 
     @Override
@@ -48,29 +82,29 @@ public class TreeVector<T> implements ImmutableVector<T> {
     }
 
     @Override
-    public ImmutableVector<T> tail() throws NoSuchElementException {
-        return treeVector(map.remove(map.first().first()));
+    public TreeList<T> tail() throws NoSuchElementException {
+        return treeList(map.remove(map.first().first()));
     }
 
     @Override
-    public ImmutableVector<T> cons(T head) {
+    public TreeList<T> cons(T head) {
         int index = map.isEmpty() ? 0 : map.first().first();
-        return treeVector(map.cons(Pair.pair(--index, head)));
+        return treeList(map.cons(Pair.pair(--index, head)));
     }
 
     @Override
-    public ImmutableVector<T> add(T value) {
+    public TreeList<T> add(T value) {
         int index = map.isEmpty() ? 0 : map.last().first();
-        return treeVector(map.cons(Pair.pair(++index, value)));
+        return treeList(map.cons(Pair.pair(++index, value)));
     }
 
     @Override
-    public ImmutableVector<T> remove(T value) {
+    public TreeList<T> remove(T value) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ImmutableVector<T> removeAll(Iterable<T> values) {
+    public TreeList<T> removeAll(Iterable<T> values) {
         return filter(not(in(set(values))));
     }
 
@@ -85,8 +119,8 @@ public class TreeVector<T> implements ImmutableVector<T> {
     }
 
     @Override
-    public ImmutableVector<T> filter(Predicate<? super T> predicate) {
-        return ImmutableVector.constructors.vector(toSequence().filter(predicate));
+    public TreeList<T> filter(Predicate<? super T> predicate) {
+        return treeList(toSequence().filter(predicate));
     }
 
     @Override
@@ -123,4 +157,5 @@ public class TreeVector<T> implements ImmutableVector<T> {
     public Iterator<T> iterator() {
         return Iterators.map(map.iterator(), Callables.<T>second());
     }
+
 }
