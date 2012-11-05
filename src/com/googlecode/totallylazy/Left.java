@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Objects.equalTo;
 
 public final class Left<L,R> extends Either<L, R> {
     private final L value;
@@ -50,7 +51,7 @@ public final class Left<L,R> extends Either<L, R> {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof Left && ((Left) o).value.equals(value);
+        return o instanceof Left && equalTo(((Left) o).value, value);
     }
 
     @Override
