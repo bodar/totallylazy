@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, ImmutableCollection<T> {
+public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, ImmutableCollection<T>, Indexed<T> {
     ImmutableList<T> add(T value);
 
     ImmutableList<T> remove(T value);

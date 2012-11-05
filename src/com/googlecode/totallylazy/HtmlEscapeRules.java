@@ -249,7 +249,7 @@ public class HtmlEscapeRules {
             {"sube", "8838"}, // subset of or equal to, U+2286 ISOtech -->
             {"supe", "8839"}, // superset of or equal to,U+2287 ISOtech -->
             {"oplus", "8853"}, // circled plus = direct sum,U+2295 ISOamsb -->
-            {"otimes", "8855"}, // circled times = vector product,U+2297 ISOamsb -->
+            {"otimes", "8855"}, // circled times = treeList product,U+2297 ISOamsb -->
             {"perp", "8869"}, // up tack = orthogonal to = perpendicular,U+22A5 ISOtech -->
             {"sdot", "8901"}, // dot operator, U+22C5 ISOamsb -->
             // <!-- dot operator is NOT the same character as U+00B7 middle dot -->
