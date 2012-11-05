@@ -11,6 +11,12 @@ import static org.hamcrest.Matchers.is;
 
 public class DatesTest {
     @Test
+    @SuppressWarnings("deprecation")
+    public void whenCreatingDateFromLongSetTimezoneToUtc() throws Exception{
+        assertThat(date(0).getTime(), Matchers.is(0L));
+    }
+
+    @Test
     public void canParseALexicalDate() throws Exception{
         Date result = Dates.LEXICAL().parse("20110908071414123");
         assertThat(result, Matchers.is(date(2011, 9, 8, 7, 14, 14, 123)));

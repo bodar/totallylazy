@@ -24,10 +24,11 @@ public class Dates {
     public static final String RFC822 = "EEE, dd MMM yyyy HH:mm:ss zzz";
     public static final String JAVA_UTIL_DATE_TO_STRING = "EEE MMM dd HH:mm:ss zzz yyyy";
     public static final String LEXICAL = "yyyyMMddHHmmssSSS";
+    public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
+    public static final Date MIN_VALUE = date(Long.MIN_VALUE);
+    public static final Date MAX_VALUE = date(Long.MAX_VALUE);
     @Deprecated
     public static final String LUCENE = LEXICAL;
-
-    public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 
     @Deprecated
     public static DateFormat LUCENE() {
@@ -85,6 +86,10 @@ public class Dates {
 
     public static Date date(String value) {
         return DateFormatConverter.defaultConverter().parse(value);
+    }
+
+    public static Date date(long value) {
+        return new Date(value);
     }
 
     public static Date date(int year, int month, int day) {
