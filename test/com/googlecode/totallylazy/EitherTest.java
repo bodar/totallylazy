@@ -22,6 +22,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class EitherTest {
     @Test
+    public void eitherToStringDoesNotThrowNullPointer() throws Exception {
+        assertThat(left(null).toString(), is("left(null)"));
+        assertThat(right(null).toString(), is("right(null)"));
+    }
+
+    @Test
+    public void eitherEqualityDoesNotThrowNullPointer() throws Exception {
+        assertThat(left(null).equals(left(null)), is(true));
+        assertThat(left(null).equals(left(1)), is(false));
+        assertThat(right(null).equals(right(null)), is(true));
+        assertThat(right(null).equals(right(2)), is(false));
+    }
+
+    @Test
     public void eitherHashCodeDoesNotThrowNullPointer() throws Exception {
         assertThat(left(null).hashCode(), is(19));
         assertThat(right(null).hashCode(), is(31));
