@@ -2,13 +2,9 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.totallylazy.time.Days;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 import static com.googlecode.totallylazy.Predicates.between;
 import static com.googlecode.totallylazy.Predicates.equalTo;
@@ -16,14 +12,11 @@ import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.or;
 import static com.googlecode.totallylazy.matchers.Matchers.matcher;
-import static com.googlecode.totallylazy.time.Dates.stripTime;
 import static org.junit.Assert.assertThat;
 
 public class RandomsTest {
     private static final int TESTS = 100;
     private static final Date NOW = Dates.date(2000, 1, 2);
-    private static final Date MIN_DATE = new Date(Long.MIN_VALUE);
-    private static final Date MAX_DATE = new Date(Long.MAX_VALUE);
 
     @Test
     public void integers() {
@@ -47,7 +40,7 @@ public class RandomsTest {
 
     @Test
     public void dates() {
-        assertThat(Randoms.dates().take(TESTS), matcher(Predicates.<Date>forAll(between(MIN_DATE, MAX_DATE))));
+        assertThat(Randoms.dates().take(TESTS), matcher(Predicates.<Date>forAll(between(Dates.MIN_VALUE, Dates.MAX_VALUE))));
     }
 
     @Test
@@ -80,6 +73,6 @@ public class RandomsTest {
 
     @Test
     public void datesAfter() {
-        assertThat(Randoms.after(NOW).take(TESTS), matcher(Predicates.<Date>forAll(between(NOW, MAX_DATE))));
+        assertThat(Randoms.after(NOW).take(TESTS), matcher(Predicates.<Date>forAll(between(NOW, Dates.MAX_VALUE))));
     }
 }
