@@ -13,8 +13,10 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.callables.Count.count;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
 import static com.googlecode.totallylazy.collections.ImmutableSortedSet.constructors.sortedSet;
+import static com.googlecode.totallylazy.collections.TreeList.treeList;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.startsWith;
@@ -23,6 +25,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 
 public class PersistentListTest {
+    @Test
+    public void canFold() throws Exception {
+        assertThat(list("Dan", "Matt").fold(0, count()).intValue(), is(2));
+    }
+
     @Test
     public void canLookupIndexOf() throws Exception {
         assertThat(list("Dan", "Matt").indexOf("Dan"), is(0));

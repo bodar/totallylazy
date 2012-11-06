@@ -3,12 +3,18 @@ package com.googlecode.totallylazy.collections;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.callables.Count.count;
 import static com.googlecode.totallylazy.collections.TreeList.treeList;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TreeListTest {
+    @Test
+    public void canFold() throws Exception {
+        assertThat(treeList("Dan", "Matt").fold(0, count()).intValue(), is(2));
+    }
+
     @Test
     public void canConsAnElementOntoTheHead() throws Exception {
         assertThat(TreeList.<String>treeList().cons("Dan").cons("Matt"), hasExactly("Matt", "Dan"));

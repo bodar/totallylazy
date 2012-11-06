@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.ImmutableCollection;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functor;
@@ -14,7 +16,7 @@ import com.googlecode.totallylazy.Unchecked;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K, V>>, ImmutableCollection<K>, Functor<V> {
+public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K, V>>, ImmutableCollection<K>, Functor<V>, Foldable<Pair<K,V>> {
     @Override
     ImmutableMap<K, V> cons(Pair<K, V> head);
 
@@ -35,8 +37,6 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
 
     @Override
     <NewV> ImmutableMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
-
-    int size();
 
     ImmutableList<Pair<K, V>> immutableList();
 

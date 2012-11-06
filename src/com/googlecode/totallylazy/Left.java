@@ -63,4 +63,9 @@ public final class Left<L,R> extends Either<L, R> {
     public Object value() {
         return value;
     }
+
+    @Override
+    public <S> S fold(S seed, Callable2<? super S, ? super R, ? extends S> callable) {
+        return seed;
+    }
 }
