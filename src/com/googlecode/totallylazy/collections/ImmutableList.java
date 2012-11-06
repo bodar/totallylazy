@@ -1,10 +1,12 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.ImmutableCollection;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
+import com.googlecode.totallylazy.ImmutableCollection;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
@@ -16,7 +18,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, ImmutableCollection<T>, Indexed<T> {
+public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, ImmutableCollection<T>, Indexed<T>, Foldable<T> {
     ImmutableList<T> add(T value);
 
     ImmutableList<T> remove(T value);

@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
@@ -105,6 +106,11 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         }
 
         @Override
+        public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
+            return seed;
+        }
+
+        @Override
         public boolean contains(T other) {
             return false;
         }
@@ -201,6 +207,11 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
                 return tail().filter(predicate);
             }
             return constructors.list(toSequence().filter(predicate));
+        }
+
+        @Override
+        public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
+            return toSequence().fold(seed, callable);
         }
 
         protected boolean useRecursion() {
