@@ -100,7 +100,7 @@ public class CountLatch {
             while (true) {
                 int oldValue = count();
                 int newValue = oldValue + adjust;
-                if (compareAndSetState(oldValue, newValue)) return newValue == 0;
+                if (compareAndSetState(oldValue, newValue)) return true;
             }
         }
     }
