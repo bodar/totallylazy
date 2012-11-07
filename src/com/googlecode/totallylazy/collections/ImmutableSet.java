@@ -1,12 +1,14 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Foldable;
+import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.ImmutableCollection;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 
-public interface ImmutableSet<T> extends Iterable<T>, Segment<T>, ImmutableCollection<T> {
+public interface ImmutableSet<T> extends Iterable<T>, Segment<T>, ImmutableCollection<T>, Functor<T>, Foldable<T> {
     Option<T> find(Predicate<? super T> predicate);
 
     @Override

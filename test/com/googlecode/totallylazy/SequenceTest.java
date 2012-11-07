@@ -51,7 +51,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
 import static com.googlecode.totallylazy.Sequences.splitOn;
-import static com.googlecode.totallylazy.Sequences.toOption;
+import static com.googlecode.totallylazy.Sequences.flatOption;
 import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
@@ -760,11 +760,11 @@ public class SequenceTest {
     }
 
     @Test
-    public void supportsToOption() {
-        assertThat(sequence("roger", "ramjet").toOption(), is(some(sequence("roger", "ramjet"))));
-        assertThat(toOption(sequence("roger", "ramjet")), is(some(sequence("roger", "ramjet"))));
+    public void supportsFlatteningToOption() {
+        assertThat(sequence("roger", "ramjet").flatOption(), is(some(sequence("roger", "ramjet"))));
+        assertThat(flatOption(sequence("roger", "ramjet")), is(some(sequence("roger", "ramjet"))));
 
-        assertThat(empty(String.class).toOption(), is(Option.<Sequence<String>>none()));
-        assertThat(toOption(empty(String.class)), is(Option.<Sequence<String>>none()));
+        assertThat(empty(String.class).flatOption(), is(Option.<Sequence<String>>none()));
+        assertThat(flatOption(empty(String.class)), is(Option.<Sequence<String>>none()));
     }
 }

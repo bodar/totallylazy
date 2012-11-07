@@ -785,7 +785,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Option<Sequence<T>> toOption(Iterable<? extends T> iterable) {
+    public static <T> Option<Sequence<T>> flatOption(Iterable<? extends T> iterable) {
         return Sequences.<T>sequence(iterable).isEmpty() ? Option.<Sequence<T>>none() : some(sequence(iterable));
     }
 
