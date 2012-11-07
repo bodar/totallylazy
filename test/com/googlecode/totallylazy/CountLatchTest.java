@@ -19,6 +19,8 @@ public class CountLatchTest {
         latch.countUp();
         assertThat("1", latch.count(), is(1));
 
+        assertThat("2", latch.await(1, TimeUnit.NANOSECONDS), is(false));
+
         repeat(number).take(5).mapConcurrently(latch.monitor(new Function1<AtomicInteger, Integer>() {
             @Override
             public Integer call(AtomicInteger atomicInteger) throws Exception {
@@ -26,11 +28,11 @@ public class CountLatchTest {
             }
         }));
 
-        assertThat("2", latch.await(1, TimeUnit.NANOSECONDS), is(false));
+        assertThat("3", latch.await(1, TimeUnit.NANOSECONDS), is(false));
         latch.countDown();
         latch.await();
 
-        assertThat("3", latch.count(), is(0));
-        assertThat("4", number.get(), is(5));
+        assertThat("4", latch.count(), is(0));
+        assertThat("5", number.get(), is(5));
     }
 }
