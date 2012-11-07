@@ -80,15 +80,11 @@ public class CountLatch {
             setState(count);
         }
 
-        int count() {
-            return getState();
-        }
-
-        protected int tryAcquireShared(int ignore) {
+        protected final int tryAcquireShared(int ignore) {
             return finished() ? 1 : -1;
         }
 
-        protected boolean tryReleaseShared(int adjust) {
+        protected final boolean tryReleaseShared(int adjust) {
             while (true) {
                 int oldValue = count();
                 int newValue = oldValue + adjust;
@@ -96,7 +92,11 @@ public class CountLatch {
             }
         }
 
-        private boolean finished() {
+        final int count() {
+            return getState();
+        }
+
+        final boolean finished() {
             return count() == 0;
         }
     }
