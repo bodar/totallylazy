@@ -28,7 +28,6 @@ public class CountLatchTest {
             }
         }));
 
-        assertThat("3", latch.await(1, TimeUnit.NANOSECONDS), is(false));
         latch.countDown();
         latch.await();
 
