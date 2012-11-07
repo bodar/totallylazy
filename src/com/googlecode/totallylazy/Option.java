@@ -6,7 +6,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Applicative<A> {
+public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Applicative<A>, Foldable<A> {
     public static <A> Option<A> option(A a) {
         if (a == null) {
             return None.none();

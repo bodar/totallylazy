@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -11,6 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Functions.call;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implements TreeMap<K, V> {
@@ -118,6 +120,11 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
         if (predicate.matches(value))
             return create(comparator, key, value, left.filterValues(predicate), right.filterValues(predicate));
         return left.filterValues(predicate).joinTo(self(right.filterValues(predicate)));
+    }
+
+    @Override
+    public <S> S fold(S seed, Callable2<? super S, ? super Pair<K, V>, ? extends S> callable) {
+        return right.fold(left.fold(call(callable, seed, pair()), callable), callable);
     }
 
     @Override

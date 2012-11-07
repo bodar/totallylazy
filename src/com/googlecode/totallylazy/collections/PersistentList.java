@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
@@ -105,6 +106,11 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         }
 
         @Override
+        public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
+            return seed;
+        }
+
+        @Override
         public boolean contains(T other) {
             return false;
         }
@@ -122,6 +128,16 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         @Override
         public String toString() {
             return "[]";
+        }
+
+        @Override
+        public T index(int i) throws IndexOutOfBoundsException {
+            throw new IndexOutOfBoundsException();
+        }
+
+        @Override
+        public int indexOf(T t) {
+            return -1;
         }
     }
 
@@ -193,6 +209,11 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
             return constructors.list(toSequence().filter(predicate));
         }
 
+        @Override
+        public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
+            return toSequence().fold(seed, callable);
+        }
+
         protected boolean useRecursion() {
             return size < 1024;
         }
@@ -225,6 +246,18 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Node && ((Node) obj).head.equals(head) && ((Node) obj).tail.equals(tail);
+        }
+
+        @Override
+        public T index(int i) throws IndexOutOfBoundsException {
+            if(i == 0) return head;
+            return tail().index(i -1);
+        }
+
+        @Override
+        public int indexOf(T t) {
+            if(t.equals(head)) return 0;
+            return 1 + tail.indexOf(t);
         }
     }
 }
