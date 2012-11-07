@@ -15,16 +15,24 @@ public class CountLatch {
         this(0);
     }
 
+    public void waitFor(int expectedCount) throws InterruptedException {
+        sync.acquireSharedInterruptibly(expectedCount);
+    }
+
+    public boolean waitFor(int expectedCount, long timeout, TimeUnit unit) throws InterruptedException {
+        return sync.tryAcquireSharedNanos(expectedCount, unit.toNanos(timeout));
+    }
+
     public void await() throws InterruptedException {
-        sync.acquireSharedInterruptibly(-1);
+        waitFor(0);
     }
 
     public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
-        return sync.tryAcquireSharedNanos(-1, unit.toNanos(timeout));
+        return waitFor(0, timeout, unit);
     }
 
     public void countUp() {
-        sync.increment();
+        sync.releaseShared(1);
     }
 
     public void countDown() {
@@ -84,24 +92,15 @@ public class CountLatch {
             return getState();
         }
 
-        protected int tryAcquireShared(int ignored) {
-            return (count() == 0) ? 1 : -1;
+        protected int tryAcquireShared(int expected) {
+            return (count() == expected) ? 1 : -1;
         }
 
-        protected boolean tryReleaseShared(int ignored) {
+        protected boolean tryReleaseShared(int adjust) {
             while (true) {
-                int current = count();
-                if (current == 0) return false;
-                int decrement = current - 1;
-                if (compareAndSetState(current, decrement)) return decrement == 0;
-            }
-        }
-
-        public void increment() {
-            while (true) {
-                int current = count();
-                int increment = current + 1;
-                if (compareAndSetState(current, increment)) return;
+                int oldValue = count();
+                int newValue = oldValue + adjust;
+                if (compareAndSetState(oldValue, newValue)) return true;
             }
         }
     }
