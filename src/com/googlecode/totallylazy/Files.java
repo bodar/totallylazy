@@ -7,12 +7,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.time.Dates.date;
 import static java.lang.String.format;
 import static java.lang.System.getProperty;
 import static java.util.UUID.randomUUID;
@@ -193,5 +195,14 @@ public class Files {
             throw LazyException.lazyException(e);
         }
         return child;
+    }
+
+    public static Function1<File, Date> lastModified() {
+        return new Function1<File, Date>() {
+            @Override
+            public Date call(File file) throws Exception {
+                return date(file.lastModified());
+            }
+        };
     }
 }
