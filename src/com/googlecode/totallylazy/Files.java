@@ -13,6 +13,7 @@ import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.time.Dates.date;
 import static java.lang.String.format;
@@ -50,10 +51,23 @@ public class Files {
         };
     }
 
+    public static LogicalPredicate<File> hasName(final String name) {
+        return where(name(), is(name));
+    }
+
+
     public static Function1<File, String> name() {
         return new Function1<File, String>() {
             public String call(File file) throws Exception {
                 return file.getName();
+            }
+        };
+    }
+
+    public static Function1<File, Sequence<File>> files() {
+        return new Function1<File, Sequence<File>>() {
+            public Sequence<File> call(File file) throws Exception {
+                return files(file);
             }
         };
     }
@@ -121,6 +135,24 @@ public class Files {
 
     public static Sequence<File> files(File directory) {
         return sequence(directory.listFiles());
+    }
+
+    public static Predicate<File> containsFile(final String fileName) {
+        return containsFile(hasName(fileName));
+    }
+
+    public static LogicalPredicate<File> containsFile(final Predicate<? super File> predicate) {
+        return where(files(), Predicates.exists(predicate));
+    }
+
+    public static Sequence<File> ancestorsAndSelf(File file) {
+        if(file.getParentFile()==null)return sequence(file);
+        return sequence(file).join(ancestorsAndSelf(file.getParentFile()));
+    }
+
+    public static Sequence<File> ancestors(File file) {
+        if(file.getParentFile()==null)return Sequences.empty();
+        return sequence(file.getParentFile()).join(ancestors(file.getParentFile()));
     }
 
     public static Sequence<File> recursiveFiles(final File directory) {
