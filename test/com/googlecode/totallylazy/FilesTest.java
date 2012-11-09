@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.io.File;
 
 import static com.googlecode.totallylazy.Files.TEMP_DIR;
+import static com.googlecode.totallylazy.Files.ancestors;
+import static com.googlecode.totallylazy.Files.ancestorsAndSelf;
 import static com.googlecode.totallylazy.Files.append;
 import static com.googlecode.totallylazy.Files.directory;
 import static com.googlecode.totallylazy.Files.emptyTemporaryDirectory;
@@ -29,6 +31,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class FilesTest {
 
@@ -80,6 +84,26 @@ public class FilesTest {
     @Test
     public void handlesDirectoriesThatReturnANullArray() {
         assertThat(recursiveFiles(new File("doesNotExist")).find(where(name(), Predicates.is("FilesTest.java"))), CoreMatchers.is((Option<File>) none(File.class)));
+    }
+
+    @Test
+    public void listsAncestors() {
+        File fileInWorkingDirectory = recursiveFiles(workingDirectory()).find(where(path(), endsWith("FilesTest.java"))).get();
+        assertFalse(ancestors(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory)));
+
+        assertTrue(ancestors(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory.getParentFile())));
+        assertTrue(ancestors(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory.getParentFile().getParentFile())));
+        assertTrue(ancestors(fileInWorkingDirectory).exists(Predicates.is(workingDirectory())));
+    }
+
+    @Test
+    public void listsAncestorsAndSelf() {
+        File fileInWorkingDirectory = recursiveFiles(workingDirectory()).find(where(path(), endsWith("FilesTest.java"))).get();
+
+        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory)));
+        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory.getParentFile())));
+        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory.getParentFile().getParentFile())));
+        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(Predicates.is(workingDirectory())));
     }
 
     @Test
