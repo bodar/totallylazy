@@ -12,6 +12,7 @@ import java.util.Date;
 import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
+import static com.googlecode.totallylazy.Predicates.exists;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -142,7 +143,7 @@ public class Files {
     }
 
     public static LogicalPredicate<File> containsFile(final Predicate<? super File> predicate) {
-        return where(files(), Predicates.exists(predicate));
+        return where(Files.files(), Predicates.<File>exists(predicate));
     }
 
     public static Sequence<File> ancestorsAndSelf(File file) {
