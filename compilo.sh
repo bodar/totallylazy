@@ -18,6 +18,5 @@ done
 if [ ! -f ${jar} ]; then
 	mkdir -p ${dir} 
 	wget ${url} -O ${jar}
-	chmod u+x ${jar}
 fi
 exec java -jar ${jar} $*
