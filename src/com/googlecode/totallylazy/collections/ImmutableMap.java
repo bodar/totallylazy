@@ -36,8 +36,6 @@ public interface ImmutableMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K
     @Override
     <NewV> ImmutableMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
 
-    int size();
-
     ImmutableList<Pair<K, V>> immutableList();
 
     Map<K, V> toMap();
