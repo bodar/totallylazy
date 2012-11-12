@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version=86
+version=90
 name=compilo
 dir=lib/
 jar=${dir}${name}.jar
