@@ -8,40 +8,36 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class CharacterSegment extends AbstractSegment<Character> {
     private final CharSequence charSequence;
-    private final int offset;
 
-    private CharacterSegment(CharSequence charSequence, int offset) {
+    private CharacterSegment(CharSequence charSequence) {
         this.charSequence = charSequence;
-        this.offset = offset;
     }
 
     public static Segment<Character> characterSegment(CharSequence charSequence) {
-        return characterSegment(charSequence, 0);
-    }
-
-    public static Segment<Character> characterSegment(CharSequence charSequence, int offset) {
-        if(offset < 0) throw new IllegalArgumentException("offset can not be negative");
-        if(isEmpty(charSequence, offset)) return Segment.constructors.emptySegment();
-        return new CharacterSegment(charSequence, offset);
+        return new CharacterSegment(charSequence);
     }
 
     @Override
     public boolean isEmpty() {
-        return isEmpty(charSequence, offset);
-    }
-
-    private static boolean isEmpty(CharSequence charSequence, int offset) {
-        return offset >= charSequence.length();
+        return charSequence.length() == 0;
     }
 
     @Override
     public Character head() throws NoSuchElementException {
-        return charSequence.charAt(offset);
+        try {
+            return charSequence.charAt(0);
+        } catch (IndexOutOfBoundsException e) {
+            throw new NoSuchElementException();
+        }
     }
 
     @Override
     public Segment<Character> tail() throws NoSuchElementException {
-        return characterSegment(charSequence, offset + 1);
+        try {
+            return characterSegment(charSequence.subSequence(1, charSequence.length()));
+        } catch (IndexOutOfBoundsException e) {
+            throw new NoSuchElementException();
+        }
     }
 
     @Override
@@ -52,5 +48,20 @@ public class CharacterSegment extends AbstractSegment<Character> {
     @Override
     public <C extends Segment<Character>> C joinTo(C rest) {
         return cast(tail().joinTo(rest).cons(head()));
+    }
+
+    @Override
+    public String toString() {
+        return charSequence.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Segment && toString().equals(obj.toString());
     }
 }

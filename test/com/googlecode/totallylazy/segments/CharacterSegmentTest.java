@@ -3,9 +3,13 @@ package com.googlecode.totallylazy.segments;
 import com.googlecode.totallylazy.Segment;
 import org.junit.Test;
 
+import java.util.NoSuchElementException;
+
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.segments.CharacterSegment.characterSegment;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CharacterSegmentTest {
     @Test
@@ -30,11 +34,30 @@ public class CharacterSegmentTest {
     }
 
     @Test
-    public void ifOffsetIsGreaterOrEqualThanLengthReturnEmpty() throws Exception {
-        assertThat(characterSegment("", 0).isEmpty(), is(true));
-        assertThat(characterSegment("", 1).isEmpty(), is(true));
-        assertThat(characterSegment("a", 1).isEmpty(), is(true));
-        assertThat(characterSegment("a", 2).isEmpty(), is(true));
-        assertThat(characterSegment("a", 0).isEmpty(), is(false));
+    public void tailShouldThrowNoSuchElementException() throws Exception {
+        try {
+            characterSegment("").tail();
+            fail("Should have thrown NoSuchElementException");
+        } catch (NoSuchElementException e) {
+        }
+    }
+
+    @Test
+    public void headShouldThrowNoSuchElementException() throws Exception {
+        try {
+            characterSegment("").head();
+            fail("Should have thrown NoSuchElementException");
+        } catch (NoSuchElementException e) {
+        }
+    }
+
+    @Test
+    public void supportsEquality() throws Exception {
+        assertThat(characterSegment("").equals(characterSegment("")), is(true));
+        assertThat(characterSegment("").equals(characterSegment("d")), is(false));
+        assertThat(characterSegment("d").equals(characterSegment("d")), is(true));
+        assertThat(characterSegment("d").equals(characterSegment("db")), is(false));
+        assertThat(characterSegment("db").equals(characterSegment("db")), is(true));
+
     }
 }
