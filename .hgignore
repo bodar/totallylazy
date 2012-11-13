@@ -8,7 +8,7 @@ build/artifacts
 lib/build
 lib/runtime
 lib/optional
-lib/compilo.jar
+lib/jcompilo.jar
 test/com/googlecode/totallylazy/records/simpledb/AwsCredentials.properties
 .DS_Store
 .idea/misc.xml
