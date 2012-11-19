@@ -30,7 +30,10 @@ import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Functions.and;
+import static com.googlecode.totallylazy.Functions.andPair;
 import static com.googlecode.totallylazy.Functions.or;
+import static com.googlecode.totallylazy.Functions.orPair;
+import static com.googlecode.totallylazy.Functions.xor;
 import static com.googlecode.totallylazy.Lists.indexIn;
 import static com.googlecode.totallylazy.Option.identity;
 import static com.googlecode.totallylazy.Option.none;
@@ -63,6 +66,7 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
+import static com.googlecode.totallylazy.numbers.Numbers.gcd;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.odd;
@@ -194,12 +198,12 @@ public class SequenceTest {
 
     @Test
     public void supportsFoldRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs() throws Exception {
-        assertThat(repeat(false).foldRight(false, and()), is(false));
+        assertThat(repeat(false).foldRight(false, andPair()), is(false));
     }
 
     @Test
     public void supportsReduceRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs() throws Exception {
-        assertThat(repeat(true).reduceRight(or()), is(true));
+        assertThat(repeat(true).reduceRight(orPair()), is(true));
     }
 
     @Test
@@ -771,5 +775,20 @@ public class SequenceTest {
 
         assertThat(empty(String.class).flatOption(), is(Option.<Sequence<String>>none()));
         assertThat(flatOption(empty(String.class)), is(Option.<Sequence<String>>none()));
+    }
+
+    @Test
+    public void logicalAndOfEmptyListIsTrue() throws Exception {
+        assertThat(empty(Boolean.class).reduce(and), is(true));
+    }
+
+    @Test
+    public void logicalOrOfEmptyListIsFalse() throws Exception {
+        assertThat(empty(Boolean.class).reduce(or), is(false));
+    }
+
+    @Test
+    public void logicalXorOfEmptyListIsFalse() throws Exception {
+        assertThat(empty(Boolean.class).reduce(xor), is(false));
     }
 }
