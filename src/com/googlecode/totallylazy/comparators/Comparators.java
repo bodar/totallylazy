@@ -54,15 +54,7 @@ public class Comparators {
     }
 
     public static <T> Comparator<T> comparators(final Sequence<Comparator<? super T>> comparators) {
-        return new Comparator<T>() {
-            public int compare(T m1, T m2) {
-                for (Comparator<? super T> comparator : comparators) {
-                    int comparisonResult = comparator.compare(m1, m2);
-                    if (comparisonResult != 0) return comparisonResult;
-                }
-                return 0;
-            }
-        };
+        return new CompositeComparator<T>(comparators);
     }
 
     public static <T> Comparator<T> comparators(final Comparator<? super T>  first) {
