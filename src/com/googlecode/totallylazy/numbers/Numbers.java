@@ -572,13 +572,10 @@ public class Numbers {
         throw new UnsupportedOperationException();
     }
 
+    public static Function2<Number, Number, Number> gcd = new Gcd();
+
     public static Function2<Number, Number, Number> gcd() {
-        return new Function2<Number, Number, Number>() {
-            @Override
-            public Number call(Number x, Number y) throws Exception {
-                return gcd(x, y);
-            }
-        };
+        return gcd;
     }
 
     public static Number gcd(Number x, Number y) {
