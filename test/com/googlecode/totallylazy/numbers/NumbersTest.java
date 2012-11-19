@@ -30,6 +30,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class NumbersTest {
     @Test
+    public void productOfEmptyListIsOne() throws Exception {
+        assertThat(numbers().reduce(product), NumberMatcher.is(1));
+    }
+
+    @Test
     public void supportLcmOnIntegrals() throws Exception {
         assertThat(Numbers.lcm(3, 5), NumberMatcher.is(15));
         assertThat(Numbers.lcm(3L, 5L), NumberMatcher.is(15L));

@@ -425,20 +425,16 @@ public class Numbers {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
-    public static Function2<Number, Number, Number> multiply = new Function2<Number, Number, Number>() {
-        public Number call(Number multiplicand, Number multiplier) throws Exception {
-            return multiply(multiplicand, multiplier);
-        }
-    };
-
-    public static Function2<Number, Number, Number> multiply() {
-        return multiply;
-    }
-
-    public static Function2<Number, Number, Number> product = multiply;
+    public static Function2<Number, Number, Number> product = new Product();
 
     public static Function2<Number, Number, Number> product() {
         return product;
+    }
+
+    public static Function2<Number, Number, Number> multiply = product;
+
+    public static Function2<Number, Number, Number> multiply() {
+        return multiply;
     }
 
     public static Function1<Number, Number> multiply(final Number multiplicand) {
@@ -593,4 +589,5 @@ public class Numbers {
     public static Number gcd(Number x, Number y) {
         return integralOperatorsFor(x, y).gcd(x, y);
     }
+
 }
