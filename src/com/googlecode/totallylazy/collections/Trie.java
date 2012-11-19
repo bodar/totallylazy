@@ -37,7 +37,9 @@ public class Trie<K, V> implements Value<V> {
 
     public Option<V> get(Segment<K> key) {
         if(key.isEmpty()) return value;
-        return childFor(key).get().get(key.tail());
+        Option<Trie<K, V>> child = childFor(key);
+        if(child.isEmpty()) return none();
+        return child.get().get(key.tail());
     }
 
     public Trie<K, V> put(Segment<K> key, V value) {
@@ -51,6 +53,10 @@ public class Trie<K, V> implements Value<V> {
 
     public V value() {
         return value.get();
+    }
+
+    public boolean isEmpty(){
+        return value.isEmpty() && children.isEmpty();
     }
 
     private Option<Trie<K, V>> childFor(Segment<K> key) {return children.get(key.head());}
