@@ -16,6 +16,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.fibonacci;
+import static com.googlecode.totallylazy.numbers.Numbers.gcd;
 import static com.googlecode.totallylazy.numbers.Numbers.lcm;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
@@ -30,6 +31,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class NumbersTest {
+    @Test
+    public void gcdOfEmptyListIsZero() throws Exception {
+        assertThat(numbers().reduce(gcd), NumberMatcher.is(0));
+    }
+
     @Test
     public void lcmOfEmptyListIsOne() throws Exception {
         assertThat(numbers().reduce(lcm), NumberMatcher.is(1));
@@ -49,9 +55,9 @@ public class NumbersTest {
 
     @Test
     public void supportGcdOnIntegrals() throws Exception {
-        assertThat(Numbers.gcd(54, 24), NumberMatcher.is(6));
-        assertThat(Numbers.gcd(54L, 24L), NumberMatcher.is(6L));
-        assertThat(Numbers.gcd(bigInteger(54), bigInteger(24)), NumberMatcher.is(bigInteger(6)));
+        assertThat(gcd(54, 24), NumberMatcher.is(6));
+        assertThat(gcd(54L, 24L), NumberMatcher.is(6L));
+        assertThat(gcd(bigInteger(54), bigInteger(24)), NumberMatcher.is(bigInteger(6)));
     }
 
     @Test
