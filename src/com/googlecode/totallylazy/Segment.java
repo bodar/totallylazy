@@ -35,8 +35,12 @@ public interface Segment<T> {
             return segment(head, constructors.<T>emptySegment());
         }
 
-        public static <T> Segment<T> segment(T head, Segment<T> empty) {
-            return ASegment.segment(head, empty);
+        public static <T> Segment<T> segment(T head, Segment<T> tail) {
+            return ASegment.segment(head, tail);
+        }
+
+        public static <T> Segment<T> cons(T head, Segment<T> tail) {
+            return segment(head, tail);
         }
 
         public static <T> Segment<T> unique(T head, Segment<T> tail) {
@@ -113,6 +117,14 @@ public interface Segment<T> {
             return functions.<T, Self>cons().flip().apply(t);
         }
 
+        public static Function1<String, Segment<Character>> characters() {
+            return new Function1<String, Segment<Character>>() {
+                @Override
+                public Segment<Character> call(String value) throws Exception {
+                    return constructors.characters(value);
+                }
+            };
+        }
     }
 
     class ASegment<T> extends AbstractSegment<T> {
