@@ -1,5 +1,9 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.callables.And;
+import com.googlecode.totallylazy.callables.Or;
+import com.googlecode.totallylazy.callables.Xor;
+
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
@@ -291,7 +295,11 @@ public class Functions {
         };
     }
 
-    public static Function1<Pair<Boolean, Boolean>, Boolean> and() {
+    public static Function2<Boolean, Boolean, Boolean> and = new And();
+    public static Function2<Boolean, Boolean, Boolean> or = new Or();
+    public static Function2<Boolean, Boolean, Boolean> xor = new Xor();
+
+    public static Function1<Pair<Boolean, Boolean>, Boolean> andPair() {
         return new Function1<Pair<Boolean, Boolean>, Boolean>() {
             @Override
             public Boolean call(Pair<Boolean, Boolean> pair) throws Exception {
@@ -300,7 +308,7 @@ public class Functions {
         };
     }
 
-    public static Function1<Pair<Boolean, Boolean>, Boolean> or() {
+    public static Function1<Pair<Boolean, Boolean>, Boolean> orPair() {
         return new Function1<Pair<Boolean, Boolean>, Boolean>() {
             @Override
             public Boolean call(Pair<Boolean, Boolean> pair) throws Exception {
