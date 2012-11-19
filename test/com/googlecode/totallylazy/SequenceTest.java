@@ -546,6 +546,11 @@ public class SequenceTest {
     }
 
     @Test
+    public void canReduceEmptySequence() {
+        assertThat(numbers().reduce(sum()), NumberMatcher.is(0));
+    }
+
+    @Test
     public void supportsReduceLeft() throws Exception {
         assertThat(numbers(1, 2, 3).reduce(sum()), NumberMatcher.is(6));
         assertThat(numbers(1, 2, 3).reduceLeft(sum()), NumberMatcher.is(6));
