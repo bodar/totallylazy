@@ -16,6 +16,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.fibonacci;
+import static com.googlecode.totallylazy.numbers.Numbers.lcm;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.powersOf;
@@ -30,15 +31,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class NumbersTest {
     @Test
+    public void lcmOfEmptyListIsOne() throws Exception {
+        assertThat(numbers().reduce(lcm), NumberMatcher.is(1));
+    }
+
+    @Test
     public void productOfEmptyListIsOne() throws Exception {
         assertThat(numbers().reduce(product), NumberMatcher.is(1));
     }
 
     @Test
     public void supportLcmOnIntegrals() throws Exception {
-        assertThat(Numbers.lcm(3, 5), NumberMatcher.is(15));
-        assertThat(Numbers.lcm(3L, 5L), NumberMatcher.is(15L));
-        assertThat(Numbers.lcm(bigInteger(3), bigInteger(5)), NumberMatcher.is(bigInteger(15)));
+        assertThat(lcm(3, 5), NumberMatcher.is(15));
+        assertThat(lcm(3L, 5L), NumberMatcher.is(15L));
+        assertThat(lcm(bigInteger(3), bigInteger(5)), NumberMatcher.is(bigInteger(15)));
     }
 
     @Test

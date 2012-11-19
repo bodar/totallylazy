@@ -556,12 +556,7 @@ public class Numbers {
         return maximum;
     }
 
-    public static Function2<Number, Number, Number> lcm = new Function2<Number, Number, Number>() {
-        @Override
-        public Number call(Number x, Number y) throws Exception {
-            return lcm(x, y);
-        }
-    };
+    public static Function2<Number, Number, Number> lcm = new Lcm();
 
     public static Function2<Number, Number, Number> lcm() {
         return lcm;
