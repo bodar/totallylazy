@@ -12,12 +12,16 @@ import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.lessThan;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.BigIntegerOperators.bigInteger;
+import static com.googlecode.totallylazy.numbers.Numbers.NEGATIVE_INFINITY;
+import static com.googlecode.totallylazy.numbers.Numbers.POSITIVE_INFINITY;
 import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.fibonacci;
 import static com.googlecode.totallylazy.numbers.Numbers.gcd;
 import static com.googlecode.totallylazy.numbers.Numbers.lcm;
+import static com.googlecode.totallylazy.numbers.Numbers.maximum;
+import static com.googlecode.totallylazy.numbers.Numbers.minimum;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.powersOf;
@@ -31,6 +35,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class NumbersTest {
+    @Test
+    public void minimumOfEmptyListIsNegativeInfinity() throws Exception {
+        assertThat(numbers().reduce(minimum), NumberMatcher.is(POSITIVE_INFINITY));
+    }
+
+    @Test
+    public void maximumOfEmptyListIsNegativeInfinity() throws Exception {
+        assertThat(numbers().reduce(maximum), NumberMatcher.is(NEGATIVE_INFINITY));
+    }
+
     @Test
     public void gcdOfEmptyListIsZero() throws Exception {
         assertThat(numbers().reduce(gcd), NumberMatcher.is(0));

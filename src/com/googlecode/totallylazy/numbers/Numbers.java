@@ -52,6 +52,8 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 
 public class Numbers {
+    public static final Number POSITIVE_INFINITY = Double.POSITIVE_INFINITY;
+    public static final Number NEGATIVE_INFINITY = Double.NEGATIVE_INFINITY;
     public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
     public static Function1<Number, Integer> intValue = new Function1<Number, Integer>() {
         @Override
@@ -351,10 +353,8 @@ public class Numbers {
 
     public static int compare(Number x, Number y) {
         Operators<Number> operators = operatorsFor(x, y);
-        if (operators.lessThan(x, y))
-            return -1;
-        else if (operators.lessThan(y, x))
-            return 1;
+        if (operators.lessThan(x, y)) return -1;
+        if (operators.lessThan(y, x)) return 1;
         return 0;
     }
 
@@ -505,7 +505,6 @@ public class Numbers {
         }
     }
 
-
     public static Number number(Number value) {
         return reduce(value);
     }
@@ -545,14 +544,15 @@ public class Numbers {
         return add(valueOf(value).get(), minValue);
     }
 
-    public static Callable2<Number, Number, Number> maximum = new Callable2<Number, Number, Number>() {
-        @Override
-        public Number call(Number a, Number b) throws Exception {
-            return compare(a, b) > 0 ? a : b;
-        }
-    };
+    public static Function2<Number, Number, Number> maximum = new Maximum();
 
-    public static Callable2<Number, Number, Number> maximum() {
+    public static Function2<Number, Number, Number> maximum() {
+        return maximum;
+    }
+
+    public static Function2<Number, Number, Number> minimum = new Minimum();
+
+    public static Function2<Number, Number, Number> minimum() {
         return maximum;
     }
 
