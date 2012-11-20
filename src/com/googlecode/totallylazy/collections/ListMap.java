@@ -59,7 +59,7 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
         return listMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
     }
 
-    public static <K, V> ImmutableMap<K, V> listMap(Iterable<Pair<K, V>> pairs) {
+    public static <K, V> ImmutableMap<K, V> listMap(Iterable<? extends Pair<K, V>> pairs) {
         return listMap(reverse(sequence((pairs))));
     }
 

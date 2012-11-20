@@ -2,15 +2,12 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.NodeIterator;
 import com.googlecode.totallylazy.iterators.PoppingIterator;
-import com.googlecode.totallylazy.xml.FunctionResolver;
-import com.googlecode.totallylazy.xml.XPathFunctions;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -25,6 +22,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
@@ -32,11 +30,13 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
+import java.util.Map;
 
 import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.string;
 import static com.googlecode.totallylazy.xml.FunctionResolver.resolver;
+import static java.lang.Integer.getInteger;
 
 public class Xml {
     public static final Escaper DEFAULT_ESCAPER = new Escaper().
@@ -46,7 +46,6 @@ public class Xml {
             withRule('\'', "&#39;").
             withRule('"', "&quot;").
             withRule(Strings.unicodeControlOrUndefinedCharacter(), toXmlEntity());
-    private static final Document DOCUMENT = document("<totallylazy/>");
 
     public static String selectContents(final Node node, final String expression) {
         return contents(internalSelectNodes(node, expression));
@@ -62,7 +61,7 @@ public class Xml {
 
     public static Number selectNumber(final Node node, final String expression) {
         try {
-            return (Number) xpath().evaluate(expression, node, XPathConstants.NUMBER);
+            return (Number) xpathExpression(expression).evaluate(node, XPathConstants.NUMBER);
         } catch (XPathExpressionException e) {
             throw LazyException.lazyException(e);
         }
@@ -70,7 +69,7 @@ public class Xml {
 
     public static boolean matches(final Node node, final String expression) {
         try {
-            return (Boolean) xpath().evaluate(expression, node, XPathConstants.BOOLEAN);
+            return (Boolean) xpathExpression(expression).evaluate(node, XPathConstants.BOOLEAN);
         } catch (XPathExpressionException e) {
             throw LazyException.lazyException(e);
         }
@@ -78,19 +77,19 @@ public class Xml {
 
     private static Sequence<Node> internalSelectNodes(final Node node, final String expression) {
         try {
-            return sequence((NodeList) xpath().evaluate(expression, node, XPathConstants.NODESET));
+            return sequence((NodeList) xpathExpression(expression).evaluate(node, XPathConstants.NODESET));
         } catch (XPathExpressionException e) {
             try {
-                String nodeAsString = (String) xpath().evaluate(expression, node, XPathConstants.STRING);
-                return Sequences.<Node>sequence(createTextNode(nodeAsString));
+                String nodeAsString = (String) xpathExpression(expression).evaluate(node, XPathConstants.STRING);
+                return Sequences.<Node>sequence(documentFor(node).createTextNode(nodeAsString));
             } catch (XPathExpressionException ignore) {
                 throw LazyException.lazyException(e);
             }
         }
     }
 
-    public static Text createTextNode(String value) {
-        return DOCUMENT.createTextNode(value);
+    private static Document documentFor(Node node) {
+        return node instanceof Document ? (Document) node : node.getOwnerDocument();
     }
 
     public static Option<Node> selectNode(final Node node, final String expression) {
@@ -105,10 +104,36 @@ public class Xml {
         return selectElements(node, expression).headOption();
     }
 
-    public static XPath xpath() {
+    private static ThreadLocal<XPath> xpath = new ThreadLocal<XPath>() {
+        @Override
+        protected XPath initialValue() {
+            return internalXpath();
+        }
+    };
+
+    private static XPath internalXpath() {
         XPath xPath = XPathFactory.newInstance().newXPath();
         xPath.setXPathFunctionResolver(resolver);
         return xPath;
+    }
+
+    public static XPath xpath() {
+        return xpath.get();
+    }
+
+    private static ThreadLocal<Map<String, XPathExpression>> expressions = new ThreadLocal<Map<String, XPathExpression>>() {
+        @Override
+        protected Map<String, XPathExpression> initialValue() {
+            return Maps.lruMap(getInteger("totallylazy.xpath.cache.size", 1000));
+        }
+    };
+
+    private static XPathExpression xpathExpression(String expression) throws XPathExpressionException {
+        Map<String, XPathExpression> expressionMap = expressions.get();
+        if (!expressionMap.containsKey(expression)) {
+            expressionMap.put(expression, xpath().compile(expression));
+        }
+        return expressionMap.get(expression);
     }
 
     public static Sequence<Node> sequence(final NodeList nodes) {
@@ -262,6 +287,11 @@ public class Xml {
     @SuppressWarnings("unchecked")
     public static String format(final Node node) throws Exception {
         return format(node, Pair.<String, Object>pair("indent-number", 4));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static String formatBasic(final Node node) throws Exception {
+        return format(node, new Pair[0]);
     }
 
     public static String format(final Node node, final Pair<String, Object>... attributes) throws Exception {
