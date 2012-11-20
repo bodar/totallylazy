@@ -238,6 +238,12 @@ public class Maps {
         };
     }
 
+    public static <K, V> Map<K,V> lruMap(final int maximumElements) {
+        return new LinkedHashMap<K,V>(maximumElements, 1f, true) {
+            protected boolean removeEldestEntry(Map.Entry<K, V> eldest) { return size() > maximumElements; }
+        };
+    }
+
     public static class PairEntry<K, V> implements Map.Entry<K, V> {
         private final Pair<K, V> pair;
 
