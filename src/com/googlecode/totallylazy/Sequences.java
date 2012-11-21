@@ -806,4 +806,16 @@ public class Sequences {
             }
         };
     }
+
+    public static <T, C extends Segment<T>> C joinTo(Iterable<? extends T> iterable, C rest) {
+        return Iterators.joinTo(iterable.iterator(), rest);
+    }
+
+    public static <T> T index(Iterable<? extends T> iterable, int index) {
+        return Iterators.index(iterable.iterator(), index);
+    }
+
+    public static <T> int indexOf(Iterable<? extends T> iterable, T instance) {
+        return Iterators.indexOf(iterable.iterator(), instance);
+    }
 }

@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.collections.ImmutableList;
+import com.googlecode.totallylazy.collections.Indexed;
 
 import java.lang.reflect.Array;
 import java.util.Comparator;
@@ -17,7 +18,7 @@ import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, ImmutableCollection<T>, Applicative<T>, Foldable<T> {
+public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, ImmutableCollection<T>, Applicative<T>, Foldable<T>, Indexed<T> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
@@ -272,7 +273,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
 
     @Override
     public <C extends Segment<T>> C joinTo(C rest) {
-        throw new UnsupportedOperationException();
+        return Sequences.joinTo(this, rest);
     }
 
     public Sequence<T> cons(final T t) {
@@ -409,5 +410,15 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
 
     public Option<Sequence<T>> flatOption() {
         return Sequences.flatOption(this);
+    }
+
+    @Override
+    public T index(int i) throws IndexOutOfBoundsException {
+        return Sequences.index(this, i);
+    }
+
+    @Override
+    public int indexOf(T t) {
+        return Sequences.indexOf(this, t);
     }
 }

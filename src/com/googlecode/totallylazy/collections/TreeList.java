@@ -102,7 +102,7 @@ public class TreeList<T> implements ImmutableList<T>, RandomAccess {
 
     @Override
     public TreeList<T> remove(T value) {
-        throw new UnsupportedOperationException();
+        return treeList(toSequence().remove(value));
     }
 
     @Override
@@ -137,7 +137,7 @@ public class TreeList<T> implements ImmutableList<T>, RandomAccess {
 
     @Override
     public <C extends Segment<T>> C joinTo(C rest) {
-        throw new UnsupportedOperationException();
+        return toSequence().joinTo(rest);
     }
 
     @Override
@@ -162,7 +162,7 @@ public class TreeList<T> implements ImmutableList<T>, RandomAccess {
 
     @Override
     public int indexOf(T t) {
-        throw new UnsupportedOperationException();
+        return toSequence().indexOf(t);
     }
 
     @Override
