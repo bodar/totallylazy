@@ -36,6 +36,7 @@ import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 
 public class Iterators {
@@ -415,5 +416,28 @@ public class Iterators {
 
     public static <A, B> Iterator<A> unfoldRight(Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, B seed) {
         return new UnfoldRightIterator<A, B>(callable, seed);
+    }
+
+    public static <T, C extends Segment<T>> C joinTo(Iterator<? extends T> iterator, C rest) {
+        while (iterator.hasNext()) {
+            rest = cast(rest.cons(iterator.next()));
+        }
+        return rest;
+    }
+
+    public static <T> T index(Iterator<? extends T> iterator, int index) {
+        for (int i = 0; iterator.hasNext(); i++) {
+            T next = iterator.next();
+            if(i == index) return next;
+        }
+        throw new IndexOutOfBoundsException();
+    }
+
+    public static <T> int indexOf(Iterator<? extends T> iterator, T instance) {
+        for (int i = 0; iterator.hasNext(); i++) {
+            T next = iterator.next();
+            if(instance.equals(next)) return i;
+        }
+        return -1;
     }
 }

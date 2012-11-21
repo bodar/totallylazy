@@ -791,4 +791,10 @@ public class SequenceTest {
     public void logicalXorOfEmptyListIsFalse() throws Exception {
         assertThat(empty(Boolean.class).reduce(xor), is(false));
     }
+
+    @Test
+    public void supportsIndexAccess() {
+        assertThat(sequence("a", "b", "c").index(1), is("b"));
+        assertThat(sequence("a", "b", "c").indexOf("c"), is(2));
+    }
 }
