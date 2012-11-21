@@ -1,9 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Combiner;
-import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.CombinerFunction;
 
-public class Gcd extends Function2<Number, Number, Number> implements Combiner<Number> {
+public class Gcd extends CombinerFunction<Number> {
     @Override
     public Number call(Number x, Number y) throws Exception {
         return Numbers.gcd(x, y);
