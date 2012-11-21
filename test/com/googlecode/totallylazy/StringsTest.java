@@ -6,8 +6,10 @@ import java.io.File;
 
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.write;
+import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.bytes;
+import static com.googlecode.totallylazy.Strings.join;
 import static com.googlecode.totallylazy.Strings.lines;
 import static com.googlecode.totallylazy.Strings.replace;
 import static com.googlecode.totallylazy.Strings.replaceAll;
@@ -22,6 +24,12 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 
 public class StringsTest {
+    @Test
+    public void canJoinStrings() throws Exception {
+        assertThat(sequence("foo", " bar ", "baz").reduce(join).toString(), is("foo bar baz"));
+        assertThat(empty(CharSequence.class).reduce(join).toString(), is(""));
+    }
+
     @Test
     public void supportsToString() throws Exception {
         File file = temporaryFile();

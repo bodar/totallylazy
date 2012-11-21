@@ -1,9 +1,10 @@
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.Associative;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Identity;
 
-public class Gcd extends Function2<Number, Number, Number> implements Identity<Number> {
+public class Gcd extends Function2<Number, Number, Number> implements Identity<Number>, Associative<Number> {
     @Override
     public Number call(Number x, Number y) throws Exception {
         return Numbers.gcd(x, y);

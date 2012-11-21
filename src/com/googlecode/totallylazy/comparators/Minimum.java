@@ -1,8 +1,9 @@
 package com.googlecode.totallylazy.comparators;
 
+import com.googlecode.totallylazy.Associative;
 import com.googlecode.totallylazy.Function2;
 
-public class Minimum<T extends Comparable<? super T>> extends Function2<T, T, T> {
+public class Minimum<T extends Comparable<? super T>> extends Function2<T, T, T> implements Associative<T> {
     public T call(T a, T b) throws Exception {
         return minimum(a, b);
     }
