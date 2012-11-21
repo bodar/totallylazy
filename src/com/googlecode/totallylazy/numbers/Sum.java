@@ -1,9 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Combiner;
-import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.CombinerFunction;
 
-public class Sum extends Function2<Number, Number, Number> implements Combiner<Number> {
+public class Sum extends CombinerFunction<Number> {
     public Number call(Number a, Number b) {
         return Numbers.add(a, b);
     }
