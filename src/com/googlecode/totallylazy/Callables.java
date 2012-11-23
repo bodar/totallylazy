@@ -14,7 +14,7 @@ import static com.googlecode.totallylazy.Option.identity;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callables {
-    public static <T> Function1<? extends Value<T>, T> value() {
+    public static <T> Function1<Value<T>, T> value() {
         return new Function1<Value<T>, T>() {
             public T call(Value<T> value) throws Exception {
                 return value.value();
@@ -22,7 +22,7 @@ public final class Callables {
         };
     }
 
-    public static <T> Function1<? extends Value<T>, T> value(Class<T> aClass) {
+    public static <T> Function1<Value<T>, T> value(Class<T> aClass) {
         return value();
     }
 
