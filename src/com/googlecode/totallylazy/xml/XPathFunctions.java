@@ -1,11 +1,13 @@
 package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.regex.Regex;
+import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.totallylazy.xml.FunctionResolver;
 import com.googlecode.totallylazy.xml.NodeArrayList;
 import org.w3c.dom.Node;
@@ -50,7 +52,16 @@ public class XPathFunctions {
         return new NodeArrayList<Text>(Xml.sequence(input).flatMap(split(pattern)));
     }
 
-
+    @XPathFunction("time-in-millis")
+    public static Long timeInMillis(NodeList dates) {
+        Option<String> date = Xml.textContents(dates).headOption();
+        return date.map(new Function1<String, Long>() {
+            @Override
+            public Long call(String s) throws Exception {
+                return Dates.parse(s).getTime();
+            }
+        }).getOrNull();
+    }
 
 
 
