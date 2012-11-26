@@ -63,7 +63,16 @@ public class XPathFunctions {
         }).getOrNull();
     }
 
-
+    @XPathFunction("date-in-millis")
+    public static Long dateInMillis(NodeList dates) {
+        Option<String> date = Xml.textContents(dates).headOption();
+        return date.map(new Function1<String, Long>() {
+            @Override
+            public Long call(String s) throws Exception {
+                return Dates.stripTime(Dates.parse(s)).getTime();
+            }
+        }).getOrNull();
+    }
 
     private static Function1<Node, Sequence<Text>> split(final String pattern) {
         return new Function1<Node, Sequence<Text>>() {
