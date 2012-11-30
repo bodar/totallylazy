@@ -2,6 +2,8 @@ package com.googlecode.totallylazy.collections;
 
 import org.junit.Test;
 
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.ImmutableSortedSet.constructors.sortedSet;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
@@ -51,5 +53,12 @@ public class ImmutableSortedSetTest {
     public void canJoin() throws Exception {
         ImmutableSortedSet<Integer> sortedSet = sortedSet(3, 2, 1, 2).joinTo(sortedSet(4, 1, 5, 2));
         assertThat(sortedSet, hasExactly(1, 2, 3, 4, 5));
+    }
+
+    @Test
+    public void supportsHeadOption() {
+        assertThat(sortedSet(1, 2, 3).headOption(), is(some(2)));
+        ImmutableSortedSet<Integer> empty = ImmutableSortedSet.constructors.<Integer>sortedSet();
+        assertThat(empty.headOption(), is(none(Integer.class)));
     }
 }

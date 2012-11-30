@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Foldable;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, ImmutableCollection<T>, Indexed<T>, Foldable<T> {
@@ -101,6 +102,14 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, I
             return Segment.functions.cons();
         }
 
+        public static <T> Function<ImmutableList<T>> emptyImmutableList(Class<T> type) {
+            return emptyImmutableList();
+        }
+
+        public static <T> Function<ImmutableList<T>> emptyImmutableList() {
+            return returns(ImmutableList.constructors.<T>empty());
+        }
+
         public static <T> Function1<ImmutableList<T>, ImmutableList<T>> cons(T t) {
             return Segment.functions.cons(t);
         }
@@ -116,6 +125,18 @@ public interface ImmutableList<T> extends Iterable<T>, Segment<T>, Functor<T>, I
 
         public static <T> Function1<ImmutableList<T>, ImmutableList<T>> tail(Class<T> aClass) {
             return tail();
+        }
+
+        public static <T> Function1<ImmutableList<T>, Option<T>> headOption(Class<T> aClass) {
+            return headOption();
+        }
+        public static <T> Function1<ImmutableList<T>, Option<T>> headOption() {
+            return new Function1<ImmutableList<T>, Option<T>>() {
+                @Override
+                public Option<T> call(ImmutableList<T> list) throws Exception {
+                    return list.headOption();
+                }
+            };
         }
     }
 }

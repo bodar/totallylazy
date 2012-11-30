@@ -13,6 +13,7 @@ import com.googlecode.totallylazy.iterators.SegmentIterator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class TreeSet<T> implements ImmutableSortedSet<T> {
@@ -98,6 +99,13 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
     @Override
     public T head() throws NoSuchElementException {
         return map.head().first();
+    }
+
+    @Override
+    public Option<T> headOption() {
+        return isEmpty()
+                ? Option.<T>none()
+                : some(head());
     }
 
     @Override

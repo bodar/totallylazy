@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -10,16 +9,16 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.Count.count;
+import static com.googlecode.totallylazy.collections.ImmutableList.constructors.empty;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
 import static com.googlecode.totallylazy.collections.ImmutableSortedSet.constructors.sortedSet;
-import static com.googlecode.totallylazy.collections.TreeList.treeList;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static com.googlecode.totallylazy.matchers.NumberMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
@@ -165,4 +164,11 @@ public class PersistentListTest {
         ImmutableSortedSet<Integer> sortedSet = list(2, 1, 4, 3).joinTo(sortedSet(3, 4));
         assertThat(sortedSet, hasExactly(1, 2, 3, 4));
     }
+
+    @Test
+    public void supportsHeadOption() {
+        assertThat(list(1, 2, 3).headOption(), is(some(1)));
+        assertThat(empty(Integer.class).headOption(), is(none(Integer.class)));
+    }
+
 }

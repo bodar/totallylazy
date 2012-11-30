@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -81,6 +82,13 @@ public class TreeList<T> implements ImmutableList<T>, RandomAccess {
     public T head() throws NoSuchElementException {
         if(map.isEmpty()) throw new NoSuchElementException();
         return map.index(0).second();
+    }
+
+    @Override
+    public Option<T> headOption() {
+        return isEmpty()
+                ? Option.<T>none()
+                : some(head());
     }
 
     @Override

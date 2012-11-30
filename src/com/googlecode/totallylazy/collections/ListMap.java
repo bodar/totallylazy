@@ -8,7 +8,6 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -17,9 +16,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Sequences.filter;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
 import static com.googlecode.totallylazy.collections.ImmutableList.constructors.reverse;
@@ -98,6 +95,11 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
     @Override
     public Pair<K, V> head() throws NoSuchElementException {
         return list.head();
+    }
+
+    @Override
+    public Option<Pair<K, V>> headOption() {
+        return list.headOption();
     }
 
     @Override
