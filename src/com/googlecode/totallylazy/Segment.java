@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -15,6 +16,8 @@ public interface Segment<T> {
     boolean isEmpty();
 
     T head() throws NoSuchElementException;
+
+    Option<T> headOption();
 
     Segment<T> tail() throws NoSuchElementException;
 
@@ -125,6 +128,15 @@ public interface Segment<T> {
                 }
             };
         }
+
+        public static <T> Function1<Segment<T>, Option<T>> headOption() {
+            return new Function1<Segment<T>, Option<T>>() {
+                @Override
+                public Option<T> call(Segment<T> segment) throws Exception {
+                    return segment.headOption();
+                }
+            };
+        }
     }
 
     class ASegment<T> extends AbstractSegment<T> {
@@ -151,6 +163,11 @@ public interface Segment<T> {
         }
 
         @Override
+        public Option<T> headOption() {
+            return some(head);
+        }
+
+        @Override
         public Segment<T> tail() throws NoSuchElementException {
             return tail;
         }
@@ -169,6 +186,12 @@ public interface Segment<T> {
         }
 
         @Override
+        public Option<T> headOption() {
+            return none();
+        }
+
+
+        @Override
         public Segment<T> tail() throws NoSuchElementException {
             throw new NoSuchElementException();
         }
@@ -178,5 +201,4 @@ public interface Segment<T> {
             return rest;
         }
     }
-
 }

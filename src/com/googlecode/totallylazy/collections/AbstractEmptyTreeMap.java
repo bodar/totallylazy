@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.None;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
@@ -13,6 +14,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.None.none;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> implements TreeMap<K, V> {
@@ -148,6 +150,11 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     @Override
     public Pair<K, V> head() throws NoSuchElementException {
         throw new NoSuchElementException();
+    }
+
+    @Override
+    public Option<Pair<K, V>> headOption() {
+        return none();
     }
 
     @Override

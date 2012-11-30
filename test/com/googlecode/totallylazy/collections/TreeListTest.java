@@ -1,9 +1,11 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Option;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.Count.count;
+import static com.googlecode.totallylazy.collections.ImmutableList.constructors.empty;
 import static com.googlecode.totallylazy.collections.TreeList.treeList;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -39,6 +41,13 @@ public class TreeListTest {
         assertThat(treeList("Dan", "Matt", "Raymond", "Tom"), hasExactly("Dan", "Matt", "Raymond", "Tom"));
         assertThat(treeList("Dan", "Matt", "Raymond", "Tom", "Stu"), hasExactly("Dan", "Matt", "Raymond", "Tom", "Stu"));
     }
+
+    @Test
+    public void supportsHeadOption() {
+        assertThat(treeList("Dan", "Matt").headOption(), is(Option.some("Dan")));
+        assertThat(empty(String.class).headOption(), is(Option.none(String.class)));
+    }
+
 
     @Test
     public void supportsRemoveAll() throws Exception {

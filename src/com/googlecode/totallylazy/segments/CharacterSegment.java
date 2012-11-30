@@ -1,9 +1,12 @@
 package com.googlecode.totallylazy.segments;
 
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
 
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.None.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class CharacterSegment extends AbstractSegment<Character> {
@@ -29,6 +32,13 @@ public class CharacterSegment extends AbstractSegment<Character> {
         } catch (IndexOutOfBoundsException e) {
             throw new NoSuchElementException();
         }
+    }
+
+    @Override
+    public Option<Character> headOption() {
+        return isEmpty()
+                ? none(Character.class)
+                : some(head());
     }
 
     @Override

@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.None.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -68,6 +70,11 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         @Override
         public T head() {
             throw new NoSuchElementException();
+        }
+
+        @Override
+        public Option<T> headOption() {
+            return none();
         }
 
         @Override
@@ -159,6 +166,11 @@ public abstract class PersistentList<T> implements ImmutableList<T> {
         @Override
         public T head() {
             return head;
+        }
+
+        @Override
+        public Option<T> headOption() {
+            return some(head);
         }
 
         @Override

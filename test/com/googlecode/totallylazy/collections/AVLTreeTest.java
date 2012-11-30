@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Files;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Maps;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeCallable;
@@ -15,11 +16,11 @@ import org.junit.Test;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -56,6 +57,19 @@ public class AVLTreeTest {
     public void balancesDeletion() throws Exception {
         final ImmutableMap<Integer, Object> map = avlTree(0, null).put(1, null).put(2, null).put(3, null).put(4, null).put(5, null).put(6, null);
         assertThat(map.remove(3).toString(), is("((( 0 ) 1 ) 2 (( 4 ) 5 ( 6 )))"));
+    }
+
+    @Test
+    public void supportsHeadOption() {
+        assertThat(avlTree(1, "A").
+                cons(pair(2, "B")).
+                cons(pair(3, "C")).headOption(),
+                is(some(pair(2, "B"))));
+
+        AVLTree<Integer, String> empty = AVLTree.constructors.factory.create(null);
+        assertThat(
+                empty.headOption(),
+                is(Option.<Pair<Integer, String>>none()));
     }
 
     @Test
