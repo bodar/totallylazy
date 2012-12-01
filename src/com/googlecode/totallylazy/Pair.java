@@ -115,6 +115,26 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
     @Override
     @SuppressWarnings("unchecked")
     public <NewF> Pair<NewF, S> map(final Callable1<? super F, ? extends NewF> callable) {
-        return Pair.pair(first.map(callable), second);
+        return pair(first.map(callable), second);
+    }
+
+    static class functions{
+        public static <F,S> Function1<S, Pair<F, S>> toPairWithFirst(final F first) {
+            return new Function1<S, Pair<F, S>>() {
+                @Override
+                public Pair<F, S> call(S second) throws Exception {
+                    return pair(first, second);
+                }
+            };
+        }
+
+        public static <F,S> Function1<F, Pair<F, S>> toPairWithSecond(final S second) {
+            return new Function1<F, Pair<F, S>>() {
+                @Override
+                public Pair<F, S> call(F first) throws Exception {
+                    return pair(first, second);
+                }
+            };
+        }
     }
 }
