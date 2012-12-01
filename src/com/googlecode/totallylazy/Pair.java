@@ -118,7 +118,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
         return pair(first.map(callable), second);
     }
 
-    static class functions{
+    public static class functions{
         public static <F,S> Function1<S, Pair<F, S>> toPairWithFirst(final F first) {
             return new Function1<S, Pair<F, S>>() {
                 @Override
