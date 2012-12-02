@@ -6,11 +6,13 @@ import org.junit.Test;
 
 import java.util.Date;
 
+import static com.googlecode.totallylazy.Functions.identity;
 import static com.googlecode.totallylazy.Predicates.between;
 import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.or;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.matcher;
 import static org.junit.Assert.assertThat;
 
@@ -45,7 +47,14 @@ public class RandomsTest {
 
     @Test
     public void values() {
-        assertThat(Randoms.values(1,2,3,4,5).take(TESTS), matcher(Predicates.<Integer>forAll(in(1,2,3,4,5))));
+        assertThat(Randoms.values(1, 2, 3, 4, 5).take(TESTS), matcher(Predicates.<Integer>forAll(in(1, 2, 3, 4, 5))));
+    }
+
+    @Test
+    public void takeFromValues() {
+        assertThat(
+                Randoms.takeFromValues(1, 2, 3, 4, 5).take(10).sortBy(identity(Integer.class)),
+                hasExactly(1, 2, 3, 4, 5));
     }
 
     @Test
