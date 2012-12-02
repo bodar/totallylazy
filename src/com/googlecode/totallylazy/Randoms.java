@@ -2,10 +2,10 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
-import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.totallylazy.time.Days;
 
 import java.util.Date;
+import java.util.List;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -67,6 +67,22 @@ public class Randoms {
             @Override
             protected T getNext() throws Exception {
                 return values[random.nextInt(values.length)];
+            }
+        });
+    }
+
+    public static <T> Sequence<T> takeFromValues(final T... values) {
+        return takeFromValues(sequence(values));
+    }
+
+    public static <T> Sequence<T> takeFromValues(final Iterable<T> values) {
+        final List<T> list = sequence(values).toList();
+        return Sequences.forwardOnly(new StatefulIterator<T>() {
+            @Override
+            protected T getNext() throws Exception {
+                if(list.isEmpty()) return finished();
+                int index = random.nextInt(list.size());
+                return list.remove(index);
             }
         });
     }
