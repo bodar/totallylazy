@@ -70,6 +70,11 @@ public class Some<T> extends Option<T> {
     }
 
     @Override
+    public Sequence<T> join(Iterable<? extends T> iterable) {
+        return Sequences.cons(value, iterable);
+    }
+
+    @Override
     public boolean contains(T instance) {
         return value.equals(instance);
     }
