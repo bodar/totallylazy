@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class None<T> extends Option<T>{
@@ -69,6 +70,11 @@ public class None<T> extends Option<T>{
     @Override
     public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
         return seed;
+    }
+
+    @Override
+    public Sequence<T> join(final Iterable<? extends T> iterable){
+        return sequence(iterable);
     }
 
     @Override

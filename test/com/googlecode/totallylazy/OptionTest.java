@@ -16,7 +16,9 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.OptionTest.Person.person;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.size;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.number;
@@ -73,6 +75,12 @@ public class OptionTest {
         assertThat(applicate(applicate(some(person()), some("Dan")), some(35)), is(some(person("Dan", 35))));
         assertThat(applicate(applicate(some(person()), some("Ray")), none(Integer.class)), is(none(Person.class)));
         assertThat(applicate(applicate(some(person()), none(String.class)), some(100)), is(none(Person.class)));
+    }
+
+    @Test
+    public void supportsJoin() {
+        assertThat(some(1).join(sequence(2, 3)), hasExactly(1, 2, 3));
+        assertThat(none(Integer.class).join(sequence(1, 2, 3)), hasExactly(1, 2, 3));
     }
 
     static class Person {
