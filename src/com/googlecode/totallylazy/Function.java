@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.callables.LazyCallable;
 import com.googlecode.totallylazy.callables.SleepyCallable;
 import com.googlecode.totallylazy.callables.TimeCallable;
+import com.googlecode.totallylazy.callables.TimeReport;
 
 import java.util.concurrent.Callable;
 
@@ -39,6 +40,10 @@ public abstract class Function<A> implements Callable<A>, Runnable, Functor<A>, 
 
     public Function<A> time() {
         return TimeCallable.time(this);
+    }
+
+    public TimeReport time(int numberOfCalls) {
+        return TimeReport.time(numberOfCalls, this);
     }
 
     @Override
