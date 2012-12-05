@@ -38,4 +38,22 @@ public class Arrays {
     public static <T> boolean equalTo(Third<T> ts, Iterable<?> obj) {
         throw new UnsupportedOperationException();
     }
+
+    public static <T> boolean isEmpty(T[] array) {return array.length == 0;}
+
+    public static <T> T head(T[] array) {
+        return array[0];
+    }
+
+    public static <T> T[] tail(T[] array) {
+        return java.util.Arrays.copyOfRange(array, 1, array.length);
+    }
+
+    public static Character[] characters(String value) {
+        Character[] result = new Character[value.length()];
+        for (int i = 0; i < value.length(); i++) {
+            result[i] = value.charAt(i);
+        }
+        return result;
+    }
 }
