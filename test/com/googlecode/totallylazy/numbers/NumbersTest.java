@@ -33,16 +33,19 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sumIterable;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertSame;
 
 public class NumbersTest {
     @Test
     public void minimumOfEmptyListIsNegativeInfinity() throws Exception {
         assertThat(numbers().reduce(minimum), NumberMatcher.is(POSITIVE_INFINITY));
+        assertSame(minimum, minimum());
     }
 
     @Test
     public void maximumOfEmptyListIsNegativeInfinity() throws Exception {
         assertThat(numbers().reduce(maximum), NumberMatcher.is(NEGATIVE_INFINITY));
+        assertSame(maximum, maximum());
     }
 
     @Test
