@@ -553,7 +553,7 @@ public class Numbers {
     public static Function2<Number, Number, Number> minimum = new Minimum();
 
     public static Function2<Number, Number, Number> minimum() {
-        return maximum;
+        return minimum;
     }
 
     public static Function2<Number, Number, Number> lcm = new Lcm();
