@@ -108,7 +108,7 @@ public class NumbersTest {
         assertThat(numbers(1, 2, 3).reduce(average()), NumberMatcher.is(2));
         assertThat(numbers(1, 2).reduce(average()), NumberMatcher.is(1.5));
         assertThat(numbers(1).reduce(average()), NumberMatcher.is(1));
-        assertThat(numbers().fold(0, average()), NumberMatcher.is(0)); // You can't reduce an empty list
+        assertThat(numbers().reduce(average()), NumberMatcher.is(0));
     }
 
     @Test
