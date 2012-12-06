@@ -1,6 +1,9 @@
 package com.googlecode.totallylazy.time;
 
+import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.comparators.Maximum;
+import com.googlecode.totallylazy.comparators.Minimum;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -160,5 +163,14 @@ public class Dates {
         calendar.set(MILLISECOND, 0);
         return calendar.getTime();
     }
+
+    public static CombinerFunction<Date> maximum() {
+        return Maximum.maximum(Dates.MIN_VALUE);
+    }
+
+    public static CombinerFunction<Date> minimum() {
+        return Minimum.minimum(Dates.MAX_VALUE);
+    }
+
 
 }
