@@ -1,10 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Combiner;
 import com.googlecode.totallylazy.CombinerFunction;
-import com.googlecode.totallylazy.Function2;
 
-public class Maximum extends CombinerFunction<Number>{
+public class Maximum extends CombinerFunction<Number> implements com.googlecode.totallylazy.comparators.Maximum<Number> {
     @Override
     public Number call(Number a, Number b) throws Exception {
         return Numbers.compare(a, b) > 0 ? a : b;
