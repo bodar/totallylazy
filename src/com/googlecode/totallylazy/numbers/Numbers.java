@@ -544,21 +544,21 @@ public class Numbers {
         return add(valueOf(value).get(), minValue);
     }
 
-    public static Function2<Number, Number, Number> maximum = new Maximum();
+    public static Maximum maximum = new Maximum();
 
-    public static Function2<Number, Number, Number> maximum() {
+    public static Maximum maximum() {
         return maximum;
     }
 
-    public static Function2<Number, Number, Number> minimum = new Minimum();
+    public static Minimum minimum = new Minimum();
 
-    public static Function2<Number, Number, Number> minimum() {
+    public static Minimum minimum() {
         return minimum;
     }
 
-    public static Function2<Number, Number, Number> lcm = new Lcm();
+    public static Lcm lcm = new Lcm();
 
-    public static Function2<Number, Number, Number> lcm() {
+    public static Lcm lcm() {
         return lcm;
     }
 
@@ -572,9 +572,9 @@ public class Numbers {
         throw new UnsupportedOperationException();
     }
 
-    public static Function2<Number, Number, Number> gcd = new Gcd();
+    public static Gcd gcd = new Gcd();
 
-    public static Function2<Number, Number, Number> gcd() {
+    public static Gcd gcd() {
         return gcd;
     }
 

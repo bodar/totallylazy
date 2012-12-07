@@ -1,10 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Associative;
-import com.googlecode.totallylazy.Function2;
-import com.googlecode.totallylazy.Identity;
+import com.googlecode.totallylazy.CombinerFunction;
 
-public class Minimum extends Function2<Number, Number, Number> implements Identity<Number>, Associative<Number> {
+public class Minimum extends CombinerFunction<Number> implements com.googlecode.totallylazy.comparators.Minimum<Number> {
     @Override
     public Number call(Number a, Number b) throws Exception {
         return Numbers.compare(a, b) > 0 ? b : a;
