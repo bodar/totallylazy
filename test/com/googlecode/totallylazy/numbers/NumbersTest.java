@@ -37,6 +37,11 @@ import static org.junit.Assert.assertSame;
 
 public class NumbersTest {
     @Test
+    public void supportsDelegatingNumber() throws Exception {
+        assertThat(Numbers.add(new DelegatingNumber(3) {}, new DelegatingNumber(3) {}), NumberMatcher.is(6));
+    }
+
+    @Test
     public void supportsMinimum() throws Exception {
         assertThat(numbers(2,1,3).reduce(minimum), NumberMatcher.is(1));
         assertThat(numbers(2,1).reduce(minimum), NumberMatcher.is(1));
@@ -114,11 +119,11 @@ public class NumbersTest {
 
     @Test
     public void supportsAverage() throws Exception {
-        assertThat(numbers(1, 2, 3, 4).reduce(average()), NumberMatcher.is(divide(5,2)));
-        assertThat(numbers(1, 2, 3).reduce(average()), NumberMatcher.is(2));
-        assertThat(numbers(1, 2).reduce(average()), NumberMatcher.is(1.5));
-        assertThat(numbers(1).reduce(average()), NumberMatcher.is(1));
-        assertThat(numbers().reduce(average()), NumberMatcher.is(0));
+        assertThat(numbers(1, 2, 3, 4).reduce(average), NumberMatcher.is(divide(5, 2)));
+        assertThat(numbers(1, 2, 3).reduce(average), NumberMatcher.is(2));
+        assertThat(numbers(1, 2).reduce(average), NumberMatcher.is(1.5));
+        assertThat(numbers(1).reduce(average), NumberMatcher.is(1));
+        assertThat(numbers().reduce(average), NumberMatcher.is(0));
     }
 
     @Test
