@@ -4,21 +4,21 @@ import com.googlecode.totallylazy.CombinerFunction;
 
 import static com.googlecode.totallylazy.numbers.Numbers.isZero;
 
-public class Average extends CombinerFunction<java.lang.Number> {
-    public java.lang.Number call(java.lang.Number average, java.lang.Number value) {
+public class Average extends CombinerFunction<Number> {
+    public Number call(Number average, Number value) {
         return weighted(average).combine(weighted(value));
     }
 
     @Override
-    public java.lang.Number identity() {
+    public Number identity() {
         return weighted(0);
     }
 
-    public static Weighted weighted(java.lang.Number number, java.lang.Number count) {
+    public static Weighted weighted(Number number, Number count) {
         return new Weighted(number, count);
     }
 
-    public static Weighted weighted(java.lang.Number number) {
+    public static Weighted weighted(Number number) {
         if (number instanceof Weighted) return (Weighted) number;
         return weighted(number, isZero(number) ? 0 : 1);
     }
@@ -26,14 +26,14 @@ public class Average extends CombinerFunction<java.lang.Number> {
     private static class Weighted extends Num {
         private final Num weight;
 
-        private Weighted(java.lang.Number value, java.lang.Number weight) {
+        private Weighted(Number value, Number weight) {
             super(value);
             this.weight = num(weight);
         }
 
         public Weighted combine(Weighted value) {
-            Num newCount = weight.add(value.weight);
-            return weighted(sum().add(value.sum()).divide(newCount), newCount);
+            Num newWeight = weight.add(value.weight);
+            return weighted(sum().add(value.sum()).divide(newWeight), newWeight);
         }
 
         private Num sum() {
