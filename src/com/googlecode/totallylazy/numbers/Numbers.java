@@ -235,11 +235,13 @@ public class Numbers {
         if (numberClass == Ratio.class) return RatioOperators.Instance;
         if (numberClass == Float.class) return FloatOperators.Instance;
         if (numberClass == Double.class) return DoubleOperators.Instance;
-        throw new UnsupportedOperationException("Unsupported number class " + numberClass);
+        if (numberClass == Double.class) return DoubleOperators.Instance;
+        throw new UnsupportedOperationException("Unsupported number " + numberClass);
     }
 
     public static Operators<Number> operatorsFor(Number number) {
-        return operatorsFor(number instanceof DelegatingNumber? ((DelegatingNumber) number).number().getClass() : number.getClass());
+        if(number instanceof DelegatingNumber) return new DelegatingOperator(operatorsFor(((DelegatingNumber) number).value()));
+        return operatorsFor(number.getClass());
     }
 
     public static Operators<Number> operatorsFor(Number a, Number b) {
@@ -381,8 +383,10 @@ public class Numbers {
         };
     }
 
-    public static Function2<Number, Number, Number> average() {
-        return new Average();
+
+    public static final Average average = new Average();
+    public static Average average() {
+        return average;
     }
 
     public static final Sum sum = new Sum();
