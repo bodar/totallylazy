@@ -2,45 +2,42 @@ package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.CombinerFunction;
 
-import static com.googlecode.totallylazy.numbers.Numbers.add;
-import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.isZero;
-import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 
 public class Average extends CombinerFunction<java.lang.Number> {
     public java.lang.Number call(java.lang.Number average, java.lang.Number value) {
-        return averageNumber(average).combine(averageNumber(value));
+        return weighted(average).combine(weighted(value));
     }
 
     @Override
     public java.lang.Number identity() {
-        return averageNumber(0);
+        return weighted(0);
     }
 
-    public static Average.Number averageNumber(java.lang.Number number, java.lang.Number count) {
-        return new Average.Number(number, count);
+    public static Weighted weighted(java.lang.Number number, java.lang.Number count) {
+        return new Weighted(number, count);
     }
 
-    public static Average.Number averageNumber(java.lang.Number number) {
-        if(number instanceof Number) return (Number) number;
-        return averageNumber(number, isZero(number) ? 0 : 1);
+    public static Weighted weighted(java.lang.Number number) {
+        if (number instanceof Weighted) return (Weighted) number;
+        return weighted(number, isZero(number) ? 0 : 1);
     }
 
-    private static class Number extends DelegatingNumber {
-        private final java.lang.Number count;
+    private static class Weighted extends Num {
+        private final Num weight;
 
-        private Number(java.lang.Number number, java.lang.Number count) {
-            super(number);
-            this.count = count;
+        private Weighted(java.lang.Number value, java.lang.Number weight) {
+            super(value);
+            this.weight = num(weight);
         }
 
-        public Number combine(Number value) {
-            java.lang.Number newCount = add(count, value.count);
-            return averageNumber(divide(add(sum(), value.sum()), newCount), newCount);
+        public Weighted combine(Weighted value) {
+            Num newCount = weight.add(value.weight);
+            return weighted(sum().add(value.sum()).divide(newCount), newCount);
         }
 
-        private java.lang.Number sum() {
-            return multiply(count, value());
+        private Num sum() {
+            return weight.multiply(value());
         }
     }
 }
