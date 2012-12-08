@@ -239,12 +239,12 @@ public class Numbers {
     }
 
     public static Operators<Number> operatorsFor(Number number) {
-        return operatorsFor(number.getClass());
+        return operatorsFor(number instanceof DelegatingNumber? ((DelegatingNumber) number).number().getClass() : number.getClass());
     }
 
     public static Operators<Number> operatorsFor(Number a, Number b) {
-        Operators<Number> aOperators = operatorsFor(a.getClass());
-        Operators<Number> bOperators = operatorsFor(b.getClass());
+        Operators<Number> aOperators = operatorsFor(a);
+        Operators<Number> bOperators = operatorsFor(b);
 
         return aOperators.priority() > bOperators.priority() ? aOperators : bOperators;
     }
