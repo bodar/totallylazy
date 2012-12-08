@@ -37,13 +37,19 @@ import static org.junit.Assert.assertSame;
 
 public class NumbersTest {
     @Test
-    public void minimumOfEmptyListIsNegativeInfinity() throws Exception {
+    public void supportsMinimum() throws Exception {
+        assertThat(numbers(2,1,3).reduce(minimum), NumberMatcher.is(1));
+        assertThat(numbers(2,1).reduce(minimum), NumberMatcher.is(1));
+        assertThat(numbers(1).reduce(minimum), NumberMatcher.is(1));
         assertThat(numbers().reduce(minimum), NumberMatcher.is(POSITIVE_INFINITY));
         assertSame(minimum, minimum());
     }
 
     @Test
-    public void maximumOfEmptyListIsNegativeInfinity() throws Exception {
+    public void supportsMaximum() throws Exception {
+        assertThat(numbers(2,1,3).reduce(maximum), NumberMatcher.is(3));
+        assertThat(numbers(2,1).reduce(maximum), NumberMatcher.is(2));
+        assertThat(numbers(1).reduce(maximum), NumberMatcher.is(1));
         assertThat(numbers().reduce(maximum), NumberMatcher.is(NEGATIVE_INFINITY));
         assertSame(maximum, maximum());
     }
