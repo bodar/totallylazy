@@ -18,7 +18,6 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
@@ -114,7 +113,7 @@ public class Numbers {
         return factor(primes.tail(), number);
     }
 
-    public static Number squareRoot(Number number){
+    public static Number squareRoot(Number number) {
         return Math.sqrt(number.doubleValue());
     }
 
@@ -224,11 +223,11 @@ public class Numbers {
         return Computation.iterate(multiply(amount), 1);
     }
 
-    public static <T> Operators<Number> operatorsFor(Class<T> numberClass) {
+    public static Operators<Number> operatorsFor(Class<? extends Number> numberClass) {
         return Unchecked.cast(internalOperatorsFor(numberClass));
     }
 
-    private static <T> Operators<? extends Number> internalOperatorsFor(Class<T> numberClass) {
+    private static Operators<? extends Number> internalOperatorsFor(Class<? extends Number> numberClass) {
         if (numberClass == Integer.class) return IntegerOperators.Instance;
         if (numberClass == Long.class) return LongOperators.Instance;
         if (numberClass == BigInteger.class) return BigIntegerOperators.Instance;
