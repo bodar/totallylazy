@@ -37,8 +37,8 @@ import static org.junit.Assert.assertSame;
 
 public class NumbersTest {
     @Test
-    public void supportsDelegatingNumber() throws Exception {
-        assertThat(Numbers.add(new DelegatingNumber(3) {}, new DelegatingNumber(3) {}), NumberMatcher.is(6));
+    public void supportsNum() throws Exception {
+        assertThat(Numbers.add(Num.num(3), Num.num(3)), NumberMatcher.is(6));
     }
 
     @Test

@@ -240,7 +240,7 @@ public class Numbers {
     }
 
     public static Operators<Number> operatorsFor(Number number) {
-        if(number instanceof DelegatingNumber) return new DelegatingOperator(operatorsFor(((DelegatingNumber) number).value()));
+        if(number instanceof Num) return new NumOperator(operatorsFor(((Num) number).value()));
         return operatorsFor(number.getClass());
     }
 
