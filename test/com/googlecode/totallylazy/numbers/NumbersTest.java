@@ -108,6 +108,7 @@ public class NumbersTest {
 
     @Test
     public void supportsAverage() throws Exception {
+        assertThat(numbers(1, 2, 3, 4).reduce(average()), NumberMatcher.is(divide(5,2)));
         assertThat(numbers(1, 2, 3).reduce(average()), NumberMatcher.is(2));
         assertThat(numbers(1, 2).reduce(average()), NumberMatcher.is(1.5));
         assertThat(numbers(1).reduce(average()), NumberMatcher.is(1));

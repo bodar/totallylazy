@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.comparators;
 
 import com.googlecode.totallylazy.Combiner;
+import com.googlecode.totallylazy.CombinerFunction;
 
 public interface Minimum<T> extends Combiner<T> {
     class methods {
@@ -15,7 +16,7 @@ public interface Minimum<T> extends Combiner<T> {
         }
     }
 
-    class Function<T extends Comparable<? super T>> implements Minimum<T> {
+    class Function<T extends Comparable<? super T>>extends CombinerFunction<T> implements Minimum<T> {
         private final T identity;
 
         private Function(T identity) {this.identity = identity;}
