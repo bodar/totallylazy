@@ -1,19 +1,12 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicates;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.collections.ListMap.emptyListMap;
 import static com.googlecode.totallylazy.collections.ListMap.listMap;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ListMapTest extends MapContract {

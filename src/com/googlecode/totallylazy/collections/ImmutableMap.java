@@ -1,11 +1,10 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Foldable;
-import com.googlecode.totallylazy.ImmutableCollection;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functor;
+import com.googlecode.totallylazy.ImmutableCollection;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;

@@ -3,9 +3,6 @@ package com.googlecode.totallylazy;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
-import java.util.Set;
-
 import static com.googlecode.totallylazy.Characters.ASCII;
 import static com.googlecode.totallylazy.Characters.UTF16;
 import static com.googlecode.totallylazy.Characters.UTF8;
