@@ -11,7 +11,7 @@ public class Average extends CombinerFunction<Number> {
 
     @Override
     public Number identity() {
-        return weighted(0);
+        return weighted(0, 0);
     }
 
     public static Weighted weighted(Number number, Number count) {
@@ -20,7 +20,7 @@ public class Average extends CombinerFunction<Number> {
 
     public static Weighted weighted(Number number) {
         if (number instanceof Weighted) return (Weighted) number;
-        return weighted(number, isZero(number) ? 0 : 1);
+        return weighted(number, 1);
     }
 
     private static class Weighted extends Num {
