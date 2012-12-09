@@ -6,7 +6,6 @@ import com.googlecode.totallylazy.Value;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
-import static com.googlecode.totallylazy.Option.some;
 
 public class Trie<K, V> implements Value<V> {
     private final Option<V> value;

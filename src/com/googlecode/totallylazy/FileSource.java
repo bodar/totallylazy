@@ -3,7 +3,6 @@ package com.googlecode.totallylazy;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 
 public class FileSource implements Sources {

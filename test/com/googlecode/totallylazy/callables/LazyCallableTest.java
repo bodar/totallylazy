@@ -10,9 +10,7 @@ import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
-import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.callables.TimeReport.time;
-import static com.googlecode.totallylazy.matchers.NumberMatcher.between;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 

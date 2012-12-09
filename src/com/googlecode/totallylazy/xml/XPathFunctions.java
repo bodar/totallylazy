@@ -8,13 +8,10 @@ import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.regex.Regex;
 import com.googlecode.totallylazy.time.Dates;
-import com.googlecode.totallylazy.xml.FunctionResolver;
-import com.googlecode.totallylazy.xml.NodeArrayList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import javax.xml.xpath.XPathFunctionResolver;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Predicates.not;

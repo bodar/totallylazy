@@ -5,8 +5,6 @@ import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
-import static com.googlecode.totallylazy.Predicates.all;
-
 public class AndPredicate<T> extends LogicalPredicate<T> {
     private final Sequence<Predicate<T>> predicates;
 

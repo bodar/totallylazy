@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.time;
 
-import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.comparators.Maximum;
 import com.googlecode.totallylazy.comparators.Minimum;

@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Identity;
 

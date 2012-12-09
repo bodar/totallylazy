@@ -5,12 +5,8 @@ import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.numbers.Numbers;
 
 import java.util.concurrent.Callable;
-
-import static com.googlecode.totallylazy.numbers.Numbers.divide;
-import static com.googlecode.totallylazy.numbers.Numbers.subtract;
 
 public final class TimeCallable<T> extends Function<T> {
     private static final String FORMAT = "Elapsed time: %s msecs";

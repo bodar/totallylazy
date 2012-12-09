@@ -6,7 +6,8 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactlyMatching;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class IterableMatcherTest {
     @Test
