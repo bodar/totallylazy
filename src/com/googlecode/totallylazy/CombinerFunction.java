@@ -1,4 +1,4 @@
 package com.googlecode.totallylazy;
 
-public abstract class CombinerFunction<T> extends Function2<T, T, T> implements Combiner<T> {
+public abstract class CombinerFunction<T> extends BinaryFunction<T> implements Combiner<T> {
 }
