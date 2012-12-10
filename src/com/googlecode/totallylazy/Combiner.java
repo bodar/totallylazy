@@ -1,4 +1,4 @@
 package com.googlecode.totallylazy;
 
-public interface Combiner<T> extends Identity<T>, Associative<T> {
+public interface Combiner<T> extends Reducer<T, T>, Associative<T> {
 }
