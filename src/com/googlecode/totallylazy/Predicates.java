@@ -267,6 +267,15 @@ public class Predicates {
         return aClass.isAssignableFrom(o.getClass());
     }
 
+    public static LogicalPredicate<Class<?>> classAssignableFrom(final Class<?> aClass) {
+        return new LogicalPredicate<Class<?>>() {
+            @Override
+            public boolean matches(Class<?> other) {
+                return other.isAssignableFrom(aClass);
+            }
+        };
+    }
+
     public static LogicalPredicate<Class<?>> classAssignableTo(final Class<?> aClass) {
         return new LogicalPredicate<Class<?>>() {
             @Override
