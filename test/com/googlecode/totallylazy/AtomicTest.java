@@ -3,9 +3,9 @@ package com.googlecode.totallylazy;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Atomic.constructors.atomic;
-import static com.googlecode.totallylazy.collections.ImmutableSortedMap.constructors;
-import static com.googlecode.totallylazy.collections.ImmutableSortedMap.constructors.sortedMap;
-import static com.googlecode.totallylazy.collections.ImmutableSortedMap.functions;
+import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors;
+import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors.sortedMap;
+import static com.googlecode.totallylazy.collections.PersistentSortedMap.functions;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 

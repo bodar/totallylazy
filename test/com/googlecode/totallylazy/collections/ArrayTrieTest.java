@@ -6,7 +6,7 @@ import static com.googlecode.totallylazy.Arrays.characters;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.collections.ArrayTrie.trie;
-import static com.googlecode.totallylazy.collections.ImmutableSortedMap.constructors;
+import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 

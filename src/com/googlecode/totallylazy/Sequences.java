@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.collections.ImmutableList;
+import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
@@ -619,7 +619,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> reverse(final Iterable<? extends T> iterable) {
-        return sequence(ImmutableList.constructors.reverse(iterable.iterator()));
+        return sequence(PersistentList.constructors.reverse(iterable.iterator()));
     }
 
     public static <T> Sequence<T> cycle(final Iterable<? extends T> iterable) {
@@ -770,10 +770,10 @@ public class Sequences {
         return internalWindowed(memorise(sequence), size).toSequence();
     }
 
-    private static <T> ImmutableList<Sequence<T>> internalWindowed(final Sequence<T> sequence, int size) {
+    private static <T> PersistentList<Sequence<T>> internalWindowed(final Sequence<T> sequence, int size) {
         Sequence<T> take = sequence.take(size);
-        if (take.size() == size) return ImmutableList.constructors.cons(take, internalWindowed(sequence.tail(), size));
-        return ImmutableList.constructors.empty();
+        if (take.size() == size) return PersistentList.constructors.cons(take, internalWindowed(sequence.tail(), size));
+        return PersistentList.constructors.empty();
     }
 
     public static <T> Sequence<T> intersperse(final Iterable<? extends T> iterable, final T separator) {
