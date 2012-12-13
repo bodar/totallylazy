@@ -55,8 +55,8 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         return computation1(lazyHead(iterator), generate(lazyTail(iterator)));
     }
 
-    private static <T> Function1<T, T> lazyTail(final Callable<? extends Iterator<? extends T>> iterator) {
-        return new Function1<T, T>() {
+    private static <T> UnaryFunction<T> lazyTail(final Callable<? extends Iterator<? extends T>> iterator) {
+        return new UnaryFunction<T>() {
             @Override
             public T call(T t) throws Exception {
                 return iterator.call().next();
