@@ -11,6 +11,21 @@ import java.util.concurrent.TimeUnit;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callers {
+    public static <T> Function<T> callConcurrently(Callable<? extends T> callable) {
+        ExecutorService service = Executors.newCachedThreadPool();
+        try {
+            final Future<? extends T> future = service.submit(callable);
+            return new Function<T>() {
+                @Override
+                public T call() throws Exception {
+                    return future.get();
+                }
+            };
+        } finally {
+            service.shutdown();
+        }
+    }
+
     public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second) {
         return callConcurrently(sequence(first, second));
     }
@@ -102,20 +117,5 @@ public final class Callers {
 
     public static <A, B, C, D, E, F> F call(final Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A a, final B b, final C c, final D d, final E e) {
         return Functions.call(callable, a, b, c, d, e);
-    }
-
-    public static <T> Function<T> asyncApply(Callable<T> callable) {
-        ExecutorService service = Executors.newCachedThreadPool();
-        try {
-            final Future<T> future = service.submit(callable);
-            return new Function<T>() {
-                @Override
-                public T call() throws Exception {
-                    return future.get();
-                }
-            };
-        } finally {
-            service.shutdown();
-        }
     }
 }
