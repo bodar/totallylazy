@@ -17,6 +17,10 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B> {
         return Callables.deferApply(this, a);
     }
 
+    public Function<B> asyncApply(final A a) {
+        return Callers.asyncApply(deferApply(a));
+    }
+
     public Function1<A, B> lazy() {
         return LazyCallable1.lazy(this);
     }

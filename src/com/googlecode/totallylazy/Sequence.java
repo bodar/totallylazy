@@ -36,6 +36,22 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return hashCode;
     }
 
+    public void eachConcurrently(final Callable1<? super T, ?> runnable) {
+        forEachConcurrently(runnable);
+    }
+
+    public void forEachConcurrently(final Callable1<? super T, ?> runnable) {
+        Sequences.forEachConcurrently(this, runnable);
+    }
+
+    public void eachConcurrently(final Callable1<? super T, ?> runnable, Executor executor) {
+        forEachConcurrently(runnable, executor);
+    }
+
+    public void forEachConcurrently(final Callable1<? super T, ?> runnable, Executor executor) {
+        Sequences.forEachConcurrently(this, runnable, executor);
+    }
+
     public void each(final Callable1<? super T, ?> runnable) {
         forEach(runnable);
     }

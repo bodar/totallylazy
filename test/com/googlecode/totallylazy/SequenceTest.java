@@ -576,11 +576,20 @@ public class SequenceTest {
     @Test
     public void supportsForEach() throws Exception {
         final int[] sum = {0};
-        sequence(1, 2).forEach(new Callable1<Integer, Void>() {
-            public Void call(Integer value) {
+        sequence(1, 2).each(new Block<Integer>() {
+            public void execute(Integer value) {
                 sum[0] += value;
-                return Runnables.VOID;
+            }
+        });
+        assertThat(sum[0], is(3));
+    }
 
+    @Test
+    public void supportsEachConcurrently() throws Exception {
+        final int[] sum = {0};
+        sequence(1, 2).eachConcurrently(new Block<Integer>() {
+            public void execute(Integer value) throws InterruptedException {
+                sum[0] += value;
             }
         });
         assertThat(sum[0], is(3));

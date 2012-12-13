@@ -226,6 +226,22 @@ public class Sequences {
         Iterators.forEach(iterable.iterator(), runnable);
     }
 
+    public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable) {
+        forEachConcurrently(iterable, runnable);
+    }
+
+    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable) {
+        mapConcurrently(iterable, runnable).realise();
+    }
+
+    public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable, Executor executor) {
+        forEachConcurrently(iterable, runnable, executor);
+    }
+
+    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable, Executor executor) {
+        mapConcurrently(iterable, runnable, executor).realise();
+    }
+
     public static <T> T first(final Iterable<? extends T> iterable) {
         return head(iterable);
     }
@@ -818,4 +834,5 @@ public class Sequences {
     public static <T> int indexOf(Iterable<? extends T> iterable, T instance) {
         return Iterators.indexOf(iterable.iterator(), instance);
     }
+
 }
