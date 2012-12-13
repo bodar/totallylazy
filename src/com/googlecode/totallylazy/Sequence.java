@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.collections.ImmutableList;
+import com.googlecode.totallylazy.collections.PersistentCollection;
+import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.collections.Indexed;
 
 import java.lang.reflect.Array;
@@ -18,7 +19,7 @@ import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, ImmutableCollection<T>, Applicative<T>, Foldable<T>, Indexed<T> {
+public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Foldable<T>, Indexed<T> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
@@ -400,8 +401,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.interruptable(this);
     }
 
-    public ImmutableList<T> toImmutableList() {
-        return ImmutableList.constructors.list(this);
+    public PersistentList<T> toImmutableList() {
+        return PersistentList.constructors.list(this);
     }
 
     public Sequence<Pair<T, T>> cartesianProduct() {

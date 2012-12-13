@@ -15,29 +15,29 @@ import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public abstract class MapContract {
-    protected abstract <K,V> ImmutableMap<K, V> empty(Class<K> kClass, Class<V> vClass);
-    protected abstract <K,V> ImmutableMap<K, V> map(K key, V value);
-    protected abstract <K,V> ImmutableMap<K, V> map(K key1, V value1, K key2, V value2);
-    protected abstract <K,V> ImmutableMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3);
-    protected abstract <K,V> ImmutableMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
-    protected abstract <K,V> ImmutableMap<K, V> map(Iterable<? extends Pair<K, V>> iterable);
+    protected abstract <K,V> PersistentMap<K, V> empty(Class<K> kClass, Class<V> vClass);
+    protected abstract <K,V> PersistentMap<K, V> map(K key, V value);
+    protected abstract <K,V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2);
+    protected abstract <K,V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3);
+    protected abstract <K,V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
+    protected abstract <K,V> PersistentMap<K, V> map(Iterable<? extends Pair<K, V>> iterable);
 
     @Test
     public void canGet() throws Exception {
-        ImmutableMap<Integer, String> map = map(1, "Dan", 2, "Ray", 3, "Stu");
+        PersistentMap<Integer, String> map = map(1, "Dan", 2, "Ray", 3, "Stu");
         assertThat(map.get(2), is(some("Ray")));
         assertThat(map.get(4), is(none(String.class)));
     }
 
     @Test
     public void canPut() throws Exception {
-        ImmutableMap<Integer, String> map = map(1, "Dan").put(3, "Stu").put(2, "Ray");
+        PersistentMap<Integer, String> map = map(1, "Dan").put(3, "Stu").put(2, "Ray");
         assertThat(map, hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
     }
 
     @Test
     public void canRemove() throws Exception {
-        final ImmutableMap<Integer, String> map = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray");
+        final PersistentMap<Integer, String> map = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray");
         assertThat(map.remove(4), hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
         assertThat(map.remove(3), hasExactly(pair(4, "Alex"), pair(1, "Dan"), pair(2, "Ray")));
         assertThat(map.remove(2), hasExactly(pair(4, "Alex"), pair(1, "Dan"), pair(3, "Stu")));
@@ -47,33 +47,33 @@ public abstract class MapContract {
 
     @Test
     public void putReplacesValuesWithSameKey() throws Exception {
-        ImmutableMap<Integer, String> map = map(1, "Dan").put(3, "Stu").put(1, "Ray");
+        PersistentMap<Integer, String> map = map(1, "Dan").put(3, "Stu").put(1, "Ray");
         assertThat(map, hasExactly(pair(1, "Ray"), pair(3, "Stu")));
     }
 
     @Test
     public void canCheckContains() throws Exception {
-        ImmutableMap<Integer, String> map = map(1, "Dan", 2, "Ray", 3, "Stu");
+        PersistentMap<Integer, String> map = map(1, "Dan", 2, "Ray", 3, "Stu");
         assertThat(map.contains(2), is(true));
         assertThat(map.contains(4), is(false));
     }
 
     @Test
     public void canCreateATreeFromAnIterable() throws Exception {
-        ImmutableMap<Integer, String> map = map(sequence(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
+        PersistentMap<Integer, String> map = map(sequence(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
         assertThat(map.contains(2), is(true));
         assertThat(map.contains(4), is(false));
     }
 
     @Test
     public void canConvertToPersistentList() throws Exception {
-        ImmutableList<Pair<Integer, String>> map = map(2, "Ray", 1, "Dan", 3, "Stu").immutableList();
+        PersistentList<Pair<Integer, String>> map = map(2, "Ray", 1, "Dan", 3, "Stu").immutableList();
         assertThat(map, hasExactly(pair(2, "Ray"), pair(1, "Dan"), pair(3, "Stu")));
     }
 
     @Test
     public void canJoin() throws Exception {
-        ImmutableMap<Integer, String> map = map(3, "Stu", 4, "Matt").joinTo(map(1, "Dan", 2, "Ray"));
+        PersistentMap<Integer, String> map = map(3, "Stu", 4, "Matt").joinTo(map(1, "Dan", 2, "Ray"));
         assertThat(map, is(map(1, "Dan", 2, "Ray", 3, "Stu", 4, "Matt")));
     }
 

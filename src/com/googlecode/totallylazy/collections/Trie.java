@@ -9,9 +9,9 @@ import static com.googlecode.totallylazy.Option.option;
 
 public class Trie<K, V> implements Value<V> {
     private final Option<V> value;
-    private final ImmutableMap<K, Trie<K, V>> children;
+    private final PersistentMap<K, Trie<K, V>> children;
 
-    private Trie(Option<V> value, ImmutableMap<K, Trie<K, V>> children) {
+    private Trie(Option<V> value, PersistentMap<K, Trie<K, V>> children) {
         this.value = value;
         this.children = children;
     }
@@ -24,7 +24,7 @@ public class Trie<K, V> implements Value<V> {
         return trie(value, ListMap.<K, Trie<K, V>>emptyListMap());
     }
 
-    public static <K, V> Trie<K, V> trie(Option<V> value, ImmutableMap<K, Trie<K, V>> children) {
+    public static <K, V> Trie<K, V> trie(Option<V> value, PersistentMap<K, Trie<K, V>> children) {
         return new Trie<K, V>(value, children);
     }
 

@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callers.call;
 
-public interface TreeMap<K, V> extends ImmutableSortedMap<K, V> {
+public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
     Comparator<K> comparator();
 
     K key();

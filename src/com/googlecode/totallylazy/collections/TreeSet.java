@@ -16,28 +16,28 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class TreeSet<T> implements ImmutableSortedSet<T> {
-    private final ImmutableSortedMap<T, T> map;
+public class TreeSet<T> implements PersistentSortedSet<T> {
+    private final PersistentSortedMap<T, T> map;
 
-    private TreeSet(ImmutableSortedMap<T, T> map) {
+    private TreeSet(PersistentSortedMap<T, T> map) {
         this.map = map;
     }
 
-    public static <T> ImmutableSortedSet<T> treeSet(ImmutableSortedMap<T, T> map) {
+    public static <T> PersistentSortedSet<T> treeSet(PersistentSortedMap<T, T> map) {
         return new TreeSet<T>(map);
     }
 
-    private Pair<ImmutableSortedSet<T>, T> treeSet(Pair<? extends ImmutableSortedMap<T, T>, Pair<T, T>> pair) {
+    private Pair<PersistentSortedSet<T>, T> treeSet(Pair<? extends PersistentSortedMap<T, T>, Pair<T, T>> pair) {
         return Pair.pair(treeSet(pair.first()), pair.second().first());
     }
 
     @Override
-    public ImmutableList<T> immutableList() {
+    public PersistentList<T> immutableList() {
         return map.immutableList().map(Callables.<T>first());
     }
 
     @Override
-    public ImmutableSortedSet<T> put(T value) {
+    public PersistentSortedSet<T> put(T value) {
         return treeSet(map.put(value, value));
     }
 
@@ -47,17 +47,17 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
     }
 
     @Override
-    public ImmutableSortedSet<T> filter(Predicate<? super T> predicate) {
+    public PersistentSortedSet<T> filter(Predicate<? super T> predicate) {
         return treeSet(map.filterKeys(predicate));
     }
 
     @Override
-    public <NewT> ImmutableSortedSet<NewT> map(Callable1<? super T, ? extends NewT> transformer) {
+    public <NewT> PersistentSortedSet<NewT> map(Callable1<? super T, ? extends NewT> transformer) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ImmutableSortedSet<T> remove(T value) {
+    public PersistentSortedSet<T> remove(T value) {
         return treeSet(map.remove(value));
     }
 
@@ -72,12 +72,12 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
     }
 
     @Override
-    public Pair<ImmutableSortedSet<T>, T> removeFirst() {
+    public Pair<PersistentSortedSet<T>, T> removeFirst() {
         return treeSet(map.removeFirst());
     }
 
     @Override
-    public Pair<ImmutableSortedSet<T>, T> removeLast() {
+    public Pair<PersistentSortedSet<T>, T> removeLast() {
         return treeSet(map.removeLast());
     }
 
@@ -114,7 +114,7 @@ public class TreeSet<T> implements ImmutableSortedSet<T> {
     }
 
     @Override
-    public ImmutableSortedSet<T> cons(T head) {
+    public PersistentSortedSet<T> cons(T head) {
         return treeSet(map.cons(pair(head)));
     }
 

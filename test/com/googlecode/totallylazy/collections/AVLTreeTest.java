@@ -55,7 +55,7 @@ public class AVLTreeTest {
 
     @Test
     public void balancesDeletion() throws Exception {
-        final ImmutableMap<Integer, Object> map = avlTree(0, null).put(1, null).put(2, null).put(3, null).put(4, null).put(5, null).put(6, null);
+        final PersistentMap<Integer, Object> map = avlTree(0, null).put(1, null).put(2, null).put(3, null).put(4, null).put(5, null).put(6, null);
         assertThat(map.remove(3).toString(), is("((( 0 ) 1 ) 2 (( 4 ) 5 ( 6 )))"));
     }
 
@@ -108,7 +108,7 @@ public class AVLTreeTest {
     }
 
     @SuppressWarnings("unchecked")
-    private Callable<Object> immutableGet(final ImmutableMap<Integer, Integer> map) {
+    private Callable<Object> immutableGet(final PersistentMap<Integer, Integer> map) {
         return new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -158,7 +158,7 @@ public class AVLTreeTest {
         Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
         Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
         Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
-        ImmutableMap<Integer, Integer> avlTree = createImmutable(range);
+        PersistentMap<Integer, Integer> avlTree = createImmutable(range);
 
         for (int i = 0; i < 100; i++) {
             timeRemove(NUMBER_OF_CALLS, hashMap, hashMapReport);
@@ -178,10 +178,10 @@ public class AVLTreeTest {
         System.out.println("AvlTree: " + avlTreeReport);
     }
 
-    private Callable<ImmutableMap<Integer, Integer>> removeImmutable(final ImmutableMap<Integer, Integer> immutable) {
-        return new Callable<ImmutableMap<Integer, Integer>>() {
+    private Callable<PersistentMap<Integer, Integer>> removeImmutable(final PersistentMap<Integer, Integer> immutable) {
+        return new Callable<PersistentMap<Integer, Integer>>() {
             @Override
-            public ImmutableMap<Integer, Integer> call() throws Exception {
+            public PersistentMap<Integer, Integer> call() throws Exception {
                 return immutable.remove(keys().head());
             }
         };
@@ -242,7 +242,7 @@ public class AVLTreeTest {
             Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
             Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
             Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
-            ImmutableMap<Integer, Integer> avlTree = createImmutable(range);
+            PersistentMap<Integer, Integer> avlTree = createImmutable(range);
 
             for (int i = 0; i < 100; i++) {
                 timePut(NUMBER_OF_CALLS, hashMap, hashMapReport);
@@ -262,10 +262,10 @@ public class AVLTreeTest {
             System.out.println("AvlTree: " + avlTreeReport);
     }
 
-    private Callable<ImmutableMap<Integer, Integer>> immutablePut(final ImmutableMap<Integer, Integer> avlTree) {
-        return new Callable<ImmutableMap<Integer, Integer>>() {
+    private Callable<PersistentMap<Integer, Integer>> immutablePut(final PersistentMap<Integer, Integer> avlTree) {
+        return new Callable<PersistentMap<Integer, Integer>>() {
             @Override
-            public ImmutableMap<Integer, Integer> call() throws Exception {
+            public PersistentMap<Integer, Integer> call() throws Exception {
                 Integer head = keys().head();
                 return avlTree.put(head, head);
             }
@@ -283,8 +283,8 @@ public class AVLTreeTest {
         };
     }
 
-    private ImmutableSortedMap<Integer, Integer> createImmutable(final Sequence<Integer> range) throws Exception {
-        ImmutableSortedMap<Integer, Integer> map = ImmutableSortedMap.constructors.sortedMap(range.map(asPair()));
+    private PersistentSortedMap<Integer, Integer> createImmutable(final Sequence<Integer> range) throws Exception {
+        PersistentSortedMap<Integer, Integer> map = PersistentSortedMap.constructors.sortedMap(range.map(asPair()));
         System.out.print("AVLTree:\t");
         return map;
     }

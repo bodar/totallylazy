@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.Count.count;
-import static com.googlecode.totallylazy.collections.ImmutableList.constructors.empty;
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
 import static com.googlecode.totallylazy.collections.TreeList.treeList;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;

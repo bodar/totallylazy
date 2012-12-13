@@ -11,9 +11,9 @@ import static com.googlecode.totallylazy.Option.option;
 
 public class ArrayTrie<K, V> implements Value<V> {
     private final Option<V> value;
-    private final ImmutableMap<K, ArrayTrie<K, V>> children;
+    private final PersistentMap<K, ArrayTrie<K, V>> children;
 
-    private ArrayTrie(Option<V> value, ImmutableMap<K, ArrayTrie<K, V>> children) {
+    private ArrayTrie(Option<V> value, PersistentMap<K, ArrayTrie<K, V>> children) {
         this.value = value;
         this.children = children;
     }
@@ -26,7 +26,7 @@ public class ArrayTrie<K, V> implements Value<V> {
         return trie(value, ListMap.<K, ArrayTrie<K, V>>emptyListMap());
     }
 
-    public static <K, V> ArrayTrie<K, V> trie(Option<V> value, ImmutableMap<K, ArrayTrie<K, V>> children) {
+    public static <K, V> ArrayTrie<K, V> trie(Option<V> value, PersistentMap<K, ArrayTrie<K, V>> children) {
         return new ArrayTrie<K, V>(value, children);
     }
 

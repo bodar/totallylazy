@@ -11,32 +11,32 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ListMapTest extends MapContract {
     @Override
-    protected <K, V> ImmutableMap<K, V> empty(Class<K> kClass, Class<V> vClass) {
+    protected <K, V> PersistentMap<K, V> empty(Class<K> kClass, Class<V> vClass) {
         return emptyListMap();
     }
 
     @Override
-    protected <K, V> ImmutableMap<K, V> map(K key, V value) {
+    protected <K, V> PersistentMap<K, V> map(K key, V value) {
         return listMap(key, value);
     }
 
     @Override
-    protected <K, V> ImmutableMap<K, V> map(K key1, V value1, K key2, V value2) {
+    protected <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2) {
         return listMap(key1, value1, key2, value2);
     }
 
     @Override
-    protected <K, V> ImmutableMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3) {
+    protected <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3) {
         return listMap(key1, value1, key2, value2, key3, value3);
     }
 
     @Override
-    protected <K, V> ImmutableMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
+    protected <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
         return listMap(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
     @Override
-    protected <K, V> ImmutableMap<K, V> map(Iterable<? extends Pair<K, V>> iterable) {
+    protected <K, V> PersistentMap<K, V> map(Iterable<? extends Pair<K, V>> iterable) {
         return listMap(iterable);
     }
 

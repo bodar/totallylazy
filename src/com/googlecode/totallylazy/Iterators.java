@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.collections.ImmutableList;
+import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.iterators.FilterIterator;
 import com.googlecode.totallylazy.iterators.FlattenIterator;
 import com.googlecode.totallylazy.iterators.InitIterator;
@@ -135,7 +135,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> reverse(Iterator<? extends T> iterator) {
-        return ImmutableList.constructors.reverse(iterator).iterator();
+        return PersistentList.constructors.reverse(iterator).iterator();
     }
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
