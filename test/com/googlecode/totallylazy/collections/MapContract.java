@@ -67,7 +67,7 @@ public abstract class MapContract {
 
     @Test
     public void canConvertToPersistentList() throws Exception {
-        PersistentList<Pair<Integer, String>> map = map(2, "Ray", 1, "Dan", 3, "Stu").immutableList();
+        PersistentList<Pair<Integer, String>> map = map(2, "Ray", 1, "Dan", 3, "Stu").persistentList();
         assertThat(map, hasExactly(pair(2, "Ray"), pair(1, "Dan"), pair(3, "Stu")));
     }
 

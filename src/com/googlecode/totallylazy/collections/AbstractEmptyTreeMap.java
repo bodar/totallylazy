@@ -38,7 +38,7 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     }
 
     @Override
-    public PersistentList<Pair<K, V>> immutableList() {
+    public PersistentList<Pair<K, V>> persistentList() {
         return PersistentList.constructors.empty();
     }
 

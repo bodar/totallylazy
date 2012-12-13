@@ -76,7 +76,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     }
 
     @Override
-    public PersistentList<Pair<K, V>> immutableList() {
+    public PersistentList<Pair<K, V>> persistentList() {
         return joinTo(PersistentList.constructors.<Pair<K, V>>empty());
     }
 

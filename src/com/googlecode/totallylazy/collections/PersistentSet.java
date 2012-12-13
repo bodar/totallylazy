@@ -21,5 +21,5 @@ public interface PersistentSet<T> extends Iterable<T>, Segment<T>, PersistentCol
 
     <NewT> PersistentSet<NewT> map(Callable1<? super T, ? extends NewT> transformer);
 
-    PersistentList<T> immutableList();
+    PersistentList<T> persistentList();
 }
