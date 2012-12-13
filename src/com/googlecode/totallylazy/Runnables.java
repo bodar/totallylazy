@@ -10,42 +10,41 @@ import static java.lang.String.format;
 public class Runnables {
     public static final Void VOID = null;
 
-    public static <T> Function1<T, Void> printLine(final PrintStream printStream, final String format) {
-        return new Function1<T, Void>() {
-            public final Void call(T t) {
+    public static <T> Block<T> printLine(final PrintStream printStream, final String format) {
+        return new Block<T>() {
+            @Override
+            protected void execute(T t) throws Exception {
                 printStream.println(format(format, t));
-                return VOID;
             }
         };
     }
 
-    public static <T> Function1<T, Void> printLine(final String format) {
+    public static <T> Block<T> printLine(final String format) {
         return printLine(System.out, format);
     }
 
-    public static <T> Function1<T, Void> doNothing(final Class<T> aClass) {
+    public static <T> Block<T> doNothing(final Class<T> aClass) {
         return doNothing();
     }
 
-    public static <T> Function1<T, Void> doNothing() {
-        return new Function1<T, Void>() {
-            public Void call(T ignore) {
-                return VOID;
-            }
+    public static <T> Block<T> doNothing() {
+        return new Block<T>() {
+            @Override
+            protected void execute(T t) throws Exception {}
         };
     }
 
-    public static <T extends Runnable> Function1<T, Void> run() {
-        return new Function1<T, Void>() {
-            public Void call(T t) {
+    public static <T extends Runnable> Block<T> run() {
+        return new Block<T>() {
+            @Override
+            protected void execute(T t) throws Exception {
                 t.run();
-                return VOID;
             }
         };
     }
 
-    public static <T> Function1<T, T> run(final Callable1<? super T, Void> callable) {
-        return new Function1<T, T>() {
+    public static <T> UnaryFunction<T> run(final Block<? super T> callable) {
+        return new UnaryFunction<T>() {
             public T call(T t) throws Exception {
                 callable.call(t);
                 return t;
@@ -53,20 +52,20 @@ public class Runnables {
         };
     }
 
-    public static Function1<OutputStream, Void> write(final byte[] bytes) {
-        return new Function1<OutputStream, Void>() {
-            public Void call(OutputStream outputStream) throws IOException {
+    public static Block<OutputStream> write(final byte[] bytes) {
+        return new Block<OutputStream>() {
+            @Override
+            protected void execute(OutputStream outputStream) throws Exception {
                 outputStream.write(bytes);
-                return VOID;
             }
         };
     }
 
-    public static Function1<Writer, Void> write(final String value) {
-        return new Function1<Writer, Void>() {
-            public Void call(Writer writer) throws IOException {
+    public static Block<Writer> write(final String value) {
+        return new Block<Writer>() {
+            @Override
+            protected void execute(Writer writer) throws Exception {
                 writer.write(value);
-                return VOID;
             }
         };
     }

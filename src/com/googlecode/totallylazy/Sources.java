@@ -20,10 +20,10 @@ public interface Sources extends Closeable {
         }
 
         public static int copy(Sources sources, final Destination destination) {
-            return sources.sources().map(new Function1<Source, Void>() {
+            return sources.sources().map(new Block<Source>() {
                 @Override
-                public Void call(Source source) throws Exception {
-                    return Streams.copyAndClose(source.input, destination.destination(source.name, source.modified));
+                protected void execute(Source source) throws Exception {
+                    Streams.copyAndClose(source.input, destination.destination(source.name, source.modified));
                 }
             }).size();
         }

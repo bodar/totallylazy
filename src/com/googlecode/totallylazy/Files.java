@@ -199,12 +199,11 @@ public class Files {
         }
     }
 
-    public static Function1<InputStream, Void> write(final File output) {
-        return new Function1<InputStream, Void>() {
+    public static Block<InputStream> write(final File output) {
+        return new Block<InputStream>() {
             @Override
-            public Void call(InputStream inputStream) throws Exception {
+            protected void execute(InputStream inputStream) throws Exception {
                 Streams.copyAndClose(inputStream, new FileOutputStream(output));
-                return null;
             }
         };
     }

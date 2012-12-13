@@ -104,11 +104,11 @@ public class Exceptions {
         };
     }
 
-    public static Function1<PrintWriter, Void> printStackTrace(final Throwable e) {
-        return new Function1<PrintWriter, Void>() {
-            public Void call(PrintWriter writer) {
+    public static Block<PrintWriter> printStackTrace(final Throwable e) {
+        return new Block<PrintWriter>() {
+            @Override
+            protected void execute(PrintWriter writer) throws Exception {
                 e.printStackTrace(writer);
-                return VOID;
             }
         };
     }
