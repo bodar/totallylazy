@@ -24,11 +24,11 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
         return None.none(aClass);
     }
 
-    public static <T> Function1<Option<T>, Option<T>> identity(Class<T> aClass) {
+    public static <T> UnaryFunction<Option<T>> identity(Class<T> aClass) {
         return identity();
     }
 
-    public static <T> Function1<Option<T>, Option<T>> identity() {
+    public static <T> UnaryFunction<Option<T>> identity() {
         return Functions.identity();
     }
 

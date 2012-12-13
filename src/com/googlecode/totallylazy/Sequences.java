@@ -30,6 +30,7 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Triple.triple;
+import static com.googlecode.totallylazy.Unary.constructors.unary;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static java.nio.CharBuffer.wrap;
@@ -388,8 +389,8 @@ public class Sequences {
         };
     }
 
-    public static <T> Function1<Sequence<T>, Sequence<T>> take(int count) {
-        return Sequences.<T>take().flip().apply(count);
+    public static <T> UnaryFunction<Sequence<T>> take(int count) {
+        return unary(Sequences.<T>take().flip().apply(count));
     }
 
     public static <T> Sequence<T> take(final Iterable<? extends T> iterable, final int count) {
@@ -784,11 +785,11 @@ public class Sequences {
         };
     }
 
-    public static <T> Function1<Iterable<T>, Iterable<T>> identity(Class<T> aClass) {
+    public static <T> UnaryFunction<Iterable<T>> identity(Class<T> aClass) {
         return identity();
     }
 
-    public static <T> Function1<Iterable<T>, Iterable<T>> identity() {
+    public static <T> UnaryFunction<Iterable<T>> identity() {
         return Functions.identity();
     }
 

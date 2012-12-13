@@ -34,6 +34,10 @@ public class Comparators {
         return Comparators.<T>ascending();
     }
 
+    public static <T, R extends Comparable<? super R>> Comparator<T> ascending(final Callable1<? super T, ? extends R> callable) {
+        return new AscendingComparator<T, R>(callable);
+    }
+
     @SuppressWarnings("unchecked")
     private static final Comparator<Comparable> DESCENDING = new Comparator<Comparable>() {
         public int compare(Comparable a, Comparable b) {
@@ -47,6 +51,10 @@ public class Comparators {
 
     public static <T extends Comparable<? super T>> Comparator<T> descending(Class<T> aClass) {
         return Comparators.<T>descending();
+    }
+
+    public static <T, R extends Comparable<? super R>> Comparator<T> descending(final Callable1<? super T, ? extends R> callable) {
+        return new DescendingComparator<T, R>(callable);
     }
 
     public static <T> Comparator<T> comparators(final Comparator<? super T>... comparators) {
