@@ -36,7 +36,7 @@ public interface PersistentMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<
     @Override
     <NewV> PersistentMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
 
-    PersistentList<Pair<K, V>> immutableList();
+    PersistentList<Pair<K, V>> persistentList();
 
     Map<K, V> toMap();
 

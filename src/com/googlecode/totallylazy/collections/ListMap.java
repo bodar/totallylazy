@@ -148,7 +148,7 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
     }
 
     @Override
-    public PersistentList<Pair<K, V>> immutableList() {
+    public PersistentList<Pair<K, V>> persistentList() {
         return reverse(list);
     }
 
@@ -169,7 +169,7 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
 
     @Override
     public Iterator<Pair<K, V>> iterator() {
-        return immutableList().iterator();
+        return persistentList().iterator();
     }
 
     private Predicate<First<K>> key(Predicate<? super K> predicate) {
@@ -192,7 +192,7 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
 
     @Override
     public String toString() {
-        return immutableList().toString();
+        return persistentList().toString();
     }
 
     @Override

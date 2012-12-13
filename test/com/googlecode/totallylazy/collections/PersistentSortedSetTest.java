@@ -33,7 +33,7 @@ public class PersistentSortedSetTest {
 
     @Test
     public void canConvertToPersistentList() throws Exception {
-        PersistentList<Integer> tree = sortedSet(8, 6, 4, 1, 7, 3, 5).immutableList();
+        PersistentList<Integer> tree = sortedSet(8, 6, 4, 1, 7, 3, 5).persistentList();
         assertThat(tree, hasExactly(1, 3, 4, 5, 6, 7, 8));
     }
 

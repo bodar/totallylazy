@@ -32,8 +32,8 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
     }
 
     @Override
-    public PersistentList<T> immutableList() {
-        return map.immutableList().map(Callables.<T>first());
+    public PersistentList<T> persistentList() {
+        return map.persistentList().map(Callables.<T>first());
     }
 
     @Override
@@ -141,7 +141,7 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return SegmentIterator.iterator(immutableList());
+        return SegmentIterator.iterator(persistentList());
     }
 
     private Pair<T, T> pair(T head) {
