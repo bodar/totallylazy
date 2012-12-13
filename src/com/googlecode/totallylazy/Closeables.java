@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Callers.call;
-import static com.googlecode.totallylazy.Runnables.VOID;
 
 public class Closeables {
-    public static <T extends Closeable> Function1<T, Void> closeAfter(final Callable1<? super T, Void> callable) {
-        return new Function1<T, Void>() {
-            public Void call(T t) throws Exception {
+    public static <T extends Closeable, R> Function1<T, R> closeAfter(final Callable1<? super T, R> callable) {
+        return new Function1<T, R>() {
+            @Override
+            public R call(T t) throws Exception {
                 return using(t, callable);
             }
         };
@@ -89,29 +89,29 @@ public class Closeables {
         }
     }
 
-    public static <T> Function1<T, Void> reflectiveClose() {
-        return new Function1<T, Void>() {
-            public Void call(T instanceWithCloseMethod) throws Exception {
+    public static <T> Block<T> reflectiveClose() {
+        return new Block<T>() {
+            @Override
+            protected void execute(T instanceWithCloseMethod) throws Exception {
                 close(instanceWithCloseMethod);
-                return VOID;
             }
         };
     }
 
-    public static Function1<Closeable, Void> close() {
-        return new Function1<Closeable, Void>() {
-            public Void call(Closeable closeable) throws IOException {
+    public static Block<Closeable> close() {
+        return new Block<Closeable>() {
+            @Override
+            protected void execute(Closeable closeable) throws Exception {
                 close(closeable);
-                return VOID;
             }
         };
     }
 
-    public static Function1<Closeable, Void> safeClose() {
-        return new Function1<Closeable, Void>() {
-            public Void call(Closeable closeable) throws IOException {
+    public static Block<Closeable> safeClose() {
+        return new Block<Closeable>() {
+            @Override
+            protected void execute(Closeable closeable) throws Exception {
                 safeClose(closeable);
-                return VOID;
             }
         };
     }

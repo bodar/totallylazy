@@ -169,11 +169,11 @@ public class Xml {
         };
     }
 
-    public static Function1<Element, Void> removeAttribute(final String name) {
-        return new Function1<Element, Void>() {
-            public Void call(Element element) throws Exception {
+    public static Block<Element> removeAttribute(final String name) {
+        return new Block<Element>() {
+            @Override
+            protected void execute(Element element) throws Exception {
                 element.removeAttribute(name);
-                return VOID;
             }
         };
     }
