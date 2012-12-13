@@ -24,7 +24,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ImmutableSortedMapTest {
+public class PersistentSortedMapTest {
     @Test
     public void canPutAndReturnOldValue() throws Exception {
         PersistentSortedMap<Integer, String> pairs = sortedMap(4, "Four", 5, "Five", 3, "Three", 2, "Two", 6, "Six");

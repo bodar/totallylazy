@@ -101,11 +101,11 @@ public interface PersistentList<T> extends Iterable<T>, Segment<T>, Functor<T>, 
             return Segment.functions.cons();
         }
 
-        public static <T> Function<PersistentList<T>> emptyImmutableList(Class<T> type) {
-            return emptyImmutableList();
+        public static <T> Function<PersistentList<T>> emptyPersistentList(Class<T> type) {
+            return emptyPersistentList();
         }
 
-        public static <T> Function<PersistentList<T>> emptyImmutableList() {
+        public static <T> Function<PersistentList<T>> emptyPersistentList() {
             return returns(PersistentList.constructors.<T>empty());
         }
 

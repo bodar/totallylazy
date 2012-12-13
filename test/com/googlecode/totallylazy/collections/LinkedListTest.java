@@ -85,7 +85,7 @@ public class LinkedListTest {
     @Test
     @Ignore
     public void supportsFilterIsPrettyFast() throws Exception {
-        final PersistentList<Number> range = range(1, 1000).toImmutableList();
+        final PersistentList<Number> range = range(1, 1000).toPersistentList();
         TimeReport report = TimeReport.time(100000, new Function<PersistentList<Number>>() {
             @Override
             public PersistentList<Number> call() throws Exception {
@@ -104,7 +104,7 @@ public class LinkedListTest {
     @Test
     @Ignore
     public void removeIsPrettyFast() throws Exception {
-        final PersistentList<Number> range = range(1, 1000).toImmutableList();
+        final PersistentList<Number> range = range(1, 1000).toPersistentList();
         TimeReport report = TimeReport.time(1000000, new Function<PersistentList<Number>>() {
             @Override
             public PersistentList<Number> call() throws Exception {

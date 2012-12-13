@@ -401,7 +401,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.interruptable(this);
     }
 
-    public PersistentList<T> toImmutableList() {
+    public PersistentList<T> toPersistentList() {
         return PersistentList.constructors.list(this);
     }
 
