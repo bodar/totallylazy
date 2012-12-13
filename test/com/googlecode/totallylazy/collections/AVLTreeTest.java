@@ -26,7 +26,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
-import static com.googlecode.totallylazy.collections.ImmutableSortedMapTest.asPair;
+import static com.googlecode.totallylazy.collections.PersistentSortedMapTest.asPair;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.range;

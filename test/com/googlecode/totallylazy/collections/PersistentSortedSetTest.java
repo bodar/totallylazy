@@ -10,7 +10,7 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ImmutableSortedSetTest {
+public class PersistentSortedSetTest {
     @Test
     public void canInsertAnElement() throws Exception {
         PersistentSortedSet<Integer> actual = sortedSet(1).cons(2).cons(3);
