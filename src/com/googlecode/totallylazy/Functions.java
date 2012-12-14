@@ -295,9 +295,9 @@ public class Functions {
         };
     }
 
-    public static Function2<Boolean, Boolean, Boolean> and = new And();
-    public static Function2<Boolean, Boolean, Boolean> or = new Or();
-    public static Function2<Boolean, Boolean, Boolean> xor = new Xor();
+    public static CombinerFunction<Boolean> and = new And();
+    public static CombinerFunction<Boolean> or = new Or();
+    public static CombinerFunction<Boolean> xor = new Xor();
 
     public static Function1<Pair<Boolean, Boolean>, Boolean> andPair() {
         return new Function1<Pair<Boolean, Boolean>, Boolean>() {
