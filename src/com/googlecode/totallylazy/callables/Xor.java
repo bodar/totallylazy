@@ -1,9 +1,8 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Function2;
-import com.googlecode.totallylazy.Identity;
+import com.googlecode.totallylazy.CombinerFunction;
 
-public class Xor extends Function2<Boolean, Boolean, Boolean> implements Identity<Boolean> {
+public class Xor extends CombinerFunction<Boolean> {
     @Override
     public Boolean call(Boolean a, Boolean b) throws Exception {
         return a ^ b;
