@@ -517,6 +517,12 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsRemoveAll() throws Exception {
+        final Sequence<Integer> numbers = sequence(1, 2, 3, 2).removeAll(sequence(2));
+        assertThat(numbers, hasExactly(1, 3));
+    }
+
+    @Test
     public void canConvertToArray() throws Exception {
         final Integer[] array = sequence(1, 2).toArray(Integer.class);
         assertThat(array[0], is(1));
