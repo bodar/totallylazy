@@ -231,6 +231,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.remove(this, t);
     }
 
+    public Sequence<T> removeAll(final Iterable<? extends T> iterable) {
+        return Sequences.removeAll(this, iterable);
+    }
+
     @Override
     public int size() {
         return Sequences.size(this);

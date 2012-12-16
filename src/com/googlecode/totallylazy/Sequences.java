@@ -372,6 +372,14 @@ public class Sequences {
         };
     }
 
+    public static <T> Sequence<T> removeAll(final Iterable<? extends T> iterable, final Iterable<? extends T> remove) {
+        return new Sequence<T>() {
+            public final Iterator<T> iterator() {
+                return Iterators.removeAll(iterable.iterator(), remove);
+            }
+        };
+    }
+
     public static <T> int size(final Iterable<? extends T> iterable) {
         return Iterators.size(iterable.iterator());
     }
