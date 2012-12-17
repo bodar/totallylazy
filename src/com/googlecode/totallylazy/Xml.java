@@ -218,11 +218,11 @@ public class Xml {
 
     }
 
-    public static String asString(Element element) throws Exception {
+    public static String asString(Node node) throws Exception {
         Transformer transformer = transformer();
         StringWriter writer = new StringWriter();
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-        transformer.transform(new DOMSource(element), new StreamResult(writer));
+        transformer.transform(new DOMSource(node), new StreamResult(writer));
         return writer.toString();
     }
 
