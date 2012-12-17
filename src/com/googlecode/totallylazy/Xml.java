@@ -32,7 +32,6 @@ import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.string;
 import static com.googlecode.totallylazy.xml.FunctionResolver.resolver;
@@ -329,6 +328,15 @@ public class Xml {
             return new Function2<Node, String, String>() {
                 @Override
                 public String call(Node node, String expression) throws Exception {
+                    return Xml.selectContents(node, expression);
+                }
+            };
+        }
+
+        public static Function1<Node, String> selectContents(final String expression) {
+            return new Function1<Node, String>() {
+                @Override
+                public String call(Node node) throws Exception {
                     return Xml.selectContents(node, expression);
                 }
             };
