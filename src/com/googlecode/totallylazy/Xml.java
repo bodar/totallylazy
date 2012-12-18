@@ -83,7 +83,7 @@ public class Xml {
                 String nodeAsString = (String) xpathExpression(expression).evaluate(node, XPathConstants.STRING);
                 return Sequences.<Node>sequence(documentFor(node).createTextNode(nodeAsString));
             } catch (XPathExpressionException ignore) {
-                throw LazyException.lazyException(e);
+                throw new IllegalArgumentException(String.format("Failed to compile xpath '%s'", expression),e);
             }
         }
     }
