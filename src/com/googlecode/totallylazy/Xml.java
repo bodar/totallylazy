@@ -340,6 +340,24 @@ public class Xml {
     }
 
     public static class functions {
+        public static Function1<Element, Element> setAttribute(final String name, final String value) {
+            return new Function1<Element, Element>() {
+                public Element call(Element element) throws Exception {
+                    element.setAttribute(name,value);
+                    return element;
+                }
+            };
+        }
+
+        public static Function1<Element, String> attribute(final String attributeName) {
+            return new Function1<Element, String>() {
+                public String call(Element element) throws Exception {
+                    return element.getAttribute(attributeName);
+                }
+            };
+        }
+
+
         public static Function2<Node, String, String> selectContents() {
             return new Function2<Node, String, String>() {
                 @Override
