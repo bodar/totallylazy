@@ -349,6 +349,15 @@ public class Xml {
             };
         }
 
+        public static Predicate<Node> matches(final String expression) {
+            return new Predicate<Node>() {
+                @Override
+                public boolean matches(Node node) {
+                    return Xml.matches(node, expression);
+                }
+            };
+        }
+
         public static Function1<Element, String> attribute(final String attributeName) {
             return new Function1<Element, String>() {
                 public String call(Element element) throws Exception {
