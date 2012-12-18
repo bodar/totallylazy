@@ -31,6 +31,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.string;
@@ -91,12 +92,27 @@ public class Xml {
         return node instanceof Document ? (Document) node : node.getOwnerDocument();
     }
 
+
+    public static Node expectNode(final Node node, String xpath) {
+        Option<Node> foundNode = selectNode(node, xpath);
+        if(foundNode.isEmpty())
+            throw new NoSuchElementException("No node for xpath " + xpath);
+        return foundNode.get();
+    }
+
     public static Option<Node> selectNode(final Node node, final String expression) {
         return selectNodes(node, expression).headOption();
     }
 
     public static Sequence<Element> selectElements(final Node node, final String expression) {
         return selectNodes(node, expression).safeCast(Element.class);
+    }
+
+    public static Element expectElement(final Node node, String xpath) {
+        Option<Element> element = selectElement(node, xpath);
+        if(element.isEmpty())
+            throw new NoSuchElementException("No element for xpath " + xpath);
+        return element.get();
     }
 
     public static Option<Element> selectElement(final Node node, final String expression) {
