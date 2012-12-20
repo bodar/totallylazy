@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.comparators;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
@@ -17,6 +19,14 @@ public class Comparators {
                 return comparator.compare(call(callable, instance), call(callable, otherInstance));
             }
         };
+    }
+
+    public static <A, B> Comparator<Pair<A, B>> first(final Comparator<A> comparator) {
+        return where(Callables.<A>first(), comparator);
+    }
+
+    public static <A, B> Comparator<Pair<A, B>> second(final Comparator<B> comparator) {
+        return where(Callables.<B>second(), comparator);
     }
 
     @SuppressWarnings("unchecked")
