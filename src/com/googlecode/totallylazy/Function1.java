@@ -41,6 +41,10 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B> {
         return either();
     }
 
+    public Mapper<A, B> orElse(final B result) {
+        return Exceptions.orElse(this, result);
+    }
+
     @Override
     public <C> Function1<A, C> map(final Callable1<? super B, ? extends C> callable) {
         return Callables.compose(this, callable);
