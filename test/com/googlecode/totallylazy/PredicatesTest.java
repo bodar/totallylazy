@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
 import java.io.Serializable;
@@ -8,7 +7,6 @@ import java.util.Set;
 
 import static com.googlecode.totallylazy.Predicates.assignableTo;
 import static com.googlecode.totallylazy.Predicates.classAssignableTo;
-import static com.googlecode.totallylazy.Predicates.forAll;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.setEqualityWith;
 import static com.googlecode.totallylazy.Predicates.subsetOf;

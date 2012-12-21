@@ -31,8 +31,7 @@ public final class Ratio extends Number implements Comparable<Number> {
     }
 
     public final boolean equals(Object arg0) {
-        return arg0 != null
-                && arg0 instanceof Ratio
+        return  arg0 instanceof Ratio
                 && ((Ratio) arg0).numerator.equals(numerator)
                 && ((Ratio) arg0).denominator.equals(denominator);
     }

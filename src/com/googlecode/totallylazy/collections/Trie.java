@@ -6,13 +6,12 @@ import com.googlecode.totallylazy.Value;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
-import static com.googlecode.totallylazy.Option.some;
 
 public class Trie<K, V> implements Value<V> {
     private final Option<V> value;
-    private final ImmutableMap<K, Trie<K, V>> children;
+    private final PersistentMap<K, Trie<K, V>> children;
 
-    private Trie(Option<V> value, ImmutableMap<K, Trie<K, V>> children) {
+    private Trie(Option<V> value, PersistentMap<K, Trie<K, V>> children) {
         this.value = value;
         this.children = children;
     }
@@ -25,7 +24,7 @@ public class Trie<K, V> implements Value<V> {
         return trie(value, ListMap.<K, Trie<K, V>>emptyListMap());
     }
 
-    public static <K, V> Trie<K, V> trie(Option<V> value, ImmutableMap<K, Trie<K, V>> children) {
+    public static <K, V> Trie<K, V> trie(Option<V> value, PersistentMap<K, Trie<K, V>> children) {
         return new Trie<K, V>(value, children);
     }
 
@@ -37,7 +36,9 @@ public class Trie<K, V> implements Value<V> {
 
     public Option<V> get(Segment<K> key) {
         if(key.isEmpty()) return value;
-        return childFor(key).get().get(key.tail());
+        Option<Trie<K, V>> child = childFor(key);
+        if(child.isEmpty()) return none();
+        return child.get().get(key.tail());
     }
 
     public Trie<K, V> put(Segment<K> key, V value) {
@@ -51,6 +52,10 @@ public class Trie<K, V> implements Value<V> {
 
     public V value() {
         return value.get();
+    }
+
+    public boolean isEmpty(){
+        return value.isEmpty() && children.isEmpty();
     }
 
     private Option<Trie<K, V>> childFor(Segment<K> key) {return children.get(key.head());}

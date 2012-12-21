@@ -12,10 +12,16 @@ import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.lessThan;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.BigIntegerOperators.bigInteger;
+import static com.googlecode.totallylazy.numbers.Numbers.NEGATIVE_INFINITY;
+import static com.googlecode.totallylazy.numbers.Numbers.POSITIVE_INFINITY;
 import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.fibonacci;
+import static com.googlecode.totallylazy.numbers.Numbers.gcd;
+import static com.googlecode.totallylazy.numbers.Numbers.lcm;
+import static com.googlecode.totallylazy.numbers.Numbers.maximum;
+import static com.googlecode.totallylazy.numbers.Numbers.minimum;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.powersOf;
@@ -27,20 +33,69 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sumIterable;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertSame;
 
 public class NumbersTest {
     @Test
+    public void supportsNum() throws Exception {
+        assertThat(Numbers.add(Num.num(3), Num.num(3)), NumberMatcher.is(6));
+    }
+
+    @Test
+    public void supportsAverage() throws Exception {
+        assertThat(numbers(1, 2, 3, 4).reduce(average), NumberMatcher.is(divide(5, 2)));
+        assertThat(numbers(1, 2, 3).reduce(average), NumberMatcher.is(2));
+        assertThat(numbers(1, 2).reduce(average), NumberMatcher.is(1.5));
+        assertThat(numbers(1, 0).reduce(average), NumberMatcher.is(.5));
+        assertThat(numbers(1).reduce(average), NumberMatcher.is(1));
+        assertThat(numbers().reduce(average), NumberMatcher.is(0));
+    }
+
+    @Test
+    public void supportsMinimum() throws Exception {
+        assertThat(numbers(2,1,3).reduce(minimum), NumberMatcher.is(1));
+        assertThat(numbers(2,1).reduce(minimum), NumberMatcher.is(1));
+        assertThat(numbers(1).reduce(minimum), NumberMatcher.is(1));
+        assertThat(numbers().reduce(minimum), NumberMatcher.is(POSITIVE_INFINITY));
+        assertSame(minimum, minimum());
+    }
+
+    @Test
+    public void supportsMaximum() throws Exception {
+        assertThat(numbers(2,1,3).reduce(maximum), NumberMatcher.is(3));
+        assertThat(numbers(2,1).reduce(maximum), NumberMatcher.is(2));
+        assertThat(numbers(1).reduce(maximum), NumberMatcher.is(1));
+        assertThat(numbers().reduce(maximum), NumberMatcher.is(NEGATIVE_INFINITY));
+        assertSame(maximum, maximum());
+    }
+
+    @Test
+    public void gcdOfEmptyListIsZero() throws Exception {
+        assertThat(numbers().reduce(gcd), NumberMatcher.is(0));
+    }
+
+    @Test
+    public void lcmOfEmptyListIsOne() throws Exception {
+        assertThat(numbers().reduce(lcm), NumberMatcher.is(1));
+    }
+
+    @Test
+    public void productOfEmptyListIsOne() throws Exception {
+        assertThat(numbers().reduce(product), NumberMatcher.is(1));
+    }
+
+    @Test
     public void supportLcmOnIntegrals() throws Exception {
-        assertThat(Numbers.lcm(3, 5), NumberMatcher.is(15));
-        assertThat(Numbers.lcm(3L, 5L), NumberMatcher.is(15L));
-        assertThat(Numbers.lcm(bigInteger(3), bigInteger(5)), NumberMatcher.is(bigInteger(15)));
+        assertThat(lcm(3, 5), NumberMatcher.is(15));
+        assertThat(lcm(3L, 5L), NumberMatcher.is(15L));
+        assertThat(lcm(bigInteger(3), bigInteger(5)), NumberMatcher.is(bigInteger(15)));
     }
 
     @Test
     public void supportGcdOnIntegrals() throws Exception {
-        assertThat(Numbers.gcd(54, 24), NumberMatcher.is(6));
-        assertThat(Numbers.gcd(54L, 24L), NumberMatcher.is(6L));
-        assertThat(Numbers.gcd(bigInteger(54), bigInteger(24)), NumberMatcher.is(bigInteger(6)));
+        assertThat(gcd(54, 24), NumberMatcher.is(6));
+        assertThat(gcd(54L, 24L), NumberMatcher.is(6L));
+        assertThat(gcd(bigInteger(54), bigInteger(24)), NumberMatcher.is(bigInteger(6)));
     }
 
     @Test
@@ -70,14 +125,6 @@ public class NumbersTest {
     @Test
     public void supportsProduct() throws Exception {
         assertThat(sequence(1, 2, 3).reduce(product()), NumberMatcher.is(6));
-    }
-
-    @Test
-    public void supportsAverage() throws Exception {
-        assertThat(numbers(1, 2, 3).reduce(average()), NumberMatcher.is(2));
-        assertThat(numbers(1, 2).reduce(average()), NumberMatcher.is(1.5));
-        assertThat(numbers(1).reduce(average()), NumberMatcher.is(1));
-        assertThat(numbers().fold(0, average()), NumberMatcher.is(0)); // You can't reduce an empty list
     }
 
     @Test

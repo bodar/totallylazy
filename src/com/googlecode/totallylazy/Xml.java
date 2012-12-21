@@ -31,8 +31,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
-import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.string;
 import static com.googlecode.totallylazy.xml.FunctionResolver.resolver;
@@ -83,7 +83,7 @@ public class Xml {
                 String nodeAsString = (String) xpathExpression(expression).evaluate(node, XPathConstants.STRING);
                 return Sequences.<Node>sequence(documentFor(node).createTextNode(nodeAsString));
             } catch (XPathExpressionException ignore) {
-                throw LazyException.lazyException(e);
+                throw new IllegalArgumentException(String.format("Failed to compile xpath '%s'", expression),e);
             }
         }
     }
@@ -92,12 +92,27 @@ public class Xml {
         return node instanceof Document ? (Document) node : node.getOwnerDocument();
     }
 
+
+    public static Node expectNode(final Node node, String xpath) {
+        Option<Node> foundNode = selectNode(node, xpath);
+        if(foundNode.isEmpty())
+            throw new NoSuchElementException("No node for xpath " + xpath);
+        return foundNode.get();
+    }
+
     public static Option<Node> selectNode(final Node node, final String expression) {
         return selectNodes(node, expression).headOption();
     }
 
     public static Sequence<Element> selectElements(final Node node, final String expression) {
         return selectNodes(node, expression).safeCast(Element.class);
+    }
+
+    public static Element expectElement(final Node node, String xpath) {
+        Option<Element> element = selectElement(node, xpath);
+        if(element.isEmpty())
+            throw new NoSuchElementException("No element for xpath " + xpath);
+        return element.get();
     }
 
     public static Option<Element> selectElement(final Node node, final String expression) {
@@ -169,11 +184,11 @@ public class Xml {
         };
     }
 
-    public static Function1<Element, Void> removeAttribute(final String name) {
-        return new Function1<Element, Void>() {
-            public Void call(Element element) throws Exception {
+    public static Block<Element> removeAttribute(final String name) {
+        return new Block<Element>() {
+            @Override
+            protected void execute(Element element) throws Exception {
                 element.removeAttribute(name);
-                return VOID;
             }
         };
     }
@@ -219,11 +234,11 @@ public class Xml {
 
     }
 
-    public static String asString(Element element) throws Exception {
+    public static String asString(Node node) throws Exception {
         Transformer transformer = transformer();
         StringWriter writer = new StringWriter();
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-        transformer.transform(new DOMSource(element), new StreamResult(writer));
+        transformer.transform(new DOMSource(node), new StreamResult(writer));
         return writer.toString();
     }
 
@@ -325,10 +340,46 @@ public class Xml {
     }
 
     public static class functions {
+        public static Function1<Element, Element> setAttribute(final String name, final String value) {
+            return new Function1<Element, Element>() {
+                public Element call(Element element) throws Exception {
+                    element.setAttribute(name,value);
+                    return element;
+                }
+            };
+        }
+
+        public static Predicate<Node> matches(final String expression) {
+            return new Predicate<Node>() {
+                @Override
+                public boolean matches(Node node) {
+                    return Xml.matches(node, expression);
+                }
+            };
+        }
+
+        public static Function1<Element, String> attribute(final String attributeName) {
+            return new Function1<Element, String>() {
+                public String call(Element element) throws Exception {
+                    return element.getAttribute(attributeName);
+                }
+            };
+        }
+
+
         public static Function2<Node, String, String> selectContents() {
             return new Function2<Node, String, String>() {
                 @Override
                 public String call(Node node, String expression) throws Exception {
+                    return Xml.selectContents(node, expression);
+                }
+            };
+        }
+
+        public static Function1<Node, String> selectContents(final String expression) {
+            return new Function1<Node, String>() {
+                @Override
+                public String call(Node node) throws Exception {
                     return Xml.selectContents(node, expression);
                 }
             };

@@ -7,9 +7,8 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import static com.googlecode.totallylazy.Maps.pairs;
-import static java.lang.String.format;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static java.lang.String.format;
 
 public class Properties {
     public static java.util.Properties properties(InputStream stream) throws IOException {

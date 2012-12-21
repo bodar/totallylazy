@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy;
 
-import org.hamcrest.Matcher;
-
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -26,11 +24,11 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
         return None.none(aClass);
     }
 
-    public static <T> Function1<Option<T>, Option<T>> identity(Class<T> aClass) {
+    public static <T> UnaryFunction<Option<T>> identity(Class<T> aClass) {
         return identity();
     }
 
-    public static <T> Function1<Option<T>, Option<T>> identity() {
+    public static <T> UnaryFunction<Option<T>> identity() {
         return Functions.identity();
     }
 
@@ -60,6 +58,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public abstract <B> B fold(final B seed, final Callable2<? super B, ? super A, ? extends B> callable);
 
+    public abstract Sequence<A> join(final Iterable<? extends A> iterable);
+
     public Sequence<A> toSequence() {
         return sequence(this);
     }
@@ -79,7 +79,7 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
         return option.map(applicator.get());
     }
 
-    public static <A> Option<A> pure(A a){
+    public static <A> Option<A> pure(A a) {
         return option(a);
     }
 

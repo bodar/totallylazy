@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.time;
 
 import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.comparators.Maximum;
+import com.googlecode.totallylazy.comparators.Minimum;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,6 +26,8 @@ public class Dates {
     public static final String RFC822 = "EEE, dd MMM yyyy HH:mm:ss zzz";
     public static final String JAVA_UTIL_DATE_TO_STRING = "EEE MMM dd HH:mm:ss zzz yyyy";
     public static final String LEXICAL = "yyyyMMddHHmmssSSS";
+    public static final String APACHE = "dd/MMM/yyyy:HH:mm:ss Z";
+
     public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
     public static final Date MIN_VALUE = date(Long.MIN_VALUE);
     public static final Date MAX_VALUE = date(Long.MAX_VALUE);
@@ -53,6 +57,10 @@ public class Dates {
                 return format.format(value);
             }
         };
+    }
+
+    public static DateFormat APACHE() {
+        return format(APACHE);
     }
 
     public static DateFormat LEXICAL() {
@@ -154,5 +162,14 @@ public class Dates {
         calendar.set(MILLISECOND, 0);
         return calendar.getTime();
     }
+
+    public static Maximum.Function<Date> maximum() {
+        return Maximum.constructors.maximum(Dates.MIN_VALUE);
+    }
+
+    public static Minimum.Function<Date> minimum() {
+        return Minimum.constructors.minimum(Dates.MAX_VALUE);
+    }
+
 
 }

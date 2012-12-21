@@ -17,6 +17,12 @@ public class DatesTest {
     }
 
     @Test
+    public void canParseAnApacheCommonLogFormatDate() throws Exception{
+        Date result = Dates.APACHE().parse("03/Dec/2012:01:02:05 +0000");
+        assertThat(result, Matchers.is(date(2012, 12, 3, 1, 2, 5)));
+    }
+
+    @Test
     public void canParseALexicalDate() throws Exception{
         Date result = Dates.LEXICAL().parse("20110908071414123");
         assertThat(result, Matchers.is(date(2011, 9, 8, 7, 14, 14, 123)));

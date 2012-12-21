@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -10,21 +9,21 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.Count.count;
-import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
-import static com.googlecode.totallylazy.collections.ImmutableSortedSet.constructors.sortedSet;
-import static com.googlecode.totallylazy.collections.TreeList.treeList;
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
+import static com.googlecode.totallylazy.collections.PersistentSortedSet.constructors.sortedSet;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static com.googlecode.totallylazy.matchers.NumberMatcher.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 
-public class PersistentListTest {
+public class LinkedListTest {
     @Test
     public void canFold() throws Exception {
         assertThat(list("Dan", "Matt").fold(0, count()).intValue(), is(2));
@@ -86,10 +85,10 @@ public class PersistentListTest {
     @Test
     @Ignore
     public void supportsFilterIsPrettyFast() throws Exception {
-        final ImmutableList<Number> range = range(1, 1000).toImmutableList();
-        TimeReport report = TimeReport.time(100000, new Function<ImmutableList<Number>>() {
+        final PersistentList<Number> range = range(1, 1000).toPersistentList();
+        TimeReport report = TimeReport.time(100000, new Function<PersistentList<Number>>() {
             @Override
-            public ImmutableList<Number> call() throws Exception {
+            public PersistentList<Number> call() throws Exception {
                 return range.filter(Predicates.<Number>is(3));
             }
         });
@@ -105,10 +104,10 @@ public class PersistentListTest {
     @Test
     @Ignore
     public void removeIsPrettyFast() throws Exception {
-        final ImmutableList<Number> range = range(1, 1000).toImmutableList();
-        TimeReport report = TimeReport.time(1000000, new Function<ImmutableList<Number>>() {
+        final PersistentList<Number> range = range(1, 1000).toPersistentList();
+        TimeReport report = TimeReport.time(1000000, new Function<PersistentList<Number>>() {
             @Override
-            public ImmutableList<Number> call() throws Exception {
+            public PersistentList<Number> call() throws Exception {
                 return range.remove(3);
             }
         });
@@ -160,9 +159,16 @@ public class PersistentListTest {
 
     @Test
     public void canJoin() throws Exception {
-        ImmutableList<Integer> join = list(1, 2, 3, 4).joinTo(list(4, 3, 2, 1));
+        PersistentList<Integer> join = list(1, 2, 3, 4).joinTo(list(4, 3, 2, 1));
         assertThat(join, hasExactly(1, 2, 3, 4, 4, 3, 2, 1));
-        ImmutableSortedSet<Integer> sortedSet = list(2, 1, 4, 3).joinTo(sortedSet(3, 4));
+        PersistentSortedSet<Integer> sortedSet = list(2, 1, 4, 3).joinTo(sortedSet(3, 4));
         assertThat(sortedSet, hasExactly(1, 2, 3, 4));
     }
+
+    @Test
+    public void supportsHeadOption() {
+        assertThat(list(1, 2, 3).headOption(), is(some(1)));
+        assertThat(empty(Integer.class).headOption(), is(none(Integer.class)));
+    }
+
 }

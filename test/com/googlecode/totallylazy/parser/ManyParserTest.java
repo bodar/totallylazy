@@ -3,9 +3,6 @@ package com.googlecode.totallylazy.parser;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.Reader;
-
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
 import static com.googlecode.totallylazy.matchers.Matchers.is;

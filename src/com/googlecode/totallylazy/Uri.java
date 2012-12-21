@@ -8,7 +8,7 @@ import java.util.regex.MatchResult;
 
 import static com.googlecode.totallylazy.Strings.isEmpty;
 
-public class Uri {
+public class Uri implements Comparable<Uri>{
     public static Regex JAR_URL = Regex.regex("jar:([^!]+)!(/.*)");
     public static Regex RFC3986 = Regex.regex("^(?:([^:/?\\#]+):)?(?://([^/?\\#]*))?([^?\\#]*)(?:\\?([^\\#]*))?(?:\\#(.*))?");
     public static final String JAR_SCHEME = "jar";
@@ -184,14 +184,28 @@ public class Uri {
         return !isAbsolute();
     }
 
+    @Override
+    public int compareTo(Uri other) {
+        return toString().compareTo(other.toString());
+    }
+
     public static class functions {
+        public static Function1<String, Uri> uri = new Function1<String, Uri>() {
+            @Override
+            public Uri call(String value) throws Exception {
+                return Uri.uri(value);
+            }
+        };
+
         public static Function1<String, Uri> uri() {
-            return new Function1<String, Uri>() {
-                @Override
-                public Uri call(String value) throws Exception {
-                    return Uri.uri(value);
-                }
-            };
+            return uri;
         }
+
+        public static final Function1<Uri, String> path = new Function1<Uri, String>() {
+            @Override
+            public String call(Uri uri) throws Exception {
+                return uri.path();
+            }
+        };
     }
 }

@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Either.left;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class None<T> extends Option<T>{
@@ -75,6 +76,10 @@ public class None<T> extends Option<T>{
     @Override
     public <L> Either<L, T> toEither(L value) {
         return left(value);
+    }
+
+    public Sequence<T> join(final Iterable<? extends T> iterable){
+        return sequence(iterable);
     }
 
     @Override

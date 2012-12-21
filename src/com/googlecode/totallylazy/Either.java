@@ -7,7 +7,15 @@ public abstract class Either<L, R> implements Functor<R>, Applicative<R>, Foldab
         return Right.right(value);
     }
 
+    public static <L, R> Either<L, R> right(Class<L> leftType, R value) {
+        return Right.right(value);
+    }
+
     public static <L, R> Either<L, R> left(L value) {
+        return Left.left(value);
+    }
+
+    public static <L, R> Either<L, R> left(L value, Class<R> rightType) {
         return Left.left(value);
     }
 

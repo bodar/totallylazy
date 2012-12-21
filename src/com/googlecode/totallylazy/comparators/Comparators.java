@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.comparators;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
@@ -19,6 +21,14 @@ public class Comparators {
         };
     }
 
+    public static <A, B> Comparator<Pair<A, B>> first(final Comparator<A> comparator) {
+        return where(Callables.<A>first(), comparator);
+    }
+
+    public static <A, B> Comparator<Pair<A, B>> second(final Comparator<B> comparator) {
+        return where(Callables.<B>second(), comparator);
+    }
+
     @SuppressWarnings("unchecked")
     private static final Comparator<Comparable> ASCENDING = new Comparator<Comparable>() {
         public int compare(Comparable a, Comparable b) {
@@ -32,6 +42,10 @@ public class Comparators {
 
     public static <T extends Comparable<? super T>> Comparator<T> ascending(Class<T> aClass) {
         return Comparators.<T>ascending();
+    }
+
+    public static <T, R extends Comparable<? super R>> Comparator<T> ascending(final Callable1<? super T, ? extends R> callable) {
+        return new AscendingComparator<T, R>(callable);
     }
 
     @SuppressWarnings("unchecked")
@@ -49,20 +63,16 @@ public class Comparators {
         return Comparators.<T>descending();
     }
 
+    public static <T, R extends Comparable<? super R>> Comparator<T> descending(final Callable1<? super T, ? extends R> callable) {
+        return new DescendingComparator<T, R>(callable);
+    }
+
     public static <T> Comparator<T> comparators(final Comparator<? super T>... comparators) {
         return comparators(sequence(comparators));
     }
 
     public static <T> Comparator<T> comparators(final Sequence<Comparator<? super T>> comparators) {
-        return new Comparator<T>() {
-            public int compare(T m1, T m2) {
-                for (Comparator<? super T> comparator : comparators) {
-                    int comparisonResult = comparator.compare(m1, m2);
-                    if (comparisonResult != 0) return comparisonResult;
-                }
-                return 0;
-            }
-        };
+        return new CompositeComparator<T>(comparators);
     }
 
     public static <T> Comparator<T> comparators(final Comparator<? super T>  first) {

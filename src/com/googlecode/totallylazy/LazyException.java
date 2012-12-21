@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.UndeclaredThrowableException;
 
 public class LazyException extends RuntimeException {
     static final long serialVersionUID = -6664897190745766939L;

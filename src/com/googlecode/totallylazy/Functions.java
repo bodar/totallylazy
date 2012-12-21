@@ -1,5 +1,9 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.callables.And;
+import com.googlecode.totallylazy.callables.Or;
+import com.googlecode.totallylazy.callables.Xor;
+
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
@@ -143,15 +147,15 @@ public class Functions {
         };
     }
 
-    public static <A> Function1<A, A> identity() {
-        return new Function1<A, A>() {
+    public static <A> UnaryFunction<A> identity() {
+        return new UnaryFunction<A>() {
             public A call(A self) throws Exception {
                 return self;
             }
         };
     }
 
-    public static <A> Function1<A, A> identity(Class<A> aClass) {
+    public static <A> UnaryFunction<A> identity(Class<A> aClass) {
         return identity();
     }
 
@@ -291,7 +295,11 @@ public class Functions {
         };
     }
 
-    public static Function1<Pair<Boolean, Boolean>, Boolean> and() {
+    public static CombinerFunction<Boolean> and = new And();
+    public static CombinerFunction<Boolean> or = new Or();
+    public static CombinerFunction<Boolean> xor = new Xor();
+
+    public static Function1<Pair<Boolean, Boolean>, Boolean> andPair() {
         return new Function1<Pair<Boolean, Boolean>, Boolean>() {
             @Override
             public Boolean call(Pair<Boolean, Boolean> pair) throws Exception {
@@ -300,7 +308,7 @@ public class Functions {
         };
     }
 
-    public static Function1<Pair<Boolean, Boolean>, Boolean> or() {
+    public static Function1<Pair<Boolean, Boolean>, Boolean> orPair() {
         return new Function1<Pair<Boolean, Boolean>, Boolean>() {
             @Override
             public Boolean call(Pair<Boolean, Boolean> pair) throws Exception {

@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.callables.JoinCharSequence;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
 import com.googlecode.totallylazy.predicates.EndsWithPredicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
@@ -26,6 +27,7 @@ public class Strings {
     public static final String EMPTY = "";
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
+    public static final CombinerFunction<CharSequence> join = new JoinCharSequence();
 
     public static Function1<String, Boolean> asBoolean() {
         return new Function1<String, Boolean>() {
@@ -328,4 +330,5 @@ public class Strings {
     public static String string(byte[] value) {
         return new String(value, UTF8);
     }
+
 }

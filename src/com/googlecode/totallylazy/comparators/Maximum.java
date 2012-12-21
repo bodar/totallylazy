@@ -1,21 +1,35 @@
 package com.googlecode.totallylazy.comparators;
 
-import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Combiner;
+import com.googlecode.totallylazy.CombinerFunction;
 
-public class Maximum<T extends Comparable<? super T>> extends Function2<T, T, T> {
-    public T call(T a, T b) throws Exception {
-        return maximum(a, b);
+public interface Maximum<T> extends Combiner<T> {
+    class methods {
+        public static <T extends Comparable<? super T>> T maximum(T a, T b) {
+            return a.compareTo(b) > 0 ? a : b;
+        }
     }
 
-    public static <T extends Comparable<? super T>> T maximum(T a, T b) {
-        return a.compareTo(b) > 0 ? a : b;
+    class constructors {
+        public static <T extends Comparable<? super T>> Function<T> maximum(final T identity) {
+            return new Function<T>(identity);
+        }
     }
 
-    public static <T extends Comparable<? super T>> Function2<T, T, T> maximum(Class<T> aClass) {
-        return new Maximum<T>();
+    class Function<T extends Comparable<? super T>> extends CombinerFunction<T> implements Maximum<T> {
+        private final T identity;
+
+        private Function(T identity) {this.identity = identity;}
+
+        @Override
+        public T call(T t, T t2) throws Exception {
+            return methods.maximum(t, t2);
+        }
+
+        @Override
+        public T identity() {
+            return identity;
+        }
     }
 
-    public static <T extends Comparable<? super T>> Function2<T, T, T> maximum() {
-        return new Maximum<T>();
-    }
 }

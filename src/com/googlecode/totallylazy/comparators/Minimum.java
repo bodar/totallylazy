@@ -1,21 +1,34 @@
 package com.googlecode.totallylazy.comparators;
 
-import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Combiner;
+import com.googlecode.totallylazy.CombinerFunction;
 
-public class Minimum<T extends Comparable<? super T>> extends Function2<T, T, T> {
-    public T call(T a, T b) throws Exception {
-        return minimum(a, b);
+public interface Minimum<T> extends Combiner<T> {
+    class methods {
+        public static <T extends Comparable<? super T>> T minimum(T a, T b) {
+            return a.compareTo(b) > 0 ? b : a;
+        }
     }
 
-    public static <T extends Comparable<? super T>> T minimum(T a, T b) {
-        return a.compareTo(b) > 0 ? b : a;
+    class constructors {
+        public static <T extends Comparable<? super T>> Function<T> minimum(final T identity) {
+            return new Function<T>(identity);
+        }
     }
 
-    public static <T extends Comparable<? super T>> Function2<T, T, T> minimum(Class<T> aClass) {
-        return new Minimum<T>();
-    }
+    class Function<T extends Comparable<? super T>>extends CombinerFunction<T> implements Minimum<T> {
+        private final T identity;
 
-    public static <T extends Comparable<? super T>> Function2<T, T, T> minimum() {
-        return new Minimum<T>();
+        private Function(T identity) {this.identity = identity;}
+
+        @Override
+        public T call(T t, T t2) throws Exception {
+            return methods.minimum(t, t2);
+        }
+
+        @Override
+        public T identity() {
+            return identity;
+        }
     }
 }

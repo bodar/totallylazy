@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.collections.ImmutableList;
+import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.iterators.FilterIterator;
 import com.googlecode.totallylazy.iterators.FlattenIterator;
 import com.googlecode.totallylazy.iterators.InitIterator;
@@ -29,6 +29,7 @@ import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
@@ -36,6 +37,7 @@ import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 
 public class Iterators {
@@ -134,7 +136,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> reverse(Iterator<? extends T> iterator) {
-        return ImmutableList.constructors.reverse(iterator).iterator();
+        return PersistentList.constructors.reverse(iterator).iterator();
     }
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
@@ -222,6 +224,10 @@ public class Iterators {
 
     public static <T> Iterator<T> remove(final Iterator<? extends T> iterator, final T t) {
         return filter(iterator, not(onlyOnce(is(t))));
+    }
+
+    public static <T> Iterator<T> removeAll(final Iterator<? extends T> iterator, final Iterable<? extends T> remove) {
+        return filter(iterator, not(in(remove)));
     }
 
     public static <T> Iterator<T> take(final Iterator<? extends T> iterator, final int count) {
@@ -415,5 +421,28 @@ public class Iterators {
 
     public static <A, B> Iterator<A> unfoldRight(Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, B seed) {
         return new UnfoldRightIterator<A, B>(callable, seed);
+    }
+
+    public static <T, C extends Segment<T>> C joinTo(Iterator<? extends T> iterator, C rest) {
+        while (iterator.hasNext()) {
+            rest = cast(rest.cons(iterator.next()));
+        }
+        return rest;
+    }
+
+    public static <T> T index(Iterator<? extends T> iterator, int index) {
+        for (int i = 0; iterator.hasNext(); i++) {
+            T next = iterator.next();
+            if(i == index) return next;
+        }
+        throw new IndexOutOfBoundsException();
+    }
+
+    public static <T> int indexOf(Iterator<? extends T> iterator, T instance) {
+        for (int i = 0; iterator.hasNext(); i++) {
+            T next = iterator.next();
+            if(instance.equals(next)) return i;
+        }
+        return -1;
     }
 }

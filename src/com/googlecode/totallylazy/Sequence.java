@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.collections.ImmutableList;
+import com.googlecode.totallylazy.collections.PersistentCollection;
+import com.googlecode.totallylazy.collections.PersistentList;
+import com.googlecode.totallylazy.collections.Indexed;
 
 import java.lang.reflect.Array;
 import java.util.Comparator;
@@ -17,7 +19,7 @@ import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, ImmutableCollection<T>, Applicative<T>, Foldable<T> {
+public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Foldable<T>, Indexed<T> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
@@ -33,6 +35,22 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
             hashCode = fold(31, asHashCode());
         }
         return hashCode;
+    }
+
+    public void eachConcurrently(final Callable1<? super T, ?> runnable) {
+        forEachConcurrently(runnable);
+    }
+
+    public void forEachConcurrently(final Callable1<? super T, ?> runnable) {
+        Sequences.forEachConcurrently(this, runnable);
+    }
+
+    public void eachConcurrently(final Callable1<? super T, ?> runnable, Executor executor) {
+        forEachConcurrently(runnable, executor);
+    }
+
+    public void forEachConcurrently(final Callable1<? super T, ?> runnable, Executor executor) {
+        Sequences.forEachConcurrently(this, runnable, executor);
     }
 
     public void each(final Callable1<? super T, ?> runnable) {
@@ -213,6 +231,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.remove(this, t);
     }
 
+    public Sequence<T> removeAll(final Iterable<? extends T> iterable) {
+        return Sequences.removeAll(this, iterable);
+    }
+
     @Override
     public int size() {
         return Sequences.size(this);
@@ -272,7 +294,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
 
     @Override
     public <C extends Segment<T>> C joinTo(C rest) {
-        throw new UnsupportedOperationException();
+        return Sequences.joinTo(this, rest);
     }
 
     public Sequence<T> cons(final T t) {
@@ -383,8 +405,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.interruptable(this);
     }
 
-    public ImmutableList<T> toImmutableList() {
-        return ImmutableList.constructors.list(this);
+    public PersistentList<T> toPersistentList() {
+        return PersistentList.constructors.list(this);
     }
 
     public Sequence<Pair<T, T>> cartesianProduct() {
@@ -409,5 +431,15 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
 
     public Option<Sequence<T>> flatOption() {
         return Sequences.flatOption(this);
+    }
+
+    @Override
+    public T index(int i) throws IndexOutOfBoundsException {
+        return Sequences.index(this, i);
+    }
+
+    @Override
+    public int indexOf(T t) {
+        return Sequences.indexOf(this, t);
     }
 }

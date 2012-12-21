@@ -11,7 +11,6 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 public class XmlTest {

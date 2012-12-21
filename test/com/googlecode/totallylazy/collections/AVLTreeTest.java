@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Files;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Maps;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeCallable;
@@ -15,17 +16,17 @@ import org.junit.Test;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
-import static com.googlecode.totallylazy.collections.ImmutableSortedMapTest.asPair;
+import static com.googlecode.totallylazy.collections.PersistentSortedMapTest.asPair;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
@@ -54,8 +55,21 @@ public class AVLTreeTest {
 
     @Test
     public void balancesDeletion() throws Exception {
-        final ImmutableMap<Integer, Object> map = avlTree(0, null).put(1, null).put(2, null).put(3, null).put(4, null).put(5, null).put(6, null);
+        final PersistentMap<Integer, Object> map = avlTree(0, null).put(1, null).put(2, null).put(3, null).put(4, null).put(5, null).put(6, null);
         assertThat(map.remove(3).toString(), is("((( 0 ) 1 ) 2 (( 4 ) 5 ( 6 )))"));
+    }
+
+    @Test
+    public void supportsHeadOption() {
+        assertThat(avlTree(1, "A").
+                cons(pair(2, "B")).
+                cons(pair(3, "C")).headOption(),
+                is(some(pair(2, "B"))));
+
+        AVLTree<Integer, String> empty = AVLTree.constructors.factory.create(null);
+        assertThat(
+                empty.headOption(),
+                is(Option.<Pair<Integer, String>>none()));
     }
 
     @Test
@@ -73,7 +87,7 @@ public class AVLTreeTest {
     @Test
     @Ignore("Manual")
     public void canIterateWorksOnLargeData() throws Exception {
-        assertThat(createImmutable(range), startsWith(sequence(pair(1, 1), pair(2, 2), pair(3, 3))));
+        assertThat(createPersistent(range), startsWith(sequence(pair(1, 1), pair(2, 2), pair(3, 3))));
     }
 
     public static final int SIZE = 100000;
@@ -85,7 +99,7 @@ public class AVLTreeTest {
     @Ignore("Manual")
     public void getIsPrettyQuick() throws Exception {
         for (int i = 0; i < 10; i++) {
-            System.out.println(TimeReport.time(NUMBER_OF_CALLS, immutableGet(createImmutable(range))));
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, persistentGet(createPersistent(range))));
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new HashMap<Integer, Integer>()))));
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new java.util.TreeMap<Integer, Integer>()))));
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap "))));
@@ -94,7 +108,7 @@ public class AVLTreeTest {
     }
 
     @SuppressWarnings("unchecked")
-    private Callable<Object> immutableGet(final ImmutableMap<Integer, Integer> map) {
+    private Callable<Object> persistentGet(final PersistentMap<Integer, Integer> map) {
         return new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -144,13 +158,13 @@ public class AVLTreeTest {
         Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
         Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
         Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
-        ImmutableMap<Integer, Integer> avlTree = createImmutable(range);
+        PersistentMap<Integer, Integer> avlTree = createPersistent(range);
 
         for (int i = 0; i < 100; i++) {
             timeRemove(NUMBER_OF_CALLS, hashMap, hashMapReport);
             timeRemove(NUMBER_OF_CALLS, treeMap, treeMapReport);
             timeRemove(NUMBER_OF_CALLS, cslMap, cslMapReport);
-            time(NUMBER_OF_CALLS, removeImmutable(avlTree), avlTreeReport);
+            time(NUMBER_OF_CALLS, removePersistent(avlTree), avlTreeReport);
         }
 
         assertThat(hashMap.size(), is(SIZE));
@@ -164,11 +178,11 @@ public class AVLTreeTest {
         System.out.println("AvlTree: " + avlTreeReport);
     }
 
-    private Callable<ImmutableMap<Integer, Integer>> removeImmutable(final ImmutableMap<Integer, Integer> immutable) {
-        return new Callable<ImmutableMap<Integer, Integer>>() {
+    private Callable<PersistentMap<Integer, Integer>> removePersistent(final PersistentMap<Integer, Integer> persistent) {
+        return new Callable<PersistentMap<Integer, Integer>>() {
             @Override
-            public ImmutableMap<Integer, Integer> call() throws Exception {
-                return immutable.remove(keys().head());
+            public PersistentMap<Integer, Integer> call() throws Exception {
+                return persistent.remove(keys().head());
             }
         };
     }
@@ -228,13 +242,13 @@ public class AVLTreeTest {
             Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
             Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
             Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
-            ImmutableMap<Integer, Integer> avlTree = createImmutable(range);
+            PersistentMap<Integer, Integer> avlTree = createPersistent(range);
 
             for (int i = 0; i < 100; i++) {
                 timePut(NUMBER_OF_CALLS, hashMap, hashMapReport);
                 timePut(NUMBER_OF_CALLS, treeMap, treeMapReport);
                 timePut(NUMBER_OF_CALLS, cslMap, cslMapReport);
-                time(NUMBER_OF_CALLS, immutablePut(avlTree), avlTreeReport);
+                time(NUMBER_OF_CALLS, persistentPut(avlTree), avlTreeReport);
             }
 
             assertThat(hashMap.size(), is(SIZE));
@@ -248,10 +262,10 @@ public class AVLTreeTest {
             System.out.println("AvlTree: " + avlTreeReport);
     }
 
-    private Callable<ImmutableMap<Integer, Integer>> immutablePut(final ImmutableMap<Integer, Integer> avlTree) {
-        return new Callable<ImmutableMap<Integer, Integer>>() {
+    private Callable<PersistentMap<Integer, Integer>> persistentPut(final PersistentMap<Integer, Integer> avlTree) {
+        return new Callable<PersistentMap<Integer, Integer>>() {
             @Override
-            public ImmutableMap<Integer, Integer> call() throws Exception {
+            public PersistentMap<Integer, Integer> call() throws Exception {
                 Integer head = keys().head();
                 return avlTree.put(head, head);
             }
@@ -269,8 +283,8 @@ public class AVLTreeTest {
         };
     }
 
-    private ImmutableSortedMap<Integer, Integer> createImmutable(final Sequence<Integer> range) throws Exception {
-        ImmutableSortedMap<Integer, Integer> map = ImmutableSortedMap.constructors.sortedMap(range.map(asPair()));
+    private PersistentSortedMap<Integer, Integer> createPersistent(final Sequence<Integer> range) throws Exception {
+        PersistentSortedMap<Integer, Integer> map = PersistentSortedMap.constructors.sortedMap(range.map(asPair()));
         System.out.print("AVLTree:\t");
         return map;
     }
@@ -278,7 +292,7 @@ public class AVLTreeTest {
     @Test
     @Ignore("Manual")
     public void canVisualiseTree() throws Exception {
-        render((TreeMap<?, ?>) createImmutable(range));
+        render((TreeMap<?, ?>) createPersistent(range));
     }
 
     private void render(TreeMap<?, ?> map) {

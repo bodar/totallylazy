@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
