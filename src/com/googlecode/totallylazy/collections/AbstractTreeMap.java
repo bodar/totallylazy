@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Functions.call;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implements TreeMap<K, V> {
@@ -75,13 +76,13 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     }
 
     @Override
-    public ImmutableList<Pair<K, V>> immutableList() {
-        return joinTo(ImmutableList.constructors.<Pair<K, V>>empty());
+    public PersistentList<Pair<K, V>> persistentList() {
+        return joinTo(PersistentList.constructors.<Pair<K, V>>empty());
     }
 
     @Override
     public Map<K, V> toMap() {
-        return ImmutableMap.methods.toMap(this);
+        return PersistentMap.methods.toMap(this);
     }
 
     @Override
@@ -102,7 +103,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
 
     @Override
     public Option<V> find(Predicate<? super K> predicate) {
-        if (predicate.matches(key)) return Option.some(value);
+        if (predicate.matches(key)) return some(value);
         Option<V> left = this.left.find(predicate);
         if (left.isEmpty()) return right.find(predicate);
         return left;
@@ -219,6 +220,11 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     @Override
     public Pair<K, V> head() throws NoSuchElementException {
         return pair();
+    }
+
+    @Override
+    public Option<Pair<K, V>> headOption() {
+        return some(head());
     }
 
     @Override

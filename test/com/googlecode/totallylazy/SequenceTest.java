@@ -30,7 +30,10 @@ import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Functions.and;
+import static com.googlecode.totallylazy.Functions.andPair;
 import static com.googlecode.totallylazy.Functions.or;
+import static com.googlecode.totallylazy.Functions.orPair;
+import static com.googlecode.totallylazy.Functions.xor;
 import static com.googlecode.totallylazy.Lists.indexIn;
 import static com.googlecode.totallylazy.Option.identity;
 import static com.googlecode.totallylazy.Option.none;
@@ -46,12 +49,12 @@ import static com.googlecode.totallylazy.Sequences.applicate;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.totallylazy.Sequences.flatOption;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
 import static com.googlecode.totallylazy.Sequences.splitOn;
-import static com.googlecode.totallylazy.Sequences.flatOption;
 import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
@@ -194,12 +197,12 @@ public class SequenceTest {
 
     @Test
     public void supportsFoldRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs() throws Exception {
-        assertThat(repeat(false).foldRight(false, and()), is(false));
+        assertThat(repeat(false).foldRight(false, andPair()), is(false));
     }
 
     @Test
     public void supportsReduceRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs() throws Exception {
-        assertThat(repeat(true).reduceRight(or()), is(true));
+        assertThat(repeat(true).reduceRight(orPair()), is(true));
     }
 
     @Test
@@ -514,6 +517,12 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsRemoveAll() throws Exception {
+        final Sequence<Integer> numbers = sequence(1, 2, 3, 2).removeAll(sequence(2));
+        assertThat(numbers, hasExactly(1, 3));
+    }
+
+    @Test
     public void canConvertToArray() throws Exception {
         final Integer[] array = sequence(1, 2).toArray(Integer.class);
         assertThat(array[0], is(1));
@@ -546,6 +555,11 @@ public class SequenceTest {
     }
 
     @Test
+    public void canReduceEmptySequence() {
+        assertThat(numbers().reduce(sum()), NumberMatcher.is(0));
+    }
+
+    @Test
     public void supportsReduceLeft() throws Exception {
         assertThat(numbers(1, 2, 3).reduce(sum()), NumberMatcher.is(6));
         assertThat(numbers(1, 2, 3).reduceLeft(sum()), NumberMatcher.is(6));
@@ -568,11 +582,20 @@ public class SequenceTest {
     @Test
     public void supportsForEach() throws Exception {
         final int[] sum = {0};
-        sequence(1, 2).forEach(new Callable1<Integer, Void>() {
-            public Void call(Integer value) {
+        sequence(1, 2).each(new Block<Integer>() {
+            public void execute(Integer value) {
                 sum[0] += value;
-                return Runnables.VOID;
+            }
+        });
+        assertThat(sum[0], is(3));
+    }
 
+    @Test
+    public void supportsEachConcurrently() throws Exception {
+        final int[] sum = {0};
+        sequence(1, 2).eachConcurrently(new Block<Integer>() {
+            public void execute(Integer value) throws InterruptedException {
+                sum[0] += value;
             }
         });
         assertThat(sum[0], is(3));
@@ -766,5 +789,26 @@ public class SequenceTest {
 
         assertThat(empty(String.class).flatOption(), is(Option.<Sequence<String>>none()));
         assertThat(flatOption(empty(String.class)), is(Option.<Sequence<String>>none()));
+    }
+
+    @Test
+    public void logicalAndOfEmptyListIsTrue() throws Exception {
+        assertThat(empty(Boolean.class).reduce(and), is(true));
+    }
+
+    @Test
+    public void logicalOrOfEmptyListIsFalse() throws Exception {
+        assertThat(empty(Boolean.class).reduce(or), is(false));
+    }
+
+    @Test
+    public void logicalXorOfEmptyListIsFalse() throws Exception {
+        assertThat(empty(Boolean.class).reduce(xor), is(false));
+    }
+
+    @Test
+    public void supportsIndexAccess() {
+        assertThat(sequence("a", "b", "c").index(1), is("b"));
+        assertThat(sequence("a", "b", "c").indexOf("c"), is(2));
     }
 }

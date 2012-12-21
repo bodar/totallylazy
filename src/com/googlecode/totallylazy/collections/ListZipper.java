@@ -3,22 +3,22 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Functions;
 
-import static com.googlecode.totallylazy.collections.ImmutableList.functions;
+import static com.googlecode.totallylazy.collections.PersistentList.functions;
 
 public class ListZipper<T> {
-    public final ImmutableList<T> focus;
-    public final ImmutableList<T> breadcrumbs;
+    public final PersistentList<T> focus;
+    public final PersistentList<T> breadcrumbs;
 
-    private ListZipper(ImmutableList<T> focus, ImmutableList<T> breadcrumbs) {
+    private ListZipper(PersistentList<T> focus, PersistentList<T> breadcrumbs) {
         this.focus = focus;
         this.breadcrumbs = breadcrumbs;
     }
 
-    public static <T> ListZipper<T> zipper(ImmutableList<T> focus) {
-        return zipper(focus, ImmutableList.constructors.<T>empty());
+    public static <T> ListZipper<T> zipper(PersistentList<T> focus) {
+        return zipper(focus, PersistentList.constructors.<T>empty());
     }
 
-    private static <T> ListZipper<T> zipper(ImmutableList<T> focus, ImmutableList<T> breadcrumbs) {
+    private static <T> ListZipper<T> zipper(PersistentList<T> focus, PersistentList<T> breadcrumbs) {
         return new ListZipper<T>(focus, breadcrumbs);
     }
 
@@ -31,8 +31,8 @@ public class ListZipper<T> {
     }
 
     public ListZipper<T> top() {
-        ImmutableList<T> focus1 = focus;
-        ImmutableList<T> breadcrumbs1 = breadcrumbs;
+        PersistentList<T> focus1 = focus;
+        PersistentList<T> breadcrumbs1 = breadcrumbs;
         while (!breadcrumbs1.isEmpty()) {
             focus1 = focus1.cons(breadcrumbs1.head());
             breadcrumbs1 = breadcrumbs1.tail();
@@ -55,11 +55,11 @@ public class ListZipper<T> {
         return String.format("focus(%s), breadcrumbs(%s)", focus, breadcrumbs);
     }
 
-    public ListZipper<T> modify(Callable1<? super ImmutableList<T>, ? extends ImmutableList<T>> callable) {
+    public ListZipper<T> modify(Callable1<? super PersistentList<T>, ? extends PersistentList<T>> callable) {
         return zipper(Functions.call(callable, focus), breadcrumbs);
     }
 
-    public ImmutableList<T> toList() {
+    public PersistentList<T> toList() {
         return top().focus;
     }
 

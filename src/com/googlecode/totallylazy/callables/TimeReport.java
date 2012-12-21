@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.callables;
 
 
+import com.googlecode.totallylazy.Block;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
@@ -17,12 +17,12 @@ import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.ascending;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 
-public class TimeReport implements Callable1<Number, Void> {
+public class TimeReport extends Block<Number> {
     private final List<Number> times = new ArrayList<Number>();
 
-    public Void call(Number time) {
+    @Override
+    protected void execute(Number time) throws Exception {
         this.times.add(time);
-        return Runnables.VOID;
     }
 
     public double lastTime() {

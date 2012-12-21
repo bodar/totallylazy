@@ -11,6 +11,21 @@ import java.util.concurrent.TimeUnit;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callers {
+    public static <T> Function<T> callConcurrently(Callable<? extends T> callable) {
+        ExecutorService service = Executors.newCachedThreadPool();
+        try {
+            final Future<? extends T> future = service.submit(callable);
+            return new Function<T>() {
+                @Override
+                public T call() throws Exception {
+                    return future.get();
+                }
+            };
+        } finally {
+            service.shutdown();
+        }
+    }
+
     public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second) {
         return callConcurrently(sequence(first, second));
     }

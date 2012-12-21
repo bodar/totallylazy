@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -15,6 +16,8 @@ public interface Segment<T> {
     boolean isEmpty();
 
     T head() throws NoSuchElementException;
+
+    Option<T> headOption();
 
     Segment<T> tail() throws NoSuchElementException;
 
@@ -35,8 +38,12 @@ public interface Segment<T> {
             return segment(head, constructors.<T>emptySegment());
         }
 
-        public static <T> Segment<T> segment(T head, Segment<T> empty) {
-            return ASegment.segment(head, empty);
+        public static <T> Segment<T> segment(T head, Segment<T> tail) {
+            return ASegment.segment(head, tail);
+        }
+
+        public static <T> Segment<T> cons(T head, Segment<T> tail) {
+            return segment(head, tail);
         }
 
         public static <T> Segment<T> unique(T head, Segment<T> tail) {
@@ -113,6 +120,23 @@ public interface Segment<T> {
             return functions.<T, Self>cons().flip().apply(t);
         }
 
+        public static Function1<String, Segment<Character>> characters() {
+            return new Function1<String, Segment<Character>>() {
+                @Override
+                public Segment<Character> call(String value) throws Exception {
+                    return constructors.characters(value);
+                }
+            };
+        }
+
+        public static <T> Function1<Segment<T>, Option<T>> headOption() {
+            return new Function1<Segment<T>, Option<T>>() {
+                @Override
+                public Option<T> call(Segment<T> segment) throws Exception {
+                    return segment.headOption();
+                }
+            };
+        }
     }
 
     class ASegment<T> extends AbstractSegment<T> {
@@ -139,6 +163,11 @@ public interface Segment<T> {
         }
 
         @Override
+        public Option<T> headOption() {
+            return some(head);
+        }
+
+        @Override
         public Segment<T> tail() throws NoSuchElementException {
             return tail;
         }
@@ -157,6 +186,12 @@ public interface Segment<T> {
         }
 
         @Override
+        public Option<T> headOption() {
+            return none();
+        }
+
+
+        @Override
         public Segment<T> tail() throws NoSuchElementException {
             throw new NoSuchElementException();
         }
@@ -166,5 +201,4 @@ public interface Segment<T> {
             return rest;
         }
     }
-
 }

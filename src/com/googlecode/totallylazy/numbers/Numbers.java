@@ -17,8 +17,9 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.BinaryFunction;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
@@ -29,6 +30,7 @@ import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
@@ -52,6 +54,8 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 
 public class Numbers {
+    public static final Number POSITIVE_INFINITY = Double.POSITIVE_INFINITY;
+    public static final Number NEGATIVE_INFINITY = Double.NEGATIVE_INFINITY;
     public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
     public static Function1<Number, Integer> intValue = new Function1<Number, Integer>() {
         @Override
@@ -112,25 +116,25 @@ public class Numbers {
         return factor(primes.tail(), number);
     }
 
-    public static Number squareRoot(Number number){
+    public static Number squareRoot(Number number) {
         return Math.sqrt(number.doubleValue());
     }
 
-    public static Function1<Number, Number> squareRoot = new Function1<Number, Number>() {
+    public static UnaryFunction<Number> squareRoot = new UnaryFunction<Number>() {
         @Override
         public Number call(Number number) throws Exception {
             return squareRoot(number);
         }
     };
 
-    public static Function1<Number, Number> squared = new Function1<Number, Number>() {
+    public static UnaryFunction<Number> squared = new UnaryFunction<Number>() {
         @Override
         public Number call(Number number) throws Exception {
             return squared(number);
         }
     };
 
-    public static Function1<Number, Number> squared() {
+    public static UnaryFunction<Number> squared() {
         return squared;
     }
 
@@ -184,8 +188,8 @@ public class Numbers {
         return iterate(nextProbablePrime(), BigInteger.valueOf(2)).map(reduce());
     }
 
-    private static Function1<BigInteger, BigInteger> nextProbablePrime() {
-        return new Function1<BigInteger, BigInteger>() {
+    private static UnaryFunction<BigInteger> nextProbablePrime() {
+        return new UnaryFunction<BigInteger>() {
             @Override
             public BigInteger call(BigInteger bigInteger) throws Exception {
                 return bigInteger.nextProbablePrime();
@@ -193,12 +197,16 @@ public class Numbers {
         };
     }
 
-    public static Function1<Number, Number> nextPrime = new Function1<Number, Number>() {
+    public static UnaryFunction<Number> nextPrime = new UnaryFunction<Number>() {
         @Override
         public Number call(Number number) throws Exception {
             return nextPrime(number);
         }
     };
+
+    public static UnaryFunction<Number> nextPrime() {
+        return nextPrime;
+    }
 
     public static Computation<Number> primes = computation(2, computation(3, nextPrime));
 
@@ -210,10 +218,6 @@ public class Numbers {
         return iterate(add(2), number).filter(prime).second();
     }
 
-    public static Function1<Number, Number> nextPrime() {
-        return nextPrime;
-    }
-
     public static Sequence<Number> fibonacci() {
         return computation(Pair.<Number, Number>pair(0, 1), reduceLeftShift(sum)).map(first(Number.class));
     }
@@ -222,11 +226,11 @@ public class Numbers {
         return Computation.iterate(multiply(amount), 1);
     }
 
-    public static <T> Operators<Number> operatorsFor(Class<T> numberClass) {
+    public static Operators<Number> operatorsFor(Class<? extends Number> numberClass) {
         return Unchecked.cast(internalOperatorsFor(numberClass));
     }
 
-    private static <T> Operators<? extends Number> internalOperatorsFor(Class<T> numberClass) {
+    private static Operators<? extends Number> internalOperatorsFor(Class<? extends Number> numberClass) {
         if (numberClass == Integer.class) return IntegerOperators.Instance;
         if (numberClass == Long.class) return LongOperators.Instance;
         if (numberClass == BigInteger.class) return BigIntegerOperators.Instance;
@@ -234,16 +238,18 @@ public class Numbers {
         if (numberClass == Ratio.class) return RatioOperators.Instance;
         if (numberClass == Float.class) return FloatOperators.Instance;
         if (numberClass == Double.class) return DoubleOperators.Instance;
-        throw new UnsupportedOperationException("Unsupported number class " + numberClass);
+        if (numberClass == Double.class) return DoubleOperators.Instance;
+        throw new UnsupportedOperationException("Unsupported number " + numberClass);
     }
 
     public static Operators<Number> operatorsFor(Number number) {
+        if(number instanceof Num) return new NumOperator(operatorsFor(((Num) number).value()));
         return operatorsFor(number.getClass());
     }
 
     public static Operators<Number> operatorsFor(Number a, Number b) {
-        Operators<Number> aOperators = operatorsFor(a.getClass());
-        Operators<Number> bOperators = operatorsFor(b.getClass());
+        Operators<Number> aOperators = operatorsFor(a);
+        Operators<Number> bOperators = operatorsFor(b);
 
         return aOperators.priority() > bOperators.priority() ? aOperators : bOperators;
     }
@@ -252,13 +258,13 @@ public class Numbers {
         return operatorsFor(value).negate(value);
     }
 
-    public static Function1<Number, Number> increment = new Function1<Number, Number>() {
+    public static UnaryFunction<Number> increment = new UnaryFunction<Number>() {
         public Number call(Number number) throws Exception {
             return Numbers.increment(number);
         }
     };
 
-    public static Function1<Number, Number> increment() {
+    public static UnaryFunction<Number> increment() {
         return increment;
     }
 
@@ -266,13 +272,13 @@ public class Numbers {
         return operatorsFor(value).increment(value);
     }
 
-    public static Function1<Number, Number> decrement = new Function1<Number, Number>() {
+    public static UnaryFunction<Number> decrement = new UnaryFunction<Number>() {
         public Number call(Number number) throws Exception {
             return Numbers.decrement(number);
         }
     };
 
-    public static Function1<Number, Number> decrement() {
+    public static UnaryFunction<Number> decrement() {
         return decrement;
     }
 
@@ -351,10 +357,8 @@ public class Numbers {
 
     public static int compare(Number x, Number y) {
         Operators<Number> operators = operatorsFor(x, y);
-        if (operators.lessThan(x, y))
-            return -1;
-        else if (operators.lessThan(y, x))
-            return 1;
+        if (operators.lessThan(x, y)) return -1;
+        if (operators.lessThan(y, x)) return 1;
         return 0;
     }
 
@@ -382,67 +386,64 @@ public class Numbers {
         };
     }
 
-    public static Function2<Number, Number, Number> average() {
-        return new Average();
+    public static final CombinerFunction<Number> average = new Average();
+    public static CombinerFunction<Number> average() {
+        return average;
     }
 
-    public static final Sum sum = new Sum();
-    public static final Sum Σ = sum;
+    public static final CombinerFunction<Number> sum = new Sum();
+    public static final CombinerFunction<Number> Σ = sum;
 
-    public static Function2<Number, Number, Number> sum() {
+    public static CombinerFunction<Number> sum() {
         return sum;
     }
 
-    public static final Sum add = sum;
+    public static final CombinerFunction<Number> add = sum;
 
-    public static Function2<Number, Number, Number> add() {
+    public static CombinerFunction<Number> add() {
         return add;
     }
 
-    public static Function1<Number, Number> add(final Number amount) {
-        return add().apply(amount);
+    public static UnaryFunction<Number> add(final Number amount) {
+        return add.apply(amount);
     }
 
     public static Number add(Number x, Number y) {
         return operatorsFor(x, y).add(x, y);
     }
 
-    public static Function2<Number, Number, Number> subtract = new Function2<Number, Number, Number>() {
+    public static BinaryFunction<Number> subtract = new BinaryFunction<Number>() {
         public Number call(Number a, Number b) {
             return Numbers.subtract(a, b);
         }
     };
 
-    public static Function2<Number, Number, Number> subtract() {
+    public static BinaryFunction<Number> subtract() {
         return subtract;
     }
 
-    public static Function1<Number, Number> subtract(final Number amount) {
-        return subtract().flip().apply(amount);
+    public static UnaryFunction<Number> subtract(final Number amount) {
+        return subtract.flip().apply(amount);
     }
 
     public static Number subtract(Number x, Number y) {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
-    public static Function2<Number, Number, Number> multiply = new Function2<Number, Number, Number>() {
-        public Number call(Number multiplicand, Number multiplier) throws Exception {
-            return multiply(multiplicand, multiplier);
-        }
-    };
+    public static CombinerFunction<Number> product = new Product();
 
-    public static Function2<Number, Number, Number> multiply() {
-        return multiply;
-    }
-
-    public static Function2<Number, Number, Number> product = multiply;
-
-    public static Function2<Number, Number, Number> product() {
+    public static CombinerFunction<Number> product() {
         return product;
     }
 
-    public static Function1<Number, Number> multiply(final Number multiplicand) {
-        return Numbers.multiply().apply(multiplicand);
+    public static CombinerFunction<Number> multiply = product;
+
+    public static CombinerFunction<Number> multiply() {
+        return multiply;
+    }
+
+    public static UnaryFunction<Number> multiply(final Number multiplicand) {
+        return multiply.apply(multiplicand);
     }
 
     public static Number multiply(Number x, Number y) {
@@ -454,17 +455,17 @@ public class Numbers {
         return operatorsFor(x, y).divide(x, y);
     }
 
-    public static Function1<Number, Number> divide(final Number divisor) {
-        return divide().flip().apply(divisor);
+    public static UnaryFunction<Number> divide(final Number divisor) {
+        return divide.flip().apply(divisor);
     }
 
-    public static Function2<Number, Number, Number> divide = new Function2<Number, Number, Number>() {
+    public static BinaryFunction<Number> divide = new BinaryFunction<Number>() {
         public Number call(Number dividend, Number divisor) throws Exception {
             return divide(dividend, divisor);
         }
     };
 
-    public static Function2<Number, Number, Number> divide() {
+    public static BinaryFunction<Number> divide() {
         return divide;
     }
 
@@ -473,28 +474,28 @@ public class Numbers {
         return reduce(operatorsFor(x, y).quotient(x, y));
     }
 
-    public static Function1<Number, Number> mod(final Number divisor) {
+    public static UnaryFunction<Number> mod(final Number divisor) {
         return mod().apply(divisor);
     }
 
-    public static Function2<Number, Number, Number> remainder = new Function2<Number, Number, Number>() {
+    public static BinaryFunction<Number> remainder = new BinaryFunction<Number>() {
         @Override
         public Number call(Number dividend, Number divisor) throws Exception {
             return remainder(dividend, divisor);
         }
     };
 
-    public static Function2<Number, Number, Number> remainder() {
+    public static BinaryFunction<Number> remainder() {
         return remainder;
     }
 
-    public static Function2<Number, Number, Number> mod = remainder.flip();
+    public static BinaryFunction<Number> mod = remainder.flip();
 
-    public static Function2<Number, Number, Number> mod() {
+    public static BinaryFunction<Number> mod() {
         return mod;
     }
 
-    public static Function1<Number, Number> remainder(final Number dividend) {
+    public static UnaryFunction<Number> remainder(final Number dividend) {
         return remainder().apply(dividend);
     }
 
@@ -509,7 +510,6 @@ public class Numbers {
         }
     }
 
-
     public static Number number(Number value) {
         return reduce(value);
     }
@@ -522,8 +522,8 @@ public class Numbers {
         return value;
     }
 
-    public static Function1<Number, Number> reduce() {
-        return new Function1<Number, Number>() {
+    public static UnaryFunction<Number> reduce() {
+        return new UnaryFunction<Number>() {
             @Override
             public Number call(Number number) throws Exception {
                 return reduce(number);
@@ -549,25 +549,21 @@ public class Numbers {
         return add(valueOf(value).get(), minValue);
     }
 
-    public static Callable2<Number, Number, Number> maximum = new Callable2<Number, Number, Number>() {
-        @Override
-        public Number call(Number a, Number b) throws Exception {
-            return compare(a, b) > 0 ? a : b;
-        }
-    };
+    public static Maximum maximum = new Maximum();
 
-    public static Callable2<Number, Number, Number> maximum() {
+    public static Maximum maximum() {
         return maximum;
     }
 
-    public static Function2<Number, Number, Number> lcm = new Function2<Number, Number, Number>() {
-        @Override
-        public Number call(Number x, Number y) throws Exception {
-            return lcm(x, y);
-        }
-    };
+    public static Minimum minimum = new Minimum();
 
-    public static Function2<Number, Number, Number> lcm() {
+    public static Minimum minimum() {
+        return minimum;
+    }
+
+    public static Lcm lcm = new Lcm();
+
+    public static Lcm lcm() {
         return lcm;
     }
 
@@ -581,16 +577,14 @@ public class Numbers {
         throw new UnsupportedOperationException();
     }
 
-    public static Function2<Number, Number, Number> gcd() {
-        return new Function2<Number, Number, Number>() {
-            @Override
-            public Number call(Number x, Number y) throws Exception {
-                return gcd(x, y);
-            }
-        };
+    public static Gcd gcd = new Gcd();
+
+    public static Gcd gcd() {
+        return gcd;
     }
 
     public static Number gcd(Number x, Number y) {
         return integralOperatorsFor(x, y).gcd(x, y);
     }
+
 }

@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
-import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.TreeMap.functions.replace;
 import static com.googlecode.totallylazy.collections.TreeZipper.Breadcrumb.breadcrumb;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.left;
@@ -70,7 +70,7 @@ public class TreeZipperTest {
 
         final TreeZipper<Integer, Integer> newZipper = zipper.left().left().top();
         assertThat(newZipper.focus, is(zipper.focus));
-        assertThat(newZipper.breadcrumbs, is(ImmutableList.constructors.<TreeZipper.Breadcrumb<Integer, Integer>>empty()));
+        assertThat(newZipper.breadcrumbs, is(PersistentList.constructors.<TreeZipper.Breadcrumb<Integer, Integer>>empty()));
     }
 
     @Test

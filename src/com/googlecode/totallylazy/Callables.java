@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.comparators.AscendingComparator;
-import com.googlecode.totallylazy.comparators.DescendingComparator;
+import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -34,8 +33,8 @@ public final class Callables {
         };
     }
 
-    public static <T> Function1<T, T> nullGuard(final Callable1<? super T, ? extends T> callable) {
-        return new Function1<T, T>() {
+    public static <T> UnaryFunction<T> nullGuard(final Callable1<? super T, ? extends T> callable) {
+        return new UnaryFunction<T>() {
             public T call(T o) throws Exception {
                 if (o == null) return null;
                 return callable.call(o);
@@ -43,8 +42,8 @@ public final class Callables {
         };
     }
 
-    public static <T> Function1<Sequence<T>, Sequence<T>> reduceAndShift(final Callable2<? super T, ? super T, ? extends T> action) {
-        return new Function1<Sequence<T>, Sequence<T>>() {
+    public static <T> UnaryFunction<Sequence<T>> reduceAndShift(final Callable2<? super T, ? super T, ? extends T> action) {
+        return new UnaryFunction<Sequence<T>>() {
             public final Sequence<T> call(final Sequence<T> values) throws Exception {
                 return values.tail().add(values.reduceLeft(action));
             }
@@ -76,11 +75,11 @@ public final class Callables {
     }
 
     public static <T, R extends Comparable<? super R>> Comparator<T> ascending(final Callable1<? super T, ? extends R> callable) {
-        return new AscendingComparator<T, R>(callable);
+        return Comparators.ascending(callable);
     }
 
     public static <T, R extends Comparable<? super R>> Comparator<T> descending(final Callable1<? super T, ? extends R> callable) {
-        return new DescendingComparator<T, R>(callable);
+        return Comparators.descending(callable);
     }
 
     public static Function1<Object, Integer> size() {
@@ -104,8 +103,8 @@ public final class Callables {
     }
 
 
-    public static <T> Function1<Sequence<T>, Sequence<T>> realise() {
-        return new Function1<Sequence<T>, Sequence<T>>() {
+    public static <T> UnaryFunction<Sequence<T>> realise() {
+        return new UnaryFunction<Sequence<T>>() {
             public final Sequence<T> call(final Sequence<T> sequence) throws Exception {
                 return sequence.realise();
             }
@@ -237,7 +236,7 @@ public final class Callables {
         };
     }
 
-    public final static Function1<Object, String> toString =  new Function1<Object, String>() {
+    public final static Function1<Object, String> toString = new Function1<Object, String>() {
         public final String call(final Object value) {
             return value.toString();
         }
@@ -297,11 +296,11 @@ public final class Callables {
         return Functions.returns2(result);
     }
 
-    public static <T> Function1<T, T> returnArgument() {
+    public static <T> UnaryFunction<T> returnArgument() {
         return Functions.identity();
     }
 
-    public static <T> Function1<T, T> returnArgument(final Class<T> aClass) {
+    public static <T> UnaryFunction<T> returnArgument(final Class<T> aClass) {
         return returnArgument();
     }
 
@@ -478,7 +477,7 @@ public final class Callables {
         return Functions.unpair(function);
     }
 
-    public static <A, B, C, D>Function1<Triple<A, B, C>, D> triple(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
+    public static <A, B, C, D> Function1<Triple<A, B, C>, D> triple(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
         return Functions.triple(callable);
     }
 
@@ -494,8 +493,8 @@ public final class Callables {
         return Either.functions.asRight();
     }
 
-    public static <T> Function1<T, T> replace(final Predicate<? super T> predicate, final Callable1<? super T, ? extends T> callable) {
-        return new Function1<T, T>() {
+    public static <T> UnaryFunction<T> replace(final Predicate<? super T> predicate, final Callable1<? super T, ? extends T> callable) {
+        return new UnaryFunction<T>() {
             @Override
             public T call(T value) throws Exception {
                 return predicate.matches(value) ? callable.call(value) : value;

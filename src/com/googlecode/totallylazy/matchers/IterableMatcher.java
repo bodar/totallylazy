@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.matchers;
 
-import com.googlecode.totallylazy.Objects;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import org.hamcrest.Description;

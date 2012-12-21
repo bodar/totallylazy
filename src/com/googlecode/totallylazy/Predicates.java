@@ -25,7 +25,7 @@ import java.util.Collection;
 
 import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sets.*;
+import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;
 
 public class Predicates {
@@ -265,6 +265,15 @@ public class Predicates {
     public static boolean isAssignableTo(Object o, Class<?> aClass) {
         if (o == null) return false;
         return aClass.isAssignableFrom(o.getClass());
+    }
+
+    public static LogicalPredicate<Class<?>> classAssignableFrom(final Class<?> aClass) {
+        return new LogicalPredicate<Class<?>>() {
+            @Override
+            public boolean matches(Class<?> other) {
+                return other.isAssignableFrom(aClass);
+            }
+        };
     }
 
     public static LogicalPredicate<Class<?>> classAssignableTo(final Class<?> aClass) {

@@ -2,9 +2,9 @@ package com.googlecode.totallylazy.collections;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
-import static com.googlecode.totallylazy.collections.ImmutableList.functions.cons;
-import static com.googlecode.totallylazy.collections.ImmutableList.functions.tail;
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
+import static com.googlecode.totallylazy.collections.PersistentList.functions.cons;
+import static com.googlecode.totallylazy.collections.PersistentList.functions.tail;
 import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -35,23 +35,23 @@ public class ListZipperTest {
 
     @Test
     public void canUseZipperToAddElementInMiddleOfList() {
-        final ImmutableList<String> modified = zipper(list("A", "B", "C", "D")).right().right().modify(cons("Z")).toList();
+        final PersistentList<String> modified = zipper(list("A", "B", "C", "D")).right().right().modify(cons("Z")).toList();
         assertThat(modified, is(list("A", "B", "Z", "C", "D")));
-        final ImmutableList<String> inserted = zipper(list("A", "B", "C", "D")).right().right().insert("Z").toList();
+        final PersistentList<String> inserted = zipper(list("A", "B", "C", "D")).right().right().insert("Z").toList();
         assertThat(inserted, is(list("A", "B", "Z", "C", "D")));
     }
 
     @Test
     public void canUseZipperToRemoveElementInMiddleOfList() {
-        final ImmutableList<String> modified = zipper(list("A", "B", "C", "D")).right().right().modify(tail(String.class)).toList();
+        final PersistentList<String> modified = zipper(list("A", "B", "C", "D")).right().right().modify(tail(String.class)).toList();
         assertThat(modified, is(list("A", "B", "D")));
-        final ImmutableList<String> deleted = zipper(list("A", "B", "C", "D")).right().right().delete().toList();
+        final PersistentList<String> deleted = zipper(list("A", "B", "C", "D")).right().right().delete().toList();
         assertThat(deleted, is(list("A", "B", "D")));
     }
 
     @Test
     public void canPerformMultipleModifications() throws Exception {
-        final ImmutableList<String> modified = zipper(list("A", "B", "C", "D")).right().delete().delete().toList();
+        final PersistentList<String> modified = zipper(list("A", "B", "C", "D")).right().delete().delete().toList();
         assertThat(modified, is(list("A", "D")));
     }
 

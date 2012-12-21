@@ -12,7 +12,6 @@ import java.util.Date;
 import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
-import static com.googlecode.totallylazy.Predicates.exists;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -108,7 +107,23 @@ public class Files {
     }
 
     public static boolean deleteFiles(File file) {
-        return recursiveFiles(file).map(delete()).forAll(is(true));
+        return recursiveFiles(file).map(deleteFile()).forAll(is(true));
+    }
+
+    public static Function1<File, Boolean> deleteFile() {
+        return new Function1<File, Boolean>() {
+            public Boolean call(File file) throws Exception {
+                return file.delete();
+            }
+        };
+    }
+
+    public static Function1<File, Boolean> delete() {
+        return new Function1<File, Boolean>() {
+            public Boolean call(File file) throws Exception {
+                return delete(file);
+            }
+        };
     }
 
     public static File temporaryFile() {
@@ -184,20 +199,11 @@ public class Files {
         }
     }
 
-    public static Function1<InputStream, Void> write(final File output) {
-        return new Function1<InputStream, Void>() {
+    public static Block<InputStream> write(final File output) {
+        return new Block<InputStream>() {
             @Override
-            public Void call(InputStream inputStream) throws Exception {
+            protected void execute(InputStream inputStream) throws Exception {
                 Streams.copyAndClose(inputStream, new FileOutputStream(output));
-                return null;
-            }
-        };
-    }
-
-    public static Function1<File, Boolean> delete() {
-        return new Function1<File, Boolean>() {
-            public Boolean call(File file) throws Exception {
-                return file.delete();
             }
         };
     }

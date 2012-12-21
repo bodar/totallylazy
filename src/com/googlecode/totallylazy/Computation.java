@@ -9,8 +9,6 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Functions.returns;
-import static com.googlecode.totallylazy.Pair.leftShift;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
 
@@ -57,8 +55,8 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         return computation1(lazyHead(iterator), generate(lazyTail(iterator)));
     }
 
-    private static <T> Function1<T, T> lazyTail(final Callable<? extends Iterator<? extends T>> iterator) {
-        return new Function1<T, T>() {
+    private static <T> UnaryFunction<T> lazyTail(final Callable<? extends Iterator<? extends T>> iterator) {
+        return new UnaryFunction<T>() {
             @Override
             public T call(T t) throws Exception {
                 return iterator.call().next();

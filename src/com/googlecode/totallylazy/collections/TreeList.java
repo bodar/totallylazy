@@ -16,21 +16,22 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.numbers.Numbers.intValue;
 
-public class TreeList<T> implements ImmutableList<T>, RandomAccess {
-    private final ImmutableSortedMap<Integer, T> map;
+public class TreeList<T> implements PersistentList<T>, RandomAccess {
+    private final PersistentSortedMap<Integer, T> map;
 
-    private TreeList(ImmutableSortedMap<Integer, T> map) {this.map = map;}
+    private TreeList(PersistentSortedMap<Integer, T> map) {this.map = map;}
 
-    public static <T> TreeList<T> treeList(ImmutableSortedMap<Integer, T> map) {return new TreeList<T>(map);}
+    public static <T> TreeList<T> treeList(PersistentSortedMap<Integer, T> map) {return new TreeList<T>(map);}
 
     public static <T> TreeList<T> treeList() {
-        return treeList(ImmutableSortedMap.constructors.<Integer, T>emptySortedMap());
+        return treeList(PersistentSortedMap.constructors.<Integer, T>emptySortedMap());
     }
 
     public static <T> TreeList<T> treeList(T first) {
@@ -58,7 +59,7 @@ public class TreeList<T> implements ImmutableList<T>, RandomAccess {
     }
 
     public static <T> TreeList<T> treeList(Iterable<? extends T> iterable) {
-        return treeList(ImmutableSortedMap.constructors.<Integer, T>sortedMap(sequence(iterable).
+        return treeList(PersistentSortedMap.constructors.<Integer, T>sortedMap(sequence(iterable).
                 zipWithIndex().map(Callables.<Number, T, Integer>first(intValue))));
     }
 
@@ -84,6 +85,13 @@ public class TreeList<T> implements ImmutableList<T>, RandomAccess {
     }
 
     @Override
+    public Option<T> headOption() {
+        return isEmpty()
+                ? Option.<T>none()
+                : some(head());
+    }
+
+    @Override
     public TreeList<T> tail() throws NoSuchElementException {
         return treeList(map.remove(map.first().first()));
     }
@@ -102,7 +110,7 @@ public class TreeList<T> implements ImmutableList<T>, RandomAccess {
 
     @Override
     public TreeList<T> remove(T value) {
-        throw new UnsupportedOperationException();
+        return treeList(toSequence().remove(value));
     }
 
     @Override
@@ -137,7 +145,7 @@ public class TreeList<T> implements ImmutableList<T>, RandomAccess {
 
     @Override
     public <C extends Segment<T>> C joinTo(C rest) {
-        throw new UnsupportedOperationException();
+        return toSequence().joinTo(rest);
     }
 
     @Override
@@ -162,7 +170,7 @@ public class TreeList<T> implements ImmutableList<T>, RandomAccess {
 
     @Override
     public int indexOf(T t) {
-        throw new UnsupportedOperationException();
+        return toSequence().indexOf(t);
     }
 
     @Override

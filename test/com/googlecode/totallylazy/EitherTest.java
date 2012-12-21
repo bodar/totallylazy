@@ -7,8 +7,6 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Either.applicate;
 import static com.googlecode.totallylazy.Left.left;
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.isLeft;
 import static com.googlecode.totallylazy.Predicates.isRight;
 import static com.googlecode.totallylazy.Right.right;

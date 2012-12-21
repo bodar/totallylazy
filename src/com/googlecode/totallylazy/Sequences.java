@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.collections.ImmutableList;
+import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
@@ -30,6 +30,7 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Triple.triple;
+import static com.googlecode.totallylazy.Unary.constructors.unary;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static java.nio.CharBuffer.wrap;
@@ -226,6 +227,22 @@ public class Sequences {
         Iterators.forEach(iterable.iterator(), runnable);
     }
 
+    public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable) {
+        forEachConcurrently(iterable, runnable);
+    }
+
+    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable) {
+        mapConcurrently(iterable, runnable).realise();
+    }
+
+    public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable, Executor executor) {
+        forEachConcurrently(iterable, runnable, executor);
+    }
+
+    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable, Executor executor) {
+        mapConcurrently(iterable, runnable, executor).realise();
+    }
+
     public static <T> T first(final Iterable<? extends T> iterable) {
         return head(iterable);
     }
@@ -355,6 +372,14 @@ public class Sequences {
         };
     }
 
+    public static <T> Sequence<T> removeAll(final Iterable<? extends T> iterable, final Iterable<? extends T> remove) {
+        return new Sequence<T>() {
+            public final Iterator<T> iterator() {
+                return Iterators.removeAll(iterable.iterator(), remove);
+            }
+        };
+    }
+
     public static <T> int size(final Iterable<? extends T> iterable) {
         return Iterators.size(iterable.iterator());
     }
@@ -372,8 +397,8 @@ public class Sequences {
         };
     }
 
-    public static <T> Function1<Sequence<T>, Sequence<T>> take(int count) {
-        return Sequences.<T>take().flip().apply(count);
+    public static <T> UnaryFunction<Sequence<T>> take(int count) {
+        return unary(Sequences.<T>take().flip().apply(count));
     }
 
     public static <T> Sequence<T> take(final Iterable<? extends T> iterable, final int count) {
@@ -602,7 +627,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<T> reverse(final Iterable<? extends T> iterable) {
-        return sequence(ImmutableList.constructors.reverse(iterable.iterator()));
+        return sequence(PersistentList.constructors.reverse(iterable.iterator()));
     }
 
     public static <T> Sequence<T> cycle(final Iterable<? extends T> iterable) {
@@ -753,10 +778,10 @@ public class Sequences {
         return internalWindowed(memorise(sequence), size).toSequence();
     }
 
-    private static <T> ImmutableList<Sequence<T>> internalWindowed(final Sequence<T> sequence, int size) {
+    private static <T> PersistentList<Sequence<T>> internalWindowed(final Sequence<T> sequence, int size) {
         Sequence<T> take = sequence.take(size);
-        if (take.size() == size) return ImmutableList.constructors.cons(take, internalWindowed(sequence.tail(), size));
-        return ImmutableList.constructors.empty();
+        if (take.size() == size) return PersistentList.constructors.cons(take, internalWindowed(sequence.tail(), size));
+        return PersistentList.constructors.empty();
     }
 
     public static <T> Sequence<T> intersperse(final Iterable<? extends T> iterable, final T separator) {
@@ -768,11 +793,11 @@ public class Sequences {
         };
     }
 
-    public static <T> Function1<Iterable<T>, Iterable<T>> identity(Class<T> aClass) {
+    public static <T> UnaryFunction<Iterable<T>> identity(Class<T> aClass) {
         return identity();
     }
 
-    public static <T> Function1<Iterable<T>, Iterable<T>> identity() {
+    public static <T> UnaryFunction<Iterable<T>> identity() {
         return Functions.identity();
     }
 
@@ -806,4 +831,17 @@ public class Sequences {
             }
         };
     }
+
+    public static <T, C extends Segment<T>> C joinTo(Iterable<? extends T> iterable, C rest) {
+        return Iterators.joinTo(iterable.iterator(), rest);
+    }
+
+    public static <T> T index(Iterable<? extends T> iterable, int index) {
+        return Iterators.index(iterable.iterator(), index);
+    }
+
+    public static <T> int indexOf(Iterable<? extends T> iterable, T instance) {
+        return Iterators.indexOf(iterable.iterator(), instance);
+    }
+
 }

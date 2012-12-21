@@ -104,11 +104,11 @@ public class Exceptions {
         };
     }
 
-    public static Function1<PrintWriter, Void> printStackTrace(final Throwable e) {
-        return new Function1<PrintWriter, Void>() {
-            public Void call(PrintWriter writer) {
+    public static Block<PrintWriter> printStackTrace(final Throwable e) {
+        return new Block<PrintWriter>() {
+            @Override
+            protected void execute(PrintWriter writer) throws Exception {
                 e.printStackTrace(writer);
-                return VOID;
             }
         };
     }
@@ -125,6 +125,20 @@ public class Exceptions {
             }
         };
     }
+
+    public static <A, B> Mapper<A, B> orElse(final Callable1<? super A, ? extends B> callable, final B result) {
+        return new Mapper<A, B>() {
+            @Override
+            public B call(A a) throws Exception {
+                try {
+                    return callable.call(a);
+                } catch (Exception e) {
+                    return result;
+                }
+            }
+        };
+    }
+
 
     public static <T, S> Function1<T, Option<S>> optional(final Callable1<? super T, ? extends S> callable) {
         return new Function1<T, Option<S>>() {

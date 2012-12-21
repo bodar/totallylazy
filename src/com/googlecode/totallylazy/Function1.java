@@ -17,6 +17,10 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B> {
         return Callables.deferApply(this, a);
     }
 
+    public Function<B> callConcurrently(final A a) {
+        return Callers.callConcurrently(deferApply(a));
+    }
+
     public Function1<A, B> lazy() {
         return LazyCallable1.lazy(this);
     }
@@ -35,6 +39,10 @@ public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B> {
 
     public Function1<A, Either<Exception, B>> orException() {
         return either();
+    }
+
+    public Mapper<A, B> orElse(final B result) {
+        return Exceptions.orElse(this, result);
     }
 
     @Override

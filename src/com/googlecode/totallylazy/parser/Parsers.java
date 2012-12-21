@@ -8,7 +8,6 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Triple;
 import com.googlecode.totallylazy.regex.Regex;
 
@@ -16,7 +15,6 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Characters.identifierPart;
 import static com.googlecode.totallylazy.Characters.identifierStart;
-import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Parsers {
     private static Function1<Pair<Character, ? extends Segment<Character>>, String> toString = new Function1<Pair<Character, ? extends Segment<Character>>, String>() {

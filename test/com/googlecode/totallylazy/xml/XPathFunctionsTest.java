@@ -3,11 +3,8 @@ package com.googlecode.totallylazy.xml;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import javax.xml.xpath.XPathConstants;
-
 import static com.googlecode.totallylazy.Xml.document;
 import static com.googlecode.totallylazy.Xml.xpath;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 

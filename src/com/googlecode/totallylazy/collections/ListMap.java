@@ -8,7 +8,6 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -17,62 +16,60 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.onlyOnce;
 import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Sequences.filter;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.collections.ImmutableList.constructors.list;
-import static com.googlecode.totallylazy.collections.ImmutableList.constructors.reverse;
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
 
-public class ListMap<K, V> implements ImmutableMap<K, V> {
-    private ImmutableList<Pair<K, V>> list;
+public class ListMap<K, V> implements PersistentMap<K, V> {
+    private PersistentList<Pair<K, V>> list;
 
-    private ListMap(ImmutableList<Pair<K, V>> list) {
+    private ListMap(PersistentList<Pair<K, V>> list) {
         this.list = list;
     }
 
-    public static <K, V> ImmutableMap<K, V> emptyListMap(Class<K> kClass, Class<V> vClass) {
+    public static <K, V> PersistentMap<K, V> emptyListMap(Class<K> kClass, Class<V> vClass) {
         return emptyListMap();
     }
 
-    public static <K, V> ImmutableMap<K, V> emptyListMap() {
-        return listMap(ImmutableList.constructors.<Pair<K,V>>empty());
+    public static <K, V> PersistentMap<K, V> emptyListMap() {
+        return listMap(PersistentList.constructors.<Pair<K,V>>empty());
     }
 
-    public static <K, V> ImmutableMap<K, V> listMap(K key, V value) {
+    public static <K, V> PersistentMap<K, V> listMap(K key, V value) {
         return listMap(pair(key, value));
     }
 
-    public static <K, V> ImmutableMap<K, V> listMap(K key1, V value1, K key2, V value2) {
+    public static <K, V> PersistentMap<K, V> listMap(K key1, V value1, K key2, V value2) {
         return listMap(sequence(pair(key1, value1), pair(key2, value2)));
     }
 
-    public static <K, V> ImmutableMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3) {
+    public static <K, V> PersistentMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3) {
         return listMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3)));
     }
 
-    public static <K, V> ImmutableMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
+    public static <K, V> PersistentMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
         return listMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4)));
     }
 
-    public static <K, V> ImmutableMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5) {
+    public static <K, V> PersistentMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5) {
         return listMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
     }
 
-    public static <K, V> ImmutableMap<K, V> listMap(Iterable<? extends Pair<K, V>> pairs) {
+    public static <K, V> PersistentMap<K, V> listMap(Iterable<? extends Pair<K, V>> pairs) {
         return listMap(reverse(sequence((pairs))));
     }
 
-    public static <K, V> ImmutableMap<K, V> listMap(Pair<K, V> pair) {
+    public static <K, V> PersistentMap<K, V> listMap(Pair<K, V> pair) {
         return listMap(list(pair));
     }
 
-    public static <K, V> ImmutableMap<K, V> listMap(ImmutableList<Pair<K, V>> list1) {
+    public static <K, V> PersistentMap<K, V> listMap(PersistentList<Pair<K, V>> list1) {
         return new ListMap<K, V>(list1);
     }
 
     @Override
-    public ImmutableMap<K, V> cons(Pair<K, V> head) {
+    public PersistentMap<K, V> cons(Pair<K, V> head) {
         return contains(head.first()) ? listMap(list.map(replace(head))) : listMap(list.cons(head));
     }
 
@@ -101,7 +98,12 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
-    public ImmutableMap<K, V> tail() throws NoSuchElementException {
+    public Option<Pair<K, V>> headOption() {
+        return list.headOption();
+    }
+
+    @Override
+    public PersistentMap<K, V> tail() throws NoSuchElementException {
         return listMap(list.tail());
     }
 
@@ -116,27 +118,27 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
-    public ImmutableMap<K, V> put(K key, V value) {
+    public PersistentMap<K, V> put(K key, V value) {
         return cons(Pair.pair(key, value));
     }
 
     @Override
-    public ImmutableMap<K, V> remove(K key) {
+    public PersistentMap<K, V> remove(K key) {
         return filterKeys(is(not(key)));
     }
 
     @Override
-    public ImmutableMap<K, V> filterKeys(Predicate<? super K> predicate) {
+    public PersistentMap<K, V> filterKeys(Predicate<? super K> predicate) {
         return listMap(list.filter(key(predicate)));
     }
 
     @Override
-    public ImmutableMap<K, V> filterValues(Predicate<? super V> predicate) {
+    public PersistentMap<K, V> filterValues(Predicate<? super V> predicate) {
         return listMap(list.filter(where(Callables.<V>second(), predicate)));
     }
 
     @Override
-    public <NewV> ImmutableMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> PersistentMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
         return listMap(list.map(Callables.<K, V, NewV>second(transformer)));
     }
 
@@ -146,13 +148,13 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
     }
 
     @Override
-    public ImmutableList<Pair<K, V>> immutableList() {
+    public PersistentList<Pair<K, V>> persistentList() {
         return reverse(list);
     }
 
     @Override
     public Map<K, V> toMap() {
-        return ImmutableMap.methods.toMap(this);
+        return PersistentMap.methods.toMap(this);
     }
 
     @Override
@@ -167,7 +169,7 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public Iterator<Pair<K, V>> iterator() {
-        return immutableList().iterator();
+        return persistentList().iterator();
     }
 
     private Predicate<First<K>> key(Predicate<? super K> predicate) {
@@ -190,7 +192,7 @@ public class ListMap<K, V> implements ImmutableMap<K, V> {
 
     @Override
     public String toString() {
-        return immutableList().toString();
+        return persistentList().toString();
     }
 
     @Override
