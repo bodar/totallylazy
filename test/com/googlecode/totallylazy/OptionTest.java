@@ -199,4 +199,14 @@ public class OptionTest {
         assertThat(some("bob").getOrThrow(new RuntimeException()), is("bob"));
         none().getOrThrow(new RuntimeException());
     }
+
+    @Test
+    public void canConvertSomeToEitherAsRight() {
+        assertThat(some("all good").<String>toEither("borked"), is(Either.<String, String>right("all good")));
+    }
+
+    @Test
+    public void canConvertNoneToEitherAsLeft() {
+        assertThat(none().toEither("borked"), is(Either.<String, Object>left("borked")));
+    }
 }

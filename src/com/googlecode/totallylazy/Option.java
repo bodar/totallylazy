@@ -64,6 +64,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
         return sequence(this);
     }
 
+    public abstract <L> Either<L, A> toEither(L value);
+
     public static <A> Option<A> flatten(Option<? extends Option<A>> option) {
         return option.flatMap(Functions.<Option<A>>identity());
     }
