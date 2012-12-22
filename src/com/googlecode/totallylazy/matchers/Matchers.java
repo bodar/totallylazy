@@ -5,10 +5,13 @@ import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.hamcrest.Description;
+import org.hamcrest.DiagnosingMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.SelfDescribing;
+import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeMatcher;
 
+import static com.googlecode.totallylazy.Callables.returns1;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static org.hamcrest.StringDescription.asString;
@@ -28,6 +31,31 @@ public class Matchers {
             @Override
             public String call(SelfDescribing selfDescribing) throws Exception {
                 return asString(selfDescribing);
+            }
+        };
+    }
+
+    public static <T> Function1<T, String> describeMismatch(Class<T> type, final Matcher<? super T> matcher) {
+        return describeMismatch(matcher);
+    }
+
+    public static <T> Function1<T, String> describeMismatch(final Matcher<? super T> matcher) {
+        if (matcher instanceof DiagnosingMatcher)
+            return diagnoseMismatch((DiagnosingMatcher) matcher);
+        return returns1(StringDescription.asString(matcher));
+    }
+
+    public static <T> Function1<T, String> diagnoseMismatch(Class<T> type, final DiagnosingMatcher matcher) {
+        return diagnoseMismatch(matcher);
+    }
+
+    public static <T> Function1<T, String> diagnoseMismatch(final DiagnosingMatcher matcher) {
+        return new Function1<T, String>() {
+            @Override
+            public String call(T t) throws Exception {
+                StringDescription mismatchDescription = new StringDescription();
+                matcher.describeMismatch(t, mismatchDescription);
+                return mismatchDescription.toString();
             }
         };
     }
