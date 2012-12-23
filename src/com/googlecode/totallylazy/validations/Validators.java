@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.nullValue;
 public class Validators {
     public static final String PLEASE_PROVIDE_A_VALUE = "Please provide a value";
 
-    static class allOf {
+    public static class allOf {
         public static <T> AllOfValidator<T> allOf(Validator<? super T> first, Validator<? super T> second) {
             return allOf(Sequences.<Validator<? super T>>sequence(first, second));
         }
@@ -48,7 +48,7 @@ public class Validators {
         }
     }
 
-    static class firstFailure {
+    public static class firstFailure {
         public static <T> FirstFailureValidator<T> firstFailure(Validator<? super T> first, Validator<? super T> second) {
             return firstFailure(Sequences.<Validator<? super T>>sequence(first, second));
         }
