@@ -11,7 +11,7 @@ import static com.googlecode.totallylazy.validations.PredicateValidator.construc
  * Validator directly
  */
 public interface Validator<T> extends Predicate<T> {
-	public ValidationResult validate(T instance);
+	ValidationResult validate(T instance);
 
 	public static class functions{
 		public static <T> Function1<Validator<? super T>, ValidationResult> validateAgainst(final T value){
