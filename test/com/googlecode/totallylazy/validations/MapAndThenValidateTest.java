@@ -10,7 +10,7 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
 import static com.googlecode.totallylazy.validations.Validators.validateThat;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class MapAndValidateTest {
+public class MapAndThenValidateTest {
     @Test
     public void appliesAMappingFunctionToTheOriginalValueAndValidatesTheResult() {
         LogicalValidator<String> integer = validateThat(isInteger()).
