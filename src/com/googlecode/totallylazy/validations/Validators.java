@@ -10,7 +10,7 @@ import com.googlecode.totallylazy.matchers.IterableMatcher;
 import org.hamcrest.Matcher;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.validations.MapAndThenValidate.constructors.mapAndThenValidate;
+import static com.googlecode.totallylazy.validations.MapAndValidate.constructors.mapAndValidate;
 import static com.googlecode.totallylazy.validations.MatcherValidator.constructors.validateMatcher;
 import static com.googlecode.totallylazy.validations.PredicateValidator.constructors.validatePredicate;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;
@@ -74,24 +74,24 @@ public class Validators {
         }
     }
 
-    public static <T, R> MapAndThenValidate<T, R> validateThat(Callable1<T, R> map, Validator<? super R> validator) {
-        return mapAndThenValidate(map, validator);
+    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Validator<? super R> validator) {
+        return mapAndValidate(map, validator);
     }
 
-    public static <T, R> MapAndThenValidate<T, R> validateThat(Callable1<T, R> map, Matcher<? super R> matcher) {
-        return mapAndThenValidate(map, validateThat(matcher));
+    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Matcher<? super R> matcher) {
+        return mapAndValidate(map, validateThat(matcher));
     }
 
-    public static <T, R> MapAndThenValidate<T, R> validateThat(Callable1<T, R> map, Predicate<? super R> predicate) {
-        return mapAndThenValidate(map, validateThat(predicate));
+    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Predicate<? super R> predicate) {
+        return mapAndValidate(map, validateThat(predicate));
     }
 
-    public static <T, R> MapAndThenValidate<T, R> validateThat(Callable1<T, R> map, Predicate<? super R> predicate, String message) {
-        return mapAndThenValidate(map, validateThat(predicate, message));
+    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Predicate<? super R> predicate, String message) {
+        return mapAndValidate(map, validateThat(predicate, message));
     }
 
-    public static <T, R> MapAndThenValidate<T, R> validateThat(Callable1<T, R> map, Predicate<? super R> predicate, Callable1<? super R, String> message) {
-        return mapAndThenValidate(map, validateThat(predicate, message));
+    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Predicate<? super R> predicate, Callable1<? super R, String> message) {
+        return mapAndValidate(map, validateThat(predicate, message));
     }
 
     public static <T> MatcherValidator<T> validateThat(Matcher<? super T> matcher) {
