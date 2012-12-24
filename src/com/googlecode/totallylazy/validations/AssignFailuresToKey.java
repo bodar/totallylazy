@@ -14,7 +14,7 @@ public class AssignFailuresToKey<T> extends LogicalValidator<T> {
         return validator.validate(instance).assignToKey(key);
     }
 
-    static class constructors {
+    public static class constructors {
         public static <T> AssignFailuresToKey<T> assignFailuresToKey(String key, Validator<? super T> validator) {
             return new AssignFailuresToKey<T>(key, validator);
         }
