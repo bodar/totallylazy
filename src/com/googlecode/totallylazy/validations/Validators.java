@@ -74,23 +74,23 @@ public class Validators {
         }
     }
 
-    public static <T, R> MapAndValidate<R, T> validateThat(Callable1<T, R> map, Validator<? super R> validator) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Validator<? super R> validator) {
         return mapAndValidate(map, validator);
     }
 
-    public static <T, R> MapAndValidate<R, T> validateThat(Callable1<T, R> map, Matcher<? super R> matcher) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Matcher<? super R> matcher) {
         return mapAndValidate(map, validateThat(matcher));
     }
 
-    public static <T, R> MapAndValidate<R, T> validateThat(Callable1<T, R> map, Predicate<? super R> predicate) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Predicate<? super R> predicate) {
         return mapAndValidate(map, validateThat(predicate));
     }
 
-    public static <T, R> MapAndValidate<R, T> validateThat(Callable1<T, R> map, Predicate<? super R> predicate, String message) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Predicate<? super R> predicate, String message) {
         return mapAndValidate(map, validateThat(predicate, message));
     }
 
-    public static <T, R> MapAndValidate<R, T> validateThat(Callable1<T, R> map, Predicate<? super R> predicate, Callable1<? super R, String> message) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Predicate<? super R> predicate, Callable1<? super R, String> message) {
         return mapAndValidate(map, validateThat(predicate, message));
     }
 
