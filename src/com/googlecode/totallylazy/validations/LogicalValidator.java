@@ -2,10 +2,12 @@ package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Callable1;
 
+import static com.googlecode.totallylazy.validations.Validators.allOf.allOf;
+
 public abstract class LogicalValidator<T> extends AbstractValidator<T> {
 
     public LogicalValidator<T> and(Validator<? super T> validator){
-        return Validators.allOf.allOf(this, validator); // Adding static imports to this class crashes javac 1.6
+        return allOf(this, validator); // Adding static imports to this class crashes javac 1.6
     }
 
     public LogicalValidator<T> andIfSo(Validator<? super T> validator){
