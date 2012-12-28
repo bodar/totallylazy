@@ -3,8 +3,10 @@ package com.googlecode.totallylazy.validations;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.ReducerFunction;
 
 import static com.googlecode.totallylazy.validations.PredicateValidator.constructors.validatePredicate;
+import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
 
 public interface Validator<T> extends Predicate<T> {
     ValidationResult validate(T instance);
@@ -19,11 +21,16 @@ public interface Validator<T> extends Predicate<T> {
             };
         }
 
-        public static <T> Function1<T, ValidationResult> validateWith(final Validator<? super T> validator) {
-            return new Function1<T, ValidationResult>() {
+        public static <T> ReducerFunction<T, ValidationResult> validateWith(final Validator<? super T> validator) {
+            return new ReducerFunction<T, ValidationResult>() {
                 @Override
-                public ValidationResult call(T instance) throws Exception {
-                    return validator.validate(instance);
+                public ValidationResult call(ValidationResult validationResult, T instance) throws Exception {
+                    return validationResult.merge(validator.validate(instance));
+                }
+
+                @Override
+                public ValidationResult identity() {
+                    return pass();
                 }
             };
         }

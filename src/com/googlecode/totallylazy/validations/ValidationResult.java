@@ -66,6 +66,10 @@ public class ValidationResult {
         return sequence(messages).fold(this, ValidationResult.functions.add());
     }
 
+    public ValidationResult merge(ValidationResult value) {
+        return this.add(Unchecked.<Iterable<Pair<String, Iterable<String>>>>cast(value.messages()));
+    }
+
     public ValidationResult remove(String key) {
         return new ValidationResult(messages.remove(key));
     }
@@ -178,7 +182,7 @@ public class ValidationResult {
             return new ReducerFunction<ValidationResult, ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult seed, ValidationResult value) throws Exception {
-                    return seed.add(Unchecked.<Iterable<Pair<String, Iterable<String>>>>cast(value.messages()));
+                    return seed.merge(value);
                 }
 
                 @Override
