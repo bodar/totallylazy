@@ -4,11 +4,11 @@ import com.googlecode.totallylazy.Unchecked;
 
 public abstract class AbstractValidator<T> implements Validator<T> {
     @Override
-    public abstract ValidationResult validate(T t);
+    public abstract ValidationResult validate(T instance);
 
     @Override
-    public boolean matches(T other) {
-        return validate(other).succeeded();
+    public boolean matches(T instance) {
+        return validate(instance).succeeded();
     }
 
     /**
