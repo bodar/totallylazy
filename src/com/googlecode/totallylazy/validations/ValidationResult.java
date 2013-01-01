@@ -78,6 +78,10 @@ public class ValidationResult {
         return messages.isEmpty();
     }
 
+    public boolean failed() {
+        return !succeeded();
+    }
+
     public PersistentMap<String, Sequence<String>> toMap() {
         return messages;
     }
