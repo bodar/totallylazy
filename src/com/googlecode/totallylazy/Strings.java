@@ -27,7 +27,7 @@ public class Strings {
     public static final String EMPTY = "";
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
-    public static final CombinerFunction<CharSequence> join = new JoinCharSequence();
+    public static final Function2<CharSequence, CharSequence, CharSequence> join = new JoinCharSequence();
 
     public static Function1<String, Boolean> asBoolean() {
         return new Function1<String, Boolean>() {
@@ -165,12 +165,24 @@ public class Strings {
         };
     }
 
+    public static LogicalPredicate<String> empty = new LogicalPredicate<String>() {
+        public boolean matches(String value) {
+            return isEmpty(value);
+        }
+    };
+
     public static LogicalPredicate<String> empty() {
-        return new LogicalPredicate<String>() {
-            public boolean matches(String value) {
-                return isEmpty(value);
-            }
-        };
+        return empty;
+    }
+
+    public static LogicalPredicate<String> blank = new LogicalPredicate<String>() {
+        public boolean matches(String value) {
+            return isBlank(value);
+        }
+    };
+
+    public static LogicalPredicate<String> blank() {
+        return blank;
     }
 
     public static boolean isEmpty(String value) {
