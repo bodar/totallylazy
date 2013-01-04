@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Unchecked;
 
 import java.lang.reflect.InvocationTargetException;
@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Invocation<T, R> implements Callable1<T, R> {
+public class Invocation<T, R> extends Function1<T, R> {
     private final Object proxy;
     private final Method method;
     private final Object[] arguments;
