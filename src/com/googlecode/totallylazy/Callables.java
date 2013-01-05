@@ -66,9 +66,9 @@ public final class Callables {
         };
     }
 
-    public static Function1<Object, Class> toClass() {
-        return new Function1<Object, Class>() {
-            public final Class call(final Object o) throws Exception {
+    public static Function1<Object, Class<?>> toClass() {
+        return new Function1<Object, Class<?>>() {
+            public final Class<?> call(final Object o) throws Exception {
                 return o.getClass();
             }
         };
