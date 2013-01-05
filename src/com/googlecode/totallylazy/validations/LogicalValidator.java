@@ -13,11 +13,11 @@ public abstract class LogicalValidator<T> extends AbstractValidator<T> {
     }
 
     public LogicalValidator<T> withMessage(String message){
-        return PredicateValidator.constructors.validatePredicate(this, message); // Adding static imports to this class crashes javac 1.6
+        return SetFailureMessage.constructors.setFailureMessage(this, message); // Adding static imports to this class crashes javac 1.6
     }
 
     public LogicalValidator<T> withMessage(Callable1<? super T,String> message){
-        return PredicateValidator.constructors.validatePredicate(this, message); // Adding static imports to this class crashes javac 1.6
+        return SetFailureMessage.constructors.setFailureMessage(this, message); // Adding static imports to this class crashes javac 1.6
     }
 
     public LogicalValidator<T> assigningFailuresTo(String key){
