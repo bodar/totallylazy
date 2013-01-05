@@ -11,6 +11,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.validations.FlatMapAndValidate.constructors.flatMapAndValidate;
 import static com.googlecode.totallylazy.validations.MapAndValidate.constructors.mapAndValidate;
 import static com.googlecode.totallylazy.validations.MatcherValidator.constructors.validateMatcher;
 import static com.googlecode.totallylazy.validations.PredicateValidator.constructors.validatePredicate;
@@ -18,7 +19,6 @@ import static com.googlecode.totallylazy.validations.ValidationResult.constructo
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 
 public class Validators {
     public static final String PLEASE_PROVIDE_A_VALUE = "Please provide a value";
@@ -73,6 +73,10 @@ public class Validators {
         public static <T> FirstFailureValidator<T> firstFailure(Sequence<Validator<? super T>> validators) {
             return FirstFailureValidator.constructors.firstFailure(validators);
         }
+    }
+
+    public static <T, R> FlatMapAndValidate<T, R> forAll(Callable1<? super T, ? extends Iterable<R>> map, Validator<? super R> validator) {
+        return flatMapAndValidate(map, validator);
     }
 
     public static <T, R> MapAndValidate<T, R> validateThat(Callable1<T, R> map, Validator<? super R> validator) {
