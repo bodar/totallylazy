@@ -14,20 +14,26 @@ import static com.googlecode.totallylazy.validations.ValidationResult.constructo
 import static com.googlecode.totallylazy.validations.Validators.forAll;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class FlatMapAndValidateTest {
+public class EveryItemValidatorTest {
     @Test
-    public void appliesValidationToEachMappedItem() {
+    public void appliesValidationToEachItemAndMergesTheResult() {
         Map<String, String> values = map(
-                pair("one", "valid"),
-                pair("two", "not valid"));
+                pair("one", "not valid"),
+                pair("two", "valid"),
+                pair("three", "not valid")
+                );
 
+        // EveryItemValidator is called inside Validators.forAll().
+        // This is the typical pattern of usage, rather than constructing
+        // an EveryItemValidator directly.
         ValidationResult result = forAll(
                     entries(String.class, String.class),
                     hasValue("valid")).
                 validate(values);
 
-        assertThat(result.messages("one"), isEmpty(String.class));
-        assertThat(result.messages("two"), hasExactly("Not the right value"));
+        assertThat(result.messages("one"), hasExactly("Not the right value"));
+        assertThat(result.messages("two"), isEmpty(String.class));
+        assertThat(result.messages("three"), hasExactly("Not the right value"));
     }
 
     private Validator<Map.Entry<String, String>> hasValue(final String expected) {
