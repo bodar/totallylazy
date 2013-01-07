@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class AnyOfValidatorTest {
     @Test
     public void shouldPassIfAnyValidatorPasses() {
-        Validator<String> validator = validateThat(is("A")).
+        LogicalValidator<String> validator = validateThat(is("A")).
                 or(validateThat(is("B"))). // or() creates an AnyOfValidator
                 assigningFailuresTo("key");
 
@@ -21,7 +21,7 @@ public class AnyOfValidatorTest {
 
     @Test
     public void shouldFailIfAllValidatorsFail() {
-        Validator<String> validator = validateThat(is("A")).
+        LogicalValidator<String> validator = validateThat(is("A")).
                 or(validateThat(is("B"))). // or() creates an AnyOfValidator
                 assigningFailuresTo("key");
 
