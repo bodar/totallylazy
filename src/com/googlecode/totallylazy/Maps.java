@@ -16,6 +16,10 @@ public class Maps {
         return entries(map).map(Maps.<K, V>entryToPair());
     }
 
+    public static <K, V> Function1<Map<K, V>, Sequence<Map.Entry<K, V>>> entries(Class<K> keyType, Class<V> valueType) {
+        return entries();
+    }
+
     public static <K, V> Function1<Map<K, V>, Sequence<Map.Entry<K, V>>> entries() {
         return new Function1<Map<K, V>, Sequence<Map.Entry<K, V>>>() {
             @Override

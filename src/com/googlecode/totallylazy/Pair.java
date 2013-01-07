@@ -24,7 +24,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
         return new Pair<F, S>(first, second);
     }
 
-    public static <F, S> Function2<F,S, Pair<F,S>> pair() {
+    public static <F, S> Function2<F, S, Pair<F, S>> pair() {
         return new Function2<F, S, Pair<F, S>>() {
             @Override
             public Pair<F, S> call(F f, S s) throws Exception {
@@ -90,7 +90,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
         return Pair.leftShift(pair, call(callable, pair.first(), pair.second()));
     }
 
-    public static <A, B, C> Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>> reduceLeftShift()  {
+    public static <A, B, C> Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>> reduceLeftShift() {
         return new Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>>() {
             @Override
             public Pair<B, C> call(Pair<A, B> pair, Callable2<A, B, C> callable) throws Exception {
@@ -108,8 +108,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
         };
     }
 
-    public static <A,B,C> Function1<Pair<A, B>, Pair<B, C>> reduceLeftShift(Callable2<A, B, C> callable) {
-        return Pair.<A,B,C>reduceLeftShift().flip().apply(callable);
+    public static <A, B, C> Function1<Pair<A, B>, Pair<B, C>> reduceLeftShift(Callable2<A, B, C> callable) {
+        return Pair.<A, B, C>reduceLeftShift().flip().apply(callable);
     }
 
     @Override
@@ -118,8 +118,26 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
         return pair(first.map(callable), second);
     }
 
-    public static class functions{
-        public static <F,S> Function1<S, Pair<F, S>> toPairWithFirst(final F first) {
+    public static class functions {
+        public static <F, S1, S2> Function1<Pair<F, S1>, Pair<F, S2>> replaceSecond(final S2 newSecond) {
+            return new Function1<Pair<F, S1>, Pair<F, S2>>() {
+                @Override
+                public Pair<F, S2> call(Pair<F, S1> pair) throws Exception {
+                    return pair(pair.first(), newSecond);
+                }
+            };
+        }
+
+        public static <F1, F2, S> Function1<Pair<F1, S>, Pair<F2, S>> replaceFirst(final F2 newFirst) {
+            return new Function1<Pair<F1, S>, Pair<F2, S>>() {
+                @Override
+                public Pair<F2, S> call(Pair<F1, S> pair) throws Exception {
+                    return pair(newFirst, pair.second());
+                }
+            };
+        }
+
+        public static <F, S> Function1<S, Pair<F, S>> toPairWithFirst(final F first) {
             return new Function1<S, Pair<F, S>>() {
                 @Override
                 public Pair<F, S> call(S second) throws Exception {
@@ -128,7 +146,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
             };
         }
 
-        public static <F,S> Function1<F, Pair<F, S>> toPairWithSecond(final S second) {
+        public static <F, S> Function1<F, Pair<F, S>> toPairWithSecond(final S second) {
             return new Function1<F, Pair<F, S>>() {
                 @Override
                 public Pair<F, S> call(F first) throws Exception {

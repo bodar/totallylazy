@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Callable1;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.returnArgument;
@@ -53,6 +52,19 @@ public class LogicalValidatorTest {
     }
 
     @Test
+    public void canReassignMessagesToANewKeyAndThenChangeTheMessage() {
+        LogicalValidator<String> validator = validateThat(containsString("not there")).
+                assigningFailuresTo("A").
+                withMessage("Validation failure").
+                castValidator(String.class);
+
+        assertThat(
+                validator.validate("some string").
+                        messages("A"),
+                hasExactly("Validation failure"));
+    }
+
+    @Test
     public void allowsSettingOfMessageBasedOnValidatedValue() {
         LogicalValidator<String> validator = validateThat(containsString("not there")).
                 castValidator(String.class).
@@ -62,5 +74,4 @@ public class LogicalValidatorTest {
                 validator.validate("some string").allMessages(),
                 hasExactly("some string"));
     }
-
 }

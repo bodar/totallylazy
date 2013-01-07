@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Unchecked;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public abstract class AbstractValidator<T> implements Validator<T> {
     @Override
@@ -15,6 +15,10 @@ public abstract class AbstractValidator<T> implements Validator<T> {
      * Use this method if Java 1.6 loses track of what T is.
      */
     public <C> LogicalValidator<C> castValidator(Class<C> type){
-        return Unchecked.cast(this);
+        return castValidator();
+    }
+
+    public <C> LogicalValidator<C> castValidator(){
+        return cast(this);
     }
 }
