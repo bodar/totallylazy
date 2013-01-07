@@ -22,6 +22,7 @@ import static com.googlecode.totallylazy.validations.ValidationResult.constructo
  * An immutable map of String keys to sequences of failure messages
  */
 public class ValidationResult {
+    public static final String DEFAULT_KEY = "value";
     private final PersistentMap<String, Sequence<String>> messages;
 
     public ValidationResult(PersistentMap<String, Sequence<String>> messages) {
@@ -92,7 +93,7 @@ public class ValidationResult {
         }
 
         public static ValidationResult failure(String message) {
-            return failure("value", message);
+            return failure(DEFAULT_KEY, message);
         }
 
         public static ValidationResult failure(String key, String message) {

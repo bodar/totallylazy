@@ -10,6 +10,8 @@ import com.googlecode.totallylazy.matchers.IterableMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
+import java.util.regex.Pattern;
+
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.validations.EveryItemValidator.constructors.everyItem;
 import static com.googlecode.totallylazy.validations.MapAndValidate.constructors.mapAndValidate;
@@ -142,6 +144,14 @@ public class Validators {
 
     public static <T> LogicalValidator<T> isNotNull(Class<T> type) {
         return isNotNull();
+    }
+
+    public static RegexValidator matchesRegex(Pattern regex) {
+        return RegexValidator.constructors.matchesRegex(regex);
+    }
+
+    public static RegexValidator matchesRegex(String regex) {
+        return RegexValidator.constructors.matchesRegex(regex);
     }
 
     public static <T> LogicalValidator<T> isNotNull() {
