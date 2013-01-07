@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
-import com.googlecode.totallylazy.time.Days;
+import com.googlecode.totallylazy.time.Seconds;
 
 import java.util.Date;
 import java.util.List;
@@ -80,7 +80,7 @@ public class Randoms {
         return Sequences.forwardOnly(new StatefulIterator<T>() {
             @Override
             protected T getNext() throws Exception {
-                if(list.isEmpty()) return finished();
+                if (list.isEmpty()) return finished();
                 int index = random.nextInt(list.size());
                 return list.remove(index);
             }
@@ -113,11 +113,11 @@ public class Randoms {
         return Sequences.forwardOnly(new StatefulIterator<Date>() {
             @Override
             protected Date getNext() throws Exception {
-                return stripTime(Days.add(bounds.first(), between(0, daysBetween(bounds.first(), bounds.second())).head()));
+                return Seconds.add(bounds.first(), between(0, daysBetween(bounds.first(), bounds.second())).head());
             }
 
-            private Integer daysBetween(Date start, Date end) {
-                return abs((int) (end.getTime() - start.getTime())) / (24 * 60 * 60 * 1000);
+            private int daysBetween(Date start, Date end) {
+                return (int) abs((end.getTime() - start.getTime()) / 1000);
             }
         });
     }

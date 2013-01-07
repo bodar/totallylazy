@@ -74,9 +74,9 @@ public class RandomsTest {
     @Test
     public void betweenDates() {
         Date yesterday = Days.subtract(NOW, 1);
-        Date tomorrow = Days.add(NOW, 1);
-        assertThat(Randoms.between(yesterday, tomorrow).take(TESTS), matcher(Predicates.<Date>forAll(between(yesterday, tomorrow))));
-        assertThat(Randoms.between(tomorrow, yesterday).take(TESTS), matcher(Predicates.<Date>forAll(between(yesterday, tomorrow))));
+        Date theFuture = Dates.MAX_VALUE;
+        assertThat(Randoms.between(yesterday, theFuture).take(TESTS), matcher(Predicates.<Date>forAll(between(yesterday, theFuture))));
+        assertThat(Randoms.between(theFuture, yesterday).take(TESTS), matcher(Predicates.<Date>forAll(between(yesterday, theFuture))));
         assertThat(Randoms.between(NOW, NOW).take(TESTS), matcher(Predicates.<Date>forAll(between(NOW, NOW))));
     }
 
