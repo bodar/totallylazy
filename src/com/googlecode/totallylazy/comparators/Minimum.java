@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.CombinerFunction;
 public interface Minimum<T> extends Combiner<T> {
     class methods {
         public static <T extends Comparable<? super T>> T minimum(T a, T b) {
-            return a.compareTo(b) > 0 ? b : a;
+            return NullComparator.compare(a, b, NullComparator.Direction.Up) > 0 ? b : a;
         }
     }
 

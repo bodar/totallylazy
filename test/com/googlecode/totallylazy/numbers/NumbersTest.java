@@ -53,6 +53,8 @@ public class NumbersTest {
 
     @Test
     public void supportsMinimum() throws Exception {
+        assertThat(numbers(2,1,null).reduce(minimum), NumberMatcher.is(1));
+        assertThat(numbers(null,1,null).reduce(minimum), NumberMatcher.is(1));
         assertThat(numbers(2,1,3).reduce(minimum), NumberMatcher.is(1));
         assertThat(numbers(2,1).reduce(minimum), NumberMatcher.is(1));
         assertThat(numbers(1).reduce(minimum), NumberMatcher.is(1));
@@ -62,6 +64,8 @@ public class NumbersTest {
 
     @Test
     public void supportsMaximum() throws Exception {
+        assertThat(numbers(2,1,null).reduce(maximum), NumberMatcher.is(2));
+        assertThat(numbers(null,1,null).reduce(maximum), NumberMatcher.is(1));
         assertThat(numbers(2,1,3).reduce(maximum), NumberMatcher.is(3));
         assertThat(numbers(2,1).reduce(maximum), NumberMatcher.is(2));
         assertThat(numbers(1).reduce(maximum), NumberMatcher.is(1));

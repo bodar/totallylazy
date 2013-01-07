@@ -11,6 +11,8 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.join;
 import static com.googlecode.totallylazy.Strings.lines;
+import static com.googlecode.totallylazy.Strings.maximum;
+import static com.googlecode.totallylazy.Strings.minimum;
 import static com.googlecode.totallylazy.Strings.replace;
 import static com.googlecode.totallylazy.Strings.replaceAll;
 import static com.googlecode.totallylazy.Strings.replaceFirst;
@@ -21,6 +23,7 @@ import static com.googlecode.totallylazy.Strings.toUpperCase;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 
 public class StringsTest {
@@ -110,6 +113,27 @@ public class StringsTest {
         assertThat(Strings.isBlank(" din"), is(false));
         assertThat(Strings.isBlank("\tdin"), is(false));
         assertThat(Strings.isBlank("\rdin"), is(false));
+    }
+
+    @Test
+    public void supportsMinimum() throws Exception {
+        assertThat(sequence("b", "a", null).reduce(minimum), is("a"));
+        assertThat(sequence(null, "a", null).reduce(minimum), is("a"));
+        assertThat(sequence("b", "a", "c").reduce(minimum), is("a"));
+        assertThat(sequence("b", "a").reduce(minimum), is("a"));
+        assertThat(sequence("a").reduce(minimum), is("a"));
+        assertThat(Sequences.<String>sequence().reduce(minimum), nullValue());
+    }
+
+    @Test
+    public void supportsMaximum() throws Exception {
+        assertThat(sequence("b", "a", null).reduce(maximum), is("b"));
+        assertThat(sequence(null, "a", null).reduce(maximum), is("a"));
+        assertThat(sequence("b", "a", "c").reduce(maximum), is("c"));
+        assertThat(sequence("b", "a").reduce(maximum), is("b"));
+        assertThat(sequence("a").reduce(maximum), is("a"));
+        assertThat(Sequences.<String>sequence().reduce(maximum), nullValue());
+
     }
 
 }
