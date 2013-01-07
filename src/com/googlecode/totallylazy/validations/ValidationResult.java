@@ -76,7 +76,7 @@ public class ValidationResult {
     }
 
     public boolean succeeded() {
-        return messages.isEmpty();
+        return allMessages().isEmpty();
     }
 
     public boolean failed() {
