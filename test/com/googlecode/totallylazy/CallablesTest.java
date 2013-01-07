@@ -1,13 +1,9 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.numbers.Numbers;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.replace;
 import static com.googlecode.totallylazy.Callables.when;
 import static com.googlecode.totallylazy.Functions.constant;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
@@ -41,6 +37,6 @@ public class CallablesTest {
 
     @Test
     public void canReplaceInline() {
-        assertThat(primes().map(when(even(), constant((Number) 0))).take(5), hasExactly(0,3,5,7,11));
+        assertThat(primes().map(when(even(), constant((Number) 0))).take(5), hasExactly(0, 3, 5, 7, 11));
     }
 }
