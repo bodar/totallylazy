@@ -56,6 +56,8 @@ public class ValidationResult {
 
     public ValidationResult add(String key, Iterable<String> messages) {
         Sequence<String> newMessages = messages(key).join(messages);
+        if(newMessages.isEmpty())
+            return this;
         return new ValidationResult(this.messages.put(key, newMessages));
     }
 
