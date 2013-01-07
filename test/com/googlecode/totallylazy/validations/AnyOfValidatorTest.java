@@ -13,7 +13,8 @@ public class AnyOfValidatorTest {
     public void shouldPassIfAnyValidatorPasses() {
         LogicalValidator<String> validator = validateThat(is("A")).
                 or(validateThat(is("B"))). // or() creates an AnyOfValidator
-                assigningFailuresTo("key");
+                assigningFailuresTo("key").
+                castValidator();
 
         assertThat(validator.validate("A").messages("key"), isEmpty(String.class));
         assertThat(validator.validate("B").messages("key"), isEmpty(String.class));
@@ -23,7 +24,8 @@ public class AnyOfValidatorTest {
     public void shouldFailIfAllValidatorsFail() {
         LogicalValidator<String> validator = validateThat(is("A")).
                 or(validateThat(is("B"))). // or() creates an AnyOfValidator
-                assigningFailuresTo("key");
+                assigningFailuresTo("key").
+                castValidator();
 
         assertThat(validator.validate("C").messages("key"), hasExactly(AnyOfValidator.DEFAULT_MESSAGE));
     }
