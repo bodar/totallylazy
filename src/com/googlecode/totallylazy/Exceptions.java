@@ -12,6 +12,7 @@ import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Exceptions {
+
     public static Exception toException(Throwable throwable) throws Exception {
         if (throwable instanceof Error) {
             throw (Error) throwable;
@@ -36,6 +37,17 @@ public class Exceptions {
                 return throwable.getCause();
             }
         };
+    }
+
+    public static final Function1<Exception,String> message = new Function1<Exception, String>() {
+        @Override
+        public String call(Exception e) throws Exception {
+            return e.getMessage();
+        }
+    };
+
+    public static Function1<Exception, String> message() {
+        return message;
     }
 
     public static <T, S> Function1<T, Option<S>> ignoringException(final Callable1<? super T, ? extends S> callable) {
