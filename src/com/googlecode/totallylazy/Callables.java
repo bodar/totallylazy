@@ -494,6 +494,10 @@ public final class Callables {
     }
 
     public static <T> UnaryFunction<T> replace(final Predicate<? super T> predicate, final Callable1<? super T, ? extends T> callable) {
+        return when(predicate, callable);
+    }
+
+    public static <T> UnaryFunction<T> when(final Predicate<? super T> predicate, final Callable1<? super T, ? extends T> callable) {
         return new UnaryFunction<T>() {
             @Override
             public T call(T value) throws Exception {
