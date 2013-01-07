@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.validations;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.validations.Validators.validateThat;
 import static org.junit.Assert.assertTrue;
 
@@ -11,16 +10,16 @@ public class ConditionalValidatorTest {
     @Test
     public void returnsResultOfValidatorIfPredicateIsMatched() {
         LogicalValidator<String> conditionalValidator = validateThat(is("A")).
-                when(not(is("B")));
+                when(is("B"));
 
-        assertTrue(conditionalValidator.validate("C").failed());
+        assertTrue(conditionalValidator.validate("B").failed());
     }
 
     @Test
-    public void doesNotValidateIfPredicateIsMatched() {
+    public void doesNotValidateIfPredicateIsNotMatched() {
         LogicalValidator<String> conditionalValidator = validateThat(is("A")).
-                when(not(is("B")));
+                when(is("B"));
 
-        assertTrue(conditionalValidator.validate("B").succeeded());
+        assertTrue(conditionalValidator.validate("C").succeeded());
     }
 }
