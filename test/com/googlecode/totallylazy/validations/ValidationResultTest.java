@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.collections.PersistentMap;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
@@ -135,5 +136,10 @@ public class ValidationResultTest {
                 reduce(merge());
 
         assertThat(result.messages("C"), hasExactly("message 1", "message 2"));
+    }
+
+    @Test
+    public void shouldStillPassIfThereAreZeroLengthMessagesAssignedToAKey() {
+        assertTrue(pass().add("key", empty(String.class)).succeeded());
     }
 }
