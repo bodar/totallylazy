@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.JoinCharSequence;
+import com.googlecode.totallylazy.comparators.Maximum;
+import com.googlecode.totallylazy.comparators.Minimum;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
 import com.googlecode.totallylazy.predicates.EndsWithPredicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
@@ -343,4 +345,8 @@ public class Strings {
         return new String(value, UTF8);
     }
 
+
+    public static Maximum.Function<String> maximum = Maximum.constructors.maximum((String) null);
+
+    public static Minimum.Function<String> minimum =  Minimum.constructors.minimum((String) null);
 }
