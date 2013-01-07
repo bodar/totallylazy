@@ -29,7 +29,7 @@ public abstract class LogicalValidator<T> extends AbstractValidator<T> {
         return AssignFailuresToKey.constructors.assignFailuresToKey(key, this); // Adding static imports to this class crashes javac 1.6
     }
 
-    public LogicalValidator<T> when(Predicate<T> predicate){
+    public LogicalValidator<T> when(Predicate<? super T> predicate){
         return ConditionalValidator.constructors.conditionalValidator(this, predicate); // Adding static imports to this class crashes javac 1.6
     }
 
