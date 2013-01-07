@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.CombinerFunction;
 public interface Maximum<T> extends Combiner<T> {
     class methods {
         public static <T extends Comparable<? super T>> T maximum(T a, T b) {
-            return a.compareTo(b) > 0 ? a : b;
+            return NullComparator.compare(a, b, NullComparator.Direction.Down) > 0 ? a : b;
         }
     }
 
