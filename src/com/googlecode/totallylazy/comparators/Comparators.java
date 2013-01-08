@@ -13,7 +13,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Comparators {
-    public static <T, R> Comparator<T> where(final Callable1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
+    public static <T, R> Comparator<T> by(final Callable1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
         return new Comparator<T>() {
             public int compare(T instance, T otherInstance) {
                 return comparator.compare(call(callable, instance), call(callable, otherInstance));
@@ -21,12 +21,16 @@ public class Comparators {
         };
     }
 
+    public static <T, R> Comparator<T> where(final Callable1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
+        return by(callable, comparator);
+    }
+
     public static <A, B> Comparator<Pair<A, B>> first(final Comparator<A> comparator) {
-        return where(Callables.<A>first(), comparator);
+        return by(Callables.<A>first(), comparator);
     }
 
     public static <A, B> Comparator<Pair<A, B>> second(final Comparator<B> comparator) {
-        return where(Callables.<B>second(), comparator);
+        return by(Callables.<B>second(), comparator);
     }
 
     @SuppressWarnings("unchecked")
