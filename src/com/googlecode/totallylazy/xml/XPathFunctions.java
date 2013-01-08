@@ -49,6 +49,11 @@ public class XPathFunctions {
         return new NodeArrayList<Text>(Xml.sequence(input).flatMap(split(pattern)));
     }
 
+    @XPathFunction("replace")
+    public static NodeArrayList<Text> tokenize(NodeList input, String pattern, String replace) {
+        return new NodeArrayList<Text>(Xml.sequence(input).map(replace(pattern, replace)));
+    }
+
     @XPathFunction("time-in-millis")
     public static Long timeInMillis(NodeList dates) {
         Option<String> date = Xml.textContents(dates).headOption();
@@ -79,14 +84,24 @@ public class XPathFunctions {
         };
     }
 
+    private static Function1<Node, Text> replace(final String pattern, final String replace) {
+        return new Function1<Node, Text>() {
+            @Override
+            public Text call(final Node node) throws Exception {
+                return createText(node, node.getTextContent().replaceAll(pattern, replace));                   }
+        };
+    }
+
     private static Function1<String, Text> createText(final Node node) {
         return new Function1<String, Text>() {
             @Override
             public Text call(String text) throws Exception {
-                return node.getOwnerDocument().createTextNode(text);
+                return XPathFunctions.createText(node, text);
             }
         };
     }
+
+    private static Text createText(Node nodeInDocument, String text) {return nodeInDocument.getOwnerDocument().createTextNode(text);}
 
     private static String unescape(String value) {
         return value.replace("\\n", "\n");
