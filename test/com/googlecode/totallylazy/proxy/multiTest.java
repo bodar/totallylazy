@@ -63,4 +63,17 @@ public class multiTest {
 
     }
 
+    @Test
+    public void worksWithInstances() throws Exception {
+        class Instance {
+            public String process(Object o) { return new multi(){}.method(o); }
+            private String process(String s) { return "String processed"; }
+            private String process(CharSequence s) { return "CharSequence processed"; }
+            private String process(Integer s) { return "Integer processed"; }
+        }
+        assertThat(new Instance().process((Object) "A String"), is("String processed"));
+    }
+
+
+
 }
