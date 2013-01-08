@@ -341,6 +341,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return sortBy(ascending(callable));
     }
 
+    public Sequence<T> sort(final Comparator<? super T> comparator) {
+        return sortBy(comparator);
+    }
+
     public Sequence<T> sortBy(final Comparator<? super T> comparator) {
         return Sequences.sortBy(this, comparator);
     }
