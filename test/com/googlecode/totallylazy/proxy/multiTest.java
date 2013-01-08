@@ -1,9 +1,14 @@
 package com.googlecode.totallylazy.proxy;
 
+import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.Serializable;
+
 import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.matchers.Matchers.matcher;
+import static com.googlecode.totallylazy.proxy.multi.distanceBetween;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class multiTest {
@@ -47,9 +52,15 @@ public class multiTest {
     }
 
     @Test
-    @Ignore
     public void willCallMostSpecific() throws Exception {
         assertThat(Static4.process((Object) "A String"), is("String processed"));
+    }
+
+    @Test
+    public void distanceBetweenTwoClass() throws Exception {
+        assertThat(distanceBetween(String.class, CharSequence.class), NumberMatcher.is(1));
+        assertThat(distanceBetween(Integer.class, Serializable.class), NumberMatcher.is(2));
+
     }
 
 }
