@@ -9,4 +9,10 @@ public class Fields {
             return field.getName();
         }
     };
+    public static Mapper<Field, Integer> modifiers = new Mapper<Field, Integer>() {
+        @Override
+        public Integer call(Field field) throws Exception {
+            return field.getModifiers();
+        }
+    };
 }
