@@ -14,4 +14,11 @@ public class patternTest {
             String match(Integer s) { return "Integer processed"; }
         }.<String>match(), is("String processed"));
     }
+
+    @Test
+    public void supportsNoMatch() throws Exception {
+        assertThat(new pattern((Object) "A String") {
+            String match(Integer s) { return "Integer processed"; }
+        }.<String>matchOption().getOrElse("No match found"), is("No match found"));
+    }
 }
