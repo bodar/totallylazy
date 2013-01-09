@@ -1,14 +1,13 @@
-package com.googlecode.totallylazy.proxy;
+package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.matchers.NumberMatcher;
-import org.junit.Ignore;
+import com.googlecode.totallylazy.multi;
 import org.junit.Test;
 
 import java.io.Serializable;
 
 import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static com.googlecode.totallylazy.matchers.Matchers.matcher;
-import static com.googlecode.totallylazy.proxy.multi.distanceBetween;
+import static com.googlecode.totallylazy.multi.distanceBetween;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class multiTest {
