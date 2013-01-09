@@ -73,6 +73,14 @@ public class multiTest {
         assertThat(new Instance().process((Object) "A String"), is("String processed"));
     }
 
+    @Test
+    public void supportsNotMatching() throws Exception {
+        class Instance {
+            public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
+        }
+        assertThat(new Instance().process(10.f), is("No match found"));
+    }
+
 
 
 }

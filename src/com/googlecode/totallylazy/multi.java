@@ -1,10 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.Function2;
-import com.googlecode.totallylazy.Mapper;
-import com.googlecode.totallylazy.Methods;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.reflect.Method;
@@ -25,21 +20,20 @@ import static java.lang.reflect.Modifier.isStatic;
 
 public abstract class multi {
     public <T> T method(Object... args) {
-        Method method = getClass().getEnclosingMethod();
-        return matchMethod(method, args);
+        return this.<T>methodOption(args).get();
     }
 
-    private <T> T matchMethod(Method method, Object[] args) {
+    public <T> Option<T> methodOption(Object... args) {
+        Method method = getClass().getEnclosingMethod();
         Sequence<Class<?>> argumentClasses = sequence(args).map(toClass());
         Object instance = instance(method);
-        Method matched = sequence(declaringClass(method, instance).getDeclaredMethods()).
+        return sequence(declaringClass(method, instance).getDeclaredMethods()).
                 remove(method).
                 filter(where(methodName(), is(method.getName())).
                         and(where(parameterTypes(), matches(argumentClasses)))).
                 sortBy(distanceFrom(argumentClasses)).
-                head();
-
-        return Methods.invoke(matched, instance, args);
+                headOption().
+                map(Methods.<T>invokeOn(instance, args));
     }
 
     private Class<?> declaringClass(Method method, Object instance) {

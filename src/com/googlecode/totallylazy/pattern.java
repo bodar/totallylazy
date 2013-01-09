@@ -8,4 +8,5 @@ public abstract class pattern {
     }
 
     public <T> T match() { return new multi(){}.method(argument); }
+    public <T> Option<T> matchOption() { return new multi(){}.methodOption(argument); }
 }
