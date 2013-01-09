@@ -1,11 +1,10 @@
-package com.googlecode.totallylazy.proxy;
+package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Methods;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.reflect.Method;
@@ -27,12 +26,13 @@ import static java.lang.reflect.Modifier.isStatic;
 public abstract class multi {
     public <T> T method(Object... args) {
         Method method = getClass().getEnclosingMethod();
-        return matchMethod(isStatic(method.getModifiers()) ? null : enclosingInstance(this), method, args);
+        return matchMethod(method, args);
     }
 
-    private static <T> T matchMethod(Object instance, Method method, Object[] args) {
+    private <T> T matchMethod(Method method, Object[] args) {
         Sequence<Class<?>> argumentClasses = sequence(args).map(toClass());
-        Method matched = sequence(method.getDeclaringClass().getDeclaredMethods()).
+        Object instance = instance(method);
+        Method matched = sequence(declaringClass(method, instance).getDeclaredMethods()).
                 remove(method).
                 filter(where(methodName(), is(method.getName())).
                         and(where(parameterTypes(), matches(argumentClasses)))).
@@ -41,6 +41,12 @@ public abstract class multi {
 
         return Methods.invoke(matched, instance, args);
     }
+
+    private Class<?> declaringClass(Method method, Object instance) {
+        return isStatic(method.getModifiers()) ? method.getDeclaringClass() : instance.getClass();
+    }
+
+    private Object instance(Method method) {return isStatic(method.getModifiers()) ? null : enclosingInstance(this);}
 
     private static Mapper<Method, Integer> distanceFrom(final Sequence<Class<?>> argumentClasses) {
         return new Mapper<Method, Integer>() {
