@@ -154,5 +154,14 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
                 }
             };
         }
+
+        public static Mapper<Pair<?,?>, Sequence<Object>> values() {
+            return new Mapper<Pair<?,?>, Sequence<Object>>() {
+                @Override
+                public Sequence<Object> call(Pair<?,?> pair) throws Exception {
+                    return pair.values();
+                }
+            };
+        }
     }
 }

@@ -442,4 +442,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
     public int indexOf(T t) {
         return Sequences.indexOf(this, t);
     }
+
+    public Sequence<Sequence<T>> grouped(int size) {
+        return recursive(Sequences.<T>splitAt(size));
+    }
 }

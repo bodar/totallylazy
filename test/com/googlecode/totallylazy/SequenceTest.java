@@ -50,6 +50,7 @@ import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.flatOption;
+import static com.googlecode.totallylazy.Sequences.flatten;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -279,6 +280,15 @@ public class SequenceTest {
         assertThat(groups.first(), hasExactly(1, 3));
         assertThat(groups.second().key(), NumberMatcher.is(0));
         assertThat(groups.second(), hasExactly(2, 4));
+    }
+
+    @Test
+    public void supportsGrouped() throws Exception {
+        Sequence<Integer> sequence = sequence(1, 2, 3, 4, 5);
+        assertThat(sequence.grouped(1), is(sequence(sequence(1), sequence(2), sequence(3), sequence(4), sequence(5))));
+        assertThat(sequence.grouped(3), is(sequence(sequence(1, 2, 3), sequence(4, 5))));
+        assertThat(sequence.grouped(5), is(Sequences.<Sequence<Integer>>sequence(sequence(1, 2, 3, 4, 5))));
+        assertThat(sequence.grouped(6), is(Sequences.<Sequence<Integer>>sequence(sequence(1, 2, 3, 4, 5))));
     }
 
     @Test
@@ -664,7 +674,7 @@ public class SequenceTest {
 
     @Test
     public void supportsFlatten() throws Exception {
-        Sequence<Character> characters = Sequences.flatten(sequence("Hello").map(toCharacters()));
+        Sequence<Character> characters = flatten(sequence("Hello").map(toCharacters()));
         assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
     }
 
