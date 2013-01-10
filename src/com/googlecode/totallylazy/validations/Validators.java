@@ -51,6 +51,32 @@ public class Validators {
         }
     }
 
+    public static class anyOf {
+        public static <T> AnyOfValidator<T> anyOf(Validator<? super T> first, Validator<? super T> second) {
+            return anyOf(Sequences.<Validator<? super T>>sequence(first, second));
+        }
+
+        public static <T> AnyOfValidator<T> anyOf(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third) {
+            return anyOf(Sequences.<Validator<? super T>>sequence(first, second, third));
+        }
+
+        public static <T> AnyOfValidator<T> anyOf(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third, Validator<? super T> fourth) {
+            return anyOf(Sequences.<Validator<? super T>>sequence(first, second, third, fourth));
+        }
+
+        public static <T> AnyOfValidator<T> anyOf(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third, Validator<? super T> fourth, Validator<? super T> fifth) {
+            return anyOf(Sequences.<Validator<? super T>>sequence(first, second, third, fourth, fifth));
+        }
+
+        public static <T> AnyOfValidator<T> anyOf(Validator<? super T>... validators) {
+            return AnyOfValidator.constructors.anyOf(validators);
+        }
+
+        public static <T> AnyOfValidator<T> anyOf(Sequence<Validator<? super T>> validators) {
+            return AnyOfValidator.constructors.anyOf(validators);
+        }
+    }
+
     public static class firstFailure {
         public static <T> FirstFailureValidator<T> firstFailure(Validator<? super T> first, Validator<? super T> second) {
             return firstFailure(Sequences.<Validator<? super T>>sequence(first, second));

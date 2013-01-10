@@ -1,9 +1,13 @@
-package com.googlecode.totallylazy.proxy;
+package com.googlecode.totallylazy;
 
-import org.junit.Ignore;
+import com.googlecode.totallylazy.matchers.NumberMatcher;
+import com.googlecode.totallylazy.multi;
 import org.junit.Test;
 
+import java.io.Serializable;
+
 import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.multi.distanceBetween;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class multiTest {
@@ -47,9 +51,36 @@ public class multiTest {
     }
 
     @Test
-    @Ignore
     public void willCallMostSpecific() throws Exception {
         assertThat(Static4.process((Object) "A String"), is("String processed"));
     }
+
+    @Test
+    public void distanceBetweenTwoClass() throws Exception {
+        assertThat(distanceBetween(String.class, CharSequence.class), NumberMatcher.is(1));
+        assertThat(distanceBetween(Integer.class, Serializable.class), NumberMatcher.is(2));
+
+    }
+
+    @Test
+    public void worksWithInstances() throws Exception {
+        class Instance {
+            public String process(Object o) { return new multi(){}.method(o); }
+            private String process(String s) { return "String processed"; }
+            private String process(CharSequence s) { return "CharSequence processed"; }
+            private String process(Integer s) { return "Integer processed"; }
+        }
+        assertThat(new Instance().process((Object) "A String"), is("String processed"));
+    }
+
+    @Test
+    public void supportsNotMatching() throws Exception {
+        class Instance {
+            public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
+        }
+        assertThat(new Instance().process(10.f), is("No match found"));
+    }
+
+
 
 }
