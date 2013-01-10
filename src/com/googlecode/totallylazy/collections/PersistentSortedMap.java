@@ -119,7 +119,7 @@ public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<P
         }
 
         public static <K, V> PersistentSortedMap<K, V> sortedMap(Comparator<K> comparator, final Iterable<? extends Pair<K, V>> values) {
-            return TreeMap.methods.treeMap(factory, comparator, sequence(values).toSortedList(Comparators.<Pair<K, V>, K>where(Callables.<K>first(), comparator)));
+            return TreeMap.methods.treeMap(factory, comparator, sequence(values).toSortedList(Comparators.<Pair<K, V>, K>by(Callables.<K>first(), comparator)));
         }
 
         public static <K, V> PersistentSortedMap<K, V> sortedMap(Comparator<K> comparator, final Map<K, V> values) {
