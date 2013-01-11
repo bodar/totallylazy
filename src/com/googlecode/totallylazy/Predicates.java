@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.AllPredicate;
+import com.googlecode.totallylazy.predicates.AlwaysFalse;
+import com.googlecode.totallylazy.predicates.AlwaysTrue;
 import com.googlecode.totallylazy.predicates.AndPredicate;
 import com.googlecode.totallylazy.predicates.BetweenPredicate;
 import com.googlecode.totallylazy.predicates.CountTo;
@@ -29,28 +30,52 @@ import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;
 
 public class Predicates {
-    public static <T> LogicalPredicate<T> all() {
-        return new AllPredicate<T>();
+    public static <T> LogicalPredicate<T> alwaysTrue() {
+        return AlwaysTrue.alwaysTrue();
     }
 
-    public static <T> LogicalPredicate<T> all(Class<T> aClass) {
-        return all();
-    }
-
-    public static <T> LogicalPredicate<T> always(Class<T> aClass) {
-        return all();
+    public static <T> LogicalPredicate<T> alwaysTrue(Class<T> aClass) {
+        return AlwaysTrue.alwaysTrue();
     }
 
     public static <T> LogicalPredicate<T> always() {
-        return all();
+        return AlwaysTrue.alwaysTrue();
     }
 
-    public static <T> LogicalPredicate<T> never(Class<T> aClass) {
-        return never();
+    public static <T> LogicalPredicate<T> always(Class<T> aClass) {
+        return AlwaysTrue.alwaysTrue();
+    }
+
+    public static <T> LogicalPredicate<T> all() {
+        return AlwaysTrue.alwaysTrue();
+    }
+
+    public static <T> LogicalPredicate<T> all(Class<T> aClass) {
+        return AlwaysTrue.alwaysTrue();
+    }
+
+    public static <T> LogicalPredicate<T> anything() {
+        return AlwaysTrue.alwaysTrue();
+    }
+
+    public static <T> LogicalPredicate<T> anything(Class<T> aClass) {
+        return AlwaysTrue.alwaysTrue();
+    }
+
+    public static <T> LogicalPredicate<T> alwaysFalse() {
+        return AlwaysFalse.alwaysFalse();
+    }
+
+    public static <T> LogicalPredicate<T> alwaysFalse(Class<T> aClass) {
+        return AlwaysFalse.alwaysFalse();
     }
 
     public static <T> LogicalPredicate<T> never() {
-        return not(always());
+        return AlwaysFalse.alwaysFalse();
+    }
+
+    public static <T> LogicalPredicate<T> never(Class<T> aClass) {
+        return AlwaysFalse.alwaysFalse();
     }
 
     public static <T> LogicalPredicate<Collection<T>> contains(final T t) {
@@ -166,7 +191,8 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> and(final Predicate<? super T>... predicates) {
-        return and(sequence(predicates));    }
+        return and(sequence(predicates));
+    }
 
     public static <T> LogicalPredicate<T> and(final Iterable<? extends Predicate<? super T>> predicates) {
         return AndPredicate.and(predicates);
