@@ -10,13 +10,13 @@ public class NotTest {
 
     @Test
     public void supportsEqualOfThePredicateItself() throws Exception {
-        assertThat(new Not<Integer>(Predicates.is(2)).equals(new Not<Integer>(Predicates.is(2))), is(true));
-        assertThat(new Not<Integer>(Predicates.is(2)).equals(new Not<Integer>(Predicates.is(3))), is(false));
+        assertThat(Not.not(Predicates.is(2)).equals(Not.not(Predicates.is(2))), is(true));
+        assertThat(Not.not(Predicates.is(2)).equals(Not.not(Predicates.is(3))), is(false));
     }
 
     @Test
     public void supportsToString() throws Exception {
-        assertThat(new Not<Integer>(Predicates.is(5)).toString(), is("not 5"));
+        assertThat(Not.not(Predicates.is(5)).toString(), is("not 5"));
     }
 
 }

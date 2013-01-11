@@ -159,7 +159,7 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> equalTo(final T t) {
-        return new EqualsPredicate<T>(t);
+        return EqualsPredicate.equalTo(t);
     }
 
     public static <T> LogicalPredicate<T> is(final T t) {
@@ -239,7 +239,7 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> not(final Predicate<? super T> t) {
-        return new Not<T>(t);
+        return Not.not(t);
     }
 
     public static LogicalPredicate<Object> countTo(final Number count) {

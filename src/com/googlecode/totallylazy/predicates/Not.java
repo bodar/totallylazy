@@ -1,19 +1,25 @@
 package com.googlecode.totallylazy.predicates;
 
+import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Unchecked;
 
 public class Not<T> extends LogicalPredicate<T> {
-    private final Predicate<? super T> predicate;
+    private final Predicate<T> predicate;
 
-    public Not(Predicate<? super T>  predicate) {
+    private Not(Predicate<T> predicate) {
         this.predicate = predicate;
+    }
+
+    public static <T> Not<T> not(Predicate<? super T> predicate) {
+        return new Not<T>(Unchecked.<Predicate<T>>cast(predicate));
     }
 
     public boolean matches(T other) {
         return !predicate.matches(other);
     }
 
-    public Predicate<? super T> predicate() {
+    public Predicate<T> predicate() {
         return predicate;
     }
 
@@ -30,5 +36,16 @@ public class Not<T> extends LogicalPredicate<T> {
     @Override
     public String toString() {
         return "not " + predicate().toString();
+    }
+
+    public static class functions {
+        public static <T> Mapper<Not<T>, Predicate<T>> predicate() {
+            return new Mapper<Not<T>, Predicate<T>>() {
+                @Override
+                public Predicate<T> call(Not<T> not) throws Exception {
+                    return not.predicate();
+                }
+            };
+        }
     }
 }
