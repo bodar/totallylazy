@@ -650,6 +650,10 @@ public class Sequences {
         return Iterators.equalsTo(iterable.iterator(), other.iterator());
     }
 
+    public static <T> boolean equalTo(Iterable<? extends T> iterable, Iterable<? extends T> other, Predicate<? super Pair<T, T>> predicate) {
+        return Iterators.equalsTo(iterable.iterator(), other.iterator(), predicate);
+    }
+
     public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterable<? extends T> iterable, final Number index) {
         return Iterators.splitAt(iterable.iterator(), index);
     }

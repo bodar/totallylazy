@@ -57,6 +57,13 @@ public class Iterators {
         return !(a.hasNext() || b.hasNext());
     }
 
+    public static <T> boolean equalsTo(Iterator<? extends T> a, Iterator<? extends T> b, Predicate<? super Pair<T, T>> predicate) {
+        while (a.hasNext() && b.hasNext()) {
+            if(!predicate.matches(Pair.pair(a.next(), b.next()))) return false;
+        }
+        return !(a.hasNext() || b.hasNext());
+    }
+
     public static <T> void each(final Iterator<? extends T> iterator, final Callable1<? super T, ?> runnable) {
         forEach(iterator, runnable);
     }

@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.collections.PersistentCollection;
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.collections.Indexed;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.reflect.Array;
 import java.util.Comparator;
@@ -24,6 +25,10 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
     public boolean equals(Object obj) {
         if (obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
         return obj instanceof Segment && methods.equalTo(this, (Segment<?>) obj);
+    }
+
+    public boolean equals(Iterable<? extends T> other, Predicate<? super Pair<T, T>> predicate) {
+        return Sequences.equalTo(this, other, predicate);
     }
 
     // Thread-safe Racy Single Check Idiom (Effective Java 2nd Edition p.284)
