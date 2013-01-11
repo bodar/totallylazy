@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static java.lang.String.format;
@@ -19,7 +20,9 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
         this.callable = callable;
     }
 
-    public static <T, R> WherePredicate<T, R> where(final Callable1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> LogicalPredicate<T> where(final Callable1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+        if(predicate instanceof AlwaysTrue) return Predicates.alwaysTrue();
+        if(predicate instanceof AlwaysFalse) return Predicates.alwaysFalse();
         return new WherePredicate<T, R>(callable, predicate);
     }
 

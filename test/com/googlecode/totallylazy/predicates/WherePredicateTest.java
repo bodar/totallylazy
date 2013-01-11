@@ -4,9 +4,12 @@ import com.googlecode.totallylazy.matchers.Matchers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.toString;
+import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.never;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 
 public class WherePredicateTest {
     @Test
@@ -20,5 +23,13 @@ public class WherePredicateTest {
         assertThat(where(toString, is("13")).toString(), Matchers.is("where toString is 13"));
     }
 
+    @Test
+    public void combiningAWhereWithAlwaysReturnsAnAlways() throws Exception {
+        assertThat(where(toString, always()), instanceOf(always().getClass()));
+    }
 
+    @Test
+    public void combiningAWhereWithNeverReturnsANever() throws Exception {
+        assertThat(where(toString, never()), instanceOf(never().getClass()));
+    }
 }
