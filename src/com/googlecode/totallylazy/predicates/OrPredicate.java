@@ -26,6 +26,8 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
                 filter(instanceOf(AlwaysFalse.class).not());
         if (collapsed.isEmpty()) return Predicates.alwaysFalse();
         if (collapsed.size() == 1) return logicalPredicate(collapsed.head());
+        if (collapsed.forAll(instanceOf(Not.class)))
+            return Predicates.not(Predicates.<T>and(sequence.<Not<T>>unsafeCast().map(Not.functions.<T>predicate())));
         return new OrPredicate<T>(sequence);
     }
 

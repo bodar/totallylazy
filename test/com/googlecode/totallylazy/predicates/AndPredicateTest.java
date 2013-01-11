@@ -8,6 +8,8 @@ import static com.googlecode.totallylazy.Predicates.alwaysFalse;
 import static com.googlecode.totallylazy.Predicates.alwaysTrue;
 import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.or;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AndPredicateTest {
@@ -57,6 +59,16 @@ public class AndPredicateTest {
         LogicalPredicate<String> and = and(is("13"));
         assertThat(and.matches("13"), Matchers.is(true));
         assertThat(and, Matchers.is(is("13")));
+    }
+
+    @Test
+    public void collapesNots() throws Exception {
+        LogicalPredicate<String> original = and(not(is("12")), not(is("13")));
+        LogicalPredicate<String> collapsed = not(or(is("12"), is("13")));
+        assertThat(original.matches("14"), Matchers.is(collapsed.matches("14")));
+        assertThat(original.matches("13"), Matchers.is(collapsed.matches("13")));
+        assertThat(original.matches("12"), Matchers.is(collapsed.matches("12")));
+        assertThat(original, Matchers.is(collapsed));
     }
 
 }
