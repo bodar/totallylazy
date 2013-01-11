@@ -13,4 +13,10 @@ public class AlwaysFalse extends LogicalPredicate<Object> {
     public static <T> LogicalPredicate<T> alwaysFalse() {
         return cast(instance);
     }
+
+    @Override
+    public String toString() {
+        return "false";
+    }
+
 }

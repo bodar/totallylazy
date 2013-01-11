@@ -170,6 +170,10 @@ public class Predicates {
         return t;
     }
 
+    public static <T> LogicalPredicate<T> and() {
+        return AndPredicate.and(Sequences.<Predicate<T>>empty());
+    }
+
     public static <T> LogicalPredicate<T> and(final Predicate<? super T> first) {
         return logicalPredicate(first);
     }

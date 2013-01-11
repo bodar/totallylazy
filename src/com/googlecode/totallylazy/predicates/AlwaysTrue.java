@@ -13,4 +13,9 @@ public class AlwaysTrue extends LogicalPredicate<Object> {
     public static <T> LogicalPredicate<T> alwaysTrue() {
         return cast(instance);
     }
+
+    @Override
+    public String toString() {
+        return "true";
+    }
 }
