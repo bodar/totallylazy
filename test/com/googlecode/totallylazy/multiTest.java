@@ -81,6 +81,24 @@ public class multiTest {
         assertThat(new Instance().process(10.f), is("No match found"));
     }
 
+    @Test
+    public void doesNotCallMethodsWithMoreArguments() throws Exception {
+        class Instance {
+            public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
+            public String process(Float a, Float b) {return "Float";}
+        }
+        assertThat(new Instance().process(10.f), is("No match found"));
+    }
+
+    @Test
+    public void doesNotCallMethodsWithLessArguments() throws Exception {
+        class Instance {
+            public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
+            public String process() {return "no args";}
+        }
+        assertThat(new Instance().process(10.f), is("No match found"));
+    }
+
 
 
 }

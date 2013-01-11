@@ -29,8 +29,8 @@ public abstract class multi {
         Object instance = instance(method);
         return sequence(declaringClass(method, instance).getDeclaredMethods()).
                 remove(method).
-                filter(where(methodName(), is(method.getName())).
-                        and(where(parameterTypes(), matches(argumentClasses)))).
+                filter(where(methodName(), is(method.getName()))).
+                filter(where(parameterTypes(), matches(argumentClasses))).
                 sortBy(distanceFrom(argumentClasses)).
                 headOption().
                 map(Methods.<T>invokeOn(instance, args));
@@ -77,7 +77,7 @@ public abstract class multi {
         return new LogicalPredicate<Class<?>[]>() {
             @Override
             public boolean matches(Class<?>[] classes) {
-                return sequence(classes).zip(argumentClasses).forAll(new LogicalPredicate<Pair<Class<?>, Class<?>>>() {
+                return sequence(classes).equals(argumentClasses,new LogicalPredicate<Pair<Class<?>, Class<?>>>() {
                     @Override
                     public boolean matches(Pair<Class<?>, Class<?>> pair) {
                         return pair.first().isAssignableFrom(pair.second());
