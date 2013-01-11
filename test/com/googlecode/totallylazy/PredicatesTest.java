@@ -94,6 +94,5 @@ public class PredicatesTest {
     public void supportsInCollection() throws Exception {
         Set<Integer> values = set(1, 2, 3);
         assertThat(sequence(2).forAll(in(values)), is(true));
-
     }
 }

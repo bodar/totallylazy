@@ -11,6 +11,10 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.newSetFromMap;
 
 public class Sets {
+    public static <T> Set<T> set() {
+        return new LinkedHashSet<T>();
+    }
+
     public static <T> Set<T> set(T... values) {
         return set(new LinkedHashSet<T>(), values);
     }
