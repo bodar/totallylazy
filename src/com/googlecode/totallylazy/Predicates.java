@@ -202,6 +202,10 @@ public class Predicates {
         return AndPredicate.and(predicates);
     }
 
+    public static <T> LogicalPredicate<T> or() {
+        return OrPredicate.or(Sequences.<Predicate<T>>empty());
+    }
+
     public static <T> LogicalPredicate<T> or(final Predicate<? super T> first) {
         return logicalPredicate(first);
     }

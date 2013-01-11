@@ -1,8 +1,14 @@
 package com.googlecode.totallylazy.predicates;
 
+import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Unchecked;
+
+import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Sequences.one;
 
 public class OrPredicate<T> extends LogicalPredicate<T> {
     private final Sequence<Predicate<T>> predicates;
@@ -12,10 +18,14 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
     }
 
     public static <T> LogicalPredicate<T> or(Iterable<? extends Predicate<? super T>> predicates) {
-        Sequence<Predicate<T>> sequence = Sequences.sequence(predicates).unsafeCast();
-        if (sequence.size() == 1) {
-            return logicalPredicate(sequence.head());
-        }
+        Sequence<Predicate<T>> sequence = Sequences.sequence(predicates).<Predicate<T>>unsafeCast().
+                flatMap(OrPredicate.<T>asPredicates());
+        if (sequence.exists(instanceOf(AlwaysTrue.class))) return Predicates.alwaysTrue();
+
+        Sequence<Predicate<T>> collapsed = sequence.
+                filter(instanceOf(AlwaysFalse.class).not());
+        if (collapsed.isEmpty()) return Predicates.alwaysFalse();
+        if (collapsed.size() == 1) return logicalPredicate(collapsed.head());
         return new OrPredicate<T>(sequence);
     }
 
@@ -43,5 +53,14 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
     @Override
     public String toString() {
         return predicates.toString(" or ");
+    }
+
+    private static <T> Mapper<Predicate<T>, Iterable<Predicate<T>>> asPredicates() {
+        return new Mapper<Predicate<T>, Iterable<Predicate<T>>>() {
+            @Override
+            public Iterable<Predicate<T>> call(Predicate<T> predicate) throws Exception {
+                return predicate instanceof OrPredicate ? Unchecked.<OrPredicate<T>>cast(predicate).predicates() : one(predicate);
+            }
+        };
     }
 }
