@@ -273,6 +273,16 @@ public class Strings {
         };
     }
 
+    public static Function1<String, Sequence<String>> split(final String regex) {
+        if (regex == null) throw new IllegalArgumentException("regex cannot be null");
+        return new Function1<String, Sequence<String>>() {
+            @Override
+            public Sequence<String> call(String s) throws Exception {
+                return sequence(s.split(regex));
+            }
+        };
+    }
+
     public static Function1<String, String> substring(final int beginIndex, final int endIndex) {
         return new Function1<String, String>() {
             public String call(String value) throws Exception {
@@ -348,5 +358,5 @@ public class Strings {
 
     public static Maximum.Function<String> maximum = Maximum.constructors.maximum((String) null);
 
-    public static Minimum.Function<String> minimum =  Minimum.constructors.minimum((String) null);
+    public static Minimum.Function<String> minimum = Minimum.constructors.minimum((String) null);
 }

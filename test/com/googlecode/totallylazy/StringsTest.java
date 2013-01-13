@@ -136,4 +136,10 @@ public class StringsTest {
 
     }
 
+    @Test
+    public void supportsSplit() throws Exception {
+        assertThat(sequence("a,b,c").flatMap(Strings.split(",")), hasExactly("a","b","c"));
+        assertThat(Strings.split(",").call("a"), hasExactly("a"));
+        assertThat(Strings.split(",").call(""), hasExactly(""));
+    }
 }
