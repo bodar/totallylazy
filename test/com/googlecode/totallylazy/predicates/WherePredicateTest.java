@@ -7,6 +7,7 @@ import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.never;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
@@ -31,5 +32,10 @@ public class WherePredicateTest {
     @Test
     public void combiningAWhereWithNeverReturnsANever() throws Exception {
         assertThat(where(toString, never()), instanceOf(never().getClass()));
+    }
+
+    @Test
+    public void supportsDeMorganLawByMovingNotToOutside() throws Exception {
+        assertThat(where(toString, not(is("Dan"))), Matchers.is(not(where(toString, is("Dan")))));
     }
 }
