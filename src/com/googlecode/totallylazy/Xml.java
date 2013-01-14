@@ -301,17 +301,13 @@ public class Xml {
 
     @SuppressWarnings("unchecked")
     public static String format(final Node node) throws Exception {
-        return format(node, Pair.<String, Object>pair("indent-number", 4));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static String formatBasic(final Node node) throws Exception {
         return format(node, new Pair[0]);
     }
 
     public static String format(final Node node, final Pair<String, Object>... attributes) throws Exception {
         Transformer transformer = transformer(attributes);
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(node), new StreamResult(writer));
