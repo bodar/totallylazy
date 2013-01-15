@@ -9,7 +9,12 @@ public class JoinCharSequence extends CombinerFunction<CharSequence> {
 
     @Override
     public CharSequence call(CharSequence a, CharSequence b) throws Exception {
-        return new StringBuilder(a).append(b);
+        return builder(a).append(b);
+    }
+
+    private StringBuilder builder(CharSequence a) {
+        if(a instanceof StringBuilder) return (StringBuilder) a;
+        return new StringBuilder(a);
     }
 
     @Override

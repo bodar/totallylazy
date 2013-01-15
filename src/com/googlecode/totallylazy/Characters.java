@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.callables.JoinCharSequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
@@ -11,6 +12,8 @@ public class Characters {
     public static Charset UTF8 = Charset.forName("UTF-8");
     public static Charset UTF16 = Charset.forName("UTF-16");
     public static Charset ASCII = Charset.forName("ASCII");
+
+    public static final CombinerFunction<CharSequence> join = JoinCharSequence.instance;
 
     public static Sequence<Character> characters(final CharSequence value) {
         return Sequences.characters(value);
@@ -31,7 +34,7 @@ public class Characters {
     }
 
     public static LogicalPredicate<Character> in(final String characters) {
-        return new LogicalPredicate<Character>(){
+        return new LogicalPredicate<Character>() {
             @Override
             public boolean matches(Character other) {
                 return characters.indexOf(other) != -1;
@@ -44,7 +47,7 @@ public class Characters {
         };
     }
 
-        public static LogicalPredicate<Character> identifierStart = new LogicalPredicate<Character>() {
+    public static LogicalPredicate<Character> identifierStart = new LogicalPredicate<Character>() {
         @Override
         public boolean matches(Character other) {
             return Character.isJavaIdentifierStart(other);
@@ -70,7 +73,7 @@ public class Characters {
         }
     };
 
-    public static LogicalPredicate<Character> between(final char start, final char end){
+    public static LogicalPredicate<Character> between(final char start, final char end) {
         return new LogicalPredicate<Character>() {
             public boolean matches(Character other) {
                 return other >= start && other <= end;
