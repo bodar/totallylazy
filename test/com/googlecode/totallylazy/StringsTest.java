@@ -29,8 +29,8 @@ import static org.junit.Assert.fail;
 public class StringsTest {
     @Test
     public void canJoinStrings() throws Exception {
-        assertThat(sequence("foo", " bar ", "baz").reduce(join).toString(), is("foo bar baz"));
-        assertThat(empty(CharSequence.class).reduce(join).toString(), is(""));
+        assertThat(sequence("foo", " bar ", "baz").reduce(join), is("foo bar baz"));
+        assertThat(empty(String.class).reduce(join), is(""));
     }
 
     @Test
