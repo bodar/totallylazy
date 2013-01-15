@@ -92,6 +92,56 @@ public class Dates {
         };
     }
 
+    public static Function1<Date, Integer> millisecond() {
+        return calendarField(Calendar.MILLISECOND);
+    }
+
+    public static Function1<Date, Integer> second() {
+        return calendarField(Calendar.SECOND);
+    }
+
+    public static Function1<Date, Integer> minute() {
+        return calendarField(Calendar.MINUTE);
+    }
+
+    public static Function1<Date, Integer> hourOfDay() {
+        return calendarField(Calendar.HOUR_OF_DAY);
+    }
+
+    public static Function1<Date, Integer> dayOfWeek() {
+        return calendarField(Calendar.DAY_OF_WEEK);
+    }
+
+    public static Function1<Date, Integer> dayOfMonth() {
+        return calendarField(Calendar.DAY_OF_MONTH);
+    }
+
+    public static Function1<Date, Integer> weekOfMonth() {
+        return calendarField(Calendar.WEEK_OF_MONTH);
+    }
+
+    public static Function1<Date, Integer> month() {
+        return calendarField(Calendar.MONTH);
+    }
+
+    public static Function1<Date, Integer> dayOfYear() {
+        return calendarField(Calendar.DAY_OF_YEAR);
+    }
+
+    public static Function1<Date, Integer> year() {
+        return calendarField(Calendar.YEAR);
+    }
+
+
+    public static Function1<Date, Integer> calendarField(final int field) {
+        return new Function1<Date, Integer>() {
+            @Override
+            public Integer call(Date value) throws Exception {
+                return calendar(value).get(field);
+            }
+        };
+    }
+
     public static Date date(String value) {
         return DateFormatConverter.defaultConverter().parse(value);
     }
