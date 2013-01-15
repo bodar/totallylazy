@@ -29,7 +29,7 @@ public class Strings {
     public static final String EMPTY = "";
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
-    public static final Function2<CharSequence, CharSequence, CharSequence> join = new JoinCharSequence();
+    public static final CombinerFunction<CharSequence> join = JoinCharSequence.instance;
 
     public static Function1<String, Boolean> asBoolean() {
         return new Function1<String, Boolean>() {
