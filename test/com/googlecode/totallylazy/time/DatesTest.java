@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.time;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.googlecode.totallylazy.time.Dates.date;
@@ -58,5 +59,20 @@ public class DatesTest {
     @Test
     public void canSubtractDaysFromDates() throws Exception {
         assertThat(Days.subtract(date(2000, 1, 11), 10), is(date(2000, 1, 1)));
+    }
+
+    @Test
+    public void exposesConvenienceMethodsForGettingPartsOfDate() {
+        assertThat(Dates.millisecond().apply(date(2013,1,1,0,0,0,123)), is(123));
+        assertThat(Dates.second().apply(date(2013,1,1,0,0,59,0)), is(59));
+        assertThat(Dates.minute().apply(date(2013,1,1,0,12,0,0)), is(12));
+        assertThat(Dates.hourOfDay().apply(date(2013,1,1,23,0,0,0)), is(23));
+        assertThat(Dates.dayOfWeek().apply(date(2013,1,15,0,0,0,0)), is(Calendar.TUESDAY));
+        assertThat(Dates.dayOfMonth().apply(date(2013,1,15,0,0,0,0)), is(15));
+        assertThat(Dates.weekOfMonth().apply(date(2013,12,31,0,0,0,0)), is(5));
+        assertThat(Dates.month().apply(date(2013,12,1,0,0,0,0)), is(Calendar.DECEMBER));
+        assertThat(Dates.dayOfYear().apply(date(2013,12,31,0,0,0,0)), is(365));
+        assertThat(Dates.year().apply(date(2013,1,1,0,0,0,0)), is(2013));
+        assertThat(Dates.calendarField(Calendar.MONTH).apply(date(2013,1,1,0,0,0,0)), is(Calendar.JANUARY));
     }
 }
