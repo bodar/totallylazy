@@ -1,10 +1,12 @@
 #!/bin/sh
 
-version=93
-name=jcompilo
+version=94
+artifact=jcompilo
+group=com/googlecode/${artifact}
+repo=repo.bodar.com.s3.amazonaws.com
 dir=lib/
-jar=${dir}${name}.jar
-url=http://${name}.googlecode.com/files/${name}-${version}.jar
+jar=${dir}${artifact}.jar
+url=http://${repo}/${group}/${artifact}/${version}/${artifact}-${version}.jar
 
 while getopts "u" opt; do
   case $opt in
@@ -17,6 +19,6 @@ done
 
 if [ ! -f ${jar} ]; then
 	mkdir -p ${dir} 
-	wget ${url} -O ${jar}
+	wget ${url} -O ${jar} || curl -o ${jar} ${url}
 fi
 exec java -jar ${jar} $*
