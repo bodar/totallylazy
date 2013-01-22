@@ -8,14 +8,10 @@ dir=lib/
 jar=${dir}${artifact}.jar
 url=http://${repo}/${group}/${artifact}/${version}/${artifact}-${version}.jar
 
-while getopts "u" opt; do
-  case $opt in
-    u) 
-      rm ${jar}
-      shift $(optind)
-      ;;
-  esac
-done
+if [ $1 = "-u" ]; then 
+	rm ${jar}
+	shift 1
+fi
 
 if [ ! -f ${jar} ]; then
 	mkdir -p ${dir} 
