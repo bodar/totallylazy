@@ -5,6 +5,9 @@ import com.googlecode.totallylazy.multi;
 import org.junit.Test;
 
 import java.io.Serializable;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.multi.distanceBetween;
@@ -55,11 +58,23 @@ public class multiTest {
         assertThat(Static4.process((Object) "A String"), is("String processed"));
     }
 
+    public static class InterfaceOverSuperClass {
+        public static String process(Object o) { return new multi(){}.method(o); }
+        private static String process(Map s) { return "Map processed"; }
+        private static String process(AbstractMap s) { return "AbstractMap processed"; }
+    }
+
+    @Test
+    public void prefersInterfacesOverSuperClass() throws Exception {
+        assertThat(distanceBetween(HashMap.class, Map.class), NumberMatcher.is(1));
+        assertThat(distanceBetween(HashMap.class, AbstractMap.class), NumberMatcher.is(1.1));
+        assertThat(InterfaceOverSuperClass.process((Object) new HashMap<String, String>()), is("Map processed"));
+    }
+
     @Test
     public void distanceBetweenTwoClass() throws Exception {
         assertThat(distanceBetween(String.class, CharSequence.class), NumberMatcher.is(1));
         assertThat(distanceBetween(Integer.class, Serializable.class), NumberMatcher.is(2));
-
     }
 
     @Test
