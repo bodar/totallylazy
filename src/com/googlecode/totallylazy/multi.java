@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.reflect.Method;
@@ -13,7 +14,7 @@ import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Reflection.enclosingInstance;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.numbers.Numbers.increment;
+import static com.googlecode.totallylazy.comparators.Comparators.by;
 import static com.googlecode.totallylazy.numbers.Numbers.minimum;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static java.lang.reflect.Modifier.isStatic;
@@ -31,7 +32,7 @@ public abstract class multi {
                 remove(method).
                 filter(where(methodName(), is(method.getName()))).
                 filter(where(parameterTypes(), matches(argumentClasses))).
-                sortBy(distanceFrom(argumentClasses)).
+                sort(by(distanceFrom(argumentClasses), Numbers.ascending())).
                 headOption().
                 map(Methods.<T>invokeOn(instance, args));
     }
@@ -42,11 +43,11 @@ public abstract class multi {
 
     private Object instance(Method method) {return isStatic(method.getModifiers()) ? null : enclosingInstance(this);}
 
-    private static Mapper<Method, Integer> distanceFrom(final Sequence<Class<?>> argumentClasses) {
-        return new Mapper<Method, Integer>() {
+    private static Mapper<Method, Number> distanceFrom(final Sequence<Class<?>> argumentClasses) {
+        return new Mapper<Method, Number>() {
             @Override
-            public Integer call(Method method) throws Exception {
-                return distanceFrom(argumentClasses, sequence(method.getParameterTypes())).intValue();
+            public Number call(Method method) throws Exception {
+                return distanceFrom(argumentClasses, sequence(method.getParameterTypes()));
             }
         };
     }
@@ -66,8 +67,8 @@ public abstract class multi {
 
     static Number distanceBetween(Class<?> argument, Class<?> parameterType) {
         if (argument.equals(parameterType)) return 0;
-        return increment(sequence(argument.getInterfaces()).
-                cons(argument.getSuperclass()).
+        return Numbers.add(parameterType.isInterface() ? 1 : 1.1, sequence(argument.getInterfaces()).
+                add(argument.getSuperclass()).
                 filter(not(nullValue())).
                 map(distanceBetween().flip().apply(parameterType)).
                 reduce(minimum));
@@ -77,7 +78,7 @@ public abstract class multi {
         return new LogicalPredicate<Class<?>[]>() {
             @Override
             public boolean matches(Class<?>[] classes) {
-                return sequence(classes).equals(argumentClasses,new LogicalPredicate<Pair<Class<?>, Class<?>>>() {
+                return sequence(classes).equals(argumentClasses, new LogicalPredicate<Pair<Class<?>, Class<?>>>() {
                     @Override
                     public boolean matches(Pair<Class<?>, Class<?>> pair) {
                         return pair.first().isAssignableFrom(pair.second());
