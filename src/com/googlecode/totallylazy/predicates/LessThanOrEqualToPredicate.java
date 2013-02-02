@@ -3,8 +3,12 @@ package com.googlecode.totallylazy.predicates;
 public class LessThanOrEqualToPredicate<T extends Comparable<? super T>> extends LogicalPredicate<T> implements LessThanOrEqualTo<T> {
     private final T comparable;
 
-    public LessThanOrEqualToPredicate(T comparable) {
+    private LessThanOrEqualToPredicate(T comparable) {
         this.comparable = comparable;
+    }
+
+    public static <T extends Comparable<? super T>> LessThanOrEqualToPredicate<T> lessThanOrEqualTo(T comparable) {
+        return new LessThanOrEqualToPredicate<T>(comparable);
     }
 
     public boolean matches(T other) {

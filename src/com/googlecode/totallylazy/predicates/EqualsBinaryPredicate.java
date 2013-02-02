@@ -11,8 +11,8 @@ public class EqualsBinaryPredicate<T> extends LogicalBinaryPredicate<T> {
     public static <T> EqualsBinaryPredicate<T> equalTo() {return new EqualsBinaryPredicate<T>();}
 
     @Override
-    public boolean matches(T a, T b) {
-        return Objects.equalTo(a, b);
+    public LogicalBinaryPredicate<T> flip() {
+        return this;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class EqualsBinaryPredicate<T> extends LogicalBinaryPredicate<T> {
     }
 
     @Override
-    public LogicalPredicate<T> applySecond(T t) {
-        return EqualsPredicate.equalTo(t);
+    public boolean matches(T a, T b) {
+        return Objects.equalTo(a, b);
     }
 }
