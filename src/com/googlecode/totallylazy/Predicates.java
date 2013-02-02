@@ -335,7 +335,7 @@ public class Predicates {
     }
 
     public static <T extends Comparable<? super T>> LogicalPredicate<T> greaterThan(final T comparable) {
-        return new GreaterThanPredicate<T>(comparable);
+        return GreaterThanPredicate.greaterThan(comparable);
     }
 
     public static <T extends Comparable<? super T>> LogicalPredicate<T> greaterThanOrEqualTo(final T comparable) {
@@ -343,11 +343,11 @@ public class Predicates {
     }
 
     public static <T extends Comparable<? super T>> LogicalPredicate<T> lessThan(final T comparable) {
-        return new LessThanPredicate<T>(comparable);
+        return LessThanPredicate.lessThan(comparable);
     }
 
     public static <T extends Comparable<? super T>> LogicalPredicate<T> lessThanOrEqualTo(final T comparable) {
-        return new LessThanOrEqualToPredicate<T>(comparable);
+        return LessThanOrEqualToPredicate.lessThanOrEqualTo(comparable);
     }
 
     public static <T extends Comparable<? super T>> LogicalPredicate<T> between(final T lower, final T upper) {
