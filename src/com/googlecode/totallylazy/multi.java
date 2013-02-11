@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Callables.toClass;
+import static com.googlecode.totallylazy.Methods.allMethods;
 import static com.googlecode.totallylazy.Methods.methodName;
 import static com.googlecode.totallylazy.Methods.parameterTypes;
 import static com.googlecode.totallylazy.Predicates.is;
@@ -13,6 +14,7 @@ import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Reflection.enclosingInstance;
+import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.comparators.Comparators.by;
 import static com.googlecode.totallylazy.numbers.Numbers.minimum;
@@ -28,7 +30,8 @@ public abstract class multi {
         Method method = getClass().getEnclosingMethod();
         Sequence<Class<?>> argumentClasses = sequence(args).map(toClass());
         Object instance = instance(method);
-        return sequence(declaringClass(method, instance).getDeclaredMethods()).
+        Class<?> aClass = declaringClass(method, instance);
+        return allMethods(aClass).
                 remove(method).
                 filter(where(methodName(), is(method.getName()))).
                 filter(where(parameterTypes(), matches(argumentClasses))).

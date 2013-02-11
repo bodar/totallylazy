@@ -77,15 +77,22 @@ public class multiTest {
         assertThat(distanceBetween(Integer.class, Serializable.class), NumberMatcher.is(2));
     }
 
+    class Instance {
+        public String process(Object o) { return new multi(){}.method(o); }
+        private String process(String s) { return "String processed"; }
+        private String process(CharSequence s) { return "CharSequence processed"; }
+        private String process(Integer s) { return "Integer processed"; }
+    }
+
     @Test
     public void worksWithInstances() throws Exception {
-        class Instance {
-            public String process(Object o) { return new multi(){}.method(o); }
-            private String process(String s) { return "String processed"; }
-            private String process(CharSequence s) { return "CharSequence processed"; }
-            private String process(Integer s) { return "Integer processed"; }
-        }
         assertThat(new Instance().process((Object) "A String"), is("String processed"));
+    }
+
+    @Test
+    public void worksWithInstancesAndSuperClasses() throws Exception {
+        class ExtendsInstance extends Instance{}
+        assertThat(new ExtendsInstance().process((Object) "A String"), is("String processed"));
     }
 
     @Test

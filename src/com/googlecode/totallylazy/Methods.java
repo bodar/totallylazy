@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Classes.allClasses;
 import static com.googlecode.totallylazy.Exceptions.handleException;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -93,6 +94,18 @@ public class Methods {
                 return sequence(aClass.getMethods());
             }
         };
+    }
+
+    public static Function1<Class<?>, Iterable<Method>> declaredMethods() {
+        return new Function1<Class<?>, Iterable<Method>>() {
+            public Iterable<Method> call(Class<?> aClass) throws Exception {
+                return sequence(aClass.getDeclaredMethods());
+            }
+        };
+    }
+
+    public static Sequence<Method> allMethods(Class<?> aClass) {
+        return allClasses(aClass).flatMap(Methods.declaredMethods());
     }
 
     public static <T, R> R invoke(Method method, T instance, Object... arguments) {
