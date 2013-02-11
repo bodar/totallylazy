@@ -54,6 +54,11 @@ public class None<T> extends Option<T>{
     }
 
     @Override
+    public <E extends Exception> T getOrThrow(E e) throws E {
+        throw e;
+    }
+
+    @Override
     public <S> Option<S> map(Callable1<? super T, ? extends S> callable) {
         return none();
     }

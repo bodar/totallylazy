@@ -51,6 +51,11 @@ public class Some<T> extends Option<T> {
     }
 
     @Override
+    public <E extends Exception> T getOrThrow(E e) throws E {
+        return get();
+    }
+
+    @Override
     public <S> Option<S> map(Callable1<? super T, ? extends S> callable) {
         return option(Callers.call(callable, get()));
     }
