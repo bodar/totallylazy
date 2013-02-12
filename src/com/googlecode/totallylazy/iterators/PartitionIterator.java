@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.annotations.tailrec;
 
 import java.util.Iterator;
 import java.util.Queue;
@@ -18,6 +19,7 @@ public class PartitionIterator<T> extends StatefulIterator<T> {
         this.unmatched = unmatched;
     }
 
+    @tailrec
     protected T getNext() throws Exception {
         if (!matched.isEmpty()) return matched.remove();
         if (!underlyingIterator.hasNext()) return finished();

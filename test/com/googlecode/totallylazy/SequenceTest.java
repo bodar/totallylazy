@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -289,6 +290,13 @@ public class SequenceTest {
         assertThat(sequence.grouped(3), is(sequence(sequence(1, 2, 3), sequence(4, 5))));
         assertThat(sequence.grouped(5), is(Sequences.<Sequence<Integer>>sequence(sequence(1, 2, 3, 4, 5))));
         assertThat(sequence.grouped(6), is(Sequences.<Sequence<Integer>>sequence(sequence(1, 2, 3, 4, 5))));
+    }
+
+    @Test
+    @Ignore("Manual Test")
+    public void groupedDoesNotBlowStack() throws Exception {
+        Sequence<Number> elements = range(0).take(100000);
+        elements.grouped(10000).realise();
     }
 
     @Test

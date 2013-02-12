@@ -10,7 +10,7 @@ url=http://${repo}/${group}/${artifact}/${version}/${artifact}-${version}
 remote_jar=${url}.jar
 remote_sh=${url}.sh
 
-if [ $1 = "-u" ]; then 
+if [ "$1" = "-u" ]; then 
 	rm ${jar}
 	shift 1
 fi
