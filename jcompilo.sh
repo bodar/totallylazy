@@ -1,7 +1,8 @@
 #!/bin/sh
 
 JAVA_OPTS=${JAVA_OPTS}
-version=101
+BUILD_NUMBER=${BUILD_NUMBER-dev-build}
+version=102
 artifact=jcompilo
 group=com/googlecode/${artifact}
 repo=repo.bodar.com.s3.amazonaws.com
@@ -21,4 +22,4 @@ if [ ! -f ${jar} ]; then
 	wget -O ${jar} ${remote_jar} || curl -o ${jar} ${remote_jar}
 	wget -O $0 ${remote_sh} || curl -o $0 ${remote_sh}
 fi
-exec java ${JAVA_OPTS} -jar ${jar} $*
+exec java -Dbuild.number=${BUILD_NUMBER} ${JAVA_OPTS} -jar ${jar} $*
