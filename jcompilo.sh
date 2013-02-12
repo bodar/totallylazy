@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version=98
+version=100
 artifact=jcompilo
 group=com/googlecode/${artifact}
 repo=repo.bodar.com.s3.amazonaws.com
@@ -10,7 +10,7 @@ url=http://${repo}/${group}/${artifact}/${version}/${artifact}-${version}
 remote_jar=${url}.jar
 remote_sh=${url}.sh
 
-if [ "$1" = "-u" ]; then 
+if [ $1 = "-u" ]; then 
 	rm ${jar}
 	shift 1
 fi
