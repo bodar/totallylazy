@@ -2,7 +2,7 @@
 
 JAVA_OPTS=${JAVA_OPTS}
 BUILD_NUMBER=${BUILD_NUMBER-dev-build}
-version=103
+version=104
 artifact=jcompilo
 group=com/googlecode/${artifact}
 repo=repo.bodar.com.s3.amazonaws.com
