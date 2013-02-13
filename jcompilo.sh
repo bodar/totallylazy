@@ -1,8 +1,8 @@
 #!/bin/sh
 
 JAVA_OPTS=${JAVA_OPTS}
-BUILD_NUMBER=${BUILD_NUMBER-dev-build}
-version=104
+BUILD_NUMBER=${BUILD_NUMBER-dev.build}
+version=107
 artifact=jcompilo
 group=com/googlecode/${artifact}
 repo=repo.bodar.com.s3.amazonaws.com
