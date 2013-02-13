@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Value;
+import com.googlecode.totallylazy.annotations.tailrec;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
@@ -34,6 +35,7 @@ public class Trie<K, V> implements Value<V> {
         return !child.isEmpty() && child.get().contains(key.tail());
     }
 
+    @tailrec
     public Option<V> get(Segment<K> key) {
         if(key.isEmpty()) return value;
         Option<Trie<K, V>> child = childFor(key);
