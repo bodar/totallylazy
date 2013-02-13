@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.annotations.tailrec;
 
 import static com.googlecode.totallylazy.collections.PersistentList.functions;
 
@@ -30,14 +31,18 @@ public class ListZipper<T> {
         return zipper(focus.cons(breadcrumbs.head()), breadcrumbs.tail());
     }
 
+    public ListZipper<T> next() {
+        return right();
+    }
+
+    public ListZipper<T> previous() {
+        return left();
+    }
+
+    @tailrec
     public ListZipper<T> top() {
-        PersistentList<T> focus1 = focus;
-        PersistentList<T> breadcrumbs1 = breadcrumbs;
-        while (!breadcrumbs1.isEmpty()) {
-            focus1 = focus1.cons(breadcrumbs1.head());
-            breadcrumbs1 = breadcrumbs1.tail();
-        }
-        return zipper(focus1, breadcrumbs1);
+        if (isTop()) return this;
+        return previous().top();
     }
 
     @Override
