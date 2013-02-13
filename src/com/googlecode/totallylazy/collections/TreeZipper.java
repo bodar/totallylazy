@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.annotations.tailrec;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -46,6 +47,7 @@ public class TreeZipper<K, V> {
         return zipper(focus.factory().create(focus.comparator(), breadcrumb.parent.first(), breadcrumb.parent.second(), left, right), breadcrumbs.tail());
     }
 
+    @tailrec
     public TreeZipper<K, V> top() {
         if (breadcrumbs.isEmpty()) return this;
         return up().top();
