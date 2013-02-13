@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.annotations.tailrec;
 import com.googlecode.totallylazy.callables.JoinString;
 import com.googlecode.totallylazy.comparators.Maximum;
 import com.googlecode.totallylazy.comparators.Minimum;
@@ -295,6 +296,7 @@ public class Strings {
         return new StringBuilder(original).reverse().toString();
     }
 
+    @tailrec
     public static String substring(String original, int beginIndex, int endIndex) {
         int length = original.length();
         int beginIndexPositive = toPositive(length, beginIndex);

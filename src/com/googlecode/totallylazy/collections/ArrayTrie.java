@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Arrays;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Value;
+import com.googlecode.totallylazy.annotations.tailrec;
 
 import static com.googlecode.totallylazy.Arrays.head;
 import static com.googlecode.totallylazy.Arrays.tail;
@@ -36,6 +37,7 @@ public class ArrayTrie<K, V> implements Value<V> {
         return !child.isEmpty() && child.get().contains(tail(key));
     }
 
+    @tailrec
     public Option<V> get(K[] key) {
         if (Arrays.isEmpty(key)) return value;
         Option<ArrayTrie<K, V>> child = childFor(key);

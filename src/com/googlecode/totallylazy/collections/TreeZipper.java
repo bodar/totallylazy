@@ -76,11 +76,13 @@ public class TreeZipper<K, V> {
         return modify(functions.<K, V>remove());
     }
 
+    @tailrec
     public TreeZipper<K, V> first() {
         if(focus.left().isEmpty()) return this;
         return left().first();
     }
 
+    @tailrec
     public TreeZipper<K, V> last() {
         if(focus.right().isEmpty()) return this;
         return right().last();
@@ -116,6 +118,7 @@ public class TreeZipper<K, V> {
         }
     }
 
+    @tailrec
     private TreeZipper<K, V> backtrack(final Direction direction) {
         if(breadcrumbs.head().direction.equals(direction)) return up().backtrack(direction);
         return this;
