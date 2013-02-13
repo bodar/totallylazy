@@ -31,10 +31,12 @@ public class ArrayTrie<K, V> implements Value<V> {
         return new ArrayTrie<K, V>(value, children);
     }
 
+    @tailrec
     public boolean contains(K[] key) {
         if (Arrays.isEmpty(key)) return !value.isEmpty();
         Option<ArrayTrie<K, V>> child = childFor(key);
-        return !child.isEmpty() && child.get().contains(tail(key));
+        if (child.isEmpty()) return false;
+        return child.get().contains(tail(key));
     }
 
     @tailrec
