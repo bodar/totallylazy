@@ -4,6 +4,8 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.annotations.tailrec;
+
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 import static java.math.BigInteger.valueOf;
@@ -87,13 +89,10 @@ public final class IntegerOperators implements Operators<Integer>, IntegralOpera
         return Math.abs(y * quotient(x, gcd(x, y)));
     }
 
-    public static int gcd(int u, int v) {
-        while (v != 0) {
-            int r = u % v;
-            u = v;
-            v = r;
-        }
-        return u;
+    @tailrec
+    public static int gcd(int x, int y) {
+        if (y == 0) return x;
+        return gcd(y, x % y);
     }
 
     public final Number divide(Number x, Number y) {
