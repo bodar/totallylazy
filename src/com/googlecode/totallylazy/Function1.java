@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Pair.pair;
 
-public abstract class Function1<A, B> implements Callable1<A, B>, Functor<B> {
+public abstract class Function1<A, B> extends Eq implements Callable1<A, B>, Functor<B> {
     public B apply(final A a) {
         return Functions.call(this, a);
     }

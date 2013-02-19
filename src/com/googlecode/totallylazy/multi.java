@@ -15,6 +15,7 @@ import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Reflection.enclosingInstance;
 import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.comparators.Comparators.by;
 import static com.googlecode.totallylazy.numbers.Numbers.minimum;
@@ -31,13 +32,14 @@ public abstract class multi {
         Sequence<Class<?>> argumentClasses = sequence(args).map(toClass());
         Object instance = instance(method);
         Class<?> aClass = declaringClass(method, instance);
-        return allMethods(aClass).
-                remove(method).
-                filter(where(methodName(), is(method.getName()))).
-                filter(where(parameterTypes(), matches(argumentClasses))).
-                sort(by(distanceFrom(argumentClasses), Numbers.ascending())).
-                headOption().
-                map(Methods.<T>invokeOn(instance, args));
+        Sequence<Method> methods = allMethods(aClass);
+        return methods.
+                        filter(where(methodName(), is(method.getName()))).
+                        filter(where(parameterTypes(), matches(argumentClasses))).
+                        filter(where(parameterTypes(), not(exactMatch(sequence(method.getParameterTypes()))))).
+                        sort(by(distanceFrom(argumentClasses), Numbers.ascending())).
+                        headOption().
+                        map(Methods.<T>invokeOn(instance, args));
     }
 
     private Class<?> declaringClass(Method method, Object instance) {
@@ -85,6 +87,20 @@ public abstract class multi {
                     @Override
                     public boolean matches(Pair<Class<?>, Class<?>> pair) {
                         return pair.first().isAssignableFrom(pair.second());
+                    }
+                });
+            }
+        };
+    }
+
+    private static LogicalPredicate<Class<?>[]> exactMatch(final Sequence<Class<?>> argumentClasses) {
+        return new LogicalPredicate<Class<?>[]>() {
+            @Override
+            public boolean matches(Class<?>[] classes) {
+                return sequence(classes).equals(argumentClasses, new LogicalPredicate<Pair<Class<?>, Class<?>>>() {
+                    @Override
+                    public boolean matches(Pair<Class<?>, Class<?>> pair) {
+                        return pair.first().equals(pair.second());
                     }
                 });
             }

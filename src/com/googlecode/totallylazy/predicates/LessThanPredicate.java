@@ -18,4 +18,18 @@ public class LessThanPredicate<T extends Comparable<? super T>> extends LogicalP
     public T value() {
         return comparable;
     }
+
+    @Override
+    public String toString() {
+        return String.format("lessThan '%s'", comparable);
+    }
+
+    public boolean equals(LessThanPredicate predicate) {
+        return comparable.equals(predicate.comparable);
+    }
+
+    @Override
+    public int hashCode() {
+        return comparable.hashCode();
+    }
 }

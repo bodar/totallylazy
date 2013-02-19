@@ -121,6 +121,29 @@ public class multiTest {
         assertThat(new Instance().process(10.f), is("No match found"));
     }
 
+    @Test
+    public void doesNotRecurse() throws Exception {
+        class Instance extends Eq {
+        }
+        assertThat(new Instance().equals(1), is(false));
+    }
 
+    @Test
+    public void canMatchNullToAVoidMethod() throws Exception {
+        class Instance extends Eq {
+            public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
+            public String process(Float a) {return "Float";}
+            public String process(Void a) {return "Void";}
+        }
+        assertThat(new Instance().process((Object) null), is("Void"));
+    }
 
+    @Test
+    public void handlesNullWhenNoExplicitMatch() throws Exception {
+        class Instance extends Eq {
+            public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
+            public String process(Float a) {return "Float";}
+        }
+        assertThat(new Instance().process((Object)null), is("No match found"));
+    }
 }

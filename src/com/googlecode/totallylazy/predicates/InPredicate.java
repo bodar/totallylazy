@@ -24,6 +24,10 @@ public class InPredicate<T> extends LogicalPredicate<T> {
         this.original = iterable;
     }
 
+    public static <T> LogicalPredicate<T> in(final T... items) {
+        return in(Sequences.sequence(items));
+    }
+
     public static <T> LogicalPredicate<T> in(final Iterable<? extends T> iterable) {
         if(Sequences.isEmpty(iterable)) return never();
         return new InPredicate<T>(Unchecked.<Iterable<T>>cast(iterable));
@@ -41,5 +45,19 @@ public class InPredicate<T> extends LogicalPredicate<T> {
     // Used by LazyRecords, do not inline or change
     public Iterable<T> values() {
         return original;
+    }
+
+    @Override
+    public String toString() {
+        return sequence(original).toString("in('", "','", "')");
+    }
+
+    public boolean equals(InPredicate other) {
+        return Sequences.equalTo(values(), other.values());
+    }
+
+    @Override
+    public int hashCode() {
+        return sequence(values()).hashCode();
     }
 }
