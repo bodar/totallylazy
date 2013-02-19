@@ -32,6 +32,7 @@ public class ZipTest {
         assertThat(b.exists(), is(true));
 
         Files.deleteFiles(playground);
+        zipFile.delete();
     }
 
     @Test
@@ -50,5 +51,6 @@ public class ZipTest {
         assertThat(new Date(a.lastModified()), is(date));
 
         Files.deleteFiles(playground);
+        zipFile.delete();
     }
 }
