@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.comparators.Comparators;
 
+import javax.sound.midi.VoiceStatus;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.Comparator;
@@ -69,6 +70,7 @@ public final class Callables {
     public static Function1<Object, Class<?>> toClass() {
         return new Function1<Object, Class<?>>() {
             public final Class<?> call(final Object o) throws Exception {
+                if(o == null) return Void.class;
                 return o.getClass();
             }
         };
