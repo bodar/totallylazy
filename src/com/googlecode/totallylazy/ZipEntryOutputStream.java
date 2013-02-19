@@ -20,6 +20,7 @@ public class ZipEntryOutputStream extends OutputStream {
 
     private void init(boolean zeroBytes) throws IOException {
         if (init) {
+            init = false;
             ZipEntry entry = new ZipEntry(filename);
             entry.setTime(modified.getTime());
             if (zeroBytes) {
