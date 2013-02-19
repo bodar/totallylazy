@@ -1,14 +1,17 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.multi;
 import org.junit.Test;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Predicates.any;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.multi.distanceBetween;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class multiTest {
     public static class StaticSingle {
         public static String process(Object o) { return new multi() {}.method(o); }
-        private static String process(String s) { return "String processed"; }
+        @multimethod static String process(String s) { return "String processed"; }
     }
 
     @Test
@@ -26,8 +29,8 @@ public class multiTest {
 
     public static class Static2 {
         public static String process(Object o) { return new multi() {}.method(o); }
-        private static String process(String s) { return "String processed"; }
-        private static String process(Integer s) { return "Integer processed"; }
+        @multimethod static String process(String s) { return "String processed"; }
+        @multimethod static String process(Integer s) { return "Integer processed"; }
     }
 
     @Test
@@ -37,8 +40,8 @@ public class multiTest {
 
     public static class Static3 {
         public static String process(Object o) { return new multi(){}.method(o); }
-        private static String process(CharSequence s) { return "CharSequence processed"; }
-        private static String process(Integer s) { return "Integer processed"; }
+        @multimethod static String process(CharSequence s) { return "CharSequence processed"; }
+        @multimethod static String process(Integer s) { return "Integer processed"; }
     }
 
     @Test
@@ -48,9 +51,9 @@ public class multiTest {
 
     public static class Static4 {
         public static String process(Object o) { return new multi(){}.method(o); }
-        private static String process(String s) { return "String processed"; }
-        private static String process(CharSequence s) { return "CharSequence processed"; }
-        private static String process(Integer s) { return "Integer processed"; }
+        @multimethod static String process(String s) { return "String processed"; }
+        @multimethod static String process(CharSequence s) { return "CharSequence processed"; }
+        @multimethod static String process(Integer s) { return "Integer processed"; }
     }
 
     @Test
@@ -60,8 +63,8 @@ public class multiTest {
 
     public static class InterfaceOverSuperClass {
         public static String process(Object o) { return new multi(){}.method(o); }
-        private static String process(Map s) { return "Map processed"; }
-        private static String process(AbstractMap s) { return "AbstractMap processed"; }
+        @multimethod static String process(Map s) { return "Map processed"; }
+        @multimethod static String process(AbstractMap s) { return "AbstractMap processed"; }
     }
 
     @Test
@@ -79,9 +82,9 @@ public class multiTest {
 
     class Instance {
         public String process(Object o) { return new multi(){}.method(o); }
-        private String process(String s) { return "String processed"; }
-        private String process(CharSequence s) { return "CharSequence processed"; }
-        private String process(Integer s) { return "Integer processed"; }
+        @multimethod String process(String s) { return "String processed"; }
+        @multimethod String process(CharSequence s) { return "CharSequence processed"; }
+        @multimethod String process(Integer s) { return "Integer processed"; }
     }
 
     @Test
@@ -107,7 +110,7 @@ public class multiTest {
     public void doesNotCallMethodsWithMoreArguments() throws Exception {
         class Instance {
             public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
-            public String process(Float a, Float b) {return "Float";}
+            @multimethod String process(Float a, Float b) {return "Float";}
         }
         assertThat(new Instance().process(10.f), is("No match found"));
     }
@@ -116,7 +119,7 @@ public class multiTest {
     public void doesNotCallMethodsWithLessArguments() throws Exception {
         class Instance {
             public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
-            public String process() {return "no args";}
+            @multimethod String process() {return "no args";}
         }
         assertThat(new Instance().process(10.f), is("No match found"));
     }
@@ -132,8 +135,8 @@ public class multiTest {
     public void canMatchNullToAVoidMethod() throws Exception {
         class Instance extends Eq {
             public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
-            public String process(Float a) {return "Float";}
-            public String process(Void a) {return "Void";}
+            @multimethod String process(Float a) {return "Float";}
+            @multimethod String process(Void a) {return "Void";}
         }
         assertThat(new Instance().process((Object) null), is("Void"));
     }
@@ -142,8 +145,26 @@ public class multiTest {
     public void handlesNullWhenNoExplicitMatch() throws Exception {
         class Instance extends Eq {
             public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
-            public String process(Float a) {return "Float";}
+            @multimethod String process(Float a) {return "Float";}
         }
         assertThat(new Instance().process((Object)null), is("No match found"));
+    }
+
+    @Test
+    public void byDefaultDoesNotInvokeMethodThatIsNotAnnotated() throws Exception {
+        class Instance extends Eq {
+            public String process(Object o) { return new multi(){}.<String>methodOption(o).getOrElse("No match found"); }
+            String process(Float a) {return "Float";}
+        }
+        assertThat(new Instance().process((Object)1.0f), is("No match found"));
+    }
+
+    @Test
+    public void supportsOverridingPredicateToAllowInvokingMethodThatIsNotAnnotated() throws Exception {
+        class Instance extends Eq {
+            public String process(Object o) { return new multi(any(Method.class)){}.<String>methodOption(o).getOrElse("No match found"); }
+            String process(Float a) {return "Float";}
+        }
+        assertThat(new Instance().process((Object)1.0f), is("Float"));
     }
 }

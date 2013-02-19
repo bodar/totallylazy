@@ -52,6 +52,14 @@ public class Predicates {
         return AlwaysTrue.alwaysTrue();
     }
 
+    public static <T> LogicalPredicate<T> any() {
+        return AlwaysTrue.alwaysTrue();
+    }
+
+    public static <T> LogicalPredicate<T> any(Class<T> aClass) {
+        return AlwaysTrue.alwaysTrue();
+    }
+
     public static <T> LogicalPredicate<T> anything() {
         return AlwaysTrue.alwaysTrue();
     }

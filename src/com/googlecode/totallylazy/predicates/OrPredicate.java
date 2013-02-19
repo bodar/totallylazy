@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.annotations.multimethod;
 
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.one;
@@ -47,14 +48,14 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
         return 31 * predicates.hashCode();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof OrPredicate && predicates.equals(((OrPredicate) obj).predicates());
+    @multimethod
+    public boolean equals(OrPredicate other) {
+        return predicates.equals(other.predicates());
     }
 
     @Override
     public String toString() {
-        return predicates.toString(" or ");
+        return predicates.toString("(", " or ", ")");
     }
 
     private static <T> Mapper<Predicate<T>, Iterable<Predicate<T>>> asPredicates() {
