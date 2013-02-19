@@ -7,10 +7,9 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 import static com.googlecode.totallylazy.Closeables.using;
-import static com.googlecode.totallylazy.Runnables.VOID;
 
 public class Streams {
-    public static void copyAndClose(final InputStream input, final OutputStream out){
+    public static void copyAndClose(final InputStream input, final OutputStream out) {
         using(input, new Block<InputStream>() {
             @Override
             protected void execute(InputStream inputStream) throws Exception {
@@ -34,6 +33,15 @@ public class Streams {
         while ((read = input.read(buffer)) > 0) {
             out.write(buffer, 0, read);
         }
+    }
+
+    public static InputStream emptyInputStream() {
+        return new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return -1;
+            }
+        };
     }
 
     public static OutputStream nullOutputStream() {
