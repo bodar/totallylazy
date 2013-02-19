@@ -61,6 +61,6 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
 
     @Override
     public String toString() {
-        return format("where %s %s", callable, predicate);
+        return format("where <%s> %s", callable, predicate);
     }
 }
