@@ -21,7 +21,7 @@ public class OrPredicateTest {
 
     @Test
     public void supportsToString() throws Exception {
-        assertThat(or(is("13"), is("14")).toString(), Matchers.is("13 or 14"));
+        assertThat(or(is("13"), is("14")).toString(), Matchers.is("(is '13' or is '14')"));
     }
 
     @Test

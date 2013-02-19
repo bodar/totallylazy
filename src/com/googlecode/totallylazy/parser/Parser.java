@@ -10,11 +10,11 @@ import java.util.concurrent.Callable;
 
 public abstract class Parser<A> implements Parse<A> {
     protected Failure<A> fail() {
-        return Failure.failure(String.format("Expected:'%s'", toString()));
+        return Failure.failure(String.format("Expected:%s", toString()));
     }
 
     protected Failure<A> fail(Object expected, Object actual) {
-        return Failure.failure(String.format("Expected:'%s' Actual:'%s'", expected, actual));
+        return Failure.failure(String.format("Expected:%s Actual:%s", expected, actual));
     }
 
     public abstract String toString();

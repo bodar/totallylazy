@@ -22,7 +22,7 @@ public class AndPredicateTest {
 
     @Test
     public void supportsToString() throws Exception {
-        assertThat(and(is("13"), is("14")).toString(), Matchers.is("13 and 14"));
+        assertThat(and(is("13"), is("14")).toString(), Matchers.is("(is '13' and is '14')"));
     }
 
     @Test

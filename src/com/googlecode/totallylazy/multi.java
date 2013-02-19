@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
@@ -11,11 +12,10 @@ import static com.googlecode.totallylazy.Methods.methodName;
 import static com.googlecode.totallylazy.Methods.parameterTypes;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Reflection.enclosingInstance;
-import static com.googlecode.totallylazy.Sequences.empty;
-import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.comparators.Comparators.by;
 import static com.googlecode.totallylazy.numbers.Numbers.minimum;
@@ -23,6 +23,16 @@ import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static java.lang.reflect.Modifier.isStatic;
 
 public abstract class multi {
+    private final Predicate<Method> predicate;
+
+    protected multi(Predicate<Method> predicate) {
+        this.predicate = predicate;
+    }
+
+    protected multi() {
+        this(Predicates.<Method, multimethod>where(Methods.annotation(multimethod.class), notNullValue()));
+    }
+
     public <T> T method(Object... args) {
         return this.<T>methodOption(args).get();
     }
@@ -34,12 +44,13 @@ public abstract class multi {
         Class<?> aClass = declaringClass(method, instance);
         Sequence<Method> methods = allMethods(aClass);
         return methods.
-                        filter(where(methodName(), is(method.getName()))).
-                        filter(where(parameterTypes(), matches(argumentClasses))).
-                        filter(where(parameterTypes(), not(exactMatch(sequence(method.getParameterTypes()))))).
-                        sort(by(distanceFrom(argumentClasses), Numbers.ascending())).
-                        headOption().
-                        map(Methods.<T>invokeOn(instance, args));
+                filter(where(methodName(), is(method.getName()))).
+                filter(predicate).
+                filter(where(parameterTypes(), matches(argumentClasses))).
+                filter(where(parameterTypes(), not(exactMatch(sequence(method.getParameterTypes()))))).
+                sort(by(distanceFrom(argumentClasses), Numbers.ascending())).
+                headOption().
+                map(Methods.<T>invokeOn(instance, args));
     }
 
     private Class<?> declaringClass(Method method, Object instance) {

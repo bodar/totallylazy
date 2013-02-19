@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.annotations.multimethod;
 
 public class Not<T> extends LogicalPredicate<T> {
     private final Predicate<T> predicate;
@@ -28,9 +29,9 @@ public class Not<T> extends LogicalPredicate<T> {
         return 31 * predicate.hashCode();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Not && predicate.equals(((Not) obj).predicate());
+    @multimethod
+    public boolean equals(Not other) {
+        return predicate.equals(other.predicate());
     }
 
     @Override

@@ -2,6 +2,9 @@ package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.Value;
+import com.googlecode.totallylazy.annotations.multimethod;
+
+import static java.lang.String.format;
 
 public class EqualsPredicate<T> extends LogicalPredicate<T> implements Value<T> {
     private final T value;
@@ -15,6 +18,10 @@ public class EqualsPredicate<T> extends LogicalPredicate<T> implements Value<T> 
         return new EqualsPredicate<T>(value);
     }
 
+    public static <T> LogicalPredicate<T> is(T value) {
+        return equalTo(value);
+    }
+
     public boolean matches(T other) {
         return value.equals(other);
     }
@@ -23,9 +30,9 @@ public class EqualsPredicate<T> extends LogicalPredicate<T> implements Value<T> 
         return value;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof EqualsPredicate && value.equals(((EqualsPredicate) obj).value());
+    @multimethod
+    public boolean equals(EqualsPredicate other) {
+        return value.equals(other.value());
     }
 
     @Override
@@ -35,7 +42,7 @@ public class EqualsPredicate<T> extends LogicalPredicate<T> implements Value<T> 
 
     @Override
     public String toString() {
-        return Strings.asString(value);
+        return format("is '%s'", Strings.asString(value));
     }
 }
 

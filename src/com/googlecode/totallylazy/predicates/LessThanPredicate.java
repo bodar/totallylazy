@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.predicates;
 
+import com.googlecode.totallylazy.annotations.multimethod;
+
 public class LessThanPredicate<T extends Comparable<? super T>> extends LogicalPredicate<T> implements LessThan<T> {
     private final T comparable;
 
@@ -24,6 +26,7 @@ public class LessThanPredicate<T extends Comparable<? super T>> extends LogicalP
         return String.format("lessThan '%s'", comparable);
     }
 
+    @multimethod
     public boolean equals(LessThanPredicate predicate) {
         return comparable.equals(predicate.comparable);
     }

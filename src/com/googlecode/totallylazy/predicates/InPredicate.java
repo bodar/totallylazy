@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.Lazy;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.annotations.multimethod;
 
 import java.util.Collection;
 
@@ -52,6 +53,7 @@ public class InPredicate<T> extends LogicalPredicate<T> {
         return sequence(original).toString("in('", "','", "')");
     }
 
+    @multimethod
     public boolean equals(InPredicate other) {
         return Sequences.equalTo(values(), other.values());
     }
