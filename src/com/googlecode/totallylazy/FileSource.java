@@ -24,7 +24,7 @@ public class FileSource implements Sources {
     }
 
     public static FileSource fileSource(File folder) {
-        return fileSource(folder, Files.recursiveFiles(folder));
+        return fileSource(folder, Files.recursiveFilesDirectoriesFirst(folder));
     }
 
     public static FileSource fileSource(File folder, Sequence<File> files) {

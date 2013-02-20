@@ -183,6 +183,18 @@ public class Files {
         };
     }
 
+    public static Sequence<File> recursiveFilesDirectoriesFirst(final File directory) {
+        return files(directory).flatMap(recursiveFilesDirectoriesFirst());
+    }
+
+    public static Function1<File, Iterable<File>> recursiveFilesDirectoriesFirst() {
+        return new Function1<File, Iterable<File>>() {
+            public Iterable<File> call(File file) throws Exception {
+                return file.isDirectory() ? recursiveFilesDirectoriesFirst(file).cons(file) : sequence(file);
+            }
+        };
+    }
+
     public static File write(byte[] bytes, File file) {
         return write(bytes, file, false);
     }
