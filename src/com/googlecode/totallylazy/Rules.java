@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import static com.googlecode.totallylazy.Callables.callWith;
 import static com.googlecode.totallylazy.Rule.rule;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -59,6 +60,10 @@ public class Rules<A, B> extends Function1<A, B> implements Predicate<A> {
     public Sequence<Rule<A, B>> filter(A instance) {
         return sequence(rules).
                 filter(Predicates.matches(instance));
+    }
+
+    public Sequence<B> applyMatching(A instance) {
+        return filter(instance).map(Callables.<A,B>callWith(instance));
     }
 
     public static <A, B> Rules<A, B> rules() {
