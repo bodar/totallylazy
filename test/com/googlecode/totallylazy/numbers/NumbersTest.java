@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.numbers;
 import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
@@ -132,6 +133,7 @@ public class NumbersTest {
     }
 
     @Test
+    @Ignore("Manual Performance Test")
     public void shouldBePrettyFast() throws Exception {
         TimeReport report = new TimeReport();
         repeat(time(sumIterable(), range(0, 10000), report)).take(100).realise();
@@ -150,6 +152,7 @@ public class NumbersTest {
     }
 
     @Test
+    @Ignore("Manual Performance Test")
     public void primeFactorsOfLargeNumbersIsPrettyFast() throws Exception {
         TimeReport report = TimeReport.time(100, primeFactors(600851475143L));
         System.out.println(report);
@@ -178,6 +181,7 @@ public class NumbersTest {
     }
 
     @Test
+    @Ignore("Manual Performance Test")
     public void primesIsPrettyFastAndIsMemorised() throws Exception {
         TimeReport report = TimeReport.time(1000, primes().take(1000));
         System.out.println(report);

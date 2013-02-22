@@ -96,7 +96,7 @@ public class AVLTreeTest {
     static final Sequence<Integer> keys_ = range.shuffle().cycle().memorise();
 
     @Test
-    @Ignore("Manual")
+    @Ignore("Manual Performance Test")
     public void getIsPrettyQuick() throws Exception {
         for (int i = 0; i < 10; i++) {
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, persistentGet(createPersistent(range))));
@@ -147,7 +147,7 @@ public class AVLTreeTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("Manual Performance Test")
     public void removeIsQuick() throws Exception {
         System.out.println("SIZE = " + SIZE);
         TimeReport hashMapReport = new TimeReport();
@@ -231,7 +231,7 @@ public class AVLTreeTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("Manual Performance Test")
     public void putIsQuick() throws Exception {
             System.out.println("SIZE = " + SIZE);
             TimeReport hashMapReport = new TimeReport();
