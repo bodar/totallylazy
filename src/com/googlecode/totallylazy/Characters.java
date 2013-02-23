@@ -9,6 +9,8 @@ import java.nio.charset.CharsetEncoder;
 import java.util.Set;
 
 public class Characters {
+    public static Character a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,_;
+
     public static Charset UTF8 = Charset.forName("UTF-8");
     public static Charset UTF16 = Charset.forName("UTF-16");
     public static Charset ASCII = Charset.forName("ASCII");
