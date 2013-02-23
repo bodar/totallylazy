@@ -27,6 +27,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.inputStreamReader;
 
 public class Strings {
+    public static String a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,_;
     public static final String EMPTY = "";
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
