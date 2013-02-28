@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.enumerable.lambda.annotation.NewLambda;
 import org.enumerable.lambda.exception.LambdaWeavingNotEnabledException;
 

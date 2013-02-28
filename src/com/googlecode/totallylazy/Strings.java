@@ -27,7 +27,6 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.inputStreamReader;
 
 public class Strings {
-    public static String a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,_;
     public static final String EMPTY = "";
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
@@ -362,4 +361,8 @@ public class Strings {
     public static Maximum.Function<String> maximum = Maximum.constructors.maximum((String) null);
 
     public static Minimum.Function<String> minimum = Minimum.constructors.minimum((String) null);
+
+    public static class parameters {
+        public static String a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,_;
+    }
 }

@@ -129,6 +129,5 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
                 }
             };
         }
-
     }
 }

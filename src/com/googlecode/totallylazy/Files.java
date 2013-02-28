@@ -21,7 +21,6 @@ import static java.lang.System.getProperty;
 import static java.util.UUID.randomUUID;
 
 public class Files {
-    public static File a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,_;
     public static final File TEMP_DIR = new File(getProperty("java.io.tmpdir"));
 
     public static String relativePath(File folder, File file) {
@@ -256,5 +255,9 @@ public class Files {
                 return date(file.lastModified());
             }
         };
+    }
+
+    public static class parameters {
+        public static File a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,_;
     }
 }
