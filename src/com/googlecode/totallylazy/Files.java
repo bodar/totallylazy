@@ -12,6 +12,8 @@ import java.util.Date;
 import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -246,6 +248,11 @@ public class Files {
             throw LazyException.lazyException(e);
         }
         return child;
+    }
+
+    public static Option<File> fileOption(File parent, String name) {
+        final File file = new File(parent, name);
+        return file.exists() ? some(file) : none(File.class);
     }
 
     public static Function1<File, Date> lastModified() {
