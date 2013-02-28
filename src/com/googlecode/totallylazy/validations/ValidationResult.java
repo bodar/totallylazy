@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Pair;
@@ -185,8 +186,8 @@ public class ValidationResult {
             };
         }
 
-        public static ReducerFunction<ValidationResult, ValidationResult> merge() {
-            return new ReducerFunction<ValidationResult, ValidationResult>() {
+        public static CombinerFunction<ValidationResult> merge() {
+            return new CombinerFunction<ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult seed, ValidationResult value) throws Exception {
                     return seed.merge(value);

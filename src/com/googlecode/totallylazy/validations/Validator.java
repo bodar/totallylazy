@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.validations;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.ReducerCombinerFunction;
 import com.googlecode.totallylazy.ReducerFunction;
 
 import static com.googlecode.totallylazy.validations.PredicateValidator.constructors.validatePredicate;
@@ -21,8 +22,8 @@ public interface Validator<T> extends Predicate<T> {
             };
         }
 
-        public static <T> ReducerFunction<T, ValidationResult> validateWith(final Validator<? super T> validator) {
-            return new ReducerFunction<T, ValidationResult>() {
+        public static <T> ReducerCombinerFunction<T, ValidationResult> validateWith(final Validator<? super T> validator) {
+            return new ReducerCombinerFunction<T, ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult validationResult, T instance) throws Exception {
                     return validationResult.merge(validator.validate(instance));
@@ -31,6 +32,11 @@ public interface Validator<T> extends Predicate<T> {
                 @Override
                 public ValidationResult identity() {
                     return pass();
+                }
+
+                @Override
+                public ValidationResult combine(ValidationResult a, ValidationResult b) throws Exception {
+                    return a.merge(b);
                 }
             };
         }
