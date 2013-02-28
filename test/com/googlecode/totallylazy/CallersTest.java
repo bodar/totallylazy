@@ -16,19 +16,4 @@ public class CallersTest {
     public void callConcurrentlyIgnoresAnEmptyIterator() throws Exception {
         callConcurrently(new ArrayList<Callable<Object>>());
     }
-
-    @Test
-    public void callConcurrentlyRunsOnDifferentThreads() {
-        Sequence<String> sequence = callConcurrently(currentThreadName(), currentThreadName());
-        assertThat(sequence.first(), is(not(sequence.second())));
-    }
-
-    private static Function<String> currentThreadName() {
-        return new Function<String>() {
-            @Override
-            public String call() throws Exception {
-                return currentThread().getName();
-            }
-        };
-    }
 }
