@@ -13,31 +13,36 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public abstract class MapContract {
-    protected abstract <K, V> MapFactory<K, V, ? extends PersistentMap<K,V>> factory();
+    protected abstract <K extends Comparable<K>, V> MapFactory<K, V, ? extends PersistentMap<K, V>> factory();
 
-    protected <K, V> PersistentMap<K, V> empty(Class<K> kClass, Class<V> vClass) {
+    protected <K extends Comparable<K>, V> PersistentMap<K, V> empty(Class<K> kClass, Class<V> vClass) {
         return this.<K, V>factory().empty();
     }
 
-    protected <K, V> PersistentMap<K, V> map(K key, V value) {
+    protected <K extends Comparable<K>, V> PersistentMap<K, V> map(K key, V value) {
         return this.<K, V>factory().map(key, value);
     }
 
-    protected <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2) {
+    protected <K extends Comparable<K>, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2) {
         return this.<K, V>factory().map(key1, value1, key2, value2);
     }
 
-    protected <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3) {
+    protected <K extends Comparable<K>, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3) {
         return this.<K, V>factory().map(key1, value1, key2, value2, key3, value3);
     }
 
-    protected <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
+    protected <K extends Comparable<K>, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
         return this.<K, V>factory().map(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
-    protected <K, V> PersistentMap<K, V> map(Iterable<? extends Pair<K, V>> iterable) {
+    protected <K extends Comparable<K>, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5) {
+        return this.<K, V>factory().map(key1, value1, key2, value2, key3, value3, key4, value4, key5, value5);
+    }
+
+    protected <K extends Comparable<K>, V> PersistentMap<K, V> map(Iterable<? extends Pair<K, V>> iterable) {
         return this.<K, V>factory().map(iterable);
     }
 
@@ -49,18 +54,20 @@ public abstract class MapContract {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void canPut() throws Exception {
         PersistentMap<Integer, String> map = map(1, "Dan").put(3, "Stu").put(2, "Ray");
-        assertThat(map, hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map, containsInAnyOrder(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void canRemove() throws Exception {
         final PersistentMap<Integer, String> map = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray");
-        assertThat(map.remove(4), hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
-        assertThat(map.remove(3), hasExactly(pair(4, "Alex"), pair(1, "Dan"), pair(2, "Ray")));
-        assertThat(map.remove(2), hasExactly(pair(4, "Alex"), pair(1, "Dan"), pair(3, "Stu")));
-        assertThat(map.remove(1), hasExactly(pair(4, "Alex"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map.remove(4), containsInAnyOrder(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map.remove(3), containsInAnyOrder(pair(4, "Alex"), pair(1, "Dan"), pair(2, "Ray")));
+        assertThat(map.remove(2), containsInAnyOrder(pair(4, "Alex"), pair(1, "Dan"), pair(3, "Stu")));
+        assertThat(map.remove(1), containsInAnyOrder(pair(4, "Alex"), pair(3, "Stu"), pair(2, "Ray")));
         assertThat(map.remove(0), is(map));
     }
 
@@ -85,15 +92,17 @@ public abstract class MapContract {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void canConvertToPersistentList() throws Exception {
         PersistentList<Pair<Integer, String>> map = map(2, "Ray", 1, "Dan", 3, "Stu").persistentList();
-        assertThat(map, hasExactly(pair(2, "Ray"), pair(1, "Dan"), pair(3, "Stu")));
+        assertThat(map, containsInAnyOrder(pair(2, "Ray"), pair(1, "Dan"), pair(3, "Stu")));
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void canJoin() throws Exception {
         PersistentMap<Integer, String> map = map(3, "Stu", 4, "Matt").joinTo(map(1, "Dan", 2, "Ray"));
-        assertThat(map, is(map(1, "Dan", 2, "Ray", 3, "Stu", 4, "Matt")));
+        assertThat(map, containsInAnyOrder(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu"), pair(4, "Matt")));
     }
 
     @Test
