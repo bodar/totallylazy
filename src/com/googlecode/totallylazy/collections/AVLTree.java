@@ -76,6 +76,14 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         public static <K extends Comparable<? super K>, V> AVLTree<K, V> avlTree(K key, V value) {
             return factory.create(Comparators.<K>ascending(), key, value);
         }
+
+        public static <K,V> TreeMapFactory<K,V, AVLTree<K,V>> factory(Comparator<K> comparator) {
+            return TreeMapFactory.treeMapFactory(factory, comparator);
+        }
+
+        public static <K extends Comparable<? super K>,V> TreeMapFactory<K,V, AVLTree<K,V>> factory() {
+            return TreeMapFactory.<K,V, AVLTree<K,V>>treeMapFactory(factory);
+        }
     }
 
     class methods {
