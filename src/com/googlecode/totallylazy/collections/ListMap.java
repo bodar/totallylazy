@@ -28,6 +28,10 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
         this.list = list;
     }
 
+    public static <K,V> ListMapFactory<K,V> factory() {
+        return new ListMapFactory<K, V>();
+    }
+
     public static <K, V> PersistentMap<K, V> emptyListMap(Class<K> kClass, Class<V> vClass) {
         return emptyListMap();
     }
