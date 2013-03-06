@@ -15,12 +15,31 @@ import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public abstract class MapContract {
-    protected abstract <K,V> PersistentMap<K, V> empty(Class<K> kClass, Class<V> vClass);
-    protected abstract <K,V> PersistentMap<K, V> map(K key, V value);
-    protected abstract <K,V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2);
-    protected abstract <K,V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3);
-    protected abstract <K,V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
-    protected abstract <K,V> PersistentMap<K, V> map(Iterable<? extends Pair<K, V>> iterable);
+    protected abstract <K, V> MapFactory<K, V, ? extends PersistentMap<K,V>> factory();
+
+    protected <K, V> PersistentMap<K, V> empty(Class<K> kClass, Class<V> vClass) {
+        return this.<K, V>factory().empty();
+    }
+
+    protected <K, V> PersistentMap<K, V> map(K key, V value) {
+        return this.<K, V>factory().map(key, value);
+    }
+
+    protected <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2) {
+        return this.<K, V>factory().map(key1, value1, key2, value2);
+    }
+
+    protected <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3) {
+        return this.<K, V>factory().map(key1, value1, key2, value2, key3, value3);
+    }
+
+    protected <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
+        return this.<K, V>factory().map(key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    protected <K, V> PersistentMap<K, V> map(Iterable<? extends Pair<K, V>> iterable) {
+        return this.<K, V>factory().map(iterable);
+    }
 
     @Test
     public void canGet() throws Exception {
