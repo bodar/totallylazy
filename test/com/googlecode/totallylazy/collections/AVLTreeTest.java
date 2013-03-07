@@ -40,28 +40,28 @@ public class AVLTreeTest extends MapContract {
 
     @Test
     public void balancesRightRightCase() throws Exception {
-        assertThat(avlTree(3, null).put(4, null).put(5, null).toString(), is("(( 3 ) 4 ( 5 ))"));
+        assertThat(avlTree(3, null).put(4, null).put(5, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
     }
 
     @Test
     public void balancesRightLeftCase() throws Exception {
-        assertThat(avlTree(3, null).put(5, null).put(4, null).toString(), is("(( 3 ) 4 ( 5 ))"));
+        assertThat(avlTree(3, null).put(5, null).put(4, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
     }
 
     @Test
     public void balancesLeftLeftCase() throws Exception {
-        assertThat(avlTree(5, null).put(4, null).put(3, null).toString(), is("(( 3 ) 4 ( 5 ))"));
+        assertThat(avlTree(5, null).put(4, null).put(3, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
     }
 
     @Test
     public void balancesLeftRightCase() throws Exception {
-        assertThat(avlTree(5, null).put(3, null).put(4, null).toString(), is("(( 3 ) 4 ( 5 ))"));
+        assertThat(avlTree(5, null).put(3, null).put(4, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
     }
 
     @Test
     public void balancesDeletion() throws Exception {
         final PersistentMap<Integer, Object> map = avlTree(0, null).put(1, null).put(2, null).put(3, null).put(4, null).put(5, null).put(6, null);
-        assertThat(map.remove(3).toString(), is("((( 0 ) 1 ) 2 (( 4 ) 5 ( 6 )))"));
+        assertThat(map.remove(3).toString(), is("((( 0=null ) 1=null ) 2=null (( 4=null ) 5=null ( 6=null )))"));
     }
 
     @Test
