@@ -213,6 +213,11 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     }
 
     @Override
+    public Self empty() {
+        return self(factory.<K,V>create(comparator));
+    }
+
+    @Override
     public boolean isEmpty() {
         return false;
     }

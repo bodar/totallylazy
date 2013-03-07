@@ -13,6 +13,8 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public interface Segment<T> {
+    Segment<T> empty();
+
     boolean isEmpty();
 
     T head() throws NoSuchElementException;

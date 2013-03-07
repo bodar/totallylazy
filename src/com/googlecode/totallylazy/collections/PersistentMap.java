@@ -16,6 +16,9 @@ import java.util.NoSuchElementException;
 
 public interface PersistentMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K, V>>, PersistentCollection<K>, Functor<V>, Foldable<Pair<K,V>> {
     @Override
+    PersistentMap<K, V> empty();
+
+    @Override
     PersistentMap<K, V> cons(Pair<K, V> head);
 
     @Override

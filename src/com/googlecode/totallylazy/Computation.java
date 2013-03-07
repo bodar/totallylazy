@@ -102,6 +102,11 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     }
 
     @Override
+    public Segment<T> empty() {
+        return Segment.constructors.emptySegment();
+    }
+
+    @Override
     public boolean isEmpty() {
         try {
             head.call();

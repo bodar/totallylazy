@@ -113,6 +113,11 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     }
 
     @Override
+    public Self empty() {
+        return cast(treeFactory.<K,V>create(comparator));
+    }
+
+    @Override
     public Self cons(Pair<K, V> newValue) {
         return cast(treeFactory.create(comparator, newValue.first(), newValue.second()));
     }

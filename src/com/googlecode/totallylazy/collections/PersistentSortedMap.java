@@ -17,6 +17,9 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<Pair<K, V>>, Indexed<Pair<K, V>> {
     @Override
+    PersistentSortedMap<K, V> empty();
+
+    @Override
     PersistentSortedMap<K, V> cons(Pair<K, V> head);
 
     @Override

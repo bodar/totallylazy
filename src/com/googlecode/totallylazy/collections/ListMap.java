@@ -73,6 +73,11 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
     }
 
     @Override
+    public PersistentMap<K, V> empty() {
+        return emptyListMap();
+    }
+
+    @Override
     public PersistentMap<K, V> cons(Pair<K, V> head) {
         return contains(head.first()) ? listMap(list.map(replace(head))) : listMap(list.cons(head));
     }

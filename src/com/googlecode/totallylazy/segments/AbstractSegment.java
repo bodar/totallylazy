@@ -10,6 +10,11 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 
 public abstract class AbstractSegment<T> implements Segment<T>, Iterable<T>{
     @Override
+    public Segment<T> empty() {
+        return Segment.constructors.emptySegment();
+    }
+
+    @Override
     public Segment<T> cons(T head) {
         return Segment.constructors.segment(head, this);
     }

@@ -92,6 +92,11 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
     }
 
     @Override
+    public PersistentSortedSet<T> empty() {
+        return treeSet(map.empty());
+    }
+
+    @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }

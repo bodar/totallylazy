@@ -74,6 +74,11 @@ public class TreeList<T> implements PersistentList<T>, RandomAccess {
     }
 
     @Override
+    public TreeList<T> empty() {
+        return treeList();
+    }
+
+    @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }

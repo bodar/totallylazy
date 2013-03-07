@@ -208,6 +208,11 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.unique(this, callable);
     }
 
+    @Override
+    public Segment<T> empty() {
+        return Sequences.empty();
+    }
+
     public boolean isEmpty() {
         return Sequences.isEmpty(this);
     }

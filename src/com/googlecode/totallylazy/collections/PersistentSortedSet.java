@@ -13,6 +13,9 @@ import static com.googlecode.totallylazy.collections.TreeSet.treeSet;
 
 public interface PersistentSortedSet<T> extends PersistentSet<T>, Sorted<T>, Indexed<T> {
     @Override
+    PersistentSortedSet<T> empty();
+
+    @Override
     PersistentSortedSet<T> cons(T head);
 
     @Override
