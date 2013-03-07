@@ -1,8 +1,11 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.collections.PersistentMap;
+
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
@@ -116,6 +119,14 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
     @SuppressWarnings("unchecked")
     public <NewF> Pair<NewF, S> map(final Callable1<? super F, ? extends NewF> callable) {
         return pair(first.map(callable), second);
+    }
+
+    public <R> Pair<R, S> first(Callable1<? super F, ? extends R> map) {
+        return pair(first.then(map), second);
+    }
+
+    public <R> Pair<F,R> second(Callable1<? super S, ? extends R> map) {
+        return pair(first, second.then(map));
     }
 
     public static class functions {

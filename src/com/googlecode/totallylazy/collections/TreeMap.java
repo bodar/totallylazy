@@ -27,6 +27,9 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
     TreeMap<K, V> right(TreeMap<K, V> newRight);
 
     @Override
+    TreeMap<K, V> empty();
+
+    @Override
     TreeMap<K, V> cons(Pair<K, V> head);
 
     @Override

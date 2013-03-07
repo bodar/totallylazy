@@ -11,6 +11,9 @@ public interface PersistentSet<T> extends Iterable<T>, Segment<T>, PersistentCol
     Option<T> find(Predicate<? super T> predicate);
 
     @Override
+    PersistentSet<T> empty();
+
+    @Override
     PersistentSet<T> cons(T head);
 
     PersistentSet<T> put(T value);

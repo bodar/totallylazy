@@ -30,6 +30,9 @@ public interface PersistentList<T> extends Iterable<T>, Segment<T>, Functor<T>, 
     Sequence<T> toSequence();
 
     @Override
+    PersistentList<T> empty();
+
+    @Override
     PersistentList<T> cons(T head);
 
     @Override
@@ -44,7 +47,7 @@ public interface PersistentList<T> extends Iterable<T>, Segment<T>, Functor<T>, 
 
     class constructors {
         public static <T> PersistentList<T> empty() {
-            return LinkedList.empty();
+            return LinkedList.emptyList();
         }
 
         public static <T> PersistentList<T> empty(Class<T> aClass) {

@@ -17,6 +17,9 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
     int balance();
 
     @Override
+    AVLTree<K, V> empty();
+
+    @Override
     AVLTree<K, V> cons(Pair<K, V> head);
 
     @Override

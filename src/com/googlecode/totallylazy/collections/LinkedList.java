@@ -25,12 +25,17 @@ import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 public abstract class LinkedList<T> implements PersistentList<T> {
     static final Empty EMPTY = new Empty();
 
-    static <T> LinkedList<T> empty() {
+    static <T> LinkedList<T> emptyList() {
         return cast(EMPTY);
     }
 
     static <T> LinkedList<T> cons(T head, PersistentList<T> tail) {
         return Node.node(head, tail);
+    }
+
+    @Override
+    public PersistentList<T> empty() {
+        return EMPTY;
     }
 
     @Override
