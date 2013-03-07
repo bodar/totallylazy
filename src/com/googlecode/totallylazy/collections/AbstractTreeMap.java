@@ -209,7 +209,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
 
     @Override
     public String toString() {
-        return String.format("(%s %s %s)", left, key, right);
+        return String.format("(%s %s=%s %s)", left, key, value, right);
     }
 
     @Override
