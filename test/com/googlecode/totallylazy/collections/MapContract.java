@@ -1,8 +1,11 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
 import org.junit.Test;
+
+import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -19,6 +22,10 @@ public abstract class MapContract {
     protected abstract <K extends Comparable<K>, V> MapFactory<K, V, ? extends PersistentMap<K, V>> factory();
 
     protected <K extends Comparable<K>, V> PersistentMap<K, V> empty(Class<K> kClass, Class<V> vClass) {
+        return this.<K, V>factory().empty();
+    }
+
+    protected <K extends Comparable<K>, V> PersistentMap<K, V> empty() {
         return this.<K, V>factory().empty();
     }
 
@@ -127,4 +134,17 @@ public abstract class MapContract {
     public void supportsMappingValues() throws Exception {
         assertThat(map("Dan", 2).map(add(2)), is(map("Dan", (Number) 4)));
     }
+
+    @Test
+    public void canIterate() throws Exception {
+        final Iterator<Pair<Integer, Integer>> iterator = map(0, 0, 1, 1, 2, 2).iterator();
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next().first(), is(0));
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next().first(), is(1));
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next().first(), is(2));
+        assertThat(iterator.hasNext(), is(false));
+    }
+
 }
