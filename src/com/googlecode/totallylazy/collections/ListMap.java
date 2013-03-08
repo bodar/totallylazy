@@ -8,6 +8,8 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -17,7 +19,6 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
 
@@ -28,7 +29,7 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
         this.list = list;
     }
 
-    public static <K,V> ListMapFactory<K,V> factory() {
+    public static <K, V> ListMapFactory<K, V> factory() {
         return new ListMapFactory<K, V>();
     }
 
@@ -37,7 +38,7 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
     }
 
     public static <K, V> PersistentMap<K, V> emptyListMap() {
-        return listMap(PersistentList.constructors.<Pair<K,V>>empty());
+        return listMap(PersistentList.constructors.<Pair<K, V>>empty());
     }
 
     public static <K, V> PersistentMap<K, V> listMap(K key, V value) {
@@ -45,23 +46,23 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
     }
 
     public static <K, V> PersistentMap<K, V> listMap(K key1, V value1, K key2, V value2) {
-        return listMap(sequence(pair(key1, value1), pair(key2, value2)));
+        return listMap(Sequences.sequence(pair(key1, value1), pair(key2, value2)));
     }
 
     public static <K, V> PersistentMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3) {
-        return listMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3)));
+        return listMap(Sequences.sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3)));
     }
 
     public static <K, V> PersistentMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
-        return listMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4)));
+        return listMap(Sequences.sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4)));
     }
 
     public static <K, V> PersistentMap<K, V> listMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5) {
-        return listMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
+        return listMap(Sequences.sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
     }
 
     public static <K, V> PersistentMap<K, V> listMap(Iterable<? extends Pair<K, V>> pairs) {
-        return listMap(reverse(sequence((pairs))));
+        return listMap(reverse(Sequences.sequence((pairs))));
     }
 
     public static <K, V> PersistentMap<K, V> listMap(Pair<K, V> pair) {
@@ -89,6 +90,11 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
                 return oldValue.first().equals(newValue.first()) ? newValue : oldValue;
             }
         };
+    }
+
+    @Override
+    public Sequence<Pair<K, V>> toSequence() {
+        return Sequences.sequence(this);
     }
 
     @Override
@@ -157,8 +163,18 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
     }
 
     @Override
-    public PersistentList<Pair<K, V>> persistentList() {
+    public PersistentList<Pair<K, V>> toPersistentList() {
         return reverse(list);
+    }
+
+    @Override
+    public Sequence<K> keys() {
+        return toSequence().map(Callables.<K>first());
+    }
+
+    @Override
+    public Sequence<V> values() {
+        return toSequence().map(Callables.<V>second());
     }
 
     @Override
@@ -178,7 +194,7 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
 
     @Override
     public Iterator<Pair<K, V>> iterator() {
-        return persistentList().iterator();
+        return toPersistentList().iterator();
     }
 
     private Predicate<First<K>> key(Predicate<? super K> predicate) {
@@ -201,7 +217,7 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
 
     @Override
     public String toString() {
-        return persistentList().toString();
+        return toPersistentList().toString();
     }
 
     @Override

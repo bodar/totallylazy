@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Atomic.constructors.atomic;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class AtomicMap<K, V> implements Map<K, V> {
@@ -45,7 +46,7 @@ public class AtomicMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsValue(Object value) {
-        throw new UnsupportedOperationException();
+        return values().contains(value);
     }
 
     @Override
@@ -97,16 +98,16 @@ public class AtomicMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException("not done yet");
+        return map().keys().toSet();
     }
 
     @Override
     public Collection<V> values() {
-        throw new UnsupportedOperationException("not done yet");
+        return map().values().toList();
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        throw new UnsupportedOperationException("not done yet");
+        return Maps.entrySet(map());
     }
 }

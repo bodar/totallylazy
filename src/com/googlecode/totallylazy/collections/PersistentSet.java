@@ -6,6 +6,9 @@ import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
+
+import java.util.Set;
 
 public interface PersistentSet<T> extends Iterable<T>, Segment<T>, PersistentCollection<T>, Functor<T>, Foldable<T> {
     Option<T> find(Predicate<? super T> predicate);
@@ -24,5 +27,9 @@ public interface PersistentSet<T> extends Iterable<T>, Segment<T>, PersistentCol
 
     <NewT> PersistentSet<NewT> map(Callable1<? super T, ? extends NewT> transformer);
 
-    PersistentList<T> persistentList();
+    PersistentList<T> toPersistentList();
+
+    Sequence<T> toSequence();
+
+    Set<T> toSet();
 }

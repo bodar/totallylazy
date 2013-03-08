@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -246,6 +247,10 @@ public class Maps {
         return new LinkedHashMap<K,V>(maximumElements, 1f, true) {
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) { return size() > maximumElements; }
         };
+    }
+
+    public static <K,V> Set<Map.Entry<K, V>> entrySet(final Iterable<? extends Pair<K, V>> map) {
+        return sequence(map).map(Maps.<K, V>pairToEntry()).toSet();
     }
 
     public static class PairEntry<K, V> implements Map.Entry<K, V> {

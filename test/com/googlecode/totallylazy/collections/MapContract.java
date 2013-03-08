@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -101,7 +101,7 @@ public abstract class MapContract {
     @Test
     @SuppressWarnings("unchecked")
     public void canConvertToPersistentList() throws Exception {
-        PersistentList<Pair<Integer, String>> map = map(2, "Ray", 1, "Dan", 3, "Stu").persistentList();
+        PersistentList<Pair<Integer, String>> map = map(2, "Ray", 1, "Dan", 3, "Stu").toPersistentList();
         assertThat(map, containsInAnyOrder(pair(2, "Ray"), pair(1, "Dan"), pair(3, "Stu")));
     }
 
@@ -145,6 +145,12 @@ public abstract class MapContract {
         assertThat(iterator.hasNext(), is(true));
         assertThat(iterator.next().first(), is(2));
         assertThat(iterator.hasNext(), is(false));
+    }
+
+    @Test
+    public void canGetKeys() throws Exception {
+        Sequence<Integer> keys = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").keys();
+        assertThat(keys, containsInAnyOrder(1,2,3,4));
     }
 
 }
