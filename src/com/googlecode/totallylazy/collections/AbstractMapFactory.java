@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequences;
 
 import java.util.Map;
 
@@ -12,6 +13,11 @@ public abstract class AbstractMapFactory<K, V, M extends PersistentMap<K, V>> im
     @Override
     public M empty(Class<K> kClass, Class<V> vClass) {
         return empty();
+    }
+
+    @Override
+    public M empty() {
+        return map(Sequences.<Pair<K,V>>empty());
     }
 
     @Override

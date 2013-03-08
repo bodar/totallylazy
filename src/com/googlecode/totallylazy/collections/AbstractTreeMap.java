@@ -19,7 +19,7 @@ import static com.googlecode.totallylazy.Functions.call;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implements TreeMap<K, V> {
+public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends AbstractMap<K,V> implements TreeMap<K, V> {
     protected final Comparator<K> comparator;
     protected final K key;
     protected final V value;
@@ -84,16 +84,6 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     }
 
     @Override
-    public Sequence<Pair<K, V>> toSequence() {
-        return Sequences.sequence(this);
-    }
-
-    @Override
-    public Map<K, V> toMap() {
-        return PersistentMap.methods.toMap(this);
-    }
-
-    @Override
     public Option<V> get(K other) {
         int difference = difference(other);
         if (difference == 0) return Option.option(value);
@@ -138,7 +128,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
 
     @Override
     public <NewV> TreeMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
-        return methods.map(transformer, factory, this);
+        return TreeMap.methods.map(transformer, factory, this);
     }
 
     @Override
@@ -180,16 +170,6 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
         if (right.isEmpty()) return Pair.pair(left, pair());
         final Pair<? extends TreeMap<K, V>, Pair<K, V>> newRight = right.removeLast();
         return Pair.pair(create(comparator, key, value, left, newRight.first()), newRight.second());
-    }
-
-    @Override
-    public Sequence<K> keys() {
-        return toSequence().map(Callables.<K>first());
-    }
-
-    @Override
-    public Sequence<V> values() {
-        return toSequence().map(Callables.<V>second());
     }
 
     @Override

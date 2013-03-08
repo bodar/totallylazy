@@ -392,4 +392,11 @@ public class Predicates {
         };
     }
 
+    public static <F> LogicalPredicate<First<F>> first(Predicate<? super F> predicate) {
+        return where(Callables.<F>first(), predicate);
+    }
+
+    public static <S> LogicalPredicate<Second<S>> second(Predicate<? super S> predicate) {
+        return where(Callables.<S>second(), predicate);
+    }
 }
