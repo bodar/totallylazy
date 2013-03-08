@@ -3,14 +3,11 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Functions;
-import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.annotations.multimethod;
 
@@ -21,6 +18,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     private final PersistentSortedMap<Integer, PersistentMap<K, V>> hash;
+    private final PersistentMap<K, V> emptyBucket = ListMap.<K, V>emptyListMap();
 
     private HashTreeMap(PersistentSortedMap<Integer, PersistentMap<K, V>> hash) {
         this.hash = hash;
@@ -39,7 +37,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     }
 
     public static <K, V> HashTreeMap<K, V> hashTreeMap(Iterable<? extends Pair<K, V>> values) {
-        return sequence(values).fold(HashTreeMap.<K,V>hashTreeMap(), Segment.functions.<Pair<K,V>, HashTreeMap<K,V>>cons());
+        return sequence(values).fold(HashTreeMap.<K, V>hashTreeMap(), Segment.functions.<Pair<K, V>, HashTreeMap<K, V>>cons());
     }
 
     @Override
@@ -80,13 +78,13 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     @Override
     public PersistentMap<K, V> put(K key, V value) {
         int hashCode = key.hashCode();
-        return hashTreeMap(hash.put(hashCode, hash.get(hashCode).getOrElse(ListMap.<K, V>emptyListMap()).put(key, value)));
+        return hashTreeMap(hash.put(hashCode, hash.get(hashCode).getOrElse(emptyBucket).put(key, value)));
     }
 
     @Override
     public PersistentMap<K, V> remove(K key) {
         int hashCode = key.hashCode();
-        return hashTreeMap(hash.put(hashCode, hash.get(hashCode).getOrElse(ListMap.<K, V>emptyListMap()).remove(key)));
+        return hashTreeMap(hash.put(hashCode, hash.get(hashCode).getOrElse(emptyBucket).remove(key)));
     }
 
     @Override
@@ -101,7 +99,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public <NewV> PersistentMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
-        return hashTreeMap(toSequence().map(Callables.<K,V, NewV>second(transformer)));
+        return hashTreeMap(toSequence().map(Callables.<K, V, NewV>second(transformer)));
     }
 
     @Override
@@ -116,7 +114,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public boolean contains(final K other) {
-        return hash.get(other.hashCode()).map(PersistentMap.functions.<K,V>contains(other)).getOrElse(false);
+        return hash.get(other.hashCode()).map(PersistentMap.functions.<K, V>contains(other)).getOrElse(false);
     }
 
     @Override
@@ -135,7 +133,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     }
 
     @multimethod
-    public boolean equals(HashTreeMap<K,V> obj) {
+    public boolean equals(HashTreeMap<K, V> obj) {
         return toSequence().equals(obj.toSequence());
     }
 
