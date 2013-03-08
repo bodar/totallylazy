@@ -30,7 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Ignore("Manual Performance Tests")
 public class MapPerformanceTest {
     public static final int SIZE = 100000;
-    public static final int NUMBER_OF_CALLS = 50000;
+    public static final int NUMBER_OF_CALLS = 500;
     public static final Sequence<Integer> range = range(1, SIZE).safeCast(Integer.class).realise();
     public static final Sequence<Integer> keys_ = range.shuffle().cycle().memorise();
 
@@ -43,6 +43,7 @@ public class MapPerformanceTest {
     public void getIsPrettyQuick() throws Exception {
         for (int i = 0; i < 10; i++) {
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, persistentGet(createPersistent(range))));
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, persistentGet(createHash(range))));
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new HashMap<Integer, Integer>()))));
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new java.util.TreeMap<Integer, Integer>()))));
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap "))));
@@ -63,7 +64,7 @@ public class MapPerformanceTest {
         Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
         PersistentMap<Integer, Integer> avlTree = createPersistent(range);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             timeRemove(NUMBER_OF_CALLS, hashMap, hashMapReport);
             timeRemove(NUMBER_OF_CALLS, treeMap, treeMapReport);
             timeRemove(NUMBER_OF_CALLS, cslMap, cslMapReport);
@@ -92,9 +93,9 @@ public class MapPerformanceTest {
         Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
         Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
         Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
-        PersistentMap<Integer, Integer> avlTree = createPersistent(range);
+        PersistentMap<Integer, Integer> avlTree = createHash(range);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             timePut(NUMBER_OF_CALLS, hashMap, hashMapReport);
             timePut(NUMBER_OF_CALLS, treeMap, treeMapReport);
             timePut(NUMBER_OF_CALLS, cslMap, cslMapReport);
@@ -227,6 +228,12 @@ public class MapPerformanceTest {
     public static PersistentSortedMap<Integer, Integer> createPersistent(final Sequence<Integer> range) throws Exception {
         PersistentSortedMap<Integer, Integer> map = PersistentSortedMap.constructors.sortedMap(range.map(asPair()));
         System.out.print("AVLTree:\t");
+        return map;
+    }
+
+    public static PersistentMap<Integer, Integer> createHash(final Sequence<Integer> range) throws Exception {
+        HashTreeMap<Integer, Integer> map = HashTreeMap.hashTreeMap(range.map(asPair()));
+        System.out.print("HashTreeMap:\t");
         return map;
     }
 
