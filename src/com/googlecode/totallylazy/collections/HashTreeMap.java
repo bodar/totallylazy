@@ -124,7 +124,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return toSequence().size();
     }
 
     @Override
