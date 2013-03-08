@@ -92,7 +92,7 @@ public abstract class MapContract {
     }
 
     @Test
-    public void canCreateATreeFromAnIterable() throws Exception {
+    public void canCreateFromAnIterable() throws Exception {
         PersistentMap<Integer, String> map = map(sequence(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
         assertThat(map.contains(2), is(true));
         assertThat(map.contains(4), is(false));
