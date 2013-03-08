@@ -121,6 +121,15 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
             };
         }
 
+        public static <T> Function1<Option<T>, T> getOrNull() {
+            return new Function1<Option<T>, T>() {
+                @Override
+                public T call(Option<T> ts) throws Exception {
+                    return ts.getOrNull();
+                }
+            };
+        }
+
         public static <T> Function1<Option<T>, T> get(Class<T> clazz) {
             return new Function1<Option<T>, T>() {
                 @Override
