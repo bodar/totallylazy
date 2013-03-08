@@ -35,7 +35,7 @@ public abstract class LinkedList<T> implements PersistentList<T> {
 
     @Override
     public PersistentList<T> empty() {
-        return EMPTY;
+        return emptyList();
     }
 
     @Override
