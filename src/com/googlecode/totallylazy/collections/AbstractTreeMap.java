@@ -2,10 +2,13 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -76,8 +79,13 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
     }
 
     @Override
-    public PersistentList<Pair<K, V>> persistentList() {
+    public PersistentList<Pair<K, V>> toPersistentList() {
         return joinTo(PersistentList.constructors.<Pair<K, V>>empty());
+    }
+
+    @Override
+    public Sequence<Pair<K, V>> toSequence() {
+        return Sequences.sequence(this);
     }
 
     @Override
@@ -172,6 +180,16 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> implemen
         if (right.isEmpty()) return Pair.pair(left, pair());
         final Pair<? extends TreeMap<K, V>, Pair<K, V>> newRight = right.removeLast();
         return Pair.pair(create(comparator, key, value, left, newRight.first()), newRight.second());
+    }
+
+    @Override
+    public Sequence<K> keys() {
+        return toSequence().map(Callables.<K>first());
+    }
+
+    @Override
+    public Sequence<V> values() {
+        return toSequence().map(Callables.<V>second());
     }
 
     @Override

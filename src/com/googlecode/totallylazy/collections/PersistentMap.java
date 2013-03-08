@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 
 import java.util.Map;
@@ -39,7 +40,13 @@ public interface PersistentMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<
     @Override
     <NewV> PersistentMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
 
-    PersistentList<Pair<K, V>> persistentList();
+    PersistentList<Pair<K, V>> toPersistentList();
+
+    Sequence<Pair<K, V>> toSequence();
+
+    Sequence<K> keys();
+
+    Sequence<V> values();
 
     Map<K, V> toMap();
 

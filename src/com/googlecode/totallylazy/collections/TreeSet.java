@@ -8,10 +8,14 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.SortedSet;
 
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -32,8 +36,13 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
     }
 
     @Override
-    public PersistentList<T> persistentList() {
-        return map.persistentList().map(Callables.<T>first());
+    public PersistentList<T> toPersistentList() {
+        return map.toPersistentList().map(Callables.<T>first());
+    }
+
+    @Override
+    public Sequence<T> toSequence() {
+        return Sequences.sequence(this);
     }
 
     @Override
@@ -79,6 +88,11 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
     @Override
     public Pair<PersistentSortedSet<T>, T> removeLast() {
         return treeSet(map.removeLast());
+    }
+
+    @Override
+    public Set<T> toSet() {
+        return map.keys().toSet();
     }
 
     @Override
@@ -146,7 +160,7 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return SegmentIterator.iterator(persistentList());
+        return SegmentIterator.iterator(toPersistentList());
     }
 
     private Pair<T, T> pair(T head) {

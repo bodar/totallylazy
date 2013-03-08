@@ -156,7 +156,7 @@ public class PersistentSortedMapTest {
 
     @Test
     public void canConvertToPersistentList() throws Exception {
-        PersistentList<Pair<Integer, String>> map = sortedMap(2, "Ray", 1, "Dan", 3, "Stu").persistentList();
+        PersistentList<Pair<Integer, String>> map = sortedMap(2, "Ray", 1, "Dan", 3, "Stu").toPersistentList();
         assertThat(map, hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
     }
 

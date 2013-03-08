@@ -7,6 +7,8 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.iterators.EmptyIterator;
 
 import java.util.Comparator;
@@ -38,8 +40,13 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     }
 
     @Override
-    public PersistentList<Pair<K, V>> persistentList() {
+    public PersistentList<Pair<K, V>> toPersistentList() {
         return PersistentList.constructors.empty();
+    }
+
+    @Override
+    public Sequence<Pair<K, V>> toSequence() {
+        return Sequences.empty();
     }
 
     @Override
@@ -105,6 +112,16 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     @Override
     public Pair<Self, Pair<K, V>> removeLast() {
         throw new NoSuchElementException();
+    }
+
+    @Override
+    public Sequence<K> keys() {
+        return Sequences.empty();
+    }
+
+    @Override
+    public Sequence<V> values() {
+        return Sequences.empty();
     }
 
     @Override
