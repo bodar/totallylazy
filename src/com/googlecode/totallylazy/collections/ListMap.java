@@ -7,12 +7,11 @@ import com.googlecode.totallylazy.First;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
@@ -22,7 +21,7 @@ import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
 
-public class ListMap<K, V> implements PersistentMap<K, V> {
+public class ListMap<K, V> extends AbstractMap<K, V> {
     private PersistentList<Pair<K, V>> list;
 
     private ListMap(PersistentList<Pair<K, V>> list) {
@@ -90,11 +89,6 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
                 return oldValue.first().equals(newValue.first()) ? newValue : oldValue;
             }
         };
-    }
-
-    @Override
-    public Sequence<Pair<K, V>> toSequence() {
-        return Sequences.sequence(this);
     }
 
     @Override
@@ -168,21 +162,6 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
     }
 
     @Override
-    public Sequence<K> keys() {
-        return toSequence().map(Callables.<K>first());
-    }
-
-    @Override
-    public Sequence<V> values() {
-        return toSequence().map(Callables.<V>second());
-    }
-
-    @Override
-    public Map<K, V> toMap() {
-        return PersistentMap.methods.toMap(this);
-    }
-
-    @Override
     public boolean contains(K other) {
         return list.exists(key(other));
     }
@@ -198,7 +177,7 @@ public class ListMap<K, V> implements PersistentMap<K, V> {
     }
 
     private Predicate<First<K>> key(Predicate<? super K> predicate) {
-        return where(Callables.<K>first(), predicate);
+        return Predicates.first(predicate);
     }
 
     private Predicate<First<K>> key(K key) {

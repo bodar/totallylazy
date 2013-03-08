@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functor;
+import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -14,6 +15,7 @@ import com.googlecode.totallylazy.Unchecked;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.concurrent.ConcurrentMap;
 
 public interface PersistentMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<K, V>>, PersistentCollection<K>, Functor<V>, Foldable<Pair<K,V>> {
     @Override
@@ -50,12 +52,32 @@ public interface PersistentMap<K, V> extends Iterable<Pair<K, V>>, Segment<Pair<
 
     Map<K, V> toMap();
 
+    ConcurrentMap<K, V> toConcurrentMap();
+
     class functions {
-        public static <K, V> Function1<PersistentMap<K, V>, PersistentMap<K, V>> remove(final K key) {
-            return new Function1<PersistentMap<K, V>, PersistentMap<K, V>>() {
+        public static <K,V> Mapper<PersistentMap<K, V>, Option<V>> get(final K key) {
+            return new Mapper<PersistentMap<K, V>, Option<V>>() {
+                @Override
+                public Option<V> call(PersistentMap<K, V> map) throws Exception {
+                    return map.get(key);
+                }
+            };
+        }
+
+        public static <K, V> Mapper<PersistentMap<K, V>, PersistentMap<K, V>> remove(final K key) {
+            return new Mapper<PersistentMap<K, V>, PersistentMap<K, V>>() {
                 @Override
                 public PersistentMap<K, V> call(PersistentMap<K, V> map) throws Exception {
                     return map.remove(key);
+                }
+            };
+        }
+
+        public static <K,V> Mapper<PersistentMap<K, V>, Boolean> contains(final K other) {
+            return new Mapper<PersistentMap<K, V>, Boolean>() {
+                @Override
+                public Boolean call(PersistentMap<K, V> map) throws Exception {
+                    return map.contains(other);
                 }
             };
         }

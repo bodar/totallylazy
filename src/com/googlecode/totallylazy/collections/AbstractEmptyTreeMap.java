@@ -13,13 +13,12 @@ import com.googlecode.totallylazy.iterators.EmptyIterator;
 
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.None.none;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> implements TreeMap<K, V> {
+public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> extends AbstractMap<K, V> implements TreeMap<K, V> {
     protected final Comparator<K> comparator;
 
     protected final TreeFactory treeFactory;
@@ -47,11 +46,6 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
     @Override
     public Sequence<Pair<K, V>> toSequence() {
         return Sequences.empty();
-    }
-
-    @Override
-    public Map<K, V> toMap() {
-        return PersistentMap.methods.toMap(this);
     }
 
     @Override
@@ -131,7 +125,7 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> imp
 
     @Override
     public Self empty() {
-        return cast(treeFactory.<K,V>create(comparator));
+        return cast(treeFactory.<K, V>create(comparator));
     }
 
     @Override
