@@ -164,4 +164,10 @@ public abstract class MapContract {
         assertThat(map(1,"2").remove(1).isEmpty(), is(true));
     }
 
+    @Test
+    public void supportsHead() throws Exception {
+        assertThat(map(1,"2").head(), is(pair(1, "2")));
+
+    }
+
 }
