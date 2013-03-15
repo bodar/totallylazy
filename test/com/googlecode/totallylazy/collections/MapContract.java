@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Lists;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
@@ -186,6 +187,12 @@ public abstract class MapContract {
     @Test
     public void supportsTail() throws Exception {
         assertThat(map(1,"2").tail().isEmpty(), is(true));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void supportsFold() throws Exception {
+        assertThat(map(1, "2").fold(Lists.list(pair(0, "1")), Lists.functions.<Pair<Integer, String>>add()), is(Lists.list(pair(0, "1"), pair(1, "2"))));
     }
 
 }

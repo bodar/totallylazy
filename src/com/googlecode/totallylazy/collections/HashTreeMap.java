@@ -106,7 +106,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public <S> S fold(S seed, Callable2<? super S, ? super Pair<K, V>, ? extends S> callable) {
-        throw new UnsupportedOperationException();
+        return toSequence().fold(seed, callable);
     }
 
     @Override
