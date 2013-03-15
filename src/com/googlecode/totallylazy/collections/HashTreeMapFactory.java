@@ -1,10 +1,15 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Pair;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class HashTreeMapFactory<K, V> extends AbstractMapFactory<K, V, HashTreeMap<K, V>> {
+    private static final HashTreeMapFactory<?,?> instance = new HashTreeMapFactory<Object, Object>();
+    private HashTreeMapFactory() {}
+
+    public static <K,V> HashTreeMapFactory<K, V> factory() {return cast(instance);}
+
     @Override
-    public HashTreeMap<K, V> map(Iterable<? extends Pair<K, V>> values) {
-        return HashTreeMap.hashTreeMap(values);
+    public HashTreeMap<K, V> empty() {
+        return HashTreeMap.hashTreeMap();
     }
 }
