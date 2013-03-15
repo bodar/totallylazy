@@ -51,7 +51,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public Pair<K, V> head() throws NoSuchElementException {
-        throw new UnsupportedOperationException();
+        return iterator().next();
     }
 
     @Override
