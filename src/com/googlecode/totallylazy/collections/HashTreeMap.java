@@ -7,7 +7,6 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.annotations.multimethod;
 
@@ -24,8 +23,8 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
         this.hash = hash;
     }
 
-    public static <K extends Comparable<K>, V> HashTreeMapFactory<K, V> factory() {
-        return new HashTreeMapFactory<K, V>();
+    public static <K, V> HashTreeMapFactory<K, V> factory() {
+        return HashTreeMapFactory.factory();
     }
 
     public static <K, V> HashTreeMap<K, V> hashTreeMap(PersistentSortedMap<Integer, PersistentMap<K, V>> map) {
@@ -33,11 +32,11 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     }
 
     public static <K, V> HashTreeMap<K, V> hashTreeMap() {
-        return new HashTreeMap<K, V>(PersistentSortedMap.constructors.<Integer, PersistentMap<K, V>>sortedMap());
+        return hashTreeMap(PersistentSortedMap.constructors.<Integer, PersistentMap<K, V>>sortedMap());
     }
 
     public static <K, V> HashTreeMap<K, V> hashTreeMap(Iterable<? extends Pair<K, V>> values) {
-        return sequence(values).fold(HashTreeMap.<K, V>hashTreeMap(), Segment.functions.<Pair<K, V>, HashTreeMap<K, V>>cons());
+        return HashTreeMap.<K,V>factory().map(values);
     }
 
     @Override

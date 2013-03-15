@@ -2,22 +2,19 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequences;
 
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public abstract class AbstractMapFactory<K, V, M extends PersistentMap<K, V>> implements MapFactory<K,V,M> {
     @Override
     public M empty(Class<K> kClass, Class<V> vClass) {
         return empty();
-    }
-
-    @Override
-    public M empty() {
-        return map(Sequences.<Pair<K,V>>empty());
     }
 
     @Override
@@ -54,5 +51,10 @@ public abstract class AbstractMapFactory<K, V, M extends PersistentMap<K, V>> im
     @Override
     public M map(Map<K, V> values) {
         return map(Maps.pairs(values));
+    }
+
+    @Override
+    public M map(Iterable<? extends Pair<K, V>> values) {
+        return sequence(values).fold(this.empty(), Segment.functions.<Pair<K, V>, M>cons());
     }
 }
