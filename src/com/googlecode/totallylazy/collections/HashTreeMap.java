@@ -67,7 +67,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public PersistentMap<K, V> tail() throws NoSuchElementException {
-        throw new UnsupportedOperationException();
+        return remove(head().first());
     }
 
     @Override
