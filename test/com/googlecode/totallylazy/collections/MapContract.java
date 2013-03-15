@@ -1,11 +1,13 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -17,6 +19,7 @@ import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.Assert.fail;
 
 public abstract class MapContract {
     protected abstract <K extends Comparable<K>, V> MapFactory<K, V, ? extends PersistentMap<K, V>> factory();
@@ -167,7 +170,17 @@ public abstract class MapContract {
     @Test
     public void supportsHead() throws Exception {
         assertThat(map(1,"2").head(), is(pair(1, "2")));
+        try {
+            empty(Integer.class, String.class).head();
+            fail("NoSuchElementException expect on calling head on empty map");
+        } catch (NoSuchElementException ignore) {
+        }
+    }
 
+    @Test
+    public void supportsHeadOption() throws Exception {
+        assertThat(map(1,"2").headOption(), is(some(pair(1, "2"))));
+        assertThat(empty(Integer.class, String.class).headOption(), is(Option.<Pair<Integer, String >>none()));
     }
 
 }
