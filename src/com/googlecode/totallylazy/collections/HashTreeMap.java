@@ -56,7 +56,8 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public Option<Pair<K, V>> headOption() {
-        throw new UnsupportedOperationException();
+        if(isEmpty()) return Option.none();
+        return Option.some(head());
     }
 
     @Override
