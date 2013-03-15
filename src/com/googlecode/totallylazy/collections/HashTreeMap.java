@@ -46,7 +46,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException();
+        return hash.isEmpty();
     }
 
     @Override
@@ -83,7 +83,9 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     @Override
     public PersistentMap<K, V> remove(K key) {
         int hashCode = key.hashCode();
-        return hashTreeMap(hash.put(hashCode, hash.get(hashCode).getOrElse(emptyBucket).remove(key)));
+        PersistentMap<K, V> bucket = hash.get(hashCode).getOrElse(emptyBucket).remove(key);
+        if(bucket.isEmpty()) return hashTreeMap(hash.remove(hashCode));
+        return hashTreeMap(hash.put(hashCode, bucket));
     }
 
     @Override
