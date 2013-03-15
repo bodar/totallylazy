@@ -29,6 +29,10 @@ public abstract class MapContract {
         return this.<K, V>factory().empty();
     }
 
+    protected <K extends Comparable<K>, V> PersistentMap<K, V> map() {
+        return empty();
+    }
+
     protected <K extends Comparable<K>, V> PersistentMap<K, V> map(K key, V value) {
         return this.<K, V>factory().map(key, value);
     }
@@ -151,6 +155,13 @@ public abstract class MapContract {
     public void canGetKeys() throws Exception {
         Sequence<Integer> keys = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").keys();
         assertThat(keys, containsInAnyOrder(1,2,3,4));
+    }
+
+    @Test
+    public void supportsIsEmpty() throws Exception {
+        assertThat(empty(Integer.class, String.class).isEmpty(), is(true));
+        assertThat(map(1,"2").isEmpty(), is(false));
+        assertThat(map(1,"2").remove(1).isEmpty(), is(true));
     }
 
 }
