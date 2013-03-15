@@ -183,4 +183,9 @@ public abstract class MapContract {
         assertThat(empty(Integer.class, String.class).headOption(), is(Option.<Pair<Integer, String >>none()));
     }
 
+    @Test
+    public void supportsTail() throws Exception {
+        assertThat(map(1,"2").tail().isEmpty(), is(true));
+    }
+
 }
