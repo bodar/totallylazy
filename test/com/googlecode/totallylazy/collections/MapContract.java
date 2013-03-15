@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
@@ -195,4 +196,10 @@ public abstract class MapContract {
         assertThat(map(1, "2").fold(Lists.list(pair(0, "1")), Lists.functions.<Pair<Integer, String>>add()), is(Lists.list(pair(0, "1"), pair(1, "2"))));
     }
 
+    @Test
+    public void exists() throws Exception {
+        assertThat(map(1,"2").exists(equalTo(1)), is(true));
+        assertThat(map(1,"2").exists(equalTo(2)), is(false));
+        assertThat(empty(Integer.class, String.class).exists(equalTo(2)), is(false));
+    }
 }
