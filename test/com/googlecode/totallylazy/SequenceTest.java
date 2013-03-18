@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
 import com.googlecode.totallylazy.comparators.Comparators;
+import com.googlecode.totallylazy.concurrent.NamedExecutors;
 import com.googlecode.totallylazy.matchers.Matchers;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
@@ -633,7 +634,7 @@ public class SequenceTest {
 
     @Test
     public void supportsConcurrentMapWithCustomExecutor() throws Exception {
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        ExecutorService executorService = NamedExecutors.newCachedThreadPool(getClass());
         Iterable<String> strings = sequence(1, 2).mapConcurrently(toString, executorService);
         assertThat(strings, hasExactly("1", "2"));
         executorService.shutdown();
@@ -674,7 +675,7 @@ public class SequenceTest {
 
     @Test
     public void supportsConcurrentFlatMapWithCustomExecutor() throws Exception {
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        ExecutorService executorService = NamedExecutors.newCachedThreadPool(getClass());
         Sequence<Character> characters = sequence("Hello").flatMapConcurrently(toCharacters(), executorService);
         assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
         executorService.shutdown();

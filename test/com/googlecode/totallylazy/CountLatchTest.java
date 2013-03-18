@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.concurrent.NamedExecutors;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
@@ -19,7 +20,7 @@ public class CountLatchTest {
         latch.countUp();
         assertThat(latch.count(), is(1));
 
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        ExecutorService executorService = NamedExecutors.newCachedThreadPool(getClass());
         for (final AtomicInteger atomicInteger : repeat(number).take(5)) {
             latch.countUp();
 
