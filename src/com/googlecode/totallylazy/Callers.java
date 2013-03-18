@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.concurrent.NamedExecutors;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -12,7 +14,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callers {
     public static <T> Function<T> callConcurrently(Callable<? extends T> callable) {
-        ExecutorService service = Executors.newCachedThreadPool();
+        ExecutorService service = executorService();
         try {
             final Future<? extends T> future = service.submit(callable);
             return new Function<T>() {
@@ -24,6 +26,10 @@ public final class Callers {
         } finally {
             service.shutdown();
         }
+    }
+
+    private static ExecutorService executorService() {
+        return NamedExecutors.newCachedThreadPool(Callers.class);
     }
 
     public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second) {
@@ -47,7 +53,7 @@ public final class Callers {
     }
 
     public static <T> Sequence<T> callConcurrently(final Iterable<? extends Callable<? extends T>> callables) {
-        ExecutorService service = Executors.newCachedThreadPool();
+        ExecutorService service = executorService();
         try {
             return callConcurrently(callables, service);
         } finally {
