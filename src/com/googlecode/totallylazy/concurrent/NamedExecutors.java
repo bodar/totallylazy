@@ -18,6 +18,14 @@ public class NamedExecutors {
         return namedThreadFactory(creatingClass.getName());
     }
 
+    public static ExecutorService newCpuThreadPool(String name) {
+        return newFixedThreadPool(Runtime.getRuntime().availableProcessors(), name);
+    }
+
+    public static ExecutorService newCpuThreadPool(Class<?> creatingClass) {
+        return newFixedThreadPool(Runtime.getRuntime().availableProcessors(), creatingClass);
+    }
+    
     public static ExecutorService newFixedThreadPool(int nThreads, String name) {
         return Executors.newFixedThreadPool(nThreads, namedThreadFactory(name));
     }
