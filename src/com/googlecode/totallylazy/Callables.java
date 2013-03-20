@@ -460,15 +460,7 @@ public final class Callables {
 
 
     public static <A, B> Function1<A, B> interruptable(final Callable1<? super A, ? extends B> function) {
-        return new Function1<A, B>() {
-            @Override
-            public B call(A a) throws Exception {
-                if (Thread.interrupted()) {
-                    throw new InterruptedException();
-                }
-                return function.call(a);
-            }
-        };
+        return Functions.interruptable(function);
     }
 
     public static <A, B, C> Function1<Pair<A, B>, C> pair(final Callable2<? super A, ? super B, ? extends C> function) {
