@@ -55,4 +55,7 @@ public abstract class Function<A> implements Callable<A>, Runnable, Functor<A>, 
         return map(callable);
     }
 
+    public Function<A> interruptable() {
+        return Functions.interruptable(this);
+    }
 }

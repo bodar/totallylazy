@@ -316,4 +316,25 @@ public class Functions {
             }
         };
     }
+
+    public static <A, B> Function1<A, B> interruptable(final Callable1<? super A, ? extends B> function) {
+        return new Function1<A, B>() {
+            @Override
+            public B call(A a) throws Exception {
+                if (Thread.interrupted()) throw new InterruptedException();
+                return function.call(a);
+            }
+        };
+    }
+
+    public static <A> Function<A> interruptable(final Callable<? extends A> function) {
+        return new Function<A>() {
+            @Override
+            public A call() throws Exception {
+                if (Thread.interrupted()) throw new InterruptedException();
+                return function.call();
+            }
+        };
+    }
+
 }

@@ -59,7 +59,7 @@ public abstract class Function1<A, B> extends Eq implements Callable1<A, B>, Fun
     }
 
     public Function1<A,B> interruptable() {
-        return Callables.interruptable(this);
+        return Functions.interruptable(this);
     }
 
     public Function1<A, Function<B>> deferExecution() {
