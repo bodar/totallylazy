@@ -10,7 +10,7 @@ public class ZipSource implements Sources {
     final ZipInputStream in;
 
     private ZipSource(InputStream inputStream) {
-        in = new ZipInputStream(inputStream);
+        in = inputStream instanceof ZipInputStream ? Unchecked.<ZipInputStream>cast(inputStream) : new ZipInputStream(inputStream);
     }
 
     public static ZipSource zipSource(InputStream inputStream) {
