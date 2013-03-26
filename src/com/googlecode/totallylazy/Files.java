@@ -98,6 +98,11 @@ public class Files {
         return directory(TEMP_DIR, name);
     }
 
+
+    public static File emptyRandomDirectory(String name) {
+        return emptyTemporaryDirectory(name + randomFilename());
+    }
+
     public static File emptyTemporaryDirectory(String name) {
         File directory = directory(TEMP_DIR, name);
         deleteFiles(directory);
@@ -164,12 +169,12 @@ public class Files {
     }
 
     public static Sequence<File> ancestorsAndSelf(File file) {
-        if(file.getParentFile()==null)return sequence(file);
+        if (file.getParentFile() == null) return sequence(file);
         return sequence(file).join(ancestorsAndSelf(file.getParentFile()));
     }
 
     public static Sequence<File> ancestors(File file) {
-        if(file.getParentFile()==null)return Sequences.empty();
+        if (file.getParentFile() == null) return Sequences.empty();
         return sequence(file.getParentFile()).join(ancestors(file.getParentFile()));
     }
 
@@ -265,6 +270,6 @@ public class Files {
     }
 
     public static class parameters {
-        public static File a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,_;
+        public static File a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, _;
     }
 }
