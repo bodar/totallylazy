@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Closeables {
     public static <T extends Closeable, R> Function1<T, R> closeAfter(final Callable1<? super T, R> callable) {
@@ -25,6 +26,30 @@ public class Closeables {
         }
     }
 
+    public static <T> void safeClose(final T t1, final T t2) {
+        reflectiveSafeClose(sequence(t1, t2));
+    }
+
+    public static <T> void safeClose(final T t1, final T t2, final T t3) {
+        reflectiveSafeClose(sequence(t1, t2, t3));
+    }
+
+    public static <T> void safeClose(final T t1, final T t2, final T t3, final T t4) {
+        reflectiveSafeClose(sequence(t1, t2, t3, t4));
+    }
+
+    public static <T> void safeClose(final T t1, final T t2, final T t3, final T t4, final T t5) {
+        reflectiveSafeClose(sequence(t1, t2, t3, t4, t5));
+    }
+
+    public static <T> void safeClose(final T... t) {
+        reflectiveSafeClose(sequence(t));
+    }
+
+    public static <T> void reflectiveSafeClose(final Iterable<? extends T> t) {
+        sequence(t).each(reflectiveSafeClose());
+    }
+
     public static <T extends Closeable> T safeClose(final T t) {
         try {
             close(t);
@@ -32,6 +57,30 @@ public class Closeables {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static <T extends Closeable> void safeClose(final T t1, final T t2) {
+        safeClose(sequence(t1, t2));
+    }
+
+    public static <T extends Closeable> void safeClose(final T t1, final T t2, final T t3) {
+        safeClose(sequence(t1, t2, t3));
+    }
+
+    public static <T extends Closeable> void safeClose(final T t1, final T t2, final T t3, final T t4) {
+        safeClose(sequence(t1, t2, t3, t4));
+    }
+
+    public static <T extends Closeable> void safeClose(final T t1, final T t2, final T t3, final T t4, final T t5) {
+        safeClose(sequence(t1, t2, t3, t4, t5));
+    }
+
+    public static <T extends Closeable> void safeClose(final T... t) {
+        safeClose(sequence(t));
+    }
+
+    public static <T extends Closeable> void safeClose(final Iterable<? extends T> t) {
+        sequence(t).each(safeClose());
     }
 
     public static <T> T close(final T t) {
@@ -111,6 +160,15 @@ public class Closeables {
         return new Block<Closeable>() {
             @Override
             protected void execute(Closeable closeable) throws Exception {
+                safeClose(closeable);
+            }
+        };
+    }
+
+    public static <T> Block<T> reflectiveSafeClose() {
+        return new Block<T>() {
+            @Override
+            protected void execute(T closeable) throws Exception {
                 safeClose(closeable);
             }
         };
