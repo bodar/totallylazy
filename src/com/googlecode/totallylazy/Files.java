@@ -99,8 +99,8 @@ public class Files {
     }
 
 
-    public static File emptyRandomDirectory(String name) {
-        return emptyTemporaryDirectory(name + randomFilename());
+    public static File emptyVMDirectory(String name) {
+        return emptyTemporaryDirectory(format("%s-%s", name, getProperty("java.version")));
     }
 
     public static File emptyTemporaryDirectory(String name) {
