@@ -5,8 +5,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Date;
 
-import static com.googlecode.totallylazy.Files.emptyRandomDirectory;
-import static com.googlecode.totallylazy.Files.emptyTemporaryDirectory;
+import static com.googlecode.totallylazy.Files.emptyVMDirectory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -16,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ZipTest {
     @Test
     public void canZipAndUnzip() throws Exception {
-        File playground = emptyRandomDirectory("totallylazy");
+        File playground = emptyVMDirectory("totallylazy");
         File a = file(playground, "a.txt");
         File b = file(playground, "folder/b.txt");
         File zipFile = temporaryFile();
@@ -38,7 +37,7 @@ public class ZipTest {
 
     @Test
     public void preservesModifiedDate() throws Exception {
-        File playground = emptyRandomDirectory("totallylazy");
+        File playground = emptyVMDirectory("totallylazy");
         File a = file(playground, "a.txt");
         Date date = date(2001, 1, 10);
         a.setLastModified(date.getTime());

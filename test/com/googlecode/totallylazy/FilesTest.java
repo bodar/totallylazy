@@ -10,7 +10,7 @@ import static com.googlecode.totallylazy.Files.ancestors;
 import static com.googlecode.totallylazy.Files.ancestorsAndSelf;
 import static com.googlecode.totallylazy.Files.append;
 import static com.googlecode.totallylazy.Files.directory;
-import static com.googlecode.totallylazy.Files.emptyRandomDirectory;
+import static com.googlecode.totallylazy.Files.emptyVMDirectory;
 import static com.googlecode.totallylazy.Files.emptyTemporaryDirectory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.files;
@@ -60,7 +60,7 @@ public class FilesTest {
 
     @Test
     public void shouldDeleteDirectoryContents() throws Exception {
-        File parentDir = emptyRandomDirectory("aTempDir");
+        File parentDir = emptyVMDirectory("aTempDir");
         File file = Files.file(parentDir, "aFile");
         assertThat(file.exists(), is(true));
         emptyTemporaryDirectory(parentDir.getName());
@@ -69,7 +69,7 @@ public class FilesTest {
 
     @Test
     public void supportsFiltering() throws Exception {
-        File directory = emptyRandomDirectory("filtering-test");
+        File directory = emptyVMDirectory("filtering-test");
         File aFile = temporaryFile(directory);
         File anOtherFile = temporaryFile(directory);
         Sequence<File> files = files(directory);
