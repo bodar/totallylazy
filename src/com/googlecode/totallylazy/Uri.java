@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.regex.Regex;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.util.regex.MatchResult;
@@ -12,6 +13,7 @@ public class Uri implements Comparable<Uri>{
     public static Regex JAR_URL = Regex.regex("jar:([^!]+)!(/.*)");
     public static Regex RFC3986 = Regex.regex("^(?:([^:/?\\#]+):)?(?://([^/?\\#]*))?([^?\\#]*)(?:\\?([^\\#]*))?(?:\\#(.*))?");
     public static final String JAR_SCHEME = "jar";
+    public static final String FILE_SCHEME = "file";
     private final String scheme;
     private final String authority;
     private final String path;
@@ -44,6 +46,10 @@ public class Uri implements Comparable<Uri>{
         }
     }
 
+    public static Uri uri(File value) {
+        return uri(value.toURI());
+    }
+
     public static Uri uri(CharSequence value) {
         return new Uri(value);
     }
@@ -54,6 +60,10 @@ public class Uri implements Comparable<Uri>{
 
     public static Uri uri(URI value) {
         return new Uri(value.toString());
+    }
+
+    public static Uri packageUri(Class<?> aClass) {
+        return uri(URLs.packageUrl(aClass));
     }
 
     public String scheme() {
@@ -187,6 +197,10 @@ public class Uri implements Comparable<Uri>{
     @Override
     public int compareTo(Uri other) {
         return toString().compareTo(other.toString());
+    }
+
+    public File toFile() {
+        return new File(toURI());
     }
 
     public static class functions {
