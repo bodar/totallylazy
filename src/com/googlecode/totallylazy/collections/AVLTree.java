@@ -98,37 +98,24 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
     class methods {
         // http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/AVL_Tree_Rebalancing.svg/350px-AVL_Tree_Rebalancing.svg.png
         static <K, V> AVLTree<K, V> balance(AVLTree<K, V> node) {
-            if (node.balance() == -2) return balanceRight(node);
-            if (node.balance() == 2) return balanceLeft(node);
+            int balance = node.balance();
+            if (balance == -2) return balanceRight(node);
+            if (balance == 2) return balanceLeft(node);
             return node;
         }
 
         static <K, V> AVLTree<K, V> balanceLeft(AVLTree<K, V> node) {
-            if (node.left().balance() == -1) return balanceLeftRight(node);
-            if (node.left().balance() == 1) return balanceLeftLeft(node);
+            int balance = node.left().balance();
+            if (balance == -1) return node.left(node.left().rotateLeft());
+            if (balance == 1) return node.rotateRight();
             return node;
         }
 
         static <K, V> AVLTree<K, V> balanceRight(AVLTree<K, V> node) {
-            if (node.right().balance() == 1) return balanceRightLeft(node);
-            if (node.right().balance() == -1) return balanceRightRight(node);
+            int balance = node.right().balance();
+            if (balance == 1) return node.right(node.right().rotateRight());
+            if (balance == -1) return node.rotateLeft();
             return node;
-        }
-
-        static <K, V> AVLTree<K, V> balanceLeftLeft(AVLTree<K, V> parent) {
-            return parent.rotateRight();
-        }
-
-        static <K, V> AVLTree<K, V> balanceLeftRight(AVLTree<K, V> parent) {
-            return parent.left(parent.left().rotateLeft());
-        }
-
-        static <K, V> AVLTree<K, V> balanceRightRight(AVLTree<K, V> parent) {
-            return parent.rotateLeft();
-        }
-
-        static <K, V> AVLTree<K, V> balanceRightLeft(AVLTree<K, V> parent) {
-            return parent.right(parent.right().rotateRight());
         }
     }
 
@@ -160,7 +147,7 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         private Node(Comparator<K> comparator, K key, V value, AVLTree<K, V> left, AVLTree<K, V> right) {
             super(comparator, key, value, left, right, AVLTree.constructors.factory);
             height = Math.max(left.height(), right.height()) + 1;
-            balance = left().height() - right().height();
+            balance = left.height() - right.height();
         }
 
         @Override
