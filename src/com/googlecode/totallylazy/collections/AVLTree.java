@@ -155,10 +155,12 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
 
     final class Node<K, V> extends AbstractTreeMap<K, V, AVLTree<K, V>> implements AVLTree<K, V> {
         private final int height;
+        private final int balance;
 
         private Node(Comparator<K> comparator, K key, V value, AVLTree<K, V> left, AVLTree<K, V> right) {
             super(comparator, key, value, left, right, AVLTree.constructors.factory);
             height = Math.max(left.height(), right.height()) + 1;
+            balance = left().height() - right().height();
         }
 
         @Override
@@ -168,7 +170,7 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
 
         @Override
         public int balance() {
-            return left().height() - right().height();
+            return balance;
         }
 
         @Override
