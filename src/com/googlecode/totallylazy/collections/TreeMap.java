@@ -26,6 +26,10 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
 
     TreeMap<K, V> right(TreeMap<K, V> newRight);
 
+    TreeMap<K, V> rotateLeft();
+
+    TreeMap<K, V> rotateRight();
+
     @Override
     TreeMap<K, V> empty();
 

@@ -121,7 +121,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public boolean exists(Predicate<? super K> predicate) {
-        return toSequence().exists(Predicates.first(predicate));
+        return toSequence().exists(Predicates.<K>first(predicate));
     }
 
     @Override

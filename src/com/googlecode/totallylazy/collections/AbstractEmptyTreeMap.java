@@ -227,4 +227,14 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> ext
     public Self right(TreeMap<K, V> newRight) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Self rotateLeft() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Self rotateRight() {
+        throw new UnsupportedOperationException();
+    }
 }
