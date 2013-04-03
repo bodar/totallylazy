@@ -106,16 +106,38 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
 
         static <K, V> AVLTree<K, V> balanceLeft(AVLTree<K, V> node) {
             int balance = node.left().balance();
-            if (balance == -1) return node.left(node.left().rotateLeft());
-            if (balance == 1) return node.rotateRight();
+            if (balance == -1) return balanceLeftRight(node);
+            if (balance == 1) return balanceLeftLeft(node);
             return node;
         }
 
         static <K, V> AVLTree<K, V> balanceRight(AVLTree<K, V> node) {
             int balance = node.right().balance();
-            if (balance == 1) return node.right(node.right().rotateRight());
-            if (balance == -1) return node.rotateLeft();
+            if (balance == 1) return balanceRightLeft(node);
+            if (balance == -1) return balanceRightRight(node);
             return node;
+        }
+
+        static <K, V> AVLTree<K, V> balanceLeftLeft(AVLTree<K, V> parent) {
+            return parent.rotateRight();
+        }
+
+        static <K, V> AVLTree<K, V> balanceLeftRight(AVLTree<K, V> parent) {
+            AVLTree<K, V> b = parent.left().right().left();
+            AVLTree<K, V> three = parent.left().right(b);
+            AVLTree<K, V> four = parent.left().right().left(three);
+            return balanceLeftLeft(parent.left(four));
+        }
+
+        static <K, V> AVLTree<K, V> balanceRightRight(AVLTree<K, V> parent) {
+            return parent.rotateLeft();
+        }
+
+        static <K, V> AVLTree<K, V> balanceRightLeft(AVLTree<K, V> parent) {
+            AVLTree<K, V> c = parent.right().left().right();
+            AVLTree<K, V> five = parent.right().left(c);
+            AVLTree<K, V> four = parent.right().left().right(five);
+            return balanceRightRight(parent.right(four));
         }
     }
 
