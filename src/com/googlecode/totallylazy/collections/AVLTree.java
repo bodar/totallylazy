@@ -120,10 +120,7 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         }
 
         static <K, V> AVLTree<K, V> balanceLeftRight(AVLTree<K, V> parent) {
-            AVLTree<K, V> b = parent.left().right().left();
-            AVLTree<K, V> three = parent.left().right(b);
-            AVLTree<K, V> four = parent.left().right().left(three);
-            return balanceLeftLeft(parent.left(four));
+            return parent.left(parent.left().rotateLeft());
         }
 
         static <K, V> AVLTree<K, V> balanceRightRight(AVLTree<K, V> parent) {
@@ -131,10 +128,7 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         }
 
         static <K, V> AVLTree<K, V> balanceRightLeft(AVLTree<K, V> parent) {
-            AVLTree<K, V> c = parent.right().left().right();
-            AVLTree<K, V> five = parent.right().left(c);
-            AVLTree<K, V> four = parent.right().left().right(five);
-            return balanceRightRight(parent.right(four));
+            return parent.right(parent.right().rotateRight());
         }
     }
 
