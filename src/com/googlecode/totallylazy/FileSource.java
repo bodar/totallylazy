@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import static com.googlecode.totallylazy.Files.isDirectory;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Streams.emptyInputStream;
 
 public class FileSource implements Sources {
@@ -17,8 +19,7 @@ public class FileSource implements Sources {
         this.sources = sources.map(new Function1<Pair<String, File>, Source>() {
             @Override
             public Source call(Pair<String, File> pair) throws Exception {
-                InputStream inputStream = pair.second().isDirectory() ? emptyInputStream() : closeables.manage(new FileInputStream(pair.second()));
-                return new Source(pair.first(), new Date(pair.second().lastModified()), inputStream);
+                return new Source(pair.first(), new Date(pair.second().lastModified()), closeables.manage(new FileInputStream(pair.second())));
             }
         });
     }
@@ -28,7 +29,7 @@ public class FileSource implements Sources {
     }
 
     public static FileSource fileSource(File folder, Sequence<File> files) {
-        return new FileSource(files.map(relativeTo(folder)));
+        return new FileSource(files.filter(not(isDirectory())).map(relativeTo(folder)));
     }
 
     @Override
