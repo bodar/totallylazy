@@ -79,6 +79,20 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
+    public Self rotateLeft() {
+        TreeMap<K, V> b = right.left();
+        Self three = right(b);
+        return cast(right.left(three));
+    }
+
+    @Override
+    public Self rotateRight() {
+        TreeMap<K, V> c = left().right();
+        Self five = left(c);
+        return cast(left().right(five));
+    }
+
+    @Override
     public PersistentList<Pair<K, V>> toPersistentList() {
         return joinTo(PersistentList.constructors.<Pair<K, V>>empty());
     }

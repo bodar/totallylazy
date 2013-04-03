@@ -58,6 +58,12 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
     @Override
     AVLTree<K, V> right(TreeMap<K, V> newRight);
 
+    @Override
+    AVLTree<K, V> rotateLeft();
+
+    @Override
+    AVLTree<K, V> rotateRight();
+
     enum constructors implements TreeFactory {
         factory;
 
@@ -110,9 +116,7 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         }
 
         static <K, V> AVLTree<K, V> balanceLeftLeft(AVLTree<K, V> parent) {
-            AVLTree<K, V> c = parent.left().right();
-            AVLTree<K, V> five = parent.left(c);
-            return parent.left().right(five);
+            return parent.rotateRight();
         }
 
         static <K, V> AVLTree<K, V> balanceLeftRight(AVLTree<K, V> parent) {
@@ -123,9 +127,7 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         }
 
         static <K, V> AVLTree<K, V> balanceRightRight(AVLTree<K, V> parent) {
-            AVLTree<K, V> b = parent.right().left();
-            AVLTree<K, V> three = parent.right(b);
-            return parent.right().left(three);
+            return parent.rotateLeft();
         }
 
         static <K, V> AVLTree<K, V> balanceRightLeft(AVLTree<K, V> parent) {
