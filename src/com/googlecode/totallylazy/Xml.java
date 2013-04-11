@@ -175,13 +175,15 @@ public class Xml {
         return Xml.textContents(Xml.sequence(nodes));
     }
 
+    public static final Function1<Node, String> textContent =  new Function1<Node, String>() {
+        @Override
+        public String call(Node node) throws Exception {
+            return node.getTextContent();
+        }
+    };
+
     public static Function1<Node, String> textContent() {
-        return new Function1<Node, String>() {
-            @Override
-            public String call(Node node) throws Exception {
-                return node.getTextContent();
-            }
-        };
+        return textContent;
     }
 
     public static Block<Element> removeAttribute(final String name) {

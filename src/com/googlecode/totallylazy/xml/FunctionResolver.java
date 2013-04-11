@@ -24,12 +24,14 @@ import static java.lang.reflect.Modifier.STATIC;
 import static java.util.Collections.newSetFromMap;
 
 public enum FunctionResolver implements XPathFunctionResolver {
-    resolver(XPathFunctions.class);
+    resolver(XPathFunctions.class, XPathLookups.class);
 
     private final Set<Method> methods = newSetFromMap(new ConcurrentHashMap<Method, Boolean>());
 
-    FunctionResolver(Class<?> defaultXpathFunctions) {
-        add(defaultXpathFunctions);
+    FunctionResolver(Class<?>... defaultXpathFunctions) {
+        for (Class<?> functions : defaultXpathFunctions) {
+            add(functions);
+        }
     }
 
     @Override
