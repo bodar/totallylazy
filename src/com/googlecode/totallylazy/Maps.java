@@ -66,7 +66,7 @@ public class Maps {
         return map(seed, sequence(entries));
     }
 
-    public static <K, V> Map<K, V>  map(final Iterable<? extends Pair<? extends K, ? extends V>> entries) {
+    public static <K, V> Map<K, V> map(final Iterable<? extends Pair<? extends K, ? extends V>> entries) {
         return map(new LinkedHashMap<K, V>(), entries);
     }
 
@@ -237,19 +237,19 @@ public class Maps {
         return map(pairs(map).map(Callables.<K, V, NewV>second(transformer)));
     }
 
-    public static <K, V> Map<K,V> fifoMap(final int maximumElements) {
-        return new LinkedHashMap<K,V>(maximumElements) {
+    public static <K, V> Map<K, V> fifoMap(final int maximumElements) {
+        return new LinkedHashMap<K, V>(maximumElements) {
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) { return size() > maximumElements; }
         };
     }
 
-    public static <K, V> Map<K,V> lruMap(final int maximumElements) {
-        return new LinkedHashMap<K,V>(maximumElements, 1f, true) {
+    public static <K, V> Map<K, V> lruMap(final int maximumElements) {
+        return new LinkedHashMap<K, V>(maximumElements, 1f, true) {
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) { return size() > maximumElements; }
         };
     }
 
-    public static <K,V> Set<Map.Entry<K, V>> entrySet(final Iterable<? extends Pair<K, V>> map) {
+    public static <K, V> Set<Map.Entry<K, V>> entrySet(final Iterable<? extends Pair<K, V>> map) {
         return sequence(map).map(Maps.<K, V>pairToEntry()).toSet();
     }
 
@@ -288,17 +288,25 @@ public class Maps {
         }
     }
 
-    public static class functions{
-        public static <K,V> Function1<Map<K,V>, V> valueFor(final K key) {
-            return new Function1<Map<K,V>, V>() {
+    public static class functions {
+        public static <K, V> Function2<Map<K, V>, K, V> get() {
+            return new Function2<Map<K, V>, K, V>() {
                 @Override
-                public V call(Map<K,V> map) throws Exception {
+                public V call(Map<K, V> map, K key) throws Exception {
                     return map.get(key);
                 }
             };
         }
 
-        public static <K,V> Function1<Map<K,V>, V> valueFor(final K key, Class<V> vClass) {
+        public static <K, V> Function1<K, V> get(final Map<K,V> map) {
+            return functions.<K,V>get().apply(map);
+        }
+
+        public static <K, V> Function1<Map<K, V>, V> valueFor(final K key) {
+            return functions.<K,V>get().flip().apply(key);
+        }
+
+        public static <K, V> Function1<Map<K, V>, V> valueFor(final K key, final Class<V> vClass) {
             return valueFor(key);
         }
     }
