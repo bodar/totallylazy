@@ -92,7 +92,7 @@ public class XPathFunctions {
         };
     }
 
-    private static Function1<String, Text> createText(final Node node) {
+    public static Function1<String, Text> createText(final Node node) {
         return new Function1<String, Text>() {
             @Override
             public Text call(String text) throws Exception {
@@ -101,7 +101,7 @@ public class XPathFunctions {
         };
     }
 
-    private static Text createText(Node nodeInDocument, String text) {return nodeInDocument.getOwnerDocument().createTextNode(text);}
+    public static Text createText(Node nodeInDocument, String text) {return nodeInDocument.getOwnerDocument().createTextNode(text);}
 
     private static String unescape(String value) {
         return value.replace("\\n", "\n");
