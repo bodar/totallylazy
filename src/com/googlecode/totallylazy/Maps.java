@@ -298,7 +298,7 @@ public class Maps {
             };
         }
 
-        public static <K, V> Function1<K, V> get(final Map<K,V> map) {
+        public static <K, V> Function1<K, V> getFrom(final Map<K, V> map) {
             return functions.<K,V>get().apply(map);
         }
 
