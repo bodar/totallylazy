@@ -102,6 +102,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
         };
     }
 
+    /** @deprecated Replaced by {@link Pair.functions#toString(String)}  } */
+    @Deprecated
     public static Function1<Pair, String> asString(final String seperator) {
         return new Function1<Pair, String>() {
             @Override
@@ -171,6 +173,24 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
                 @Override
                 public Sequence<Object> call(Pair<?,?> pair) throws Exception {
                     return pair.values();
+                }
+            };
+        }
+
+        public static Mapper<Pair<?,?>, String> toString(final String separator) {
+            return new Mapper<Pair<?,?>, String>() {
+                @Override
+                public String call(Pair<?,?> pair) throws Exception {
+                    return pair.toString(separator);
+                }
+            };
+        }
+
+        public static Mapper<Pair<?,?>, String> toString(final String start, final String separator, final String end) {
+            return new Mapper<Pair<?,?>, String>() {
+                @Override
+                public String call(Pair<?,?> pair) throws Exception {
+                    return pair.toString(start, separator, end);
                 }
             };
         }
