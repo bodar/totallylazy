@@ -1,10 +1,13 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Option;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.collections.PersistentSet.functions.get;
 import static com.googlecode.totallylazy.collections.PersistentSortedSet.constructors.sortedSet;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -66,5 +69,8 @@ public class PersistentSortedSetTest {
     public void supportsGet() throws Exception {
         assertThat(sortedSet(1, 2, 3).get(1), is(some(1)));
         assertThat(PersistentSortedSet.constructors.<Integer>sortedSet().get(1), is(none(Integer.class)));
+
+        assertThat(get(1).call(sortedSet(1, 2, 3)), is(some(1)));
+        assertThat(get(5).call(sortedSet(1, 2, 3)), is(none(Integer.class)));
     }
 }

@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Functor;
+import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
@@ -34,4 +35,15 @@ public interface PersistentSet<T> extends Iterable<T>, Segment<T>, PersistentCol
     Sequence<T> toSequence();
 
     Set<T> toSet();
+
+    class functions extends Segment.functions {
+        public static <T> Mapper<PersistentSet<T>,Option<T>> get(final T value) {
+            return new Mapper<PersistentSet<T>, Option<T>>() {
+                @Override
+                public Option<T> call(PersistentSet<T> set) throws Exception {
+                    return set.get(value);
+                }
+            };
+        }
+    }
 }
