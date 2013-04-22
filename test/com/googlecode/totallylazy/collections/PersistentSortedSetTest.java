@@ -14,7 +14,7 @@ public class PersistentSortedSetTest {
     @Test
     public void canInsertAnElement() throws Exception {
         PersistentSortedSet<Integer> actual = sortedSet(1).cons(2).cons(3);
-        assertThat(actual, hasExactly(1,2,3));
+        assertThat(actual, hasExactly(1, 2, 3));
     }
 
     @Test
@@ -60,5 +60,11 @@ public class PersistentSortedSetTest {
         assertThat(sortedSet(1, 2, 3).headOption(), is(some(2)));
         PersistentSortedSet<Integer> empty = PersistentSortedSet.constructors.<Integer>sortedSet();
         assertThat(empty.headOption(), is(none(Integer.class)));
+    }
+
+    @Test
+    public void supportsGet() throws Exception {
+        assertThat(sortedSet(1, 2, 3).get(1), is(some(1)));
+        assertThat(PersistentSortedSet.constructors.<Integer>sortedSet().get(1), is(none(Integer.class)));
     }
 }

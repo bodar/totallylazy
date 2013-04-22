@@ -51,6 +51,11 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
     }
 
     @Override
+    public Option<T> get(T value) {
+        return map.get(value);
+    }
+
+    @Override
     public Option<T> find(Predicate<? super T> predicate) {
         return map.find(predicate);
     }

@@ -11,6 +11,8 @@ import com.googlecode.totallylazy.Sequence;
 import java.util.Set;
 
 public interface PersistentSet<T> extends Iterable<T>, Segment<T>, PersistentCollection<T>, Functor<T>, Foldable<T> {
+    Option<T> get(T value);
+
     Option<T> find(Predicate<? super T> predicate);
 
     @Override
