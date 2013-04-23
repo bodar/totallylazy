@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
+import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Uri.uri;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -65,5 +66,24 @@ public class UriTest {
         assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").dropScheme().dropAuthority(), is(uri("/pub/ietf/uri/?foo=bar#Related")));
         assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").dropScheme().dropAuthority().dropPath(), is(uri("?foo=bar#Related")));
         assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").dropScheme().dropAuthority().dropPath().dropQuery(), is(uri("#Related")));
+    }
+
+    @Test
+    public void parsesHost() throws Exception {
+        assertThat(uri("http://stuandjorge.com").host(), is("stuandjorge.com"));
+        assertThat(uri("http://stuandjorge.com:8081").host(), is("stuandjorge.com"));
+        assertThat(uri("http://stuandjorge.com/somepath").host(), is("stuandjorge.com"));
+
+        assertThat(uri("http://stuandjorge.com").host("jorgeandstu.com").host(), is("jorgeandstu.com"));
+        assertThat(uri("http://stuandjorge.com:8081").host("jorgeandstu.com").host(), is("jorgeandstu.com"));
+
+        assertThat(uri("http://stuandjorge.com/foo").host(null).toString(), is("http:/foo"));
+        assertThat(uri("http://stuandjorge.com/foo").dropHost().toString(), is("http:/foo"));
+
+        assertThat(uri("http://stuandjorge.com:8080").host(null).toString(), is("http:"));
+        assertThat(uri("http://stuandjorge.com:8080").dropHost().toString(), is("http:"));
+
+        assertThat(uri("http://stuandjorge.com").host(null).toString(), is("http:"));
+        assertThat(uri("http://stuandjorge.com").dropHost().toString(), is("http:"));
     }
 }

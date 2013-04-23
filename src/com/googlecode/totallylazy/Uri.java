@@ -90,6 +90,20 @@ public class Uri implements Comparable<Uri>{
         return authority(null);
     }
 
+    public String host() {
+        return authority().split(":")[0];
+    }
+
+    public Uri host(String newHost) {
+        if (isEmpty(authority())){ return authority(newHost); }
+        if (isEmpty(newHost)){ return dropHost(); }
+        return authority(authority().replaceFirst("[^:]+", newHost));
+    }
+
+    public Uri dropHost() {
+        return dropAuthority();
+    }
+
     public String path() {
         return path;
     }
@@ -103,7 +117,7 @@ public class Uri implements Comparable<Uri>{
     }
 
     public Uri mergePath(String value) {
-        if(value.startsWith("/")){
+        if (value.startsWith("/")){
             return path(value);
         }
 
@@ -221,5 +235,21 @@ public class Uri implements Comparable<Uri>{
                 return uri.path();
             }
         };
+
+        public static final Function1<Uri, String> host = new Function1<Uri, String>() {
+            @Override
+            public String call(Uri uri) throws Exception {
+                return uri.host();
+            }
+        };
+
+        public static Mapper<Uri, Uri> host(final String newHost) {
+            return new Mapper<Uri, Uri>() {
+                @Override
+                public Uri call(Uri uri) throws Exception {
+                    return uri.host(newHost);
+                }
+            };
+        }
     }
 }
