@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -83,7 +84,7 @@ public class Xml {
                 String nodeAsString = (String) xpathExpression(expression).evaluate(node, XPathConstants.STRING);
                 return Sequences.<Node>sequence(documentFor(node).createTextNode(nodeAsString));
             } catch (XPathExpressionException ignore) {
-                throw new IllegalArgumentException(String.format("Failed to compile xpath '%s'", expression),e);
+                throw new IllegalArgumentException(String.format("Failed to compile xpath '%s'", expression), e);
             }
         }
     }
@@ -95,7 +96,7 @@ public class Xml {
 
     public static Node expectNode(final Node node, String xpath) {
         Option<Node> foundNode = selectNode(node, xpath);
-        if(foundNode.isEmpty())
+        if (foundNode.isEmpty())
             throw new NoSuchElementException("No node for xpath " + xpath);
         return foundNode.get();
     }
@@ -110,7 +111,7 @@ public class Xml {
 
     public static Element expectElement(final Node node, String xpath) {
         Option<Element> element = selectElement(node, xpath);
-        if(element.isEmpty())
+        if (element.isEmpty())
             throw new NoSuchElementException("No element for xpath " + xpath);
         return element.get();
     }
@@ -175,7 +176,7 @@ public class Xml {
         return Xml.textContents(Xml.sequence(nodes));
     }
 
-    public static final Function1<Node, String> textContent =  new Function1<Node, String>() {
+    public static final Function1<Node, String> textContent = new Function1<Node, String>() {
         @Override
         public String call(Node node) throws Exception {
             return node.getTextContent();
@@ -237,9 +238,13 @@ public class Xml {
     }
 
     public static String asString(Node node) throws Exception {
+        return asString(node, true);
+    }
+
+    public static String asString(Node node, boolean omitXmlDeclaration) throws TransformerException {
         Transformer transformer = transformer();
         StringWriter writer = new StringWriter();
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        if (omitXmlDeclaration) transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         transformer.transform(new DOMSource(node), new StreamResult(writer));
         return writer.toString();
     }
@@ -341,7 +346,7 @@ public class Xml {
         public static Function1<Element, Element> setAttribute(final String name, final String value) {
             return new Function1<Element, Element>() {
                 public Element call(Element element) throws Exception {
-                    element.setAttribute(name,value);
+                    element.setAttribute(name, value);
                     return element;
                 }
             };
@@ -397,6 +402,15 @@ public class Xml {
                 @Override
                 public Document call(String value) throws Exception {
                     return Xml.document(value);
+                }
+            };
+        }
+
+        public static Block<Element> setTextContent(final Function<String> function) {
+            return new Block<Element>() {
+                @Override
+                protected void execute(Element element) throws Exception {
+                    element.setTextContent(function.apply());
                 }
             };
         }
