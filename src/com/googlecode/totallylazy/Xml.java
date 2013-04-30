@@ -343,6 +343,26 @@ public class Xml {
         };
     }
 
+    public static class methods {
+        public static Block<Element> replaceTextContent(final String regex, final String replacement) {
+            return new Block<Element>() {
+                @Override
+                protected void execute(Element element) throws Exception {
+                    element.getTextContent().replaceAll(regex, replacement);
+                }
+            };
+        }
+
+        public static Block<Element> setTextContent(final Callable<? extends CharSequence> function) {
+            return new Block<Element>() {
+                @Override
+                protected void execute(Element element) throws Exception {
+                    element.setTextContent(function.call().toString());
+                }
+            };
+        }
+    }
+
     public static class functions {
         public static Function1<Element, Element> setAttribute(final String name, final String value) {
             return new Function1<Element, Element>() {
@@ -369,7 +389,6 @@ public class Xml {
                 }
             };
         }
-
 
         public static Function2<Node, String, String> selectContents() {
             return new Function2<Node, String, String>() {
@@ -407,11 +426,11 @@ public class Xml {
             };
         }
 
-        public static Block<Element> setTextContent(final Callable<? extends CharSequence> function) {
-            return new Block<Element>() {
+        public static Function1<Element, String> textContent() {
+            return new Function1<Element, String>() {
                 @Override
-                protected void execute(Element element) throws Exception {
-                    element.setTextContent(function.call().toString());
+                public String call(Element element) throws Exception {
+                    return element.getTextContent();
                 }
             };
         }
