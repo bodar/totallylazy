@@ -33,6 +33,7 @@ import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.string;
@@ -406,11 +407,11 @@ public class Xml {
             };
         }
 
-        public static Block<Element> setTextContent(final Function<String> function) {
+        public static Block<Element> setTextContent(final Callable<? extends CharSequence> function) {
             return new Block<Element>() {
                 @Override
                 protected void execute(Element element) throws Exception {
-                    element.setTextContent(function.apply());
+                    element.setTextContent(function.call().toString());
                 }
             };
         }
