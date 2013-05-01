@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.regex;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Sequence;
 
 import java.util.Iterator;
@@ -43,5 +44,17 @@ public class Matches extends Sequence<MatchResult> {
 
     private static CharSequence filterNull(CharSequence value) {
         return value == null ? "" : value;
+    }
+
+    public static class functions {
+        public static Mapper<Matches, String> replace(final Callable1<? super MatchResult, ? extends CharSequence> constant) {
+            return new Mapper<Matches, String>() {
+                @Override
+                public String call(Matches matchResults) throws Exception {
+                    return matchResults.replace(constant);
+                }
+            };
+        }
+
     }
 }

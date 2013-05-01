@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.NodeIterator;
 import com.googlecode.totallylazy.iterators.PoppingIterator;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -343,29 +344,19 @@ public class Xml {
         };
     }
 
-    public static class methods {
-        public static Block<Element> replaceTextContent(final String regex, final String replacement) {
-            return new Block<Element>() {
-                @Override
-                protected void execute(Element element) throws Exception {
-                    element.getTextContent().replaceAll(regex, replacement);
-                }
-            };
-        }
-
-        public static Block<Element> setTextContent(final Callable<? extends CharSequence> function) {
-            return new Block<Element>() {
-                @Override
-                protected void execute(Element element) throws Exception {
-                    element.setTextContent(function.call().toString());
-                }
-            };
-        }
-    }
-
     public static class functions {
+        public static UnaryFunction<Element> modifyTextContent(final Callable1<? super String, ? extends CharSequence> function) {
+            return new UnaryFunction<Element>() {
+                @Override
+                public Element call(Element element) throws Exception {
+                    element.setTextContent(function.call(element.getTextContent()).toString());
+                    return element;
+                }
+            };
+        }
+
         public static Function1<Element, Element> setAttribute(final String name, final String value) {
-            return new Function1<Element, Element>() {
+            return new UnaryFunction<Element>() {
                 public Element call(Element element) throws Exception {
                     element.setAttribute(name, value);
                     return element;
@@ -374,7 +365,7 @@ public class Xml {
         }
 
         public static Predicate<Node> matches(final String expression) {
-            return new Predicate<Node>() {
+            return new LogicalPredicate<Node>() {
                 @Override
                 public boolean matches(Node node) {
                     return Xml.matches(node, expression);
@@ -383,7 +374,7 @@ public class Xml {
         }
 
         public static Function1<Element, String> attribute(final String attributeName) {
-            return new Function1<Element, String>() {
+            return new Mapper<Element, String>() {
                 public String call(Element element) throws Exception {
                     return element.getAttribute(attributeName);
                 }
@@ -400,7 +391,7 @@ public class Xml {
         }
 
         public static Function1<Node, String> selectContents(final String expression) {
-            return new Function1<Node, String>() {
+            return new Mapper<Node, String>() {
                 @Override
                 public String call(Node node) throws Exception {
                     return Xml.selectContents(node, expression);
@@ -427,7 +418,7 @@ public class Xml {
         }
 
         public static Function1<Element, String> textContent() {
-            return new Function1<Element, String>() {
+            return new Mapper<Element, String>() {
                 @Override
                 public String call(Element element) throws Exception {
                     return element.getTextContent();
