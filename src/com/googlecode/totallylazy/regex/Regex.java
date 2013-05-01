@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.regex;
 
+import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
@@ -8,7 +9,7 @@ import java.util.regex.Pattern;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Regex implements Predicate<CharSequence>{
+public class Regex extends Mapper<CharSequence, Matches> implements Predicate<CharSequence>{
     private final Pattern pattern;
 
     private Regex(Pattern pattern) {
@@ -35,6 +36,7 @@ public class Regex implements Predicate<CharSequence>{
         return sequence(pattern.split(value));
     }
 
+    @Override
     public boolean matches(CharSequence other) {
         return pattern.matcher(other).matches();
     }
@@ -46,5 +48,10 @@ public class Regex implements Predicate<CharSequence>{
 
     public MatchResult match(CharSequence value) {
         return findMatches(value).head();
+    }
+
+    @Override
+    public Matches call(CharSequence charSequence) throws Exception {
+        return findMatches(charSequence);
     }
 }

@@ -365,4 +365,13 @@ public class Strings {
     public static class parameters {
         public static String a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,_;
     }
+
+    public static class functions {
+        public static Function3<String, String, String, String> replaceAll = new Function3<String, String, String, String>() {
+            @Override
+            public String call(String regex, String replacemenent, String source) throws Exception {
+                return Strings.replaceAll(regex, replacemenent).apply(source);
+            }
+        };
+    }
 }
