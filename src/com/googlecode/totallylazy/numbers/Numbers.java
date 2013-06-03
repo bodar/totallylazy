@@ -231,13 +231,13 @@ public class Numbers {
     }
 
     private static Operators<? extends Number> internalOperatorsFor(Class<? extends Number> numberClass) {
+        if (numberClass == Short.class) return ShortOperators.Instance;
         if (numberClass == Integer.class) return IntegerOperators.Instance;
         if (numberClass == Long.class) return LongOperators.Instance;
         if (numberClass == BigInteger.class) return BigIntegerOperators.Instance;
         if (numberClass == BigDecimal.class) return BigDecimalOperators.Instance;
         if (numberClass == Ratio.class) return RatioOperators.Instance;
         if (numberClass == Float.class) return FloatOperators.Instance;
-        if (numberClass == Double.class) return DoubleOperators.Instance;
         if (numberClass == Double.class) return DoubleOperators.Instance;
         throw new UnsupportedOperationException("Unsupported number " + numberClass);
     }

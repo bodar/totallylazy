@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.numbers;
 
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
@@ -34,6 +36,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sumIterable;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertSame;
 
 public class NumbersTest {
@@ -207,5 +210,18 @@ public class NumbersTest {
         assertThat(Numbers.valueOf("-1.11").get().doubleValue(), is(-1.11d));
         assertThat(Numbers.valueOf("").isEmpty(), is(true));
         assertThat(Numbers.valueOf(null).isEmpty(), is(true));
+    }
+
+    /**
+     * Test case for issue #14
+     */
+    @Test
+    public void supportsShort() {
+        assertThat(numbers((short)0, (short)0 ,(short)1).reduceLeft(Numbers.maximum), NumberMatcher.is((short) 1));
+
+        Sequence<Short> s = Sequences.sequence((short)0, (short)0 ,(short)1);
+        Number result = s.reduceLeft(Numbers.maximum());
+        assertEquals(Short.class, result.getClass());
+        assertThat(result, NumberMatcher.is(Short.valueOf((short) 1)));
     }
 }
