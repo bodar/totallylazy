@@ -220,4 +220,8 @@ public class Dates {
     public static Minimum.Function<Date> minimum() {
         return Minimum.constructors.minimum(Dates.MAX_VALUE);
     }
+
+    public static Date date(Date date) {
+        return new Date(date.getTime());
+    }
 }

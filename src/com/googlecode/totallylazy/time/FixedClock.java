@@ -2,14 +2,10 @@ package com.googlecode.totallylazy.time;
 
 import java.util.Date;
 
-public class FixedClock implements Clock{
-    private final Date date;
-
+/** @deprecated Replaced by {@link StoppedClock}  } */
+@Deprecated
+public class FixedClock extends StoppedClock {
     public FixedClock(Date date) {
-        this.date = date;
-    }
-
-    public Date now() {
-        return date;
+        super(date);
     }
 }
