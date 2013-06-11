@@ -2,6 +2,8 @@ package com.googlecode.totallylazy.time;
 
 import java.util.Date;
 
+import static com.googlecode.totallylazy.time.Dates.date;
+
 public class SettableClock implements Clock {
     private volatile Date date;
 
@@ -10,15 +12,15 @@ public class SettableClock implements Clock {
     }
 
     public SettableClock(Date date) {
-        this.date = date;
+        this.date = date(date);
     }
 
     @Override
     public Date now() {
-        return date;
+        return date(date);
     }
 
     public void now(Date date) {
-        this.date = date;
+        this.date = date(date);
     }
 }
