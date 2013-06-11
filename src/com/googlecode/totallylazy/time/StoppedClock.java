@@ -11,6 +11,14 @@ public class StoppedClock implements Clock {
         this.date = date(date);
     }
 
+    public static StoppedClock stoppedClock(Date date) {
+        return new StoppedClock(date);
+    }
+
+    public static StoppedClock stoppedClock() {
+        return stoppedClock(new Date());
+    }
+
     public Date now() {
         return date(date);
     }

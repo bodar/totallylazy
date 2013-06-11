@@ -15,6 +15,14 @@ public class SettableClock implements Clock {
         this.date = date(date);
     }
 
+    public static SettableClock settableClock() {
+        return new SettableClock();
+    }
+
+    public static SettableClock settableClock(Date date) {
+        return new SettableClock(date);
+    }
+
     @Override
     public Date now() {
         return date(date);

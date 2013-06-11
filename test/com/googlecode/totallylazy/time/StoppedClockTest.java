@@ -12,14 +12,14 @@ public class StoppedClockTest {
     @Test
     public void changingDateIntoStoppedClockDoesNotChangeStoppedClock() throws Exception {
         Date dateIn = date(2000, 1, 1);
-        StoppedClock clock = new StoppedClock(dateIn);
+        StoppedClock clock = StoppedClock.stoppedClock(dateIn);
         dateIn.setTime(date(1974, 10, 29).getTime());
         assertThat(clock.now(), is(date(2000, 1, 1)));
     }
 
     @Test
     public void changingDateOutOfStoppedClockDoesNotChangeStoppedClock() throws Exception {
-        StoppedClock clock = new StoppedClock(date(2000, 1, 1));
+        StoppedClock clock = StoppedClock.stoppedClock(date(2000, 1, 1));
         clock.now().setTime(date(1974, 10, 29).getTime());
         assertThat(clock.now(), is(date(2000, 1, 1)));
     }
