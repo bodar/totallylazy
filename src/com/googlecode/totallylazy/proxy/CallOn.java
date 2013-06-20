@@ -9,16 +9,16 @@ import static com.googlecode.totallylazy.proxy.Generics.getGenericSuperclassType
 import static com.googlecode.totallylazy.proxy.Proxy.createProxy;
 
 public abstract class CallOn<T, S> implements Callable1<T,S>, InvocationHandler {
-    private Invocation<T,S> invocation;
-    protected final T call;
+    private MethodInvocation<T,S> invocation;
+    protected final T call, instance;
 
     protected CallOn() {
         Class<T> aClass = getGenericSuperclassType(this.getClass(), 0);
-        call = createProxy(aClass, this);
+        call = instance = createProxy(aClass, this);
     }
 
     public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
-        invocation = new Invocation<T,S>(proxy, method, arguments);
+        invocation = new MethodInvocation<T,S>(method, arguments);
         return null;
     }
 
@@ -26,7 +26,7 @@ public abstract class CallOn<T, S> implements Callable1<T,S>, InvocationHandler 
         return invocation.call(t);
     }
 
-    public Invocation<T,S> invocation() {
+    public MethodInvocation<T,S> invocation() {
         return invocation;
     }
 }

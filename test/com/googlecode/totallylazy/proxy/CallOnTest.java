@@ -9,6 +9,13 @@ import static com.googlecode.totallylazy.proxy.User.user;
 import static org.hamcrest.MatcherAssert.assertThat;
 public class CallOnTest {
     @Test
+    public void canUseInstanceInsteadOfCallForReadability() throws Exception {
+        Sequence<User> users = sequence(user("Dan", "Bodart"), user("Matt", "Savage"));
+        Sequence<String> firstNames = users.map(new CallOn<User, String>(){{instance.firstName();}});
+        assertThat(firstNames, hasExactly("Dan", "Matt"));
+    }
+
+    @Test
     public void canSortByProxy() throws Exception {
         User matt = user("Matt", "Savage");
         User dan = user("Dan", "Bodart");
