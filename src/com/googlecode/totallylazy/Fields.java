@@ -1,7 +1,10 @@
 package com.googlecode.totallylazy;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
+import static com.googlecode.totallylazy.Classes.allClasses;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Fields {
@@ -55,5 +58,17 @@ public class Fields {
     public static Field access(Field field) {
         field.setAccessible(true);
         return field;
+    }
+
+    public static Sequence<Field> fields(Class<?> aClass) {
+        return allClasses(aClass).flatMap(Fields.fields());
+    }
+
+    public static Mapper<Class<?>, Sequence<Field>> fields() {
+        return new Mapper<Class<?>, Sequence<Field>>() {
+            public Sequence<Field> call(Class<?> aClass) throws Exception {
+                return sequence(aClass.getDeclaredFields());
+            }
+        };
     }
 }
