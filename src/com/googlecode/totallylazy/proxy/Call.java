@@ -17,7 +17,7 @@ public class Call<T,R> implements InvocationHandler{
     }
 
     public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
-        invocation.set(new Invocation<T,R>(proxy, method, arguments));
+        invocation.set(new MethodInvocation<T,R>(method, arguments));
         return null;
     }
 
