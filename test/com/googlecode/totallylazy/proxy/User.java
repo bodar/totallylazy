@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.proxy;
 
 public class User {
-    private final String firstName;
-    private final String lastName;
+    final String firstName;
+    final String lastName;
 
     User(String firstName, String lastName) {
         this.firstName = firstName;

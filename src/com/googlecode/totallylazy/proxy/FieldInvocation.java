@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
+import com.googlecode.totallylazy.Fields;
 import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Unchecked;
 
@@ -16,6 +17,10 @@ public class FieldInvocation<A, B> extends Mapper<A, B> implements Invocation<A,
         this.field = field;
     }
 
+    public Field field() {
+        return field;
+    }
+
     @Override
     public String toString() {
         return field.getName();
@@ -23,6 +28,6 @@ public class FieldInvocation<A, B> extends Mapper<A, B> implements Invocation<A,
 
     @Override
     public B call(A instance) throws InvocationTargetException, IllegalAccessException {
-        return Unchecked.cast(field.get(instance));
+        return Unchecked.cast(Fields.get(field, instance));
     }
 }

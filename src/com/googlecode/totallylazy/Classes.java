@@ -2,6 +2,8 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
+import java.io.File;
+
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -20,4 +22,17 @@ public class Classes {
                 join(allClasses(aClass.getSuperclass())).
                 cons(aClass);
     }
+
+    public static String filename(Class<?> aClass) {
+        return filename(aClass.getName());
+    }
+
+    public static String filename(String className) {
+        return className.replace('.', '/') + ".class";
+    }
+
+    public static byte[] bytes(Class<?> aClass){
+        return Bytes.bytes(aClass.getResourceAsStream("/" + filename(aClass)));
+    }
+
 }
