@@ -18,6 +18,7 @@ import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 
 public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Foldable<T>, Indexed<T> {
@@ -459,5 +460,15 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
 
     public Sequence<Sequence<T>> grouped(int size) {
         return recursive(Sequences.<T>splitAt(size));
+    }
+
+    public static class functions{
+        public static <T> UnaryFunction<Sequence<T>> tail() {
+            return Segment.functions.<T, Sequence<T>>tail();
+        }
+
+        public static <T> UnaryFunction<Sequence<T>> tail(Class<T> aClass) {
+            return tail();
+        }
     }
 }
