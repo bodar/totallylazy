@@ -118,6 +118,15 @@ public interface Segment<T> {
             };
         }
 
+        public static <T, Self extends Segment<T>> UnaryFunction<Self> tail() {
+            return new UnaryFunction<Self>() {
+                @Override
+                public Self call(Self segment) throws Exception {
+                    return cast(segment.tail());
+                }
+            };
+        }
+
         public static <T, Self extends Segment<T>> Function1<Self, Self> cons(T t) {
             return functions.<T, Self>cons().flip().apply(t);
         }
