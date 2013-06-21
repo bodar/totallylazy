@@ -7,7 +7,7 @@ import static com.googlecode.totallylazy.Callables.callWith;
 import static com.googlecode.totallylazy.Rule.rule;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Rules<A, B> extends Function1<A, B> implements Predicate<A> {
+public class Rules<A, B> extends Function1<A, B> implements Predicate<A>, Value<Sequence<Rule<A,B>>> {
     private final Deque<Rule<A, B>> rules = new ArrayDeque<Rule<A, B>>();
 
     private Rules(Sequence<Rule<A, B>> rules) {
@@ -41,6 +41,10 @@ public class Rules<A, B> extends Function1<A, B> implements Predicate<A> {
     public Rules<A, B> addLast(Rule<? super A, ? extends B> rule) {
         rules.addLast(Unchecked.<Rule<A, B>>cast(rule));
         return this;
+    }
+
+    public Sequence<Rule<A,B>> value() {
+        return sequence(rules).realise();
     }
 
     @Override
