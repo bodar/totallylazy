@@ -1,10 +1,7 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Fields;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
-
-import java.lang.reflect.Field;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
