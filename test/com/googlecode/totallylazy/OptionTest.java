@@ -35,6 +35,12 @@ public class OptionTest {
     }
 
     @Test
+    public void supportsIsAlias() throws Exception {
+        assertThat(option(1).is(Predicates.is(1)), is(true));
+        assertThat(option(1).is(Predicates.is(2)), is(false));
+    }
+
+    @Test
     public void supportsExists() throws Exception {
         assertThat(option(1).exists(Predicates.is(1)), is(true));
         assertThat(option(1).exists(Predicates.is(2)), is(false));
