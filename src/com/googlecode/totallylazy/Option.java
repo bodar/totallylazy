@@ -102,6 +102,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public abstract boolean exists(Predicate<? super A> predicate);
 
+    public boolean is(Predicate<? super A> predicate) { return exists(predicate);}
+
     public static class functions {
         public static <T> Function1<Option<T>, T> getOrElse(final T t) {
             return new Function1<Option<T>, T>() {
