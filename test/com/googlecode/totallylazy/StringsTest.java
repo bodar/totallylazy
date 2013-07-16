@@ -2,7 +2,9 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.StringReader;
 
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.write;
@@ -28,6 +30,15 @@ import static org.junit.Assert.fail;
 
 public class StringsTest {
     @Test
+    public void canCoerceToString() throws Exception {
+        assertThat(Strings.string((Object)null), is(""));
+        assertThat(Strings.string("foo".getBytes()), is("foo"));
+        assertThat(Strings.string(new ByteArrayInputStream("foo".getBytes())), is("foo"));
+        assertThat(Strings.string(new StringReader("foo")), is("foo"));
+        assertThat(Strings.string(Files.write("foo".getBytes(), temporaryFile())), is("foo"));
+    }
+
+        @Test
     public void canJoinStrings() throws Exception {
         assertThat(sequence("foo", " bar ", "baz").reduce(join), is("foo bar baz"));
         assertThat(empty(String.class).reduce(join), is(""));

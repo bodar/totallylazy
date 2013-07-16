@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.annotations.tailrec;
 import com.googlecode.totallylazy.callables.JoinString;
 import com.googlecode.totallylazy.comparators.Maximum;
@@ -25,6 +26,7 @@ import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.inputStreamReader;
+import static com.googlecode.totallylazy.Strings.toString;
 
 public class Strings {
     public static final String EMPTY = "";
@@ -213,8 +215,37 @@ public class Strings {
         return value == null ? "" : value.toString();
     }
 
+    public static String string(Object value) {
+        return new multi(){}.<String>methodOption(value).getOrElse(String.valueOf(value));
+    }
+
+    @multimethod
+    public static String string(Void value) {
+        return "";
+    }
+
+    @multimethod
+    public static String string(byte[] value) {
+        return toString(value);
+    }
+
+    @multimethod
+    public static String string(File value) {
+        return toString(value);
+    }
+
+    @multimethod
+    public static String string(InputStream value) {
+        return toString(value);
+    }
+
+    @multimethod
+    public static String string(Reader value) {
+        return toString(value);
+    }
+
     public static String toString(byte[] bytes) {
-        return toString(new ByteArrayInputStream(bytes));
+        return new String(bytes, UTF8);
     }
 
     public static String toString(File file) {
@@ -353,9 +384,6 @@ public class Strings {
         return value.getBytes(UTF8);
     }
 
-    public static String string(byte[] value) {
-        return new String(value, UTF8);
-    }
 
 
     public static Maximum.Function<String> maximum = Maximum.constructors.maximum((String) null);
