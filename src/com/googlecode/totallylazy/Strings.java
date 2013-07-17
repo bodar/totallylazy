@@ -15,11 +15,15 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.net.URI;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 import static com.googlecode.totallylazy.Closeables.using;
+import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.or;
 import static com.googlecode.totallylazy.Sequences.characters;
@@ -27,6 +31,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.inputStreamReader;
 import static com.googlecode.totallylazy.Strings.toString;
+import static com.googlecode.totallylazy.Uri.uri;
 
 public class Strings {
     public static final String EMPTY = "";
@@ -46,7 +51,7 @@ public class Strings {
         try {
             return lines(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            throw LazyException.lazyException(e);
+            throw lazyException(e);
         }
     }
 
@@ -244,6 +249,25 @@ public class Strings {
         return toString(value);
     }
 
+    @multimethod
+    public static String string(Uri value) {
+        return string(value.toURL());
+    }
+
+    @multimethod
+    public static String string(URI value) {
+        return string(uri(value));
+    }
+
+    @multimethod
+    public static String string(URL value) {
+        try {
+            return toString(value.openStream());
+        } catch (IOException e) {
+            throw lazyException(e);
+        }
+    }
+
     public static String toString(byte[] bytes) {
         return new String(bytes, UTF8);
     }
@@ -252,7 +276,7 @@ public class Strings {
         try {
             return toString(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            throw LazyException.lazyException(e);
+            throw lazyException(e);
         }
     }
 

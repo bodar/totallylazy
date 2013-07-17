@@ -22,6 +22,7 @@ import static com.googlecode.totallylazy.Strings.reverse;
 import static com.googlecode.totallylazy.Strings.substring;
 import static com.googlecode.totallylazy.Strings.toLowerCase;
 import static com.googlecode.totallylazy.Strings.toUpperCase;
+import static com.googlecode.totallylazy.Uri.uri;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -35,7 +36,11 @@ public class StringsTest {
         assertThat(Strings.string("foo".getBytes()), is("foo"));
         assertThat(Strings.string(new ByteArrayInputStream("foo".getBytes())), is("foo"));
         assertThat(Strings.string(new StringReader("foo")), is("foo"));
-        assertThat(Strings.string(Files.write("foo".getBytes(), temporaryFile())), is("foo"));
+        File file = Files.write("foo".getBytes(), temporaryFile());
+        assertThat(Strings.string(file), is("foo"));
+        assertThat(Strings.string(file.toURI()), is("foo"));
+        assertThat(Strings.string(uri(file)), is("foo"));
+        assertThat(Strings.string(uri(file).toURL()), is("foo"));
     }
 
         @Test
