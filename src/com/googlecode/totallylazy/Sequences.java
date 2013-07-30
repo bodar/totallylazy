@@ -110,8 +110,16 @@ public class Sequences {
         };
     }
 
+    public static <T> Sequence<T> memoize(final Enumeration<T> enumeration) {
+        return memorise(enumeration);
+    }
+
     public static <T> Sequence<T> memorise(final Enumeration<T> enumeration) {
         return memorise(new EnumerationIterator<T>(enumeration));
+    }
+
+    public static <T> Sequence<T> memoize(final Enumeration enumeration, final Class<T> aClass) {
+        return memorise(enumeration, aClass);
     }
 
     public static <T> Sequence<T> memorise(final Enumeration enumeration, final Class<T> aClass) {

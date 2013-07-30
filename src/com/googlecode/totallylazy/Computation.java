@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Computation.memorise;
 import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
@@ -45,11 +46,19 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         return computation(t, callable);
     }
 
+    public static <T> Computation<T> memoize(final Iterable<? extends T> iterable) {
+        return memorise(iterable);
+    }
+
     public static <T> Computation<T> memorise(final Iterable<? extends T> iterable) {
         final Callable<Iterator<T>> iterator = lazyIterator(iterable);
         return computation1(lazyHead(iterator), generate(lazyTail(iterator)));
     }
 
+    public static <T> Computation<T> memoize(final Iterator<? extends T> values) {
+        return memorise(values);
+    }
+    
     public static <T> Computation<T> memorise(final Iterator<? extends T> values) {
         final Function<Iterator<T>> iterator = returns(Unchecked.<Iterator<T>>cast(values));
         return computation1(lazyHead(iterator), generate(lazyTail(iterator)));
