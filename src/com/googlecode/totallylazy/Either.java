@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+
 import java.util.NoSuchElementException;
 
 public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Functor<R>, Applicative<R>, Foldable<R> {
@@ -68,7 +70,7 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Funct
             return new Function1<L, Either<L, R>>() {
                 @Override
                 public Either<L, R> call(L value) throws Exception {
-                    return left(value);
+                    return Either.left(value);
                 }
             };
         }
@@ -77,7 +79,25 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Funct
             return new Function1<R, Either<L, R>>() {
                 @Override
                 public Either<L, R> call(R value) throws Exception {
-                    return right(value);
+                    return Either.right(value);
+                }
+            };
+        }
+
+        public static LogicalPredicate<Either<?, ?>> left() {
+            return new LogicalPredicate<Either<?, ?>>() {
+                @Override
+                public boolean matches(Either<?, ?> other) {
+                    return other.isLeft();
+                }
+            };
+        }
+
+        public static LogicalPredicate<Either<?, ?>> right() {
+            return new LogicalPredicate<Either<?, ?>>() {
+                @Override
+                public boolean matches(Either<?, ?> other) {
+                    return other.isRight();
                 }
             };
         }
