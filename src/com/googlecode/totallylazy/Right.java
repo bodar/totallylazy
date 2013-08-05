@@ -1,7 +1,10 @@
 package com.googlecode.totallylazy;
 
+import java.util.Iterator;
+
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Objects.equalTo;
+import static com.googlecode.totallylazy.Sequences.one;
 
 public final class Right<L,R> extends Either<L,R> {
     private final R value;
@@ -67,5 +70,10 @@ public final class Right<L,R> extends Either<L,R> {
     @Override
     public <S> S fold(S seed, Callable2<? super S, ? super R, ? extends S> callable) {
         return call(callable, seed, value);
+    }
+
+    @Override
+    public Iterator<R> iterator() {
+        return one(value).iterator();
     }
 }
