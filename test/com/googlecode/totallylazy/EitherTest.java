@@ -15,10 +15,17 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.DIVIDE_BY_ZERO;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
+import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class EitherTest {
+    @Test
+    public void isIterableSoCanFlatMap() throws Exception {
+        assertThat(sequence(Either.<String, Number>right(3), Either.<String, Number>left("error")).
+                flatMap(Either.identity(String.class, Number.class)), is(numbers(3)));
+    }
+
     @Test
     public void eitherToStringDoesNotThrowNullPointer() throws Exception {
         assertThat(left(null).toString(), is("left(null)"));

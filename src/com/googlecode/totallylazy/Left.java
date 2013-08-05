@@ -1,5 +1,9 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.iterators.EmptyIterator;
+
+import java.util.Iterator;
+
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Objects.equalTo;
 
@@ -67,5 +71,10 @@ public final class Left<L,R> extends Either<L, R> {
     @Override
     public <S> S fold(S seed, Callable2<? super S, ? super R, ? extends S> callable) {
         return seed;
+    }
+
+    @Override
+    public Iterator<R> iterator() {
+        return new EmptyIterator<R>();
     }
 }

@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import java.util.NoSuchElementException;
 
-public abstract class Either<L, R> implements Functor<R>, Applicative<R>, Foldable<R> {
+public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Functor<R>, Applicative<R>, Foldable<R> {
     public static <L, R> Either<L, R> right(R value) {
         return Right.right(value);
     }
