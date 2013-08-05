@@ -37,6 +37,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Funct
         throw new NoSuchElementException();
     }
 
+    public abstract Either<R,L> flip();
+
     public abstract <S> S fold(final S seed, final Callable2<? super S, ? super L, ? extends S> left, final Callable2<? super S, ? super R, ? extends S> right);
 
     public abstract <S> S map(final Callable1<? super L, S> left, final Callable1<? super R, ? extends S> right);
@@ -64,6 +66,10 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Funct
         if (applicator.isLeft()) return left(applicator.left());
         return value.map(applicator.right());
     }
+
+    public abstract Option<L> leftOption();
+
+    public abstract Option<R> rightOption();
 
     public static class functions {
         public static <L, R> Function1<L, Either<L, R>> asLeft() {
@@ -101,5 +107,16 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Funct
                 }
             };
         }
+
+        public static <L, R> Mapper<Either<L, R>, Either<R, L>> flip() {
+            return new Mapper<Either<L, R>, Either<R,L>>() {
+                @Override
+                public Either<R,L> call(Either<L, R> either) throws Exception {
+                    return either.flip();
+                }
+            };
+        }
+
+
     }
 }
