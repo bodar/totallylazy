@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Objects.equalTo;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.one;
 
 public final class Right<L,R> extends Either<L,R> {
@@ -25,6 +27,21 @@ public final class Right<L,R> extends Either<L,R> {
     @Override
     public R right() {
         return value;
+    }
+
+    @Override
+    public Either<R, L> flip() {
+        return left(value);
+    }
+
+    @Override
+    public Option<L> leftOption() {
+        return none();
+    }
+
+    @Override
+    public Option<R> rightOption() {
+        return some(value);
     }
 
     @Override

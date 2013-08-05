@@ -6,6 +6,8 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Objects.equalTo;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 
 public final class Left<L,R> extends Either<L, R> {
     private final L value;
@@ -26,6 +28,21 @@ public final class Left<L,R> extends Either<L, R> {
     @Override
     public L left() {
         return value;
+    }
+
+    @Override
+    public Either<R, L> flip() {
+        return right(value);
+    }
+
+    @Override
+    public Option<L> leftOption() {
+        return some(value);
+    }
+
+    @Override
+    public Option<R> rightOption() {
+        return none();
     }
 
     @Override
