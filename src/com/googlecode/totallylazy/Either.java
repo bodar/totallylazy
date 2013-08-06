@@ -2,9 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
-import java.util.NoSuchElementException;
-
-public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Functor<R>, Applicative<R>, Foldable<R> {
+public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functor<R>, Applicative<R>, Foldable<R> {
     public static <L, R> Either<L, R> right(R value) {
         return Right.right(value);
     }
@@ -21,23 +19,15 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Funct
         return Left.left(value);
     }
 
-    public boolean isRight() {
-        return false;
-    }
+    public abstract boolean isRight();
 
-    public boolean isLeft() {
-        return false;
-    }
+    public abstract boolean isLeft();
 
-    public R right() {
-        throw new NoSuchElementException();
-    }
+    public abstract R right();
 
-    public L left() {
-        throw new NoSuchElementException();
-    }
+    public abstract L left();
 
-    public abstract Either<R,L> flip();
+    public abstract Either<R, L> flip();
 
     public abstract <S> S fold(final S seed, final Callable2<? super S, ? super L, ? extends S> left, final Callable2<? super S, ? super R, ? extends S> right);
 
@@ -52,7 +42,9 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Funct
         return either.flatMap(Either.<L, R>identity());
     }
 
-    public static <L, R> Function1<Either<L, R>, Either<L, R>> identity(Class<L> lClass, Class<R> rClass) { return identity(); }
+    public static <L, R> Function1<Either<L, R>, Either<L, R>> identity(Class<L> lClass, Class<R> rClass) {
+        return identity();
+    }
 
     public static <L, R> Function1<Either<L, R>, Either<L, R>> identity() { return Functions.identity(); }
 
@@ -71,7 +63,59 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Funct
 
     public abstract Option<R> rightOption();
 
+    public static class predicates {
+        public static LogicalPredicate<Either<?, ?>> left = new LogicalPredicate<Either<?, ?>>() {
+            @Override
+            public boolean matches(Either<?, ?> other) {
+                return other.isLeft();
+            }
+        };
+
+        public static LogicalPredicate<Either<?, ?>> right = new LogicalPredicate<Either<?, ?>>() {
+            @Override
+            public boolean matches(Either<?, ?> other) {
+                return other.isRight();
+            }
+        };
+    }
+
     public static class functions {
+        public static <L> Mapper<Either<? extends L, ?>, L> left() {
+            return new Mapper<Either<? extends L, ?>, L>() {
+                @Override
+                public L call(Either<? extends L, ?> either) throws Exception {
+                    return either.left();
+                }
+            };
+        }
+
+        public static <R> Mapper<Either<?, ? extends R>, R> right() {
+            return new Mapper<Either<?, ? extends R>, R>() {
+                @Override
+                public R call(Either<?, ? extends R> either) throws Exception {
+                    return either.right();
+                }
+            };
+        }
+
+        public static <L> Mapper<Either<? extends L, ?>, Option<? extends L>> leftOption() {
+            return new Mapper<Either<? extends L, ?>, Option<? extends L>>() {
+                @Override
+                public Option<? extends L> call(Either<? extends L, ?> either) throws Exception {
+                    return either.leftOption();
+                }
+            };
+        }
+
+        public static <R> Mapper<Either<?, ? extends R>, Option<? extends R>> rightOption() {
+            return new Mapper<Either<?, ? extends R>, Option<? extends R>>() {
+                @Override
+                public Option<? extends R> call(Either<?, ? extends R> either) throws Exception {
+                    return either.rightOption();
+                }
+            };
+        }
+
         public static <L, R> Function1<L, Either<L, R>> asLeft() {
             return new Function1<L, Either<L, R>>() {
                 @Override
@@ -90,28 +134,10 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>,  Funct
             };
         }
 
-        public static LogicalPredicate<Either<?, ?>> left() {
-            return new LogicalPredicate<Either<?, ?>>() {
-                @Override
-                public boolean matches(Either<?, ?> other) {
-                    return other.isLeft();
-                }
-            };
-        }
-
-        public static LogicalPredicate<Either<?, ?>> right() {
-            return new LogicalPredicate<Either<?, ?>>() {
-                @Override
-                public boolean matches(Either<?, ?> other) {
-                    return other.isRight();
-                }
-            };
-        }
-
         public static <L, R> Mapper<Either<L, R>, Either<R, L>> flip() {
-            return new Mapper<Either<L, R>, Either<R,L>>() {
+            return new Mapper<Either<L, R>, Either<R, L>>() {
                 @Override
-                public Either<R,L> call(Either<L, R> either) throws Exception {
+                public Either<R, L> call(Either<L, R> either) throws Exception {
                     return either.flip();
                 }
             };

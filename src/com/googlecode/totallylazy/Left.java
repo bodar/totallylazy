@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.iterators.EmptyIterator;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Objects.equalTo;
@@ -21,8 +22,18 @@ public final class Left<L,R> extends Either<L, R> {
     }
 
     @Override
+    public boolean isRight() {
+        return false;
+    }
+
+    @Override
     public boolean isLeft() {
         return true;
+    }
+
+    @Override
+    public R right() {
+        throw new NoSuchElementException();
     }
 
     @Override
