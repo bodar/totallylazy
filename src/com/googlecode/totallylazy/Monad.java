@@ -7,7 +7,8 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface Monad {
+public interface Monad<A> extends Applicative<A> { // Java does not support Type Constructors or Self Types
+//    <B> Self<B> flatMap(Callable1<? super A, ? extends Self<B>> callable);
 
     class methods {
         public static <L, R> Either<Sequence<L>, Sequence<R>> sequenceEs(Iterable<? extends Either<? extends L, ? extends R>> iterable) {

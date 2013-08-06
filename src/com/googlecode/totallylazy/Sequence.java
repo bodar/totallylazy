@@ -21,11 +21,11 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 
-public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Foldable<T>, Indexed<T> {
+public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Monad<T>, Foldable<T>, Indexed<T> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
-        return obj instanceof Segment && methods.equalTo(this, (Segment<?>) obj);
+        return obj instanceof Segment && Segment.methods.equalTo(this, (Segment<?>) obj);
     }
 
     public boolean equals(Iterable<? extends T> other, Predicate<? super Pair<T, T>> predicate) {
