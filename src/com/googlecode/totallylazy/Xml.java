@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -34,7 +35,6 @@ import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.string;
@@ -282,6 +282,14 @@ public class Xml {
         } catch (Exception e) {
             throw LazyException.lazyException(e);
         }
+    }
+
+    public static Source source(String xml) {
+        return source(Xml.document(xml));
+    }
+
+    public static Source source(Document document) {
+        return new DOMSource(document);
     }
 
     private static EntityResolver ignoreEntities() {
