@@ -288,8 +288,17 @@ public class Xml {
         return source(Xml.document(xml));
     }
 
-    public static Source source(Document document) {
-        return new DOMSource(document);
+    public static Source source(final Document document) {
+        return new DOMSource(document){
+            @Override
+            public String toString() {
+                try {
+                    return Xml.asString(document);
+                } catch (Exception e) {
+                    throw LazyException.lazyException(e);
+                }
+            }
+        };
     }
 
     private static EntityResolver ignoreEntities() {
