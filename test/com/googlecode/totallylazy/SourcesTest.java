@@ -41,7 +41,7 @@ public class SourcesTest {
 
         Sources sources = sources(uri(String.format("jar:file:%s!/folder/", zipFile)));
         List<String> list = sources.sources().map(Sources.functions.name).toList();
-        assertThat(list, Matchers.contains("b.txt", "c.txt"));
+        assertThat(list, Matchers.containsInAnyOrder("b.txt", "c.txt"));
         sources.close();
     }
 
