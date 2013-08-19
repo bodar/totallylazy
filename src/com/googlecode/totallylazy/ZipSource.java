@@ -6,6 +6,11 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static com.googlecode.totallylazy.FilterSource.filterSource;
+import static com.googlecode.totallylazy.MapSources.mapSource;
+import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Strings.startsWith;
+
 public class ZipSource implements Sources {
     final ZipInputStream in;
 
@@ -15,6 +20,20 @@ public class ZipSource implements Sources {
 
     public static ZipSource zipSource(InputStream inputStream) {
         return new ZipSource(inputStream);
+    }
+
+    public static Sources zipSource(InputStream inputStream, String rawFolder) {
+        String folder = rawFolder.replaceFirst("/", "");
+        return mapSource(removeFolderFromName(folder), filterSource(where(functions.name, startsWith(folder)), zipSource(inputStream)));
+    }
+
+    private static UnaryFunction<Source> removeFolderFromName(final String folder) {
+        return new UnaryFunction<Source>() {
+            @Override
+            public Source call(Source source) throws Exception {
+                return new Source(source.name.replaceFirst(folder, ""), source.modified, source.input);
+            }
+        };
     }
 
     @Override

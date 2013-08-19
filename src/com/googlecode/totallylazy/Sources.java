@@ -9,28 +9,27 @@ import java.util.Date;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.FileSource.fileSource;
-import static com.googlecode.totallylazy.FilterSource.filterSource;
 import static com.googlecode.totallylazy.LazyException.lazyException;
-import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Sources.functions.name;
-import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.ZipSource.zipSource;
 
 public interface Sources extends Closeable {
     Sequence<Source> sources();
 
     class constructors {
-        public static Sources sources(Uri uri){
-            if(uri.scheme().equals(Uri.FILE_SCHEME)) return fileSource(uri.toFile());
-            if(uri.scheme().equals(Uri.JAR_SCHEME)) {
-                try {
-                    Uri locationJar = Uri.uri(uri.authority());
-                    return filterSource(where(name, startsWith(uri.path().replaceFirst("/", ""))), zipSource(locationJar.toURL().openStream()));
-                } catch (IOException e) {
-                    throw lazyException(e);
-                }
+        public static Sources sources(Uri uri) {
+            if (uri.scheme().equals(Uri.FILE_SCHEME)) return fileSource(uri.toFile());
+            if (uri.scheme().equals(Uri.JAR_SCHEME)) {
+                return zipSource(inputStream(Uri.uri(uri.authority())), uri.path());
             }
             throw new UnsupportedOperationException();
+        }
+
+        private static InputStream inputStream(Uri locationJar) {
+            try {
+                return locationJar.toURL().openStream();
+            } catch (IOException e) {
+                throw lazyException(e);
+            }
         }
     }
 
@@ -54,7 +53,7 @@ public interface Sources extends Closeable {
         }
     }
 
-    class functions{
+    class functions {
         public static Mapper<Source, String> name = new Mapper<Source, String>() {
             @Override
             public String call(Source source) throws Exception {

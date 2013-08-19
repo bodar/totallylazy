@@ -1,9 +1,11 @@
 package com.googlecode.totallylazy;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static com.googlecode.totallylazy.Files.emptyVMDirectory;
 import static com.googlecode.totallylazy.Files.file;
@@ -38,7 +40,8 @@ public class SourcesTest {
         zip(files(), zipFile);
 
         Sources sources = sources(uri(String.format("jar:file:%s!/folder/", zipFile)));
-        assertThat(sources.sources().size(), is(2));
+        List<String> list = sources.sources().map(Sources.functions.name).toList();
+        assertThat(list, Matchers.contains("b.txt", "c.txt"));
         sources.close();
     }
 
