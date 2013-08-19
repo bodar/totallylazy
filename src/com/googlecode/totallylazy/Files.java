@@ -244,7 +244,7 @@ public class Files {
     public static File file(File parent, String name) {
         File child = new File(parent, name);
         if (child.isDirectory()) {
-            throw new IllegalArgumentException(format("%s is a directory", child));
+            throw new IllegalArgumentException(format("%s is a isDirectory", child));
         }
         try {
             child.getParentFile().mkdirs();

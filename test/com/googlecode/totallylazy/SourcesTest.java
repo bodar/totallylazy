@@ -11,11 +11,15 @@ import static com.googlecode.totallylazy.Files.emptyVMDirectory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Sources.constructors.sources;
+import static com.googlecode.totallylazy.Sources.functions.directory;
+import static com.googlecode.totallylazy.Sources.functions.name;
 import static com.googlecode.totallylazy.Uri.packageUri;
 import static com.googlecode.totallylazy.Uri.uri;
 import static com.googlecode.totallylazy.Zip.zip;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
+import static com.googlecode.totallylazy.predicates.Not.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.greaterThan;
 
 public class SourcesTest {
@@ -50,8 +54,19 @@ public class SourcesTest {
         zip(files(), zipFile);
 
         Sources sources = sources(uri(String.format("jar:file:%s!/folder/", zipFile)));
-        List<String> list = sources.sources().map(Sources.functions.name).toList();
-        assertThat(list, Matchers.containsInAnyOrder("b.txt", "c.txt"));
+        List<String> names = sources.sources().map(Sources.functions.name).toList();
+        assertThat(names, containsInAnyOrder("b.txt", "c.txt"));
+        sources.close();
+    }
+
+    @Test
+    public void canFilterDirectories() throws IOException {
+        File zipFile = temporaryFile();
+        zip(files(), zipFile);
+
+        Sources sources = sources(uri(String.format("jar:file:%s!/", zipFile)));
+        List<String> names = sources.sources().filter(not(directory)).map(name).toList();
+        assertThat(names, containsInAnyOrder("a.txt", "folder/b.txt", "folder/c.txt"));
         sources.close();
     }
 
@@ -62,6 +77,4 @@ public class SourcesTest {
         file(directory, "folder/c.txt");
         return directory;
     }
-
-
 }
