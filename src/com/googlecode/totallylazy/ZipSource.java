@@ -36,7 +36,7 @@ public class ZipSource implements Sources {
         return new UnaryFunction<Source>() {
             @Override
             public Source call(Source source) throws Exception {
-                return new Source(source.name.replaceFirst("^" + folder, ""), source.modified, source.input);
+                return new Source(source.name.replaceFirst("^" + folder, ""), source.modified, source.input, source.isDirectory);
             }
         };
     }
@@ -46,7 +46,7 @@ public class ZipSource implements Sources {
         return Zip.entries(in).map(new Function1<ZipEntry, Source>() {
             @Override
             public Source call(ZipEntry zipEntry) throws Exception {
-                return new Source(zipEntry.getName(), new Date(zipEntry.getTime()), new IgnoreCloseInputStream());
+                return new Source(zipEntry.getName(), new Date(zipEntry.getTime()), new IgnoreCloseInputStream(), zipEntry.isDirectory());
             }
         });
     }

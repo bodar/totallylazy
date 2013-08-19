@@ -18,7 +18,7 @@ public class FileSource implements Sources {
         this.sources = sources.map(new Function1<Pair<String, File>, Source>() {
             @Override
             public Source call(Pair<String, File> pair) throws Exception {
-                return new Source(pair.first(), new Date(pair.second().lastModified()), inputStream(pair.second()));
+                return new Source(pair.first(), new Date(pair.second().lastModified()), inputStream(pair.second()), pair.second().isDirectory());
             }
         });
     }

@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -60,27 +61,35 @@ public interface Sources extends Closeable {
                 return source.name;
             }
         };
+        public static LogicalPredicate<Source> directory = new LogicalPredicate<Source>() {
+            @Override
+            public boolean matches(Source source) {
+                return source.isDirectory;
+            }
+        };
     }
 
     class Source extends Eq {
         public final String name;
         public final Date modified;
         public final InputStream input;
+        public final boolean isDirectory;
 
-        public Source(String name, Date modified, InputStream input) {
+        public Source(String name, Date modified, InputStream input, boolean isDirectory) {
             this.name = name;
             this.modified = modified;
             this.input = input;
+            this.isDirectory = isDirectory;
         }
 
         @multimethod
         public boolean equals(Source other) {
-            return name.equals(other.name) && modified.equals(other.modified);
+            return name.equals(other.name) && modified.equals(other.modified) && isDirectory == other.isDirectory;
         }
 
         @Override
         public int hashCode() {
-            return name.hashCode() * modified.hashCode() * 31;
+            return name.hashCode() * modified.hashCode() * Boolean.valueOf(isDirectory).hashCode() * 31;
         }
 
         @Override
