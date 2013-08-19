@@ -30,12 +30,22 @@ public class SourcesTest {
     public void canReadSourcesFromFileUri() throws IOException {
         File files = files();
         Sources sources = sources(uri(files));
-        assertThat(sources.sources().size(), is(3));
+        assertThat(sources.sources().size(), is(4));
         sources.close();
     }
 
     @Test
     public void canReadSourcesFromZipUri() throws IOException {
+        File zipFile = temporaryFile();
+        zip(files(), zipFile);
+
+        Sources sources = sources(uri(String.format("jar:file:%s!/", zipFile)));
+        assertThat(sources.sources().size(), is(4));
+        sources.close();
+    }
+
+    @Test
+    public void canReadSourcesFromZipUriSubFolder() throws IOException {
         File zipFile = temporaryFile();
         zip(files(), zipFile);
 
