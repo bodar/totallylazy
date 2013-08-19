@@ -2,12 +2,11 @@ package com.googlecode.totallylazy;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import static com.googlecode.totallylazy.Files.isDirectory;
-import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Streams.emptyInputStream;
 
 public class FileSource implements Sources {
@@ -19,9 +18,14 @@ public class FileSource implements Sources {
         this.sources = sources.map(new Function1<Pair<String, File>, Source>() {
             @Override
             public Source call(Pair<String, File> pair) throws Exception {
-                return new Source(pair.first(), new Date(pair.second().lastModified()), closeables.manage(new FileInputStream(pair.second())));
+                return new Source(pair.first(), new Date(pair.second().lastModified()), inputStream(pair.second()));
             }
         });
+    }
+
+    private InputStream inputStream(File file) throws FileNotFoundException {
+        if (file.isDirectory()) return emptyInputStream();
+        return closeables.manage(new FileInputStream(file));
     }
 
     public static FileSource fileSource(File folder) {
@@ -29,7 +33,7 @@ public class FileSource implements Sources {
     }
 
     public static FileSource fileSource(File folder, Sequence<File> files) {
-        return new FileSource(files.filter(not(isDirectory())).map(relativeTo(folder)));
+        return new FileSource(files.map(relativeTo(folder)));
     }
 
     @Override

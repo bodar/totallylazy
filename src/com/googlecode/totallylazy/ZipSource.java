@@ -8,7 +8,10 @@ import java.util.zip.ZipInputStream;
 
 import static com.googlecode.totallylazy.FilterSource.filterSource;
 import static com.googlecode.totallylazy.MapSources.mapSource;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Sources.functions.name;
 import static com.googlecode.totallylazy.Strings.startsWith;
 
 public class ZipSource implements Sources {
@@ -24,14 +27,16 @@ public class ZipSource implements Sources {
 
     public static Sources zipSource(InputStream inputStream, String rawFolder) {
         String folder = rawFolder.replaceFirst("/", "");
-        return mapSource(removeFolderFromName(folder), filterSource(where(functions.name, startsWith(folder)), zipSource(inputStream)));
+        return filterSource(where(name, is(not(""))),
+                mapSource(removeFolderFromName(folder),
+                        filterSource(where(name, startsWith(folder)), zipSource(inputStream))));
     }
 
     private static UnaryFunction<Source> removeFolderFromName(final String folder) {
         return new UnaryFunction<Source>() {
             @Override
             public Source call(Source source) throws Exception {
-                return new Source(source.name.replaceFirst(folder, ""), source.modified, source.input);
+                return new Source(source.name.replaceFirst("^" + folder, ""), source.modified, source.input);
             }
         };
     }
