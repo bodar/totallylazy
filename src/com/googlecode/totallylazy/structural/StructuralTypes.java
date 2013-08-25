@@ -38,7 +38,7 @@ public class StructuralTypes {
         return map(sequence(structuralType.getMethods()).map(new Mapper<Method, Pair<Method, Method>>() {
             @Override
             public Pair<Method, Method> call(Method requiredMethod) throws Exception {
-                return pair(requiredMethod, findMethod(requiredMethod, instanceMethods).get());
+                return pair(requiredMethod, findMethod(requiredMethod, instanceMethods).getOrThrow(new ClassCastException("Does not have method: " + requiredMethod)));
             }
         }));
     }

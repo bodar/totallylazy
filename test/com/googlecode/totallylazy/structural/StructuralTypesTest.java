@@ -23,4 +23,12 @@ public class StructuralTypesTest {
         close.close();
         assertThat(called.get(), is(true));
     }
+
+    @Test
+    public void throwsWhenDoesNotFulfillStructuralContract() throws Exception {
+        try {
+            structrualType(Closeable.class, new Object());
+        } catch (ClassCastException e) {
+        }
+    }
 }
