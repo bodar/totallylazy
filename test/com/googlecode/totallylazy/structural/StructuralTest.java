@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.structural;
 
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Some;
 import org.junit.Test;
 
@@ -37,13 +36,17 @@ public class StructuralTest {
 
     @Test
     public void canCastOption() throws Exception {
-        assertThat(Structural.castOption(Closeable.class, new Object() { void close() {} }), instanceOf(Some.class));
+        assertThat(Structural.castOption(Closeable.class, new Object() {
+            void close() {}
+        }), instanceOf(Some.class));
         assertThat(Structural.castOption(Closeable.class, new Object()), is(none(Closeable.class)));
     }
 
     @Test
     public void canCheckInstanceOf() throws Exception {
-        assertThat(Structural.instanceOf(Closeable.class, new Object() { void close() {} }), is(true));
+        assertThat(Structural.instanceOf(Closeable.class, new Object() {
+            void close() {}
+        }), is(true));
         assertThat(Structural.instanceOf(Closeable.class, new Object()), is(false));
     }
 }

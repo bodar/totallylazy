@@ -5,10 +5,10 @@ import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Methods;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
-import com.googlecode.totallylazy.proxy.Proxy;
-import net.sf.cglib.proxy.InvocationHandler;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -18,6 +18,7 @@ import static com.googlecode.totallylazy.Methods.allMethods;
 import static com.googlecode.totallylazy.Monad.methods.sequenceO;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static java.lang.reflect.Proxy.newProxyInstance;
 
 public class Structural {
     public static boolean instanceOf(final Class<?> structuralType, final Object instance) {
@@ -32,12 +33,12 @@ public class Structural {
         return extractMethods(instance, structuralType).map(new Mapper<Map<Method, Method>, T>() {
             @Override
             public T call(final Map<Method, Method> methods) throws Exception {
-                return Proxy.createProxy(structuralType, new InvocationHandler() {
+                return Unchecked.cast(newProxyInstance(structuralType.getClassLoader(), new Class[]{structuralType}, new InvocationHandler() {
                     @Override
                     public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
                         return Methods.invoke(methods.get(method), instance, objects);
                     }
-                });
+                }));
             }
         });
     }
@@ -66,15 +67,15 @@ public class Structural {
         return instanceMethods.find(structuralMatch(requiredMethod));
     }
 
-    private static LogicalPredicate<Method> structuralMatch(final Method requiredMethod) {
-        final Sequence<Type> requiredParameters = sequence(requiredMethod.getGenericParameterTypes());
-        final Sequence<Type> requiredReturnType = sequence(requiredMethod.getGenericReturnType());
+    private static LogicalPredicate<Method> structuralMatch(final Method required) {
+        final Sequence<Type> requiredParameters = sequence(required.getGenericParameterTypes());
+        final Sequence<Type> requiredReturnType = sequence(required.getGenericReturnType());
         return new LogicalPredicate<Method>() {
             @Override
-            public boolean matches(Method objectsMethod) {
-                return objectsMethod.getName().equals(requiredMethod.getName()) &&
-                        sequence(objectsMethod.getGenericParameterTypes()).equals(requiredParameters) &&
-                        sequence(objectsMethod.getGenericReturnType()).equals(requiredReturnType);
+            public boolean matches(Method objects) {
+                return objects.getName().equals(required.getName()) &&
+                        sequence(objects.getGenericParameterTypes()).equals(requiredParameters) &&
+                        sequence(objects.getGenericReturnType()).equals(requiredReturnType);
             }
         };
     }
