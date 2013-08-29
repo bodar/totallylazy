@@ -452,4 +452,20 @@ public class Iterators {
         }
         return -1;
     }
+
+    public static class functions {
+        public static <T> Function2<Iterable<? extends T>, Iterable<? extends T>, Iterable<T>> join() {
+            return new Function2<Iterable<? extends T>, Iterable<? extends T>, Iterable<T>>() {
+                @Override
+                public Iterable<T> call(final Iterable<? extends T> a, final Iterable<? extends T> b) throws Exception {
+                    return new Sequence<T>() {
+                        @Override
+                        public Iterator<T> iterator() {
+                            return Iterators.join(a.iterator(), b.iterator());
+                        }
+                    };
+                }
+            };
+        }
+    }
 }
