@@ -14,4 +14,9 @@ public class ContainsPredicate extends LogicalPredicate<String> {
     public String value() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("contains '%s'", value());
+    }
 }
