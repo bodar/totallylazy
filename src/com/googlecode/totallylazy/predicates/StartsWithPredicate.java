@@ -14,4 +14,19 @@ public class StartsWithPredicate extends LogicalPredicate<String> {
     public String value() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("starts with '%s'", value());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof StartsWithPredicate && ((StartsWithPredicate) o).value().equals(value());
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
 }
