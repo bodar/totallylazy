@@ -12,4 +12,10 @@ public class ContainsPredicateTest {
     public void supportsToString() throws Exception {
         assertThat(Strings.contains("13").toString(), Matchers.is("contains '13'"));
     }
+
+    @Test
+    public void supportsEqualityOnPredicateItself() throws Exception {
+        assertThat(Strings.contains("13").equals(Strings.contains("13")), Matchers.is(true));
+        assertThat(Strings.contains("13").equals(Strings.contains("14")), Matchers.is(false));
+    }
 }

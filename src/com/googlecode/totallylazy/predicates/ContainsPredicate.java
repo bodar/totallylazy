@@ -19,4 +19,14 @@ public class ContainsPredicate extends LogicalPredicate<String> {
     public String toString() {
         return String.format("contains '%s'", value());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof ContainsPredicate && ((ContainsPredicate) o).value().equals(value());
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
 }
