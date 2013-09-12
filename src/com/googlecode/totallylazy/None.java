@@ -44,6 +44,11 @@ public class None<T> extends Option<T>{
     }
 
     @Override
+    public Option<T> orElse(Callable<? extends Option<T>> other) {
+        return call(other);
+    }
+
+    @Override
     public T getOrElse(T other) {
         return other;
     }
