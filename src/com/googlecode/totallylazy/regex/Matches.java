@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.regex;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.iterators.GroupIterator;
 
 import java.util.Iterator;
 import java.util.regex.MatchResult;
@@ -56,5 +57,16 @@ public class Matches extends Sequence<MatchResult> {
             };
         }
 
+        public static Mapper<MatchResult, Sequence<String>> groups = new Mapper<MatchResult, Sequence<String>>() {
+            @Override
+            public Sequence<String> call(final MatchResult matchResult) throws Exception {
+                return new Sequence<String>() {
+                    @Override
+                    public Iterator<String> iterator() {
+                        return new GroupIterator(matchResult);
+                    }
+                };
+            }
+        };
     }
 }

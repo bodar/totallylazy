@@ -70,6 +70,7 @@ public class UriTest {
 
     @Test
     public void parsesHost() throws Exception {
+//        assertThat(uri("http:/foo").host(), is(nullValue())); TODO
         assertThat(uri("http://stuandjorge.com").host(), is("stuandjorge.com"));
         assertThat(uri("http://stuandjorge.com:8081").host(), is("stuandjorge.com"));
         assertThat(uri("http://stuandjorge.com/somepath").host(), is("stuandjorge.com"));
