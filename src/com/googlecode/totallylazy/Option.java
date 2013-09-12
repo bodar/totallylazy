@@ -44,6 +44,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public abstract Option<A> orElse(Option<A> other);
 
+    public abstract Option<A> orElse(Callable<? extends Option<A>> other);
+
     public abstract A getOrElse(A other);
 
     public abstract A getOrElse(Callable<? extends A> callable);
