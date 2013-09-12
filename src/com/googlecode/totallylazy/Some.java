@@ -36,6 +36,11 @@ public class Some<T> extends Option<T> {
     }
 
     @Override
+    public Option<T> orElse(Option<T> other) {
+        return this;
+    }
+
+    @Override
     public T getOrElse(T other) {
         return get();
     }

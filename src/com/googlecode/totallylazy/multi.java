@@ -39,7 +39,10 @@ public abstract class multi {
 
     public <T> Option<T> methodOption(Object... args) {
         Method method = getClass().getEnclosingMethod();
-        Sequence<Class<?>> argumentClasses = sequence(args).map(toClass());
+        return methodFor(method, args);
+    }
+
+    public <T> Option<T> methodFor(Method method, Object[] args) {Sequence<Class<?>> argumentClasses = sequence(args).map(toClass());
         Object instance = instance(method);
         Class<?> aClass = declaringClass(method, instance);
         Sequence<Method> methods = allMethods(aClass);
