@@ -30,7 +30,7 @@ public abstract class multi {
     }
 
     protected multi() {
-        this(where(Methods.annotation(multimethod.class), notNullValue(multimethod.class)));
+        this(Predicates.<Method, multimethod>where(Methods.annotation(multimethod.class), notNullValue()));
     }
 
     public <T> T method(Object... args) {
