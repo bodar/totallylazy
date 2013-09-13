@@ -30,7 +30,7 @@ public abstract class multi {
     }
 
     protected multi() {
-        this(Predicates.<Method, multimethod>where(Methods.annotation(multimethod.class), notNullValue()));
+        this(where(Methods.annotation(multimethod.class), notNullValue(multimethod.class)));
     }
 
     public <T> T method(Object... args) {
@@ -38,23 +38,34 @@ public abstract class multi {
     }
 
     public <T> Option<T> methodOption(Object... args) {
-        Method method = getClass().getEnclosingMethod();
-        return methodFor(method, args);
-    }
-
-    public <T> Option<T> methodFor(Method method, Object[] args) {Sequence<Class<?>> argumentClasses = sequence(args).map(toClass());
+        Method method = enclosing();
         Object instance = instance(method);
         Class<?> aClass = declaringClass(method, instance);
-        Sequence<Method> methods = allMethods(aClass);
-        return methods.
-                filter(where(methodName(), is(method.getName()))).
+        String name = method.getName();
+        return invoke(aClass, instance, name, args);
+    }
+
+    public <T> Option<T> invoke(Object instance, String name, Object... args) {
+        return invoke(instance.getClass(), instance, name, args);
+    }
+
+    public <T> Option<T> invoke(Class<?> aClass, String name, Object... args) {
+        return invoke(aClass, null, name, args);
+    }
+
+    private <T> Option<T> invoke(Class<?> aClass, Object instance, String name, Object[] args) {
+        Sequence<Class<?>> argumentClasses = sequence(args).map(toClass()).memoize();
+        return allMethods(aClass).
+                filter(not(enclosing())).
+                filter(where(methodName(), is(name))).
                 filter(predicate).
                 filter(where(parameterTypes(), matches(argumentClasses))).
-                filter(where(parameterTypes(), not(exactMatch(sequence(method.getParameterTypes()))))).
                 sort(by(distanceFrom(argumentClasses), Numbers.ascending())).
                 headOption().
                 map(Methods.<T>invokeOn(instance, args));
     }
+
+    private Method enclosing() {return getClass().getEnclosingMethod();}
 
     private Class<?> declaringClass(Method method, Object instance) {
         return isStatic(method.getModifiers()) ? method.getDeclaringClass() : instance.getClass();
