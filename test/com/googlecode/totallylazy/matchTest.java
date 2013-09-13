@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.regex.Regex.regex;
@@ -30,16 +31,16 @@ public class matchTest {
     @Test
     public void worksWithInstances() throws Exception {
         assertThat(new match<String,String>() {
-            String value(String s) { return "String processed"; }
-            String value(CharSequence s) { return "CharSequence processed"; }
-            String value(Integer s) { return "Integer processed"; }
-        }.apply("A String").get(), is("String processed"));
+            String value(String s) { return "String"; }
+            String value(CharSequence s) { return "CharSequence"; }
+            String value(Integer s) { return "Integer"; }
+        }.apply("A String").get(), is("String"));
     }
 
     @Test
     public void supportsNoMatch() throws Exception {
         assertThat(new match<String,String>() {
-            String value(Integer s) { return "Integer processed"; }
+            String value(Integer s) { return "Integer"; }
         }.apply("A String").getOrElse("No match found"), is("No match found"));
     }
 }
