@@ -2,7 +2,7 @@
 
 JAVA_OPTS=-Djava.net.useSystemProxies=true ${JAVA_OPTS}
 BUILD_NUMBER=${BUILD_NUMBER-dev.build}
-version=139
+version=145
 artifact=jcompilo
 group=com/googlecode/${artifact}
 repo=repo.bodar.com
