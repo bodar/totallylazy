@@ -192,7 +192,7 @@ public class Maps {
     public static <K, V> Function1<Pair<K, V>, Map.Entry<K, V>> pairToEntry() {
         return new Function1<Pair<K, V>, Map.Entry<K, V>>() {
             public final Map.Entry<K, V> call(final Pair<K, V> pair) throws Exception {
-                return new PairEntry<K, V>(pair);
+                return pair;
             }
         };
     }
@@ -251,41 +251,6 @@ public class Maps {
 
     public static <K, V> Set<Map.Entry<K, V>> entrySet(final Iterable<? extends Pair<K, V>> map) {
         return sequence(map).map(Maps.<K, V>pairToEntry()).toSet();
-    }
-
-    public static class PairEntry<K, V> implements Map.Entry<K, V> {
-        private final Pair<K, V> pair;
-
-        public PairEntry(Pair<K, V> pair) {
-            this.pair = pair;
-        }
-
-        public K getKey() {
-            return pair.first();
-        }
-
-        public V getValue() {
-            return pair.second();
-        }
-
-        public V setValue(V value) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof PairEntry && ((PairEntry) obj).pair.equals(pair);
-        }
-
-        @Override
-        public int hashCode() {
-            return pair.hashCode();
-        }
-
-        @Override
-        public String toString() {
-            return pair.toString();
-        }
     }
 
     public static class functions {
