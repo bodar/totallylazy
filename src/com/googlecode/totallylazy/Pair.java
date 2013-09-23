@@ -1,16 +1,14 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.collections.PersistentMap;
-
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.call;
-import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
-public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
+public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Map.Entry<F,S> {
     private final Lazy<F> first;
     private final Lazy<S> second;
 
@@ -64,6 +62,21 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F> {
 
     public Sequence<Object> values() {
         return sequence(first(), second());
+    }
+
+    @Override
+    public F getKey() {
+        return first();
+    }
+
+    @Override
+    public S getValue() {
+        return second();
+    }
+
+    @Override
+    public S setValue(S value) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

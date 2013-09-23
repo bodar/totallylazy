@@ -80,7 +80,7 @@ public class MapsTest {
         Map<String, Integer> map = new AbstractMap<String, Integer>() {
             @Override
             public Set<Entry<String, Integer>> entrySet() {
-                return set(sequence(pair("dan", 1), pair("matt", 2)).map(Maps.<String, Integer>pairToEntry()));
+                return set(Sequences.<Entry<String, Integer>>sequence(pair("dan", 1), pair("matt", 2)));
             }
         };
 
