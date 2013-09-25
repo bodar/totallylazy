@@ -206,4 +206,17 @@ public class TreeZipperTest {
         Assert.assertThat(zipper.value(), Matchers.is(pair("K", "L")));
         Assert.assertThat(zipper.index(), Matchers.is(5));
     }
+
+    @Test
+    public void canSkipToIndex() throws Exception {
+        TreeZipper<String, String> zipper = TreeZipper.zipper(avlTree("A", "B").insert("C", "D").
+                insert("E", "F").insert("G", "H").
+                insert("I", "J").insert("K", "L")).first();
+        Assert.assertThat(zipper.index(5).value(), Matchers.is(pair("K", "L")));
+        Assert.assertThat(zipper.index(1).value(), Matchers.is(pair("C", "D")));
+        Assert.assertThat(zipper.index(3).value(), Matchers.is(pair("G", "H")));
+        Assert.assertThat(zipper.index(4).value(), Matchers.is(pair("I", "J")));
+        Assert.assertThat(zipper.index(2).value(), Matchers.is(pair("E", "F")));
+        Assert.assertThat(zipper.index(0).value(), Matchers.is(pair("A", "B")));
+    }
 }

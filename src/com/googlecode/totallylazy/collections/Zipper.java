@@ -10,4 +10,5 @@ public interface Zipper<T> extends Value<T> {
     boolean isFirst();
     boolean isLast();
     int index();
+    Zipper<T> index(int index);
 }
