@@ -75,4 +75,20 @@ public class ListZipperTest {
         assertThat(zipper.isTop(), is(true));
         assertThat(zipper.right().isTop(), is(false));
     }
+
+    @Test
+    public void supportsIndex() throws Exception {
+        ListZipper<String> zipper = zipper(list("A", "B", "C", "D"));
+        assertThat(zipper.value(), is("A"));
+        assertThat(zipper.index(), is(0));
+        zipper = zipper.next();
+        assertThat(zipper.value(), is("B"));
+        assertThat(zipper.index(), is(1));
+        zipper = zipper.next();
+        assertThat(zipper.value(), is("C"));
+        assertThat(zipper.index(), is(2));
+        zipper = zipper.next();
+        assertThat(zipper.value(), is("D"));
+        assertThat(zipper.index(), is(3));
+    }
 }

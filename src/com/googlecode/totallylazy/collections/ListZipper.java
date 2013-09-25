@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.annotations.tailrec;
 
 import static com.googlecode.totallylazy.collections.PersistentList.functions;
 
-public class ListZipper<T> {
+public class ListZipper<T> implements Zipper<T> {
     public final PersistentList<T> focus;
     public final PersistentList<T> breadcrumbs;
 
@@ -31,18 +31,56 @@ public class ListZipper<T> {
         return zipper(focus.cons(breadcrumbs.head()), breadcrumbs.tail());
     }
 
+    @Override
     public ListZipper<T> next() {
         return right();
     }
 
+    @Override
     public ListZipper<T> previous() {
         return left();
+    }
+
+    @Override
+    public ListZipper<T> first() {
+        return top();
+    }
+
+    @Override
+    public ListZipper<T> last() {
+        return bottom();
+    }
+
+    @Override
+    public boolean isFirst() {
+        return isTop();
+    }
+
+    @Override
+    public boolean isLast() {
+        return isBottom();
     }
 
     @tailrec
     public ListZipper<T> top() {
         if (isTop()) return this;
         return previous().top();
+    }
+
+    @tailrec
+    public ListZipper<T> bottom() {
+        if (isBottom()) return this;
+        return next().bottom();
+    }
+
+    @Override
+    public T value() {
+        return current();
+    }
+
+    @Override
+    public int index() {
+        return breadcrumbs.size();
     }
 
     @Override
