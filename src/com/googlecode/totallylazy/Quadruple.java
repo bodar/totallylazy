@@ -27,7 +27,7 @@ public class Quadruple<F, S, T, Fo> extends Triple<F, S, T> implements Fourth<Fo
 
     @Override
     public Sequence<Object> values() {
-        return super.values().add(fourth());
+        return super.values().append(fourth());
     }
 
 }

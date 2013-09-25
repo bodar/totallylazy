@@ -11,6 +11,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,16 +19,8 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface PersistentList<T> extends Iterable<T>, Segment<T>, Functor<T>, PersistentCollection<T>, Indexed<T>, Foldable<T> {
-    PersistentList<T> add(T value);
-
-    PersistentList<T> remove(T value);
-
-    PersistentList<T> removeAll(Iterable<T> values);
-
-    List<T> toList();
-
-    Sequence<T> toSequence();
+public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Iterable<T>, Segment<T>, Functor<T>, Indexed<T>, Foldable<T> {
+    Option<T> find(Predicate<? super T> predicate);
 
     @Override
     PersistentList<T> empty();
@@ -38,12 +31,38 @@ public interface PersistentList<T> extends Iterable<T>, Segment<T>, Functor<T>, 
     @Override
     PersistentList<T> tail() throws NoSuchElementException;
 
+    PersistentList<T> append(T value);
+
+    @Override
+    PersistentList<T> delete(T value);
+
+    PersistentList<T> deleteAll(Iterable<T> values);
+
+    List<T> toMutableList();
+
+    Sequence<T> toSequence();
+
     @Override
     <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable);
 
-    Option<T> find(Predicate<? super T> predicate);
-
     PersistentList<T> filter(Predicate<? super T> predicate);
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
+    @Override @Deprecated
+    void add(int index, T element);
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
+    @Override @Deprecated
+    boolean addAll(int index, Collection<? extends T> c);
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
+    @Override @Deprecated
+    T set(int index, T element);
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
+    @Override @Deprecated
+    T remove(int index);
+
 
     class constructors {
         public static <T> PersistentList<T> empty() {

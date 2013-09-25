@@ -117,7 +117,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public Option<V> get(K key) {
+    public Option<V> lookup(K key) {
         return find(is(key));
     }
 
@@ -127,12 +127,12 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public PersistentMap<K, V> put(K key, V value) {
+    public PersistentMap<K, V> insert(K key, V value) {
         return cons(Pair.pair(key, value));
     }
 
     @Override
-    public PersistentMap<K, V> remove(K key) {
+    public PersistentMap<K, V> delete(K key) {
         return filterKeys(is(not(key)));
     }
 
@@ -162,7 +162,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public boolean contains(K other) {
+    public boolean contains(Object other) {
         return list.exists(key(other));
     }
 
@@ -180,7 +180,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
         return Predicates.first(predicate);
     }
 
-    private Predicate<First<K>> key(K key) {
+    private Predicate<First<K>> key(Object key) {
         return key(is(key));
     }
 

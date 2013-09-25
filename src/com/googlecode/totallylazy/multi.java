@@ -98,7 +98,7 @@ public abstract class multi {
     static Number distanceBetween(Class<?> argument, Class<?> parameterType) {
         if (argument.equals(parameterType)) return 0;
         return Numbers.add(parameterType.isInterface() ? 1 : 1.1, sequence(argument.getInterfaces()).
-                add(argument.getSuperclass()).
+                append(argument.getSuperclass()).
                 filter(not(nullValue())).
                 map(distanceBetween().flip().apply(parameterType)).
                 reduce(minimum));

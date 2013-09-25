@@ -372,7 +372,7 @@ public class Sequences {
         return Iterators.toDeque(iterable.iterator());
     }
 
-    public static <T> Sequence<T> remove(final Iterable<? extends T> iterable, final T t) {
+    public static <T> Sequence<T> delete(final Iterable<? extends T> iterable, final T t) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.remove(iterable.iterator(), t);
@@ -380,7 +380,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> removeAll(final Iterable<? extends T> iterable, final Iterable<? extends T> remove) {
+    public static <T> Sequence<T> deleteAll(final Iterable<? extends T> iterable, final Iterable<? extends T> remove) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.removeAll(iterable.iterator(), remove);
@@ -465,7 +465,7 @@ public class Sequences {
         return Iterators.pick(iterable.iterator(), callable);
     }
 
-    public static <T> Sequence<T> add(final Iterable<? extends T> iterable, final T t) {
+    public static <T> Sequence<T> append(final Iterable<? extends T> iterable, final T t) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.add(iterable.iterator(), t);

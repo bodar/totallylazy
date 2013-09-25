@@ -29,7 +29,7 @@ public class PersistentSortedMapTest {
     public void canPutAndReturnOldValue() throws Exception {
         PersistentSortedMap<Integer, String> pairs = sortedMap(4, "Four", 5, "Five", 3, "Three", 2, "Two", 6, "Six");
         Pair<PersistentSortedMap<Integer, String>, Option<String>> result = PersistentMap.methods.put(pairs, 4, "NewFour");
-        assertThat(result.first().get(4).get(), is("NewFour"));
+        assertThat(result.first().lookup(4).get(), is("NewFour"));
         assertThat(result.second().get(), is("Four"));
     }
 
@@ -37,7 +37,7 @@ public class PersistentSortedMapTest {
     public void canRemoveAndReturnOldValue() throws Exception {
         PersistentSortedMap<Integer, String> pairs = sortedMap(4, "Four", 5, "Five", 3, "Three", 2, "Two", 6, "Six");
         Pair<PersistentSortedMap<Integer, String>, Option<String>> result = PersistentMap.methods.remove(pairs, 4);
-        assertThat(result.first().get(4).isEmpty(), is(true));
+        assertThat(result.first().lookup(4).isEmpty(), is(true));
         assertThat(result.second().get(), is("Four"));
     }
 
@@ -55,11 +55,11 @@ public class PersistentSortedMapTest {
     @Test
     public void canGetByIndex() throws Exception {
         PersistentSortedMap<Integer, Integer> map = sortedMap(4, 4, 5, 5, 3, 3, 2, 2, 6, 6);
-        assertThat(map.index(0), is(pair(2,2)));
-        assertThat(map.index(1), is(pair(3,3)));
-        assertThat(map.index(2), is(pair(4,4)));
-        assertThat(map.index(3), is(pair(5,5)));
-        assertThat(map.index(4), is(pair(6,6)));
+        assertThat(map.get(0), is(pair(2,2)));
+        assertThat(map.get(1), is(pair(3,3)));
+        assertThat(map.get(2), is(pair(4,4)));
+        assertThat(map.get(3), is(pair(5,5)));
+        assertThat(map.get(4), is(pair(6,6)));
     }
 
     @Test
@@ -120,16 +120,16 @@ public class PersistentSortedMapTest {
     @Test
     public void canRemove() throws Exception {
         final PersistentMap<Integer, String> map = sortedMap(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray");
-        assertThat(map.remove(4), hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
-        assertThat(map.remove(3), hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(4, "Alex")));
-        assertThat(map.remove(2), hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(4, "Alex")));
-        assertThat(map.remove(1), hasExactly(pair(2, "Ray"), pair(3, "Stu"), pair(4, "Alex")));
-        assertThat(map.remove(0), is(map));
+        assertThat(map.delete(4), hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
+        assertThat(map.delete(3), hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(4, "Alex")));
+        assertThat(map.delete(2), hasExactly(pair(1, "Dan"), pair(3, "Stu"), pair(4, "Alex")));
+        assertThat(map.delete(1), hasExactly(pair(2, "Ray"), pair(3, "Stu"), pair(4, "Alex")));
+        assertThat(map.delete(0), is(map));
     }
 
     @Test
     public void canPut() throws Exception {
-        PersistentMap<Integer, String> map = sortedMap(1, "Dan").put(3, "Stu").put(2, "Ray");
+        PersistentMap<Integer, String> map = sortedMap(1, "Dan").insert(3, "Stu").insert(2, "Ray");
         assertThat(map, hasExactly(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu")));
     }
 
@@ -169,8 +169,8 @@ public class PersistentSortedMapTest {
     @Test
     public void canGet() throws Exception {
         PersistentMap<Integer, String> map = sortedMap(1, "Dan", 2, "Ray", 3, "Stu");
-        assertThat(map.get(2), is(some("Ray")));
-        assertThat(map.get(4), is(none(String.class)));
+        assertThat(map.lookup(2), is(some("Ray")));
+        assertThat(map.lookup(4), is(none(String.class)));
     }
 
     @Test

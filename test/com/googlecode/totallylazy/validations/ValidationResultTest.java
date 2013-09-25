@@ -53,8 +53,8 @@ public class ValidationResultTest {
                 add("B", "message b 2");
 
         PersistentMap<String,Sequence<String>> map = result.toMap();
-        assertThat(map.get("A").get(), hasExactly("message a 1", "message a 2"));
-        assertThat(map.get("B").get(), hasExactly("message b 1", "message b 2"));
+        assertThat(map.lookup("A").get(), hasExactly("message a 1", "message a 2"));
+        assertThat(map.lookup("B").get(), hasExactly("message b 1", "message b 2"));
     }
 
     @Test

@@ -26,10 +26,10 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
     AVLTree<K, V> tail() throws NoSuchElementException;
 
     @Override
-    AVLTree<K, V> put(K key, V value);
+    AVLTree<K, V> insert(K key, V value);
 
     @Override
-    AVLTree<K, V> remove(K key);
+    AVLTree<K, V> delete(K key);
 
     @Override
     AVLTree<K, V> filterKeys(Predicate<? super K> predicate);

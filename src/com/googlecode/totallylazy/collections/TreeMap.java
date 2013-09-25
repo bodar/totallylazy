@@ -40,10 +40,10 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
     TreeMap<K, V> tail() throws NoSuchElementException;
 
     @Override
-    TreeMap<K, V> put(K key, V value);
+    TreeMap<K, V> insert(K key, V value);
 
     @Override
-    TreeMap<K, V> remove(K key);
+    TreeMap<K, V> delete(K key);
 
     @Override
     TreeMap<K, V> filterKeys(Predicate<? super K> predicate);
@@ -110,7 +110,7 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
             return new Function1<TreeMap<K, V>, TreeMap<K, V>>() {
                 @Override
                 public TreeMap<K, V> call(TreeMap<K, V> focus) throws Exception {
-                    return focus.remove(focus.key());
+                    return focus.delete(focus.key());
                 }
             };
         }

@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Mapper;
-import com.googlecode.totallylazy.Option;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Option.none;
@@ -66,9 +64,9 @@ public class PersistentSortedSetTest {
     }
 
     @Test
-    public void supportsGet() throws Exception {
-        assertThat(sortedSet(1, 2, 3).get(1), is(some(1)));
-        assertThat(PersistentSortedSet.constructors.<Integer>sortedSet().get(1), is(none(Integer.class)));
+    public void supportsLookup() throws Exception {
+        assertThat(sortedSet('c', 'a', 'b').lookup('a'), is(some('a')));
+        assertThat(PersistentSortedSet.constructors.<Integer>sortedSet().lookup(1), is(none(Integer.class)));
 
         assertThat(get(1).call(sortedSet(1, 2, 3)), is(some(1)));
         assertThat(get(5).call(sortedSet(1, 2, 3)), is(none(Integer.class)));

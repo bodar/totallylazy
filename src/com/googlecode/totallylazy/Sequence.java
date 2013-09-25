@@ -3,9 +3,10 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.collections.PersistentCollection;
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.collections.Indexed;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.collections.ReadOnlyCollection;
 
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedHashSet;
@@ -17,11 +18,12 @@ import java.util.concurrent.Executor;
 import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.returnArgument;
+import static com.googlecode.totallylazy.Predicates.in;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Unchecked.cast;
 
 
-public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Monad<T>, Foldable<T>, Indexed<T> {
+public abstract class Sequence<T> extends ReadOnlyCollection<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Monad<T>, Foldable<T>, Indexed<T> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
@@ -210,7 +212,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
     }
 
     @Override
-    public Segment<T> empty() {
+    public Sequence<T> empty() {
         return Sequences.empty();
     }
 
@@ -234,19 +236,25 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return toArray(Unchecked.<T[]>cast(Array.newInstance(aClass, 0)));
     }
 
-    public T[] toArray(T[] array) {
+    @Override
+    public <A> A[] toArray(A[] array) {
         return toList().toArray(array);
     }
 
-    public Sequence<T> remove(final T t) {
-        return Sequences.remove(this, t);
-    }
-
-    public Sequence<T> removeAll(final Iterable<? extends T> iterable) {
-        return Sequences.removeAll(this, iterable);
+    @Override
+    public Object[] toArray() {
+        return toList().toArray();
     }
 
     @Override
+    public Sequence<T> delete(final T t) {
+        return Sequences.delete(this, t);
+    }
+
+    public Sequence<T> deleteAll(final Iterable<? extends T> iterable) {
+        return Sequences.deleteAll(this, iterable);
+    }
+
     public int size() {
         return Sequences.size(this);
     }
@@ -275,8 +283,14 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.forAll(this, predicate);
     }
 
-    public boolean contains(final T t) {
-        return Sequences.contains(this, t);
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return forAll(in(c));
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return exists(is(o));
     }
 
     public boolean exists(final Predicate<? super T> predicate) {
@@ -295,8 +309,8 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
         return Sequences.pick(this, callable);
     }
 
-    public Sequence<T> add(final T t) {
-        return Sequences.add(this, t);
+    public Sequence<T> append(final T t) {
+        return Sequences.append(this, t);
     }
 
     public Sequence<T> join(final Iterable<? extends T> iterable) {
@@ -453,12 +467,7 @@ public abstract class Sequence<T> implements Iterable<T>, First<T>, Second<T>, T
     }
 
     @Override
-    public T index(int i) throws IndexOutOfBoundsException {
-        return Sequences.index(this, i);
-    }
-
-    @Override
-    public int indexOf(T t) {
+    public int indexOf(Object t) {
         return Sequences.indexOf(this, t);
     }
 

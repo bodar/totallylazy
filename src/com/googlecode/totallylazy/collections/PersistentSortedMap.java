@@ -26,10 +26,10 @@ public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<P
     PersistentSortedMap<K, V> tail() throws NoSuchElementException;
 
     @Override
-    PersistentSortedMap<K, V> put(K key, V value);
+    PersistentSortedMap<K, V> insert(K key, V value);
 
     @Override
-    PersistentSortedMap<K, V> remove(K key);
+    PersistentSortedMap<K, V> delete(K key);
 
     @Override
     PersistentSortedMap<K, V> filterKeys(Predicate<? super K> predicate);
@@ -135,7 +135,7 @@ public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<P
             return new Function1<PersistentSortedMap<K, V>, PersistentSortedMap<K, V>>() {
                 @Override
                 public PersistentSortedMap<K, V> call(PersistentSortedMap<K, V> map) throws Exception {
-                    return map.remove(key);
+                    return map.delete(key);
                 }
             };
         }

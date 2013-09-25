@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Callables.ascending;
@@ -465,7 +464,7 @@ public class SequenceTest {
 
     @Test
     public void supportsAdd() throws Exception {
-        Sequence<Integer> numbers = sequence(1, 2, 3).add(4);
+        Sequence<Integer> numbers = sequence(1, 2, 3).append(4);
         assertThat(numbers, hasExactly(1, 2, 3, 4));
     }
 
@@ -531,13 +530,13 @@ public class SequenceTest {
 
     @Test
     public void supportsRemove() throws Exception {
-        final Sequence<Integer> numbers = sequence(1, 2, 3, 2).remove(2);
+        final Sequence<Integer> numbers = sequence(1, 2, 3, 2).delete(2);
         assertThat(numbers, hasExactly(1, 3, 2));
     }
 
     @Test
     public void supportsRemoveAll() throws Exception {
-        final Sequence<Integer> numbers = sequence(1, 2, 3, 2).removeAll(sequence(2));
+        final Sequence<Integer> numbers = sequence(1, 2, 3, 2).deleteAll(sequence(2));
         assertThat(numbers, hasExactly(1, 3));
     }
 
@@ -827,7 +826,7 @@ public class SequenceTest {
 
     @Test
     public void supportsIndexAccess() {
-        assertThat(sequence("a", "b", "c").index(1), is("b"));
+        assertThat(sequence("a", "b", "c").get(1), is("b"));
         assertThat(sequence("a", "b", "c").indexOf("c"), is(2));
     }
 }

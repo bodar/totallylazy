@@ -11,8 +11,8 @@ import com.googlecode.totallylazy.Sequence;
 
 import java.util.Set;
 
-public interface PersistentSet<T> extends Iterable<T>, Segment<T>, PersistentCollection<T>, Functor<T>, Foldable<T> {
-    Option<T> get(T value);
+public interface PersistentSet<T> extends Set<T>, Iterable<T>, Segment<T>, PersistentCollection<T>, Functor<T>, Foldable<T> {
+    Option<T> lookup(T value);
 
     Option<T> find(Predicate<? super T> predicate);
 
@@ -22,10 +22,10 @@ public interface PersistentSet<T> extends Iterable<T>, Segment<T>, PersistentCol
     @Override
     PersistentSet<T> cons(T head);
 
-    PersistentSet<T> put(T value);
+    @Override
+    PersistentSet<T> delete(T value);
 
-    PersistentSet<T> remove(T value);
-
+    @Override
     PersistentSet<T> filter(Predicate<? super T> predicate);
 
     <NewT> PersistentSet<NewT> map(Callable1<? super T, ? extends NewT> transformer);
@@ -36,12 +36,14 @@ public interface PersistentSet<T> extends Iterable<T>, Segment<T>, PersistentCol
 
     Set<T> toSet();
 
+
+
     class functions extends Segment.functions {
         public static <T> Mapper<PersistentSet<T>,Option<T>> get(final T value) {
             return new Mapper<PersistentSet<T>, Option<T>>() {
                 @Override
                 public Option<T> call(PersistentSet<T> set) throws Exception {
-                    return set.get(value);
+                    return set.lookup(value);
                 }
             };
         }

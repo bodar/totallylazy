@@ -90,13 +90,13 @@ public class SequencesTest {
 
     @Test
     public void supportsAddingToAnEmptyList() throws Exception {
-        assertThat(sequence().add(1).add(2).add(3), hasExactly((Object) 1, 2, 3));
+        assertThat(sequence().append(1).append(2).append(3), hasExactly((Object) 1, 2, 3));
     }
 
     @Test
     public void joinWorksEvenWhenFirstIterableIsEmpty() throws Exception {
         final Sequence<Integer> empty = Sequences.<Integer>empty();
-        assertThat(empty.add(1).join(sequence(2, 3)).add(4), hasExactly(1, 2, 3, 4));
+        assertThat(empty.append(1).join(sequence(2, 3)).append(4), hasExactly(1, 2, 3, 4));
         assertThat(join(empty, sequence(1, 2, 3), empty, asList(4, 5, 6)), hasExactly(1, 2, 3, 4, 5, 6));
     }
 

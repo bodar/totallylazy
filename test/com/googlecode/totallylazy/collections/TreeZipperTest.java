@@ -20,53 +20,53 @@ public class TreeZipperTest {
     @Test
     public void canGoLeft() {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+                zipper(avlTree(0, 0).insert(1, 1).insert(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6));
 
         final TreeZipper<Integer, Integer> newZipper = zipper.left().left();
         assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(0, 0)));
         assertThat(newZipper.breadcrumbs, is(list(
                 breadcrumb(left, pair(1, 1), avlTree(2, 2)),
-                breadcrumb(left, pair(3, 3), avlTree(4, 4).put(5, 5).put(6, 6)))));
+                breadcrumb(left, pair(3, 3), avlTree(4, 4).insert(5, 5).insert(6, 6)))));
     }
 
     @Test
     public void canGoRight() {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+                zipper(avlTree(0, 0).insert(1, 1).insert(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6));
 
         final TreeZipper<Integer, Integer> newZipper = zipper.right().right();
         assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(6, 6)));
         assertThat(newZipper.breadcrumbs, is(list(
                 breadcrumb(right, pair(5, 5), avlTree(4, 4)),
-                breadcrumb(right, pair(3, 3), avlTree(0, 0).put(1, 1).put(2, 2)))));
+                breadcrumb(right, pair(3, 3), avlTree(0, 0).insert(1, 1).insert(2, 2)))));
     }
 
     @Test
     public void canGoUpFromRight() {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+                zipper(avlTree(0, 0).insert(1, 1).insert(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6));
 
         final TreeZipper<Integer, Integer> newZipper = zipper.right().right().up();
-        assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(4, 4).put(5, 5).put(6, 6)));
+        assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(4, 4).insert(5, 5).insert(6, 6)));
         assertThat(newZipper.breadcrumbs, is(list(
-                breadcrumb(right, pair(3, 3), avlTree(0, 0).put(1, 1).put(2, 2)))));
+                breadcrumb(right, pair(3, 3), avlTree(0, 0).insert(1, 1).insert(2, 2)))));
     }
 
     @Test
     public void canGoUpFromLeft() {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+                zipper(avlTree(0, 0).insert(1, 1).insert(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6));
 
         final TreeZipper<Integer, Integer> newZipper = zipper.left().left().up();
-        assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(0, 0).put(1, 1).put(2, 2)));
+        assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(0, 0).insert(1, 1).insert(2, 2)));
         assertThat(newZipper.breadcrumbs, is(list(
-                breadcrumb(left, pair(3, 3), avlTree(4, 4).put(5, 5).put(6, 6)))));
+                breadcrumb(left, pair(3, 3), avlTree(4, 4).insert(5, 5).insert(6, 6)))));
     }
 
     @Test
     public void canGoToTop() {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+                zipper(avlTree(0, 0).insert(1, 1).insert(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6));
 
         final TreeZipper<Integer, Integer> newZipper = zipper.left().left().top();
         assertThat(newZipper.focus, is(zipper.focus));
@@ -76,32 +76,32 @@ public class TreeZipperTest {
     @Test
     public void canReplaceElementInMiddleOfTree() {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(10, 10).put(20, 20));
+                zipper(avlTree(0, 0).insert(10, 10).insert(20, 20));
         final TreeZipper<Integer, Integer> newZipper = zipper.left().modify(replace(5, 5));
-        assertThat(newZipper.toTreeMap(), is((TreeMap<Integer, Integer>) avlTree(5, 5).put(10, 10).put(20, 20)));
+        assertThat(newZipper.toTreeMap(), is((TreeMap<Integer, Integer>) avlTree(5, 5).insert(10, 10).insert(20, 20)));
         assertThat(newZipper.focus, is((TreeMap<Integer, Integer>) avlTree(5, 5)));
 
-        assertThat(zipper.left().replace(5, 5).toTreeMap(), is((TreeMap<Integer, Integer>) avlTree(5, 5).put(10, 10).put(20, 20)));
+        assertThat(zipper.left().replace(5, 5).toTreeMap(), is((TreeMap<Integer, Integer>) avlTree(5, 5).insert(10, 10).insert(20, 20)));
     }
 
     @Test
     public void canPerformMultipleModifications() throws Exception {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+                zipper(avlTree(0, 0).insert(1, 1).insert(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6));
         final TreeZipper<Integer, Integer> newZipper = zipper.left().left().delete().delete();
-        assertThat(newZipper.toTreeMap(), is((TreeMap<Integer, Integer>) avlTree(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6)));
+        assertThat(newZipper.toTreeMap(), is((TreeMap<Integer, Integer>) avlTree(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6)));
     }
 
     @Test
     public void canDelete() throws Exception {
-        assertThat(zipper(avlTree(0, 0).put(10, 10).put(20, 20)).left().delete().toTreeMap(),
-                is((TreeMap<Integer, Integer>) avlTree(10, 10).put(20, 20)));
+        assertThat(zipper(avlTree(0, 0).insert(10, 10).insert(20, 20)).left().delete().toTreeMap(),
+                is((TreeMap<Integer, Integer>) avlTree(10, 10).insert(20, 20)));
     }
 
     @Test
     public void canDeleteRootNode() throws Exception {
-        assertThat(zipper(avlTree(0, 0).put(10, 10).put(20, 20)).delete().toTreeMap(),
-                is((TreeMap<Integer, Integer>) avlTree(0, 0).put(20, 20)));
+        assertThat(zipper(avlTree(0, 0).insert(10, 10).insert(20, 20)).delete().toTreeMap(),
+                is((TreeMap<Integer, Integer>) avlTree(0, 0).insert(20, 20)));
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -112,7 +112,7 @@ public class TreeZipperTest {
     @Test
     public void canGoToFirst() throws Exception {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+                zipper(avlTree(0, 0).insert(1, 1).insert(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6));
 
         final TreeZipper<Integer, Integer> newZipper = zipper.first();
         assertThat(newZipper.focus.key(), is((0)));
@@ -121,7 +121,7 @@ public class TreeZipperTest {
     @Test
     public void canGoToLast() throws Exception {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+                zipper(avlTree(0, 0).insert(1, 1).insert(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6));
 
         final TreeZipper<Integer, Integer> newZipper = zipper.last();
         assertThat(newZipper.focus.key(), is(6));
@@ -130,7 +130,7 @@ public class TreeZipperTest {
     @Test
     public void canGoToNext() throws Exception {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+                zipper(avlTree(0, 0).insert(1, 1).insert(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6));
 
         TreeZipper<Integer, Integer> zero = zipper.first();
         assertThat(zero.focus.key(), is(0));
@@ -157,7 +157,7 @@ public class TreeZipperTest {
     @Test
     public void canGoToPrevious() throws Exception {
         final TreeZipper<Integer, Integer> zipper =
-                zipper(avlTree(0, 0).put(1, 1).put(2, 2).put(3, 3).put(4, 4).put(5, 5).put(6, 6));
+                zipper(avlTree(0, 0).insert(1, 1).insert(2, 2).insert(3, 3).insert(4, 4).insert(5, 5).insert(6, 6));
 
         TreeZipper<Integer, Integer> six = zipper.last();
         assertThat(six.focus.key(), is(6));

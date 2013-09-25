@@ -4,8 +4,6 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import org.junit.Test;
 
-import java.util.Iterator;
-
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
@@ -35,13 +33,13 @@ public class AVLTreeTest extends MapContract {
 
     @Test
     public void balancesLeftRightCase() throws Exception {
-        assertThat(avlTree(5, null).put(3, null).put(4, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
+        assertThat(avlTree(5, null).insert(3, null).insert(4, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
     }
 
     @Test
     public void balancesDeletion() throws Exception {
-        final PersistentMap<Integer, Object> map = map(0, null, 1, null, 2, null, 3, null, 4, null).put(5, null).put(6, null);
-        assertThat(map.remove(3).toString(), is("((( 0=null ) 1=null ) 2=null (( 4=null ) 5=null ( 6=null )))"));
+        final PersistentMap<Integer, Object> map = map(0, null, 1, null, 2, null, 3, null, 4, null).insert(5, null).insert(6, null);
+        assertThat(map.delete(3).toString(), is("((( 0=null ) 1=null ) 2=null (( 4=null ) 5=null ( 6=null )))"));
     }
 
     @Test

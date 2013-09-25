@@ -10,17 +10,17 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.SortedSet;
 
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class TreeSet<T> implements PersistentSortedSet<T> {
+public class TreeSet<T> extends AbstractCollection<T> implements PersistentSortedSet<T> {
     private final PersistentSortedMap<T, T> map;
 
     private TreeSet(PersistentSortedMap<T, T> map) {
@@ -46,13 +46,8 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
     }
 
     @Override
-    public PersistentSortedSet<T> put(T value) {
-        return treeSet(map.put(value, value));
-    }
-
-    @Override
-    public Option<T> get(T value) {
-        return map.get(value);
+    public Option<T> lookup(T value) {
+        return map.lookup(value);
     }
 
     @Override
@@ -71,8 +66,8 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
     }
 
     @Override
-    public PersistentSortedSet<T> remove(T value) {
-        return treeSet(map.remove(value));
+    public PersistentSortedSet<T> delete(T value) {
+        return treeSet(map.delete(value));
     }
 
     @Override
@@ -101,12 +96,12 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
     }
 
     @Override
-    public T index(int i) {
-        return map.index(i).first();
+    public T get(int i) {
+        return map.get(i).first();
     }
 
     @Override
-    public int indexOf(T t) {
+    public int indexOf(Object t) {
         return map.indexOf(pair(t));
     }
 
@@ -133,7 +128,7 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
     }
 
     @Override
-    public Segment<T> tail() throws NoSuchElementException {
+    public PersistentSortedSet<T> tail() throws NoSuchElementException {
         return treeSet(map.tail());
     }
 
@@ -149,7 +144,7 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
     }
 
     @Override
-    public boolean contains(T other) {
+    public boolean contains(Object other) {
         return map.contains(other);
     }
 
@@ -168,8 +163,8 @@ public class TreeSet<T> implements PersistentSortedSet<T> {
         return SegmentIterator.iterator(toPersistentList());
     }
 
-    private Pair<T, T> pair(T head) {
-        return Pair.pair(head, head);
+    private Pair<T, T> pair(Object head) {
+        return Pair.pair(Unchecked.<T>cast(head), Unchecked.<T>cast(head));
     }
 
     @Override

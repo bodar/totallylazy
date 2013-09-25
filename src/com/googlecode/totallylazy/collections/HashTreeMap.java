@@ -62,31 +62,31 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public PersistentMap<K, V> cons(Pair<K, V> head) {
-        return put(head.first(), head.second());
+        return insert(head.first(), head.second());
     }
 
     @Override
     public PersistentMap<K, V> tail() throws NoSuchElementException {
-        return remove(head().first());
+        return delete(head().first());
     }
 
     @Override
-    public Option<V> get(final K key) {
-        return hash.get(key.hashCode()).flatMap(PersistentMap.functions.<K, V>get(key));
+    public Option<V> lookup(final K key) {
+        return hash.lookup(key.hashCode()).flatMap(PersistentMap.functions.<K, V>get(key));
     }
 
     @Override
-    public PersistentMap<K, V> put(K key, V value) {
+    public PersistentMap<K, V> insert(K key, V value) {
         int hashCode = key.hashCode();
-        return hashTreeMap(hash.put(hashCode, hash.get(hashCode).getOrElse(emptyBucket).put(key, value)));
+        return hashTreeMap(hash.insert(hashCode, hash.lookup(hashCode).getOrElse(emptyBucket).insert(key, value)));
     }
 
     @Override
-    public PersistentMap<K, V> remove(K key) {
+    public PersistentMap<K, V> delete(K key) {
         int hashCode = key.hashCode();
-        PersistentMap<K, V> bucket = hash.get(hashCode).getOrElse(emptyBucket).remove(key);
-        if(bucket.isEmpty()) return hashTreeMap(hash.remove(hashCode));
-        return hashTreeMap(hash.put(hashCode, bucket));
+        PersistentMap<K, V> bucket = hash.lookup(hashCode).getOrElse(emptyBucket).delete(key);
+        if(bucket.isEmpty()) return hashTreeMap(hash.delete(hashCode));
+        return hashTreeMap(hash.insert(hashCode, bucket));
     }
 
     @Override
@@ -115,8 +115,8 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public boolean contains(final K other) {
-        return hash.get(other.hashCode()).map(PersistentMap.functions.<K, V>contains(other)).getOrElse(false);
+    public boolean contains(final Object other) {
+        return hash.lookup(other.hashCode()).map(PersistentMap.functions.<K, V>contains(other)).getOrElse(false);
     }
 
     @Override

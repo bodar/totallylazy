@@ -21,10 +21,7 @@ public interface PersistentSortedSet<T> extends PersistentSet<T>, Sorted<T>, Ind
     PersistentSortedSet<T> cons(T head);
 
     @Override
-    PersistentSortedSet<T> put(T value);
-
-    @Override
-    PersistentSortedSet<T> remove(T value);
+    PersistentSortedSet<T> delete(T value);
 
     @Override
     PersistentSortedSet<T> filter(Predicate<? super T> predicate);
