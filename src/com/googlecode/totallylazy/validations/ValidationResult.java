@@ -5,7 +5,6 @@ import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.ReducerFunction;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.collections.PersistentMap;
@@ -39,7 +38,7 @@ public class ValidationResult {
     }
 
     public Sequence<String> messages(String key) {
-        return messages.get(key).getOrElse(empty(String.class));
+        return messages.lookup(key).getOrElse(empty(String.class));
     }
 
     /**
@@ -59,7 +58,7 @@ public class ValidationResult {
         Sequence<String> newMessages = messages(key).join(messages);
         if(newMessages.isEmpty())
             return this;
-        return new ValidationResult(this.messages.put(key, newMessages));
+        return new ValidationResult(this.messages.insert(key, newMessages));
     }
 
     public ValidationResult add(String key, String message) {
@@ -75,7 +74,7 @@ public class ValidationResult {
     }
 
     public ValidationResult remove(String key) {
-        return new ValidationResult(messages.remove(key));
+        return new ValidationResult(messages.delete(key));
     }
 
     public boolean succeeded() {

@@ -24,12 +24,12 @@ public class TreeListTest {
 
     @Test
     public void canLookupByIndex() throws Exception {
-        assertThat(TreeList.<String>treeList().cons("Dan").cons("Matt").index(0), is("Matt"));
+        assertThat(TreeList.<String>treeList().cons("Dan").cons("Matt").get(0), is("Matt"));
     }
 
     @Test
     public void canAddAnElementOntoTheEnd() throws Exception {
-        assertThat(TreeList.<String>treeList().add("Dan").add("Matt"), hasExactly("Dan", "Matt"));
+        assertThat(TreeList.<String>treeList().append("Dan").append("Matt"), hasExactly("Dan", "Matt"));
     }
 
     @Test
@@ -51,6 +51,6 @@ public class TreeListTest {
 
     @Test
     public void supportsRemoveAll() throws Exception {
-        assertThat(treeList(1, 2, 3, 4, 5, 6).removeAll(sequence(3, 4)), hasExactly(1, 2, 5, 6));
+        assertThat(treeList(1, 2, 3, 4, 5, 6).deleteAll(sequence(3, 4)), hasExactly(1, 2, 5, 6));
     }
 }

@@ -16,7 +16,6 @@ import java.util.concurrent.ConcurrentMap;
 
 import static com.googlecode.totallylazy.Atomic.constructors.atomic;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Sequences.remove;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -55,7 +54,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public V get(Object key) {
-        return map().get(key(key)).getOrNull();
+        return map().lookup(key(key)).getOrNull();
     }
 
     @Override
@@ -125,7 +124,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
             @Override
             public Pair<PersistentMap<K, V>, V> call(PersistentMap<K, V> map) throws Exception {
                 if (!map.contains(key)) return put(map, key, value);
-                return pair(map, map.get(key).getOrNull());
+                return pair(map, map.lookup(key).getOrNull());
             }
         });
     }
@@ -136,7 +135,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
             @Override
             public Pair<PersistentMap<K, V>, Boolean> call(PersistentMap<K, V> map) throws Exception {
                 K key = key(rawKey);
-                if (map.get(key).contains(Unchecked.<V>cast(value))) return pair(map.remove(key), true);
+                if (map.lookup(key).contains(Unchecked.<V>cast(value))) return pair(map.delete(key), true);
                 return pair(map, false);
             }
         });
@@ -148,7 +147,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
             @Override
             public Pair<PersistentMap<K, V>, Boolean> call(PersistentMap<K, V> map) throws Exception {
                 K key = key(rawKey);
-                if (map.get(key).contains(Unchecked.<V>cast(oldValue))) return pair(map.put(key, newValue), true);
+                if (map.lookup(key).contains(Unchecked.<V>cast(oldValue))) return pair(map.insert(key, newValue), true);
                 return pair(map, false);
             }
         });

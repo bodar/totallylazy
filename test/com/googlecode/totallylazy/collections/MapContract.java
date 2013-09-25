@@ -65,14 +65,14 @@ public abstract class MapContract {
     @Test
     public void canGet() throws Exception {
         PersistentMap<Integer, String> map = map(1, "Dan", 2, "Ray", 3, "Stu");
-        assertThat(map.get(2), is(some("Ray")));
-        assertThat(map.get(4), is(none(String.class)));
+        assertThat(map.lookup(2), is(some("Ray")));
+        assertThat(map.lookup(4), is(none(String.class)));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void canPut() throws Exception {
-        PersistentMap<Integer, String> map = map(1, "Dan").put(3, "Stu").put(2, "Ray");
+        PersistentMap<Integer, String> map = map(1, "Dan").insert(3, "Stu").insert(2, "Ray");
         assertThat(map, containsInAnyOrder(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
     }
 
@@ -80,16 +80,16 @@ public abstract class MapContract {
     @SuppressWarnings("unchecked")
     public void canRemove() throws Exception {
         final PersistentMap<Integer, String> map = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray");
-        assertThat(map.remove(4), containsInAnyOrder(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
-        assertThat(map.remove(3), containsInAnyOrder(pair(4, "Alex"), pair(1, "Dan"), pair(2, "Ray")));
-        assertThat(map.remove(2), containsInAnyOrder(pair(4, "Alex"), pair(1, "Dan"), pair(3, "Stu")));
-        assertThat(map.remove(1), containsInAnyOrder(pair(4, "Alex"), pair(3, "Stu"), pair(2, "Ray")));
-        assertThat(map.remove(0), is(map));
+        assertThat(map.delete(4), containsInAnyOrder(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map.delete(3), containsInAnyOrder(pair(4, "Alex"), pair(1, "Dan"), pair(2, "Ray")));
+        assertThat(map.delete(2), containsInAnyOrder(pair(4, "Alex"), pair(1, "Dan"), pair(3, "Stu")));
+        assertThat(map.delete(1), containsInAnyOrder(pair(4, "Alex"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map.delete(0), is(map));
     }
 
     @Test
     public void putReplacesValuesWithSameKey() throws Exception {
-        PersistentMap<Integer, String> map = map(1, "Dan").put(3, "Stu").put(1, "Ray");
+        PersistentMap<Integer, String> map = map(1, "Dan").insert(3, "Stu").insert(1, "Ray");
         assertThat(map, hasExactly(pair(1, "Ray"), pair(3, "Stu")));
     }
 
@@ -166,7 +166,7 @@ public abstract class MapContract {
     public void supportsIsEmpty() throws Exception {
         assertThat(empty(Integer.class, String.class).isEmpty(), is(true));
         assertThat(map(1,"2").isEmpty(), is(false));
-        assertThat(map(1,"2").remove(1).isEmpty(), is(true));
+        assertThat(map(1,"2").delete(1).isEmpty(), is(true));
     }
 
     @Test

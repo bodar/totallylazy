@@ -185,7 +185,7 @@ public class Files {
     public static Function1<File, Iterable<File>> recursiveFiles() {
         return new Function1<File, Iterable<File>>() {
             public Iterable<File> call(File file) throws Exception {
-                return file.isDirectory() ? recursiveFiles(file).add(file) : sequence(file);
+                return file.isDirectory() ? recursiveFiles(file).append(file) : sequence(file);
             }
         };
     }

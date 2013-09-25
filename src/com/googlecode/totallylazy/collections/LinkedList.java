@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sets;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Iterator;
@@ -22,7 +23,7 @@ import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 
-public abstract class LinkedList<T> implements PersistentList<T> {
+public abstract class LinkedList<T> extends AbstractList<T> implements PersistentList<T> {
     static final Empty EMPTY = new Empty();
 
     static <T> LinkedList<T> emptyList() {
@@ -49,17 +50,17 @@ public abstract class LinkedList<T> implements PersistentList<T> {
     }
 
     @Override
-    public PersistentList<T> removeAll(Iterable<T> values) {
-        return filter(not(in(set(values))));
+    public PersistentList<T> deleteAll(Iterable<T> values) {
+        return filter(not(in(Sets.set(values))));
     }
 
     @Override
-    public PersistentList<T> add(T value) {
-        return constructors.list(toSequence().add(value));
+    public PersistentList<T> append(T value) {
+        return PersistentList.constructors.list(toSequence().append(value));
     }
 
     @Override
-    public List<T> toList() {
+    public List<T> toMutableList() {
         return toSequence().toList();
     }
 
@@ -93,7 +94,7 @@ public abstract class LinkedList<T> implements PersistentList<T> {
         }
 
         @Override
-        public PersistentList<T> remove(T value) {
+        public PersistentList<T> delete(T value) {
             return this;
         }
 
@@ -123,7 +124,7 @@ public abstract class LinkedList<T> implements PersistentList<T> {
         }
 
         @Override
-        public boolean contains(T other) {
+        public boolean contains(Object other) {
             return false;
         }
 
@@ -143,12 +144,12 @@ public abstract class LinkedList<T> implements PersistentList<T> {
         }
 
         @Override
-        public T index(int i) throws IndexOutOfBoundsException {
+        public T get(int i) throws IndexOutOfBoundsException {
             throw new IndexOutOfBoundsException();
         }
 
         @Override
-        public int indexOf(T t) {
+        public int indexOf(Object t) {
             return -1;
         }
     }
@@ -189,10 +190,10 @@ public abstract class LinkedList<T> implements PersistentList<T> {
         }
 
         @Override
-        public PersistentList<T> remove(T value) {
+        public PersistentList<T> delete(T value) {
             if(useRecursion()){
                 if(head.equals(value)) return tail;
-                return cons(head, tail.remove(value));
+                return cons(head, tail.delete(value));
             }
             ListZipper<T> zipper = zipper(this);
             while (!zipper.isBottom()){
@@ -223,7 +224,7 @@ public abstract class LinkedList<T> implements PersistentList<T> {
                 if(predicate.matches(head)) return cons(head, tail().filter(predicate));
                 return tail().filter(predicate);
             }
-            return constructors.list(toSequence().filter(predicate));
+            return PersistentList.constructors.list(toSequence().filter(predicate));
         }
 
         @Override
@@ -236,7 +237,7 @@ public abstract class LinkedList<T> implements PersistentList<T> {
         }
 
         @Override
-        public boolean contains(T other) {
+        public boolean contains(Object other) {
             return toSequence().contains(other);
         }
 
@@ -266,13 +267,13 @@ public abstract class LinkedList<T> implements PersistentList<T> {
         }
 
         @Override
-        public T index(int i) throws IndexOutOfBoundsException {
+        public T get(int i) throws IndexOutOfBoundsException {
             if(i == 0) return head;
-            return tail().index(i -1);
+            return tail().get(i - 1);
         }
 
         @Override
-        public int indexOf(T t) {
+        public int indexOf(Object t) {
             if(t.equals(head)) return 0;
             return 1 + tail.indexOf(t);
         }

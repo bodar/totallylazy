@@ -2,7 +2,6 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.comparators.Comparators;
 
-import javax.sound.midi.VoiceStatus;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.Comparator;
@@ -46,7 +45,7 @@ public final class Callables {
     public static <T> UnaryFunction<Sequence<T>> reduceAndShift(final Callable2<? super T, ? super T, ? extends T> action) {
         return new UnaryFunction<Sequence<T>>() {
             public final Sequence<T> call(final Sequence<T> values) throws Exception {
-                return values.tail().add(values.reduceLeft(action));
+                return values.tail().append(values.reduceLeft(action));
             }
         };
     }

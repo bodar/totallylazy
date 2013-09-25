@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Files;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;
@@ -11,7 +10,6 @@ import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -20,7 +18,6 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.collections.PersistentSortedMapTest.asPair;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -118,7 +115,7 @@ public class MapPerformanceTest {
         return new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                return map.get(keys().head());
+                return map.lookup(keys().head());
             }
         };
     }
@@ -156,7 +153,7 @@ public class MapPerformanceTest {
         return new Callable<PersistentMap<Integer, Integer>>() {
             @Override
             public PersistentMap<Integer, Integer> call() throws Exception {
-                return persistent.remove(keys().head());
+                return persistent.delete(keys().head());
             }
         };
     }
@@ -209,7 +206,7 @@ public class MapPerformanceTest {
             @Override
             public PersistentMap<Integer, Integer> call() throws Exception {
                 Integer head = keys().head();
-                return avlTree.put(head, head);
+                return avlTree.insert(head, head);
             }
         };
     }

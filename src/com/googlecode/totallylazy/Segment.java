@@ -13,17 +13,17 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public interface Segment<T> {
-    Segment<T> empty();
-
     boolean isEmpty();
 
     T head() throws NoSuchElementException;
 
     Option<T> headOption();
 
-    Segment<T> tail() throws NoSuchElementException;
+    Segment<T> empty();
 
     Segment<T> cons(T head);
+
+    Segment<T> tail() throws NoSuchElementException;
 
     <C extends Segment<T>> C joinTo(C rest);
 

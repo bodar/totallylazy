@@ -111,8 +111,8 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     }
 
     @Override
-    public Segment<T> empty() {
-        return Segment.constructors.emptySegment();
+    public Sequence<T> empty() {
+        return Sequences.empty();
     }
 
     @Override

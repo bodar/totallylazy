@@ -2,17 +2,15 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Unchecked;
 
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Functions.call;
@@ -98,19 +96,19 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
-    public Option<V> get(K other) {
+    public Option<V> lookup(K other) {
         int difference = difference(other);
         if (difference == 0) return Option.option(value);
-        if (difference < 0) return left.get(other);
-        return right.get(other);
+        if (difference < 0) return left.lookup(other);
+        return right.lookup(other);
     }
 
     @Override
-    public Self put(K key, V value) {
+    public Self insert(K key, V value) {
         int difference = difference(key);
         if (difference == 0) return create(comparator, key, value, left, right);
-        if (difference < 0) return create(comparator, this.key, this.value, left.put(key, value), right);
-        return create(comparator, this.key, this.value, left, right.put(key, value));
+        if (difference < 0) return create(comparator, this.key, this.value, left.insert(key, value), right);
+        return create(comparator, this.key, this.value, left, right.insert(key, value));
     }
 
     @Override
@@ -137,7 +135,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
 
     @Override
     public <S> S fold(S seed, Callable2<? super S, ? super Pair<K, V>, ? extends S> callable) {
-        return right.fold(left.fold(call(callable, seed, pair()), callable), callable);
+        return right.fold(left.fold(Functions.call(callable, seed, pair()), callable), callable);
     }
 
     @Override
@@ -146,7 +144,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
-    public Self remove(K key) {
+    public Self delete(K key) {
         int difference = difference(key);
         if (difference == 0) {
             if (left.isEmpty()) return right;
@@ -156,8 +154,8 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
             Pair<K, V> newRoot = pair.second();
             return create(comparator, newRoot.first(), newRoot.second(), newLeft, right);
         }
-        if (difference < 0) return create(comparator, this.key, value, left.remove(key), right);
-        return create(comparator, this.key, value, left, right.remove(key));
+        if (difference < 0) return create(comparator, this.key, value, left.delete(key), right);
+        return create(comparator, this.key, value, left, right.delete(key));
     }
 
     @Override
@@ -193,12 +191,12 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
 
     @Override
     public Self cons(Pair<K, V> newValue) {
-        return put(newValue.first(), newValue.second());
+        return insert(newValue.first(), newValue.second());
     }
 
     @Override
-    public boolean contains(K other) {
-        int difference = difference(other);
+    public boolean contains(Object other) {
+        int difference = difference(Unchecked.<K>cast(other));
         if (difference == 0) return true;
         if (difference < 0) return left.contains(other);
         return right.contains(other);
@@ -260,15 +258,15 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
-    public Pair<K, V> index(int i) {
+    public Pair<K, V> get(int i) {
         if (left.size() == i) return pair();
-        if (i < left.size()) return left.index(i);
-        return right.index(i - left.size() - 1);
+        if (i < left.size()) return left.get(i);
+        return right.get(i - left.size() - 1);
     }
 
     @Override
-    public int indexOf(Pair<K, V> pair) {
-        int difference = difference(pair.first());
+    public int indexOf(Object pair) {
+        int difference = difference(Unchecked.<Pair<K,V>>cast(pair).first());
         if (difference == 0) return left.size();
         if (difference < 0) return left.indexOf(pair);
         return 1 + left.size() + right.indexOf(pair);

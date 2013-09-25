@@ -37,8 +37,8 @@ public class LinkedListTest {
 
     @Test
     public void canLookupByIndex() throws Exception {
-        assertThat(list("Dan", "Matt").index(0), is("Dan"));
-        assertThat(list("Dan", "Matt").index(1), is("Matt"));
+        assertThat(list("Dan", "Matt").get(0), is("Dan"));
+        assertThat(list("Dan", "Matt").get(1), is("Matt"));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class LinkedListTest {
 
     @Test
     public void supportsRemoveAll() throws Exception {
-        assertThat(list(1, 2, 3, 4, 5, 6).removeAll(sequence(3, 4)), hasExactly(1, 2, 5, 6));
+        assertThat(list(1, 2, 3, 4, 5, 6).deleteAll(sequence(3, 4)), hasExactly(1, 2, 5, 6));
     }
 
     @Test
@@ -97,8 +97,8 @@ public class LinkedListTest {
 
     @Test
     public void supportsRemove() throws Exception {
-        assertThat(list(1, 2, 3, 4, 5, 6).remove(3), hasExactly(1, 2, 4, 5, 6));
-        assertThat(list(1, 2, 3, 4, 5, 6).remove(6), hasExactly(1, 2, 3, 4, 5));
+        assertThat(list(1, 2, 3, 4, 5, 6).delete(3), hasExactly(1, 2, 4, 5, 6));
+        assertThat(list(1, 2, 3, 4, 5, 6).delete(6), hasExactly(1, 2, 3, 4, 5));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class LinkedListTest {
         TimeReport report = TimeReport.time(1000000, new Function<PersistentList<Number>>() {
             @Override
             public PersistentList<Number> call() throws Exception {
-                return range.remove(3);
+                return range.delete(3);
             }
         });
         System.out.println(report);
@@ -128,7 +128,7 @@ public class LinkedListTest {
 
     @Test
     public void supportsAdd() throws Exception {
-        assertThat(list(1).add(2), hasExactly(1, 2));
+        assertThat(list(1).append(2), hasExactly(1, 2));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class LinkedListTest {
 
     @Test
     public void supportsToList() throws Exception {
-        final List<Integer> actual = list(1).toList();
+        final List<Integer> actual = list(1).toMutableList();
         final List<Integer> expected = new ArrayList<Integer>() {{
             add(1);
         }};

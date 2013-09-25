@@ -49,12 +49,12 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> ext
     }
 
     @Override
-    public None<V> get(K key) {
+    public None<V> lookup(K key) {
         return None.none();
     }
 
     @Override
-    public Self put(K key, V value) {
+    public Self insert(K key, V value) {
         return cons(Pair.pair(key, value));
     }
 
@@ -84,7 +84,7 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> ext
     }
 
     @Override
-    public Self remove(K key) {
+    public Self delete(K key) {
         return cast(this);
     }
 
@@ -134,7 +134,7 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> ext
     }
 
     @Override
-    public boolean contains(K other) {
+    public boolean contains(Object other) {
         return false;
     }
 
@@ -189,12 +189,12 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> ext
     }
 
     @Override
-    public Pair<K, V> index(int i) {
+    public Pair<K, V> get(int i) {
         throw new IndexOutOfBoundsException();
     }
 
     @Override
-    public int indexOf(Pair<K, V> pair) {
+    public int indexOf(Object pair) {
         return -1;
     }
 

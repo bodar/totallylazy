@@ -10,6 +10,7 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sets;
 
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +24,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.numbers.Numbers.intValue;
 
-public class TreeList<T> implements PersistentList<T>, RandomAccess {
+public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, RandomAccess {
     private final PersistentSortedMap<Integer, T> map;
 
     private TreeList(PersistentSortedMap<Integer, T> map) {this.map = map;}
@@ -86,7 +87,7 @@ public class TreeList<T> implements PersistentList<T>, RandomAccess {
     @Override
     public T head() throws NoSuchElementException {
         if(map.isEmpty()) throw new NoSuchElementException();
-        return map.index(0).second();
+        return map.get(0).second();
     }
 
     @Override
@@ -98,7 +99,7 @@ public class TreeList<T> implements PersistentList<T>, RandomAccess {
 
     @Override
     public TreeList<T> tail() throws NoSuchElementException {
-        return treeList(map.remove(map.first().first()));
+        return treeList(map.delete(map.first().first()));
     }
 
     @Override
@@ -108,23 +109,23 @@ public class TreeList<T> implements PersistentList<T>, RandomAccess {
     }
 
     @Override
-    public TreeList<T> add(T value) {
+    public TreeList<T> append(T value) {
         int index = map.isEmpty() ? 0 : map.last().first();
         return treeList(map.cons(Pair.pair(++index, value)));
     }
 
     @Override
-    public TreeList<T> remove(T value) {
-        return treeList(toSequence().remove(value));
+    public TreeList<T> delete(T value) {
+        return treeList(toSequence().delete(value));
     }
 
     @Override
-    public TreeList<T> removeAll(Iterable<T> values) {
-        return filter(not(in(set(values))));
+    public TreeList<T> deleteAll(Iterable<T> values) {
+        return filter(not(in(values)));
     }
 
     @Override
-    public List<T> toList() {
+    public List<T> toMutableList() {
         return toSequence().toList();
     }
 
@@ -154,7 +155,7 @@ public class TreeList<T> implements PersistentList<T>, RandomAccess {
     }
 
     @Override
-    public boolean contains(T other) {
+    public boolean contains(Object other) {
         return toSequence().contains(other);
     }
 
@@ -169,12 +170,12 @@ public class TreeList<T> implements PersistentList<T>, RandomAccess {
     }
 
     @Override
-    public T index(int i) throws IndexOutOfBoundsException {
-        return map.index(i).second();
+    public T get(int i) throws IndexOutOfBoundsException {
+        return map.get(i).second();
     }
 
     @Override
-    public int indexOf(T t) {
+    public int indexOf(Object t) {
         return toSequence().indexOf(t);
     }
 

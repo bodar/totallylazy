@@ -27,7 +27,7 @@ public class Triple<F, S, T> extends Pair<F, S> implements Third<T> {
 
     @Override
     public Sequence<Object> values() {
-        return super.values().add(third());
+        return super.values().append(third());
     }
 
     public static <A, B, C, D>  Function2<Triple<A, B, C>, D, Triple<B, C, D>> leftShift() {

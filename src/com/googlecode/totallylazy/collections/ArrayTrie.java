@@ -49,7 +49,7 @@ public class ArrayTrie<K, V> implements Value<V> {
 
     public ArrayTrie<K, V> put(K[] key, V value) {
         if (Arrays.isEmpty(key)) return trie(option(value), children);
-        return trie(this.value, children.put(head(key), childFor(key).getOrElse(ArrayTrie.<K, V>trie()).put(tail(key), value)));
+        return trie(this.value, children.insert(head(key), childFor(key).getOrElse(ArrayTrie.<K, V>trie()).put(tail(key), value)));
     }
 
     public ArrayTrie<K, V> remove(K[] key) {
@@ -64,5 +64,5 @@ public class ArrayTrie<K, V> implements Value<V> {
         return value.isEmpty() && children.isEmpty();
     }
 
-    private Option<ArrayTrie<K, V>> childFor(K[] key) {return children.get(head(key));}
+    private Option<ArrayTrie<K, V>> childFor(K[] key) {return children.lookup(head(key));}
 }
