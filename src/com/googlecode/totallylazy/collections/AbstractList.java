@@ -5,11 +5,6 @@ import java.util.ListIterator;
 
 public abstract class AbstractList<T> extends ReadOnlyList<T> implements PersistentList<T> {
     @Override
-    public int indexOf(Object o) {
-        throw new UnsupportedOperationException("TODO");
-    }
-
-    @Override
     public int lastIndexOf(Object o) {
         throw new UnsupportedOperationException("TODO");
     }

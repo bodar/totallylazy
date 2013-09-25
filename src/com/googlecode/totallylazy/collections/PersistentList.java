@@ -38,14 +38,16 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
 
     PersistentList<T> deleteAll(Iterable<T> values);
 
-    List<T> toMutableList();
-
-    Sequence<T> toSequence();
-
     @Override
     <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable);
 
     PersistentList<T> filter(Predicate<? super T> predicate);
+
+    List<T> toMutableList();
+
+    Sequence<T> toSequence();
+
+//    Zipper<T> zipper();
 
     /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
     @Override @Deprecated
