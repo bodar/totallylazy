@@ -1,21 +1,25 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.annotations.tailrec;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.collections.TreeMap.functions;
 import static com.googlecode.totallylazy.collections.TreeZipper.Breadcrumb.breadcrumb;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.left;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.right;
+import static com.googlecode.totallylazy.collections.TreeZipper.functions.direction;
 import static java.lang.String.format;
 
-public class TreeZipper<K, V> {
+public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
     public final TreeMap<K, V> focus;
     public final PersistentList<Breadcrumb<K, V>> breadcrumbs;
 
@@ -78,14 +82,34 @@ public class TreeZipper<K, V> {
 
     @tailrec
     public TreeZipper<K, V> first() {
-        if(focus.left().isEmpty()) return this;
+        if (isFirst()) return this;
         return left().first();
     }
 
     @tailrec
     public TreeZipper<K, V> last() {
-        if(focus.right().isEmpty()) return this;
+        if (isLast()) return this;
         return right().last();
+    }
+
+    @Override
+    public boolean isFirst() {
+        return focus.left().isEmpty();
+    }
+
+    @Override
+    public boolean isLast() {
+        return focus.right().isEmpty();
+    }
+
+    @Override
+    public int index() {
+        return focus.indexOf(value()) + breadcrumbs.filter(where(direction, is(right))).fold(0, new Function2<Integer, Breadcrumb<K, V>, Integer>() {
+            @Override
+            public Integer call(Integer integer, Breadcrumb<K, V> breadcrumb) throws Exception {
+                return integer + breadcrumb.other.size() + 1;
+            }
+        });
     }
 
     public boolean isTop() {
@@ -93,7 +117,7 @@ public class TreeZipper<K, V> {
     }
 
     public TreeZipper<K, V> next() {
-        if(focus.right().isEmpty()) return backtrack(Direction.right).up();
+        if (focus.right().isEmpty()) return backtrack(right).up();
         return right().first();
     }
 
@@ -106,7 +130,7 @@ public class TreeZipper<K, V> {
     }
 
     public TreeZipper<K, V> previous() {
-        if(focus.left().isEmpty()) return backtrack(Direction.left).up();
+        if (focus.left().isEmpty()) return backtrack(left).up();
         return left().last();
     }
 
@@ -120,7 +144,7 @@ public class TreeZipper<K, V> {
 
     @tailrec
     private TreeZipper<K, V> backtrack(final Direction direction) {
-        if(breadcrumbs.head().direction.equals(direction)) return up().backtrack(direction);
+        if (breadcrumbs.head().direction.equals(direction)) return up().backtrack(direction);
         return this;
     }
 
@@ -134,6 +158,11 @@ public class TreeZipper<K, V> {
 
     public Pair<K, V> pair() {
         return Pair.pair(focus.key(), focus.value());
+    }
+
+    @Override
+    public Pair<K, V> value() {
+        return pair();
     }
 
     public enum Direction {
@@ -173,4 +202,14 @@ public class TreeZipper<K, V> {
                     ((Breadcrumb) obj).other.equals(other);
         }
     }
+
+    public static class functions extends TreeMap.functions {
+        public static Mapper<Breadcrumb<?, ?>, Direction> direction = new Mapper<Breadcrumb<?, ?>, Direction>() {
+            @Override
+            public Direction call(Breadcrumb<?, ?> breadcrumb) throws Exception {
+                return breadcrumb.direction;
+            }
+        };
+    }
+
 }
