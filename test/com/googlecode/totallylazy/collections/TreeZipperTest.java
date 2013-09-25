@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
@@ -181,5 +183,27 @@ public class TreeZipperTest {
         }
     }
 
-
+    @Test
+    public void supportsIndex() throws Exception {
+        TreeZipper<String, String> zipper = TreeZipper.zipper(avlTree("A", "B").insert("C", "D").
+                insert("E", "F").insert("G", "H").
+                insert("I", "J").insert("K", "L")).first();
+        Assert.assertThat(zipper.value(), Matchers.is(pair("A", "B")));
+        Assert.assertThat(zipper.index(), Matchers.is(0));
+        zipper = zipper.next();
+        Assert.assertThat(zipper.value(), Matchers.is(pair("C", "D")));
+        Assert.assertThat(zipper.index(), Matchers.is(1));
+        zipper = zipper.next();
+        Assert.assertThat(zipper.value(), Matchers.is(pair("E", "F")));
+        Assert.assertThat(zipper.index(), Matchers.is(2));
+        zipper = zipper.next();
+        Assert.assertThat(zipper.value(), Matchers.is(pair("G", "H")));
+        Assert.assertThat(zipper.index(), Matchers.is(3));
+        zipper = zipper.next();
+        Assert.assertThat(zipper.value(), Matchers.is(pair("I", "J")));
+        Assert.assertThat(zipper.index(), Matchers.is(4));
+        zipper = zipper.next();
+        Assert.assertThat(zipper.value(), Matchers.is(pair("K", "L")));
+        Assert.assertThat(zipper.index(), Matchers.is(5));
+    }
 }
