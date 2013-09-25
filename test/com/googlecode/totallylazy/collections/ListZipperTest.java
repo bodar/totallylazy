@@ -91,4 +91,13 @@ public class ListZipperTest {
         assertThat(zipper.value(), is("D"));
         assertThat(zipper.index(), is(3));
     }
+
+    @Test
+    public void canSkipToIndex() throws Exception {
+        ListZipper<String> zipper = zipper(list("A", "B", "C", "D"));
+        assertThat(zipper.index(3).value(), is("D"));
+        assertThat(zipper.index(0).value(), is("A"));
+        assertThat(zipper.index(2).value(), is("C"));
+        assertThat(zipper.index(1).value(), is("B"));
+    }
 }

@@ -112,6 +112,14 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
         });
     }
 
+    @Override @tailrec
+    public TreeZipper<K, V> index(int index) {
+        int position = index();
+        if (position == index) return this;
+        if (position < index) return next().index(index);
+        return previous().index(index);
+    }
+
     public boolean isTop() {
         return breadcrumbs.isEmpty();
     }

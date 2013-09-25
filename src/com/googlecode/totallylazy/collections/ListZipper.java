@@ -83,6 +83,14 @@ public class ListZipper<T> implements Zipper<T> {
         return breadcrumbs.size();
     }
 
+    @Override @tailrec
+    public ListZipper<T> index(int index) {
+        int position = index();
+        if (position == index) return this;
+        if (position < index) return next().index(index);
+        return previous().index(index);
+    }
+
     @Override
     public int hashCode() {
         return focus.hashCode() * breadcrumbs.hashCode();
