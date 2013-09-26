@@ -56,6 +56,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public abstract <B> Option<B> map(Callable1<? super A, ? extends B> callable);
 
+    public abstract Option<A> each(Callable1<? super A, ?> callable);
+
     public abstract <B> Option<B> flatMap(Callable1<? super A, ? extends Option<? extends B>> callable);
 
     public abstract Option<A> filter(Predicate<? super A> predicate);

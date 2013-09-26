@@ -38,6 +38,8 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
 
     PersistentList<T> deleteAll(Iterable<T> values);
 
+    PersistentList<T> reverse();
+
     @Override
     <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable);
 
@@ -115,6 +117,14 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
             PersistentList<T> reverse = empty();
             while (iterator.hasNext()) {
                 reverse = cons(iterator.next(), reverse);
+            }
+            return reverse;
+        }
+
+        public static <T> PersistentList<T> reverse(PersistentList<T> list) {
+            PersistentList<T> reverse = list.empty();
+            for (T element : list) {
+                reverse = reverse.cons(element);
             }
             return reverse;
         }

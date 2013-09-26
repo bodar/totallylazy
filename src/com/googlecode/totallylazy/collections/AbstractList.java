@@ -23,4 +23,9 @@ public abstract class AbstractList<T> extends ReadOnlyList<T> implements Persist
     public List<T> subList(int fromIndex, int toIndex) {
         throw new UnsupportedOperationException("TODO");
     }
+
+    @Override
+    public PersistentList<T> reverse() {
+        return PersistentList.constructors.reverse(this);
+    }
 }
