@@ -27,8 +27,7 @@ public class ZipperListIterator<T> extends ReadOnlyListIterator<T> {
 
     @Override
     public T next() {
-        if (!hasNext()) throw new NoSuchElementException();
-        if (lastDirection.contains(Direction.next)) zipper.nextOption().each(update);
+        if (lastDirection.contains(Direction.next)) zipper = zipper.next();
         lastDirection = some(Direction.next);
         return zipper.value();
     }
@@ -40,26 +39,18 @@ public class ZipperListIterator<T> extends ReadOnlyListIterator<T> {
 
     @Override
     public T previous() {
-        if (!hasPrevious()) throw new NoSuchElementException();
-        if (lastDirection.contains(Direction.previous)) zipper.previousOption().each(update);
+        if (lastDirection.contains(Direction.previous)) zipper = zipper.previous();
         lastDirection = some(Direction.previous);
         return zipper.value();
     }
 
-    private final Block<Zipper<T>> update = new Block<Zipper<T>>() {
-        @Override
-        protected void execute(Zipper<T> z) throws Exception {
-            zipper = z;
-        }
-    };
-
     @Override
     public int nextIndex() {
-        throw new UnsupportedOperationException();
+        return zipper.index() + (lastDirection.contains(Direction.next) ? 1 : 0);
     }
 
     @Override
     public int previousIndex() {
-        throw new UnsupportedOperationException();
+        return zipper.index() - (lastDirection.contains(Direction.next) ? 0 : 1);
     }
 }

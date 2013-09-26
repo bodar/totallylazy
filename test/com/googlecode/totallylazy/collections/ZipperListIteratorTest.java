@@ -18,7 +18,6 @@ public class ZipperListIteratorTest {
         ListIterator<Character> listIterator = new ZipperListIterator<Character>(zipper(values));
 
         for (int i = 0; i < values.size(); i++) {
-            System.out.println("i = " + i);
             assertThat(listIterator.hasNext(), is(expected.hasNext()));
             assertThat(listIterator.next(), is(expected.next()));
         }
@@ -33,7 +32,6 @@ public class ZipperListIteratorTest {
         ListIterator<Character> listIterator = new ZipperListIterator<Character>(zipper(values).last());
 
         for (int i = 0; i < values.size(); i++) {
-            System.out.println("i = " + i);
             assertThat(listIterator.hasPrevious(), is(expected.hasNext()));
             assertThat(listIterator.previous(), is(expected.next()));
         }
@@ -43,7 +41,7 @@ public class ZipperListIteratorTest {
 
     @Test
     public void canGoBackwardsAndForwards() throws Exception {
-        PersistentList<Character> values = list('a', 'b', 'c', 'd', 'e');
+        PersistentList<Character> values = list('a', 'b', 'c');
         ListIterator<Character> listIterator = new ZipperListIterator<Character>(zipper(values));
 
         assertThat(listIterator.next(), is('a'));
@@ -54,5 +52,46 @@ public class ZipperListIteratorTest {
         assertThat(listIterator.previous(), is('c'));
         assertThat(listIterator.previous(), is('b'));
         assertThat(listIterator.previous(), is('a'));
+    }
+
+    @Test
+    public void supportsIndex() throws Exception {
+        PersistentList<Character> values = list('a', 'b', 'c');
+        ListIterator<Character> listIterator = new ZipperListIterator<Character>(zipper(values));
+
+        assertThat(listIterator.nextIndex(), is(0));
+        assertThat(listIterator.previousIndex(), is(-1));
+
+        assertThat(listIterator.next(), is('a'));
+        assertThat(listIterator.nextIndex(), is(1));
+        assertThat(listIterator.previousIndex(), is(0));
+
+        assertThat(listIterator.next(), is('b'));
+        assertThat(listIterator.nextIndex(), is(2));
+        assertThat(listIterator.previousIndex(), is(1));
+
+        assertThat(listIterator.next(), is('c'));
+        assertThat(listIterator.nextIndex(), is(3));
+        assertThat(listIterator.previousIndex(), is(2));
+
+        assertThat(listIterator.previous(), is('c'));
+        assertThat(listIterator.nextIndex(), is(2));
+        assertThat(listIterator.previousIndex(), is(1));
+
+        assertThat(listIterator.next(), is('c'));
+        assertThat(listIterator.nextIndex(), is(3));
+        assertThat(listIterator.previousIndex(), is(2));
+
+        assertThat(listIterator.previous(), is('c'));
+        assertThat(listIterator.nextIndex(), is(2));
+        assertThat(listIterator.previousIndex(), is(1));
+
+        assertThat(listIterator.previous(), is('b'));
+        assertThat(listIterator.nextIndex(), is(1));
+        assertThat(listIterator.previousIndex(), is(0));
+
+        assertThat(listIterator.previous(), is('a'));
+        assertThat(listIterator.nextIndex(), is(0));
+        assertThat(listIterator.previousIndex(), is(-1));
     }
 }
