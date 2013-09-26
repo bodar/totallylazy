@@ -198,7 +198,7 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
             ListZipper<T> zipper = zipper(this);
             while (!zipper.isBottom()){
                 if(zipper.current().equals(value)) return zipper.delete().toList();
-                zipper = zipper.right();
+                zipper = zipper.next();
             }
             return this;
         }

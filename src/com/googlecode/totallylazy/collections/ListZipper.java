@@ -2,8 +2,11 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.annotations.tailrec;
 
+import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.collections.PersistentList.functions;
 
 public class ListZipper<T> implements Zipper<T> {
@@ -23,22 +26,33 @@ public class ListZipper<T> implements Zipper<T> {
         return new ListZipper<T>(focus, breadcrumbs);
     }
 
-    public ListZipper<T> right() {
-        return zipper(focus.tail(), breadcrumbs.cons(focus.head()));
+    public Option<ListZipper<T>> nextOption() {
+        if(isLast()) return none();
+        return focus.headOption().map(new Mapper<T, ListZipper<T>>() {
+            @Override
+            public ListZipper<T> call(T t) throws Exception {
+                return zipper(focus.tail(), breadcrumbs.cons(t));
+            }
+        });
     }
 
-    public ListZipper<T> left() {
-        return zipper(focus.cons(breadcrumbs.head()), breadcrumbs.tail());
+    public Option<ListZipper<T>> previousOption() {
+        return breadcrumbs.headOption().map(new Mapper<T, ListZipper<T>>() {
+            @Override
+            public ListZipper<T> call(T t) throws Exception {
+                return zipper(focus.cons(t), breadcrumbs.tail());
+            }
+        });
     }
 
     @Override
     public ListZipper<T> next() {
-        return right();
+        return nextOption().get();
     }
 
     @Override
     public ListZipper<T> previous() {
-        return left();
+        return previousOption().get();
     }
 
     @Override
@@ -75,7 +89,7 @@ public class ListZipper<T> implements Zipper<T> {
 
     @Override
     public T value() {
-        return current();
+        return focus.head();
     }
 
     @Override
@@ -83,7 +97,7 @@ public class ListZipper<T> implements Zipper<T> {
         return breadcrumbs.size();
     }
 
-    @Override @tailrec
+    @Override
     public ListZipper<T> index(int index) {
         int position = index();
         if (position == index) return this;
@@ -131,7 +145,7 @@ public class ListZipper<T> implements Zipper<T> {
     }
 
     public boolean isBottom() {
-        return focus.isEmpty();
+        return focus.tail().isEmpty();
     }
 
     public boolean isTop() {

@@ -112,7 +112,7 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
         });
     }
 
-    @Override @tailrec
+    @Override
     public TreeZipper<K, V> index(int index) {
         int position = index();
         if (position == index) return this;
@@ -170,7 +170,7 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
 
     @Override
     public Pair<K, V> value() {
-        return pair();
+        return focus.head();
     }
 
     public enum Direction {
