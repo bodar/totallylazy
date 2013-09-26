@@ -3,6 +3,8 @@ package com.googlecode.totallylazy.collections;
 import java.util.List;
 import java.util.ListIterator;
 
+import static com.googlecode.totallylazy.collections.ListZipper.zipper;
+
 public abstract class AbstractList<T> extends ReadOnlyList<T> implements PersistentList<T> {
     @Override
     public int lastIndexOf(Object o) {
@@ -11,12 +13,12 @@ public abstract class AbstractList<T> extends ReadOnlyList<T> implements Persist
 
     @Override
     public ListIterator<T> listIterator() {
-        throw new UnsupportedOperationException("TODO");
+        return new ZipperListIterator<T>(zipper(this));
     }
 
     @Override
     public ListIterator<T> listIterator(int index) {
-        throw new UnsupportedOperationException("TODO");
+        return new ZipperListIterator<T>(zipper(this).index(index));
     }
 
     @Override

@@ -1,10 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Block;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.iterators.ReadOnlyListIterator;
-
-import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
