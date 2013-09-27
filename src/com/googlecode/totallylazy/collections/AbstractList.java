@@ -11,7 +11,7 @@ import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 public abstract class AbstractList<T> extends ReadOnlyList<T> implements PersistentList<T> {
     @Override
     public int lastIndexOf(Object o) {
-        throw new UnsupportedOperationException("TODO");
+        return toMutableList().lastIndexOf(o);
     }
 
     @Override
