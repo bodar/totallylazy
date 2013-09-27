@@ -120,11 +120,6 @@ public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, R
     }
 
     @Override
-    public TreeList<T> deleteAll(Iterable<? extends T> values) {
-        return filter(not(in(values)));
-    }
-
-    @Override
     public TreeList<T> filter(Predicate<? super T> predicate) {
         return treeList(toSequence().filter(predicate));
     }
