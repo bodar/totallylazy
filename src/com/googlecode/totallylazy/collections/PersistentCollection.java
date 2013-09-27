@@ -25,6 +25,8 @@ public interface PersistentCollection<T> extends Container<T>, Collection<T>, Se
 
     Sequence<T> toSequence();
 
+    T[] toArray(Class<?> aClass);
+
     /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#cons(T)} */
     @Override @Deprecated
     boolean add(T e);
@@ -37,7 +39,7 @@ public interface PersistentCollection<T> extends Container<T>, Collection<T>, Se
     @Override @Deprecated
     boolean remove(Object o);
 
-    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#filter(Predicate)} */
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#deleteAll(Iterable)}*/
     @Override @Deprecated
     boolean removeAll(Collection<?> c);
 

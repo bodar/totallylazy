@@ -1,7 +1,9 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Unchecked;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 
 import static com.googlecode.totallylazy.Predicates.in;
@@ -12,6 +14,11 @@ public abstract class AbstractCollection<T> extends ReadOnlyCollection<T> implem
     @Override
     public Sequence<T> toSequence() {
         return sequence(this);
+    }
+
+    @Override
+    public T[] toArray(final Class<?> aClass) {
+        return toArray(Unchecked.<T[]>cast(Array.newInstance(aClass, 0)));
     }
 
     @Override
@@ -33,4 +40,5 @@ public abstract class AbstractCollection<T> extends ReadOnlyCollection<T> implem
     public PersistentCollection<T> deleteAll(Iterable<? extends T> items) {
         return filter(not(in(items)));
     }
+
 }
