@@ -49,7 +49,10 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
 
     Sequence<T> toSequence();
 
-//    Zipper<T> zipper();
+    Zipper<T> zipper();
+
+    @Override
+    PersistentList<T> subList(int fromIndex, int toIndex);
 
     /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#cons(T)} */
     @Override @Deprecated
@@ -91,7 +94,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     @Override @Deprecated
     void clear();
 
-class constructors {
+    class constructors {
         public static <T> PersistentList<T> empty() {
             return LinkedList.emptyList();
         }

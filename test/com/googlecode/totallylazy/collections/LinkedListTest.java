@@ -22,6 +22,7 @@ import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.fail;
 
 public class LinkedListTest {
     @Test
@@ -41,6 +42,20 @@ public class LinkedListTest {
         assertThat(list("Dan", "Matt", "Dan").lastIndexOf("Matt"), is(1));
         assertThat(list("Dan", "Matt", "Dan").lastIndexOf("Chris"), is(-1));
         assertThat(list().lastIndexOf("Chris"), is(-1));
+    }
+
+    @Test
+    public void supportsSubList() throws Exception {
+        PersistentList<String> all = list("Dan", "Matt", "Chris", "Tom");
+        assertThat(all.subList(2,4), is(list("Chris", "Tom")));
+        assertThat(all.subList(2,3), is(list("Chris")));
+        assertThat(all.subList(2, 2), is(PersistentList.constructors.<String>list()));
+        assertThat(PersistentList.constructors.<String>list().subList(0, 0), is(PersistentList.constructors.<String>list()));
+
+        try{
+            all.subList(2, 10);
+            fail("Should have thrown IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException ignore){ }
     }
 
     @Test
