@@ -3,6 +3,8 @@ package com.googlecode.totallylazy.collections;
 import java.util.List;
 import java.util.ListIterator;
 
+import static com.googlecode.totallylazy.Predicates.in;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 
 public abstract class AbstractList<T> extends ReadOnlyList<T> implements PersistentList<T> {
@@ -29,5 +31,15 @@ public abstract class AbstractList<T> extends ReadOnlyList<T> implements Persist
     @Override
     public PersistentList<T> reverse() {
         return PersistentList.constructors.reverse(this);
+    }
+
+    @Override
+    public List<T> toMutableList() {
+        return toSequence().toList();
+    }
+
+    @Override
+    public PersistentList<T> deleteAll(Iterable<? extends T> values) {
+        return filter(not(in(values)));
     }
 }

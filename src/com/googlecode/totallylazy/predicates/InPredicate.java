@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.annotations.multimethod;
 
 import java.util.Collection;
+import java.util.RandomAccess;
 
 import static com.googlecode.totallylazy.Predicates.never;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -35,7 +36,7 @@ public class InPredicate<T> extends LogicalPredicate<T> {
     }
 
     private Collection<T> collection(Iterable<T> iterable) {
-        if(iterable instanceof Collection) return (Collection<T>) iterable;
+        if(iterable instanceof Collection && iterable instanceof RandomAccess) return (Collection<T>) iterable;
         return sequence(iterable).toSet();
     }
 

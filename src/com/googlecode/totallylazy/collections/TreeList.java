@@ -120,18 +120,8 @@ public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, R
     }
 
     @Override
-    public TreeList<T> deleteAll(Iterable<T> values) {
+    public TreeList<T> deleteAll(Iterable<? extends T> values) {
         return filter(not(in(values)));
-    }
-
-    @Override
-    public List<T> toMutableList() {
-        return toSequence().toList();
-    }
-
-    @Override
-    public Sequence<T> toSequence() {
-        return sequence(this);
     }
 
     @Override
