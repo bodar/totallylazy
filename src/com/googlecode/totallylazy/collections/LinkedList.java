@@ -45,23 +45,13 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
     }
 
     @Override
-    public Sequence<T> toSequence() {
-        return sequence(this);
-    }
-
-    @Override
-    public PersistentList<T> deleteAll(Iterable<T> values) {
-        return filter(not(in(Sets.set(values))));
+    public PersistentList<T> deleteAll(Iterable<? extends T> values) {
+        return filter(not(in(values)));
     }
 
     @Override
     public PersistentList<T> append(T value) {
         return PersistentList.constructors.list(toSequence().append(value));
-    }
-
-    @Override
-    public List<T> toMutableList() {
-        return toSequence().toList();
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Predicate;
 
-public interface QueryCollection<T> {
+public interface Container<T> {
     int size();
 
     boolean isEmpty();

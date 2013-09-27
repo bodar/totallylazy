@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.collections.AbstractCollection;
+import com.googlecode.totallylazy.collections.Indexed;
 import com.googlecode.totallylazy.collections.PersistentCollection;
 import com.googlecode.totallylazy.collections.PersistentList;
-import com.googlecode.totallylazy.collections.Indexed;
-import com.googlecode.totallylazy.collections.ReadOnlyCollection;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
@@ -23,7 +23,7 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public abstract class Sequence<T> extends ReadOnlyCollection<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Monad<T>, Foldable<T>, Indexed<T> {
+public abstract class Sequence<T> extends AbstractCollection<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Monad<T>, Foldable<T>, Indexed<T> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
@@ -236,21 +236,13 @@ public abstract class Sequence<T> extends ReadOnlyCollection<T> implements Itera
         return toArray(Unchecked.<T[]>cast(Array.newInstance(aClass, 0)));
     }
 
-    @Override
-    public <A> A[] toArray(A[] array) {
-        return toList().toArray(array);
-    }
-
-    @Override
-    public Object[] toArray() {
-        return toList().toArray();
-    }
 
     @Override
     public Sequence<T> delete(final T t) {
         return Sequences.delete(this, t);
     }
 
+    @Override
     public Sequence<T> deleteAll(final Iterable<? extends T> iterable) {
         return Sequences.deleteAll(this, iterable);
     }
@@ -475,7 +467,7 @@ public abstract class Sequence<T> extends ReadOnlyCollection<T> implements Itera
         return recursive(Sequences.<T>splitAt(size));
     }
 
-    public static class functions{
+    public static class functions {
         public static <T> UnaryFunction<Sequence<T>> tail() {
             return Segment.functions.<T, Sequence<T>>tail();
         }

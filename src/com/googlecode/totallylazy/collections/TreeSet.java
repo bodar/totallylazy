@@ -41,11 +41,6 @@ public class TreeSet<T> extends AbstractCollection<T> implements PersistentSorte
     }
 
     @Override
-    public Sequence<T> toSequence() {
-        return Sequences.sequence(this);
-    }
-
-    @Override
     public Option<T> lookup(T value) {
         return map.lookup(value);
     }

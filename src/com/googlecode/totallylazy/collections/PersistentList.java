@@ -36,7 +36,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     @Override
     PersistentList<T> delete(T value);
 
-    PersistentList<T> deleteAll(Iterable<T> values);
+    PersistentList<T> deleteAll(Iterable<? extends T> values);
 
     PersistentList<T> reverse();
 
