@@ -7,6 +7,7 @@ import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 
+@SuppressWarnings("deprecation")
 public abstract class AbstractList<T> extends ReadOnlyList<T> implements PersistentList<T> {
     @Override
     public int lastIndexOf(Object o) {
