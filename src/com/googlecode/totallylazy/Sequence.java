@@ -232,11 +232,6 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.toDeque(this);
     }
 
-    public T[] toArray(final Class<?> aClass) {
-        return toArray(Unchecked.<T[]>cast(Array.newInstance(aClass, 0)));
-    }
-
-
     @Override
     public Sequence<T> delete(final T t) {
         return Sequences.delete(this, t);
