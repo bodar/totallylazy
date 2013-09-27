@@ -36,6 +36,14 @@ public class LinkedListTest {
     }
 
     @Test
+    public void canLookupLastIndexOf() throws Exception {
+        assertThat(list("Dan", "Matt", "Dan").lastIndexOf("Dan"), is(2));
+        assertThat(list("Dan", "Matt", "Dan").lastIndexOf("Matt"), is(1));
+        assertThat(list("Dan", "Matt", "Dan").lastIndexOf("Chris"), is(-1));
+        assertThat(list().lastIndexOf("Chris"), is(-1));
+    }
+
+    @Test
     public void canLookupByIndex() throws Exception {
         assertThat(list("Dan", "Matt").get(0), is("Dan"));
         assertThat(list("Dan", "Matt").get(1), is("Matt"));
