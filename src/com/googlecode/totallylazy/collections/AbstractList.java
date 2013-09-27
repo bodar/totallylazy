@@ -5,7 +5,6 @@ import java.util.ListIterator;
 
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 
 @SuppressWarnings("deprecation")
 public abstract class AbstractList<T> extends ReadOnlyList<T> implements PersistentList<T> {
@@ -16,17 +15,22 @@ public abstract class AbstractList<T> extends ReadOnlyList<T> implements Persist
 
     @Override
     public ListIterator<T> listIterator() {
-        return new ZipperListIterator<T>(zipper(this));
+        return new ZipperListIterator<T>(zipper());
     }
 
     @Override
     public ListIterator<T> listIterator(int index) {
-        return new ZipperListIterator<T>(zipper(this).index(index));
+        return new ZipperListIterator<T>(zipper().index(index));
     }
 
     @Override
-    public List<T> subList(int fromIndex, int toIndex) {
-        throw new UnsupportedOperationException("TODO");
+    public PersistentList<T> subList(int fromIndex, int toIndex) {
+        return PersistentList.constructors.list(toMutableList().subList(fromIndex, toIndex));
+    }
+
+    @Override
+    public Zipper<T> zipper() {
+        return ListZipper.zipper(this);
     }
 
     @Override
