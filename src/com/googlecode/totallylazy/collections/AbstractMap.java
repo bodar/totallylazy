@@ -8,11 +8,13 @@ import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Unchecked;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
+@SuppressWarnings("deprecation")
 public abstract class AbstractMap<K, V> extends ReadOnlyMap<K,V> implements PersistentMap<K, V> {
     @Override
     public Map<K, V> toMutableMap() {
@@ -72,7 +74,7 @@ public abstract class AbstractMap<K, V> extends ReadOnlyMap<K,V> implements Pers
 
     @Override
     public V get(Object key) {
-        return lookup((K)key).getOrNull();
+        return lookup(Unchecked.<K>cast(key)).getOrNull();
     }
 
     @Override

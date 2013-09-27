@@ -51,6 +51,14 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
 
 //    Zipper<T> zipper();
 
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#cons(T)} */
+    @Override @Deprecated
+    boolean add(T e);
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#cons(T)} */
+    @Override @Deprecated
+    boolean addAll(Collection<? extends T> c);
+
     /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
     @Override @Deprecated
     void add(int index, T element);
@@ -67,8 +75,23 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     @Override @Deprecated
     T remove(int index);
 
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#delete(T)} */
+    @Override @Deprecated
+    boolean remove(Object o);
 
-    class constructors {
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#deleteAll(Iterable)}*/
+    @Override @Deprecated
+    boolean removeAll(Collection<?> c);
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#filter(Predicate)} */
+    @Override @Deprecated
+    boolean retainAll(Collection<?> c);
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#empty()} */
+    @Override @Deprecated
+    void clear();
+
+class constructors {
         public static <T> PersistentList<T> empty() {
             return LinkedList.emptyList();
         }
