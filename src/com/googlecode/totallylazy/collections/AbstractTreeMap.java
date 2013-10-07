@@ -130,12 +130,12 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
 
     @Override
     public Self filterKeys(final Predicate<? super K> predicate) {
-        return filter(Predicates.first(predicate));
+        return filter(Predicates.<K>first(predicate));
     }
 
     @Override
     public Self filterValues(final Predicate<? super V> predicate) {
-        return filter(Predicates.second(predicate));
+        return filter(Predicates.<V>second(predicate));
     }
 
     @Override

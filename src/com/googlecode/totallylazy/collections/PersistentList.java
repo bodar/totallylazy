@@ -44,7 +44,8 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     @Override
     <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable);
 
-    PersistentList<T> filter(Predicate<? super T> predicate);
+    @Override
+    PersistentList<T> filter(final Predicate<? super T> predicate);
 
     List<T> toMutableList();
 
