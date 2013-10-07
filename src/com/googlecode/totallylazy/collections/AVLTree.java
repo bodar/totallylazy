@@ -32,6 +32,9 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
     AVLTree<K, V> delete(K key);
 
     @Override
+    AVLTree<K, V> filter(Predicate<? super Pair<K, V>> predicate);
+
+    @Override
     AVLTree<K, V> filterKeys(Predicate<? super K> predicate);
 
     @Override

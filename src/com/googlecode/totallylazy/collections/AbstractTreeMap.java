@@ -6,8 +6,10 @@ import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -120,17 +122,20 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
-    public Self filterKeys(Predicate<? super K> predicate) {
-        if (predicate.matches(key))
-            return create(comparator, key, value, left.filterKeys(predicate), right.filterKeys(predicate));
-        return left.filterKeys(predicate).joinTo(self(right.filterKeys(predicate)));
+    public Self filter(Predicate<? super Pair<K, V>> predicate) {
+        if (predicate.matches(pair()))
+            return create(comparator, key, value, left.filter(predicate), right.filter(predicate));
+        return left.filter(predicate).joinTo(self(right.filter(predicate)));
     }
 
     @Override
-    public Self filterValues(Predicate<? super V> predicate) {
-        if (predicate.matches(value))
-            return create(comparator, key, value, left.filterValues(predicate), right.filterValues(predicate));
-        return left.filterValues(predicate).joinTo(self(right.filterValues(predicate)));
+    public Self filterKeys(final Predicate<? super K> predicate) {
+        return filter(Predicates.first(predicate));
+    }
+
+    @Override
+    public Self filterValues(final Predicate<? super V> predicate) {
+        return filter(Predicates.second(predicate));
     }
 
     @Override
