@@ -6,6 +6,8 @@ import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
+import java.nio.CharBuffer;
+
 import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -25,7 +27,7 @@ public class ManyParser<A> extends Parser<Sequence<A>> {
         return String.format("many %s", parser);
     }
 
-    public Result<Sequence<A>> parse(Segment<Character> sequence) throws Exception {
+    public Result<Sequence<A>> parse(CharBuffer sequence) throws Exception {
         return parser.then(returns(this)).
                 map(ManyParser.<A, Sequence<A>>cons()).
                 or(ReturnsParser.returns(Sequences.<A>empty())).

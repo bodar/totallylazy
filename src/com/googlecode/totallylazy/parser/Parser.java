@@ -6,9 +6,14 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 
+import java.nio.CharBuffer;
 import java.util.concurrent.Callable;
 
 public abstract class Parser<A> implements Parse<A> {
+    public Result<A> parse(CharSequence sequence) throws Exception {
+        return parse(CharBuffer.wrap(sequence));
+    }
+
     protected Failure<A> fail() {
         return Failure.failure(String.format("Expected:%s", toString()));
     }

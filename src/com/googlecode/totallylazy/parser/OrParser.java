@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Segment;
+import java.nio.CharBuffer;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -23,7 +23,7 @@ public class OrParser<A> extends Parser<A> {
     }
 
     @Override
-    public Result<A> parse(Segment<Character> characters) throws Exception {
+    public Result<A> parse(CharBuffer characters) throws Exception {
         Result<? extends A> result = parserA.parse(characters);
         if (result instanceof Failure) {
             return cast(parserB.parse(characters));

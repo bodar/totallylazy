@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Segment;
+import java.nio.CharBuffer;
 
 public class ReturnsParser<A> extends Parser<A> {
     private final A a;
@@ -19,7 +19,7 @@ public class ReturnsParser<A> extends Parser<A> {
     }
 
     @Override
-    public Result<A> parse(Segment<Character> sequence) throws Exception {
+    public Result<A> parse(CharBuffer sequence) throws Exception {
         return Success.success(a, sequence);
     }
 }
