@@ -47,13 +47,9 @@ public class CharacterParser extends Parser<Character> {
 
     @Override
     public Result<Character> parse(final CharBuffer characters) {
+        if (!characters.hasRemaining()) return fail();
+
         characters.mark();
-
-        if (!characters.hasRemaining()) {
-            characters.reset();
-            return fail();
-        }
-
         char character = characters.get();
         if (value.matches(character)) return success(character, characters);
 

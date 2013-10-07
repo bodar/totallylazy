@@ -21,7 +21,7 @@ public class MappingParser<A, B> extends Parser<B> {
 
     @Override
     public Result<B> parse(CharBuffer characters) throws Exception {
-        return cast(source.parse(characters).map(callable));
+        return source.parse(characters).map(callable);
     }
 
     @Override

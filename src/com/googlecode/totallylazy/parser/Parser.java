@@ -68,4 +68,12 @@ public abstract class Parser<A> implements Parse<A> {
     public Parser<Sequence<A>> many() {
         return ManyParser.many(this);
     }
+
+    public Parser<Sequence<A>> times(int count) {
+        return Parsers.times(this, count);
+    }
+
+    public Parser<String> source() {
+        return Parsers.source(this);
+    }
 }
