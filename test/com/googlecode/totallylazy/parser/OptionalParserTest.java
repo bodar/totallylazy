@@ -16,16 +16,16 @@ public class OptionalParserTest {
     @Test
     public void isOptional() throws Exception {
         OptionalParser<String> parser = optional(string("foo"));
-        Result<Option<String>> result = parser.parse(characters("foo"));
+        Result<Option<String>> result = parser.parse("foo");
         assertThat(result.value(), is(some("foo")));
-        assertThat(result.remainder(), is(emptySegment(Character.class)));
+        assertThat(result.remainder().toString(), is(""));
     }
 
     @Test
     public void canChain() throws Exception {
-        Parse<Option<String>> parser = string("foo").optional();
-        Result<Option<String>> result = parser.parse(characters("bob"));
+        Parser<Option<String>> parser = string("foo").optional();
+        Result<Option<String>> result = parser.parse("bob");
         assertThat(result.value(), is(none(String.class)));
-        assertThat(result.remainder(), is(characters("bob")));
+        assertThat(result.remainder().toString(), is("bob"));
     }
 }

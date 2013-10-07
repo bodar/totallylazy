@@ -13,16 +13,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class SequenceParserTest {
     @Test
     public void canCombineTwoParsers() throws Exception {
-        Result<Sequence<Character>> result = SequenceParser.sequenceOf(character('A'), character('B')).parse(characters("ABC"));
+        Result<Sequence<Character>> result = SequenceParser.sequenceOf(character('A'), character('B')).parse("ABC");
         assertThat(result.value(), is(sequence('A', 'B')));
-        assertThat(result.remainder(), is(characters("C")));
+        assertThat(result.remainder().toString(), is("C"));
     }
 
     @Test
     public void canCombineThreeParsers() throws Exception {
         Result<Sequence<Character>> result = SequenceParser.sequenceOf(character('A'), character('B'), character('C')).
-                parse(characters("ABC"));
+                parse("ABC");
         assertThat(result.value(), is(sequence('A', 'B', 'C')));
-        assertThat(result.remainder(), is(emptySegment(Character.class)));
+        assertThat(result.remainder().toString(), is(""));
     }
 }

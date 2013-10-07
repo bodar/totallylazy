@@ -1,7 +1,8 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Segment;
+
+import java.nio.CharBuffer;
 
 import static com.googlecode.totallylazy.parser.ReturnsParser.returns;
 import static java.lang.String.format;
@@ -23,7 +24,7 @@ public class OptionalParser<A> extends Parser<Option<A>> {
     }
 
     @Override
-    public Result<Option<A>> parse(Segment<Character> characters) throws Exception {
+    public Result<Option<A>> parse(CharBuffer characters) throws Exception {
         return parserA.map(Option.<A>option()).
                 or(returns(Option.<A>none())).
                 parse(characters);

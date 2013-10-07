@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Segment;
+
+import java.nio.CharBuffer;
 
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
@@ -46,20 +46,19 @@ public class CharacterParser extends Parser<Character> {
     }
 
     @Override
-    public Result<Character> parse(final Segment<Character> characters) {
-        return Segment.methods.headOption(characters).
-                map(ifMatches(characters)).
-                getOrElse(fail());
-    }
+    public Result<Character> parse(final CharBuffer characters) {
+        characters.mark();
 
-    private Callable1<Character, Result<Character>> ifMatches(final Segment<Character> characters) {
-        return new Callable1<Character, Result<Character>>() {
-            @Override
-            public Result<Character> call(Character character) throws Exception {
-                return value.matches(character) ? success(character, characters.tail()) :
-                        fail(value, character);
-            }
-        };
+        if (!characters.hasRemaining()) {
+            characters.reset();
+            return fail();
+        }
+
+        char character = characters.get();
+        if (value.matches(character)) return success(character, characters);
+
+        characters.reset();
+        return fail(value, character);
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Segment;
 
+import java.nio.CharBuffer;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Functions.returns;
@@ -37,7 +37,7 @@ public class PairParser<A, B> extends Parser<Pair<A, B>> {
     }
 
     @Override
-    public Result<Pair<A, B>> parse(Segment<Character> characters) throws Exception {
+    public Result<Pair<A, B>> parse(CharBuffer characters) throws Exception {
         Result<? extends A> resultA = parserA.value().parse(characters);
         if (resultA instanceof Failure) return cast(resultA);
 

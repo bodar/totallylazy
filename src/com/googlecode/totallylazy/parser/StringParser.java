@@ -1,9 +1,10 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+
+import java.nio.CharBuffer;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.parser.SequenceParser.sequenceOf;
@@ -42,7 +43,7 @@ public class StringParser extends Parser<String> {
     }
 
     @Override
-    public Result<String> parse(Segment<Character> input) throws Exception {
+    public Result<String> parse(CharBuffer input) throws Exception {
         return parser.parse(input).map(asString(""));
     }
 

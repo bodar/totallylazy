@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.parser;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 
+import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,16 +43,18 @@ public class SequenceParser<A> extends Parser<Sequence<A>> {
     }
 
     @Override
-    public Result<Sequence<A>> parse(Segment<Character> characters) throws Exception {
-        Segment<Character> state = characters;
+    public Result<Sequence<A>> parse(CharBuffer characters) throws Exception {
+        characters.mark();
         List<A> parsed = new ArrayList<A>();
         for (Parse<? extends A> parser : parsers) {
-            Result<? extends A> result = parser.parse(state);
-            if (result instanceof Failure) return cast(result);
+            Result<? extends A> result = parser.parse(characters);
+            if (result instanceof Failure) {
+                characters.reset();
+                return cast(result);
+            }
             parsed.add(result.value());
-            state = result.remainder();
         }
-        return success(sequence(parsed), state);
+        return success(sequence(parsed), characters);
     }
 
     @Override
