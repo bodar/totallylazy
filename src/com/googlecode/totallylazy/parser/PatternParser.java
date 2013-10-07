@@ -5,7 +5,6 @@ import com.googlecode.totallylazy.regex.Regex;
 
 import java.nio.CharBuffer;
 
-import static com.googlecode.totallylazy.parser.CharacterSequence.charSequence;
 import static com.googlecode.totallylazy.parser.Success.success;
 
 public class PatternParser extends Parser<String> {

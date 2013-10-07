@@ -47,15 +47,16 @@ public class LinkedListTest {
     @Test
     public void supportsSubList() throws Exception {
         PersistentList<String> all = list("Dan", "Matt", "Chris", "Tom");
-        assertThat(all.subList(2,4), is(list("Chris", "Tom")));
-        assertThat(all.subList(2,3), is(list("Chris")));
+        assertThat(all.subList(2, 4), is(list("Chris", "Tom")));
+        assertThat(all.subList(2, 3), is(list("Chris")));
         assertThat(all.subList(2, 2), is(PersistentList.constructors.<String>list()));
         assertThat(PersistentList.constructors.<String>list().subList(0, 0), is(PersistentList.constructors.<String>list()));
 
-        try{
+        try {
             all.subList(2, 10);
             fail("Should have thrown IndexOutOfBoundsException");
-        } catch (IndexOutOfBoundsException ignore){ }
+        } catch (IndexOutOfBoundsException ignore) {
+        }
     }
 
     @Test

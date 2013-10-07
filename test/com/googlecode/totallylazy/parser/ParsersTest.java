@@ -8,6 +8,7 @@ import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
+import static com.googlecode.totallylazy.parser.CharacterParser.isChar;
 import static com.googlecode.totallylazy.parser.Parsers.identifier;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -53,5 +54,19 @@ public class ParsersTest {
         Result<String> result = identifier.parse("sayHello()");
         assertThat(result.value(), is("sayHello"));
         assertThat(result.remainder().toString(), is("()"));
+    }
+
+    @Test
+    public void supportsTimes() throws Exception {
+        Result<Sequence<Character>> result = isChar('A').times(3).parse("AAABBB");
+        assertThat(result.value(), is(Sequences.characters("AAA")));
+        assertThat(result.remainder().toString(), is("BBB"));
+    }
+
+    @Test
+    public void supportsSource() throws Exception {
+        Result<String> result = isChar('A').times(3).source().parse("AAABBB");
+        assertThat(result.value(), is("AAA"));
+        assertThat(result.remainder().toString(), is("BBB"));
     }
 }

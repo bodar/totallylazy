@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Triple;
 import com.googlecode.totallylazy.regex.Regex;
 
@@ -17,13 +18,7 @@ import static com.googlecode.totallylazy.Characters.identifierPart;
 import static com.googlecode.totallylazy.Characters.identifierStart;
 
 public class Parsers {
-    private static Function1<Pair<Character, ? extends Segment<Character>>, String> toString = new Function1<Pair<Character, ? extends Segment<Character>>, String>() {
-        @Override
-        public String call(Pair<Character, ? extends Segment<Character>> pair) throws Exception {
-            return pair.first() + Segment.methods.toString(pair.second(), "");
-        }
-    };
-    public static Parser<String> identifier = character(identifierStart).then(character(identifierPart).many()).map(toString);
+    public static Parser<String> identifier = character(identifierStart).then(character(identifierPart).many()).source();
 
     public static <A> Parser<A> parser(final Parse<? extends A> parser) {
         return MappingParser.map(parser, Callables.<A>returnArgument());
@@ -93,6 +88,10 @@ public class Parsers {
         return ManyParser.many(parser);
     }
 
+    public static <A> Parser<Sequence<A>> times(Parse<? extends A> parser, int count) {
+        return SequenceParser.sequenceOf(Sequences.repeat(parser).take(count));
+    }
+
     public static <A> Parser<Sequence<A>> sequenceOf(final Sequence<? extends Parse<? extends A>> parsers) {
         return SequenceParser.sequenceOf(parsers);
     }
@@ -131,5 +130,9 @@ public class Parsers {
 
     public static <A, B, C> Parser<Triple<A, B, C>> tripleOf(final Callable<? extends Parse<? extends A>> parserA, final Callable<? extends Parse<? extends B>> parserB, final Callable<? extends Parse<? extends C>> parserC) {
         return TripleParser.tripleOf(parserA, parserB, parserC);
+    }
+
+    public static Parser<String> source(Parser<?> parser) {
+        return SourceParser.source(parser);
     }
 }
