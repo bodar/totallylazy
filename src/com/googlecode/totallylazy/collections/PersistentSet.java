@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Mapper;
@@ -11,7 +12,7 @@ import com.googlecode.totallylazy.Sequence;
 
 import java.util.Set;
 
-public interface PersistentSet<T> extends Set<T>, Iterable<T>, Segment<T>, PersistentCollection<T>, Functor<T>, Foldable<T> {
+public interface PersistentSet<T> extends Set<T>, Iterable<T>, Segment<T>, PersistentCollection<T>, Functor<T>, Foldable<T>, Filterable<T> {
     Option<T> lookup(T value);
 
     Option<T> find(Predicate<? super T> predicate);
