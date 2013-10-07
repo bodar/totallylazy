@@ -53,28 +53,6 @@ public class Parsers {
         return StringParser.string(value);
     }
 
-    public static Parser<String> string(Iterable<? extends Parse<Character>> map) {return StringParser.string(map);}
-
-    public static Parser<String> string(final Parse<Character> a, final Parse<Character> b) {
-        return StringParser.string(a, b);
-    }
-
-    public static Parser<String> string(final Parse<Character> a, final Parse<Character> b, final Parse<Character> c) {
-        return StringParser.string(a, b, c);
-    }
-
-    public static Parser<String> string(final Parse<Character> a, final Parse<Character> b, final Parse<Character> c, final Parse<Character> d) {
-        return StringParser.string(a, b, c, d);
-    }
-
-    public static Parser<String> string(final Parse<Character> a, final Parse<Character> b, final Parse<Character> c, final Parse<Character> d, final Parse<Character> e) {
-        return StringParser.string(a, b, c, d, e);
-    }
-
-    public static Parser<String> string(final Parse<Character>... parsers) {
-        return StringParser.string(parsers);
-    }
-
     public static Parser<String> pattern(Regex regex) {
         return PatternParser.pattern(regex);
     }
