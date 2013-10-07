@@ -137,13 +137,8 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public PersistentMap<K, V> filterKeys(Predicate<? super K> predicate) {
-        return listMap(list.filter(key(predicate)));
-    }
-
-    @Override
-    public PersistentMap<K, V> filterValues(Predicate<? super V> predicate) {
-        return listMap(list.filter(where(Callables.<V>second(), predicate)));
+    public PersistentMap<K, V> filter(Predicate<? super Pair<K, V>> predicate) {
+        return listMap(list.filter(predicate));
     }
 
     @Override

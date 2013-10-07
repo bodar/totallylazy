@@ -23,7 +23,7 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public abstract class Sequence<T> extends AbstractCollection<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Monad<T>, Foldable<T>, Indexed<T> {
+public abstract class Sequence<T> extends AbstractCollection<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Monad<T>, Foldable<T>, Indexed<T>, Filterable<T> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
@@ -86,6 +86,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.partition(this, predicate);
     }
 
+    @Override
     public Sequence<T> filter(final Predicate<? super T> predicate) {
         return Sequences.filter(this, predicate);
     }

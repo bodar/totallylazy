@@ -90,13 +90,18 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
+    public PersistentMap<K, V> filter(Predicate<? super Pair<K, V>> predicate) {
+        return hashTreeMap(toSequence().filter(predicate));
+    }
+
+    @Override
     public PersistentMap<K, V> filterKeys(Predicate<? super K> predicate) {
-        return hashTreeMap(toSequence().filter(Predicates.<K>first(predicate)));
+        return filter(Predicates.<K>first(predicate));
     }
 
     @Override
     public PersistentMap<K, V> filterValues(Predicate<? super V> predicate) {
-        return hashTreeMap(toSequence().filter(Predicates.<V>second(predicate)));
+        return filter(Predicates.<V>second(predicate));
     }
 
     @Override

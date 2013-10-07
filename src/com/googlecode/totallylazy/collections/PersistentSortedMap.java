@@ -32,6 +32,9 @@ public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<P
     PersistentSortedMap<K, V> delete(K key);
 
     @Override
+    PersistentSortedMap<K, V> filter(Predicate<? super Pair<K, V>> predicate);
+
+    @Override
     PersistentSortedMap<K, V> filterKeys(Predicate<? super K> predicate);
 
     @Override

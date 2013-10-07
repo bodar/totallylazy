@@ -46,6 +46,9 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
     TreeMap<K, V> delete(K key);
 
     @Override
+    TreeMap<K, V> filter(Predicate<? super Pair<K, V>> predicate);
+
+    @Override
     TreeMap<K, V> filterKeys(Predicate<? super K> predicate);
 
     @Override
