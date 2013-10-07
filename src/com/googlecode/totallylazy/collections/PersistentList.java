@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function1;
@@ -19,7 +20,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Iterable<T>, Segment<T>, Functor<T>, Indexed<T>, Foldable<T> {
+public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Iterable<T>, Segment<T>, Functor<T>, Indexed<T>, Foldable<T>, Filterable<T> {
     Option<T> find(Predicate<? super T> predicate);
 
     @Override
