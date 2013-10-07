@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Predicate;
 
-public interface Container<T> {
+public interface PersistentContainer<T> {
     int size();
 
     boolean isEmpty();
