@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentMap;
 
-public interface PersistentMap<K, V> extends Map<K,V>, Iterable<Pair<K, V>>, Segment<Pair<K, V>>, Container<K>, Functor<V>, Foldable<Pair<K,V>> {
+public interface PersistentMap<K, V> extends Map<K,V>, Iterable<Pair<K, V>>, Segment<Pair<K, V>>, PersistentContainer<K>, Functor<V>, Foldable<Pair<K,V>> {
     Option<V> lookup(K key);
 
     Option<V> find(Predicate<? super K> predicate);

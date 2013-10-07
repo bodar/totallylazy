@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.Sequence;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-public interface PersistentCollection<T> extends Container<T>, Collection<T>, Segment<T> {
+public interface PersistentCollection<T> extends PersistentContainer<T>, Collection<T>, Segment<T> {
     @Override
     PersistentCollection<T> empty();
 
