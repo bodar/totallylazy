@@ -184,18 +184,18 @@ public class Iterators {
     }
 
     public static String toString(final Iterator<?> iterator, final String start, final String separator, final String end) {
-        return appendTo(iterator, new StringBuilder(), start, separator, end);
+        return appendTo(iterator, new StringBuilder(), start, separator, end).toString();
     }
 
-    public static String appendTo(Iterator<?> iterator, Appendable appendable) {
+    public static Appendable appendTo(Iterator<?> iterator, Appendable appendable) {
         return appendTo(iterator, appendable, ",");
     }
 
-    public static String appendTo(Iterator<?> iterator, Appendable appendable, String separator) {
+    public static Appendable appendTo(Iterator<?> iterator, Appendable appendable, String separator) {
         return appendTo(iterator, appendable, "", separator, "");
     }
 
-    public static String appendTo(Iterator<?> iterator, Appendable appendable, String start, String separator, String end) {
+    public static Appendable appendTo(Iterator<?> iterator, Appendable appendable, String start, String separator, String end) {
         try {
             appendable.append(start);
             if (iterator.hasNext()) appendable.append(String.valueOf(iterator.next()));
@@ -204,7 +204,7 @@ public class Iterators {
                 appendable.append(String.valueOf(iterator.next()));
             }
             appendable.append(end);
-            return appendable.toString();
+            return appendable;
         } catch (IOException e) {
             throw lazyException(e);
         }
