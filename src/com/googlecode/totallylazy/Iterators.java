@@ -15,6 +15,7 @@ import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -187,15 +188,15 @@ public class Iterators {
         return appendTo(iterator, new StringBuilder(), start, separator, end).toString();
     }
 
-    public static Appendable appendTo(Iterator<?> iterator, Appendable appendable) {
+    public static <A extends Appendable> A appendTo(Iterator<?> iterator, A appendable) {
         return appendTo(iterator, appendable, ",");
     }
 
-    public static Appendable appendTo(Iterator<?> iterator, Appendable appendable, String separator) {
+    public static <A extends Appendable> A appendTo(Iterator<?> iterator, A appendable, String separator) {
         return appendTo(iterator, appendable, "", separator, "");
     }
 
-    public static Appendable appendTo(Iterator<?> iterator, Appendable appendable, String start, String separator, String end) {
+    public static <A extends Appendable> A appendTo(Iterator<?> iterator, A appendable, String start, String separator, String end) {
         try {
             appendable.append(start);
             if (iterator.hasNext()) appendable.append(String.valueOf(iterator.next()));

@@ -188,15 +188,15 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.toString(this, start, separator, end);
     }
 
-    public Sequence<T> appendTo(Appendable appendable) {
+    public <A extends Appendable> A appendTo(A appendable) {
         return Sequences.appendTo(this, appendable);
     }
 
-    public Sequence<T> appendTo(Appendable appendable, final String separator) {
+    public <A extends Appendable> A appendTo(A appendable, final String separator) {
         return Sequences.appendTo(this, appendable, separator);
     }
 
-    public Sequence<T> appendTo(Appendable appendable, final String start, final String separator, final String end) {
+    public <A extends Appendable> A appendTo(A appendable, final String start, final String separator, final String end) {
         return Sequences.appendTo(this, appendable,start, separator, end);
     }
 

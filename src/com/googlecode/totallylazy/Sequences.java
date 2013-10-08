@@ -14,6 +14,7 @@ import com.googlecode.totallylazy.iterators.TransposeIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
 import com.googlecode.totallylazy.predicates.UniquePredicate;
 
+import java.io.Writer;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
@@ -354,19 +355,16 @@ public class Sequences {
         return Iterators.toString(iterable.iterator(), start, separator, end);
     }
 
-    public static <I extends Iterable<?>> I appendTo(final I iterable, Appendable appendable) {
-        Iterators.appendTo(iterable.iterator(), appendable);
-        return iterable;
+    public static <A extends Appendable> A appendTo(final Iterable<?> iterable, A appendable) {
+        return Iterators.appendTo(iterable.iterator(), appendable);
     }
 
-    public static <I extends Iterable<?>> I appendTo(final I iterable, Appendable appendable, final String separator) {
-        Iterators.appendTo(iterable.iterator(), appendable, separator);
-        return iterable;
+    public static <A extends Appendable> A appendTo(final Iterable<?> iterable, A appendable, final String separator) {
+        return Iterators.appendTo(iterable.iterator(), appendable, separator);
     }
 
-    public static <I extends Iterable<?>> I  appendTo(final I iterable, Appendable appendable, final String start, final String separator, final String end) {
-        Iterators.appendTo(iterable.iterator(), appendable,start, separator, end);
-        return iterable;
+    public static <A extends Appendable> A  appendTo(final Iterable<?> iterable, A appendable, final String start, final String separator, final String end) {
+        return Iterators.appendTo(iterable.iterator(), appendable,start, separator, end);
     }
 
     public static boolean isEmpty(final Iterable<?> iterable) {
