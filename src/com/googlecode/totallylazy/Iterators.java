@@ -14,8 +14,6 @@ import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -26,10 +24,10 @@ import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Appendables.append;
 import static com.googlecode.totallylazy.Callables.nullGuard;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
-import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.in;
@@ -197,18 +195,12 @@ public class Iterators {
     }
 
     public static <A extends Appendable> A appendTo(Iterator<?> iterator, A appendable, String start, String separator, String end) {
-        try {
-            appendable.append(start);
-            if (iterator.hasNext()) appendable.append(String.valueOf(iterator.next()));
-            while (iterator.hasNext()) {
-                appendable.append(separator);
-                appendable.append(String.valueOf(iterator.next()));
-            }
-            appendable.append(end);
-            return appendable;
-        } catch (IOException e) {
-            throw lazyException(e);
+        append(start, appendable);
+        if (iterator.hasNext()) append(String.valueOf(iterator.next()), appendable);
+        while (iterator.hasNext()) {
+            append(String.valueOf(iterator.next()), append(separator, appendable));
         }
+        return append(end, appendable);
     }
 
     public static <T> List<T> toList(final Iterator<? extends T> iterator) {
