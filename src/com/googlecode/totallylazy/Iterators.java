@@ -14,6 +14,7 @@ import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -27,6 +28,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Callables.nullGuard;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.in;
@@ -59,7 +61,7 @@ public class Iterators {
 
     public static <T> boolean equalsTo(Iterator<? extends T> a, Iterator<? extends T> b, Predicate<? super Pair<T, T>> predicate) {
         while (a.hasNext() && b.hasNext()) {
-            if(!predicate.matches(Pair.pair(a.next(), b.next()))) return false;
+            if (!predicate.matches(Pair.pair(a.next(), b.next()))) return false;
         }
         return !(a.hasNext() || b.hasNext());
     }
@@ -165,7 +167,7 @@ public class Iterators {
     }
 
     private static <T, S> S seed(Iterator<? extends T> iterator, Callable2<? super S, ? super T, ? extends S> callable) {
-        if(callable instanceof Identity) return Unchecked.<Identity<S>>cast(callable).identity();
+        if (callable instanceof Identity) return Unchecked.<Identity<S>>cast(callable).identity();
         return Unchecked.<S>cast(iterator.next());
     }
 
@@ -182,15 +184,30 @@ public class Iterators {
     }
 
     public static String toString(final Iterator<?> iterator, final String start, final String separator, final String end) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(start);
-        if (iterator.hasNext()) builder.append(iterator.next());
-        while (iterator.hasNext()) {
-            builder.append(separator);
-            builder.append(iterator.next());
+        return appendTo(iterator, new StringBuilder(), start, separator, end);
+    }
+
+    public static String appendTo(Iterator<?> iterator, Appendable appendable) {
+        return appendTo(iterator, appendable, ",");
+    }
+
+    public static String appendTo(Iterator<?> iterator, Appendable appendable, String separator) {
+        return appendTo(iterator, appendable, "", separator, "");
+    }
+
+    public static String appendTo(Iterator<?> iterator, Appendable appendable, String start, String separator, String end) {
+        try {
+            appendable.append(start);
+            if (iterator.hasNext()) appendable.append(String.valueOf(iterator.next()));
+            while (iterator.hasNext()) {
+                appendable.append(separator);
+                appendable.append(String.valueOf(iterator.next()));
+            }
+            appendable.append(end);
+            return appendable.toString();
+        } catch (IOException e) {
+            throw lazyException(e);
         }
-        builder.append(end);
-        return builder.toString();
     }
 
     public static <T> List<T> toList(final Iterator<? extends T> iterator) {
@@ -440,7 +457,7 @@ public class Iterators {
     public static <T> T index(Iterator<? extends T> iterator, int index) {
         for (int i = 0; iterator.hasNext(); i++) {
             T next = iterator.next();
-            if(i == index) return next;
+            if (i == index) return next;
         }
         throw new IndexOutOfBoundsException();
     }
@@ -448,7 +465,7 @@ public class Iterators {
     public static <T> int indexOf(Iterator<? extends T> iterator, T instance) {
         for (int i = 0; iterator.hasNext(); i++) {
             T next = iterator.next();
-            if(instance.equals(next)) return i;
+            if (instance.equals(next)) return i;
         }
         return -1;
     }

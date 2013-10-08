@@ -38,9 +38,6 @@ public class StringsTest {
         assertThat(Strings.string(new StringReader("foo")), is("foo"));
         File file = Files.write("foo".getBytes(), temporaryFile());
         assertThat(Strings.string(file), is("foo"));
-        assertThat(Strings.string(file.toURI()), is("foo"));
-        assertThat(Strings.string(uri(file)), is("foo"));
-        assertThat(Strings.string(uri(file).toURL()), is("foo"));
     }
 
         @Test
