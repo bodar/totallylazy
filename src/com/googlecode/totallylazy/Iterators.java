@@ -198,7 +198,8 @@ public class Iterators {
         append(start, appendable);
         if (iterator.hasNext()) append(String.valueOf(iterator.next()), appendable);
         while (iterator.hasNext()) {
-            append(String.valueOf(iterator.next()), append(separator, appendable));
+            append(separator, appendable); // Do not single line as causes weird BUG with StringBuilder
+            append(String.valueOf(iterator.next()), appendable);
         }
         return append(end, appendable);
     }
