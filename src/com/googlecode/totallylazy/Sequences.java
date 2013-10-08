@@ -346,12 +346,27 @@ public class Sequences {
         return Iterators.toString(sequence.init().iterator(), ",");
     }
 
-    public static String toString(final Iterable iterable, final String separator) {
+    public static String toString(final Iterable<?> iterable, final String separator) {
         return Iterators.toString(iterable.iterator(), separator);
     }
 
-    public static String toString(final Iterable iterable, final String start, final String separator, final String end) {
+    public static String toString(final Iterable<?> iterable, final String start, final String separator, final String end) {
         return Iterators.toString(iterable.iterator(), start, separator, end);
+    }
+
+    public static <I extends Iterable<?>> I appendTo(final I iterable, Appendable appendable) {
+        Iterators.appendTo(iterable.iterator(), appendable);
+        return iterable;
+    }
+
+    public static <I extends Iterable<?>> I appendTo(final I iterable, Appendable appendable, final String separator) {
+        Iterators.appendTo(iterable.iterator(), appendable, separator);
+        return iterable;
+    }
+
+    public static <I extends Iterable<?>> I  appendTo(final I iterable, Appendable appendable, final String start, final String separator, final String end) {
+        Iterators.appendTo(iterable.iterator(), appendable,start, separator, end);
+        return iterable;
     }
 
     public static boolean isEmpty(final Iterable<?> iterable) {

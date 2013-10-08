@@ -249,25 +249,6 @@ public class Strings {
         return toString(value);
     }
 
-    @multimethod
-    public static String string(Uri value) {
-        return string(value.toURL());
-    }
-
-    @multimethod
-    public static String string(URI value) {
-        return string(uri(value));
-    }
-
-    @multimethod
-    public static String string(URL value) {
-        try {
-            return toString(value.openStream());
-        } catch (IOException e) {
-            throw lazyException(e);
-        }
-    }
-
     public static String toString(byte[] bytes) {
         return new String(bytes, UTF8);
     }
