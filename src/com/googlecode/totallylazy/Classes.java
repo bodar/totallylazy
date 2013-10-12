@@ -4,10 +4,19 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.io.File;
 
+import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Classes {
+    public static Option<Class<?>> forName(final String name) {
+        try {
+            return Option.<Class<?>>some(Class.forName(name));
+        } catch (Exception e) {
+            return none();
+        }
+    }
+
     public static LogicalPredicate<Class<?>> isInstance(final Object instance) {
         return new LogicalPredicate<Class<?>>() {
             public boolean matches(Class<?> aClass) {
