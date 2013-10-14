@@ -154,6 +154,23 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
             };
         }
 
+        public static <F1, F2, S> Function1<Pair<F1, S>, Pair<F2, S>> replaceFirst(final Function1<F1,F2> newFirst) {
+            return new Function1<Pair<F1, S>, Pair<F2, S>>() {
+                @Override
+                public Pair<F2, S> call(Pair<F1, S> pair) throws Exception {
+                    return pair(newFirst.call(pair.first()), pair.second());
+                }
+            };
+        }
+        public static <F, S1, S2> Function1<Pair<F, S1>, Pair<F, S2>> replaceSecond(final Function1<S1,S2> newSecond) {
+            return new Function1<Pair<F, S1>, Pair<F, S2>>() {
+                @Override
+                public Pair<F, S2> call(Pair<F, S1> pair) throws Exception {
+                    return pair(pair.first(), newSecond.call(pair.second()));
+                }
+            };
+        }
+
         public static <F1, F2, S> Function1<Pair<F1, S>, Pair<F2, S>> replaceFirst(final F2 newFirst) {
             return new Function1<Pair<F1, S>, Pair<F2, S>>() {
                 @Override
