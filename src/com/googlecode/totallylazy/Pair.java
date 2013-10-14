@@ -256,5 +256,13 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
                 }
             };
         }
+
+        public <F,S> Callable1<? super Pair<F,S>, String> pairToString(final String start, final String separator, final String end) {
+            return new Callable1<Pair<F,S>, String>() {
+                public String call(Pair<F,S> pair) throws Exception {
+                    return pair.toString(start, separator, end);
+                }
+            };
+        }
     }
 }
