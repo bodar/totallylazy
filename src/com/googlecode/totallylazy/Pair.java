@@ -257,7 +257,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
             };
         }
 
-        public static <F,S> Function1<Pair<?,?>, String> pairToString(final String separator) {
+        public static Function1<Pair<?,?>, String> pairToString(final String separator) {
             return new Function1<Pair<?,?>, String>() {
                 public String call(Pair<?,?> pair) throws Exception {
                     return pair.toString(separator);
@@ -265,7 +265,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
             };
         }
 
-        public static <F,S> Function1<Pair<?,?>, String> pairToString(final String start, final String separator, final String end) {
+        public static Function1<Pair<?,?>, String> pairToString(final String start, final String separator, final String end) {
             return new Function1<Pair<?,?>, String>() {
                 public String call(Pair<?,?> pair) throws Exception {
                     return pair.toString(start, separator, end);
