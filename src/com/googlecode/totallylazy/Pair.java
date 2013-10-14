@@ -257,27 +257,20 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
             };
         }
 
-        public static <F,S> Function1<? super Pair<F,S>, String> pairToString(final String separator) {
-            return new Function1<Pair<F,S>, String>() {
-                public String call(Pair<F,S> pair) throws Exception {
+        public static <F,S> Function1<Pair<?,?>, String> pairToString(final String separator) {
+            return new Function1<Pair<?,?>, String>() {
+                public String call(Pair<?,?> pair) throws Exception {
                     return pair.toString(separator);
                 }
             };
         }
 
-        public static <F,S> Function1<? super Pair<F,S>, String> pairToString(final Class<F> classF, final Class<S> classS, final String separator) {
-            return pairToString(separator);
-        }
-
-        public static <F,S> Function1<? super Pair<F,S>, String> pairToString(final String start, final String separator, final String end) {
-            return new Function1<Pair<F,S>, String>() {
-                public String call(Pair<F,S> pair) throws Exception {
+        public static <F,S> Function1<Pair<?,?>, String> pairToString(final String start, final String separator, final String end) {
+            return new Function1<Pair<?,?>, String>() {
+                public String call(Pair<?,?> pair) throws Exception {
                     return pair.toString(start, separator, end);
                 }
             };
-        }
-        public static <F,S> Function1<? super Pair<F,S>, String> pairToString(final Class<F> classF, final Class<S> classS, final String start, final String separator, final String end) {
-            return pairToString(start, separator, end);
         }
     }
 }
