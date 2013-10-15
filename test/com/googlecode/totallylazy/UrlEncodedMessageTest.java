@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 
 public class UrlEncodedMessageTest {
     @Test
@@ -26,6 +27,18 @@ public class UrlEncodedMessageTest {
         assertThat(pairs.size(), NumberMatcher.is(1));
         assertThat(pairs.get(0).first(), Matchers.is("The string"));
         assertThat(pairs.get(0).second(), Matchers.is(""));
+    }
+
+    @Test
+    public void preservesTheDifferenceBetweenNullAndEmptyString() throws Exception {
+        String original = "one&two=";
+        List<Pair<String, String>> pairs = UrlEncodedMessage.parse(original);
+        assertThat(pairs.size(), NumberMatcher.is(2));
+        assertThat(pairs.get(0).first(), Matchers.is("one"));
+        assertThat(pairs.get(0).second(), nullValue());
+        assertThat(pairs.get(1).first(), Matchers.is("two"));
+        assertThat(pairs.get(1).second(), Matchers.is(""));
+        assertThat(UrlEncodedMessage.toString(pairs), Matchers.is(original));
     }
 
     @Test
