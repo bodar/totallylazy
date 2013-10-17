@@ -5,8 +5,7 @@ import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.annotations.multimethod;
 
-import java.util.Collection;
-import java.util.RandomAccess;
+import java.util.Set;
 
 import static com.googlecode.totallylazy.Predicates.never;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -14,13 +13,13 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class InPredicate<T> extends LogicalPredicate<T> {
     private final Iterable<T> original;
-    private final Lazy<Collection<T>> collection;
+    private final Lazy<Set<T>> set;
 
     private InPredicate(final Iterable<T> iterable) {
-        this.collection = new Lazy<Collection<T>>() {
+        this.set = new Lazy<Set<T>>() {
             @Override
-            protected Collection<T> get() throws Exception {
-                return collection(iterable);
+            protected Set<T> get() throws Exception {
+                return set(iterable);
             }
         };
         this.original = iterable;
@@ -35,13 +34,13 @@ public class InPredicate<T> extends LogicalPredicate<T> {
         return new InPredicate<T>(Unchecked.<Iterable<T>>cast(iterable));
     }
 
-    private Collection<T> collection(Iterable<T> iterable) {
-        if(iterable instanceof Collection && iterable instanceof RandomAccess) return (Collection<T>) iterable;
+    private Set<T> set(Iterable<T> iterable) {
+        if(iterable instanceof Set) return (Set<T>) iterable;
         return sequence(iterable).toSet();
     }
 
     public boolean matches(T other) {
-        return collection.value().contains(other);
+        return set.value().contains(other);
     }
 
     // Used by LazyRecords, do not inline or change
