@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.is;
 
 public class XmlTest {
     @Test
-    public void shouldSupportRealWorldNamespacesAndCompexQueries() throws Exception {
+    public void shouldSupportRealWorldNamespacesAndComplexQueries() throws Exception {
         Document bt = Xml.document("<?xml version=\"1.0\"?>\n" +
                 "<or:OrderStatusUpdate xmlns:gea=\"urn:uk.org.telcob2b/tML/Fulfilment/GEA-v16-0\" xmlns:odr=\"urn:uk.org.telcob2b/tML/BT-OrderResponse-v16-0\" xmlns:or=\"urn:com.openreach.Fulfilment2-v16-0\" xmlns:utcc=\"urn:uk.org.telcob2b/tML/ukt-CommonComponents-v16-0\" xmlns=\"\">\n" +
                 "  <odr:OrderResponse>\n" +
