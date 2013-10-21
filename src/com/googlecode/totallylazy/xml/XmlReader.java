@@ -3,9 +3,7 @@ package com.googlecode.totallylazy.xml;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.Xml;
-import com.googlecode.totallylazy.annotations.tailrec;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -41,41 +39,42 @@ public class XmlReader extends StatefulIterator<Node> {
     }
 
     @Override
-    @tailrec
     protected Node getNext() throws Exception {
-        if (!reader.hasNext()) return finished();
-        XMLEvent event = reader.nextEvent();
+        while (reader.hasNext()){
+            XMLEvent event = reader.nextEvent();
 
-        if (event instanceof StartElement) {
-            StartElement start = (StartElement) event;
-            if (start.getName().getLocalPart().equals(repeatingElement)) {
-                Document document = Xml.document("<" + repeatingElement + "/>");
-                copyAttributes(start, document.getDocumentElement());
-                return children(document.getDocumentElement());
+            if (event instanceof StartElement) {
+                StartElement start = (StartElement) event;
+                if (start.getName().getLocalPart().equals(repeatingElement)) {
+                    return children(copyAttributes(start, element(start.getName().getLocalPart())));
+                }
             }
         }
-        return getNext();
+        return finished();
     }
 
-    private Element children(Element parent) throws XMLStreamException {
-        if (!reader.hasNext()) return parent;
-        XMLEvent event = reader.nextEvent();
-        if (event instanceof EndElement) return parent;
+    private Element element(String name) {
+        return Xml.document("<" + name + "/>").getDocumentElement();
+    }
 
-        if (event instanceof StartElement) {
-            StartElement start = (StartElement) event;
-            Element child = parent.getOwnerDocument().createElement(start.getName().getLocalPart());
-            copyAttributes(start, child);
-            parent.appendChild(child);
-            children(child);
+    private Node children(Node parent) throws XMLStreamException {
+        while (reader.hasNext()) {
+            XMLEvent event = reader.nextEvent();
+            if (event instanceof EndElement) return parent;
+            if (event instanceof StartElement) children(child(parent, (StartElement) event));
         }
-        return children(parent);
+        return parent;
     }
 
-    private void copyAttributes(StartElement source, Element destination) {
+    private Node child(Node parent, StartElement start) {
+        return parent.appendChild(copyAttributes(start, parent.getOwnerDocument().createElement(start.getName().getLocalPart())));
+    }
+
+    private Element copyAttributes(StartElement source, Element destination) {
         for (Attribute attribute : forwardOnly(Unchecked.<Iterator<Attribute>>cast(source.getAttributes()))) {
             destination.setAttribute(attribute.getName().getLocalPart(), attribute.getValue());
         }
+        return destination;
     }
 
 }
