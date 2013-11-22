@@ -9,9 +9,10 @@ import java.util.regex.MatchResult;
 
 import static com.googlecode.totallylazy.Strings.isEmpty;
 
-public class Uri implements Comparable<Uri>{
+public class Uri implements Comparable<Uri> {
     public static final Regex JAR_URL = Regex.regex("jar:([^!]+)!(/.*)");
     public static final Regex RFC3986 = Regex.regex("^(?:([^:/?\\#]+):)?(?://([^/?\\#]*))?([^?\\#]*)(?:\\?([^\\#]*))?(?:\\#(.*))?");
+    public static final Regex AUTHORITY = Regex.regex("(?:([^@]+)@)?([^:]+)(?:\\:([\\d]+))?");
     public static final String JAR_SCHEME = "jar";
     public static final String FILE_SCHEME = "file";
     private final String scheme;
@@ -90,18 +91,40 @@ public class Uri implements Comparable<Uri>{
         return authority(null);
     }
 
-    public String host() {
-        return authority().split(":")[0];
+    public String userInfo() {
+        return Authority.authority(authority).userInfo();
     }
 
-    public Uri host(String newHost) {
-        if (isEmpty(authority())){ return authority(newHost); }
-        if (isEmpty(newHost)){ return dropHost(); }
-        return authority(authority().replaceFirst("[^:]+", newHost));
+    public Uri userInfo(String value) {
+        return authority(Authority.authority(authority).userInfo(value).toString());
+    }
+
+    public Uri dropUserInfo() {
+        return userInfo(null);
+    }
+
+    public String host() {
+        return Authority.authority(authority).host();
+    }
+
+    public Uri host(String value) {
+        return authority(Authority.authority(authority).host(value).toString());
     }
 
     public Uri dropHost() {
-        return dropAuthority();
+        return host(null);
+    }
+
+    public int port() {
+        return Authority.authority(authority).port();
+    }
+
+    public Uri port(int value) {
+        return authority(Authority.authority(authority).port(value).toString());
+    }
+
+    public Uri dropPort() {
+        return port(-1);
     }
 
     public String path() {
@@ -117,7 +140,7 @@ public class Uri implements Comparable<Uri>{
     }
 
     public Uri mergePath(String value) {
-        if (value.startsWith("/")){
+        if (value.startsWith("/")) {
             return path(value);
         }
 
@@ -164,7 +187,7 @@ public class Uri implements Comparable<Uri>{
 
     @Override
     public String toString() {
-        if(JAR_SCHEME.equals(scheme)){
+        if (JAR_SCHEME.equals(scheme)) {
             return String.format("%s:%s!%s", JAR_SCHEME, authority, path);
         }
         return standardToString();
@@ -252,4 +275,70 @@ public class Uri implements Comparable<Uri>{
             };
         }
     }
+
+    static class Authority {
+        private final String userInfo;
+        private final String host;
+        private final int port;
+
+        private Authority(String userInfo, String host, int port) {
+            this.userInfo = userInfo;
+            this.host = host;
+            this.port = port;
+        }
+
+        static Authority authority(String authority) {
+            if (authority == null) return authority(null, null, null);
+            MatchResult match = AUTHORITY.match(authority);
+            return authority(match.group(1), match.group(2), match.group(3));
+        }
+
+        static Authority authority(String userInfo, String host, String port) {
+            return authority(userInfo, host, port == null ? -1 : Integer.parseInt(port));
+        }
+
+        static Authority authority(String userInfo, String host, int port) {
+            return new Authority(userInfo, host, port);
+        }
+
+        String userInfo() {
+            return userInfo;
+        }
+
+        Authority userInfo(String value) {
+            return authority(value, host, port);
+        }
+
+        String host() {
+            return host;
+        }
+
+        Authority host(String value) {
+            return authority(userInfo, value, port);
+        }
+
+        int port() {
+            return port;
+        }
+
+        Authority port(int value) {
+            return authority(userInfo, host, value);
+        }
+
+        @Override
+        public String toString() {
+            if (isEmpty(host)) return null;
+            StringBuilder builder = new StringBuilder();
+            if (!isEmpty(userInfo)) {
+                builder.append(userInfo).append("@");
+            }
+            builder.append(host);
+            if (port != -1) {
+                builder.append(":").append(port);
+            }
+            return builder.toString();
+        }
+    }
+
+
 }
