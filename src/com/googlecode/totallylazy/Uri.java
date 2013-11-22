@@ -12,7 +12,6 @@ import static com.googlecode.totallylazy.Strings.isEmpty;
 public class Uri implements Comparable<Uri> {
     public static final Regex JAR_URL = Regex.regex("jar:([^!]+)!(/.*)");
     public static final Regex RFC3986 = Regex.regex("^(?:([^:/?\\#]+):)?(?://([^/?\\#]*))?([^?\\#]*)(?:\\?([^\\#]*))?(?:\\#(.*))?");
-    public static final Regex AUTHORITY = Regex.regex("(?:([^@]+)@)?([^:]+)(?:\\:([\\d]+))?");
     public static final String JAR_SCHEME = "jar";
     public static final String FILE_SCHEME = "file";
     private final String scheme;
@@ -277,6 +276,7 @@ public class Uri implements Comparable<Uri> {
     }
 
     static class Authority {
+        private static final Regex AUTHORITY = Regex.regex("(?:([^@]+)@)?([^:]+)(?:\\:([\\d]+))?");
         private final String userInfo;
         private final String host;
         private final int port;
