@@ -2,6 +2,8 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
+import java.net.URI;
+
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Uri.uri;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -69,22 +71,36 @@ public class UriTest {
     }
 
     @Test
-    public void parsesHost() throws Exception {
-//        assertThat(uri("http:/foo").host(), is(nullValue())); TODO
-        assertThat(uri("http://stuandjorge.com").host(), is("stuandjorge.com"));
-        assertThat(uri("http://stuandjorge.com:8081").host(), is("stuandjorge.com"));
-        assertThat(uri("http://stuandjorge.com/somepath").host(), is("stuandjorge.com"));
+    public void supportsUserInfo() throws Exception {
+        assertThat(uri("http://user:password@www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").userInfo(), is("user:password"));
+        assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").userInfo("user:password"), is(uri("http://user:password@www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related")));
 
-        assertThat(uri("http://stuandjorge.com").host("jorgeandstu.com").host(), is("jorgeandstu.com"));
-        assertThat(uri("http://stuandjorge.com:8081").host("jorgeandstu.com").host(), is("jorgeandstu.com"));
+        assertThat(uri("http://user:password@www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").userInfo(null), is(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related")));
+        assertThat(uri("http://user:password@www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").userInfo(""), is(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related")));
+        assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").dropUserInfo(), is(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related")));
+    }
 
-        assertThat(uri("http://stuandjorge.com/foo").host(null).toString(), is("http:/foo"));
-        assertThat(uri("http://stuandjorge.com/foo").dropHost().toString(), is("http:/foo"));
+    @Test
+    public void supportsHost() throws Exception {
+        assertThat(uri("http:/path").host(), is(nullValue()));
+        assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").host(), is("www.ics.uci.edu"));
+        assertThat(uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related").host("example"), is(uri("http://example:80/pub/ietf/uri/?foo=bar#Related")));
 
-        assertThat(uri("http://stuandjorge.com:8080").host(null).toString(), is("http:"));
-        assertThat(uri("http://stuandjorge.com:8080").dropHost().toString(), is("http:"));
+        assertThat(uri("http://server/foo").host(null), is(uri("http:/foo")));
+        assertThat(uri("http://server/foo").host(""), is(uri("http:/foo")));
+        assertThat(uri("http://server/foo").dropHost(), is(uri("http:/foo")));
+        assertThat(uri("http://server:8080/foo").dropHost(), is(uri("http:/foo")));
+    }
 
-        assertThat(uri("http://stuandjorge.com").host(null).toString(), is("http:"));
-        assertThat(uri("http://stuandjorge.com").dropHost().toString(), is("http:"));
+    @Test
+    public void supportsPort() throws Exception {
+        assertThat(uri("http://server").port(), is(-1));
+        assertThat(uri("http://server").port(), is(new URI("http://server").getPort()));
+        assertThat(uri("http://server:8080").port(), is(8080));
+        assertThat(uri("http://server:8080").port(), is(new URI("http://server:8080").getPort()));
+
+        assertThat(uri("http://server:8080").port(7777), is(uri("http://server:7777")));
+        assertThat(uri("http://server:8080").port(-1), is(uri("http://server")));
+        assertThat(uri("http://server:8080").dropPort(), is(uri("http://server")));
     }
 }
