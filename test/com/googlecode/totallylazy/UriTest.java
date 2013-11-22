@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.net.URI;
 
-import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Uri.uri;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

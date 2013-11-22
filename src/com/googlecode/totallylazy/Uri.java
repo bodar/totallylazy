@@ -337,16 +337,10 @@ public class Uri implements Comparable<Uri> {
         public String toString() {
             if (isEmpty(host)) return null;
             StringBuilder builder = new StringBuilder();
-            if (!isEmpty(userInfo)) {
-                builder.append(userInfo).append("@");
-            }
+            if (!isEmpty(userInfo)) builder.append(userInfo).append("@");
             builder.append(host);
-            if (port != -1) {
-                builder.append(":").append(port);
-            }
+            if (port != -1) builder.append(":").append(port);
             return builder.toString();
         }
     }
-
-
 }
