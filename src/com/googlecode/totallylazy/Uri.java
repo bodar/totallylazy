@@ -86,16 +86,24 @@ public class Uri implements Comparable<Uri> {
         return new Uri(scheme, value, path, query, fragment);
     }
 
+    private Authority Authority() {
+        return Authority.authority(authority);
+    }
+
+    private Uri Authority(Authority value) {
+        return authority(value.toString());
+    }
+
     public Uri dropAuthority() {
         return authority(null);
     }
 
     public String userInfo() {
-        return Authority.authority(authority).userInfo();
+        return Authority().userInfo();
     }
 
     public Uri userInfo(String value) {
-        return authority(Authority.authority(authority).userInfo(value).toString());
+        return Authority(Authority().userInfo(value));
     }
 
     public Uri dropUserInfo() {
@@ -103,11 +111,11 @@ public class Uri implements Comparable<Uri> {
     }
 
     public String host() {
-        return Authority.authority(authority).host();
+        return Authority().host();
     }
 
     public Uri host(String value) {
-        return authority(Authority.authority(authority).host(value).toString());
+        return Authority(Authority().host(value));
     }
 
     public Uri dropHost() {
@@ -115,11 +123,11 @@ public class Uri implements Comparable<Uri> {
     }
 
     public int port() {
-        return Authority.authority(authority).port();
+        return Authority().port();
     }
 
     public Uri port(int value) {
-        return authority(Authority.authority(authority).port(value).toString());
+        return Authority(Authority().port(value));
     }
 
     public Uri dropPort() {
