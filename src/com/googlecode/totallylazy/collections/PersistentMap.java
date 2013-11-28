@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Functor;
@@ -12,10 +13,15 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.comparators.Comparators;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentMap;
+
+import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Segment<Pair<K, V>>, PersistentContainer<K>, Functor<V>, Foldable<Pair<K, V>>, Filterable<Pair<K, V>> {
     Option<V> lookup(K key);
@@ -85,6 +91,52 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
     @Override
     @Deprecated
     void clear();
+
+    class constructors {
+        public static <K, V> PersistentMap<K, V> map() {
+            return HashTreeMap.hashTreeMap();
+        }
+
+        public static <K, V> PersistentMap<K, V> emptyMap() {
+            return map();
+        }
+
+        public static <K, V> PersistentMap<K, V> emptyMap(Class<K> kClass, Class<V> vClass) {
+            return map();
+        }
+
+        public static <K, V> PersistentMap<K, V> map(K key, V value) {
+            return map(sequence(pair(key, value)));
+        }
+
+        public static <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2) {
+            return map(sequence(pair(key1, value1), pair(key2, value2)));
+        }
+
+        public static <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3) {
+            return map(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3)));
+        }
+
+        public static <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
+            return map(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4)));
+        }
+
+        public static <K, V> PersistentMap<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5) {
+            return map(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
+        }
+
+        public static <K, V> PersistentMap<K, V> map(final Pair<K, V> head, final Pair<K, V>... tail) {
+            return map(sequence(tail).cons(head));
+        }
+
+        public static <K, V> PersistentMap<K, V> map(final Iterable<? extends Pair<K, V>> values) {
+            return HashTreeMap.hashTreeMap(values);
+        }
+
+        public static <K, V> PersistentMap<K, V> map(final Map<K, V> values) {
+            return map(Maps.pairs(values));
+        }
+    }
 
     class functions {
         public static <K, V> Mapper<PersistentMap<K, V>, Option<V>> get(final K key) {

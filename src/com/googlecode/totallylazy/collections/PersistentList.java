@@ -109,6 +109,10 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
             return LinkedList.cons(head, tail);
         }
 
+        public static <T> PersistentList<T> one(T one) {
+            return cons(one, constructors.<T>empty());
+        }
+
         public static <T> PersistentList<T> list(T one) {
             return cons(one, constructors.<T>empty());
         }
