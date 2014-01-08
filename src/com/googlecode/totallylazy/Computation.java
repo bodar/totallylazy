@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Computation.memorise;
 import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
@@ -22,7 +21,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         this.tail = lazy(tail);
     }
 
-    public static <T> Computation<T> computation1(T value, Callable1<T, Computation<T>> next) {
+    public static <T> Computation<T> computation2(T value, Callable1<T, Computation<T>> next) {
         return computation1(returns(value), next);
     }
 
@@ -35,7 +34,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     }
 
     public static <T> Computation<T> computation(T value, Callable1<? super T, ? extends T> callable) {
-        return computation1(value, generate(callable));
+        return computation2(value, generate(callable));
     }
 
     public static <T> Computation<T> computation(T value, Computation<T> next) {
@@ -58,7 +57,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     public static <T> Computation<T> memoize(final Iterator<? extends T> values) {
         return memorise(values);
     }
-    
+
     public static <T> Computation<T> memorise(final Iterator<? extends T> values) {
         final Function<Iterator<T>> iterator = returns(Unchecked.<Iterator<T>>cast(values));
         return computation1(lazyHead(iterator), generate(lazyTail(iterator)));
@@ -122,8 +121,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
             return false;
         } catch (NoSuchElementException e) {
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw LazyException.lazyException(e);
         }
     }
