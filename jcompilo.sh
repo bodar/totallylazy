@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PATH=${JAVA_HOME}/bin:${PATH}
+export PATH=${JAVA_HOME}/bin:${PATH}
 JAVA_OPTS=-Djava.net.useSystemProxies=true ${JAVA_OPTS}
 BUILD_NUMBER=${BUILD_NUMBER-dev.build}
 version=162
