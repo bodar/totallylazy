@@ -395,10 +395,6 @@ public class Strings {
 
     public static Minimum.Function<String> minimum = Minimum.constructors.minimum((String) null);
 
-    public static class parameters {
-        public static String a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,_;
-    }
-
     public static class functions {
         public static Function3<String, String, String, String> replaceAll = new Function3<String, String, String, String>() {
             @Override
