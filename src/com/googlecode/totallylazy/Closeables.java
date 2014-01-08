@@ -17,6 +17,15 @@ public class Closeables {
         };
     }
 
+    public static <T> T safeClose(final T t) {
+        try {
+            close(t);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     @SafeVarargs
     public static <T> void safeClose(final T... t) {
         reflectiveSafeClose(sequence(t));
@@ -24,6 +33,15 @@ public class Closeables {
 
     public static <T> void reflectiveSafeClose(final Iterable<? extends T> t) {
         sequence(t).each(reflectiveSafeClose());
+    }
+
+    public static <T extends Closeable> T safeClose(final T t) {
+        try {
+            close(t);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @SafeVarargs
