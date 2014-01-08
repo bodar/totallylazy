@@ -125,6 +125,7 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
             return map(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
         }
 
+        @SafeVarargs
         public static <K, V> PersistentMap<K, V> map(final Pair<K, V> head, final Pair<K, V>... tail) {
             return map(sequence(tail).cons(head));
         }

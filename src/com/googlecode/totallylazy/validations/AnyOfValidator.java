@@ -34,6 +34,7 @@ public class AnyOfValidator<T> extends LogicalValidator<T>{
     }
 
     public static class constructors {
+        @SafeVarargs
         public static <T> AnyOfValidator<T> anyOf(Validator<? super T>... validators) {
             return anyOf(sequence(validators));
         }

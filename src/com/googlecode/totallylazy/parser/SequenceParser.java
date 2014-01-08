@@ -37,6 +37,7 @@ public class SequenceParser<A> extends Parser<Sequence<A>> {
         return new SequenceParser<A>(sequence(a, b, c, d, e));
     }
 
+    @SafeVarargs
     public static <A> SequenceParser<A> sequenceOf(final Parse<? extends A>... parsers) {
         return sequenceOf(sequence(parsers));
     }

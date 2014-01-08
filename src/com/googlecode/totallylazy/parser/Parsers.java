@@ -112,6 +112,7 @@ public class Parsers {
         return SequenceParser.sequenceOf(a, b, c, d, e);
     }
 
+    @SafeVarargs
     public static <A> Parser<Sequence<A>> sequenceOf(final Parse<? extends A>... parsers) {
         return SequenceParser.sequenceOf(parsers);
     }

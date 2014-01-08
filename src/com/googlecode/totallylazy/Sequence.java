@@ -342,7 +342,8 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.zip(this, second);
     }
 
-    public Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables) {
+    @SafeVarargs
+    public final Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables) {
         return transpose(sequence(iterables));
     }
 

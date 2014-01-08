@@ -128,6 +128,7 @@ public class Predicates {
         };
     }
 
+    @SafeVarargs
     public static <T> LogicalPredicate<T> in(final T... values) {
         return in(sequence(values));
     }
@@ -200,6 +201,7 @@ public class Predicates {
         return and(Sequences.<Predicate<? super T>>sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <T> LogicalPredicate<T> and(final Predicate<? super T>... predicates) {
         return and(sequence(predicates));
     }
@@ -232,6 +234,7 @@ public class Predicates {
         return or(Sequences.<Predicate<? super T>>sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <T> LogicalPredicate<T> or(final Predicate<? super T>... predicates) {
         return or(sequence(predicates));
     }

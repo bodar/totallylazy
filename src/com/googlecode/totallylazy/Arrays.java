@@ -23,6 +23,7 @@ public class Arrays {
         };
     }
 
+    @SafeVarargs
     public static <T> List<T> list(T... values) {
         return Lists.list(values);
     }
@@ -31,6 +32,7 @@ public class Arrays {
         return index < array.length;
     }
 
+    @SafeVarargs
     public static <T> T[] array(T ... values) {
         return values;
     }
