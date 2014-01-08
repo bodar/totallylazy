@@ -14,7 +14,6 @@ import com.googlecode.totallylazy.iterators.TransposeIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
 import com.googlecode.totallylazy.predicates.UniquePredicate;
 
-import java.io.Writer;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
@@ -65,14 +64,8 @@ public class Sequences {
         return empty();
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> Sequence<T> one(final T first) {
-        return internal(first);
-    }
-
-    @SafeVarargs
-    private static <T> Sequence<T> internal(final T... items) {
-        return sequence(items);
+        return sequence(first);
     }
 
     @SafeVarargs

@@ -26,22 +26,6 @@ public class Validators {
     public static final String PLEASE_PROVIDE_A_VALUE = "Please provide a value";
 
     public static class allOf {
-        public static <T> AllOfValidator<T> allOf(Validator<? super T> first, Validator<? super T> second) {
-            return allOf(Sequences.<Validator<? super T>>sequence(first, second));
-        }
-
-        public static <T> AllOfValidator<T> allOf(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third) {
-            return allOf(Sequences.<Validator<? super T>>sequence(first, second, third));
-        }
-
-        public static <T> AllOfValidator<T> allOf(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third, Validator<? super T> fourth) {
-            return allOf(Sequences.<Validator<? super T>>sequence(first, second, third, fourth));
-        }
-
-        public static <T> AllOfValidator<T> allOf(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third, Validator<? super T> fourth, Validator<? super T> fifth) {
-            return allOf(Sequences.<Validator<? super T>>sequence(first, second, third, fourth, fifth));
-        }
-
         @SafeVarargs
         public static <T> AllOfValidator<T> allOf(Validator<? super T>... validators) {
             return AllOfValidator.constructors.allOf(validators);
