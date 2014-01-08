@@ -1,0 +1,38 @@
+package com.googlecode.totallylazy.parser;
+
+import org.junit.Test;
+
+import static com.googlecode.totallylazy.Characters.in;
+import static com.googlecode.totallylazy.Segment.constructors.characters;
+import static com.googlecode.totallylazy.Unchecked.cast;
+import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.parser.CharacterParser.character;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+public class CharacterParserTest {
+    @Test
+    public void canCombineWithPredicate() throws Exception {
+        Result<Character> result = character(in("AFZ")).parse("ABC");
+        assertThat(result.value(), is('A'));
+        assertThat(result.remainder().toString(), is("BC"));
+    }
+
+    @Test
+    public void doesNotThrowIfItRunsOutOfCharacters() throws Exception {
+        Failure<Character> result = cast(character('A').parse(""));
+        assertThat(result.message(), is("Expected:is 'A'"));
+    }
+
+    @Test
+    public void canParseACharacter() throws Exception {
+        Result<Character> result = character('A').parse("ABC");
+        assertThat(result.value(), is('A'));
+        assertThat(result.remainder().toString(), is("BC"));
+    }
+
+    @Test
+    public void handlesNoMatch() throws Exception {
+        Failure<Character> result = cast(character('A').parse("CBA"));
+        assertThat(result.message(), is("Expected:is 'A' Actual:C"));
+    }
+}

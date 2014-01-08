@@ -1,0 +1,5 @@
+mvn:cglib:cglib-nodep:jar:2.2
+mvn:org.objenesis:objenesis:jar:1.2
+mvn:org.ow2.asm:asm-all:jar|sources:5.0_BETA
+
+
