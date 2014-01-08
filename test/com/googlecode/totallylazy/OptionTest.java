@@ -209,8 +209,8 @@ public class OptionTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void canThrowIfNone() {
-        assertThat(some("bob").getOrThrow(new RuntimeException()), is("bob"));
+    public void canThrowIfNone(){
+        assertThat(some("bob").<RuntimeException>getOrThrow(new RuntimeException()), is("bob"));
         none().getOrThrow(new RuntimeException());
     }
 

@@ -32,22 +32,7 @@ public final class Callers {
         return NamedExecutors.newCachedThreadPool(Callers.class);
     }
 
-    public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second) {
-        return callConcurrently(sequence(first, second));
-    }
-
-    public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second, final Callable<? extends T> third) {
-        return callConcurrently(sequence(first, second, third));
-    }
-
-    public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second, final Callable<? extends T> third, final Callable<? extends T> fourth) {
-        return callConcurrently(sequence(first, second, third, fourth));
-    }
-
-    public static <T> Sequence<T> callConcurrently(final Callable<? extends T> first, final Callable<? extends T> second, final Callable<? extends T> third, final Callable<? extends T> fourth, final Callable<? extends T> fifth) {
-        return callConcurrently(sequence(first, second, third, fourth, fifth));
-    }
-
+    @SafeVarargs
     public static <T> Sequence<T> callConcurrently(final Callable<? extends T>... callables) {
         return callConcurrently(sequence(callables));
     }

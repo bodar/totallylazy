@@ -42,6 +42,7 @@ public class Validators {
             return allOf(Sequences.<Validator<? super T>>sequence(first, second, third, fourth, fifth));
         }
 
+        @SafeVarargs
         public static <T> AllOfValidator<T> allOf(Validator<? super T>... validators) {
             return AllOfValidator.constructors.allOf(validators);
         }
@@ -68,6 +69,7 @@ public class Validators {
             return anyOf(Sequences.<Validator<? super T>>sequence(first, second, third, fourth, fifth));
         }
 
+        @SafeVarargs
         public static <T> AnyOfValidator<T> anyOf(Validator<? super T>... validators) {
             return AnyOfValidator.constructors.anyOf(validators);
         }
@@ -94,6 +96,7 @@ public class Validators {
             return firstFailure(Sequences.<Validator<? super T>>sequence(first, second, third, fourth, fifth));
         }
 
+        @SafeVarargs
         public static <T> FirstFailureValidator<T> firstFailure(Validator<? super T>... validators) {
             return firstFailure(sequence(validators));
         }
