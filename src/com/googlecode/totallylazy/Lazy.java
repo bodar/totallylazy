@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.callables.LazyCallable;
 
 import java.util.concurrent.Callable;
 
-public abstract class Lazy<T> extends Returns<T> implements Memory {
+public abstract class Lazy<T> implements Returns<T>, Memory {
     private final Object lock = new Object();
     private volatile T state;
 
