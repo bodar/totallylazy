@@ -6,9 +6,8 @@ import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.callables.TimeReport;
 
 import java.util.concurrent.Callable;
-import java.util.function.Supplier;
 
-public abstract class Returns<A> implements Callable<A>, Runnable, Functor<A>, Value<A>, Supplier<A> {
+public abstract class Returns<A> implements Callable<A>, Runnable, Functor<A>, Value<A> {
     public A apply() {
         return Functions.call(this);
     }
@@ -58,10 +57,5 @@ public abstract class Returns<A> implements Callable<A>, Runnable, Functor<A>, V
 
     public Returns<A> interruptable() {
         return Functions.interruptable(this);
-    }
-
-    @Override
-    public A get() {
-        return apply();
     }
 }
