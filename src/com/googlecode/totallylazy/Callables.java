@@ -281,7 +281,7 @@ public final class Callables {
         };
     }
 
-    public static <T> Function<T> returns(final T t) {
+    public static <T> Returns<T> returns(final T t) {
         return Functions.returns(t);
     }
 
@@ -305,23 +305,23 @@ public final class Callables {
         return returnArgument();
     }
 
-    public static <T> Function<T> aNull(final Class<T> aClass) {
-        return new Function<T>() {
+    public static <T> Returns<T> aNull(final Class<T> aClass) {
+        return new Returns<T>() {
             public final T call() throws Exception {
                 return null;
             }
         };
     }
 
-    public static <T> Function<T> callThrows(final Exception e) {
-        return new Function<T>() {
+    public static <T> Returns<T> callThrows(final Exception e) {
+        return new Returns<T>() {
             public final T call() throws Exception {
                 throw e;
             }
         };
     }
 
-    public static <T> Function<T> callThrows(final Exception e, final Class<T> aClass) {
+    public static <T> Returns<T> callThrows(final Exception e, final Class<T> aClass) {
         return callThrows(e);
     }
 
@@ -345,8 +345,8 @@ public final class Callables {
         };
     }
 
-    public static <A, B, C> Function<C> deferApply(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
-        return new Function<C>() {
+    public static <A, B, C> Returns<C> deferApply(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
+        return new Returns<C>() {
             @Override
             public C call() throws Exception {
                 return callable.call(a, b);
@@ -354,17 +354,17 @@ public final class Callables {
         };
     }
 
-    public static <A, B> Function<B> deferApply(final Callable1<? super A, ? extends B> callable, final A value) {
-        return new Function<B>() {
+    public static <A, B> Returns<B> deferApply(final Callable1<? super A, ? extends B> callable, final A value) {
+        return new Returns<B>() {
             public final B call() throws Exception {
                 return callable.call(value);
             }
         };
     }
 
-    public static <A, B> Function1<A, Function<B>> deferReturn(final Callable1<? super A, ? extends B> callable) {
-        return new Function1<A, Function<B>>() {
-            public Function<B> call(A a) throws Exception {
+    public static <A, B> Function1<A, Returns<B>> deferReturn(final Callable1<? super A, ? extends B> callable) {
+        return new Function1<A, Returns<B>>() {
+            public Returns<B> call(A a) throws Exception {
                 return Callables.deferApply(callable, a);
             }
         };
@@ -448,8 +448,8 @@ public final class Callables {
         return compose(ignoreResult, callable);
     }
 
-    public static <A, B> Function<B> compose(final Callable<? extends A> first, final Callable1<? super A, ? extends B> second) {
-        return new Function<B>() {
+    public static <A, B> Returns<B> compose(final Callable<? extends A> first, final Callable1<? super A, ? extends B> second) {
+        return new Returns<B>() {
             @Override
             public B call() throws Exception {
                 return second.call(first.call());

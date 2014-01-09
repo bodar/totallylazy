@@ -600,23 +600,15 @@ public class SequenceTest {
 
     @Test
     public void supportsForEach() throws Exception {
-        final int[] sum = {0};
-        sequence(1, 2).each(new Block<Integer>() {
-            public void execute(Integer value) {
-                sum[0] += value;
-            }
-        });
-        assertThat(sum[0], is(3));
+        AtomicInteger sum = new AtomicInteger();
+        sequence(1, 2).each(sum::addAndGet);
+        assertThat(sum.intValue(), is(3));
     }
 
     @Test
     public void supportsEachConcurrently() throws Exception {
-        AtomicInteger sum = new AtomicInteger(0);
-        sequence(1, 2).eachConcurrently(new Block<Integer>() {
-            public void execute(Integer value) throws InterruptedException {
-                    sum.addAndGet(value);
-            }
-        });
+        AtomicInteger sum = new AtomicInteger();
+        sequence(1, 2).eachConcurrently(sum::addAndGet);
         assertThat(sum.intValue(), is(3));
     }
 
@@ -762,7 +754,7 @@ public class SequenceTest {
     @Test
     public void supportsInterruption() throws Exception {
         final int[] count = new int[]{0};
-        Sequence<Integer> interruptable = repeat(new Function<Integer>() {
+        Sequence<Integer> interruptable = repeat(new Returns<Integer>() {
             @Override
             public Integer call() throws Exception {
                 if (++count[0] == 5) {

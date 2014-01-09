@@ -65,8 +65,8 @@ public interface Segment<T> {
             });
         }
 
-        private static Function<Character> read(final Reader reader) {
-            return new Function<Character>() {
+        private static Returns<Character> read(final Reader reader) {
+            return new Returns<Character>() {
                 @Override
                 public Character call() throws Exception {
                     int read = reader.read();
