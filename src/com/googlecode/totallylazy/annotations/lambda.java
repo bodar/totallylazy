@@ -1,10 +1,8 @@
 package com.googlecode.totallylazy.annotations;
 
-import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Mapper;
-import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.annotation.ElementType;
@@ -19,7 +17,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface lambda {
     class functions {
-        public static <T> Function<T> λ(T result) {
+        public static <T> Returns<T> λ(T result) {
             throw new IllegalStateException("JCompilo required");
         }
 
@@ -35,7 +33,7 @@ public @interface lambda {
             throw new IllegalStateException("JCompilo required");
         }
 
-        public static <T> Function<T> lambda(T result) {
+        public static <T> Returns<T> lambda(T result) {
             throw new IllegalStateException("JCompilo required");
         }
 

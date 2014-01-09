@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Triple;
 
 import java.nio.CharBuffer;
@@ -11,9 +11,9 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
 public class TripleParser<A, B, C> extends Parser<Triple<A, B, C>> {
-    private final Function<? extends Parse<? extends A>> parserA;
-    private final Function<? extends Parse<? extends B>> parserB;
-    private final Function<? extends Parse<? extends C>> parserC;
+    private final Returns<? extends Parse<? extends A>> parserA;
+    private final Returns<? extends Parse<? extends B>> parserB;
+    private final Returns<? extends Parse<? extends C>> parserC;
 
     private TripleParser(Callable<? extends Parse<? extends A>> parserA, Callable<? extends Parse<? extends B>> parserB, Callable<? extends Parse<? extends C>> parserC) {
         this.parserA = lazy(parserA);

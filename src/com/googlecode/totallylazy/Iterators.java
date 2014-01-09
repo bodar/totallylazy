@@ -149,7 +149,7 @@ public class Iterators {
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
         if (!iterator.hasNext()) return seed;
-        return Callers.call(callable, Pair.pair(returns(head(iterator)), new Function<S>() {
+        return Callers.call(callable, Pair.pair(returns(head(iterator)), new Returns<S>() {
             @Override
             public S call() throws Exception {
                 return foldRight(iterator, seed, callable);

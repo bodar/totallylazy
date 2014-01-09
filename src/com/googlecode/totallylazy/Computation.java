@@ -59,7 +59,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     }
 
     public static <T> Computation<T> memorise(final Iterator<? extends T> values) {
-        final Function<Iterator<T>> iterator = returns(Unchecked.<Iterator<T>>cast(values));
+        final Returns<Iterator<T>> iterator = returns(Unchecked.<Iterator<T>>cast(values));
         return computation1(lazyHead(iterator), generate(lazyTail(iterator)));
     }
 
@@ -72,8 +72,8 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         };
     }
 
-    private static <T> Function<T> lazyHead(final Callable<? extends Iterator<? extends T>> iterator) {
-        return new Function<T>() {
+    private static <T> Returns<T> lazyHead(final Callable<? extends Iterator<? extends T>> iterator) {
+        return new Returns<T>() {
             @Override
             public T call() throws Exception {
                 return iterator.call().next();
@@ -81,8 +81,8 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         };
     }
 
-    private static <T> Function<Iterator<T>> lazyIterator(final Iterable<? extends T> iterable) {
-        return new Function<Iterator<T>>() {
+    private static <T> Returns<Iterator<T>> lazyIterator(final Iterable<? extends T> iterable) {
+        return new Returns<Iterator<T>>() {
             @Override
             public Iterator<T> call() throws Exception {
                 return Unchecked.cast(iterable.iterator());
