@@ -10,7 +10,6 @@ import com.googlecode.totallylazy.iterators.SegmentIterator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.None.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.in;
@@ -191,7 +190,7 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
 
         @Override
         public <S> PersistentList<S> map(Function<? super T, ? extends S> callable) {
-            return node(call(callable, head), tail().map(callable));
+            return node(callable.apply(head), tail().map(callable));
         }
 
         @Override

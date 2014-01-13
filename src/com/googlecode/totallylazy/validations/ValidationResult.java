@@ -9,7 +9,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.collections.PersistentMap;
 import com.googlecode.totallylazy.comparators.Comparators;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.identity;
@@ -132,8 +132,8 @@ public class ValidationResult {
             };
         }
 
-        public static LogicalPredicate<ValidationResult> succeeded() {
-            return new LogicalPredicate<ValidationResult>() {
+        public static AbstractPredicate<ValidationResult> succeeded() {
+            return new Predicate<ValidationResult>() {
                 @Override
                 public boolean matches(ValidationResult other) {
                     return other.succeeded();

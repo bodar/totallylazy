@@ -4,18 +4,18 @@ import com.googlecode.totallylazy.BinaryPredicate;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Function;
 
-public abstract class LogicalBinaryPredicate<T> extends com.googlecode.totallylazy.Eq implements BinaryPredicate<T>, Callable2<T, T, Boolean>, Function<T, LogicalPredicate<T>> {
+public abstract class LogicalBinaryPredicate<T> extends com.googlecode.totallylazy.Eq implements BinaryPredicate<T>, Callable2<T, T, Boolean>, Function<T, AbstractPredicate<T>> {
     public abstract LogicalBinaryPredicate<T> flip();
 
     @Override
-    public abstract LogicalPredicate<T> apply(T t);
+    public abstract AbstractPredicate<T> apply(T t);
 
-    public LogicalPredicate<T> applySecond(final T b) {
+    public AbstractPredicate<T> applySecond(final T b) {
         return flip().apply(b);
     }
 
     @Override
-    public LogicalPredicate<T> call(T t) throws Exception {
+    public AbstractPredicate<T> call(T t) throws Exception {
         return apply(t);
     }
 

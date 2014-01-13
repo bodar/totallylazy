@@ -6,13 +6,22 @@ import com.googlecode.totallylazy.callables.TimeFunction;
 
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Pair.pair;
 
 public interface Function<A, B> extends Functor<B>, java.util.function.Function<A, B> {
     B call(A input) throws Exception;
 
+    static <A, B> Function<A, B> function(final java.util.function.Function<? super A, ? extends B> callable) {
+        return callable::apply;
+    }
+
     default B apply(final A a) {
-        return Functions.call(this, a);
+        try {
+            return call(a);
+        } catch (Exception e) {
+            throw lazyException(e);
+        }
     }
 
     default Returns<B> deferApply(final A a) {

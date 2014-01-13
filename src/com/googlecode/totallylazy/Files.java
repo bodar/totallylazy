@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,31 +29,31 @@ public class Files {
         return folder.toURI().relativize(file.toURI()).getPath();
     }
 
-    public static LogicalPredicate<File> isFile() {
-        return new LogicalPredicate<File>() {
+    public static AbstractPredicate<File> isFile() {
+        return new Predicate<File>() {
             public boolean matches(File file) {
                 return file.isFile();
             }
         };
     }
 
-    public static LogicalPredicate<File> hasSuffix(final String suffix) {
-        return new LogicalPredicate<File>() {
+    public static AbstractPredicate<File> hasSuffix(final String suffix) {
+        return new Predicate<File>() {
             public boolean matches(File file) {
                 return file.getName().endsWith("." + suffix);
             }
         };
     }
 
-    public static LogicalPredicate<File> isDirectory() {
-        return new LogicalPredicate<File>() {
+    public static AbstractPredicate<File> isDirectory() {
+        return new Predicate<File>() {
             public boolean matches(File file) {
                 return file.isDirectory();
             }
         };
     }
 
-    public static LogicalPredicate<File> hasName(final String name) {
+    public static AbstractPredicate<File> hasName(final String name) {
         return where(name(), is(name));
     }
 
@@ -164,7 +164,7 @@ public class Files {
         return containsFile(hasName(fileName));
     }
 
-    public static LogicalPredicate<File> containsFile(final Predicate<? super File> predicate) {
+    public static AbstractPredicate<File> containsFile(final Predicate<? super File> predicate) {
         return where(Files.files(), Predicates.<File>exists(predicate));
     }
 

@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.predicates;
 
 import java.lang.annotation.Annotation;
 
-public class InstanceOf<T> extends LogicalPredicate<T> {
+public class InstanceOf<T> extends AbstractPredicate<T> {
     private final Class<?> aClass;
 
     public InstanceOf(Class<?> aClass) {

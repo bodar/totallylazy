@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.annotations.multimethod;
 
-public class Not<T> extends LogicalPredicate<T> {
+public class Not<T> extends AbstractPredicate<T> {
     private final Predicate<T> predicate;
 
     private Not(Predicate<T> predicate) {

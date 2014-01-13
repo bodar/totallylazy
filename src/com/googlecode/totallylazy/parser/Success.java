@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Pair;
 
 import java.nio.CharBuffer;
@@ -24,7 +23,7 @@ public class Success<A> extends Pair<A, CharBuffer> implements Result<A> {
 
     @Override
     public <S> Success<S> map(Function<? super A, ? extends S> callable) {
-        return success(Functions.call(callable, value()), second());
+        return success(callable.apply(value()), second());
     }
 
     @Override

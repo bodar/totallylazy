@@ -2,8 +2,6 @@ package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Function;
 
-import static com.googlecode.totallylazy.Callers.call;
-
 public class MapAndValidate<T, R> extends LogicalValidator<T> {
 	private final Function<? super T, ? extends R> map;
 	private final Validator<? super R> validator;
@@ -15,7 +13,7 @@ public class MapAndValidate<T, R> extends LogicalValidator<T> {
 
 	@Override
 	public ValidationResult validate(T instance) {
-		R value = call(map, instance);
+        R value = map.apply(instance);
 		return validator.validate(value);
 	}
 

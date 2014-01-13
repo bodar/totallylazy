@@ -10,7 +10,7 @@ public class GreaterThanBinaryPredicate<T extends Comparable<? super T>> extends
     }
 
     @Override
-    public LogicalPredicate<T> apply(T t) {
+    public AbstractPredicate<T> apply(T t) {
         return LessThanPredicate.lessThan(t);
     }
 

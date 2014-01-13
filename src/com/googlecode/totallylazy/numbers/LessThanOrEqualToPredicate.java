@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.predicates.LessThanOrEqualTo;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
-public class LessThanOrEqualToPredicate extends LogicalPredicate<Number> implements LessThanOrEqualTo<Number> {
+public class LessThanOrEqualToPredicate extends AbstractPredicate<Number> implements LessThanOrEqualTo<Number> {
     private final Number value;
 
     public LessThanOrEqualToPredicate(Number value) {

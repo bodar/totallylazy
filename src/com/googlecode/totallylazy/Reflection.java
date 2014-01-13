@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import java.lang.reflect.Field;
 
@@ -12,7 +12,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.startsWith;
 
 public class Reflection {
-    public static LogicalPredicate<Integer> synthetic = new LogicalPredicate<Integer>() {
+    public static AbstractPredicate<Integer> synthetic = new Predicate<Integer>() {
         @Override
         public boolean matches(Integer mod) {
             return (mod & 0x00001000) != 0;

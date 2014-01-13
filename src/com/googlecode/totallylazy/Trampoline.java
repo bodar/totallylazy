@@ -3,7 +3,6 @@ package com.googlecode.totallylazy;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.compose;
-import static com.googlecode.totallylazy.Callers.call;
 
 public abstract class Trampoline<T> implements Functor<T> {
     public static <T> Trampoline<T> done(T value) {
@@ -39,7 +38,7 @@ public abstract class Trampoline<T> implements Functor<T> {
 
         @Override
         public <S> Trampoline<S> map(Function<? super T, ? extends S> callable) {
-            return done(call(callable, value));
+            return done(callable.apply(value));
         }
     }
 

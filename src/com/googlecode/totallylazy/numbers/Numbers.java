@@ -18,9 +18,9 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.BinaryFunction;
-import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Computation;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -30,7 +30,6 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.UnaryOperator;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
 import java.math.BigDecimal;
@@ -42,7 +41,6 @@ import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Computation.computation;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Pair.reduceLeftShift;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Segment.constructors.segment;
 import static com.googlecode.totallylazy.Segment.constructors.unique;
@@ -55,12 +53,7 @@ public class Numbers {
     public static final Number POSITIVE_INFINITY = Double.POSITIVE_INFINITY;
     public static final Number NEGATIVE_INFINITY = Double.NEGATIVE_INFINITY;
     public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
-    public static Function<Number, Integer> intValue = new Function<Number, Integer>() {
-        @Override
-        public Integer call(Number number) throws Exception {
-            return number.intValue();
-        }
-    };
+    public static Function<Number, Integer> intValue = Number::intValue;
 
     public static Sequence<Number> range(final Number start) {
         return iterate(increment, start);
@@ -84,12 +77,7 @@ public class Numbers {
         }
     }
 
-    public static Function<Object, Number> valueOf = new Function<Object, Number>() {
-        @Override
-        public Number call(Object value) throws Exception {
-            return Numbers.valueOf(value.toString()).get();
-        }
-    };
+    public static Function<Object, Number> valueOf = value -> Numbers.valueOf(value.toString()).get();
 
     public static Sequence<Number> numbers(Number... numbers) {
         return Sequences.sequence(numbers);
@@ -118,19 +106,9 @@ public class Numbers {
         return Math.sqrt(number.doubleValue());
     }
 
-    public static UnaryOperator<Number> squareRoot = new UnaryOperator<Number>() {
-        @Override
-        public Number call(Number number) throws Exception {
-            return squareRoot(number);
-        }
-    };
+    public static UnaryOperator<Number> squareRoot = Numbers::squareRoot;
 
-    public static UnaryOperator<Number> squared = new UnaryOperator<Number>() {
-        @Override
-        public Number call(Number number) throws Exception {
-            return squared(number);
-        }
-    };
+    public static UnaryOperator<Number> squared = Numbers::squared;
 
     public static UnaryOperator<Number> squared() {
         return squared;
@@ -140,37 +118,33 @@ public class Numbers {
         return multiply(value, value);
     }
 
-    public static LogicalPredicate<Number> not(Number value) {
+    public static Predicate<Number> not(Number value) {
         return Predicates.not(value);
     }
 
-    public static LogicalPredicate<Number> not(Predicate<? super Number> predicate) {
+    public static Predicate<Number> not(Predicate<? super Number> predicate) {
         return Predicates.not(predicate);
     }
 
-    public static LogicalPredicate<Number> even = remainderIs(2, 0);
+    public static Predicate<Number> even = remainderIs(2, 0);
 
-    public static LogicalPredicate<Number> even() {
+    public static Predicate<Number> even() {
         return even;
     }
 
-    public static LogicalPredicate<Number> odd = remainderIs(2, 1);
+    public static Predicate<Number> odd = remainderIs(2, 1);
 
-    public static LogicalPredicate<Number> odd() {
+    public static Predicate<Number> odd() {
         return odd;
     }
 
-    public static LogicalPredicate<Number> prime = new LogicalPredicate<Number>() {
-        public final boolean matches(final Number candidate) {
-            return isPrime(candidate);
-        }
-    };
+    public static Predicate<Number> prime = Numbers::isPrime;
 
-    public static LogicalPredicate<Number> prime() {
+    public static Predicate<Number> prime() {
         return prime;
     }
 
-    public static LogicalPredicate<Number> isPrime() {
+    public static Predicate<Number> isPrime() {
         return prime;
     }
 
@@ -178,7 +152,7 @@ public class Numbers {
         return primes().takeWhile(where(squared, lessThanOrEqualTo(candidate))).forAll(where(remainder(candidate), is(not(zero))));
     }
 
-    public static LogicalPredicate<Number> remainderIs(final Number divisor, final Number remainder) {
+    public static Predicate<Number> remainderIs(final Number divisor, final Number remainder) {
         return new RemainderIs(divisor, remainder);
     }
 
@@ -187,20 +161,10 @@ public class Numbers {
     }
 
     private static UnaryOperator<BigInteger> nextProbablePrime() {
-        return new UnaryOperator<BigInteger>() {
-            @Override
-            public BigInteger call(BigInteger bigInteger) throws Exception {
-                return bigInteger.nextProbablePrime();
-            }
-        };
+        return BigInteger::nextProbablePrime;
     }
 
-    public static UnaryOperator<Number> nextPrime = new UnaryOperator<Number>() {
-        @Override
-        public Number call(Number number) throws Exception {
-            return nextPrime(number);
-        }
-    };
+    public static UnaryOperator<Number> nextPrime = Numbers::nextPrime;
 
     public static UnaryOperator<Number> nextPrime() {
         return nextPrime;
@@ -217,7 +181,7 @@ public class Numbers {
     }
 
     public static Sequence<Number> fibonacci() {
-        return computation(Pair.<Number, Number>pair(0, 1), reduceLeftShift(sum)).map(first(Number.class));
+        return computation(Pair.<Number, Number>pair(0, 1), Pair.<Number, Number, Number>reduceLeftShift(sum)).map(first(Number.class));
     }
 
     public static Sequence<Number> powersOf(Number amount) {
@@ -241,7 +205,7 @@ public class Numbers {
     }
 
     public static Operators<Number> operatorsFor(Number number) {
-        if(number instanceof Num) return new NumOperator(operatorsFor(((Num) number).value()));
+        if (number instanceof Num) return new NumOperator(operatorsFor(((Num) number).value()));
         return operatorsFor(number.getClass());
     }
 
@@ -256,11 +220,7 @@ public class Numbers {
         return operatorsFor(value).negate(value);
     }
 
-    public static UnaryOperator<Number> increment = new UnaryOperator<Number>() {
-        public Number call(Number number) throws Exception {
-            return Numbers.increment(number);
-        }
-    };
+    public static UnaryOperator<Number> increment = Numbers::increment;
 
     public static UnaryOperator<Number> increment() {
         return increment;
@@ -270,11 +230,7 @@ public class Numbers {
         return operatorsFor(value).increment(value);
     }
 
-    public static UnaryOperator<Number> decrement = new UnaryOperator<Number>() {
-        public Number call(Number number) throws Exception {
-            return Numbers.decrement(number);
-        }
-    };
+    public static UnaryOperator<Number> decrement = Numbers::decrement;
 
     public static UnaryOperator<Number> decrement() {
         return decrement;
@@ -284,20 +240,15 @@ public class Numbers {
         return operatorsFor(value).decrement(value);
     }
 
-    public static LogicalPredicate<Number> zero = new LogicalPredicate<Number>() {
-        @Override
-        public boolean matches(Number other) {
-            return isZero(other);
-        }
-    };
+    public static Predicate<Number> zero = Numbers::isZero;
 
-    public static LogicalPredicate<Number> zero() {
+    public static Predicate<Number> zero() {
         return zero;
     }
 
-    public static LogicalPredicate<Number> isZero = zero;
+    public static Predicate<Number> isZero = zero;
 
-    public static LogicalPredicate<Number> isZero() {
+    public static Predicate<Number> isZero() {
         return zero;
     }
 
@@ -317,7 +268,7 @@ public class Numbers {
         return operatorsFor(x, y).equalTo(x, y);
     }
 
-    public static LogicalPredicate<Number> lessThan(final Number value) {
+    public static Predicate<Number> lessThan(final Number value) {
         return new LessThanPredicate(value);
     }
 
@@ -325,7 +276,7 @@ public class Numbers {
         return operatorsFor(x, y).lessThan(x, y);
     }
 
-    public static LogicalPredicate<Number> lessThanOrEqualTo(final Number value) {
+    public static Predicate<Number> lessThanOrEqualTo(final Number value) {
         return new LessThanOrEqualToPredicate(value);
     }
 
@@ -333,7 +284,7 @@ public class Numbers {
         return !operatorsFor(x, y).lessThan(y, x);
     }
 
-    public static LogicalPredicate<Number> greaterThan(final Number value) {
+    public static Predicate<Number> greaterThan(final Number value) {
         return new GreaterThanPredicate(value);
     }
 
@@ -341,7 +292,7 @@ public class Numbers {
         return operatorsFor(x, y).lessThan(y, x);
     }
 
-    public static LogicalPredicate<Number> greaterThanOrEqualTo(final Number value) {
+    public static Predicate<Number> greaterThanOrEqualTo(final Number value) {
         return new GreaterThanOrEqualToPredicate(value);
     }
 
@@ -349,7 +300,7 @@ public class Numbers {
         return !operatorsFor(x, y).lessThan(x, y);
     }
 
-    public static LogicalPredicate<Number> between(final Number a, final Number b) {
+    public static Predicate<Number> between(final Number a, final Number b) {
         return new BetweenPredicate(a, b);
     }
 
@@ -361,30 +312,19 @@ public class Numbers {
     }
 
     public static Comparator<Number> ascending() {
-        return new Comparator<Number>() {
-            public int compare(Number x, Number y) {
-                return Numbers.compare(x, y);
-            }
-        };
+        return Numbers::compare;
     }
 
     public static Comparator<Number> descending() {
-        return new Comparator<Number>() {
-            public int compare(Number x, Number y) {
-                return Numbers.compare(y, x);
-            }
-        };
+        return (x, y) -> compare(y, x);
     }
 
     public static Function<Iterable<Number>, Number> sumIterable() {
-        return new Function<Iterable<Number>, Number>() {
-            public Number call(Iterable<Number> numbers) throws Exception {
-                return Sequences.reduceLeft(numbers, sum());
-            }
-        };
+        return numbers -> Sequences.reduceLeft(numbers, sum());
     }
 
     public static final CombinerFunction<Number> average = new Average();
+
     public static CombinerFunction<Number> average() {
         return average;
     }
@@ -521,20 +461,11 @@ public class Numbers {
     }
 
     public static UnaryOperator<Number> reduce() {
-        return new UnaryOperator<Number>() {
-            @Override
-            public Number call(Number number) throws Exception {
-                return reduce(number);
-            }
-        };
+        return Numbers::reduce;
     }
 
     public static Function<Number, Character> toCharacter() {
-        return new Function<Number, Character>() {
-            public Character call(Number number) throws Exception {
-                return (char) number.shortValue();
-            }
-        };
+        return number -> (char) number.shortValue();
     }
 
     public static String toLexicalString(Number value, final Number minValue, final Number maxValue) {

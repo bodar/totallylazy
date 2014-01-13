@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.comparators.Maximum;
 import com.googlecode.totallylazy.comparators.Minimum;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;
 import com.googlecode.totallylazy.predicates.EndsWithPredicate;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 
 import java.io.BufferedReader;
@@ -119,7 +119,7 @@ public class Strings {
         };
     }
 
-    public static LogicalPredicate<String> startsWith(final String value) {
+    public static AbstractPredicate<String> startsWith(final String value) {
         return new StartsWithPredicate(value);
     }
 
@@ -131,11 +131,11 @@ public class Strings {
         };
     }
 
-    public static LogicalPredicate<String> startsWith(String first, String... rest) {
+    public static AbstractPredicate<String> startsWith(String first, String... rest) {
         return or(sequence(rest).cons(first).map(startsWith()));
     }
 
-    public static LogicalPredicate<String> endsWith(final String value) {
+    public static AbstractPredicate<String> endsWith(final String value) {
         return new EndsWithPredicate(value);
     }
 
@@ -147,11 +147,11 @@ public class Strings {
         };
     }
 
-    public static LogicalPredicate<String> endsWith(String first, String... rest) {
+    public static AbstractPredicate<String> endsWith(String first, String... rest) {
         return or(sequence(rest).cons(first).map(endsWith()));
     }
 
-    public static LogicalPredicate<String> contains(final String value) {
+    public static AbstractPredicate<String> contains(final String value) {
         return new ContainsPredicate(value);
     }
 
@@ -163,31 +163,31 @@ public class Strings {
         };
     }
 
-    public static LogicalPredicate<String> equalIgnoringCase(final String expected) {
-        return new LogicalPredicate<String>() {
+    public static AbstractPredicate<String> equalIgnoringCase(final String expected) {
+        return new Predicate<String>() {
             public boolean matches(String actual) {
                 return expected.equalsIgnoreCase(actual);
             }
         };
     }
 
-    public static LogicalPredicate<String> empty = new LogicalPredicate<String>() {
+    public static AbstractPredicate<String> empty = new Predicate<String>() {
         public boolean matches(String value) {
             return isEmpty(value);
         }
     };
 
-    public static LogicalPredicate<String> empty() {
+    public static AbstractPredicate<String> empty() {
         return empty;
     }
 
-    public static LogicalPredicate<String> blank = new LogicalPredicate<String>() {
+    public static AbstractPredicate<String> blank = new Predicate<String>() {
         public boolean matches(String value) {
             return isBlank(value);
         }
     };
 
-    public static LogicalPredicate<String> blank() {
+    public static AbstractPredicate<String> blank() {
         return blank;
     }
 
@@ -199,8 +199,8 @@ public class Strings {
         return isEmpty(value) || isEmpty(value.trim());
     }
 
-    public static LogicalPredicate<Character> unicodeControlOrUndefinedCharacter() {
-        return new LogicalPredicate<Character>() {
+    public static AbstractPredicate<Character> unicodeControlOrUndefinedCharacter() {
+        return new Predicate<Character>() {
             public boolean matches(Character character) {
                 return character > 0x7F;
             }
@@ -366,14 +366,14 @@ public class Strings {
         };
     }
 
-    public static LogicalPredicate<String> palindrome = new LogicalPredicate<String>() {
+    public static AbstractPredicate<String> palindrome = new Predicate<String>() {
         @Override
         public boolean matches(String other) {
             return Strings.isPalindrome(other);
         }
     };
 
-    public static LogicalPredicate<String> isPalindrome() {
+    public static AbstractPredicate<String> isPalindrome() {
         return palindrome;
     }
 

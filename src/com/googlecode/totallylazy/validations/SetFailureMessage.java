@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
@@ -33,7 +32,7 @@ public class SetFailureMessage<T> extends LogicalValidator<T> {
         return new UnaryOperator<Pair<String, Sequence<String>>>() {
             @Override
             public Pair<String, Sequence<String>> call(Pair<String, Sequence<String>> keyAndMessages) throws Exception {
-                String message = Callers.call(messageBuilder, instance);
+                String message = messageBuilder.apply(instance);
                 return pair(keyAndMessages.first(), keyAndMessages.second().map(returns1(message)));
             }
         };

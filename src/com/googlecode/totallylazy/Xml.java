@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.NodeIterator;
 import com.googlecode.totallylazy.iterators.PoppingIterator;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -385,7 +385,7 @@ public class Xml {
         }
 
         public static Predicate<Node> matches(final String expression) {
-            return new LogicalPredicate<Node>() {
+            return new Predicate<Node>() {
                 @Override
                 public boolean matches(Node node) {
                     return Xml.matches(node, expression);

@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
@@ -11,7 +10,7 @@ import com.googlecode.totallylazy.Unchecked;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static java.lang.String.format;
 
-public class WherePredicate<T, R> extends LogicalPredicate<T> {
+public class WherePredicate<T, R> extends AbstractPredicate<T> {
     private final Function<? super T, ? extends R> callable;
     private final Predicate<? super R> predicate;
 
@@ -20,10 +19,10 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
         this.callable = callable;
     }
 
-    public static <T, R> LogicalPredicate<T> where(final Function<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> Predicate<T> where(final Function<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
         if(predicate instanceof AlwaysTrue) return Predicates.alwaysTrue();
         if(predicate instanceof AlwaysFalse) return Predicates.alwaysFalse();
-        if(predicate instanceof Not) return Predicates.not(where(callable, Unchecked.<Not< ? super R >>cast(predicate).predicate()));
+        if(predicate instanceof Not) return Predicates.not(WherePredicate.<T,R>where(callable, Unchecked.<Not<? super R>>cast(predicate).predicate()));
         return new WherePredicate<T, R>(callable, predicate);
     }
 
@@ -37,7 +36,7 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
     }
 
     public boolean matches(T o) {
-        return predicate.matches(Callers.call(callable, o));
+        return predicate.matches(callable.apply(o));
     }
 
     public Function<T, R> callable() {

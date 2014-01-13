@@ -5,7 +5,6 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Predicates.always;
 
@@ -42,7 +41,7 @@ public interface Atomic<T> extends Value<T> {
             Predicate<? super Integer> retry = call(retryPredicate);
             for (int i = 0; retry.matches(i); i++) {
                 T current = reference.get();
-                Pair<? extends T, ? extends R> modified = call(callable, current);
+                Pair<? extends T, ? extends R> modified = callable.apply(current);
                 if (reference.compareAndSet(current, modified.first())) return modified.second() ;
             }
             throw new RejectedExecutionException(String.format("Atomic operation could not be applied due to %s", retry));

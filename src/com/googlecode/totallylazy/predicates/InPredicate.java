@@ -1,9 +1,11 @@
 package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Lazy;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.annotations.multimethod;
+import com.googlecode.totallylazy.callables.LazyCallable;
 
 import java.util.Set;
 
@@ -11,32 +13,27 @@ import static com.googlecode.totallylazy.Predicates.never;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
-public class InPredicate<T> extends LogicalPredicate<T> {
+public class InPredicate<T> extends AbstractPredicate<T> {
     private final Iterable<T> original;
     private final Lazy<Set<T>> set;
 
     private InPredicate(final Iterable<T> iterable) {
-        this.set = new Lazy<Set<T>>() {
-            @Override
-            protected Set<T> get() throws Exception {
-                return set(iterable);
-            }
-        };
+        this.set = Lazy.lazy(() -> set(iterable));
         this.original = iterable;
     }
 
     @SafeVarargs
-    public static <T> LogicalPredicate<T> in(final T... items) {
+    public static <T> Predicate<T> in(final T... items) {
         return in(Sequences.sequence(items));
     }
 
-    public static <T> LogicalPredicate<T> in(final Iterable<? extends T> iterable) {
-        if(Sequences.isEmpty(iterable)) return never();
-        return new InPredicate<T>(Unchecked.<Iterable<T>>cast(iterable));
+    public static <T> Predicate<T> in(final Iterable<? extends T> iterable) {
+        if (Sequences.isEmpty(iterable)) return never();
+        return new InPredicate<>(Unchecked.<Iterable<T>>cast(iterable));
     }
 
     private Set<T> set(Iterable<T> iterable) {
-        if(iterable instanceof Set) return (Set<T>) iterable;
+        if (iterable instanceof Set) return (Set<T>) iterable;
         return sequence(iterable).toSet();
     }
 

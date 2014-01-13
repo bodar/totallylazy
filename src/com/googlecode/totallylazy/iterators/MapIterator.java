@@ -4,8 +4,6 @@ import com.googlecode.totallylazy.Function;
 
 import java.util.Iterator;
 
-import static com.googlecode.totallylazy.Callers.call;
-
 public final class MapIterator<T, S> extends ReadOnlyIterator<S> {
     private final Iterator<? extends T> iterator;
     private final Function<? super T, ? extends S> callable;
@@ -20,6 +18,6 @@ public final class MapIterator<T, S> extends ReadOnlyIterator<S> {
     }
 
     public final S next() {
-        return call(callable, iterator.next());
+        return callable.apply(iterator.next());
     }
 }

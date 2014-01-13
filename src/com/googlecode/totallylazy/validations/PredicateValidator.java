@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 
 import static com.googlecode.totallylazy.Callables.returns1;
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.validations.PredicateValidator.constructors.validatePredicate;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
@@ -22,7 +21,7 @@ public class PredicateValidator<T> extends LogicalValidator<T> {
     public ValidationResult validate(T instance) {
         return predicate.matches(instance)
                 ? pass()
-                : failure(call(message, instance));
+                : failure(message.apply(instance));
     }
 
     public static class constructors {

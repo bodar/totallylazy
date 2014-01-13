@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -61,7 +61,7 @@ public interface Sources extends Closeable {
                 return source.name;
             }
         };
-        public static LogicalPredicate<Source> directory = new LogicalPredicate<Source>() {
+        public static AbstractPredicate<Source> directory = new Predicate<Source>() {
             @Override
             public boolean matches(Source source) {
                 return source.isDirectory;

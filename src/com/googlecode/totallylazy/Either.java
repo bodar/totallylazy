@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functor<R>, Applicative<R>, Monad<R>, Foldable<R> {
     public static <L, R> Either<L, R> right(R value) {
@@ -64,19 +64,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
     public abstract Option<R> rightOption();
 
     public static class predicates {
-        public static LogicalPredicate<Either<?, ?>> left = new LogicalPredicate<Either<?, ?>>() {
-            @Override
-            public boolean matches(Either<?, ?> other) {
-                return other.isLeft();
-            }
-        };
-
-        public static LogicalPredicate<Either<?, ?>> right = new LogicalPredicate<Either<?, ?>>() {
-            @Override
-            public boolean matches(Either<?, ?> other) {
-                return other.isRight();
-            }
-        };
+        public static Predicate<Either<?, ?>> left = either -> either.isLeft();
+        public static Predicate<Either<?, ?>> right = either -> either.isRight();
     }
 
     public static class functions {
