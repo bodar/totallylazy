@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
-public class StartsWithPredicate extends LogicalPredicate<String> {
+public class StartsWithPredicate extends AbstractPredicate<String> {
     private final String value;
 
     public StartsWithPredicate(String value) {

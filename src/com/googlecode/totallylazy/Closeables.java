@@ -4,7 +4,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Closeables {
@@ -82,9 +81,9 @@ public class Closeables {
 
     public static <T extends Closeable, R> R using(T t, Function<? super T, ? extends R> callable) {
         try {
-            return call(callable, t);
+            return callable.apply(t);
         } finally {
-            call(close(), t);
+            close().apply(t);
         }
     }
 
@@ -93,18 +92,18 @@ public class Closeables {
             return call(callable, a, b);
         } finally {
             try {
-                call(close(), a);
+                close().apply(a);
             } finally {
-                call(close(), b);
+                ((Function<? super Void, ? extends Void>) close()).apply((Void) b);
             }
         }
     }
 
     public static <T, R> R using(T instanceWithCloseMethod, Function<? super T, ? extends R> callable) {
         try {
-            return call(callable, instanceWithCloseMethod);
+            return callable.apply(instanceWithCloseMethod);
         } finally {
-            call(reflectiveClose(), instanceWithCloseMethod);
+            reflectiveClose().apply(instanceWithCloseMethod);
         }
     }
 

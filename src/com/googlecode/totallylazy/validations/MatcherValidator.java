@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.validations;
 import com.googlecode.totallylazy.Function;
 import org.hamcrest.Matcher;
 
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.matchers.Matchers.describeMismatch;
 import static com.googlecode.totallylazy.validations.MatcherValidator.constructors.validateMatcher;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;
@@ -20,9 +19,9 @@ public class MatcherValidator<T> extends LogicalValidator<T> {
 
 	@Override
 	public ValidationResult validate(T instance) {
-		return matcher.matches(instance)
+        return matcher.matches(instance)
 				? pass()
-				: failure(call(message, instance));
+				: failure(message.apply(instance));
 	}
 
 	public static class constructors {

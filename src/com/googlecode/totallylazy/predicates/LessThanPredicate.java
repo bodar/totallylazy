@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.annotations.multimethod;
 
-public class LessThanPredicate<T extends Comparable<? super T>> extends LogicalPredicate<T> implements LessThan<T> {
+public class LessThanPredicate<T extends Comparable<? super T>> extends AbstractPredicate<T> implements LessThan<T> {
     private final T comparable;
 
     private LessThanPredicate(T comparable) {

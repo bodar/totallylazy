@@ -62,17 +62,17 @@ public final class Right<L,R> extends Either<L,R> {
 
     @Override
     public <S> S map(Function<? super L, S> left, Function<? super R, ? extends S> right) {
-        return call(right, right());
+        return right.apply(right());
     }
 
     @Override
     public <S> Either<L, S> map(Function<? super R, ? extends S> callable) {
-        return right(call(callable, right()));
+        return right(callable.apply(right()));
     }
 
     @Override
     public <S> Either<L, S> flatMap(Function<? super R, ? extends Either<L, S>> callable) {
-        return call(callable, right());
+        return callable.apply(right());
     }
 
     @Override

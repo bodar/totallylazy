@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
-import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -62,7 +61,7 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
     }
 
     public TreeZipper<K, V> modify(Function<? super TreeMap<K, V>, ? extends TreeMap<K, V>> callable) {
-        TreeMap<K, V> result = Functions.call(callable, focus);
+        TreeMap<K, V> result = callable.apply(focus);
         TreeZipper<K, V> newZipper = zipper(result, breadcrumbs);
         if (newZipper.focus.isEmpty()) return newZipper.up();
         return newZipper;

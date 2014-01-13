@@ -16,7 +16,7 @@ public class EqualsBinaryPredicate<T> extends LogicalBinaryPredicate<T> {
     }
 
     @Override
-    public LogicalPredicate<T> apply(T t) {
+    public AbstractPredicate<T> apply(T t) {
         return EqualsPredicate.equalTo(t);
     }
 

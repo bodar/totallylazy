@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.matchers;
 
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 import org.hamcrest.Description;
 import org.hamcrest.DiagnosingMatcher;
 import org.hamcrest.Matcher;
@@ -72,8 +72,8 @@ public class Matchers {
         };
     }
 
-    public static <T> LogicalPredicate<T> predicate(final Matcher<T> matcher) {
-        return new LogicalPredicate<T>() {
+    public static <T> Predicate<T> predicate(final Matcher<T> matcher) {
+        return new Predicate<T>() {
             public final boolean matches(T other) {
                 return matcher.matches(other);
             }

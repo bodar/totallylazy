@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.JoinCharSequence;
 import com.googlecode.totallylazy.numbers.Numbers;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
@@ -23,9 +23,9 @@ public class Characters {
         return Sequences.characters(value);
     }
 
-    public static LogicalPredicate<Character> in(Charset charset) {
+    public static AbstractPredicate<Character> in(Charset charset) {
         final CharsetEncoder encoder = charset.newEncoder();
-        return new LogicalPredicate<Character>() {
+        return new Predicate<Character>() {
             @Override
             public boolean matches(Character other) {
                 return encoder.canEncode(other);
@@ -33,8 +33,8 @@ public class Characters {
         };
     }
 
-    public static LogicalPredicate<Character> in(final String characters) {
-        return new LogicalPredicate<Character>() {
+    public static AbstractPredicate<Character> in(final String characters) {
+        return new Predicate<Character>() {
             @Override
             public boolean matches(Character other) {
                 return characters.indexOf(other) != -1;
@@ -47,41 +47,41 @@ public class Characters {
         };
     }
 
-    public static LogicalPredicate<Character> identifierStart = new LogicalPredicate<Character>() {
+    public static AbstractPredicate<Character> identifierStart = new Predicate<Character>() {
         @Override
         public boolean matches(Character other) {
             return Character.isJavaIdentifierStart(other);
         }
     };
 
-    public static LogicalPredicate<Character> identifierPart = new LogicalPredicate<Character>() {
+    public static AbstractPredicate<Character> identifierPart = new Predicate<Character>() {
         @Override
         public boolean matches(Character other) {
             return Character.isJavaIdentifierPart(other);
         }
     };
 
-    public static LogicalPredicate<Character> letter = new LogicalPredicate<Character>() {
+    public static AbstractPredicate<Character> letter = new Predicate<Character>() {
         public boolean matches(Character other) {
             return Character.isLetter(other);
         }
     };
 
-    public static LogicalPredicate<Character> digit = new LogicalPredicate<Character>() {
+    public static AbstractPredicate<Character> digit = new Predicate<Character>() {
         public boolean matches(Character other) {
             return Character.isDigit(other);
         }
     };
 
-    public static LogicalPredicate<Character> between(final char start, final char end) {
-        return new LogicalPredicate<Character>() {
+    public static AbstractPredicate<Character> between(final char start, final char end) {
+        return new Predicate<Character>() {
             public boolean matches(Character other) {
                 return other >= start && other <= end;
             }
         };
     }
 
-    public static LogicalPredicate<Character> alphaNumeric = between('A', 'Z').or(between('a', 'z')).or(between('0', '9'));
+    public static AbstractPredicate<Character> alphaNumeric = between('A', 'Z').or(between('a', 'z')).or(between('0', '9'));
 
     public static Sequence<Character> range(char start, char end) {
         return Numbers.range((int) start, (int) end).map(new Function<Number, Character>() {

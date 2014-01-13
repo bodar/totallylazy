@@ -11,14 +11,14 @@ import com.googlecode.totallylazy.annotations.multimethod;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.one;
 
-public class AndPredicate<T> extends LogicalPredicate<T> {
+public class AndPredicate<T> extends AbstractPredicate<T> {
     private final Sequence<Predicate<T>> predicates;
 
     private AndPredicate(Sequence<Predicate<T>> predicates) {
         this.predicates = predicates;
     }
 
-    public static <T> LogicalPredicate<T> and(Iterable<? extends Predicate<? super T>> predicates) {
+    public static <T> Predicate<T> and(Iterable<? extends Predicate<? super T>> predicates) {
         Sequence<Predicate<T>> sequence = Sequences.sequence(predicates).<Predicate<T>>unsafeCast().
                 flatMap(AndPredicate.<T>asPredicates());
         if (sequence.exists(instanceOf(AlwaysFalse.class))) return Predicates.alwaysFalse();

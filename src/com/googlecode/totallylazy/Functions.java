@@ -18,15 +18,6 @@ public class Functions {
         };
     }
 
-    public static <A, B> Function<A, B> function(final Function<? super A, ? extends B> callable) {
-        return new Function<A, B>() {
-            @Override
-            public B call(A a) throws Exception {
-                return callable.call(a);
-            }
-        };
-    }
-
     public static <A, B, C> Function2<A, B, C> function(final Callable2<? super A, ? super B, ? extends C> callable) {
         return new Function2<A, B, C>() {
             @Override
@@ -66,14 +57,6 @@ public class Functions {
     public static <A> A call(final Callable<? extends A> callable) {
         try {
             return callable.call();
-        } catch (Exception e) {
-            throw lazyException(e);
-        }
-    }
-
-    public static <A, B> B call(final Function<? super A, ? extends B> callable, final A a) {
-        try {
-            return callable.call(a);
         } catch (Exception e) {
             throw lazyException(e);
         }

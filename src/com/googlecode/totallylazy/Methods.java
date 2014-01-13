@@ -1,13 +1,12 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Classes.allClasses;
 import static com.googlecode.totallylazy.Exceptions.handleException;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
@@ -15,69 +14,35 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Methods {
     public static Function<Method, String> methodName() {
-        return new Function<Method, String>() {
-            @Override
-            public String call(Method method) throws Exception {
-                return method.getName();
-            }
-        };
+        return Method::getName;
     }
 
     public static Function<Method,? extends Class<?>> returnType() {
-        return new Function<Method, Class<?>>() {
-            @Override
-            public Class<?> call(Method method) throws Exception {
-                return method.getReturnType();
-            }
-        };
+        return Method::getReturnType;
     }
 
     public static Function<Method, Class<?>[]> parameterTypes() {
-        return new Function<Method, Class<?>[]>() {
-            public Class<?>[] call(Method method) throws Exception {
-                return method.getParameterTypes();
-            }
-        };
+        return Method::getParameterTypes;
     }
 
     public static <T extends Annotation> Function<Method, T> annotation(final Class<T> annotationClass) {
-        return new Function<Method, T>() {
-            public T call(Method method) throws Exception {
-                return method.getAnnotation(annotationClass);
-            }
-        };
+        return method -> method.getAnnotation(annotationClass);
     }
 
     public static Function<Method, Type> genericReturnType() {
-        return new Function<Method, Type>() {
-            public Type call(Method method) throws Exception {
-                return method.getGenericReturnType();
-            }
-        };
+        return Method::getGenericReturnType;
     }
 
     public static Function<Method, Type[]> genericParameterTypes() {
-        return new Function<Method, Type[]>() {
-            public Type[] call(Method method) throws Exception {
-                return method.getGenericParameterTypes();
-            }
-        };
+        return Method::getGenericParameterTypes;
     }
 
-    public static LogicalPredicate<Method> modifier(final int modifier) {
-        return new LogicalPredicate<Method>() {
-            public boolean matches(Method method) {
-                return (method.getModifiers() & modifier) != 0;
-            }
-        };
+    public static Predicate<Method> modifier(final int modifier) {
+        return method -> (method.getModifiers() & modifier) != 0;
     }
 
     public static Function<Class<?>, Method> method(final String name, final Class<?>... parameters) {
-        return new Function<Class<?>, Method>() {
-            public Method call(Class<?> aClass) throws Exception {
-                return aClass.getMethod(name, parameters);
-            }
-        };
+        return aClass -> aClass.getMethod(name, parameters);
     }
 
     public static <T> Option<Method> method(T instance, final String name, final Class<?>... parameters) {
@@ -85,23 +50,15 @@ public class Methods {
     }
 
     public static Option<Method> method(Class<?> aClass, String name, final Class<?>... parameters) {
-        return call(handleException(method(name, parameters), instanceOf(NoSuchMethodException.class)), aClass);
+        return handleException(method(name, parameters), instanceOf(NoSuchMethodException.class)).apply(aClass);
     }
 
     public static Function<Class<?>, Iterable<Method>> methods() {
-        return new Function<Class<?>, Iterable<Method>>() {
-            public Iterable<Method> call(Class<?> aClass) throws Exception {
-                return sequence(aClass.getMethods());
-            }
-        };
+        return aClass -> sequence(aClass.getMethods());
     }
 
     public static Function<Class<?>, Iterable<Method>> declaredMethods() {
-        return new Function<Class<?>, Iterable<Method>>() {
-            public Iterable<Method> call(Class<?> aClass) throws Exception {
-                return sequence(aClass.getDeclaredMethods());
-            }
-        };
+        return aClass -> sequence(aClass.getDeclaredMethods());
     }
 
     public static Sequence<Method> allMethods(Class<?> aClass) {
@@ -120,10 +77,6 @@ public class Methods {
     }
 
     public static <R> Function<Method, R> invokeOn(final Object instance, final Object... arguments) {
-        return new Function<Method, R>() {
-            public R call(Method method) throws Exception {
-                return Unchecked.cast(invoke(method, instance, arguments));
-            }
-        };
+        return method -> Unchecked.cast(invoke(method, instance, arguments));
     }
 }

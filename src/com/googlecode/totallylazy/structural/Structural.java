@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.Methods;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -67,10 +67,10 @@ public class Structural {
         return instanceMethods.find(structuralMatch(requiredMethod));
     }
 
-    private static LogicalPredicate<Method> structuralMatch(final Method required) {
+    private static AbstractPredicate<Method> structuralMatch(final Method required) {
         final Sequence<Type> requiredParameters = sequence(required.getGenericParameterTypes());
         final Sequence<Type> requiredReturnType = sequence(required.getGenericReturnType());
-        return new LogicalPredicate<Method>() {
+        return new Predicate<Method>() {
             @Override
             public boolean matches(Method objects) {
                 return objects.getName().equals(required.getName()) &&

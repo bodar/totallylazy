@@ -2,8 +2,6 @@ package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.Function;
 
-import static com.googlecode.totallylazy.Callers.call;
-
 public final class IterateIterator<T> extends ReadOnlyIterator<T> {
     private final Function<? super T, ? extends T> callable;
     private T t;
@@ -19,7 +17,7 @@ public final class IterateIterator<T> extends ReadOnlyIterator<T> {
 
     public final T next() {
         T result = t;
-        t = call(callable, t);
+        t = callable.apply(t);
         return result;
     }
 

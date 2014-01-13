@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.Function;
 
 import java.util.Comparator;
 
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class DescendingComparator<T, R extends Comparable<? super R>> implements Comparator<T> {
@@ -15,7 +14,7 @@ public class DescendingComparator<T, R extends Comparable<? super R>> implements
     }
 
     public final int compare(final T first, final T second) {
-        return NullComparator.compare(call(callable, second), call(callable, first), NullComparator.Direction.Down);
+        return NullComparator.compare(callable.apply(second), callable.apply(first), NullComparator.Direction.Down);
     }
 
     public Function<T, R> callable() {

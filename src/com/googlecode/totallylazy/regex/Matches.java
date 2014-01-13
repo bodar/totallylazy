@@ -10,7 +10,6 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 import static com.googlecode.totallylazy.Callables.returnArgument;
-import static com.googlecode.totallylazy.Callers.call;
 
 public class Matches extends Sequence<MatchResult> {
     private final Pattern pattern;
@@ -34,12 +33,12 @@ public class Matches extends Sequence<MatchResult> {
         int position = 0;
         for (MatchResult matchResult : this) {
             CharSequence before = text.subSequence(position, matchResult.start());
-            if (before.length() > 0) builder.append(filterNull(call(notMatched, before)));
-            builder.append(filterNull(call(matched, (matchResult))));
+            if (before.length() > 0) builder.append(filterNull(notMatched.apply(before)));
+            builder.append(filterNull(matched.apply((matchResult))));
             position = matchResult.end();
         }
         CharSequence after = text.subSequence(position, text.length());
-        if (after.length() > 0) builder.append(filterNull(call(notMatched, after)));
+        if (after.length() > 0) builder.append(filterNull(notMatched.apply(after)));
         return builder.toString();
     }
 

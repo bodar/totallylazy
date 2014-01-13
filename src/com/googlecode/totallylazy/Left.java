@@ -63,7 +63,7 @@ public final class Left<L,R> extends Either<L, R> {
 
     @Override
     public <S> S map(Function<? super L, S> left, Function<? super R, ? extends S> right) {
-        return call(left, left());
+        return left.apply(left());
     }
 
     @Override

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -66,7 +65,7 @@ public class Maps {
     public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterator<? extends T> iterator, final Function<? super T, ? extends Key> callable) {
         while (iterator.hasNext()) {
             final T next = iterator.next();
-            final Key key = call(callable, next);
+            final Key key = callable.apply(next);
             seed.put(key, next);
         }
         return seed;
@@ -111,7 +110,7 @@ public class Maps {
     public static <V, K> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterator<? extends V> iterator, final Function<? super V, ? extends K> callable) {
         while (iterator.hasNext()) {
             final V value = iterator.next();
-            final K key = call(callable, value);
+            final K key = callable.apply(value);
             if (!seed.containsKey(key)) {
                 seed.put(key, new ArrayList<V>());
             }

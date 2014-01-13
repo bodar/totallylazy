@@ -12,7 +12,7 @@ import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -27,7 +27,6 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Appendables.append;
 import static com.googlecode.totallylazy.Callables.nullGuard;
 import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.in;
@@ -71,7 +70,7 @@ public class Iterators {
 
     public static <T> void forEach(final Iterator<? extends T> iterator, final Function<? super T, ?> runnable) {
         while (iterator.hasNext()) {
-            Callers.call(runnable, iterator.next());
+            runnable.apply(iterator.next());
         }
     }
 
@@ -149,7 +148,7 @@ public class Iterators {
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Function<? super Pair<T, S>, ? extends S> callable) {
         if (!iterator.hasNext()) return seed;
-        return Callers.call(callable, Pair.pair(returns(head(iterator)), new Returns<S>() {
+        return callable.apply(Pair.pair(returns(head(iterator)), new Returns<S>() {
             @Override
             public S call() throws Exception {
                 return foldRight(iterator, seed, callable);
@@ -301,7 +300,7 @@ public class Iterators {
     public static <T, S> Option<S> tryPick(final Iterator<? extends T> iterator, final Function<? super T, ? extends Option<? extends S>> callable) {
         while (iterator.hasNext()) {
             T item = iterator.next();
-            Option<S> result = Unchecked.cast(call(callable, item));
+            Option<S> result = Unchecked.cast(callable.apply(item));
             if (!result.isEmpty()) {
                 return result;
             }
@@ -393,8 +392,8 @@ public class Iterators {
         });
     }
 
-    public static <T> LogicalPredicate<Iterator<T>> hasNext() {
-        return new LogicalPredicate<Iterator<T>>() {
+    public static <T> Predicate<Iterator<T>> hasNext() {
+        return new Predicate<Iterator<T>>() {
             public boolean matches(Iterator<T> iterator) {
                 return iterator.hasNext();
             }

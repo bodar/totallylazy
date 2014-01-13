@@ -8,7 +8,6 @@ import com.googlecode.totallylazy.Sequences;
 
 import java.util.Comparator;
 
-import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -16,7 +15,7 @@ public class Comparators {
     public static <T, R> Comparator<T> by(final Function<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
         return new Comparator<T>() {
             public int compare(T instance, T otherInstance) {
-                return comparator.compare(call(callable, instance), call(callable, otherInstance));
+                return comparator.compare(callable.apply(instance), callable.apply(otherInstance));
             }
         };
     }

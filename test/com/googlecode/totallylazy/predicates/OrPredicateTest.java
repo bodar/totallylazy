@@ -26,15 +26,15 @@ public class OrPredicateTest {
 
     @Test
     public void collapsesTrues() throws Exception {
-        LogicalPredicate<String> predicate = is("13");
-        LogicalPredicate<String> or = or(alwaysTrue(), predicate, alwaysTrue());
+        AbstractPredicate<String> predicate = is("13");
+        AbstractPredicate<String> or = or(alwaysTrue(), predicate, alwaysTrue());
         assertThat(or, Matchers.is(alwaysTrue(String.class)));
     }
 
     @Test
     public void collapsesFalses() throws Exception {
-        LogicalPredicate<String> predicate = is("13");
-        LogicalPredicate<String> or = or(alwaysFalse(), predicate, alwaysFalse());
+        AbstractPredicate<String> predicate = is("13");
+        AbstractPredicate<String> or = or(alwaysFalse(), predicate, alwaysFalse());
         assertThat(or.matches("13"), Matchers.is(predicate.matches("13")));
         assertThat(or.matches("12"), Matchers.is(predicate.matches("12")));
         assertThat(or, Matchers.is(predicate));
@@ -53,15 +53,15 @@ public class OrPredicateTest {
 
     @Test
     public void collapsesOne() throws Exception {
-        LogicalPredicate<String> or = or(is("13"));
+        AbstractPredicate<String> or = or(is("13"));
         assertThat(or.matches("13"), Matchers.is(true));
         assertThat(or, Matchers.is(is("13")));
     }
 
     @Test
     public void collapesNots() throws Exception {
-        LogicalPredicate<String> original = or(not(is("12")), not(is("13")));
-        LogicalPredicate<String> collapsed = not(and(is("12"), is("13")));
+        AbstractPredicate<String> original = or(not(is("12")), not(is("13")));
+        AbstractPredicate<String> collapsed = not(and(is("12"), is("13")));
         assertThat(original.matches("14"), Matchers.is(collapsed.matches("14")));
         assertThat(original.matches("13"), Matchers.is(collapsed.matches("13")));
         assertThat(original.matches("12"), Matchers.is(collapsed.matches("12")));

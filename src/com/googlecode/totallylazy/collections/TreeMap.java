@@ -8,8 +8,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static com.googlecode.totallylazy.Callers.call;
-
 public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
     Comparator<K> comparator();
 
@@ -85,7 +83,7 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
 
     class methods {
         public static <K, V, NewV> TreeMap<K, NewV> map(Function<? super V, ? extends NewV> transformer, final TreeFactory factory, final TreeMap<K, V> treeMap) {
-            return factory.create(treeMap.comparator(), treeMap.key(), call(transformer, treeMap.value()), treeMap.left().map(transformer), treeMap.right().map(transformer));
+            return factory.create(treeMap.comparator(), treeMap.key(), transformer.apply(treeMap.value()), treeMap.left().map(transformer), treeMap.right().map(transformer));
         }
 
         public static <K, V> TreeMap<K, V> treeMap(final TreeFactory factory, final Comparator<K> comparator, final List<Pair<K, V>> sortedList) {

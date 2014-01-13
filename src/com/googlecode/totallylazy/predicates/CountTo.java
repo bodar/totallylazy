@@ -4,7 +4,7 @@ package com.googlecode.totallylazy.predicates;
 import static com.googlecode.totallylazy.numbers.Numbers.decrement;
 import static com.googlecode.totallylazy.numbers.Numbers.isPositive;
 
-public class CountTo extends LogicalPredicate<Object> {
+public class CountTo extends AbstractPredicate<Object> {
     private Number count;
 
     public CountTo(Number count) {

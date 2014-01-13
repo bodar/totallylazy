@@ -5,8 +5,6 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callers.call;
-
 public class LazyEqualsMatcher<T> extends TypeSafeMatcher<T> {
     private final Callable<? extends T> expectedLoader;
     private final String descriptionText;
