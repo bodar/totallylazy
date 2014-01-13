@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-public abstract class Mapper<T,R> extends Function1<T,R> {
+public abstract class Mapper<T,R> extends Eq implements Function<T,R> {
     public static <T,R> Mapper<T,R> mapper(final Function<? super T, ? extends R> callable){
         return new Mapper<T, R>() {
             @Override

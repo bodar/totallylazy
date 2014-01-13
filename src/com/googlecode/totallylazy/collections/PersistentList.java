@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Returns;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
@@ -159,12 +158,12 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
             return returns(PersistentList.constructors.<T>empty());
         }
 
-        public static <T> Function1<PersistentList<T>, PersistentList<T>> cons(T t) {
+        public static <T> Function<PersistentList<T>, PersistentList<T>> cons(T t) {
             return Segment.functions.cons(t);
         }
 
-        public static <T> Function1<PersistentList<T>, PersistentList<T>> tail() {
-            return new Function1<PersistentList<T>, PersistentList<T>>() {
+        public static <T> Function<PersistentList<T>, PersistentList<T>> tail() {
+            return new Function<PersistentList<T>, PersistentList<T>>() {
                 @Override
                 public PersistentList<T> call(PersistentList<T> list) throws Exception {
                     return list.tail();
@@ -172,15 +171,15 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
             };
         }
 
-        public static <T> Function1<PersistentList<T>, PersistentList<T>> tail(Class<T> aClass) {
+        public static <T> Function<PersistentList<T>, PersistentList<T>> tail(Class<T> aClass) {
             return tail();
         }
 
-        public static <T> Function1<PersistentList<T>, Option<T>> headOption(Class<T> aClass) {
+        public static <T> Function<PersistentList<T>, Option<T>> headOption(Class<T> aClass) {
             return headOption();
         }
-        public static <T> Function1<PersistentList<T>, Option<T>> headOption() {
-            return new Function1<PersistentList<T>, Option<T>>() {
+        public static <T> Function<PersistentList<T>, Option<T>> headOption() {
+            return new Function<PersistentList<T>, Option<T>>() {
                 @Override
                 public Option<T> call(PersistentList<T> list) throws Exception {
                     return list.headOption();

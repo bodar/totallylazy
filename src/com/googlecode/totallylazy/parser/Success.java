@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Pair;
 
@@ -34,8 +33,8 @@ public class Success<A> extends Pair<A, CharBuffer> implements Result<A> {
     }
 
     public static class functions {
-        public static <A> Function1<Result<A>, CharBuffer> remainder() {
-            return new Function1<Result<A>, CharBuffer>() {
+        public static <A> Function<Result<A>, CharBuffer> remainder() {
+            return new Function<Result<A>, CharBuffer>() {
                 @Override
                 public CharBuffer call(Result<A> result) throws Exception {
                     return ((Success<A>) result).remainder();

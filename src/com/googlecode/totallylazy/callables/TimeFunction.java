@@ -1,11 +1,10 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Function1;
 
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
 
-public final class TimeFunction<A,B> extends Function1<A, B> {
+public final class TimeFunction<A,B> extends com.googlecode.totallylazy.Eq implements Function<A,B> {
     private final Function<? super A, ? extends B> callable;
     private final Function<? super Number, ?> reporter;
 

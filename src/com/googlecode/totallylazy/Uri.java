@@ -248,25 +248,25 @@ public class Uri implements Comparable<Uri> {
     }
 
     public static class functions {
-        public static Function1<String, Uri> uri = new Function1<String, Uri>() {
+        public static Function<String, Uri> uri = new Function<String, Uri>() {
             @Override
             public Uri call(String value) throws Exception {
                 return Uri.uri(value);
             }
         };
 
-        public static Function1<String, Uri> uri() {
+        public static Function<String, Uri> uri() {
             return uri;
         }
 
-        public static final Function1<Uri, String> path = new Function1<Uri, String>() {
+        public static final Function<Uri, String> path = new Function<Uri, String>() {
             @Override
             public String call(Uri uri) throws Exception {
                 return uri.path();
             }
         };
 
-        public static final Function1<Uri, String> host = new Function1<Uri, String>() {
+        public static final Function<Uri, String> host = new Function<Uri, String>() {
             @Override
             public String call(Uri uri) throws Exception {
                 return uri.host();

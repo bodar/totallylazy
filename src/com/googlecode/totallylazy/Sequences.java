@@ -290,7 +290,7 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Function1<Sequence<T>, S> reduce(final Callable2<S, T, S> callable) {
+    public static <T, S> Function<Sequence<T>, S> reduce(final Callable2<S, T, S> callable) {
         return Sequences.<T, S>reduce().flip().apply(callable);
     }
 
@@ -472,8 +472,8 @@ public class Sequences {
         };
     }
 
-    public static <T> Function1<Iterable<? extends T>, Sequence<T>> cons(final T value) {
-        return new Function1<Iterable<? extends T>, Sequence<T>>() {
+    public static <T> Function<Iterable<? extends T>, Sequence<T>> cons(final T value) {
+        return new Function<Iterable<? extends T>, Sequence<T>>() {
             @Override
             public Sequence<T> call(Iterable<? extends T> values) throws Exception {
                 return cons(value, sequence(values));
@@ -633,8 +633,8 @@ public class Sequences {
         return Iterators.splitAt(iterable.iterator(), index);
     }
 
-    public static <T> Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index) {
-        return new Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
+    public static <T> Function<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index) {
+        return new Function<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
             public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
                 return sequence.splitAt(index);
             }
@@ -645,8 +645,8 @@ public class Sequences {
         return Iterators.splitWhen(iterable.iterator(), predicate);
     }
 
-    public static <T> Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitWhen(final Predicate<? super T> predicate) {
-        return new Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
+    public static <T> Function<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitWhen(final Predicate<? super T> predicate) {
+        return new Function<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
             public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
                 return sequence.splitWhen(predicate);
             }
@@ -657,8 +657,8 @@ public class Sequences {
         return Iterators.splitOn(iterable.iterator(), instance);
     }
 
-    public static <T> Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitOn(final T instance) {
-        return new Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
+    public static <T> Function<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitOn(final T instance) {
+        return new Function<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
             public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
                 return sequence.splitOn(instance);
             }
@@ -682,8 +682,8 @@ public class Sequences {
                 map(Callables.<Sequence<T>>first());
     }
 
-    public static <F, S> Function1<Pair<F, S>, Pair<F, S>> applyToSecond(final Function<S, Pair<F, S>> callable) {
-        return new Function1<Pair<F, S>, Pair<F, S>>() {
+    public static <F, S> Function<Pair<F, S>, Pair<F, S>> applyToSecond(final Function<S, Pair<F, S>> callable) {
+        return new Function<Pair<F, S>, Pair<F, S>>() {
             public Pair<F, S> call(Pair<F, S> pair) throws Exception {
                 return callable.call(pair.second());
             }
@@ -732,7 +732,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Function1<T, Integer> indexIn(final Iterable<? extends T> values) {
+    public static <T> Function<T, Integer> indexIn(final Iterable<? extends T> values) {
         return Lists.indexIn(sequence(values).toList());
     }
 
@@ -793,8 +793,8 @@ public class Sequences {
         return Sequences.<T>sequence(iterable).isEmpty() ? Option.<Sequence<T>>none() : some(sequence(iterable));
     }
 
-    public static Function1<Iterable<?>, String> toString(final String seperator) {
-        return new Function1<Iterable<?>, String>() {
+    public static Function<Iterable<?>, String> toString(final String seperator) {
+        return new Function<Iterable<?>, String>() {
             @Override
             public String call(Iterable<?> objects) throws Exception {
                 return Sequences.toString(objects, seperator);
@@ -802,8 +802,8 @@ public class Sequences {
         };
     }
 
-    public static Function1<Iterable<?>, String> toString(final String start, final String seperator, final String end) {
-        return new Function1<Iterable<?>, String>() {
+    public static Function<Iterable<?>, String> toString(final String start, final String seperator, final String end) {
+        return new Function<Iterable<?>, String>() {
             @Override
             public String call(Iterable<?> objects) throws Exception {
                 return Sequences.toString(objects, start, seperator, end);
