@@ -259,7 +259,7 @@ public class Strings {
 
     public static String toString(final InputStream stream) {
         if (stream == null) return EMPTY;
-        return using(stream, new Callable1<InputStream, String>() {
+        return using(stream, new Function<InputStream, String>() {
             @Override
             public String call(InputStream inputStream) throws Exception {
                 return Strings.toString(inputStreamReader(inputStream));
@@ -268,7 +268,7 @@ public class Strings {
     }
 
     public static String toString(Reader reader) {
-        return using(reader, new Callable1<Reader, String>() {
+        return using(reader, new Function<Reader, String>() {
             public String call(Reader reader) throws Exception {
                 StringBuilder builder = new StringBuilder();
                 char[] buffer = new char[512];
@@ -357,8 +357,8 @@ public class Strings {
     }
 
 
-    public static Callable1<String, String> trim() {
-        return new Callable1<String, String>() {
+    public static Function<String, String> trim() {
+        return new Function<String, String>() {
             @Override
             public String call(String value) throws Exception {
                 return value.trim();

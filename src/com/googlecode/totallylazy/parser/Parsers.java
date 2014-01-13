@@ -1,12 +1,10 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Triple;
@@ -56,7 +54,7 @@ public class Parsers {
         return PatternParser.pattern(value);
     }
 
-    public static <A, B> Parser<B> map(Parse<? extends A> source, Callable1<? super A, ? extends B> callable) {
+    public static <A, B> Parser<B> map(Parse<? extends A> source, Function<? super A, ? extends B> callable) {
         return MappingParser.map(source, callable);
     }
 

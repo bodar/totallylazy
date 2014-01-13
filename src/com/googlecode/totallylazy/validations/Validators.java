@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
@@ -90,27 +90,27 @@ public class Validators {
         }
     }
 
-    public static <T, R> MapAndValidate<T, ? extends Iterable<? extends R>> forAll(Callable1<? super T, ? extends Iterable<? extends R>> map, Validator<? super R> validator) {
+    public static <T, R> MapAndValidate<T, ? extends Iterable<? extends R>> forAll(Function<? super T, ? extends Iterable<? extends R>> map, Validator<? super R> validator) {
         return mapAndValidate(map, everyItem(validator));
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<? super T, ? extends R> map, Validator<? super R> validator) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Validator<? super R> validator) {
         return mapAndValidate(map, validator);
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<? super T, ? extends R> map, Matcher<? super R> matcher) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Matcher<? super R> matcher) {
         return mapAndValidate(map, validateThat(matcher));
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<? super T, ? extends R> map, Predicate<? super R> predicate) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Predicate<? super R> predicate) {
         return mapAndValidate(map, validateThat(predicate));
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<? super T, ? extends R> map, Predicate<? super R> predicate, String message) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Predicate<? super R> predicate, String message) {
         return mapAndValidate(map, validateThat(predicate, message));
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<? super T, ? extends R> map, Predicate<? super R> predicate, Callable1<? super R, String> message) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Predicate<? super R> predicate, Function<? super R, String> message) {
         return mapAndValidate(map, validateThat(predicate, message));
     }
 
@@ -126,7 +126,7 @@ public class Validators {
         return validatePredicate(predicate, message);
     }
 
-    public static <T> PredicateValidator<T> validateThat(Predicate<? super T> predicate, Callable1<? super T, String> message) {
+    public static <T> PredicateValidator<T> validateThat(Predicate<? super T> predicate, Function<? super T, String> message) {
         return validatePredicate(predicate, message);
     }
 

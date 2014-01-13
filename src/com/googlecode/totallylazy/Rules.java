@@ -3,7 +3,6 @@ package com.googlecode.totallylazy;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import static com.googlecode.totallylazy.Callables.callWith;
 import static com.googlecode.totallylazy.Rule.rule;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -15,7 +14,7 @@ public class Rules<A, B> extends Function1<A, B> implements Predicate<A>, Value<
     }
 
     @Deprecated
-    public Rules<A, B> add(final Predicate<? super A> predicate, final Callable1<? super A, ? extends B> callable) {
+    public Rules<A, B> add(final Predicate<? super A> predicate, final Function<? super A, ? extends B> callable) {
         return addFirst(predicate, callable);
     }
 
@@ -25,7 +24,7 @@ public class Rules<A, B> extends Function1<A, B> implements Predicate<A>, Value<
         return this;
     }
 
-    public Rules<A, B> addFirst(final Predicate<? super A> predicate, final Callable1<? super A, ? extends B> callable) {
+    public Rules<A, B> addFirst(final Predicate<? super A> predicate, final Function<? super A, ? extends B> callable) {
         return addFirst(rule(predicate, callable));
     }
 
@@ -34,7 +33,7 @@ public class Rules<A, B> extends Function1<A, B> implements Predicate<A>, Value<
         return this;
     }
 
-    public Rules<A, B> addLast(final Predicate<? super A> predicate, final Callable1<? super A, ? extends B> callable) {
+    public Rules<A, B> addLast(final Predicate<? super A> predicate, final Function<? super A, ? extends B> callable) {
         return addLast(rule(predicate, callable));
     }
 

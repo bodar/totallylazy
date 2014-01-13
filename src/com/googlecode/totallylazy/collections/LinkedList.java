@@ -1,16 +1,13 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sets;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Callers.call;
@@ -21,7 +18,6 @@ import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 
 public abstract class LinkedList<T> extends AbstractList<T> implements PersistentList<T> {
     static final Empty EMPTY = new Empty();
@@ -89,7 +85,7 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
         }
 
         @Override
-        public <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable) {
+        public <S> PersistentList<S> map(Function<? super T, ? extends S> callable) {
             return cast(this);
         }
 
@@ -194,7 +190,7 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
         }
 
         @Override
-        public <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable) {
+        public <S> PersistentList<S> map(Function<? super T, ? extends S> callable) {
             return node(call(callable, head), tail().map(callable));
         }
 

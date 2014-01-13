@@ -34,7 +34,7 @@ public interface Returns<A> extends Callable<A>, Runnable, Functor<A>, Value<A> 
         return Sequences.repeat(this);
     }
 
-    default Returns<A> time(Callable1<? super Number, ?> report) {
+    default Returns<A> time(Function<? super Number, ?> report) {
         return TimeCallable.time(this, report);
     }
 
@@ -47,11 +47,11 @@ public interface Returns<A> extends Callable<A>, Runnable, Functor<A>, Value<A> 
     }
 
     @Override
-    default <B> Returns<B> map(final Callable1<? super A, ? extends B> callable) {
+    default <B> Returns<B> map(final Function<? super A, ? extends B> callable) {
         return Callables.compose(this, callable);
     }
 
-    default <B> Returns<B> then(final Callable1<? super A, ? extends B> callable) {
+    default <B> Returns<B> then(final Function<? super A, ? extends B> callable) {
         return map(callable);
     }
 

@@ -482,7 +482,7 @@ public class SequenceTest {
         assertThat(converted, is("converted"));
     }
 
-    Callable1<Integer, Option<String>> someVeryExpensiveOperation = new Callable1<Integer, Option<String>>() {
+    Function<Integer, Option<String>> someVeryExpensiveOperation = new Function<Integer, Option<String>>() {
         public Option<String> call(Integer number) throws Exception {
             if (Numbers.equalTo(number, 1)) {
                 return none(); // the conversion didn't work

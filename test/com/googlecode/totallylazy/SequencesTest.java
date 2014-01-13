@@ -155,7 +155,7 @@ public class SequencesTest {
 
     @Test
     public void supportsIteratingEvenWhenCallableReturnNull() throws Exception {
-        final Sequence<Integer> sequence = iterate(new Callable1<Integer, Integer>() {
+        final Sequence<Integer> sequence = iterate(new Function<Integer, Integer>() {
             public Integer call(Integer integer) throws Exception {
                 assertThat("Should never see a null value", integer, is(Matchers.notNullValue()));
                 return null;

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
@@ -14,7 +14,7 @@ public abstract class LogicalPredicate<T> extends Function1<T, Boolean> implemen
         return new DelegatingPredicate<T>(predicate);
     }
 
-    public static <T> LogicalPredicate<T> logicalPredicate(final Callable1<? super T, Boolean> predicate) {
+    public static <T> LogicalPredicate<T> logicalPredicate(final Function<? super T, Boolean> predicate) {
         if(predicate instanceof LogicalPredicate){
             return Unchecked.cast(predicate);
         }

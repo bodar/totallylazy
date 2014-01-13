@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Unchecked;
@@ -41,7 +41,7 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
     AVLTree<K, V> filterValues(Predicate<? super V> predicate);
 
     @Override
-    <NewV> AVLTree<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
+    <NewV> AVLTree<K, NewV> map(Function<? super V, ? extends NewV> transformer);
 
     @Override
     Pair<AVLTree<K, V>, Pair<K, V>> removeFirst();
@@ -160,7 +160,7 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         }
 
         @Override
-        public <NewV> AVLTree<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
+        public <NewV> AVLTree<K, NewV> map(Function<? super V, ? extends NewV> transformer) {
             return cast(this);
         }
     }
@@ -186,7 +186,7 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         }
 
         @Override
-        public <NewV> AVLTree<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
+        public <NewV> AVLTree<K, NewV> map(Function<? super V, ? extends NewV> transformer) {
             return cast(TreeMap.methods.map(transformer, factory, this));
         }
     }

@@ -228,7 +228,7 @@ public class Xml {
     }
 
     public static String contents(Element element) throws Exception {
-        return sequence(element.getChildNodes()).map(new Callable1<Node, String>() {
+        return sequence(element.getChildNodes()).map(new Function<Node, String>() {
             public String call(Node node) throws Exception {
                 if (node instanceof Element) {
                     return asString((Element) node);
@@ -365,7 +365,7 @@ public class Xml {
     }
 
     public static class functions {
-        public static UnaryFunction<Element> modifyTextContent(final Callable1<? super String, ? extends CharSequence> function) {
+        public static UnaryFunction<Element> modifyTextContent(final Function<? super String, ? extends CharSequence> function) {
             return new UnaryFunction<Element>() {
                 @Override
                 public Element call(Element element) throws Exception {
