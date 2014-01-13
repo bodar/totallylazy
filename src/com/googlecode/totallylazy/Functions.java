@@ -18,7 +18,7 @@ public class Functions {
         };
     }
 
-    public static <A, B> Function1<A, B> function(final Callable1<? super A, ? extends B> callable) {
+    public static <A, B> Function1<A, B> function(final Function<? super A, ? extends B> callable) {
         return new Function1<A, B>() {
             @Override
             public B call(A a) throws Exception {
@@ -71,7 +71,7 @@ public class Functions {
         }
     }
 
-    public static <A, B> B call(final Callable1<? super A, ? extends B> callable, final A a) {
+    public static <A, B> B call(final Function<? super A, ? extends B> callable, final A a) {
         try {
             return callable.call(a);
         } catch (Exception e) {
@@ -188,7 +188,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C> Function2<A, B, C> uncurry2(final Callable1<? super A, ? extends Callable1<? super B, ? extends C>> callable) {
+    public static <A, B, C> Function2<A, B, C> uncurry2(final Function<? super A, ? extends Function<? super B, ? extends C>> callable) {
         return new Function2<A, B, C>() {
             public final C call(final A a, final B b) throws Exception {
                 return callable.call(a).call(b);
@@ -196,7 +196,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D> Function3<A, B, C, D> uncurry3(final Callable1<? super A, ? extends Callable1<? super B, ? extends Callable1<? super C, ? extends D>>> callable) {
+    public static <A, B, C, D> Function3<A, B, C, D> uncurry3(final Function<? super A, ? extends Function<? super B, ? extends Function<? super C, ? extends D>>> callable) {
         return new Function3<A, B, C, D>() {
             @Override
             public D call(A a, B b, C c) throws Exception {
@@ -205,7 +205,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D, E> Function4<A, B, C, D, E> uncurry4(final Callable1<? super A, ? extends Callable1<? super B, ? extends Callable1<? super C, ? extends Callable1<? super D, ? extends E>>>> callable) {
+    public static <A, B, C, D, E> Function4<A, B, C, D, E> uncurry4(final Function<? super A, ? extends Function<? super B, ? extends Function<? super C, ? extends Function<? super D, ? extends E>>>> callable) {
         return new Function4<A, B, C, D, E>() {
             @Override
             public E call(A a, B b, C c, D d) throws Exception {
@@ -214,7 +214,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D, E, F> Function5<A, B, C, D, E, F> uncurry5(final Callable1<? super A, ? extends Callable1<? super B, ? extends Callable1<? super C, ? extends Callable1<? super D, ? extends Callable1<? super E, ? extends F>>>>> callable) {
+    public static <A, B, C, D, E, F> Function5<A, B, C, D, E, F> uncurry5(final Function<? super A, ? extends Function<? super B, ? extends Function<? super C, ? extends Function<? super D, ? extends Function<? super E, ? extends F>>>>> callable) {
         return new Function5<A, B, C, D, E, F>() {
             @Override
             public F call(A a, B b, C c, D d, E e) throws Exception {
@@ -232,7 +232,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C> Function2<A, B, C> unpair(final Callable1<? super Pair<? extends A, ? extends B>, ? extends C> function) {
+    public static <A, B, C> Function2<A, B, C> unpair(final Function<? super Pair<? extends A, ? extends B>, ? extends C> function) {
         return new Function2<A, B, C>() {
             @Override
             public C call(A a, B b) throws Exception {
@@ -250,7 +250,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D> Function3<A, B, C, D> untriple(final Callable1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> function) {
+    public static <A, B, C, D> Function3<A, B, C, D> untriple(final Function<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> function) {
         return new Function3<A, B, C, D>() {
             @Override
             public D call(A a, B b, C c) throws Exception {
@@ -268,7 +268,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D, E> Function4<A, B, C, D, E> unquadruple(final Callable1<? super Quadruple<? extends A, ? extends B, ? extends C, ? extends D>, ? extends E> function) {
+    public static <A, B, C, D, E> Function4<A, B, C, D, E> unquadruple(final Function<? super Quadruple<? extends A, ? extends B, ? extends C, ? extends D>, ? extends E> function) {
         return new Function4<A, B, C, D, E>() {
             @Override
             public E call(A a, B b, C c, D d) throws Exception {
@@ -286,7 +286,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D, E, F> Function5<A, B, C, D, E, F> unquintuple(final Callable1<? super Quintuple<? extends A, ? extends B, ? extends C, ? extends D, ? extends E>, ? extends F> function) {
+    public static <A, B, C, D, E, F> Function5<A, B, C, D, E, F> unquintuple(final Function<? super Quintuple<? extends A, ? extends B, ? extends C, ? extends D, ? extends E>, ? extends F> function) {
         return new Function5<A, B, C, D, E, F>() {
             @Override
             public F call(A a, B b, C c, D d, E e) throws Exception {
@@ -317,7 +317,7 @@ public class Functions {
         };
     }
 
-    public static <A, B> Function1<A, B> interruptable(final Callable1<? super A, ? extends B> function) {
+    public static <A, B> Function1<A, B> interruptable(final Function<? super A, ? extends B> function) {
         return new Function1<A, B>() {
             @Override
             public B call(A a) throws Exception {

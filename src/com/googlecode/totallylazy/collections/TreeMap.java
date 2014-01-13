@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -55,7 +55,7 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
     TreeMap<K, V> filterValues(Predicate<? super V> predicate);
 
     @Override
-    <NewV> TreeMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
+    <NewV> TreeMap<K, NewV> map(Function<? super V, ? extends NewV> transformer);
 
     @Override
     Pair<? extends TreeMap<K, V>, Pair<K, V>> removeFirst();
@@ -85,7 +85,7 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
     }
 
     class methods {
-        public static <K, V, NewV> TreeMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer, final TreeFactory factory, final TreeMap<K, V> treeMap) {
+        public static <K, V, NewV> TreeMap<K, NewV> map(Function<? super V, ? extends NewV> transformer, final TreeFactory factory, final TreeMap<K, V> treeMap) {
             return factory.create(treeMap.comparator(), treeMap.key(), call(transformer, treeMap.value()), treeMap.left().map(transformer), treeMap.right().map(transformer));
         }
 

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Maps;
@@ -174,8 +174,8 @@ public class MapPerformanceTest {
         return report;
     }
 
-    private Callable1<Integer, Integer> remove(final Map<Integer, Integer> map) {
-        return new Callable1<Integer, Integer>() {
+    private Function<Integer, Integer> remove(final Map<Integer, Integer> map) {
+        return new Function<Integer, Integer>() {
             @Override
             public Integer call(Integer integer) throws Exception {
                 return map.remove(integer);
@@ -183,8 +183,8 @@ public class MapPerformanceTest {
         };
     }
 
-    private Callable1<Integer, Integer> putValueBack(final Map<Integer, Integer> map) {
-        return new Callable1<Integer, Integer>() {
+    private Function<Integer, Integer> putValueBack(final Map<Integer, Integer> map) {
+        return new Function<Integer, Integer>() {
             @Override
             public Integer call(Integer key) throws Exception {
                 return map.put(key, key);

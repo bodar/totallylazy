@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.matchers;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
@@ -60,12 +60,12 @@ public class Matchers {
         };
     }
 
-    public static <T> Callable1<T, Matcher<T>> isMatcher(Class<T> clazz) {
+    public static <T> Function<T, Matcher<T>> isMatcher(Class<T> clazz) {
         return isMatcher();
     }
 
-    public static <T> Callable1<T, Matcher<T>> isMatcher() {
-        return new Callable1<T, Matcher<T>>() {
+    public static <T> Function<T, Matcher<T>> isMatcher() {
+        return new Function<T, Matcher<T>>() {
             @Override
             public Matcher<T> call(T t) throws Exception {
                 return is(t);

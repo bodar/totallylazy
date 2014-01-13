@@ -54,11 +54,11 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public abstract <E extends Exception> A getOrThrow(E e) throws E;
 
-    public abstract <B> Option<B> map(Callable1<? super A, ? extends B> callable);
+    public abstract <B> Option<B> map(Function<? super A, ? extends B> callable);
 
-    public abstract Option<A> each(Callable1<? super A, ?> callable);
+    public abstract Option<A> each(Function<? super A, ?> callable);
 
-    public abstract <B> Option<B> flatMap(Callable1<? super A, ? extends Option<? extends B>> callable);
+    public abstract <B> Option<B> flatMap(Function<? super A, ? extends Option<? extends B>> callable);
 
     public abstract Option<A> filter(Predicate<? super A> predicate);
 
@@ -76,11 +76,11 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
         return option.flatMap(Functions.<Option<A>>identity());
     }
 
-    public <B> Option<B> applicate(Option<? extends Callable1<? super A, ? extends B>> applicator) {
+    public <B> Option<B> applicate(Option<? extends Function<? super A, ? extends B>> applicator) {
         return applicate(applicator, this);
     }
 
-    public static <A, B> Option<B> applicate(Option<? extends Callable1<? super A, ? extends B>> applicator, Option<? extends A> option) {
+    public static <A, B> Option<B> applicate(Option<? extends Function<? super A, ? extends B>> applicator, Option<? extends A> option) {
         if (applicator.isEmpty()) return none();
         return option.map(applicator.get());
     }

@@ -1,10 +1,9 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.ReducerCombinerFunction;
-import com.googlecode.totallylazy.ReducerFunction;
 
 import static com.googlecode.totallylazy.validations.PredicateValidator.constructors.validatePredicate;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
@@ -50,7 +49,7 @@ public interface Validator<T> extends Predicate<T> {
             };
         }
 
-        public static <T> Function1<Validator<T>, Validator<T>> setFailureMessage(final Callable1<T, String> message) {
+        public static <T> Function1<Validator<T>, Validator<T>> setFailureMessage(final Function<T, String> message) {
             return new Function1<Validator<T>, Validator<T>>() {
                 @Override
                 public Validator<T> call(Validator<T> validator) throws Exception {

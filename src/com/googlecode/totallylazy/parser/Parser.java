@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -25,7 +25,7 @@ public abstract class Parser<A> implements Parse<A> {
     public abstract String toString();
 
     @Override
-    public <B> Parser<B> map(Callable1<? super A, ? extends B> callable) {
+    public <B> Parser<B> map(Function<? super A, ? extends B> callable) {
         return MappingParser.map(this, callable);
     }
 

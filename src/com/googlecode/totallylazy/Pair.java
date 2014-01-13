@@ -132,15 +132,15 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
 
     @Override
     @SuppressWarnings("unchecked")
-    public <NewF> Pair<NewF, S> map(final Callable1<? super F, ? extends NewF> callable) {
+    public <NewF> Pair<NewF, S> map(final Function<? super F, ? extends NewF> callable) {
         return pair(first.map(callable), second);
     }
 
-    public <R> Pair<R, S> first(Callable1<? super F, ? extends R> map) {
+    public <R> Pair<R, S> first(Function<? super F, ? extends R> map) {
         return pair(first.then(map), second);
     }
 
-    public <R> Pair<F,R> second(Callable1<? super S, ? extends R> map) {
+    public <R> Pair<F,R> second(Function<? super S, ? extends R> map) {
         return pair(first, second.then(map));
     }
 

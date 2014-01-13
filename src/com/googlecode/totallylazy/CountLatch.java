@@ -57,11 +57,11 @@ public class CountLatch {
         };
     }
 
-    public <A, B> Function1<A, B> monitor(Callable1<? super A, ? extends B> callable) {
+    public <A, B> Function1<A, B> monitor(Function<? super A, ? extends B> callable) {
         return monitor(this, callable);
     }
 
-    public static <A, B> Function1<A, B> monitor(final CountLatch latch, final Callable1<? super A, ? extends B> callable) {
+    public static <A, B> Function1<A, B> monitor(final CountLatch latch, final Function<? super A, ? extends B> callable) {
         return new Function1<A, B>() {
             @Override
             public B call(A a) throws Exception {

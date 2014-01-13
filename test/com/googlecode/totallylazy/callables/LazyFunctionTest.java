@@ -5,16 +5,16 @@ import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callers.callConcurrently;
-import static com.googlecode.totallylazy.callables.CountingCallable1.counting;
-import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
+import static com.googlecode.totallylazy.callables.CountingFunction.counting;
+import static com.googlecode.totallylazy.callables.LazyFunction.lazy;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class LazyCallable1Test {
+public class LazyFunctionTest {
     @Test
     public void isThreadSafe() throws Exception {
-        CountingCallable1<Number, Number> counting = counting(increment);
+        CountingFunction<Number, Number> counting = counting(increment);
         Function1<Number, Number> lazyCallable1 = counting.sleep(10).lazy();
 
         Sequence<Number> result = callConcurrently(
@@ -29,7 +29,7 @@ public class LazyCallable1Test {
 
     @Test
     public void onlyCallsUnderlyingCallableOnce() throws Exception {
-        CountingCallable1<Number, Number> counting = counting(increment);
+        CountingFunction<Number, Number> counting = counting(increment);
         Function1<Number, Number> lazyCallable = lazy(counting);
 
         assertThat(lazyCallable.call(0), is(1));
