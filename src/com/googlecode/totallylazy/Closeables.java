@@ -89,12 +89,12 @@ public class Closeables {
 
     public static <A extends Closeable, B extends Closeable, R> R using(A a, B b, Callable2<? super A, ? super B, ? extends R> callable) {
         try {
-            return call(callable, a, b);
+            return Callers.call(callable, a, b);
         } finally {
             try {
                 close().apply(a);
             } finally {
-                ((Function<? super Void, ? extends Void>) close()).apply((Void) b);
+                close().apply(b);
             }
         }
     }

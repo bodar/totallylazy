@@ -155,7 +155,7 @@ public class SequenceTest {
         assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 4, 90, 10)));
 
         //http://learnyouahaskell.com/functors-applicative-functors-and-monoids#applicative-functors (Lists)
-        assertThat(applicate(applicate(sequence(add(), multiply()), numbers(1, 2)), numbers(3, 4)), Matchers.is(numbers(4, 5, 5, 6, 3, 4, 6, 8)));
+        assertThat(applicate(applicate(sequence(add().curry(), multiply().curry()), numbers(1, 2)), numbers(3, 4)), Matchers.is(numbers(4, 5, 5, 6, 3, 4, 6, 8)));
     }
 
     @Test

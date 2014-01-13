@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.predicates;
 
+import com.googlecode.totallylazy.Predicate;
+
 public class GreaterThanBinaryPredicate<T extends Comparable<? super T>> extends LogicalBinaryPredicate<T> {
     public static <T extends Comparable<? super T>> GreaterThanBinaryPredicate<T> greaterThan(Class<T> aClass) {return GreaterThanBinaryPredicate.<T>greaterThan(); }
     public static <T extends Comparable<? super T>> GreaterThanBinaryPredicate<T> greaterThan() {return new GreaterThanBinaryPredicate<T>();}
@@ -10,7 +12,7 @@ public class GreaterThanBinaryPredicate<T extends Comparable<? super T>> extends
     }
 
     @Override
-    public AbstractPredicate<T> apply(T t) {
+    public Predicate<T> apply(T t) {
         return LessThanPredicate.lessThan(t);
     }
 

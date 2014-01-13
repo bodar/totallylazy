@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.collections.PersistentMap;
@@ -132,21 +133,11 @@ public class ValidationResult {
             };
         }
 
-        public static AbstractPredicate<ValidationResult> succeeded() {
-            return new Predicate<ValidationResult>() {
-                @Override
-                public boolean matches(ValidationResult other) {
-                    return other.succeeded();
-                }
-            };
+        public static Predicate<ValidationResult> succeeded() {
+            return ValidationResult::succeeded;
         }
         public static Function<ValidationResult, ValidationResult> assignToKey(final String key) {
-            return new Function<ValidationResult, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult) throws Exception {
-                    return validationResult.assignToKey(key);
-                }
-            };
+            return validationResult -> validationResult.assignToKey(key);
         }
 
         public static Function2<ValidationResult, Iterable<String>, ValidationResult> addWithKey(final String key) {

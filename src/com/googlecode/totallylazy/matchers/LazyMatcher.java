@@ -8,6 +8,7 @@ import org.hamcrest.TypeSafeMatcher;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callers.call;
 
 public final class LazyMatcher<A, E> extends TypeSafeMatcher<A> {
     private final Function<? super A,? extends E> actualMapper;

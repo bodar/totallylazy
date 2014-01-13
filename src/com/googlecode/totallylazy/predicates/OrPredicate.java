@@ -26,7 +26,7 @@ public class OrPredicate<T> extends AbstractPredicate<T> {
         Sequence<Predicate<T>> collapsed = sequence.
                 filter(instanceOf(AlwaysFalse.class).not());
         if (collapsed.isEmpty()) return Predicates.alwaysFalse();
-        if (collapsed.size() == 1) return logicalPredicate(collapsed.head());
+        if (collapsed.size() == 1) return collapsed.head();
         if (collapsed.forAll(instanceOf(Not.class)))
             return Predicates.not(Predicates.<T>and(sequence.<Not<T>>unsafeCast().map(Not.functions.<T>predicate())));
         return new OrPredicate<T>(sequence);

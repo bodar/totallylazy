@@ -27,6 +27,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Appendables.append;
 import static com.googlecode.totallylazy.Callables.nullGuard;
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.in;

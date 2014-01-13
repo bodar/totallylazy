@@ -23,6 +23,7 @@ import java.util.Collection;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Predicates {
     public static <T> Predicate<T> alwaysTrue() {
@@ -171,7 +172,7 @@ public class Predicates {
     }
 
     public static <T> Predicate<T> and(final Predicate<? super T> first) {
-        return Predicate.predicate(first);
+        return cast(first);
     }
 
     @SafeVarargs
@@ -188,7 +189,7 @@ public class Predicates {
     }
 
     public static <T> Predicate<T> or(final Predicate<? super T> first) {
-        return Predicate.predicate(first);
+        return cast(first);
     }
 
     @SafeVarargs
