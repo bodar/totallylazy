@@ -147,15 +147,15 @@ public class Functions {
         };
     }
 
-    public static <A> UnaryFunction<A> identity() {
-        return new UnaryFunction<A>() {
+    public static <A> UnaryOperator<A> identity() {
+        return new UnaryOperator<A>() {
             public A call(A self) throws Exception {
                 return self;
             }
         };
     }
 
-    public static <A> UnaryFunction<A> identity(Class<A> aClass) {
+    public static <A> UnaryOperator<A> identity(Class<A> aClass) {
         return identity();
     }
 
