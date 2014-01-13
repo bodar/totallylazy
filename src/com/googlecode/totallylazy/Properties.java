@@ -74,7 +74,7 @@ public class Properties {
     public static Function2<java.util.Properties, java.util.Properties, java.util.Properties> compose() {
         return new Function2<java.util.Properties, java.util.Properties, java.util.Properties>() {
             public java.util.Properties call(java.util.Properties soFar, java.util.Properties nextProperties) throws Exception {
-                return compose(soFar, nextProperties);
+                return Properties.compose(soFar, nextProperties);
             }
         };
     }
