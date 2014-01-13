@@ -24,4 +24,4 @@ if [ ! -f ${jar} ]; then
 	rm ${pack}
 	#wget -O $0 ${remote_sh} || curl -o $0 ${remote_sh}
 fi
-exec java -showversion -Dbuild.number=${BUILD_NUMBER} ${JAVA_OPTS} -jar ${jar} $*
+exec ${JAVA_HOME}/bin/java -showversion -Dbuild.number=${BUILD_NUMBER} ${JAVA_OPTS} -jar ${jar} $*
