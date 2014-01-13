@@ -61,12 +61,7 @@ public interface Sources extends Closeable {
                 return source.name;
             }
         };
-        public static AbstractPredicate<Source> directory = new Predicate<Source>() {
-            @Override
-            public boolean matches(Source source) {
-                return source.isDirectory;
-            }
-        };
+        public static Predicate<Source> directory = source -> source.isDirectory;
     }
 
     class Source extends Eq {

@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.matchers.Matchers;
 import org.junit.Test;
@@ -27,8 +28,8 @@ public class AndPredicateTest {
 
     @Test
     public void collapsesTrues() throws Exception {
-        AbstractPredicate<String> predicate = is("13");
-        AbstractPredicate<String> and = and(alwaysTrue(), predicate, alwaysTrue());
+        Predicate<String> predicate = is("13");
+        Predicate<String> and = and(alwaysTrue(), predicate, alwaysTrue());
         assertThat(and.matches("13"), Matchers.is(predicate.matches("13")));
         assertThat(and.matches("12"), Matchers.is(predicate.matches("12")));
         assertThat(and, Matchers.is(predicate));
@@ -36,8 +37,8 @@ public class AndPredicateTest {
 
     @Test
     public void collapsesFalses() throws Exception {
-        AbstractPredicate<String> predicate = is("13");
-        AbstractPredicate<String> and = and(alwaysFalse(), predicate, alwaysFalse());
+        Predicate<String> predicate = is("13");
+        Predicate<String> and = and(alwaysFalse(), predicate, alwaysFalse());
         assertThat(and.matches("13"), Matchers.is(!predicate.matches("13")));
         assertThat(and.matches("12"), Matchers.is(predicate.matches("12")));
         assertThat(and, Matchers.is(alwaysFalse(String.class)));
@@ -56,15 +57,15 @@ public class AndPredicateTest {
 
     @Test
     public void collapsesOne() throws Exception {
-        AbstractPredicate<String> and = and(is("13"));
+        Predicate<String> and = and(is("13"));
         assertThat(and.matches("13"), Matchers.is(true));
         assertThat(and, Matchers.is(is("13")));
     }
 
     @Test
     public void collapesNots() throws Exception {
-        AbstractPredicate<String> original = and(not(is("12")), not(is("13")));
-        AbstractPredicate<String> collapsed = not(or(is("12"), is("13")));
+        Predicate<String> original = and(not(is("12")), not(is("13")));
+        Predicate<String> collapsed = not(or(is("12"), is("13")));
         assertThat(original.matches("14"), Matchers.is(collapsed.matches("14")));
         assertThat(original.matches("13"), Matchers.is(collapsed.matches("13")));
         assertThat(original.matches("12"), Matchers.is(collapsed.matches("12")));

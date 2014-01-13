@@ -3,14 +3,15 @@ package com.googlecode.totallylazy;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.compose;
+import static com.googlecode.totallylazy.Callers.call;
 
 public abstract class Trampoline<T> implements Functor<T> {
     public static <T> Trampoline<T> done(T value) {
-        return new Done<T>(value);
+        return new Done<>(value);
     }
 
     public static <T> Trampoline<T> more(Callable<? extends Trampoline<T>> function) {
-        return new More<T>(function);
+        return new More<>(function);
     }
 
     public T trampoline() {
@@ -55,12 +56,7 @@ public abstract class Trampoline<T> implements Functor<T> {
 
         @Override
         public <S> Trampoline<S> map(final Function<? super T, ? extends S> callable) {
-            return more(compose(this.callable, new Function<Trampoline<T>, Trampoline<S>>() {
-                @Override
-                public Trampoline<S> call(Trampoline<T> trampoline) throws Exception {
-                    return null; //callable.call(trampoline);
-                }
-            }));
+            return more(compose(this.callable, trampoline -> null));
         }
     }
 }

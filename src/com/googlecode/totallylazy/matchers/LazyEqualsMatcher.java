@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.matchers;
 
+import com.googlecode.totallylazy.Callers;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -19,7 +20,7 @@ public class LazyEqualsMatcher<T> extends TypeSafeMatcher<T> {
     @Override
     protected boolean matchesSafely(T actualValue) {
         actual = actualValue;
-        expected = call(expectedLoader);
+        expected = Callers.call(expectedLoader);
         
         return expected.equals(actual);
     }

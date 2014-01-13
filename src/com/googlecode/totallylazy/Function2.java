@@ -1,8 +1,15 @@
 package com.googlecode.totallylazy;
 
 
-public abstract class Function2<A, B, C> extends Eq implements Callable2<A, B, C>,Function<A,Function<B,C>> {
-    @Override
+public abstract class Function2<A, B, C> extends Eq implements Callable2<A, B, C> {
+    public Function<A, Function<B, C>> curry() {
+        return (a) -> (b) -> call(a, b);
+    }
+
+    public Function<B, C> apply(final A a) {
+        return Functions.apply(this, a);
+    }
+
     public Function<B, C> call(final A a) throws Exception {
         return Functions.apply(this, a);
     }

@@ -744,13 +744,8 @@ public class Sequences {
         return cartesianProduct(a, a);
     }
 
-    public static <A, B> Sequence<Pair<A, B>> cartesianProduct(final Iterable<? extends A> a, final Iterable<? extends B> b) {
-        return sequence(b).flatMap(new Function<B, Sequence<Pair<A, B>>>() {
-            @Override
-            public Sequence<Pair<A, B>> call(final B b) throws Exception {
-                return sequence(a).map(Pair.<A, B>pair()).map(Callables.<B, Pair<A, B>>callWith(b));
-            }
-        });
+    public static <A, B> Sequence<Pair<A, B>> cartesianProduct(final Iterable<? extends A> as, final Iterable<? extends B> bs) {
+        return sequence(bs).flatMap(b -> sequence(as).map(a -> pair(a, b)));
     }
 
     public static <T> Sequence<Sequence<T>> windowed(final Iterable<? extends T> sequence, int size) {
@@ -759,7 +754,7 @@ public class Sequences {
 
     private static <T> PersistentList<Sequence<T>> internalWindowed(final Sequence<T> sequence, int size) {
         Sequence<T> take = sequence.take(size);
-        if (take.size() == size) return PersistentList.constructors.cons(take, internalWindowed(sequence.tail(), size));
+        if (take.size() == size) return PersistentList.constructors.cons(take, Sequences.<T>internalWindowed(sequence.tail(), size));
         return PersistentList.constructors.empty();
     }
 

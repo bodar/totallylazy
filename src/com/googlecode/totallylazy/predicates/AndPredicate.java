@@ -26,9 +26,9 @@ public class AndPredicate<T> extends AbstractPredicate<T> {
         Sequence<Predicate<T>> collapsed = sequence.
                 filter(instanceOf(AlwaysTrue.class).not());
         if (collapsed.isEmpty()) return Predicates.alwaysTrue();
-        if (collapsed.size() == 1) return logicalPredicate(collapsed.head());
+        if (collapsed.size() == 1) return collapsed.head();
         if (collapsed.forAll(instanceOf(Not.class)))
-            return Predicates.not(Predicates.<T>or(sequence.<Not<T>>unsafeCast().map(Not.functions.<T>predicate())));
+            return Predicates.not(Predicates.or(sequence.<Not<T>>unsafeCast().map(Not.functions.<T>predicate())));
         return new AndPredicate<T>(collapsed);
     }
 

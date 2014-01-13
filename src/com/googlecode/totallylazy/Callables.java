@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Methods.method;
-import static com.googlecode.totallylazy.Option.identity;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callables {
@@ -69,7 +68,7 @@ public final class Callables {
     public static Function<Object, Class<?>> toClass() {
         return new Function<Object, Class<?>>() {
             public final Class<?> call(final Object o) throws Exception {
-                if(o == null) return Void.class;
+                if (o == null) return Void.class;
                 return o.getClass();
             }
         };
@@ -88,18 +87,16 @@ public final class Callables {
     }
 
     public static Function<Object, Integer> length() {
-        return new Function<Object, Integer>() {
-            public final Integer call(final Object instance) throws Exception {
-                Class aClass = instance.getClass();
-                if (aClass.isArray()) {
-                    return Array.getLength(instance);
-                }
-                return sequence(method(instance, "size"), method(instance, "length")).
-                        flatMap(identity(Method.class)).
-                        headOption().
-                        map(Methods.<Integer>invokeOn(instance)).
-                        getOrElse(Callables.<Integer>callThrows(new UnsupportedOperationException("Does not support fields yet")));
+        return instance -> {
+            Class aClass = instance.getClass();
+            if (aClass.isArray()) {
+                return Array.getLength(instance);
             }
+            return sequence(method(instance, "size"), method(instance, "length")).
+                    flatMap(Option.identity(Method.class)).
+                    headOption().
+                    map(Methods.<Integer>invokeOn(instance)).
+                    getOrElse(Callables.<Integer>callThrows(new UnsupportedOperationException("Does not support fields yet")));
         };
     }
 
@@ -338,11 +335,7 @@ public final class Callables {
     }
 
     public static <T, R> Function<Function<T, R>, R> callWith(final T value) {
-        return new Function<Function<T, R>, R>() {
-            public final R call(final Function<T, R> callable) throws Exception {
-                return callable.call(value);
-            }
-        };
+        return callable -> callable.call(value);
     }
 
     public static <A, B, C> Returns<C> deferApply(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
@@ -379,11 +372,11 @@ public final class Callables {
     }
 
     public static <A, B, C> Function<A, Function<B, C>> curry(final Callable2<? super A, ? super B, ? extends C> callable) {
-        return Functions.function(callable);
+        return (a) -> (b) -> callable.call(a, b);
     }
 
     public static <A, B, C, D> Function<A, Function<B, Function<C, D>>> curry(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
-        return Functions.function(callable);
+        return (a) -> (b) -> (c) -> callable.call(a, b, c);
     }
 
     public static <A, B, C> Function2<A, B, C> uncurry2(final Function<? super A, ? extends Function<? super B, ? extends C>> callable) {

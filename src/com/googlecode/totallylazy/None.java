@@ -44,7 +44,7 @@ public class None<T> extends Option<T>{
 
     @Override
     public Option<T> orElse(Callable<? extends Option<T>> other) {
-        return call(other);
+        return Callers.call(other);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class None<T> extends Option<T>{
 
     @Override
     public T getOrElse(Callable<? extends T> callable) {
-        return call(callable);
+        return Callers.call(callable);
     }
 
     @Override

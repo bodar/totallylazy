@@ -29,65 +29,37 @@ public class Files {
         return folder.toURI().relativize(file.toURI()).getPath();
     }
 
-    public static AbstractPredicate<File> isFile() {
-        return new Predicate<File>() {
-            public boolean matches(File file) {
-                return file.isFile();
-            }
-        };
+    public static Predicate<File> isFile() {
+        return File::isFile;
     }
 
-    public static AbstractPredicate<File> hasSuffix(final String suffix) {
-        return new Predicate<File>() {
-            public boolean matches(File file) {
-                return file.getName().endsWith("." + suffix);
-            }
-        };
+    public static Predicate<File> hasSuffix(final String suffix) {
+        return file -> file.getName().endsWith("." + suffix);
     }
 
-    public static AbstractPredicate<File> isDirectory() {
-        return new Predicate<File>() {
-            public boolean matches(File file) {
-                return file.isDirectory();
-            }
-        };
+    public static Predicate<File> isDirectory() {
+        return File::isDirectory;
     }
 
-    public static AbstractPredicate<File> hasName(final String name) {
+    public static Predicate<File> hasName(final String name) {
         return where(name(), is(name));
     }
 
 
     public static Function<File, String> name() {
-        return new Function<File, String>() {
-            public String call(File file) throws Exception {
-                return file.getName();
-            }
-        };
+        return File::getName;
     }
 
     public static Function<File, Sequence<File>> files() {
-        return new Function<File, Sequence<File>>() {
-            public Sequence<File> call(File file) throws Exception {
-                return files(file);
-            }
-        };
+        return Files::files;
     }
 
     public static Function<File, String> path() {
-        return new Function<File, String>() {
-            public String call(File file) throws Exception {
-                return file.getPath();
-            }
-        };
+        return File::getPath;
     }
 
     public static Function<File, File> parent() {
-        return new Function<File, File>() {
-            public File call(File file) throws Exception {
-                return file.getParentFile();
-            }
-        };
+        return File::getParentFile;
     }
 
     public static File temporaryDirectory() {
@@ -118,19 +90,11 @@ public class Files {
     }
 
     public static Function<File, Boolean> deleteFile() {
-        return new Function<File, Boolean>() {
-            public Boolean call(File file) throws Exception {
-                return file.delete();
-            }
-        };
+        return File::delete;
     }
 
     public static Function<File, Boolean> delete() {
-        return new Function<File, Boolean>() {
-            public Boolean call(File file) throws Exception {
-                return delete(file);
-            }
-        };
+        return Files::delete;
     }
 
     public static File temporaryFile() {
@@ -164,7 +128,7 @@ public class Files {
         return containsFile(hasName(fileName));
     }
 
-    public static AbstractPredicate<File> containsFile(final Predicate<? super File> predicate) {
+    public static Predicate<File> containsFile(final Predicate<? super File> predicate) {
         return where(Files.files(), Predicates.<File>exists(predicate));
     }
 
@@ -183,11 +147,7 @@ public class Files {
     }
 
     public static Function<File, Iterable<File>> recursiveFiles() {
-        return new Function<File, Iterable<File>>() {
-            public Iterable<File> call(File file) throws Exception {
-                return file.isDirectory() ? recursiveFiles(file).append(file) : sequence(file);
-            }
-        };
+        return (file) -> file.isDirectory() ? recursiveFiles(file).append(file) : sequence(file);
     }
 
     public static Sequence<File> recursiveFilesDirectoriesFirst(final File directory) {
@@ -195,11 +155,7 @@ public class Files {
     }
 
     public static Function<File, Iterable<File>> recursiveFilesDirectoriesFirst() {
-        return new Function<File, Iterable<File>>() {
-            public Iterable<File> call(File file) throws Exception {
-                return file.isDirectory() ? recursiveFilesDirectoriesFirst(file).cons(file) : sequence(file);
-            }
-        };
+        return (file) -> file.isDirectory() ? recursiveFilesDirectoriesFirst(file).cons(file) : sequence(file);
     }
 
     public static File write(byte[] bytes, File file) {
@@ -228,11 +184,7 @@ public class Files {
     }
 
     public static Function<String, File> asFile() {
-        return new Function<String, File>() {
-            public File call(String name) throws Exception {
-                return new File(name);
-            }
-        };
+        return File::new;
     }
 
     public static File directory(File parent, String name) {
@@ -261,11 +213,6 @@ public class Files {
     }
 
     public static Function<File, Date> lastModified() {
-        return new Function<File, Date>() {
-            @Override
-            public Date call(File file) throws Exception {
-                return date(file.lastModified());
-            }
-        };
+        return file -> date(file.lastModified());
     }
 }
