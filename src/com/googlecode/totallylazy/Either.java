@@ -42,11 +42,11 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
         return either.flatMap(Either.<L, R>identity());
     }
 
-    public static <L, R> Function1<Either<L, R>, Either<L, R>> identity(Class<L> lClass, Class<R> rClass) {
+    public static <L, R> Function<Either<L, R>, Either<L, R>> identity(Class<L> lClass, Class<R> rClass) {
         return identity();
     }
 
-    public static <L, R> Function1<Either<L, R>, Either<L, R>> identity() { return Functions.identity(); }
+    public static <L, R> Function<Either<L, R>, Either<L, R>> identity() { return Functions.identity(); }
 
     public abstract Object value();
 
@@ -116,8 +116,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
             };
         }
 
-        public static <L, R> Function1<L, Either<L, R>> asLeft() {
-            return new Function1<L, Either<L, R>>() {
+        public static <L, R> Function<L, Either<L, R>> asLeft() {
+            return new Function<L, Either<L, R>>() {
                 @Override
                 public Either<L, R> call(L value) throws Exception {
                     return Either.left(value);
@@ -125,8 +125,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
             };
         }
 
-        public static <L, R> Function1<R, Either<L, R>> asRight() {
-            return new Function1<R, Either<L, R>>() {
+        public static <L, R> Function<R, Either<L, R>> asRight() {
+            return new Function<R, Either<L, R>>() {
                 @Override
                 public Either<L, R> call(R value) throws Exception {
                     return Either.right(value);

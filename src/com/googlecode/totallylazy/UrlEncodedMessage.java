@@ -63,8 +63,8 @@ public class UrlEncodedMessage {
     }
 
     public static class functions {
-        public static Function1<String, String> encode() {
-            return new Function1<String, String>() {
+        public static Function<String, String> encode() {
+            return new Function<String, String>() {
                 @Override
                 public String call(String value) throws Exception {
                     return UrlEncodedMessage.encode(value);
@@ -72,8 +72,8 @@ public class UrlEncodedMessage {
             };
         }
 
-        public static Function1<String, String> decode() {
-            return new Function1<String, String>() {
+        public static Function<String, String> decode() {
+            return new Function<String, String>() {
                 @Override
                 public String call(String value) throws Exception {
                     return UrlEncodedMessage.decode(value);

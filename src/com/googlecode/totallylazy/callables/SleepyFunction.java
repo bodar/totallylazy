@@ -1,9 +1,8 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Function1;
 
-public final class SleepyFunction<T,R> extends Function1<T, R> {
+public final class SleepyFunction<T,R> extends com.googlecode.totallylazy.Eq implements Function<T,R> {
     private final Function<? super T, ? extends R> callable;
     private final int millis;
 
@@ -18,7 +17,7 @@ public final class SleepyFunction<T,R> extends Function1<T, R> {
         return result;
     }
 
-    public static <T,R> Function1<T, R> sleepy(Function<? super T, ? extends R> callable, int millis) {
+    public static <T,R> Function<T, R> sleepy(Function<? super T, ? extends R> callable, int millis) {
         return new SleepyFunction<T,R>(callable, millis);
     }
 }

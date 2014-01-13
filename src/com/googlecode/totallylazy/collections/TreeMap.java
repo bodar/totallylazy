@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 
@@ -100,8 +99,8 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
     }
 
     static class functions {
-        public static <K, V> Function1<TreeMap<K, V>, TreeMap<K, V>> replace(final K key, final V value) {
-            return new Function1<TreeMap<K, V>, TreeMap<K, V>>() {
+        public static <K, V> Function<TreeMap<K, V>, TreeMap<K, V>> replace(final K key, final V value) {
+            return new Function<TreeMap<K, V>, TreeMap<K, V>>() {
                 @Override
                 public TreeMap<K, V> call(TreeMap<K, V> focus) throws Exception {
                     return focus.factory().create(focus.comparator(), key, value, focus.left(), focus.right());
@@ -109,8 +108,8 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
             };
         }
 
-        public static <K, V> Function1<TreeMap<K, V>, TreeMap<K, V>> remove() {
-            return new Function1<TreeMap<K, V>, TreeMap<K, V>>() {
+        public static <K, V> Function<TreeMap<K, V>, TreeMap<K, V>> remove() {
+            return new Function<TreeMap<K, V>, TreeMap<K, V>>() {
                 @Override
                 public TreeMap<K, V> call(TreeMap<K, V> focus) throws Exception {
                     return focus.delete(focus.key());
