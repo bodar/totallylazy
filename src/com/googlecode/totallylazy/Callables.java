@@ -33,8 +33,8 @@ public final class Callables {
         };
     }
 
-    public static <T> UnaryFunction<T> nullGuard(final Function<? super T, ? extends T> callable) {
-        return new UnaryFunction<T>() {
+    public static <T> UnaryOperator<T> nullGuard(final Function<? super T, ? extends T> callable) {
+        return new UnaryOperator<T>() {
             public T call(T o) throws Exception {
                 if (o == null) return null;
                 return callable.call(o);
@@ -42,8 +42,8 @@ public final class Callables {
         };
     }
 
-    public static <T> UnaryFunction<Sequence<T>> reduceAndShift(final Callable2<? super T, ? super T, ? extends T> action) {
-        return new UnaryFunction<Sequence<T>>() {
+    public static <T> UnaryOperator<Sequence<T>> reduceAndShift(final Callable2<? super T, ? super T, ? extends T> action) {
+        return new UnaryOperator<Sequence<T>>() {
             public final Sequence<T> call(final Sequence<T> values) throws Exception {
                 return values.tail().append(values.reduceLeft(action));
             }
@@ -104,8 +104,8 @@ public final class Callables {
     }
 
 
-    public static <T> UnaryFunction<Sequence<T>> realise() {
-        return new UnaryFunction<Sequence<T>>() {
+    public static <T> UnaryOperator<Sequence<T>> realise() {
+        return new UnaryOperator<Sequence<T>>() {
             public final Sequence<T> call(final Sequence<T> sequence) throws Exception {
                 return sequence.realise();
             }
@@ -297,11 +297,11 @@ public final class Callables {
         return Functions.returns2(result);
     }
 
-    public static <T> UnaryFunction<T> returnArgument() {
+    public static <T> UnaryOperator<T> returnArgument() {
         return Functions.identity();
     }
 
-    public static <T> UnaryFunction<T> returnArgument(final Class<T> aClass) {
+    public static <T> UnaryOperator<T> returnArgument(final Class<T> aClass) {
         return returnArgument();
     }
 
@@ -486,12 +486,12 @@ public final class Callables {
         return Either.functions.asRight();
     }
 
-    public static <T> UnaryFunction<T> replace(final Predicate<? super T> predicate, final Function<? super T, ? extends T> callable) {
+    public static <T> UnaryOperator<T> replace(final Predicate<? super T> predicate, final Function<? super T, ? extends T> callable) {
         return when(predicate, callable);
     }
 
-    public static <T> UnaryFunction<T> when(final Predicate<? super T> predicate, final Function<? super T, ? extends T> callable) {
-        return new UnaryFunction<T>() {
+    public static <T> UnaryOperator<T> when(final Predicate<? super T> predicate, final Function<? super T, ? extends T> callable) {
+        return new UnaryOperator<T>() {
             @Override
             public T call(T value) throws Exception {
                 return predicate.matches(value) ? callable.call(value) : value;

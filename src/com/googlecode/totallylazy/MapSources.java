@@ -4,14 +4,14 @@ import java.io.IOException;
 
 public class MapSources implements Sources {
     private final Sources sources;
-    private final Unary<Source> function;
+    private final UnaryOperator<Source> function;
 
-    public MapSources(Sources sources, Unary<Source> function) {
+    public MapSources(Sources sources, UnaryOperator<Source> function) {
         this.sources = sources;
         this.function = function;
     }
 
-    static Sources mapSource(final Unary<Source> function, final Sources sources) {
+    static Sources mapSource(final UnaryOperator<Source> function, final Sources sources) {
         return new MapSources(sources, function);
     }
 
