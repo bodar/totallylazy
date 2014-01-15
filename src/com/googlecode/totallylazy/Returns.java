@@ -6,10 +6,23 @@ import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.callables.TimeReport;
 
 import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
-public interface Returns<A> extends Callable<A>, Runnable, Functor<A>, Value<A> {
+import static com.googlecode.totallylazy.LazyException.lazyException;
+
+@FunctionalInterface
+public interface Returns<A> extends Callable<A>, Runnable, Functor<A>, Value<A>, Supplier<A> {
     default A apply() {
-        return Functions.call(this);
+        try {
+            return call();
+        } catch (Exception e) {
+            throw lazyException(e);
+        }
+    }
+
+    @Override
+    default A get() {
+        return apply();
     }
 
     @Override
