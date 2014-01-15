@@ -11,8 +11,8 @@ public class Objects {
         return a.equals(b);
     }
 
-    public static Function2<Object, Object, Boolean> equalTo() {
-        return new Function2<Object, Object, Boolean>() {
+    public static BiFunction<Object, Object, Boolean> equalTo() {
+        return new BiFunction<Object, Object, Boolean>() {
             @Override
             public Boolean call(Object a, Object b) throws Exception {
                 return a.equals(b);

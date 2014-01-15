@@ -21,17 +21,17 @@ public class CallablesTest {
 
     @Test
     public void functionsAreCurriable() throws Exception {
-        Function2<Number, Number, Number> add = add();
+        BiFunction<Number, Number, Number> add = add();
         Function<Number, Function<Number, Number>> curried = add.curry();
         assertThat(curried.call(1).call(2), is(3));
-        Function2<Number, Number, Number> callableAdd = add;
+        BiFunction<Number, Number, Number> callableAdd = add;
         assertThat(Callables.curry(callableAdd).call(1).call(2), is(3));
     }
 
     @Test
     public void canUnCurryAdd() throws Exception {
         Function<Number, Function<Number, Number>> curried = add().curry();
-        Callable2<Number, Number, Number> unCurriedAdd = Functions.uncurry2(curried);
+        BiFunction<Number, Number, Number> unCurriedAdd = Functions.uncurry2(curried);
         assertThat(unCurriedAdd.call(1, 2), is(3));
     }
 

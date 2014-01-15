@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.BiFunction;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -110,7 +110,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public <S> S fold(S seed, Callable2<? super S, ? super Pair<K, V>, ? extends S> callable) {
+    public <S> S fold(S seed, BiFunction<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return toSequence().fold(seed, callable);
     }
 

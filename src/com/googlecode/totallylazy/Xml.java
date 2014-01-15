@@ -2,7 +2,6 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.NodeIterator;
 import com.googlecode.totallylazy.iterators.PoppingIterator;
-import com.googlecode.totallylazy.predicates.AbstractPredicate;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -401,8 +400,8 @@ public class Xml {
             };
         }
 
-        public static Function2<Node, String, String> selectContents() {
-            return new Function2<Node, String, String>() {
+        public static BiFunction<Node, String, String> selectContents() {
+            return new BiFunction<Node, String, String>() {
                 @Override
                 public String call(Node node, String expression) throws Exception {
                     return Xml.selectContents(node, expression);
@@ -419,8 +418,8 @@ public class Xml {
             };
         }
 
-        public static Function2<Node, String, Sequence<Node>> selectNodes() {
-            return new Function2<Node, String, Sequence<Node>>() {
+        public static BiFunction<Node, String, Sequence<Node>> selectNodes() {
+            return new BiFunction<Node, String, Sequence<Node>>() {
                 @Override
                 public Sequence<Node> call(final Node node, final String expression) throws Exception {
                     return Xml.selectNodes(node, expression);

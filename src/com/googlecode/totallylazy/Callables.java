@@ -31,7 +31,7 @@ public final class Callables {
         };
     }
 
-    public static <T> UnaryOperator<Sequence<T>> reduceAndShift(final Callable2<? super T, ? super T, ? extends T> action) {
+    public static <T> UnaryOperator<Sequence<T>> reduceAndShift(final BiFunction<? super T, ? super T, ? extends T> action) {
         return values -> values.tail().append(values.reduceLeft(action));
     }
 
@@ -172,7 +172,7 @@ public final class Callables {
         return toString;
     }
 
-    public static final Function2<Integer, Object, Integer> hashCode = new Function2<Integer, Object, Integer>() {
+    public static final BiFunction<Integer, Object, Integer> hashCode = new BiFunction<Integer, Object, Integer>() {
         public Integer call(Integer hash, Object value) throws Exception {
             if (value == null) return hash * 19;
             int current = value.hashCode();
@@ -180,7 +180,7 @@ public final class Callables {
         }
     };
 
-    public static Function2<Integer, Object, Integer> asHashCode() {
+    public static BiFunction<Integer, Object, Integer> asHashCode() {
         return hashCode;
     }
 
@@ -205,7 +205,7 @@ public final class Callables {
         return Functions.returns1(result);
     }
 
-    public static <A, B, C> Function2<A, B, C> returns2(C result) {
+    public static <A, B, C> BiFunction<A, B, C> returns2(C result) {
         return Functions.returns2(result);
     }
 
@@ -243,7 +243,7 @@ public final class Callables {
         return callable -> callable.call(value);
     }
 
-    public static <A, B, C> Returns<C> deferApply(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
+    public static <A, B, C> Returns<C> deferApply(final BiFunction<? super A, ? super B, ? extends C> callable, final A a, final B b) {
         return () -> callable.call(a, b);
     }
 
@@ -255,15 +255,15 @@ public final class Callables {
         return a -> deferApply(callable, a);
     }
 
-    public static <A, B, C> Function<B, C> apply(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
+    public static <A, B, C> Function<B, C> apply(final BiFunction<? super A, ? super B, ? extends C> callable, final A value) {
         return Functions.apply(callable, value);
     }
 
-    public static <A, B, C, D> Function2<B, C, D> apply(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
+    public static <A, B, C, D> BiFunction<B, C, D> apply(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
         return Functions.apply(callable, value);
     }
 
-    public static <A, B, C> Function<A, Function<B, C>> curry(final Callable2<? super A, ? super B, ? extends C> callable) {
+    public static <A, B, C> Function<A, Function<B, C>> curry(final BiFunction<? super A, ? super B, ? extends C> callable) {
         return (a) -> (b) -> callable.call(a, b);
     }
 
@@ -271,7 +271,7 @@ public final class Callables {
         return (a) -> (b) -> (c) -> callable.call(a, b, c);
     }
 
-    public static <A, B, C> Function2<A, B, C> uncurry2(final Function<? super A, ? extends Function<? super B, ? extends C>> callable) {
+    public static <A, B, C> BiFunction<A, B, C> uncurry2(final Function<? super A, ? extends Function<? super B, ? extends C>> callable) {
         return Functions.uncurry2(callable);
     }
 
@@ -295,8 +295,8 @@ public final class Callables {
         return either -> either.right();
     }
 
-    public static <A, B, C> Function2<B, A, C> flip(final Callable2<? super A, ? super B, ? extends C> callable) {
-        return new Function2<B, A, C>() {
+    public static <A, B, C> BiFunction<B, A, C> flip(final BiFunction<? super A, ? super B, ? extends C> callable) {
+        return new BiFunction<B, A, C>() {
             public C call(B s, A t) throws Exception {
                 return callable.call(t, s);
             }
@@ -327,11 +327,11 @@ public final class Callables {
         return Functions.interruptable(function);
     }
 
-    public static <A, B, C> Function<Pair<A, B>, C> pair(final Callable2<? super A, ? super B, ? extends C> function) {
+    public static <A, B, C> Function<Pair<A, B>, C> pair(final BiFunction<? super A, ? super B, ? extends C> function) {
         return Functions.pair(function);
     }
 
-    public static <A, B, C> Function2<A, B, C> unpair(final Function<? super Pair<? extends A, ? extends B>, ? extends C> function) {
+    public static <A, B, C> BiFunction<A, B, C> unpair(final Function<? super Pair<? extends A, ? extends B>, ? extends C> function) {
         return Functions.unpair(function);
     }
 

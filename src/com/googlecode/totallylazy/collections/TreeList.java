@@ -1,9 +1,8 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.BiFunction;
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -123,8 +122,8 @@ public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, R
     }
 
     @Override
-    public <S> S fold(S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
-        return map.fold(seed, new Function2<S, Pair<?, T>, S>() {
+    public <S> S fold(S seed, final BiFunction<? super S, ? super T, ? extends S> callable) {
+        return map.fold(seed, new BiFunction<S, Pair<?, T>, S>() {
             @Override
             public S call(S s, Pair<?, T> pair) throws Exception {
                 return callable.call(s, pair.second());

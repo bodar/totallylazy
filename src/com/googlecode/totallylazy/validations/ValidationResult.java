@@ -3,14 +3,13 @@ package com.googlecode.totallylazy.validations;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.BiFunction;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.collections.PersistentMap;
 import com.googlecode.totallylazy.comparators.Comparators;
-import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.identity;
@@ -140,8 +139,8 @@ public class ValidationResult {
             return validationResult -> validationResult.assignToKey(key);
         }
 
-        public static Function2<ValidationResult, Iterable<String>, ValidationResult> addWithKey(final String key) {
-            return new Function2<ValidationResult, Iterable<String>, ValidationResult>() {
+        public static BiFunction<ValidationResult, Iterable<String>, ValidationResult> addWithKey(final String key) {
+            return new BiFunction<ValidationResult, Iterable<String>, ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult validationResult, Iterable<String> messages) throws Exception {
                     return validationResult.add(key, messages);
@@ -149,8 +148,8 @@ public class ValidationResult {
             };
         }
 
-        public static Function2<ValidationResult, Pair<String, String>, ValidationResult> addSingleMessage() {
-            return new Function2<ValidationResult, Pair<String, String>, ValidationResult>() {
+        public static BiFunction<ValidationResult, Pair<String, String>, ValidationResult> addSingleMessage() {
+            return new BiFunction<ValidationResult, Pair<String, String>, ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult validationResult, Pair<String, String> keyAndMessage) throws Exception {
                     return validationResult.add(keyAndMessage.first(), keyAndMessage.second());
@@ -158,8 +157,8 @@ public class ValidationResult {
             };
         }
 
-        public static Function2<ValidationResult, String, ValidationResult> addSingleMessageWithKey(final String key) {
-            return new Function2<ValidationResult, String, ValidationResult>() {
+        public static BiFunction<ValidationResult, String, ValidationResult> addSingleMessageWithKey(final String key) {
+            return new BiFunction<ValidationResult, String, ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult validationResult, String message) throws Exception {
                     return validationResult.add(key, message);
@@ -167,8 +166,8 @@ public class ValidationResult {
             };
         }
 
-        public static Function2<ValidationResult, Pair<String, ? extends Iterable<String>>, ValidationResult> add() {
-            return new Function2<ValidationResult, Pair<String, ? extends Iterable<String>>, ValidationResult>() {
+        public static BiFunction<ValidationResult, Pair<String, ? extends Iterable<String>>, ValidationResult> add() {
+            return new BiFunction<ValidationResult, Pair<String, ? extends Iterable<String>>, ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult validationResult, Pair<String, ? extends Iterable<String>> keyAndMessages) throws Exception {
                     return validationResult.add(keyAndMessages.first(), keyAndMessages.second());

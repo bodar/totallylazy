@@ -265,15 +265,15 @@ public class Sequences {
         };
     }
 
-    public static <T, S> S fold(final Iterable<? extends T> iterable, S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S fold(final Iterable<? extends T> iterable, S seed, final BiFunction<? super S, ? super T, ? extends S> callable) {
         return Iterators.fold(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> S foldLeft(final Iterable<? extends T> iterable, S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S foldLeft(final Iterable<? extends T> iterable, S seed, final BiFunction<? super S, ? super T, ? extends S> callable) {
         return Iterators.foldLeft(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
+    public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final BiFunction<? super T, ? super S, ? extends S> callable) {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
     }
 
@@ -281,28 +281,28 @@ public class Sequences {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> Function2<Sequence<T>, Callable2<S, T, S>, S> reduce() {
-        return new Function2<Sequence<T>, Callable2<S, T, S>, S>() {
+    public static <T, S> BiFunction<Sequence<T>, BiFunction<S, T, S>, S> reduce() {
+        return new BiFunction<Sequence<T>, BiFunction<S, T, S>, S>() {
             @Override
-            public S call(Sequence<T> sequence, Callable2<S, T, S> callable) throws Exception {
+            public S call(Sequence<T> sequence, BiFunction<S, T, S> callable) throws Exception {
                 return sequence.reduce(callable);
             }
         };
     }
 
-    public static <T, S> Function<Sequence<T>, S> reduce(final Callable2<S, T, S> callable) {
+    public static <T, S> Function<Sequence<T>, S> reduce(final BiFunction<S, T, S> callable) {
         return Sequences.<T, S>reduce().flip().apply(callable);
     }
 
-    public static <T, S> S reduce(final Iterable<? extends T> iterable, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S reduce(final Iterable<? extends T> iterable, final BiFunction<? super S, ? super T, ? extends S> callable) {
         return Iterators.reduce(iterable.iterator(), callable);
     }
 
-    public static <T, S> S reduceLeft(final Iterable<? extends T> iterable, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S reduceLeft(final Iterable<? extends T> iterable, final BiFunction<? super S, ? super T, ? extends S> callable) {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
 
-    public static <T, S> S reduceRight(final Iterable<? extends T> iterable, final Callable2<? super T, ? super S, ? extends S> callable) {
+    public static <T, S> S reduceRight(final Iterable<? extends T> iterable, final BiFunction<? super T, ? super S, ? extends S> callable) {
         return Iterators.reduceRight(iterable.iterator(), callable);
     }
 
@@ -378,8 +378,8 @@ public class Sequences {
         return Iterators.number(iterable.iterator());
     }
 
-    public static <T> Function2<Sequence<T>, Integer, Sequence<T>> take() {
-        return new Function2<Sequence<T>, Integer, Sequence<T>>() {
+    public static <T> BiFunction<Sequence<T>, Integer, Sequence<T>> take() {
+        return new BiFunction<Sequence<T>, Integer, Sequence<T>>() {
             @Override
             public Sequence<T> call(Sequence<T> ts, Integer size) throws Exception {
                 return take(ts, size);
@@ -775,8 +775,8 @@ public class Sequences {
         return Functions.identity();
     }
 
-    public static <A, B> Function2<Iterable<? extends A>, Function<? super A, ? extends B>, Sequence<B>> map() {
-        return new Function2<Iterable<? extends A>, Function<? super A, ? extends B>, Sequence<B>>() {
+    public static <A, B> BiFunction<Iterable<? extends A>, Function<? super A, ? extends B>, Sequence<B>> map() {
+        return new BiFunction<Iterable<? extends A>, Function<? super A, ? extends B>, Sequence<B>>() {
             @Override
             public Sequence<B> call(Iterable<? extends A> as, Function<? super A, ? extends B> callable) throws Exception {
                 return sequence(as).map(callable);

@@ -17,7 +17,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.BinaryFunction;
+import com.googlecode.totallylazy.BinaryOperator;
 import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Function;
@@ -350,13 +350,13 @@ public class Numbers {
         return operatorsFor(x, y).add(x, y);
     }
 
-    public static BinaryFunction<Number> subtract = new BinaryFunction<Number>() {
+    public static BinaryOperator<Number> subtract = new BinaryOperator<Number>() {
         public Number call(Number a, Number b) {
             return Numbers.subtract(a, b);
         }
     };
 
-    public static BinaryFunction<Number> subtract() {
+    public static BinaryOperator<Number> subtract() {
         return subtract;
     }
 
@@ -397,13 +397,13 @@ public class Numbers {
         return divide.flip().apply(divisor);
     }
 
-    public static BinaryFunction<Number> divide = new BinaryFunction<Number>() {
+    public static BinaryOperator<Number> divide = new BinaryOperator<Number>() {
         public Number call(Number dividend, Number divisor) throws Exception {
             return divide(dividend, divisor);
         }
     };
 
-    public static BinaryFunction<Number> divide() {
+    public static BinaryOperator<Number> divide() {
         return divide;
     }
 
@@ -416,20 +416,20 @@ public class Numbers {
         return mod().apply(divisor);
     }
 
-    public static BinaryFunction<Number> remainder = new BinaryFunction<Number>() {
+    public static BinaryOperator<Number> remainder = new BinaryOperator<Number>() {
         @Override
         public Number call(Number dividend, Number divisor) throws Exception {
             return remainder(dividend, divisor);
         }
     };
 
-    public static BinaryFunction<Number> remainder() {
+    public static BinaryOperator<Number> remainder() {
         return remainder;
     }
 
-    public static BinaryFunction<Number> mod = remainder.flip();
+    public static BinaryOperator<Number> mod = remainder.flip();
 
-    public static BinaryFunction<Number> mod() {
+    public static BinaryOperator<Number> mod() {
         return mod;
     }
 

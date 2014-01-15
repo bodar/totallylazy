@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.AbstractPredicate;
-
 public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functor<R>, Applicative<R>, Monad<R>, Foldable<R> {
     public static <L, R> Either<L, R> right(R value) {
         return Right.right(value);
@@ -29,7 +27,7 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
 
     public abstract Either<R, L> flip();
 
-    public abstract <S> S fold(final S seed, final Callable2<? super S, ? super L, ? extends S> left, final Callable2<? super S, ? super R, ? extends S> right);
+    public abstract <S> S fold(final S seed, final BiFunction<? super S, ? super L, ? extends S> left, final BiFunction<? super S, ? super R, ? extends S> right);
 
     public abstract <S> S map(final Function<? super L, S> left, final Function<? super R, ? extends S> right);
 

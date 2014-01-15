@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.BiFunction;
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
@@ -99,7 +99,7 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
         }
 
         @Override
-        public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
+        public <S> S fold(S seed, BiFunction<? super S, ? super T, ? extends S> callable) {
             return seed;
         }
 
@@ -208,7 +208,7 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
         }
 
         @Override
-        public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
+        public <S> S fold(S seed, BiFunction<? super S, ? super T, ? extends S> callable) {
             return toSequence().fold(seed, callable);
         }
 

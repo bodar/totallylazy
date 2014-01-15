@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.numbers.Numbers;
 
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 
-public class Count extends ReducerCombinerFunction<Object, Number> {
+public class Count implements ReducerCombinerFunction<Object, Number> {
     public Number call(Number a, Object b) throws Exception {
         return b != null ? increment(a) : a;
     }

@@ -1,11 +1,10 @@
 package com.googlecode.totallylazy.time;
 
-import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.BiFunction;
 
 import java.util.Date;
 
 import static java.util.Calendar.HOUR;
-import static java.util.Calendar.SECOND;
 
 public class Hours {
     public static Date add(Date date, int amount) {
@@ -21,36 +20,36 @@ public class Hours {
     }
 
     public static class functions {
-        public static Function2<Date, Integer, Date> add = new Function2<Date, Integer, Date>() {
+        public static BiFunction<Date, Integer, Date> add = new BiFunction<Date, Integer, Date>() {
             @Override
             public Date call(Date date, Integer amount) throws Exception {
                 return Hours.add(date, amount);
             }
         };
 
-        public static Function2<Date, Integer, Date> add()  {
+        public static BiFunction<Date, Integer, Date> add()  {
             return add;
         }
 
-        public static Function2<Date, Integer, Date> subtract = new Function2<Date, Integer, Date>() {
+        public static BiFunction<Date, Integer, Date> subtract = new BiFunction<Date, Integer, Date>() {
             @Override
             public Date call(Date date, Integer amount) throws Exception {
                 return Hours.subtract(date, amount);
             }
         };
 
-        public static Function2<Date, Integer, Date> subtract()  {
+        public static BiFunction<Date, Integer, Date> subtract()  {
             return subtract;
         }
 
-        public static Function2<Date, Date, Long> between = new Function2<Date, Date, Long>() {
+        public static BiFunction<Date, Date, Long> between = new BiFunction<Date, Date, Long>() {
             @Override
             public Long call(Date start, Date end) throws Exception {
                 return Hours.between(start, end);
             }
         };
 
-        public static Function2<Date, Date, Long> between()  {
+        public static BiFunction<Date, Date, Long> between()  {
             return between;
         }
     }
