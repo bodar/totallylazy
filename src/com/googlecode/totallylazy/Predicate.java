@@ -20,6 +20,11 @@ public interface Predicate<T> extends java.util.function.Predicate<T> {
         return Predicates.<T>not(this);
     }
 
+    @Override
+    default Predicate<T> negate() {
+        return not();
+    }
+
     default Function<T, Boolean> function() {
         return this::matches;
     }
@@ -30,7 +35,8 @@ public interface Predicate<T> extends java.util.function.Predicate<T> {
         }
         return other -> {
             try {
-                return predicate.call(other);
+                Boolean result = predicate.call(other);
+                return result == null ? false : result;
             } catch (Exception e) {
                 return false;
             }
