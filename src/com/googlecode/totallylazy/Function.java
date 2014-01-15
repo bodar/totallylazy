@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Pair.pair;
 
+@FunctionalInterface
 public interface Function<A, B> extends Functor<B>, java.util.function.Function<A, B> {
     B call(A input) throws Exception;
 

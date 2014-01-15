@@ -8,7 +8,7 @@ public abstract class Lazy<T> implements Returns<T>, Memory {
     private final Object lock = new Object();
     private volatile T state;
 
-    protected abstract T get() throws Exception;
+    protected abstract T compute() throws Exception;
 
     public static <T> Lazy<T> lazy(Callable<? extends T> callable) {
         return LazyCallable.lazy(callable);
@@ -19,7 +19,7 @@ public abstract class Lazy<T> implements Returns<T>, Memory {
         if (state == null) {
             synchronized (lock) {
                 if (state == null) {
-                    state = get();
+                    state = compute();
                 }
             }
         }

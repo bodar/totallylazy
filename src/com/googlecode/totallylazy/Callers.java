@@ -15,13 +15,7 @@ public final class Callers {
     public static <T> Returns<T> callConcurrently(Callable<? extends T> callable) {
         ExecutorService service = executorService();
         try {
-            final Future<? extends T> future = service.submit(callable);
-            return new Returns<T>() {
-                @Override
-                public T call() throws Exception {
-                    return future.get();
-                }
-            };
+            return service.submit(callable)::get;
         } finally {
             service.shutdown();
         }
@@ -53,36 +47,22 @@ public final class Callers {
     }
 
     public static <T> Function<FutureTask<T>, Future<T>> executeWith(final Executor executor) {
-        return new Function<FutureTask<T>, Future<T>>() {
-            public Future<T> call(FutureTask<T> task) throws Exception {
-                executor.execute(task);
-                return task;
-            }
+        return task -> {
+            executor.execute(task);
+            return task;
         };
     }
 
     public static <T> Function<Callable<T>, FutureTask<T>> asFutureTask() {
-        return new Function<Callable<T>, FutureTask<T>>() {
-            public FutureTask<T> call(Callable<T> callable) throws Exception {
-                return new FutureTask<T>(callable);
-            }
-        };
+        return FutureTask::new;
     }
 
     public static <T> Function<Future<T>, T> realiseFuture() {
-        return new Function<Future<T>, T>() {
-            public final T call(final Future<T> future) throws Exception {
-                return future.get();
-            }
-        };
+        return Future<T>::get;
     }
 
     public static <T> Function<Future<T>, T> realiseFuture(final long timeout, final TimeUnit unit) {
-        return new Function<Future<T>, T>() {
-            public final T call(final Future<T> future) throws Exception {
-                return future.get(timeout, unit);
-            }
-        };
+        return future -> future.get(timeout, unit);
     }
 
     public static <T> T call(final Callable<? extends T> callable) {
