@@ -18,8 +18,8 @@ public class Functions {
         };
     }
 
-    public static <A, B, C> Function2<A, B, C> function(final Callable2<? super A, ? super B, ? extends C> callable) {
-        return new Function2<A, B, C>() {
+    public static <A, B, C> BiFunction<A, B, C> function(final BiFunction<? super A, ? super B, ? extends C> callable) {
+        return new BiFunction<A, B, C>() {
             @Override
             public C call(A a, B b) throws Exception {
                 return callable.call(a, b);
@@ -62,7 +62,7 @@ public class Functions {
         }
     }
 
-    public static <A, B, C> C call(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
+    public static <A, B, C> C call(final BiFunction<? super A, ? super B, ? extends C> callable, final A a, final B b) {
         try {
             return callable.call(a, b);
         } catch (Exception e) {
@@ -94,7 +94,7 @@ public class Functions {
         }
     }
 
-    public static <A, B, C> Function<B, C> apply(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
+    public static <A, B, C> Function<B, C> apply(final BiFunction<? super A, ? super B, ? extends C> callable, final A value) {
         return new Function<B, C>() {
             @Override
             public C call(B b) throws Exception {
@@ -103,8 +103,8 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D> Function2<B, C, D> apply(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
-        return new Function2<B, C, D>() {
+    public static <A, B, C, D> BiFunction<B, C, D> apply(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
+        return new BiFunction<B, C, D>() {
             @Override
             public D call(B b, C c) throws Exception {
                 return callable.call(value, b, c);
@@ -162,8 +162,8 @@ public class Functions {
         return constant(result);
     }
 
-    public static <A, B, C> Function2<A, B, C> returns2(final C result) {
-        return new Function2<A, B, C>() {
+    public static <A, B, C> BiFunction<A, B, C> returns2(final C result) {
+        return new BiFunction<A, B, C>() {
             @Override
             public C call(A ignore, B ignoreMeToo) throws Exception {
                 return result;
@@ -171,8 +171,8 @@ public class Functions {
         };
     }
 
-    public static <A, B, C> Function2<A, B, C> uncurry2(final Function<? super A, ? extends Function<? super B, ? extends C>> callable) {
-        return new Function2<A, B, C>() {
+    public static <A, B, C> BiFunction<A, B, C> uncurry2(final Function<? super A, ? extends Function<? super B, ? extends C>> callable) {
+        return new BiFunction<A, B, C>() {
             public final C call(final A a, final B b) throws Exception {
                 return callable.call(a).call(b);
             }
@@ -206,7 +206,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C> Function<Pair<A, B>, C> pair(final Callable2<? super A, ? super B, ? extends C> function) {
+    public static <A, B, C> Function<Pair<A, B>, C> pair(final BiFunction<? super A, ? super B, ? extends C> function) {
         return new Function<Pair<A, B>, C>() {
             @Override
             public C call(Pair<A, B> pair) throws Exception {
@@ -215,8 +215,8 @@ public class Functions {
         };
     }
 
-    public static <A, B, C> Function2<A, B, C> unpair(final Function<? super Pair<? extends A, ? extends B>, ? extends C> function) {
-        return new Function2<A, B, C>() {
+    public static <A, B, C> BiFunction<A, B, C> unpair(final Function<? super Pair<? extends A, ? extends B>, ? extends C> function) {
+        return new BiFunction<A, B, C>() {
             @Override
             public C call(A a, B b) throws Exception {
                 return function.call(Pair.pair(a, b));

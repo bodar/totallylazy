@@ -87,7 +87,7 @@ public class Closeables {
         }
     }
 
-    public static <A extends Closeable, B extends Closeable, R> R using(A a, B b, Callable2<? super A, ? super B, ? extends R> callable) {
+    public static <A extends Closeable, B extends Closeable, R> R using(A a, B b, BiFunction<? super A, ? super B, ? extends R> callable) {
         try {
             return Callers.call(callable, a, b);
         } finally {

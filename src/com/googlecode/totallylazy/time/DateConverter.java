@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.time;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.BiFunction;
 
 import java.util.Date;
 
@@ -11,14 +11,9 @@ public interface DateConverter {
     Date parse(String value);
 
     public static class functions {
-        public static Function2<DateConverter, Date, String> format = new Function2<DateConverter, Date, String>() {
-            @Override
-            public String call(DateConverter dateConverter, Date date) throws Exception {
-                return dateConverter.format(date);
-            }
-        };
+        public static BiFunction<DateConverter, Date, String> format = (dateConverter, date) -> dateConverter.format(date);
 
-        public static Function2<DateConverter, Date, String> format()  {
+        public static BiFunction<DateConverter, Date, String> format()  {
             return format;
         }
 
@@ -26,14 +21,14 @@ public interface DateConverter {
             return format.apply(dateConverter);
         }
 
-        public static Function2<DateConverter, String, Date> parse = new Function2<DateConverter, String, Date>() {
+        public static BiFunction<DateConverter, String, Date> parse = new BiFunction<DateConverter, String, Date>() {
             @Override
             public Date call(DateConverter dateConverter, String dateAsString) throws Exception {
                 return dateConverter.parse(dateAsString);
             }
         };
 
-        public static Function2<DateConverter, String, Date> parse() {
+        public static BiFunction<DateConverter, String, Date> parse() {
             return parse;
         }
 

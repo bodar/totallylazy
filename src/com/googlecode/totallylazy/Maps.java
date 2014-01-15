@@ -127,8 +127,8 @@ public class Maps {
         return multiMap(seed, iterable.iterator(), callable);
     }
 
-    public static <K, V> Function2<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap() {
-        return new Function2<Map<K, List<V>>, Pair<? extends K, ? extends V>, Map<K, List<V>>>() {
+    public static <K, V> BiFunction<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap() {
+        return new BiFunction<Map<K, List<V>>, Pair<? extends K, ? extends V>, Map<K, List<V>>>() {
             public Map<K, List<V>> call(Map<K, List<V>> map, Pair<? extends K, ? extends V> pair) throws Exception {
                 if (!map.containsKey(pair.first())) {
                     map.put(pair.first(), new ArrayList<V>());
@@ -139,12 +139,12 @@ public class Maps {
         };
     }
 
-    public static <K, V> Function2<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap(Class<K> key, Class<V> value) {
+    public static <K, V> BiFunction<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap(Class<K> key, Class<V> value) {
         return asMultiValuedMap();
     }
 
-    public static <K, V> Function2<? super Map<K, V>, ? super Pair<K, V>, Map<K, V>> asMap() {
-        return new Function2<Map<K, V>, Pair<K, V>, Map<K, V>>() {
+    public static <K, V> BiFunction<? super Map<K, V>, ? super Pair<K, V>, Map<K, V>> asMap() {
+        return new BiFunction<Map<K, V>, Pair<K, V>, Map<K, V>>() {
             public Map<K, V> call(Map<K, V> map, Pair<K, V> pair) throws Exception {
                 map.put(pair.first(), pair.second());
                 return map;
@@ -152,7 +152,7 @@ public class Maps {
         };
     }
 
-    public static <K, V> Function2<? super Map<K, V>, ? super Pair<K, V>, Map<K, V>> asMap(Class<K> key, Class<V> value) {
+    public static <K, V> BiFunction<? super Map<K, V>, ? super Pair<K, V>, Map<K, V>> asMap(Class<K> key, Class<V> value) {
         return asMap();
     }
 
@@ -221,8 +221,8 @@ public class Maps {
     }
 
     public static class functions {
-        public static <K, V> Function2<Map<K, V>, K, V> get() {
-            return new Function2<Map<K, V>, K, V>() {
+        public static <K, V> BiFunction<Map<K, V>, K, V> get() {
+            return new BiFunction<Map<K, V>, K, V>() {
                 @Override
                 public V call(Map<K, V> map, K key) throws Exception {
                     return map.get(key);

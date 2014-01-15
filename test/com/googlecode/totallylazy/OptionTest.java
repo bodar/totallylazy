@@ -98,8 +98,8 @@ public class OptionTest {
             this.age = age;
         }
 
-        static Function2<String, Integer, Person> person() {
-            return new Function2<String, Integer, Person>() {
+        static BiFunction<String, Integer, Person> person() {
+            return new BiFunction<String, Integer, Person>() {
                 @Override
                 public Person call(String name, Integer age) throws Exception {
                     return person(name, age);

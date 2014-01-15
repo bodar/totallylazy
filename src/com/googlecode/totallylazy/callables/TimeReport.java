@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.callables;
 
 
-import com.googlecode.totallylazy.BinaryFunction;
+import com.googlecode.totallylazy.BinaryOperator;
 import com.googlecode.totallylazy.Block;
 import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Sequence;
@@ -83,7 +83,7 @@ public class TimeReport extends Block<Number> {
     }
 
     public static void timeRatio(final Callable<?> function) {
-        iterate(multiply(2), 125).map(time(function)).reduce(new BinaryFunction<TimeReport>() {
+        iterate(multiply(2), 125).map(time(function)).reduce(new BinaryOperator<TimeReport>() {
             @Override
             public TimeReport call(TimeReport previous, TimeReport current) throws Exception {
                 Number ratio = Numbers.divide(current.average(), previous.average());

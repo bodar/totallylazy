@@ -57,7 +57,7 @@ public final class Left<L,R> extends Either<L, R> {
     }
 
     @Override
-    public <S> S fold(S seed, Callable2<? super S, ? super L, ? extends S> left, Callable2<? super S, ? super R, ? extends S> right) {
+    public <S> S fold(S seed, BiFunction<? super S, ? super L, ? extends S> left, BiFunction<? super S, ? super R, ? extends S> right) {
         return call(left, seed, left());
     }
 
@@ -97,7 +97,7 @@ public final class Left<L,R> extends Either<L, R> {
     }
 
     @Override
-    public <S> S fold(S seed, Callable2<? super S, ? super R, ? extends S> callable) {
+    public <S> S fold(S seed, BiFunction<? super S, ? super R, ? extends S> callable) {
         return seed;
     }
 

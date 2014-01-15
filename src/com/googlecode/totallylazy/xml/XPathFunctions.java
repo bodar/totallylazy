@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.xml;
 
+import com.googlecode.totallylazy.BiFunction;
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
@@ -93,7 +93,7 @@ public class XPathFunctions {
         };
     }
 
-    public static Function2<Node, String, Text> createText = new Function2<Node, String, Text>() {
+    public static BiFunction<Node, String, Text> createText = new BiFunction<Node, String, Text>() {
         @Override
         public Text call(Node node, String s) throws Exception {
             return createText(node, s);

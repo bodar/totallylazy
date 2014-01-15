@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.BiFunction;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
@@ -26,7 +26,7 @@ public class WherePredicate<T, R> extends AbstractPredicate<T> {
         return new WherePredicate<T, R>(callable, predicate);
     }
 
-    public static <T, R> Function<T, Predicate<T>> asWhere(final Callable2<? super T, ? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> Function<T, Predicate<T>> asWhere(final BiFunction<? super T, ? super T, ? extends R> callable, final Predicate<? super R> predicate) {
         return new Function<T, Predicate<T>>() {
             @Override
             public Predicate<T> call(T t) throws Exception {

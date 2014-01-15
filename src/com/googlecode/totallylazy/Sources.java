@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
-import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -36,7 +35,7 @@ public interface Sources extends Closeable {
 
     class methods {
         public static int copyAndClose(Sources source, final Destination destination) {
-            return using(source, destination, new Function2<Sources, Destination, Integer>() {
+            return using(source, destination, new BiFunction<Sources, Destination, Integer>() {
                 @Override
                 public Integer call(Sources source, Destination destination) throws Exception {
                     return copy(source, destination);

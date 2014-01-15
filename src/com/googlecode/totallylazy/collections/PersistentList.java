@@ -1,10 +1,10 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.BiFunction;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Returns;
-import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
@@ -146,7 +146,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     }
 
     class functions {
-        public static <T> Function2<PersistentList<T>, T, PersistentList<T>> cons() {
+        public static <T> BiFunction<PersistentList<T>, T, PersistentList<T>> cons() {
             return Segment.functions.cons();
         }
 

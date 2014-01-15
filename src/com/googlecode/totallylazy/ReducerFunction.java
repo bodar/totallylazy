@@ -1,4 +1,4 @@
 package com.googlecode.totallylazy;
 
-public abstract class ReducerFunction<T,R> extends Function2<R, T, R> implements Reducer<T,R> {
+public interface ReducerFunction<T,R> extends BiFunction<R, T, R>, Reducer<T,R> {
 }

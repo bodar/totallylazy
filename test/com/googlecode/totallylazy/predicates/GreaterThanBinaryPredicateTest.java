@@ -17,14 +17,14 @@ public class GreaterThanBinaryPredicateTest {
         assertThat(greaterThan.matches(4, 3), is(true));
     }
 
-    @Test
-    public void canCallWithTwoArguments() throws Exception {
-        assertThat(greaterThan.call(2, 3), is(false));
-        assertThat(greaterThan.call(3, 3), is(false));
-        assertThat(greaterThan.call(4, 3), is(true));
-    }
-
-// TODO: dan and mike, what to do?
+    // TODO: dan and mike, what to do?
+//    @Test
+//    public void canCallWithTwoArguments() throws Exception {
+//        assertThat(greaterThan.call(2, 3), is(false));
+//        assertThat(greaterThan.call(3, 3), is(false));
+//        assertThat(greaterThan.call(4, 3), is(true));
+//    }
+//
 //    @Test
 //    public void canApply() throws Exception {
 //        assertThat(greaterThan.apply(2).apply(3), is(false));

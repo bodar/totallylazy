@@ -2,7 +2,6 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.numbers.Numbers;
-import com.googlecode.totallylazy.predicates.AbstractPredicate;
 
 import java.lang.reflect.Method;
 
@@ -86,8 +85,8 @@ public abstract class multi {
         return argumentClasses.zip(parameterTypes).map(distanceBetween().pair()).reduce(sum);
     }
 
-    private static Function2<Class<?>, Class<?>, Number> distanceBetween() {
-        return new Function2<Class<?>, Class<?>, Number>() {
+    private static BiFunction<Class<?>, Class<?>, Number> distanceBetween() {
+        return new BiFunction<Class<?>, Class<?>, Number>() {
             @Override
             public Number call(Class<?> argument, Class<?> parameter) throws Exception {
                 return distanceBetween(argument, parameter);

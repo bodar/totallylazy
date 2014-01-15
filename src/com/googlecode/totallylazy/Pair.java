@@ -25,8 +25,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return new Pair<F, S>(first, second);
     }
 
-    public static <F, S> Function2<F, S, Pair<F, S>> pair() {
-        return new Function2<F, S, Pair<F, S>>() {
+    public static <F, S> BiFunction<F, S, Pair<F, S>> pair() {
+        return new BiFunction<F, S, Pair<F, S>>() {
             @Override
             public Pair<F, S> call(F f, S s) throws Exception {
                 return Pair.pair(f, s);
@@ -89,8 +89,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return values().hashCode();
     }
 
-    public static <A, B, C> Function2<Pair<A, B>, C, Pair<B, C>> leftShift() {
-        return new Function2<Pair<A, B>, C, Pair<B, C>>() {
+    public static <A, B, C> BiFunction<Pair<A, B>, C, Pair<B, C>> leftShift() {
+        return new BiFunction<Pair<A, B>, C, Pair<B, C>>() {
             @Override
             public Pair<B, C> call(Pair<A, B> pair, C c) throws Exception {
                 return leftShift(pair, c);
@@ -102,14 +102,14 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return Pair.pair(pair.second(), c);
     }
 
-    public static <A, B, C> Pair<B, C> reduceLeftShift(final Pair<? extends A, ? extends B> pair, final Callable2<? super A, ? super B, ? extends C> callable) {
+    public static <A, B, C> Pair<B, C> reduceLeftShift(final Pair<? extends A, ? extends B> pair, final BiFunction<? super A, ? super B, ? extends C> callable) {
         return Pair.leftShift(pair, call(callable, pair.first(), pair.second()));
     }
 
-    public static <A, B, C> Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>> reduceLeftShift() {
-        return new Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>>() {
+    public static <A, B, C> BiFunction<Pair<A, B>, BiFunction<A, B, C>, Pair<B, C>> reduceLeftShift() {
+        return new BiFunction<Pair<A, B>, BiFunction<A, B, C>, Pair<B, C>>() {
             @Override
-            public Pair<B, C> call(Pair<A, B> pair, Callable2<A, B, C> callable) throws Exception {
+            public Pair<B, C> call(Pair<A, B> pair, BiFunction<A, B, C> callable) throws Exception {
                 return reduceLeftShift(pair, callable);
             }
         };
@@ -126,7 +126,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         };
     }
 
-    public static <A, B, C> Function<Pair<A, B>, Pair<B, C>> reduceLeftShift(Callable2<A, B, C> callable) {
+    public static <A, B, C> Function<Pair<A, B>, Pair<B, C>> reduceLeftShift(BiFunction<A, B, C> callable) {
         return Pair.<A, B, C>reduceLeftShift().flip().apply(callable);
     }
 

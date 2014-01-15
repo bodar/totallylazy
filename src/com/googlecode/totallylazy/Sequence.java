@@ -143,15 +143,15 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.init(this);
     }
 
-    public <S> S fold(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> S fold(final S seed, final BiFunction<? super S, ? super T, ? extends S> callable) {
         return Sequences.fold(this, seed, callable);
     }
 
-    public <S> S foldLeft(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> S foldLeft(final S seed, final BiFunction<? super S, ? super T, ? extends S> callable) {
         return Sequences.foldLeft(this, seed, callable);
     }
 
-    public <S> S foldRight(final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
+    public <S> S foldRight(final S seed, final BiFunction<? super T, ? super S, ? extends S> callable) {
         return Sequences.foldRight(this, seed, callable);
     }
 
@@ -159,15 +159,15 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.foldRight(this, seed, callable);
     }
 
-    public <S> S reduce(final Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> S reduce(final BiFunction<? super S, ? super T, ? extends S> callable) {
         return Sequences.reduce(this, callable);
     }
 
-    public <S> S reduceLeft(final Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> S reduceLeft(final BiFunction<? super S, ? super T, ? extends S> callable) {
         return Sequences.reduceLeft(this, callable);
     }
 
-    public <S> S reduceRight(final Callable2<? super T, ? super S, ? extends S> callable) {
+    public <S> S reduceRight(final BiFunction<? super T, ? super S, ? extends S> callable) {
         return Sequences.reduceRight(this, callable);
     }
 
@@ -484,8 +484,8 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
             return tail();
         }
 
-        public static <T> Function2<Iterable<? extends T>, Iterable<? extends T>, Sequence<T>> join() {
-            return new Function2<Iterable<? extends T>, Iterable<? extends T>, Sequence<T>>() {
+        public static <T> BiFunction<Iterable<? extends T>, Iterable<? extends T>, Sequence<T>> join() {
+            return new BiFunction<Iterable<? extends T>, Iterable<? extends T>, Sequence<T>>() {
                 @Override
                 public Sequence<T> call(Iterable<? extends T> a, Iterable<? extends T> b) throws Exception {
                     return sequence(Iterators.functions.<T>join().call(a, b));
