@@ -1,8 +1,12 @@
 #!/bin/sh
 
-JAVA_OPTS=-Djava.net.useSystemProxies=true ${JAVA_OPTS}
+if [ -n "${JAVA_HOME}" ]; then
+	PATH=${JAVA_HOME}/bin:${PATH}
+fi
+
+JAVA_OPTS="-Djava.net.useSystemProxies=true ${JAVA_OPTS}"
 BUILD_NUMBER=${BUILD_NUMBER-dev.build}
-version=162
+version=168
 artifact=jcompilo
 group=com/googlecode/${artifact}
 repo=repo.bodar.com
@@ -24,4 +28,4 @@ if [ ! -f ${jar} ]; then
 	rm ${pack}
 	#wget -O $0 ${remote_sh} || curl -o $0 ${remote_sh}
 fi
-exec ${JAVA_HOME}/bin/java -showversion -Dbuild.number=${BUILD_NUMBER} ${JAVA_OPTS} -jar ${jar} $*
+exec java -showversion -Dbuild.number=${BUILD_NUMBER} ${JAVA_OPTS} -jar ${jar} $*
