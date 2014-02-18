@@ -155,7 +155,7 @@ public class Exceptions {
         return new Function1<T, Option<S>>() {
             public Option<S> call(T t) throws Exception {
                 try {
-                    return Option.some(callable.call(t));
+                    return Option.option(callable.call(t));
                 } catch (Exception e) {
                     return none();
                 }

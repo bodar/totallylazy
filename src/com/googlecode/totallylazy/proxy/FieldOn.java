@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Classes;
-import com.googlecode.totallylazy.Fields;
+import com.googlecode.totallylazy.Bytes;
 import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
@@ -75,7 +74,7 @@ public abstract class FieldOn<T, S> extends Mapper<T, S> implements InvocationHa
 
     private static class Asm {
         public static ClassNode classNode(final Class<?> aClass) {
-            return classNode(Classes.bytes(aClass));
+            return classNode(Bytes.bytes(aClass));
         }
 
         public static ClassNode classNode(final byte[] bytes) {
