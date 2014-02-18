@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
@@ -138,11 +139,20 @@ public class Files {
     }
 
     public static File temporaryFile(File directory) {
+        return temporaryFile(directory, randomFilename());
+    }
+
+    public static File temporaryFile(File directory, String name) {
+        File file = new File(directory, name);
+        file.deleteOnExit();
+        create(file);
+        return file;
+    }
+
+    private static void create(File file) {
         try {
-            File file = new File(directory, randomFilename());
-            file.deleteOnExit();
+            file.getParentFile().mkdirs();
             file.createNewFile();
-            return file;
         } catch (IOException e) {
             throw LazyException.lazyException(e);
         }
@@ -218,6 +228,24 @@ public class Files {
         }
     }
 
+    public static File deleteOnExit(File directory) {
+        delete.add(directory);
+        return directory;
+    }
+
+    private static Set<File> delete = Sets.concurrentSet();
+
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (File directory : delete) {
+                    Files.delete(directory);
+                }
+            }
+        }));
+    }
+
     public static Block<InputStream> write(final File output) {
         return new Block<InputStream>() {
             @Override
@@ -242,17 +270,12 @@ public class Files {
     }
 
     public static File file(File parent, String name) {
-        File child = new File(parent, name);
-        if (child.isDirectory()) {
-            throw new IllegalArgumentException(format("%s is a isDirectory", child));
+        File file = new File(parent, name);
+        if (file.isDirectory()) {
+            throw new IllegalArgumentException(format("%s is a isDirectory", file));
         }
-        try {
-            child.getParentFile().mkdirs();
-            child.createNewFile();
-        } catch (IOException e) {
-            throw LazyException.lazyException(e);
-        }
-        return child;
+        create(file);
+        return file;
     }
 
     public static Option<File> fileOption(File parent, String name) {
@@ -267,6 +290,10 @@ public class Files {
                 return date(file.lastModified());
             }
         };
+    }
+
+    public static File randomFile() {
+        return file(temporaryDirectory(), randomFilename());
     }
 
     public static class parameters {

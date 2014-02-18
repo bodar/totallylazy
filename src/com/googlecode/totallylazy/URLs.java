@@ -14,6 +14,11 @@ public class URLs {
         return url(aClass.getResource(name).toString().replace(name, EMPTY));
     }
 
+    public static URL rootUrl(final Class<?> aClass) {
+        String filename = Classes.filename(aClass);
+        return url(aClass.getResource("/" + filename).toString().replace(filename, EMPTY));
+    }
+
     public static URL url(final String url) {
         try {
             return new URL(url);
@@ -33,5 +38,13 @@ public class URLs {
                 return file.toURI().toURL();
             }
         };
+    }
+
+    public static URL url(File file) {
+        try {
+            return file.toURI().toURL();
+        } catch (MalformedURLException e) {
+            throw LazyException.lazyException(e);
+        }
     }
 }
