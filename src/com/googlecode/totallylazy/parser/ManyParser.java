@@ -1,21 +1,20 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
-
-import java.nio.CharBuffer;
 
 import static com.googlecode.totallylazy.Functions.returns;
-import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class ManyParser<A> extends Parser<Sequence<A>> {
+public class ManyParser<A> extends Parser<Segment<A>> {
     private final Parser<A> parser;
+    private final Function1<Result<A>, Segment<Character>> remainder = Success.functions.<A>remainder();
+    private final Function1<Segment<Character>, Result<A>> parse;
 
-    private ManyParser(Parse<? extends A> parse) {
-        this.parser = Parsers.parser(parse);
+    private ManyParser(Parse<? extends A> parser) {
+        this.parser = Parsers.parser(parser);
+        parse = functions.parse(this.parser);
     }
 
     public static <A> ManyParser<A> many(Parse<? extends A> parser) {
@@ -27,18 +26,35 @@ public class ManyParser<A> extends Parser<Sequence<A>> {
         return String.format("many %s", parser);
     }
 
-    public Result<Sequence<A>> parse(CharBuffer sequence) throws Exception {
+// lazy version
+//    @Override
+//    public Result<Segment<A>> parse(final Segment<Character> sequence) throws Exception {
+//        final Sequence<Result<A>> result = computation(parse.deferApply(sequence), remainder.then(parse)).takeWhile(instanceOf(Success.class));
+//        return Success.<Segment<A>>success(returns(result.map(Callables.<A>value())), remainderOf(result));
+//    }
+//
+//    private Callable<Segment<Character>> remainderOf(final Sequence<Result<A>> computation) {
+//        return new Callable<Segment<Character>>() {
+//            @Override
+//            public Segment<Character> call() throws Exception {
+//                return computation.map(remainder).last();
+//            }
+//        };
+//    }
+
+    //Eager version
+    public Result<Segment<A>> parse(Segment<Character> sequence) throws Exception {
         return parser.then(returns(this)).
-                map(ManyParser.<A, Sequence<A>>cons()).
-                or(ReturnsParser.returns(Sequences.<A>empty())).
+                map(ManyParser.<A>cons()).
+                or(ReturnsParser.returns(Segment.constructors.<A>emptySegment())).
                 parse(sequence);
     }
 
-    public static <A, S extends Segment<A>> Callable1<Pair<A, S>, S> cons() {
-        return new Callable1<Pair<A, S>, S>() {
+    public static <A> Callable1<Pair<A, Segment<A>>, Segment<A>> cons() {
+        return new Callable1<Pair<A, Segment<A>>, Segment<A>>() {
             @Override
-            public S call(Pair<A, S> pair) throws Exception {
-                return cast(pair.second().cons(pair.first()));
+            public Segment<A> call(Pair<A, Segment<A>> pair) throws Exception {
+                return pair.second().cons(pair.first());
             }
         };
     }

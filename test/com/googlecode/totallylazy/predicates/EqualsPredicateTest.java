@@ -23,7 +23,7 @@ public class EqualsPredicateTest {
 
     @Test
     public void supportsToString() throws Exception {
-        assertThat(equalTo(1).toString(), is("is '1'"));
-        assertThat(equalTo(null).toString(), is("is null"));
+        assertThat(equalTo(1).toString(), is("1"));
+        assertThat(equalTo(null).toString(), is("null"));
     }
 }

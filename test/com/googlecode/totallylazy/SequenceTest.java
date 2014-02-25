@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Callables.ascending;
@@ -610,13 +611,13 @@ public class SequenceTest {
 
     @Test
     public void supportsEachConcurrently() throws Exception {
-        final int[] sum = {0};
+        final AtomicInteger sum = new AtomicInteger();
         sequence(1, 2).eachConcurrently(new Block<Integer>() {
             public void execute(Integer value) throws InterruptedException {
-                sum[0] += value;
+                sum.addAndGet(value);
             }
         });
-        assertThat(sum[0], is(3));
+        assertThat(sum.intValue(), is(3));
     }
 
     @Test
