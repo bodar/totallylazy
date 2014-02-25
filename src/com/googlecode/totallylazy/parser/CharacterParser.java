@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
@@ -10,10 +9,10 @@ import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.parser.Success.success;
 
 public class CharacterParser extends Parser<Character> {
-    private final Predicate<Character> value;
+    private final Predicate<Character> predicate;
 
-    private CharacterParser(Predicate<Character> value) {
-        this.value = value;
+    private CharacterParser(Predicate<Character> predicate) {
+        this.predicate = predicate;
     }
 
     public static CharacterParser character(Predicate<Character> value) {
@@ -47,23 +46,15 @@ public class CharacterParser extends Parser<Character> {
 
     @Override
     public Result<Character> parse(final Segment<Character> characters) {
-        return Segment.methods.headOption(characters).
-                map(ifMatches(characters)).
-                getOrElse(fail());
-    }
-
-    private Callable1<Character, Result<Character>> ifMatches(final Segment<Character> characters) {
-        return new Callable1<Character, Result<Character>>() {
-            @Override
-            public Result<Character> call(Character character) throws Exception {
-                return value.matches(character) ? success(character, characters.tail()) :
-                        fail(value, character);
-            }
-        };
+        if(characters.isEmpty()) return fail();
+        Character c = characters.head();
+        return predicate.matches(c) ?
+                success(c, characters.tail()) :
+                fail(predicate, c);
     }
 
     @Override
     public String toString() {
-        return value.toString();
+        return predicate.toString();
     }
 }
