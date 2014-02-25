@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.parser.ReturnsParser.returns;
+import static com.googlecode.totallylazy.parser.Success.success;
 import static java.lang.String.format;
 
 public class OptionalParser<A> extends Parser<Option<A>> {
@@ -24,8 +25,8 @@ public class OptionalParser<A> extends Parser<Option<A>> {
 
     @Override
     public Result<Option<A>> parse(Segment<Character> characters) throws Exception {
-        return parserA.map(Option.<A>option()).
-                or(returns(Option.<A>none())).
-                parse(characters);
+        Result<? extends A> result = parserA.parse(characters);
+        if(result instanceof Failure) return success(Option.<A>none(), characters);
+        return success(Option.some(result.value()), result.remainder());
     }
 }

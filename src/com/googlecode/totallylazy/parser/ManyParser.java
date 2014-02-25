@@ -1,20 +1,17 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
 
-import static com.googlecode.totallylazy.Functions.returns;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ManyParser<A> extends Parser<Segment<A>> {
-    private final Parser<A> parser;
-    private final Function1<Result<A>, Segment<Character>> remainder = Success.functions.<A>remainder();
-    private final Function1<Segment<Character>, Result<A>> parse;
+import static com.googlecode.totallylazy.parser.Success.success;
+
+public class ManyParser<A> extends Parser<List<A>> {
+    private final Parse<? extends A> parser;
 
     private ManyParser(Parse<? extends A> parser) {
-        this.parser = Parsers.parser(parser);
-        parse = functions.parse(this.parser);
+        this.parser = parser;
     }
 
     public static <A> ManyParser<A> many(Parse<? extends A> parser) {
@@ -26,36 +23,16 @@ public class ManyParser<A> extends Parser<Segment<A>> {
         return String.format("many %s", parser);
     }
 
-// lazy version
-//    @Override
-//    public Result<Segment<A>> parse(final Segment<Character> sequence) throws Exception {
-//        final Sequence<Result<A>> result = computation(parse.deferApply(sequence), remainder.then(parse)).takeWhile(instanceOf(Success.class));
-//        return Success.<Segment<A>>success(returns(result.map(Callables.<A>value())), remainderOf(result));
-//    }
-//
-//    private Callable<Segment<Character>> remainderOf(final Sequence<Result<A>> computation) {
-//        return new Callable<Segment<Character>>() {
-//            @Override
-//            public Segment<Character> call() throws Exception {
-//                return computation.map(remainder).last();
-//            }
-//        };
-//    }
+    public Result<List<A>> parse(Segment<Character> sequence) throws Exception {
+        Segment<Character> segment = sequence;
+        List<A> list = new ArrayList<A>();
 
-    //Eager version
-    public Result<Segment<A>> parse(Segment<Character> sequence) throws Exception {
-        return parser.then(returns(this)).
-                map(ManyParser.<A>cons()).
-                or(ReturnsParser.returns(Segment.constructors.<A>emptySegment())).
-                parse(sequence);
-    }
-
-    public static <A> Callable1<Pair<A, Segment<A>>, Segment<A>> cons() {
-        return new Callable1<Pair<A, Segment<A>>, Segment<A>>() {
-            @Override
-            public Segment<A> call(Pair<A, Segment<A>> pair) throws Exception {
-                return pair.second().cons(pair.first());
-            }
-        };
+        while (!segment.isEmpty()) {
+            Result<? extends A> result = parser.parse(segment);
+            if (result instanceof Failure) break;
+            list.add(result.value());
+            segment = result.remainder();
+        }
+        return success(list, segment);
     }
 }

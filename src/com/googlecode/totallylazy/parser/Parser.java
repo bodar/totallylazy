@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 public abstract class Parser<A> implements Parse<A> {
@@ -28,10 +29,6 @@ public abstract class Parser<A> implements Parse<A> {
         return PairParser.pairOf(this, parser);
     }
 
-    public <B> Parser<Pair<A, B>> then(Callable<? extends Parse<? extends B>> parser){
-        return PairParser.pairOf(this, parser);
-    }
-
     public <B> Parser<B> next(Parse<? extends B> parser){
         return then(parser).map(Callables.<B>second());
     }
@@ -48,7 +45,7 @@ public abstract class Parser<A> implements Parse<A> {
         return between(parser, parser);
     }
 
-    public <B> Parser<Segment<A>> separatedBy(Parse<?> parser){
+    public <B> Parser<List<A>> separatedBy(Parse<?> parser){
         return then(OptionalParser.optional(parser)).map(Callables.<A>first()).many();
     }
 
@@ -60,7 +57,7 @@ public abstract class Parser<A> implements Parse<A> {
         return OptionalParser.optional(this);
     }
     
-    public Parser<Segment<A>> many() {
+    public Parser<List<A>> many() {
         return ManyParser.many(this);
     }
 }

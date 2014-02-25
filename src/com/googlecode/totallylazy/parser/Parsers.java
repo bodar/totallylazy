@@ -13,6 +13,7 @@ import com.googlecode.totallylazy.Triple;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 import com.googlecode.totallylazy.regex.Regex;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Characters.identifierPart;
@@ -25,17 +26,24 @@ import static com.googlecode.totallylazy.iterators.SegmentIterator.iterator;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
 
 public class Parsers {
-    public static Function1<Segment<Character>, String> toString = new Function1<Segment<Character>, String>() {
+    public static Function1<List<Character>, String> toString = new Function1<List<Character>, String>() {
         @Override
-        public String call(Segment<Character> characterSegment) throws Exception {
-            return Iterators.toString(iterator(characterSegment), "");
+        public String call(List<Character> list) throws Exception {
+            return sequence(list).toString("");
         }
     };
 
-    public static Parser<String> identifier =
-            character(identifierStart).
-            then(character(identifierPart).many()).
-                    map(ManyParser.<Character>cons()).map(toString);
+//    public static Parser<String> identifier =
+//            character(identifierStart).
+//            then(character(identifierPart).many()).
+//                    map(new Function1<Pair<Character, List<Character>>, List<Character>>() {
+//                        @Override
+//                        public List<Character> call(Pair<Character, List<Character>> p) throws Exception {
+//                            List<Character> list = p.second();
+//                            list.;
+//                            return list;
+//                        }
+//                    }).map(toString);
 
     public static <A> Parser<A> parser(final Parse<? extends A> parser){
         return MappingParser.map(parser, Callables.<A>returnArgument());
@@ -61,7 +69,7 @@ public class Parsers {
         return CharacterParser.notChar(value);
     }
 
-    public static Parser<String> string(CharSequence value) {
+    public static Parser<String> string(String value) {
         return StringParser.string(value);
     }
 
@@ -89,19 +97,11 @@ public class Parsers {
         return PairParser.pairOf(parserA, parserB);
     }
 
-    public static <A, B> Parser<Pair<A,B>> pairOf(final Parse<? extends A> parserA, final Callable<? extends Parse<? extends B>> parserB) {
-        return PairParser.pairOf(parserA, parserB);
-    }
-
-    public static <A, B> Parser<Pair<A,B>> pairOf(final Callable<? extends Parse<? extends A>> parserA, final Callable<? extends Parse<? extends B>> parserB) {
-        return PairParser.pairOf(parserA, parserB);
-    }
-
     public static <A> Parser<A> returns(A a) {
         return ReturnsParser.returns(a);
     }
 
-    public static <A> Parser<Segment<A>> many(Parse<? extends A> parser) {
+    public static <A> Parser<List<A>> many(Parse<? extends A> parser) {
         return ManyParser.many(parser);
     }
 
@@ -130,18 +130,6 @@ public class Parsers {
     }
 
     public static <A, B, C> Parser<Triple<A, B, C>> tripleOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Parse<? extends C> parserC) {
-        return TripleParser.tripleOf(parserA, parserB, parserC);
-    }
-
-    public static <A, B, C> Parser<Triple<A, B, C>> tripleOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Callable<? extends Parse<? extends C>> parserC) {
-        return TripleParser.tripleOf(parserA, parserB, parserC);
-    }
-
-    public static <A, B, C> Parser<Triple<A, B, C>> tripleOf(final Parse<? extends A> parserA, final Callable<? extends Parse<? extends B>> parserB, final Callable<? extends Parse<? extends C>> parserC) {
-        return TripleParser.tripleOf(parserA, parserB, parserC);
-    }
-
-    public static <A, B, C> Parser<Triple<A, B, C>> tripleOf(final Callable<? extends Parse<? extends A>> parserA, final Callable<? extends Parse<? extends B>> parserB, final Callable<? extends Parse<? extends C>> parserC) {
         return TripleParser.tripleOf(parserA, parserB, parserC);
     }
 }
