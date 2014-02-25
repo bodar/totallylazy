@@ -1,17 +1,19 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.collections.PersistentList;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
 
-import java.nio.CharBuffer;
-
-import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
-import static com.googlecode.totallylazy.parser.Success.success;
+import static com.googlecode.totallylazy.Sequences.characters;
+import static com.googlecode.totallylazy.parser.SequenceParser.sequenceOf;
 
 public class StringParser extends Parser<String> {
     private final CharSequence expected;
+    private final SequenceParser<Character> parser;
 
-    public StringParser(CharSequence expected) {
+    private StringParser(CharSequence expected) {
         this.expected = expected;
+        parser = sequenceOf(characters(expected).map(CharacterParser.characterParser()));
     }
 
     public static StringParser string(CharSequence value) {
@@ -19,20 +21,17 @@ public class StringParser extends Parser<String> {
     }
 
     @Override
-    public Result<String> parse(CharBuffer buffer) throws Exception {
-        if (buffer.remaining() < expected.length()) return fail(expected, buffer.toString());
-        buffer.mark();
-        PersistentList<Character> accumulator = empty();
-        for (int i = 0; i < expected.length(); i++) {
-            char e = expected.charAt(i);
-            char a = buffer.get();
-            accumulator = accumulator.cons(a);
-            if (e != a) {
-                buffer.reset();
-                return fail(expected, accumulator.reverse().toSequence().toString(""));
+    public Result<String> parse(Segment<Character> input) throws Exception {
+        return parser.parse(input).map(asString(""));
+    }
+
+    public static Function1<Sequence<Character>, String> asString(final String separator) {
+        return new Function1<Sequence<Character>, String>() {
+            @Override
+            public String call(Sequence<Character> characters) throws Exception {
+                return characters.toString(separator);
             }
-        }
-        return success(expected.toString(), buffer);
+        };
     }
 
     @Override

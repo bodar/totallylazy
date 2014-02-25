@@ -1,72 +1,54 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Segment;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Segment.constructors.characters;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
-import static com.googlecode.totallylazy.parser.CharacterParser.isChar;
 import static com.googlecode.totallylazy.parser.Parsers.identifier;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ParsersTest {
     @Test
     public void supportsNext() throws Exception {
-        Result<Character> result = character('A').next(character('B')).parse("ABC");
+        Result<Character> result = character('A').next(character('B')).parse(characters("ABC"));
         assertThat(result.value(), is('B'));
-        assertThat(result.remainder().get(), is('C'));
+        assertThat(result.remainder().head(), is('C'));
     }
 
     @Test
     public void supportsFollowedBy() throws Exception {
-        Result<Character> result = character('A').followedBy(character('B')).parse("ABC");
+        Result<Character> result = character('A').followedBy(character('B')).parse(characters("ABC"));
         assertThat(result.value(), is('A'));
-        assertThat(result.remainder().get(), is('C'));
+        assertThat(result.remainder().head(), is('C'));
     }
 
     @Test
     public void supportsBetween() throws Exception {
-        Result<Character> result = character('B').between(character('A'), character('C')).parse("ABCD");
+        Result<Character> result = character('B').between(character('A'), character('C')).parse(characters("ABCD"));
         assertThat(result.value(), is('B'));
-        assertThat(result.remainder().get(), is('D'));
+        assertThat(result.remainder().head(), is('D'));
     }
 
     @Test
     public void supportsSurroundedBy() throws Exception {
-        Result<Character> result = character('B').surroundedBy(character('$')).parse("$B$D");
+        Result<Character> result = character('B').surroundedBy(character('$')).parse(characters("$B$D"));
         assertThat(result.value(), is('B'));
-        assertThat(result.remainder().get(), is('D'));
+        assertThat(result.remainder().head(), is('D'));
     }
 
     @Test
     public void supportsSeparatedBy() throws Exception {
-        Result<Sequence<Character>> result = character('A').separatedBy(character(',')).parse("A,A,ABC");
-        Sequence<Character> value = result.value();
-        assertThat(value, is(Sequences.characters("AAA")));
-        assertThat(result.remainder().get(), is('B'));
+        Result<Segment<Character>> result = character('A').separatedBy(character(',')).parse(characters("A,A,ABC"));
+        assertThat(result.value(), is(characters("AAA")));
+        assertThat(result.remainder().head(), is('B'));
     }
 
     @Test
     public void supportsIdentifier() throws Exception {
-        Result<String> result = identifier.parse("sayHello()");
+        Result<String> result = identifier.parse(characters("sayHello()"));
         assertThat(result.value(), is("sayHello"));
-        assertThat(result.remainder().toString(), is("()"));
-    }
-
-    @Test
-    public void supportsTimes() throws Exception {
-        Result<Sequence<Character>> result = isChar('A').times(3).parse("AAABBB");
-        assertThat(result.value(), is(Sequences.characters("AAA")));
-        assertThat(result.remainder().toString(), is("BBB"));
-    }
-
-    @Test
-    public void supportsSource() throws Exception {
-        Result<String> result = isChar('A').times(3).source().parse("AAABBB");
-        assertThat(result.value(), is("AAA"));
-        assertThat(result.remainder().toString(), is("BBB"));
+        assertThat(result.remainder(), is(characters("()")));
     }
 }

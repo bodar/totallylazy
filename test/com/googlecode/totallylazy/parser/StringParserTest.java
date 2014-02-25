@@ -1,13 +1,15 @@
 package com.googlecode.totallylazy.parser;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 
-import static com.googlecode.totallylazy.Streams.inputStreamReader;
+import static com.googlecode.totallylazy.Segment.constructors.characters;
+import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
+import static com.googlecode.totallylazy.Strings.UTF8;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.StringParser.string;
@@ -16,24 +18,23 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class StringParserTest {
     @Test
     public void canParseAString() throws Exception {
-        Result<String> result = string("ABC").parse("ABC");
+        Result<String> result = string("ABC").parse(characters("ABC"));
         assertThat(result.value(), is("ABC"));
-        assertThat(result.remainder().toString(), is(""));
+        assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
 
     @Test
     public void supportsRemainder() throws Exception {
-        Result<String> result = string("ABC").parse("ABCDEF");
+        Result<String> result = string("ABC").parse(characters("ABCDEF"));
         assertThat(result.value(), is("ABC"));
-        assertThat(result.remainder().toString(), is("DEF"));
+        assertThat(result.remainder(), is(characters("DEF")));
     }
 
     @Test
-    @Ignore
     public void doesNotReadMoreThanItNeeds() throws Exception {
         InputStream stream = new ByteArrayInputStream(bytes("ABCDEF"));
-        Reader reader = inputStreamReader(stream);
-        Result<String> result = string("ABC").parse((CharSequence) reader);
+        Reader reader = new InputStreamReader(stream, UTF8);
+        Result<String> result = string("ABC").parse(characters(reader));
         assertThat(result.value(), is("ABC"));
         char next = (char) reader.read();
         assertThat(next, is('D'));

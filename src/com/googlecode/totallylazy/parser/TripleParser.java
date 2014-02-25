@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Triple;
 
-import java.nio.CharBuffer;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Functions.returns;
@@ -43,7 +43,7 @@ public class TripleParser<A, B, C> extends Parser<Triple<A, B, C>> {
     }
 
     @Override
-    public Result<Triple<A, B, C>> parse(CharBuffer characters) throws Exception {
+    public Result<Triple<A, B, C>> parse(Segment<Character> characters) throws Exception {
         Result<? extends A> resultA = parserA.value().parse(characters);
         if (resultA instanceof Failure) return cast(resultA);
 

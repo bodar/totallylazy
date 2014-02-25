@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.parser;
 
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 
-import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +13,11 @@ import static com.googlecode.totallylazy.parser.Success.success;
 public class SequenceParser<A> extends Parser<Sequence<A>> {
     private final Sequence<? extends Parse<? extends A>> parsers;
 
-    private SequenceParser(Iterable<? extends Parse<? extends A>> parsers) {
-        this.parsers = sequence(parsers);
+    private SequenceParser(Sequence<? extends Parse<? extends A>> parsers) {
+        this.parsers = parsers;
     }
 
-    public static <A> SequenceParser<A> sequenceOf(final Iterable<? extends Parse<? extends A>> parsers) {
+    public static <A> SequenceParser<A> sequenceOf(final Sequence<? extends Parse<? extends A>> parsers) {
         return new SequenceParser<A>(parsers);
     }
 
@@ -42,26 +42,20 @@ public class SequenceParser<A> extends Parser<Sequence<A>> {
     }
 
     @Override
-    public Result<Sequence<A>> parse(CharBuffer characters) throws Exception {
-        characters.mark();
-        List<A> parsed = new ArrayList<A>();
-        for (Parse<? extends A> parser : parsers) {
-            Result<? extends A> result = parser.parse(characters);
-            if (result instanceof Failure) {
-                characters.reset();
-                return cast(result);
-            }
-            parsed.add(result.value());
-        }
-        return success(sequence(parsed), characters);
-    }
-
-    @Override
     public String toString() {
         return parsers.toString();
     }
 
-    public String toString(String separator) {
-        return parsers.toString(separator);
+    @Override
+    public Result<Sequence<A>> parse(Segment<Character> characters) throws Exception {
+        Segment<Character> state = characters;
+        List<A> parsed = new ArrayList<A>();
+        for (Parse<? extends A> parser : parsers) {
+            Result<? extends A> result = parser.parse(state);
+            if (result instanceof Failure) return cast(result);
+            parsed.add(result.value());
+            state = result.remainder();
+        }
+        return success(sequence(parsed), state);
     }
 }
