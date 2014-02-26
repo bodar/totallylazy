@@ -34,6 +34,16 @@ public class Failure<A> implements Result<A>{
     }
 
     @Override
+    public boolean success() {
+        return false;
+    }
+
+    @Override
+    public boolean failure() {
+        return true;
+    }
+
+    @Override
     public Segment<Character> remainder() {
         throw fail();
     }

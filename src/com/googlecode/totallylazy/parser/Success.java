@@ -42,6 +42,16 @@ public class Success<A> extends Pair<A, Segment<Character>> implements Result<A>
     }
 
     @Override
+    public boolean success() {
+        return true;
+    }
+
+    @Override
+    public boolean failure() {
+        return false;
+    }
+
+    @Override
     public Segment<Character> remainder() {
         return second();
     }
