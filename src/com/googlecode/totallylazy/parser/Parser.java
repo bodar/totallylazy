@@ -17,12 +17,8 @@ import static com.googlecode.totallylazy.Sequences.join;
 import static com.googlecode.totallylazy.Strings.UTF8;
 
 public abstract class Parser<A> implements Parse<A> {
-    protected Failure<A> fail() {
-        return Failure.failure(String.format("%s expected.", toString()));
-    }
-
     protected Failure<A> fail(Object expected, Object actual) {
-        return Failure.failure(String.format("%s expected, %s encountered.", expected, actual));
+        return Failure.failure(expected, actual);
     }
 
     public abstract String toString();
