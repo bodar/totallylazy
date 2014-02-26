@@ -193,4 +193,8 @@ public class Parsers {
     public static <A, B, C> Parser<Triple<A, B, C>> tuple(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Parse<? extends C> parserC) {
         return TripleParser.tripleOf(parserA, parserB, parserC);
     }
+
+    public static <A> Parser<A> between(Parse<?> before, Parser<A> parserB, Parse<?> after) {
+        return TripleParser.tripleOf(before, parserB, after).map(Callables.<A>second());
+    }
 }

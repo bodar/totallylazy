@@ -6,16 +6,14 @@ import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.Strings;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
-import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Sequences.join;
 import static com.googlecode.totallylazy.Strings.UTF8;
 
 public abstract class Parser<A> implements Parse<A> {
@@ -47,11 +45,15 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public <B> Parser<A> between(Parse<?> before, Parse<?> after){
-        return TripleParser.tripleOf(before, this, after).map(Callables.<A>second());
+        return Parsers.between(before, this, after);
     }
 
     public <B> Parser<A> surroundedBy(Parse<?> parser){
         return between(parser, parser);
+    }
+
+    public <B> Parser<List<A>> sepBy(Parse<?> parser){
+        return separatedBy(parser);
     }
 
     public <B> Parser<List<A>> separatedBy(Parse<?> parser){
@@ -66,10 +68,6 @@ public abstract class Parser<A> implements Parse<A> {
         return OptionalParser.optional(this);
     }
     
-    public Parser<List<A>> many() {
-        return ManyParser.many(this);
-    }
-
     public Result<A> parse(CharSequence value) throws Exception {
         return parse(Segment.constructors.characters(value));
     }
@@ -93,5 +91,22 @@ public abstract class Parser<A> implements Parse<A> {
 
     public Parser<List<A>> times(int number){
         return Parsers.sequenceOf(Sequences.repeat(this).take(number));
+    }
+
+    public Parser<List<A>> many() {
+        return ManyParser.many(this);
+    }
+
+    public Parser<List<A>> many1() {
+        return many(1);
+    }
+
+    private Parser<List<A>> many(int min) {
+        return times(min).then(many()).map(new Callable1<Pair<List<A>, List<A>>, List<A>>() {
+            @Override
+            public List<A> call(Pair<List<A>, List<A>> p) throws Exception {
+                return join(p.first(), p.second()).toList();
+            }
+        });
     }
 }
