@@ -46,7 +46,7 @@ public class CharacterParser extends Parser<Character> {
 
     @Override
     public Result<Character> parse(final Segment<Character> characters) {
-        if(characters.isEmpty()) return fail();
+        if(characters.isEmpty()) return fail(predicate, "[EOF]");
         Character c = characters.head();
         return predicate.matches(c) ?
                 success(c, characters.tail()) :

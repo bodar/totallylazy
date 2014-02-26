@@ -47,7 +47,7 @@ public class Grammar {
     };
 
     public static final Parser<String> STRING = string(is(UNICODE_CHARACTER)).
-            or(ESCAPED_CHARACTER).many().map(join).between(isChar('"'), isChar('"'));
+            or(ESCAPED_CHARACTER).many1().map(join).between(isChar('"'), isChar('"'));
 
     public static final Parser<Number> NUMBER = isChar(Characters.digit.or(among(".eE-+"))).many1().map(join).map(new Callable1<String, Number>() {
         public Number call(String value) {

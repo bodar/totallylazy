@@ -6,21 +6,23 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Failure<A> implements Result<A>{
-    private final String message;
+    private final Object expected, actual;
 
-    private Failure(String message) {
-        this.message = message;
+    private Failure(Object expected, Object actual) {
+        this.expected = expected;
+        this.actual = actual;
     }
 
-    public static <A> Failure<A> failure(String message) {
-        return new Failure<A>(message);
+    public static <A> Failure<A> failure(Object expected, Object actual) {
+        return new Failure<A>(expected, actual);
     }
 
     @Override
     public <B> Failure<B> map(Callable1<? super A, ? extends B> callable) {
-        return failure(message);
+        return cast(this);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class Failure<A> implements Result<A>{
 
     @Override
     public Either<String, A> either() {
-        return Either.left(message);
+        return Either.left(message());
     }
 
     @Override
@@ -55,10 +57,10 @@ public class Failure<A> implements Result<A>{
 
     @Override
     public String message() {
-        return message;
+        return expected + " expected, " + actual + " encountered.";
     }
 
     private RuntimeException fail() {
-        return new RuntimeException(message);
+        return new RuntimeException(message());
     }
 }
