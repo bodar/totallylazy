@@ -23,8 +23,8 @@ public class ManyParser<A> extends Parser<List<A>> {
         return String.format("many %s", parser);
     }
 
-    public Result<List<A>> parse(Segment<Character> sequence) {
-        Segment<Character> segment = sequence;
+    public Result<List<A>> parse(Segment<Character> characters) {
+        Segment<Character> segment = characters;
         List<A> list = new ArrayList<A>();
 
         while (!segment.isEmpty()) {

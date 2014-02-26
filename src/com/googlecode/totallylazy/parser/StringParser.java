@@ -35,8 +35,8 @@ public class StringParser extends Parser<String> {
     }
 
     @Override
-    public Result<String> parse(Segment<Character> input) {
-        Segment<Character> segment = input;
+    public Result<String> parse(Segment<Character> characters) {
+        Segment<Character> segment = characters;
         StringBuilder result = new StringBuilder();
         for (Predicate<? super Character> predicate : predicates) {
             char a = segment.head();

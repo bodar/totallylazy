@@ -2,14 +2,27 @@ package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Characters;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Triple;
 import com.googlecode.totallylazy.parser.Parser;
+import com.googlecode.totallylazy.parser.Parsers;
+import com.googlecode.totallylazy.parser.Reference;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import static com.googlecode.totallylazy.Characters.among;
 import static com.googlecode.totallylazy.Characters.hexDigit;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.parser.Parsers.isChar;
 import static com.googlecode.totallylazy.parser.Parsers.string;
+import static com.googlecode.totallylazy.parser.Parsers.ws;
+import static com.googlecode.totallylazy.parser.Parsers.wsChar;
 
 public class Grammar {
 
@@ -24,34 +37,31 @@ public class Grammar {
     public static final Parser<String> ESCAPED_CHARACTER = isChar('\\').next(
             string(Characters.among("\"\\/bfnrt")).or(string(cons(is('u'), repeat(hexDigit).take(4)))).
                     map(Strings.functions.unescape));
-    //
-//    public static final Predicate<Character> UNICODE_CHARACTER = Characters.notAmong("\"\\");
-//    public static final Parser<String> STRING = isChar(UNICODE_CHARACTER).source().
-//            or(ESCAPED_CHARACTER).many().map(join()).between(isChar('"'), isChar('"'));
-//
-//    private static Function1<List<String>, String> join() {
-//        return new Function1<List<String>, String>() {
-//            public String call(List<String> strings) throws Exception {
-//                return sequence(strings).toString("");
-//            }
-//        };
-//    }
-//
-//
-//    public static final Parser<Number> NUMBER = Scanners.DECIMAL.map(new Callable1<String, Number>() {
-//        public Number call(String value) {
-//            return new BigDecimal(value);
-//        }
-//    });
-//
-//    private static final Parser.Reference<Object> value = Parser.newReference();
-//    public static final Parser<Object> VALUE = value.lazy();
-//
-//    public static final Parser<Pair<String, Object>> PAIR = Parsers.tuple(STRING, wsChar(':'), VALUE).map(new Callable1<Triple<String, Void, Object>, Pair<String, Object>>() {
-//        public Pair<String, Object> call(Triple<String, Void, Object> triple) {
-//            return Pair.pair(triple.first(), triple.third());
-//        }
-//    });
+
+    public static final Predicate<Character> UNICODE_CHARACTER = Characters.notAmong("\"\\");
+    private static Function1<Iterable<?>, String> join = new Function1<Iterable<?>, String>() {
+        public String call(Iterable<?> strings) throws Exception {
+            return sequence(strings).toString("");
+        }
+    };
+
+    public static final Parser<String> STRING = string(is(UNICODE_CHARACTER)).
+            or(ESCAPED_CHARACTER).many().map(join).between(isChar('"'), isChar('"'));
+
+    public static final Parser<Number> NUMBER = isChar(Characters.digit.or(among(".eE-+"))).many().map(join).map(new Callable1<String, Number>() {
+        public Number call(String value) {
+            return new BigDecimal(value);
+        }
+    });
+
+    private static final Reference<Object> value = new Reference<Object>();
+    public static final Parser<Object> VALUE = value;
+
+    public static final Parser<Pair<String, Object>> PAIR = Parsers.tuple(STRING, wsChar(':'), VALUE).map(new Callable1<Triple<String, Character, Object>, Pair<String, Object>>() {
+        public Pair<String, Object> call(Triple<String, Character, Object> triple) {
+            return Pair.pair(triple.first(), triple.third());
+        }
+    });
 //
 //    public static final Parser<Void> SEPARATOR = wsChar(',');
 //
@@ -63,7 +73,7 @@ public class Grammar {
 //        }
 //    });
 //
-//    static {
-//        value.set(ws(Parsers.<Object>or(OBJECT, ARRAY, STRING, NUMBER, BOOLEAN, NULL)));
-//    }
+    static {
+        value.set(ws(Parsers.<Object>or(STRING, NUMBER, BOOLEAN, NULL)));
+    }
 }

@@ -68,6 +68,14 @@ public class Parsers {
         return CharacterParser.character(value);
     }
 
+    public static Parser<Character> wsChar(char value) {
+        return ws(isChar(value));
+    }
+
+    public static <A> Parser<A> ws(Parser<A> parser) {
+        return parser.surroundedBy(isChar(Characters.whitespace).many());
+    }
+
     public static Parser<Character> notChar(char value) {
         return CharacterParser.notChar(value);
     }
@@ -116,12 +124,24 @@ public class Parsers {
         return OptionalParser.optional(parserA);
     }
 
-    public static <A> Parser<A> or(Parse<? extends A> parserA, Parse<? extends A> parserB) {
-        return OrParser.or(parserA, parserB);
+    public static <A> Parser<A> or(Sequence<? extends Parse<? extends A>> parsers) {
+        return OrParser.or(parsers);
     }
 
-    public static <A, B> Parser<Pair<A,B>> pairOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
-        return PairParser.pairOf(parserA, parserB);
+    public static <A> Parser<A> or(Parse<? extends A>... parsers) {
+        return or(sequence(parsers));
+    }
+
+    public static <A> Parser<A> or(Parse<? extends A> a, Parse<? extends A> b) {
+        return or(sequence(a, b));
+    }
+
+    public static <A> Parser<A> or(Parse<? extends A> a, Parse<? extends A> b, Parse<? extends A> c) {
+        return or(sequence(a, b, c));
+    }
+
+    public static <A> Parser<A> or(Parse<? extends A> a, Parse<? extends A> b, Parse<? extends A> c, Parse<? extends A> d) {
+        return or(sequence(a, b, c, d));
     }
 
     public static <A> Parser<A> returns(A a) {
@@ -156,7 +176,21 @@ public class Parsers {
         return SequenceParser.sequenceOf(parsers);
     }
 
+
+
+    public static <A, B> Parser<Pair<A,B>> pairOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
+        return PairParser.pairOf(parserA, parserB);
+    }
+
     public static <A, B, C> Parser<Triple<A, B, C>> tripleOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Parse<? extends C> parserC) {
+        return TripleParser.tripleOf(parserA, parserB, parserC);
+    }
+
+    public static <A, B> Parser<Pair<A,B>> tuple(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
+        return PairParser.pairOf(parserA, parserB);
+    }
+
+    public static <A, B, C> Parser<Triple<A, B, C>> tuple(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Parse<? extends C> parserC) {
         return TripleParser.tripleOf(parserA, parserB, parserC);
     }
 }
