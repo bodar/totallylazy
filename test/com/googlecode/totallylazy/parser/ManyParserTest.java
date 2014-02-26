@@ -16,28 +16,28 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ManyParserTest {
     @Test
     public void doesNotThrowIfNoCharacters() throws Exception {
-        Result<List<Character>> result = many(character('C')).parse(characters(""));
+        Result<List<Character>> result = many(character('C')).parse("");
         assertThat(result.value(), is(Lists.<Character>list()));
         assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
 
     @Test
     public void doesNotThrowIfItConsumesAllCharacters() throws Exception {
-        Result<List<Character>> result = many(character('C')).parse(characters("CCCCC"));
+        Result<List<Character>> result = many(character('C')).parse("CCCCC");
         assertThat(result.value(), is(list('C', 'C', 'C', 'C', 'C')));
         assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
 
     @Test
     public void supportMany() throws Exception {
-        Result<List<Character>> result = many(character('C')).parse(characters("CCCCCDEFG"));
+        Result<List<Character>> result = many(character('C')).parse("CCCCCDEFG");
         assertThat(result.value(), is(list('C', 'C', 'C', 'C', 'C')));
         assertThat(result.remainder(), is(characters("DEFG")));
     }
 
     @Test
     public void supportChaining() throws Exception {
-        Result<List<Character>> result = character('C').many().parse(characters("CCCCCDEFG"));
+        Result<List<Character>> result = character('C').many().parse("CCCCCDEFG");
         assertThat(result.value(), is(list('C', 'C', 'C', 'C', 'C')));
         assertThat(result.remainder(), is(characters("DEFG")));
     }

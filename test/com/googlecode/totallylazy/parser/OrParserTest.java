@@ -12,8 +12,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class OrParserTest {
     @Test
     public void canMatchOneParser() throws Exception {
-        OrParser<String> parser = or(string("foo"), string("bar"));
-        Result<String> result = parser.parse(characters("food"));
+        Parser<String> parser = or(string("foo"), string("bar"));
+        Result<String> result = parser.parse("food");
         assertThat(result.value(), is("foo"));
         assertThat(result.remainder(), is(characters("d")));
     }

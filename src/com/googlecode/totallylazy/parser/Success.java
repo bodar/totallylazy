@@ -1,14 +1,17 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
 
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Functions.returns;
+import static com.googlecode.totallylazy.Option.some;
 
 public class Success<A> extends Pair<A, Segment<Character>> implements Result<A>{
     private Success(Callable<? extends A> a, Callable<? extends Segment<Character>> remainder) {
@@ -26,6 +29,16 @@ public class Success<A> extends Pair<A, Segment<Character>> implements Result<A>
     @Override
     public <S> Success<S> map(Callable1<? super A, ? extends S> callable) {
         return success(Functions.call(callable, value()), second());
+    }
+
+    @Override
+    public Option<A> option() {
+        return some(value());
+    }
+
+    @Override
+    public Either<String, A> either() {
+        return Either.right(value());
     }
 
     @Override

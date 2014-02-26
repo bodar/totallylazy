@@ -11,20 +11,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class CharacterParserTest {
     @Test
     public void doesNotThrowIfItRunsOutOfCharacters() throws Exception {
-        Failure<Character> result = cast(character('A').parse(characters("")));
+        Failure<Character> result = cast(character('A').parse(""));
         assertThat(result.message(), is("A expected."));
     }
 
     @Test
     public void canParseACharacter() throws Exception {
-        Result<Character> result = character('A').parse(characters("ABC"));
+        Result<Character> result = character('A').parse("ABC");
         assertThat(result.value(), is('A'));
         assertThat(result.remainder(), is(characters("BC")));
     }
 
     @Test
     public void handlesNoMatch() throws Exception {
-        Failure<Character> result = cast(character('A').parse(characters("CBA")));
+        Failure<Character> result = cast(character('A').parse("CBA"));
         assertThat(result.message(), is("A expected, C encountered."));
     }
 }
