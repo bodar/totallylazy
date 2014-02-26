@@ -4,6 +4,9 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -61,4 +64,54 @@ public class GrammarTest {
         assertThat((Number) parse.second(), NumberMatcher.is(123));
     }
 
+    @Test
+    public void canParseArray() throws Exception {
+        List<Object> listOfOne = Grammar.ARRAY.parse("[\"foo\"]").value();
+        assertThat((String) listOfOne.get(0), is("foo"));
+        List<Object> listOfTwo = Grammar.ARRAY.parse("[\"foo\", 123 ]").value();
+        assertThat((String) listOfTwo.get(0), is("foo"));
+        assertThat((Number) listOfTwo.get(1), NumberMatcher.is(123));
+        List<Object> empty = Grammar.ARRAY.parse("[]").value();
+        assertThat(empty.isEmpty(), is(true));
+    }
+
+
+    @Test
+    public void canParseObjectLiteral() throws Exception {
+        Map<String, Object> mapOfOne = Grammar.OBJECT.parse("{ \"foo\" : 123 } ").value();
+        assertThat((Number) mapOfOne.get("foo"), NumberMatcher.is(123));
+        Map<String, Object> mapOfTwo = Grammar.OBJECT.parse("{\"foo\":123,\"bar\":\"baz\"}").value();
+        assertThat((Number) mapOfTwo.get("foo"), NumberMatcher.is(123));
+        assertThat((String) mapOfTwo.get("bar"), is("baz"));
+        Map<String, Object> empty = Grammar.OBJECT.parse("{}").value();
+        assertThat(empty.isEmpty(), is(true));
+    }
+
+    @Test
+    public void canParseAValue() throws Exception {
+        Number number = (Number) Grammar.VALUE.parse("1").value();
+        assertThat(number, NumberMatcher.is(1));
+        String string = (String) Grammar.VALUE.parse("\"foo\"").value();
+        assertThat(string, is("foo"));
+        Map map = (Map) Grammar.VALUE.parse("{\"foo\":123}").value();
+        assertThat((Number) map.get("foo"), NumberMatcher.is(123));
+        List array = (List) Grammar.VALUE.parse("[\"foo\",123]").value();
+        assertThat(array.get(0), is((Object) "foo"));
+        assertThat((Number) array.get(1), NumberMatcher.is(123));
+    }
+
+    @Test
+    public void canParseNestedJson() throws Exception {
+        Map map = (Map) Grammar.VALUE.parse(" { \"root\"  : { \"foo\" : [ \"bar\", { \"baz\" : [1, null, true, false, 12.3 ] } ] } }  ").value();
+        Map root = (Map) map.get("root");
+        List foo = (List) root.get("foo");
+        assertThat(foo.get(0), is((Object) "bar"));
+        Map child = (Map) foo.get(1);
+        List baz = (List) child.get("baz");
+        assertThat((Number)baz.get(0), NumberMatcher.is(1));
+        assertThat(baz.get(1), is((nullValue())));
+        assertThat(baz.get(2), is(((Object) true)));
+        assertThat(baz.get(3), is(((Object) false)));
+        assertThat((Number) baz.get(4), NumberMatcher.is(12.3));
+    }
 }

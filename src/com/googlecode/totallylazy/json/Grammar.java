@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.json;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Triple;
@@ -48,7 +49,7 @@ public class Grammar {
     public static final Parser<String> STRING = string(is(UNICODE_CHARACTER)).
             or(ESCAPED_CHARACTER).many().map(join).between(isChar('"'), isChar('"'));
 
-    public static final Parser<Number> NUMBER = isChar(Characters.digit.or(among(".eE-+"))).many().map(join).map(new Callable1<String, Number>() {
+    public static final Parser<Number> NUMBER = isChar(Characters.digit.or(among(".eE-+"))).many1().map(join).map(new Callable1<String, Number>() {
         public Number call(String value) {
             return new BigDecimal(value);
         }
@@ -62,18 +63,18 @@ public class Grammar {
             return Pair.pair(triple.first(), triple.third());
         }
     });
-//
-//    public static final Parser<Void> SEPARATOR = wsChar(',');
-//
-//    public static final Parser<List<Object>> ARRAY = Parsers.between(wsChar('['), VALUE.sepBy(SEPARATOR), wsChar(']'));
-//
-//    public static final Parser<java.util.Map<String, Object>> OBJECT = Parsers.between(wsChar('{'), PAIR.sepBy(SEPARATOR), wsChar('}')).map(new Callable1<List<Pair<String, Object>>, java.util.Map<String, Object>>() {
-//        public java.util.Map<String, Object> call(List<Pair<String, Object>> pairs) {
-//            return Maps.map(pairs);
-//        }
-//    });
-//
+
+    public static final Parser<?> SEPARATOR = wsChar(',');
+
+    public static final Parser<List<Object>> ARRAY = Parsers.between(wsChar('['), VALUE.sepBy(SEPARATOR), wsChar(']'));
+
+    public static final Parser<java.util.Map<String, Object>> OBJECT = Parsers.between(wsChar('{'), PAIR.sepBy(SEPARATOR), wsChar('}')).map(new Callable1<List<Pair<String, Object>>, java.util.Map<String, Object>>() {
+        public java.util.Map<String, Object> call(List<Pair<String, Object>> pairs) {
+            return Maps.map(pairs);
+        }
+    });
+
     static {
-        value.set(ws(Parsers.<Object>or(STRING, NUMBER, BOOLEAN, NULL)));
+        value.set(ws(Parsers.<Object>or(OBJECT, ARRAY, STRING, NUMBER, BOOLEAN, NULL)));
     }
 }
