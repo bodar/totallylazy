@@ -1,11 +1,13 @@
 package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
