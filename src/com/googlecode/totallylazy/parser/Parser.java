@@ -59,7 +59,7 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public Parser<A> or(Parse<? extends A> parser){
-        return OrParser.or(this, parser);
+        return Parsers.or(this, parser);
     }
 
     public Parser<Option<A>> optional(){

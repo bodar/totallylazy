@@ -19,7 +19,7 @@ public class ReturnsParser<A> extends Parser<A> {
     }
 
     @Override
-    public Result<A> parse(Segment<Character> sequence) {
-        return Success.success(a, sequence);
+    public Result<A> parse(Segment<Character> characters) {
+        return Success.success(a, characters);
     }
 }

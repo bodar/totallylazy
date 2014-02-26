@@ -83,6 +83,12 @@ public class Characters {
         }
     };
 
+    public static LogicalPredicate<Character> whitespace = new LogicalPredicate<Character>() {
+        public boolean matches(Character other) {
+            return Character.isWhitespace(other);
+        }
+    };
+
     public static LogicalPredicate<Character> between(final char start, final char end) {
         return new LogicalPredicate<Character>() {
             public boolean matches(Character other) {
