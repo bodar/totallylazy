@@ -24,6 +24,13 @@ public class StringParserTest {
     }
 
     @Test
+    public void printsNiceMessage() throws Exception {
+        Result<String> result = string("ABC").parse("DEF");
+        assertThat(result.failure(), is(true));
+        assertThat(result.message(), is("ABC expected, D encountered."));
+    }
+
+    @Test
     public void supportsRemainder() throws Exception {
         Result<String> result = string("ABC").parse("ABCDEF");
         assertThat(result.value(), is("ABC"));

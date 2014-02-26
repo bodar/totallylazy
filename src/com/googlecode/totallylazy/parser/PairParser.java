@@ -26,7 +26,7 @@ public class PairParser<A, B> extends Parser<Pair<A, B>> {
     }
 
     @Override
-    public Result<Pair<A, B>> parse(Segment<Character> characters) throws Exception {
+    public Result<Pair<A, B>> parse(Segment<Character> characters) {
         Result<? extends A> resultA = parserA.parse(characters);
         if (resultA instanceof Failure) return cast(resultA);
 

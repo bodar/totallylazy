@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Segment;
 
 public interface Parse<A> extends Functor<A> {
-    Result<A> parse(Segment<Character> sequence) throws Exception;
+    Result<A> parse(Segment<Character> sequence);
 
     @Override
     <S> Parse<S> map(Callable1<? super A, ? extends S> callable);

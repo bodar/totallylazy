@@ -19,7 +19,7 @@ public class MappingParser<A, B> extends Parser<B> {
     }
 
     @Override
-    public Result<B> parse(Segment<Character> characters) throws Exception {
+    public Result<B> parse(Segment<Character> characters) {
         return cast(source.parse(characters).map(callable));
     }
 

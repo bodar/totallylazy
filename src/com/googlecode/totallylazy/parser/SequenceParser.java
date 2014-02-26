@@ -10,7 +10,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class SequenceParser<A> extends Parser<Sequence<A>> {
+public class SequenceParser<A> extends Parser<List<A>> {
     private final Sequence<? extends Parse<? extends A>> parsers;
 
     private SequenceParser(Sequence<? extends Parse<? extends A>> parsers) {
@@ -47,7 +47,7 @@ public class SequenceParser<A> extends Parser<Sequence<A>> {
     }
 
     @Override
-    public Result<Sequence<A>> parse(Segment<Character> characters) throws Exception {
+    public Result<List<A>> parse(Segment<Character> characters) {
         Segment<Character> state = characters;
         List<A> parsed = new ArrayList<A>();
         for (Parse<? extends A> parser : parsers) {
@@ -56,6 +56,6 @@ public class SequenceParser<A> extends Parser<Sequence<A>> {
             parsed.add(result.value());
             state = result.remainder();
         }
-        return success(sequence(parsed), state);
+        return success(parsed, state);
     }
 }

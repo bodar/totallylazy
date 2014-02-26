@@ -31,7 +31,7 @@ public class TripleParser<A, B, C> extends Parser<Triple<A, B, C>> {
     }
 
     @Override
-    public Result<Triple<A, B, C>> parse(Segment<Character> characters) throws Exception {
+    public Result<Triple<A, B, C>> parse(Segment<Character> characters) {
         Result<? extends A> resultA = parserA.parse(characters);
         if (resultA instanceof Failure) return cast(resultA);
 
