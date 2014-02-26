@@ -18,14 +18,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class StringParserTest {
     @Test
     public void canParseAString() throws Exception {
-        Result<String> result = string("ABC").parse(characters("ABC"));
+        Result<String> result = string("ABC").parse("ABC");
         assertThat(result.value(), is("ABC"));
         assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
 
     @Test
     public void supportsRemainder() throws Exception {
-        Result<String> result = string("ABC").parse(characters("ABCDEF"));
+        Result<String> result = string("ABC").parse("ABCDEF");
         assertThat(result.value(), is("ABC"));
         assertThat(result.remainder(), is(characters("DEF")));
     }
@@ -34,7 +34,7 @@ public class StringParserTest {
     public void doesNotReadMoreThanItNeeds() throws Exception {
         InputStream stream = new ByteArrayInputStream(bytes("ABCDEF"));
         Reader reader = new InputStreamReader(stream, UTF8);
-        Result<String> result = string("ABC").parse(characters(reader));
+        Result<String> result = string("ABC").parse(reader);
         assertThat(result.value(), is("ABC"));
         char next = (char) reader.read();
         assertThat(next, is('D'));
