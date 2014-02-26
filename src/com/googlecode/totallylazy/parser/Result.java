@@ -20,4 +20,6 @@ public interface Result<A> extends Value<A>, Functor<A> {
     boolean success();
 
     boolean failure();
+
+    String message();
 }

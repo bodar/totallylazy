@@ -23,7 +23,7 @@ public class OrParser<A> extends Parser<A> {
     }
 
     @Override
-    public Result<A> parse(Segment<Character> characters) throws Exception {
+    public Result<A> parse(Segment<Character> characters) {
         Result<? extends A> result = parserA.parse(characters);
         if(result instanceof Failure){
             return cast(parserB.parse(characters));

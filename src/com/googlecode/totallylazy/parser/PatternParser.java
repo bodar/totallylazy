@@ -28,7 +28,7 @@ public class PatternParser extends Parser<String> {
     }
 
     @Override
-    public Result<String> parse(Segment<Character> characters) throws Exception {
+    public Result<String> parse(Segment<Character> characters) {
         CharacterSequence sequence = charSequence(characters);
         Matches matches = regex.findMatches(sequence);
         if (matches.isEmpty()) return fail(regex, sequence);

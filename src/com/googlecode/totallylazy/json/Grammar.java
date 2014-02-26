@@ -1,25 +1,31 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.parser.Parser;
 
+import static com.googlecode.totallylazy.Characters.hexDigit;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Sequences.cons;
+import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.parser.Parsers.isChar;
 import static com.googlecode.totallylazy.parser.Parsers.string;
 
 public class Grammar {
 
     public static final Parser<Void> NULL = string("null").ignore();
 
-//    public static final Parser<Boolean> BOOLEAN = string("true").or(string("false")).source().map(new Callable1<String, Boolean>() {
-//        public Boolean call(String s) {
-//            return Boolean.valueOf(s);
-//        }
-//    });
-//
-//    public static final Predicate<Character> UNICODE_CHARACTER = CharacterPredicates.notAmong("\"\\");
-//
-//    public static final Parser<String> ESCAPED_CHARACTER = isChar('\\').followedBy(among("\"\\/bfnrt").
-//            or(isChar('u').followedBy(isChar(CharacterPredicates.IS_HEX_DIGIT).times(4)))).source().map(Strings.functions.unescape);
-//
+    public static final Parser<Boolean> BOOLEAN = string("true").or(string("false")).map(new Callable1<String, Boolean>() {
+        public Boolean call(String s) {
+            return Boolean.valueOf(s);
+        }
+    });
+
+    public static final Parser<String> ESCAPED_CHARACTER = isChar('\\').next(
+            string(Characters.among("\"\\/bfnrt")).or(string(cons(is('u'), repeat(hexDigit).take(4)))).
+                    map(Strings.functions.unescape));
+    //
+//    public static final Predicate<Character> UNICODE_CHARACTER = Characters.notAmong("\"\\");
 //    public static final Parser<String> STRING = isChar(UNICODE_CHARACTER).source().
 //            or(ESCAPED_CHARACTER).many().map(join()).between(isChar('"'), isChar('"'));
 //

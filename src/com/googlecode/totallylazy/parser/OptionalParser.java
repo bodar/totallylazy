@@ -23,7 +23,7 @@ public class OptionalParser<A> extends Parser<Option<A>> {
     }
 
     @Override
-    public Result<Option<A>> parse(Segment<Character> characters) throws Exception {
+    public Result<Option<A>> parse(Segment<Character> characters) {
         Result<? extends A> result = parserA.parse(characters);
         if (result instanceof Failure) return success(Option.<A>none(), characters);
         return success(Option.some(result.value()), result.remainder());

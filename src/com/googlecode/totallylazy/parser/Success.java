@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Functions.returns;
@@ -49,6 +50,11 @@ public class Success<A> extends Pair<A, Segment<Character>> implements Result<A>
     @Override
     public boolean failure() {
         return false;
+    }
+
+    @Override
+    public String message() {
+        throw new NoSuchElementException();
     }
 
     @Override

@@ -6,6 +6,8 @@ import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Strings;
 
 import java.io.InputStream;
@@ -87,5 +89,9 @@ public abstract class Parser<A> implements Parse<A> {
                 return null;
             }
         });
+    }
+
+    public Parser<List<A>> times(int number){
+        return Parsers.sequenceOf(Sequences.repeat(this).take(number));
     }
 }

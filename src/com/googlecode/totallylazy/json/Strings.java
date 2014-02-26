@@ -32,7 +32,7 @@ public class Strings {
     }
 
     public static String unescape(CharSequence escaped) {
-        switch (escaped.charAt(1)) {
+        switch (escaped.charAt(0)) {
             case '"': return "\"";
             case '\\': return "\\";
             case '/': return "/";

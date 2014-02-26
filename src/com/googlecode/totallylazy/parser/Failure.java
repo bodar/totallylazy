@@ -53,6 +53,7 @@ public class Failure<A> implements Result<A>{
         throw fail();
     }
 
+    @Override
     public String message() {
         return message;
     }
