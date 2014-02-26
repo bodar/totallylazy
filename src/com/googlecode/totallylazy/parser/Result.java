@@ -16,4 +16,8 @@ public interface Result<A> extends Value<A>, Functor<A> {
     Option<A> option();
 
     Either<String, A> either();
+
+    boolean success();
+
+    boolean failure();
 }

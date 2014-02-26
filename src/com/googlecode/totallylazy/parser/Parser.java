@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
@@ -77,5 +78,14 @@ public abstract class Parser<A> implements Parse<A> {
 
     public Result<A> parse(InputStream value) throws Exception {
         return parse(Segment.constructors.characters(new InputStreamReader(value, UTF8)));
+    }
+
+    public Parser<Void> ignore() {
+        return map(new Function1<A, Void>() {
+            @Override
+            public Void call(A value) throws Exception {
+                return null;
+            }
+        });
     }
 }
