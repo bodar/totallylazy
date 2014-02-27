@@ -42,10 +42,12 @@ public class Parsers {
         return MappingParser.map(parser, Callables.<A>returnArgument());
     }
 
+    // Use in Java 7+, for Java 6 use Parsers.reference
     public static <T> Parser<T> lazy(Callable<? extends Parse<T>> value) {
         return LazyParser.lazy(value);
     }
 
+    // Use in Java 6, for Java 7+ use Parsers.lazy
     public static <T> ReferenceParser<T> reference(){
         return ReferenceParser.reference();
     }

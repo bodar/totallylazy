@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.Segment;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-// Use in Java 6, for Java 7+ use Parsers.lazy
 public class ReferenceParser<T> extends Parser<T> {
     private final AtomicReference<Parse<T>> value = new AtomicReference<Parse<T>>();
 
