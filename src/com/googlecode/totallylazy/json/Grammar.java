@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.Triple;
 import com.googlecode.totallylazy.parser.Parse;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
+import com.googlecode.totallylazy.parser.ReferenceParser;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -48,12 +49,8 @@ public class Grammar {
         }
     });
 
-    public static final Parser<Object> VALUE = Parsers.lazy(new Callable<Parse<Object>>() {
-        @Override
-        public Parse<Object> call() throws Exception {
-            return ws(Parsers.<Object>or(OBJECT, ARRAY, STRING, NUMBER, BOOLEAN, NULL));
-        }
-    });
+    private static final ReferenceParser<Object> ref = Parsers.reference();
+    public static final Parser<Object> VALUE = ref;
 
     public static final Parser<Pair<String, Object>> PAIR = Parsers.tuple(STRING, wsChar(':'), VALUE).map(new Callable1<Triple<String, Character, Object>, Pair<String, Object>>() {
         public Pair<String, Object> call(Triple<String, Character, Object> triple) {
@@ -70,4 +67,8 @@ public class Grammar {
             return Maps.map(pairs);
         }
     });
+
+    static {
+        ref.set(ws(Parsers.<Object>or(OBJECT, ARRAY, STRING, NUMBER, BOOLEAN, NULL)));
+    }
 }

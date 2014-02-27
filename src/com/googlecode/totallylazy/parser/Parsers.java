@@ -46,6 +46,10 @@ public class Parsers {
         return LazyParser.lazy(value);
     }
 
+    public static <T> ReferenceParser<T> reference(){
+        return ReferenceParser.reference();
+    }
+
     public static Parser<Character> character(Predicate<Character> value) {
         return CharacterParser.character(value);
     }
