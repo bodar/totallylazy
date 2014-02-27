@@ -26,18 +26,6 @@ public class Parsers {
         }
     };
 
-//    public static Parser<String> identifier =
-//            character(identifierStart).
-//            then(character(identifierPart).many()).
-//                    map(new Function1<Pair<Character, List<Character>>, List<Character>>() {
-//                        @Override
-//                        public List<Character> call(Pair<Character, List<Character>> p) throws Exception {
-//                            List<Character> list = p.second();
-//                            list.;
-//                            return list;
-//                        }
-//                    }).map(toString);
-
     public static <A> Parser<A> parser(final Parse<? extends A> parser) {
         return MappingParser.map(parser, Callables.<A>returnArgument());
     }

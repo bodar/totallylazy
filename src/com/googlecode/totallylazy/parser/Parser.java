@@ -64,15 +64,15 @@ public abstract class Parser<A> implements Parse<A> {
         return OptionalParser.optional(this);
     }
     
-    public Result<A> parse(CharSequence value) throws Exception {
+    public Result<A> parse(CharSequence value) {
         return parse(Segment.constructors.characters(value));
     }
 
-    public Result<A> parse(Reader value) throws Exception {
+    public Result<A> parse(Reader value) {
         return parse(Segment.constructors.characters(value));
     }
 
-    public Result<A> parse(InputStream value) throws Exception {
+    public Result<A> parse(InputStream value) {
         return parse(Segment.constructors.characters(new InputStreamReader(value, UTF8)));
     }
 
