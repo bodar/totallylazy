@@ -5,31 +5,33 @@ import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
 
 import java.util.NoSuchElementException;
-import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Option.some;
 
-public class Success<A> extends Pair<A, Segment<Character>> implements Result<A>{
-    private Success(Callable<? extends A> a, Callable<? extends Segment<Character>> remainder) {
-        super(a, remainder);
+public class Success<A> implements Result<A>{
+    private final A value;
+    private final Segment<Character> remainder;
+
+    private Success(A value, Segment<Character> remainder) {
+        this.value = value;
+        this.remainder = remainder;
     }
 
-    public static <A> Success<A> success(A value, Segment<Character> second) {
-        return success(returns(value), returns(second));
+    public static <A> Success<A> success(A value, Segment<Character> remainder) {
+        return new Success<A>(value, remainder);
     }
 
-    public static <A> Success<A> success(Callable<? extends A> a, Callable<? extends Segment<Character>> remainder) {
-        return new Success<A>(a, remainder);
+    @Override
+    public A value() {
+        return value;
     }
 
     @Override
     public <S> Success<S> map(Callable1<? super A, ? extends S> callable) {
-        return success(Functions.call(callable, value()), second());
+        return success(Functions.call(callable, value()), remainder);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class Success<A> extends Pair<A, Segment<Character>> implements Result<A>
 
     @Override
     public Segment<Character> remainder() {
-        return second();
+        return remainder;
     }
 
     public static class functions {

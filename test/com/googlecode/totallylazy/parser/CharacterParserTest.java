@@ -12,7 +12,7 @@ public class CharacterParserTest {
     @Test
     public void doesNotThrowIfItRunsOutOfCharacters() throws Exception {
         Failure<Character> result = cast(character('A').parse(""));
-        assertThat(result.message(), is("A expected."));
+        assertThat(result.message(), is("A expected, [EOF] encountered."));
     }
 
     @Test

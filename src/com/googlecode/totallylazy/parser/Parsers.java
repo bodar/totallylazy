@@ -4,29 +4,17 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Triple;
-import com.googlecode.totallylazy.iterators.SegmentIterator;
 import com.googlecode.totallylazy.regex.Regex;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Characters.identifierPart;
-import static com.googlecode.totallylazy.Characters.identifierStart;
-import static com.googlecode.totallylazy.Functions.returns;
-import static com.googlecode.totallylazy.Predicates.first;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.iterators.SegmentIterator.iterator;
-import static com.googlecode.totallylazy.parser.CharacterParser.character;
 
 public class Parsers {
     public static Function1<List<Character>, String> toString = new Function1<List<Character>, String>() {
@@ -48,7 +36,7 @@ public class Parsers {
 //                        }
 //                    }).map(toString);
 
-    public static <A> Parser<A> parser(final Parse<? extends A> parser){
+    public static <A> Parser<A> parser(final Parse<? extends A> parser) {
         return MappingParser.map(parser, Callables.<A>returnArgument());
     }
 
@@ -177,8 +165,7 @@ public class Parsers {
     }
 
 
-
-    public static <A, B> Parser<Pair<A,B>> pairOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
+    public static <A, B> Parser<Pair<A, B>> pairOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
         return PairParser.pairOf(parserA, parserB);
     }
 
@@ -186,7 +173,7 @@ public class Parsers {
         return TripleParser.tripleOf(parserA, parserB, parserC);
     }
 
-    public static <A, B> Parser<Pair<A,B>> tuple(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
+    public static <A, B> Parser<Pair<A, B>> tuple(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
         return PairParser.pairOf(parserA, parserB);
     }
 
