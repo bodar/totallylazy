@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Json {
     public static String json(Object value) {
-        return JsonWriter.toJson(value, new StringBuilder()).toString();
+        return JsonWriter.write(value, new StringBuilder()).toString();
     }
 
     public static <V> Map<String, V> map(String json) {
