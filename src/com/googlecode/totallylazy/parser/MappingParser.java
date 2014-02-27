@@ -14,7 +14,7 @@ class MappingParser<A, B> extends Parser<B> {
         this.callable = callable;
     }
 
-    static <A, B> MappingParser<A, B> map(Parse<? extends A> source, Callable1<? super A, ? extends B> callable) {
+    public static <A, B> MappingParser<A, B> map(Parse<? extends A> source, Callable1<? super A, ? extends B> callable) {
         return new MappingParser<A, B>(source, callable);
     }
 

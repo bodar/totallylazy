@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Characters;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -20,14 +19,12 @@ import static com.googlecode.totallylazy.Characters.hexDigit;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.repeat;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.parser.Parsers.isChar;
 import static com.googlecode.totallylazy.parser.Parsers.string;
 import static com.googlecode.totallylazy.parser.Parsers.ws;
 import static com.googlecode.totallylazy.parser.Parsers.wsChar;
 
 public class Grammar {
-
     public static final Parser<Void> NULL = string("null").ignore();
 
     public static final Parser<Boolean> BOOLEAN = string("true").or(string("false")).map(new Callable1<String, Boolean>() {
@@ -41,16 +38,11 @@ public class Grammar {
                     map(Strings.functions.unescape));
 
     public static final Predicate<Character> UNICODE_CHARACTER = Characters.notAmong("\"\\");
-    private static Function1<Iterable<?>, String> join = new Function1<Iterable<?>, String>() {
-        public String call(Iterable<?> strings) throws Exception {
-            return sequence(strings).toString("");
-        }
-    };
 
     public static final Parser<String> STRING = string(is(UNICODE_CHARACTER)).
-            or(ESCAPED_CHARACTER).many().map(join).between(isChar('"'), isChar('"'));
+            or(ESCAPED_CHARACTER).many().map(Parsers.toString).between(isChar('"'), isChar('"'));
 
-    public static final Parser<Number> NUMBER = isChar(Characters.digit.or(among(".eE-+"))).many1().map(join).map(new Callable1<String, Number>() {
+    public static final Parser<Number> NUMBER = isChar(Characters.digit.or(among(".eE-+"))).many1().map(Parsers.toString).map(new Callable1<String, Number>() {
         public Number call(String value) {
             return new BigDecimal(value);
         }
@@ -69,7 +61,7 @@ public class Grammar {
         }
     });
 
-    public static final Parser<?> SEPARATOR = wsChar(',');
+    private static final Parser<?> SEPARATOR = wsChar(',');
 
     public static final Parser<List<Object>> ARRAY = VALUE.sepBy(SEPARATOR).between(wsChar('['), wsChar(']'));
 

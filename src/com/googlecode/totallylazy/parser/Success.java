@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Option.some;
 
-public class Success<A> implements Result<A>{
+public class Success<A> implements Result<A> {
     private final A value;
     private final Segment<Character> remainder;
 
@@ -30,7 +30,7 @@ public class Success<A> implements Result<A>{
     }
 
     @Override
-    public <S> Success<S> map(Callable1<? super A, ? extends S> callable) {
+    public <S> Result<S> map(Callable1<? super A, ? extends S> callable) {
         return success(Functions.call(callable, value), remainder);
     }
 

@@ -97,7 +97,7 @@ public abstract class Parser<A> implements Parse<A> {
         return many(1);
     }
 
-    private Parser<List<A>> many(int min) {
+    public Parser<List<A>> many(int min) {
         return times(min).then(many()).map(new Callable1<Pair<List<A>, List<A>>, List<A>>() {
             @Override
             public List<A> call(Pair<List<A>, List<A>> p) throws Exception {
