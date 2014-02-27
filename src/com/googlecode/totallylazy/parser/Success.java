@@ -31,17 +31,17 @@ public class Success<A> implements Result<A>{
 
     @Override
     public <S> Success<S> map(Callable1<? super A, ? extends S> callable) {
-        return success(Functions.call(callable, value()), remainder);
+        return success(Functions.call(callable, value), remainder);
     }
 
     @Override
     public Option<A> option() {
-        return some(value());
+        return some(value);
     }
 
     @Override
     public Either<String, A> either() {
-        return Either.right(value());
+        return Either.right(value);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class Success<A> implements Result<A>{
             return new Function1<Result<A>, Segment<Character>>() {
                 @Override
                 public Segment<Character> call(Result<A> result) throws Exception {
-                    return ((Success<A>)result).remainder();
+                    return result.remainder();
                 }
             };
         }

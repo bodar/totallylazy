@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class MappingParser<A, B> extends Parser<B> {
+class MappingParser<A, B> extends Parser<B> {
     private final Parse<? extends A> source;
     private final Callable1<? super A, ? extends B> callable;
 
@@ -14,7 +14,7 @@ public class MappingParser<A, B> extends Parser<B> {
         this.callable = callable;
     }
 
-    public static <A, B> MappingParser<A, B> map(Parse<? extends A> source, Callable1<? super A, ? extends B> callable) {
+    static <A, B> MappingParser<A, B> map(Parse<? extends A> source, Callable1<? super A, ? extends B> callable) {
         return new MappingParser<A, B>(source, callable);
     }
 
