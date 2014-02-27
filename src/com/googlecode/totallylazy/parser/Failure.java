@@ -57,7 +57,7 @@ public class Failure<A> implements Result<A>{
 
     @Override
     public String message() {
-        return expected + " expected, " + actual + " encountered.";
+        return String.format("%s expected, %s encountered.", expected, actual);
     }
 
     private RuntimeException fail() {
