@@ -19,10 +19,10 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Parsers {
-    public static Function1<List<Character>, String> toString = new Function1<List<Character>, String>() {
+    public static Function1<Iterable<?>, String> toString = new Function1<Iterable<?>, String>() {
         @Override
-        public String call(List<Character> list) throws Exception {
-            return sequence(list).toString("");
+        public String call(Iterable<?> iterable) throws Exception {
+            return sequence(iterable).toString("");
         }
     };
 

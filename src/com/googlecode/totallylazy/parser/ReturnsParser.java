@@ -15,7 +15,7 @@ class ReturnsParser<A> extends Parser<A> {
 
     @Override
     public Result<A> parse(Segment<Character> characters) {
-        return Success.success(a, characters);
+        return Success.success(a, characters.tail());
     }
 
     @Override
