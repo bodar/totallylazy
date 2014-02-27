@@ -3,11 +3,10 @@ package com.googlecode.totallylazy.parser;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
 
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class PairParser<A, B> extends Parser<Pair<A, B>> {
+class PairParser<A, B> extends Parser<Pair<A, B>> {
     private final Parse<? extends A> parserA;
     private final Parse<? extends B> parserB;
 
@@ -16,13 +15,8 @@ public class PairParser<A, B> extends Parser<Pair<A, B>> {
         this.parserB = parserB;
     }
 
-    public static <A, B> PairParser<A, B> pairOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
+    static <A, B> PairParser<A, B> pair(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
         return new PairParser<A, B>(parserA, parserB);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s and %s", parserA, parserB);
     }
 
     @Override
@@ -33,6 +27,11 @@ public class PairParser<A, B> extends Parser<Pair<A, B>> {
         Result<? extends B> resultB = parserB.parse(resultA.remainder());
         if (resultB instanceof Failure) return cast(resultB);
 
-        return success(pair(resultA.value(), resultB.value()), resultB.remainder());
+        return success(Pair.pair(resultA.value(), resultB.value()), resultB.remainder());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s and %s", parserA, parserB);
     }
 }

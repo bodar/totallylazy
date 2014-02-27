@@ -7,18 +7,18 @@ import com.googlecode.totallylazy.regex.Regex;
 import static com.googlecode.totallylazy.parser.CharacterSequence.charSequence;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class PatternParser extends Parser<String> {
+class PatternParser extends Parser<String> {
     private final Regex regex;
 
     private PatternParser(Regex regex) {
         this.regex = regex;
     }
 
-    public static PatternParser pattern(Regex regex) {
+    static PatternParser pattern(Regex regex) {
         return new PatternParser(regex);
     }
 
-    public static PatternParser pattern(String value) {
+    static PatternParser pattern(String value) {
         return pattern(Regex.regex(value));
     }
 

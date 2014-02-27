@@ -29,7 +29,7 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public <B> Parser<Pair<A, B>> then(Parse<? extends B> parser){
-        return PairParser.pairOf(this, parser);
+        return PairParser.pair(this, parser);
     }
 
     public <B> Parser<B> next(Parse<? extends B> parser){
@@ -86,7 +86,7 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public Parser<List<A>> times(int number){
-        return Parsers.sequenceOf(Sequences.repeat(this).take(number));
+        return Parsers.list(Sequences.repeat(this).take(number));
     }
 
     public Parser<List<A>> many() {

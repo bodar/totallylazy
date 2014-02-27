@@ -7,20 +7,15 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class ManyParser<A> extends Parser<List<A>> {
+class ManyParser<A> extends Parser<List<A>> {
     private final Parse<? extends A> parser;
 
     private ManyParser(Parse<? extends A> parser) {
         this.parser = parser;
     }
 
-    public static <A> ManyParser<A> many(Parse<? extends A> parser) {
+    static <A> ManyParser<A> many(Parse<? extends A> parser) {
         return new ManyParser<A>(parser);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("many %s", parser);
     }
 
     public Result<List<A>> parse(Segment<Character> characters) {
@@ -34,5 +29,10 @@ public class ManyParser<A> extends Parser<List<A>> {
             segment = result.remainder();
         }
         return success(list, segment);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("many %s", parser);
     }
 }

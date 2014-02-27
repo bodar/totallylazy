@@ -11,10 +11,10 @@ import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class SequenceParserTest {
+public class ListParserTest {
     @Test
     public void canCombineTwoParsers() throws Exception {
-        Parser<List<Character>> parser = SequenceParser.sequenceOf(character('A'), character('B'));
+        Parser<List<Character>> parser = Parsers.list(character('A'), character('B'));
         Result<List<Character>> result = parser.parse("ABC");
         assertThat(result.value(), is(list('A', 'B')));
         assertThat(result.remainder(), is(characters("C")));
@@ -22,7 +22,7 @@ public class SequenceParserTest {
 
     @Test
     public void canCombineThreeParsers() throws Exception {
-        Result<List<Character>> result = SequenceParser.sequenceOf(character('A'), character('B'), character('C')).
+        Result<List<Character>> result = Parsers.list(character('A'), character('B'), character('C')).
                 parse("ABC");
         assertThat(result.value(), is(list('A', 'B', 'C')));
         assertThat(result.remainder(), is(emptySegment(Character.class)));

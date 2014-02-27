@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Lazy;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -13,6 +14,7 @@ import com.googlecode.totallylazy.Triple;
 import com.googlecode.totallylazy.regex.Regex;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -38,6 +40,10 @@ public class Parsers {
 
     public static <A> Parser<A> parser(final Parse<? extends A> parser) {
         return MappingParser.map(parser, Callables.<A>returnArgument());
+    }
+
+    public static <T> Parser<T> lazy(Callable<? extends Parse<T>> value) {
+        return LazyParser.lazy(value);
     }
 
     public static Parser<Character> character(Predicate<Character> value) {
@@ -81,19 +87,19 @@ public class Parsers {
     }
 
     public static Parser<String> string(Iterable<? extends Predicate<? super Character>> value) {
-        return StringParser.string(value);
+        return PredicatesParser.string(value);
     }
 
     public static Parser<String> string(Predicate<? super Character> first) {
-        return StringParser.string(sequence(first));
+        return PredicatesParser.string(sequence(first));
     }
 
     public static Parser<String> string(Predicate<? super Character> first, Predicate<? super Character> second) {
-        return StringParser.string(Sequences.<Predicate<? super Character>>sequence(first, second));
+        return PredicatesParser.string(Sequences.<Predicate<? super Character>>sequence(first, second));
     }
 
     public static Parser<String> string(Predicate<? super Character>... predicates) {
-        return StringParser.string(predicates);
+        return PredicatesParser.string(predicates);
     }
 
     public static Parser<String> pattern(Regex regex) {
@@ -140,48 +146,47 @@ public class Parsers {
         return ManyParser.many(parser);
     }
 
-    public static <A> Parser<List<A>> sequenceOf(final Sequence<? extends Parse<? extends A>> parsers) {
-        return SequenceParser.sequenceOf(parsers);
+    public static <A> Parser<List<A>> list(final Iterable<? extends Parse<? extends A>> parsers) {
+        return ListParser.list(parsers);
     }
 
-    public static <A> Parser<List<A>> sequenceOf(final Parse<? extends A> a, final Parse<? extends A> b) {
-        return SequenceParser.sequenceOf(a, b);
+    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b) {
+        return list(sequence(a, b));
     }
 
-    public static <A> Parser<List<A>> sequenceOf(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c) {
-        return SequenceParser.sequenceOf(a, b, c);
+    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c) {
+        return list(sequence(a, b, c));
     }
 
-    public static <A> Parser<List<A>> sequenceOf(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c, final Parse<? extends A> d) {
-        return SequenceParser.sequenceOf(a, b, c, d);
+    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c, final Parse<? extends A> d) {
+        return list(sequence(a, b, c, d));
     }
 
-    public static <A> Parser<List<A>> sequenceOf(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c, final Parse<? extends A> d, final Parse<? extends A> e) {
-        return SequenceParser.sequenceOf(a, b, c, d, e);
+    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c, final Parse<? extends A> d, final Parse<? extends A> e) {
+        return list(sequence(a, b, c, d, e));
     }
 
-    public static <A> Parser<List<A>> sequenceOf(final Parse<? extends A>... parsers) {
-        return SequenceParser.sequenceOf(parsers);
+    public static <A> Parser<List<A>> list(final Parse<? extends A>... parsers) {
+        return list(sequence(parsers));
     }
 
-
-    public static <A, B> Parser<Pair<A, B>> pairOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
-        return PairParser.pairOf(parserA, parserB);
+    public static <A, B> Parser<Pair<A, B>> pair(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
+        return PairParser.pair(parserA, parserB);
     }
 
-    public static <A, B, C> Parser<Triple<A, B, C>> tripleOf(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Parse<? extends C> parserC) {
-        return TripleParser.tripleOf(parserA, parserB, parserC);
+    public static <A, B, C> Parser<Triple<A, B, C>> triple(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Parse<? extends C> parserC) {
+        return TripleParser.triple(parserA, parserB, parserC);
     }
 
     public static <A, B> Parser<Pair<A, B>> tuple(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
-        return PairParser.pairOf(parserA, parserB);
+        return PairParser.pair(parserA, parserB);
     }
 
     public static <A, B, C> Parser<Triple<A, B, C>> tuple(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Parse<? extends C> parserC) {
-        return TripleParser.tripleOf(parserA, parserB, parserC);
+        return TripleParser.triple(parserA, parserB, parserC);
     }
 
     public static <A> Parser<A> between(Parse<?> before, Parser<A> parserB, Parse<?> after) {
-        return TripleParser.tripleOf(before, parserB, after).map(Callables.<A>second());
+        return TripleParser.triple(before, parserB, after).map(Callables.<A>second());
     }
 }

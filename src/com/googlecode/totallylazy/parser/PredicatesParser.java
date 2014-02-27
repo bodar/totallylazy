@@ -1,0 +1,42 @@
+package com.googlecode.totallylazy.parser;
+
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
+
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.parser.Success.success;
+
+class PredicatesParser extends Parser<String> {
+    private final Sequence<? extends Predicate<? super Character>> predicates;
+
+    private PredicatesParser(Sequence<? extends Predicate<? super Character>> predicates) {
+        this.predicates = predicates;
+    }
+
+    static Parser<String> string(Iterable<? extends Predicate<? super Character>> predicates) {
+        return new PredicatesParser(sequence(predicates));
+    }
+
+    static Parser<String> string(Predicate<? super Character>... predicates) {
+        return new PredicatesParser(sequence(predicates));
+    }
+
+    @Override
+    public Result<String> parse(Segment<Character> characters) {
+        Segment<Character> segment = characters;
+        StringBuilder result = new StringBuilder();
+        for (Predicate<? super Character> predicate : predicates) {
+            char a = segment.head();
+            result.append(a);
+            if (!predicate.matches(a)) return fail(toString(), result.toString());
+            segment = segment.tail();
+        }
+        return success(result.toString(), segment);
+    }
+
+    @Override
+    public String toString() {
+        return predicates.toString("");
+    }
+}
