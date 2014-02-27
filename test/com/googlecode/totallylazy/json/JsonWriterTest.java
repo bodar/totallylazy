@@ -23,7 +23,7 @@ public class JsonWriterTest {
 
         String actual = writer.toString();
         assertThat(actual, is("[\"1\",\"2\"]"));
-//        assertThat(actual, is(Json.toJson(values)));
+        assertThat(actual, is(Json.json(values)));
     }
 
     @Test
@@ -40,7 +40,7 @@ public class JsonWriterTest {
 
         String actual = writer.toString();
         assertThat(actual, is("{\"root\":{\"parent\":{\"children\":[\"1\",true]}}}"));
-//        assertThat(actual, is(Json.toJson(model)));
+        assertThat(actual, is(Json.json(model)));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class JsonWriterTest {
 
         String actual = writer.toString();
         assertThat(actual, is("[\"1\",\"2\"]"));
-//        assertThat(actual, is(Json.toJson(values)));
+        assertThat(actual, is(Json.json(values)));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class JsonWriterTest {
 
         String actual = writer.toString();
         assertThat(actual, is("{\"one\":1,\"two\":2}"));
-//        assertThat(actual, is(Json.toJson(values)));
+        assertThat(actual, is(Json.json(values)));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class JsonWriterTest {
 
         String actual = writer.toString();
         assertThat(actual, is("{\"one\":1,\"two\":2}"));
-//        assertThat(actual, is(Json.toJson(values)));
+        assertThat(actual, is(Json.json(values)));
     }
 }
 

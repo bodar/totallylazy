@@ -6,14 +6,12 @@ import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Triple;
-import com.googlecode.totallylazy.parser.Parse;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
 import com.googlecode.totallylazy.parser.ReferenceParser;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Characters.among;
 import static com.googlecode.totallylazy.Characters.hexDigit;
