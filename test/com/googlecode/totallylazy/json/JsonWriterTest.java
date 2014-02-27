@@ -19,7 +19,7 @@ public class JsonWriterTest {
         Sequence<String> values = sequence("1", "2");
         Writer writer = new StringWriter();
 
-        JsonWriter.toJson(values.iterator(), writer);
+        JsonWriter.write(values.iterator(), writer);
 
         String actual = writer.toString();
         assertThat(actual, is("[\"1\",\"2\"]"));
@@ -36,7 +36,7 @@ public class JsonWriterTest {
 
         Writer writer = new StringWriter();
 
-        JsonWriter.toJson(model, writer);
+        JsonWriter.write(model, writer);
 
         String actual = writer.toString();
         assertThat(actual, is("{\"root\":{\"parent\":{\"children\":[\"1\",true]}}}"));
@@ -48,7 +48,7 @@ public class JsonWriterTest {
         Sequence<String> values = sequence("1", "2");
         Writer writer = new StringWriter();
 
-        JsonWriter.toJson(values, writer);
+        JsonWriter.write(values, writer);
 
         String actual = writer.toString();
         assertThat(actual, is("[\"1\",\"2\"]"));
@@ -60,7 +60,7 @@ public class JsonWriterTest {
         Map<String, Integer> values = sortedMap("one", 1, "two", 2);
         Writer writer = new StringWriter();
 
-        JsonWriter.toJson(values, writer);
+        JsonWriter.write(values, writer);
 
         String actual = writer.toString();
         assertThat(actual, is("{\"one\":1,\"two\":2}"));
@@ -72,7 +72,7 @@ public class JsonWriterTest {
         Map<String, Integer> values = sortedMap("one", 1, "two", 2);
         Writer writer = new StringWriter();
 
-        JsonWriter.toJson((Iterable) values, writer);
+        JsonWriter.write((Iterable) values, writer);
 
         String actual = writer.toString();
         assertThat(actual, is("{\"one\":1,\"two\":2}"));
