@@ -55,15 +55,4 @@ public abstract class Success<A> implements Result<A> {
     public String message() {
         throw new NoSuchElementException();
     }
-
-    public static class functions {
-        public static <A> Function1<Result<A>, Segment<Character>> remainder() {
-            return new Function1<Result<A>, Segment<Character>>() {
-                @Override
-                public Segment<Character> call(Result<A> result) throws Exception {
-                    return result.remainder();
-                }
-            };
-        }
-    }
 }
