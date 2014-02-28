@@ -1,7 +1,11 @@
 package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
 
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +26,14 @@ public class Json {
 
     public static Object object(String json) {
         return Grammar.VALUE.parse(json).value();
+    }
+
+    public static <V> Sequence<Pair<String, V>> pairs(Reader json) {
+        return cast(Grammar.PAIRS.parse(json).value());
+    }
+
+    public static <V> Sequence<V> sequence(Reader json) {
+        return cast(Grammar.SEQUENCE.parse(json).value());
     }
 
     public static class functions {
