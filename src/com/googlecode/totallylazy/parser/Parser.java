@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
 import java.io.InputStream;
@@ -28,42 +29,42 @@ public abstract class Parser<A> implements Parse<A> {
         return MappingParser.map(this, callable);
     }
 
-    public <B> Parser<Pair<A, B>> then(Parse<? extends B> parser){
+    public <B> Parser<Pair<A, B>> then(Parse<? extends B> parser) {
         return PairParser.pair(this, parser);
     }
 
-    public <B> Parser<B> next(Parse<? extends B> parser){
+    public <B> Parser<B> next(Parse<? extends B> parser) {
         return then(parser).map(Callables.<B>second());
     }
 
-    public <B> Parser<A> followedBy(Parse<?> parser){
+    public Parser<A> followedBy(Parse<?> parser) {
         return then(parser).map(Callables.<A>first());
     }
 
-    public <B> Parser<A> between(Parse<?> before, Parse<?> after){
+    public Parser<A> between(Parse<?> before, Parse<?> after) {
         return Parsers.between(before, this, after);
     }
 
-    public <B> Parser<A> surroundedBy(Parse<?> parser){
+    public Parser<A> surroundedBy(Parse<?> parser) {
         return between(parser, parser);
     }
 
-    public <B> Parser<List<A>> sepBy(Parse<?> parser){
+    public Parser<List<A>> sepBy(Parse<?> parser) {
         return separatedBy(parser);
     }
 
-    public <B> Parser<List<A>> separatedBy(Parse<?> parser){
+    public Parser<List<A>> separatedBy(Parse<?> parser) {
         return then(OptionalParser.optional(parser)).map(Callables.<A>first()).many();
     }
 
-    public Parser<A> or(Parse<? extends A> parser){
+    public Parser<A> or(Parse<? extends A> parser) {
         return Parsers.or(this, parser);
     }
 
-    public Parser<Option<A>> optional(){
+    public Parser<Option<A>> optional() {
         return OptionalParser.optional(this);
     }
-    
+
     public Result<A> parse(CharSequence value) {
         return parse(Segment.constructors.characters(value));
     }
@@ -85,12 +86,16 @@ public abstract class Parser<A> implements Parse<A> {
         });
     }
 
-    public Parser<List<A>> times(int number){
+    public Parser<List<A>> times(int number) {
         return Parsers.list(Sequences.repeat(this).take(number));
     }
 
     public Parser<List<A>> many() {
         return ManyParser.many(this);
+    }
+
+    public Parser<Sequence<A>> sequence() {
+        return SequenceParser.sequence(this);
     }
 
     public Parser<List<A>> many1() {

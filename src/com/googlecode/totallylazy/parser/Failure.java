@@ -8,16 +8,18 @@ import com.googlecode.totallylazy.Segment;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class Failure<A> implements Result<A>{
-    private final Object expected, actual;
-
-    private Failure(Object expected, Object actual) {
-        this.expected = expected;
-        this.actual = actual;
+public abstract class Failure<A> implements Result<A>{
+    public static <A> Failure<A> failure(final Object expected, final Object actual) {
+        return new Failure<A>() {
+            @Override
+            public String message() {
+                return String.format("%s expected, %s encountered.", expected, actual);
+            }
+        };
     }
 
-    public static <A> Failure<A> failure(Object expected, Object actual) {
-        return new Failure<A>(expected, actual);
+    public static <A> Failure<A> failure(final Object expected, final Exception actual) {
+        return failure(expected, actual.getMessage());
     }
 
     @Override
@@ -53,11 +55,6 @@ public class Failure<A> implements Result<A>{
     @Override
     public A value() {
         throw fail();
-    }
-
-    @Override
-    public String message() {
-        return String.format("%s expected, %s encountered.", expected, actual);
     }
 
     private RuntimeException fail() {
