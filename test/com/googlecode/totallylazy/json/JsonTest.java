@@ -6,18 +6,26 @@ import com.googlecode.totallylazy.Uri;
 import com.googlecode.totallylazy.time.Dates;
 import org.junit.Test;
 
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Maps.map;
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.time.Dates.date;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 public class JsonTest {
+    @Test
+    public void supportsStreaming() throws Exception {
+        assertThat(Json.<String>pairs(new StringReader("{\"root\" : \"text\"}")).head(), is(pair("root", "text")));
+        assertThat(Json.<String>sequence(new StringReader("[\"one\", \"two\"]")).head(), is("one"));
+    }
+
     @Test
     public void supportsParsingToVariousNativeJavaTypes() throws Exception {
         assertThat(Json.<String>map(("{\"root\" : \"text\"}")).get("root"), is("text"));

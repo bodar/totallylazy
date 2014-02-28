@@ -57,6 +57,14 @@ public abstract class Parser<A> implements Parse<A> {
         return then(OptionalParser.optional(parser)).map(Callables.<A>first()).many();
     }
 
+    public Parser<Sequence<A>> seqBy(Parse<?> parser) {
+        return sequencedBy(parser);
+    }
+
+    public Parser<Sequence<A>> sequencedBy(Parse<?> parser) {
+        return then(OptionalParser.optional(parser)).map(Callables.<A>first()).sequence();
+    }
+
     public Parser<A> or(Parse<? extends A> parser) {
         return Parsers.or(this, parser);
     }
