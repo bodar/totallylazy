@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -13,7 +14,7 @@ class OrParser<A> extends Parser<A> {
     }
 
     static <A> OrParser<A> or(Iterable<? extends Parse<? extends A>> parsers) {
-        return new OrParser<A>(sequence(parsers).<Parse<A>>unsafeCast());
+        return new OrParser<A>(Sequences.sequence(parsers).<Parse<A>>unsafeCast());
     }
 
     @Override

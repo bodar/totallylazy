@@ -117,4 +117,107 @@ public class GrammarTest {
         assertThat(baz.get(3), is(((Object) false)));
         assertThat((Number) baz.get(4), NumberMatcher.is(12.3));
     }
+
+    @Test
+    public void foo() throws Exception {
+        final String json = "{\n" +
+                "    \"graph\": {\n" +
+                "        \"mode\":\"NORMAL\",\n" +
+                "        \"vertices\": [\n" +
+                "            {\n" +
+                "                \"name\": \"lop\",\n" +
+                "                \"lang\": \"java\",\n" +
+                "                \"_id\": \"3\",\n" +
+                "                \"_type\": \"vertex\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"name\": \"vadas\",\n" +
+                "                \"age\": 27,\n" +
+                "                \"_id\": \"2\",\n" +
+                "                \"_type\": \"vertex\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"name\": \"marko\",\n" +
+                "                \"age\": 29,\n" +
+                "                \"_id\": \"1\",\n" +
+                "                \"_type\": \"vertex\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"name\": \"peter\",\n" +
+                "                \"age\": 35,\n" +
+                "                \"_id\": \"6\",\n" +
+                "                \"_type\": \"vertex\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"name\": \"ripple\",\n" +
+                "                \"lang\": \"java\",\n" +
+                "                \"_id\": \"5\",\n" +
+                "                \"_type\": \"vertex\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"name\": \"josh\",\n" +
+                "                \"age\": 32,\n" +
+                "                \"_id\": \"4\",\n" +
+                "                \"_type\": \"vertex\"\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"edges\": [\n" +
+                "            {\n" +
+                "                \"weight\": 1,\n" +
+                "                \"_id\": \"10\",\n" +
+                "                \"_type\": \"edge\",\n" +
+                "                \"_outV\": \"4\",\n" +
+                "                \"_inV\": \"5\",\n" +
+                "                \"_label\": \"created\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"weight\": 0.5,\n" +
+                "                \"_id\": \"7\",\n" +
+                "                \"_type\": \"edge\",\n" +
+                "                \"_outV\": \"1\",\n" +
+                "                \"_inV\": \"2\",\n" +
+                "                \"_label\": \"knows\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"weight\": 0.4000000059604645,\n" +
+                "                \"_id\": \"9\",\n" +
+                "                \"_type\": \"edge\",\n" +
+                "                \"_outV\": \"1\",\n" +
+                "                \"_inV\": \"3\",\n" +
+                "                \"_label\": \"created\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"weight\": 1,\n" +
+                "                \"_id\": \"8\",\n" +
+                "                \"_type\": \"edge\",\n" +
+                "                \"_outV\": \"1\",\n" +
+                "                \"_inV\": \"4\",\n" +
+                "                \"_label\": \"knows\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"weight\": 0.4000000059604645,\n" +
+                "                \"_id\": \"11\",\n" +
+                "                \"_type\": \"edge\",\n" +
+                "                \"_outV\": \"4\",\n" +
+                "                \"_inV\": \"3\",\n" +
+                "                \"_label\": \"created\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"weight\": 0.20000000298023224,\n" +
+                "                \"_id\": \"12\",\n" +
+                "                \"_type\": \"edge\",\n" +
+                "                \"_outV\": \"6\",\n" +
+                "                \"_inV\": \"3\",\n" +
+                "                \"_label\": \"created\"\n" +
+                "            }\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}";
+        System.out.println(TimeReport.time(10000, new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return Grammar.OBJECT.parse(json).value();
+            }
+        }));
+    }
 }

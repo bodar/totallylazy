@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.parser;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.parser.Success.success;
@@ -15,11 +16,11 @@ class PredicatesParser extends Parser<String> {
     }
 
     static Parser<String> string(Iterable<? extends Predicate<? super Character>> predicates) {
-        return new PredicatesParser(sequence(predicates));
+        return new PredicatesParser(Sequences.sequence(predicates));
     }
 
     static Parser<String> string(Predicate<? super Character>... predicates) {
-        return new PredicatesParser(sequence(predicates));
+        return new PredicatesParser(Sequences.sequence(predicates));
     }
 
     @Override

@@ -11,37 +11,34 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Option.some;
 
-public class Success<A> implements Result<A> {
-    private final A value;
-    private final Segment<Character> remainder;
+public abstract class Success<A> implements Result<A> {
+    public static <A> Success<A> success(final A value, final Segment<Character> remainder) {
+        return new Success<A>() {
+            @Override
+            public Segment<Character> remainder() {
+                return remainder;
+            }
 
-    private Success(A value, Segment<Character> remainder) {
-        this.value = value;
-        this.remainder = remainder;
-    }
-
-    public static <A> Success<A> success(A value, Segment<Character> remainder) {
-        return new Success<A>(value, remainder);
-    }
-
-    @Override
-    public A value() {
-        return value;
+            @Override
+            public A value() {
+                return value;
+            }
+        };
     }
 
     @Override
     public <S> Result<S> map(Callable1<? super A, ? extends S> callable) {
-        return success(Functions.call(callable, value), remainder);
+        return success(Functions.call(callable, value()), remainder());
     }
 
     @Override
     public Option<A> option() {
-        return some(value);
+        return some(value());
     }
 
     @Override
     public Either<String, A> either() {
-        return Either.right(value);
+        return Either.right(value());
     }
 
     @Override
@@ -57,11 +54,6 @@ public class Success<A> implements Result<A> {
     @Override
     public String message() {
         throw new NoSuchElementException();
-    }
-
-    @Override
-    public Segment<Character> remainder() {
-        return remainder;
     }
 
     public static class functions {
