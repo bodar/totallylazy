@@ -54,6 +54,9 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     Zipper<T> zipper();
 
     @Override
+    T get(int index) throws IndexOutOfBoundsException;
+
+    @Override
     PersistentList<T> subList(int fromIndex, int toIndex);
 
     /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#cons(T)} */
