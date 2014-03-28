@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.LazyCallable;
 import com.googlecode.totallylazy.callables.LazyCallable1;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
@@ -14,11 +13,11 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
 
 public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
-    private final LazyCallable<T> head;
+    private final Lazy<T> head;
     private final LazyCallable1<T, Computation<T>> tail;
 
     private Computation(Callable<T> head, Callable1<T, Computation<T>> tail) {
-        this.head = LazyCallable.lazy(head);
+        this.head = Lazy.lazy(head);
         this.tail = lazy(tail);
     }
 

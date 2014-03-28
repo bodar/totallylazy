@@ -9,7 +9,7 @@ import com.googlecode.totallylazy.Sequence;
 
 import java.util.concurrent.Callable;
 
-public final class TimeCallable<T> extends Returns<T> {
+public final class TimeCallable<T> implements Returns<T> {
     private static final String FORMAT = "Elapsed time: %s msecs";
     public static final Block<Number> DEFAULT_REPORTER = Runnables.printLine(FORMAT);
     private final Callable<? extends T> callable;
