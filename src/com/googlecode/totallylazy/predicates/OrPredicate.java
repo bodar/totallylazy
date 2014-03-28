@@ -11,14 +11,14 @@ import com.googlecode.totallylazy.annotations.multimethod;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.one;
 
-public class OrPredicate<T> extends AbstractPredicate<T> {
+public class OrPredicate<T> extends LogicalPredicate<T> {
     private final Sequence<Predicate<T>> predicates;
 
     private OrPredicate(Sequence<Predicate<T>> predicates) {
         this.predicates = predicates;
     }
 
-    public static <T> Predicate<T> or(Iterable<? extends Predicate<? super T>> predicates) {
+    public static <T> LogicalPredicate<T> or(Iterable<? extends Predicate<? super T>> predicates) {
         Sequence<Predicate<T>> sequence = Sequences.sequence(predicates).<Predicate<T>>unsafeCast().
                 flatMap(OrPredicate.<T>asPredicates());
         if (sequence.exists(instanceOf(AlwaysTrue.class))) return Predicates.alwaysTrue();
@@ -26,7 +26,7 @@ public class OrPredicate<T> extends AbstractPredicate<T> {
         Sequence<Predicate<T>> collapsed = sequence.
                 filter(instanceOf(AlwaysFalse.class).not());
         if (collapsed.isEmpty()) return Predicates.alwaysFalse();
-        if (collapsed.size() == 1) return collapsed.head();
+        if (collapsed.size() == 1) return logicalPredicate(collapsed.head());
         if (collapsed.forAll(instanceOf(Not.class)))
             return Predicates.not(Predicates.<T>and(sequence.<Not<T>>unsafeCast().map(Not.functions.<T>predicate())));
         return new OrPredicate<T>(sequence);

@@ -11,7 +11,7 @@ public class LazyTest {
         final int[] count = {0};
 
         Lazy<String> lazy = new Lazy<String>() {
-            protected String compute() { return "Hello " + ++count[0]; }
+            protected String get() { return "Hello " + ++count[0]; }
         };
 
         assertThat(lazy.value(), is("Hello 1"));

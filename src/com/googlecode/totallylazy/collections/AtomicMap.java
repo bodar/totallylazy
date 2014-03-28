@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.UnaryOperator;
+import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.totallylazy.Unchecked;
 
 import java.util.Collection;
@@ -74,7 +74,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public void putAll(final Map<? extends K, ? extends V> m) {
-        atomic.modify(new UnaryOperator<PersistentMap<K, V>>() {
+        atomic.modify(new UnaryFunction<PersistentMap<K, V>>() {
             @Override
             public PersistentMap<K, V> call(PersistentMap<K, V> map) throws Exception {
                 return Maps.pairs(m).<Pair<K, V>>unsafeCast().fold(map, Segment.functions.<Pair<K, V>, PersistentMap<K, V>>cons());
@@ -95,7 +95,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public void clear() {
-        atomic.modify(new UnaryOperator<PersistentMap<K, V>>() {
+        atomic.modify(new UnaryFunction<PersistentMap<K, V>>() {
             @Override
             public PersistentMap<K, V> call(PersistentMap<K, V> map) throws Exception {
                 return map.empty();

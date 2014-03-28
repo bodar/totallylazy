@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
@@ -42,8 +43,8 @@ public class Runnables {
         };
     }
 
-    public static <T> UnaryOperator<T> run(final Block<? super T> callable) {
-        return new UnaryOperator<T>() {
+    public static <T> UnaryFunction<T> run(final Block<? super T> callable) {
+        return new UnaryFunction<T>() {
             public T call(T t) throws Exception {
                 callable.call(t);
                 return t;

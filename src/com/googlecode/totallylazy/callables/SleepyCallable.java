@@ -1,10 +1,10 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Returns;
+import com.googlecode.totallylazy.Function;
 
 import java.util.concurrent.Callable;
 
-public final class SleepyCallable<T> implements Returns<T> {
+public final class SleepyCallable<T> extends Function<T> {
     private final Callable<? extends T> callable;
     private final int millis;
 
@@ -19,7 +19,7 @@ public final class SleepyCallable<T> implements Returns<T> {
         return t;
     }
 
-    public static <T> Returns<T> sleepy(Callable<? extends T> callable, int millis) {
+    public static <T> Function<T> sleepy(Callable<? extends T> callable, int millis) {
         return new SleepyCallable<T>(callable, millis);
     }
 }

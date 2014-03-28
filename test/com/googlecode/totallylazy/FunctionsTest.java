@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.matchers.Matchers;
-import com.googlecode.totallylazy.numbers.Numbers;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
@@ -50,7 +49,7 @@ public class FunctionsTest {
 
     @Test
     public void canCallWithAValue() throws Exception {
-        Sequence<Number> computations = range(1, 5).map(multiply().curry()).map(f -> f.call(2));
+        Sequence<Number> computations = range(1, 5).map(multiply()).map(Callables.<Number, Number>callWith(2));
         assertThat(computations, hasExactly(2, 4, 6, 8, 10));
     }
 
@@ -67,11 +66,6 @@ public class FunctionsTest {
     }
 
     private Function3<Number, Number, Number, Number> addThenMultiple() {
-        return new Function3<Number, Number, Number, Number>() {
-            @Override
-            public Number call(Number a, Number b, Number c) throws Exception {
-                return Numbers.multiply(Numbers.add(a,b), c);
-            }
-        };
+        return uncurry3(add().then(multiply()));
     }
 }

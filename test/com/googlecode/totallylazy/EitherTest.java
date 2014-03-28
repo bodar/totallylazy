@@ -48,13 +48,13 @@ public class EitherTest {
 
     @Test
     public void supportsApplicativeUsage() throws Exception {
-        assertThat(Either.<String, Number>left("error").applicate(Either.<String, Function<Number, Number>>right(add(3))), is(Either.<String, Number>left("error")));
-        assertThat(Either.<String, Number>right(2).applicate(Either.<String, Function<Number, Number>>left("error")), is(Either.<String, Number>left("error")));
-        assertThat(Either.<String, Number>right(3).applicate(Either.<String, Function<Number, Number>>right(add(3))), is(Either.<String, Number>right(6)));
+        assertThat(Either.<String, Number>left("error").applicate(Either.<String, Function1<Number, Number>>right(add(3))), is(Either.<String, Number>left("error")));
+        assertThat(Either.<String, Number>right(2).applicate(Either.<String, Function1<Number, Number>>left("error")), is(Either.<String, Number>left("error")));
+        assertThat(Either.<String, Number>right(3).applicate(Either.<String, Function1<Number, Number>>right(add(3))), is(Either.<String, Number>right(6)));
 
-        assertThat(applicate(Either.<String, Function<Number, Number>>right(add(3)), Either.<String, Number>left("error")), is(Either.<String, Number>left("error")));
-        assertThat(applicate(Either.<String, Function<Number, Number>>left("error"), Either.<String, Number>right(2)), is(Either.<String, Number>left("error")));
-        assertThat(applicate(Either.<String, Function<Number, Number>>right(add(3)), Either.<String, Number>right(3)), is(Either.<String, Number>right(6)));
+        assertThat(applicate(Either.<String, Function1<Number, Number>>right(add(3)), Either.<String, Number>left("error")), is(Either.<String, Number>left("error")));
+        assertThat(applicate(Either.<String, Function1<Number, Number>>left("error"), Either.<String, Number>right(2)), is(Either.<String, Number>left("error")));
+        assertThat(applicate(Either.<String, Function1<Number, Number>>right(add(3)), Either.<String, Number>right(3)), is(Either.<String, Number>right(6)));
     }
 
     @Test

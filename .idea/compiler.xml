@@ -4,7 +4,7 @@
     <option name="BUILD_JARS_ON_MAKE" value="false" />
   </component>
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="Javac" />
+    <option name="DEFAULT_COMPILER" value="jcompilo" />
     <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="!*.java" />
@@ -16,7 +16,7 @@
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:deprecation -Xlint:unchecked" />
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:unchecked -Xlint:deprecation" />
   </component>
 </project>
 

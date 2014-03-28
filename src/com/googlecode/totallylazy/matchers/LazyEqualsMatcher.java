@@ -1,10 +1,11 @@
 package com.googlecode.totallylazy.matchers;
 
-import com.googlecode.totallylazy.Callers;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.util.concurrent.Callable;
+
+import static com.googlecode.totallylazy.Callers.call;
 
 public class LazyEqualsMatcher<T> extends TypeSafeMatcher<T> {
     private final Callable<? extends T> expectedLoader;
@@ -20,7 +21,7 @@ public class LazyEqualsMatcher<T> extends TypeSafeMatcher<T> {
     @Override
     protected boolean matchesSafely(T actualValue) {
         actual = actualValue;
-        expected = Callers.call(expectedLoader);
+        expected = call(expectedLoader);
         
         return expected.equals(actual);
     }

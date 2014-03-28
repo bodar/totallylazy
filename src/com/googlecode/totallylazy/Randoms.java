@@ -62,7 +62,6 @@ public class Randoms {
         });
     }
 
-    @SafeVarargs
     public static <T> Sequence<T> values(final T... values) {
         return Sequences.forwardOnly(new StatefulIterator<T>() {
             @Override
@@ -72,7 +71,6 @@ public class Randoms {
         });
     }
 
-    @SafeVarargs
     public static <T> Sequence<T> takeFromValues(final T... values) {
         return takeFromValues(sequence(values));
     }

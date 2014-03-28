@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Predicate;
 
-public class OnlyOnce<T> extends AbstractPredicate<T> {
+public class OnlyOnce<T> extends LogicalPredicate<T> {
     private final Predicate<? super T> predicate;
     private boolean matched = false;
 

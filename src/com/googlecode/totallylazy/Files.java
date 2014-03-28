@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.AbstractPredicate;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,37 +29,65 @@ public class Files {
         return folder.toURI().relativize(file.toURI()).getPath();
     }
 
-    public static Predicate<File> isFile() {
-        return File::isFile;
+    public static LogicalPredicate<File> isFile() {
+        return new LogicalPredicate<File>() {
+            public boolean matches(File file) {
+                return file.isFile();
+            }
+        };
     }
 
-    public static Predicate<File> hasSuffix(final String suffix) {
-        return file -> file.getName().endsWith("." + suffix);
+    public static LogicalPredicate<File> hasSuffix(final String suffix) {
+        return new LogicalPredicate<File>() {
+            public boolean matches(File file) {
+                return file.getName().endsWith("." + suffix);
+            }
+        };
     }
 
-    public static Predicate<File> isDirectory() {
-        return File::isDirectory;
+    public static LogicalPredicate<File> isDirectory() {
+        return new LogicalPredicate<File>() {
+            public boolean matches(File file) {
+                return file.isDirectory();
+            }
+        };
     }
 
-    public static Predicate<File> hasName(final String name) {
+    public static LogicalPredicate<File> hasName(final String name) {
         return where(name(), is(name));
     }
 
 
-    public static Function<File, String> name() {
-        return File::getName;
+    public static Function1<File, String> name() {
+        return new Function1<File, String>() {
+            public String call(File file) throws Exception {
+                return file.getName();
+            }
+        };
     }
 
-    public static Function<File, Sequence<File>> files() {
-        return Files::files;
+    public static Function1<File, Sequence<File>> files() {
+        return new Function1<File, Sequence<File>>() {
+            public Sequence<File> call(File file) throws Exception {
+                return files(file);
+            }
+        };
     }
 
-    public static Function<File, String> path() {
-        return File::getPath;
+    public static Function1<File, String> path() {
+        return new Function1<File, String>() {
+            public String call(File file) throws Exception {
+                return file.getPath();
+            }
+        };
     }
 
-    public static Function<File, File> parent() {
-        return File::getParentFile;
+    public static Function1<File, File> parent() {
+        return new Function1<File, File>() {
+            public File call(File file) throws Exception {
+                return file.getParentFile();
+            }
+        };
     }
 
     public static File temporaryDirectory() {
@@ -89,12 +117,20 @@ public class Files {
         return recursiveFiles(file).map(deleteFile()).forAll(is(true));
     }
 
-    public static Function<File, Boolean> deleteFile() {
-        return File::delete;
+    public static Function1<File, Boolean> deleteFile() {
+        return new Function1<File, Boolean>() {
+            public Boolean call(File file) throws Exception {
+                return file.delete();
+            }
+        };
     }
 
-    public static Function<File, Boolean> delete() {
-        return Files::delete;
+    public static Function1<File, Boolean> delete() {
+        return new Function1<File, Boolean>() {
+            public Boolean call(File file) throws Exception {
+                return delete(file);
+            }
+        };
     }
 
     public static File temporaryFile() {
@@ -128,7 +164,7 @@ public class Files {
         return containsFile(hasName(fileName));
     }
 
-    public static Predicate<File> containsFile(final Predicate<? super File> predicate) {
+    public static LogicalPredicate<File> containsFile(final Predicate<? super File> predicate) {
         return where(Files.files(), Predicates.<File>exists(predicate));
     }
 
@@ -146,16 +182,24 @@ public class Files {
         return files(directory).flatMap(recursiveFiles());
     }
 
-    public static Function<File, Iterable<File>> recursiveFiles() {
-        return (file) -> file.isDirectory() ? recursiveFiles(file).append(file) : sequence(file);
+    public static Function1<File, Iterable<File>> recursiveFiles() {
+        return new Function1<File, Iterable<File>>() {
+            public Iterable<File> call(File file) throws Exception {
+                return file.isDirectory() ? recursiveFiles(file).append(file) : sequence(file);
+            }
+        };
     }
 
     public static Sequence<File> recursiveFilesDirectoriesFirst(final File directory) {
         return files(directory).flatMap(recursiveFilesDirectoriesFirst());
     }
 
-    public static Function<File, Iterable<File>> recursiveFilesDirectoriesFirst() {
-        return (file) -> file.isDirectory() ? recursiveFilesDirectoriesFirst(file).cons(file) : sequence(file);
+    public static Function1<File, Iterable<File>> recursiveFilesDirectoriesFirst() {
+        return new Function1<File, Iterable<File>>() {
+            public Iterable<File> call(File file) throws Exception {
+                return file.isDirectory() ? recursiveFilesDirectoriesFirst(file).cons(file) : sequence(file);
+            }
+        };
     }
 
     public static File write(byte[] bytes, File file) {
@@ -183,8 +227,12 @@ public class Files {
         };
     }
 
-    public static Function<String, File> asFile() {
-        return File::new;
+    public static Function1<String, File> asFile() {
+        return new Function1<String, File>() {
+            public File call(String name) throws Exception {
+                return new File(name);
+            }
+        };
     }
 
     public static File directory(File parent, String name) {
@@ -212,7 +260,16 @@ public class Files {
         return file.exists() ? some(file) : none(File.class);
     }
 
-    public static Function<File, Date> lastModified() {
-        return file -> date(file.lastModified());
+    public static Function1<File, Date> lastModified() {
+        return new Function1<File, Date>() {
+            @Override
+            public Date call(File file) throws Exception {
+                return date(file.lastModified());
+            }
+        };
+    }
+
+    public static class parameters {
+        public static File a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, _;
     }
 }

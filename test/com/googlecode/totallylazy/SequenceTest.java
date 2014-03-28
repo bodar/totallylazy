@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Callables.ascending;
@@ -149,13 +148,13 @@ public class SequenceTest {
     @Test
     public void supportsApplicativeUsage() throws Exception {
         assertThat(empty(Number.class).applicate(one(add(3))), Matchers.is(empty(Number.class)));
-        assertThat(numbers(9).applicate(Sequences.<Function<Number, Number>>empty()), Matchers.is(empty(Number.class)));
+        assertThat(numbers(9).applicate(Sequences.<Function1<Number, Number>>empty()), Matchers.is(empty(Number.class)));
         assertThat(numbers(9).applicate(one(add(3))), Matchers.is(numbers(12)));
         assertThat(numbers(9, 1).applicate(one(add(3))), Matchers.is(numbers(12, 4)));
         assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 4, 90, 10)));
 
         //http://learnyouahaskell.com/functors-applicative-functors-and-monoids#applicative-functors (Lists)
-        assertThat(applicate(applicate(sequence(add().curry(), multiply().curry()), numbers(1, 2)), numbers(3, 4)), Matchers.is(numbers(4, 5, 5, 6, 3, 4, 6, 8)));
+        assertThat(applicate(applicate(sequence(add(), multiply()), numbers(1, 2)), numbers(3, 4)), Matchers.is(numbers(4, 5, 5, 6, 3, 4, 6, 8)));
     }
 
     @Test
@@ -482,7 +481,7 @@ public class SequenceTest {
         assertThat(converted, is("converted"));
     }
 
-    Function<Integer, Option<String>> someVeryExpensiveOperation = new Function<Integer, Option<String>>() {
+    Callable1<Integer, Option<String>> someVeryExpensiveOperation = new Callable1<Integer, Option<String>>() {
         public Option<String> call(Integer number) throws Exception {
             if (Numbers.equalTo(number, 1)) {
                 return none(); // the conversion didn't work
@@ -600,16 +599,24 @@ public class SequenceTest {
 
     @Test
     public void supportsForEach() throws Exception {
-        AtomicInteger sum = new AtomicInteger();
-        sequence(1, 2).each(sum::addAndGet);
-        assertThat(sum.intValue(), is(3));
+        final int[] sum = {0};
+        sequence(1, 2).each(new Block<Integer>() {
+            public void execute(Integer value) {
+                sum[0] += value;
+            }
+        });
+        assertThat(sum[0], is(3));
     }
 
     @Test
     public void supportsEachConcurrently() throws Exception {
-        AtomicInteger sum = new AtomicInteger();
-        sequence(1, 2).eachConcurrently(sum::addAndGet);
-        assertThat(sum.intValue(), is(3));
+        final int[] sum = {0};
+        sequence(1, 2).eachConcurrently(new Block<Integer>() {
+            public void execute(Integer value) throws InterruptedException {
+                sum[0] += value;
+            }
+        });
+        assertThat(sum[0], is(3));
     }
 
     @Test
@@ -754,7 +761,7 @@ public class SequenceTest {
     @Test
     public void supportsInterruption() throws Exception {
         final int[] count = new int[]{0};
-        Sequence<Integer> interruptable = repeat(new Returns<Integer>() {
+        Sequence<Integer> interruptable = repeat(new Function<Integer>() {
             @Override
             public Integer call() throws Exception {
                 if (++count[0] == 5) {

@@ -15,7 +15,7 @@ public class LazyCallable<T> extends Lazy<T> {
         return new LazyCallable<T>(callable);
     }
 
-    public final T compute() throws Exception {
+    public final T get() throws Exception {
         return callable.call();
     }
 }

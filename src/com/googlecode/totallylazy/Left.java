@@ -57,22 +57,22 @@ public final class Left<L,R> extends Either<L, R> {
     }
 
     @Override
-    public <S> S fold(S seed, BiFunction<? super S, ? super L, ? extends S> left, BiFunction<? super S, ? super R, ? extends S> right) {
+    public <S> S fold(S seed, Callable2<? super S, ? super L, ? extends S> left, Callable2<? super S, ? super R, ? extends S> right) {
         return call(left, seed, left());
     }
 
     @Override
-    public <S> S map(Function<? super L, S> left, Function<? super R, ? extends S> right) {
-        return left.apply(left());
+    public <S> S map(Callable1<? super L, S> left, Callable1<? super R, ? extends S> right) {
+        return call(left, left());
     }
 
     @Override
-    public <S> Either<L, S> map(Function<? super R, ? extends S> callable) {
+    public <S> Either<L, S> map(Callable1<? super R, ? extends S> callable) {
         return left(left());
     }
 
     @Override
-    public <S> Either<L, S> flatMap(Function<? super R, ? extends Either<L, S>> callable) {
+    public <S> Either<L, S> flatMap(Callable1<? super R, ? extends Either<L, S>> callable) {
         return left(left());
     }
 
@@ -97,7 +97,7 @@ public final class Left<L,R> extends Either<L, R> {
     }
 
     @Override
-    public <S> S fold(S seed, BiFunction<? super S, ? super R, ? extends S> callable) {
+    public <S> S fold(S seed, Callable2<? super S, ? super R, ? extends S> callable) {
         return seed;
     }
 

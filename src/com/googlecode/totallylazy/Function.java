@@ -1,108 +1,61 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.LazyFunction;
-import com.googlecode.totallylazy.callables.SleepyFunction;
-import com.googlecode.totallylazy.callables.TimeFunction;
+import com.googlecode.totallylazy.callables.LazyCallable;
+import com.googlecode.totallylazy.callables.SleepyCallable;
+import com.googlecode.totallylazy.callables.TimeCallable;
+import com.googlecode.totallylazy.callables.TimeReport;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.LazyException.lazyException;
-import static com.googlecode.totallylazy.Pair.pair;
-
-@FunctionalInterface
-public interface Function<A, B> extends Functor<B>, java.util.function.Function<A, B> {
-    B call(A input) throws Exception;
-
-    static <A, B> Function<A, B> function(final java.util.function.Function<? super A, ? extends B> callable) {
-        return callable::apply;
-    }
-
-    default B apply(final A a) {
-        try {
-            return call(a);
-        } catch (Exception e) {
-            throw lazyException(e);
-        }
-    }
-
-    default Returns<B> deferApply(final A a) {
-        return Callables.deferApply(this, a);
-    }
-
-    default Returns<B> callConcurrently(final A a) {
-        return Callers.callConcurrently(deferApply(a));
-    }
-
-    default Function<A, B> lazy() {
-        return LazyFunction.lazy(this);
-    }
-
-    default Function<A, B> sleep(int millis) {
-        return SleepyFunction.sleepy(this, millis);
-    }
-
-    default Function<A, Option<B>> optional() {
-        return Exceptions.optional(this);
-    }
-
-    default Function<A, Either<Exception, B>> either() {
-        return Exceptions.either(this);
-    }
-
-    default Function<A, Either<Exception, B>> orException() {
-        return either();
-    }
-
-    default Mapper<A, B> orElse(final B result) {
-        return Exceptions.orElse(this, result);
+public abstract class Function<A> implements Callable<A>, Runnable, Functor<A>, Value<A> {
+    public A apply() {
+        return Functions.call(this);
     }
 
     @Override
-    default <C> Function<A, C> map(final Function<? super B, ? extends C> callable) {
+    public void run() {
+        apply();
+    }
+
+    @Override
+    public A value() {
+        return apply();
+    }
+
+    public Function<A> lazy() {
+        return LazyCallable.lazy(this);
+    }
+
+    public Function<A> sleep(int millis) {
+        return SleepyCallable.sleepy(this, millis);
+    }
+
+    public Sequence<A> repeat() {
+        return Sequences.repeat(this);
+    }
+
+    public Function<A> time(Callable1<? super Number, ?> report) {
+        return TimeCallable.time(this, report);
+    }
+
+    public Function<A> time() {
+        return TimeCallable.time(this);
+    }
+
+    public TimeReport time(int numberOfCalls) {
+        return TimeReport.time(numberOfCalls, this);
+    }
+
+    @Override
+    public <B> Function<B> map(final Callable1<? super A, ? extends B> callable) {
         return Callables.compose(this, callable);
     }
 
-    default <C> Function<A, C> then(final Function<? super B, ? extends C> callable) {
+    public <B> Function<B> then(final Callable1<? super A, ? extends B> callable) {
         return map(callable);
     }
 
-    default <C> Function<A, C> then(final Callable<? extends C> callable) {
-        return Callables.compose(this, callable);
-    }
-
-    default Function<A, B> interruptable() {
+    public Function<A> interruptable() {
         return Functions.interruptable(this);
-    }
-
-    default Function<A, Returns<B>> deferExecution() {
-        return Callables.deferReturn(this);
-    }
-
-    default Function<A, Pair<A, B>> capturing() {
-        return new Function<A, Pair<A, B>>() {
-            public Pair<A, B> call(A original) throws Exception {
-                return pair(original, Function.this.apply(original));
-            }
-        };
-    }
-
-    default Function<A, B> time() {
-        return TimeFunction.time1(this);
-    }
-
-    default Function<A, B> time(Function<? super Number, ?> reporter) {
-        return TimeFunction.time1(this, reporter);
-    }
-
-    default Option<B> $(Option<? extends A> applicative) {
-        return applicative.applicate(Option.some(this));
-    }
-
-    default <L> Either<L, B> $(Either<L, ? extends A> applicative) {
-        return applicative.applicate(Either.<L, Function<A, B>>right(this));
-    }
-
-    default Sequence<B> $(Sequence<? extends A> applicative) {
-        return applicative.applicate(Sequences.one(this));
     }
 }

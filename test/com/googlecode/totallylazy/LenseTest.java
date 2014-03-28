@@ -65,22 +65,22 @@ public class LenseTest {
         }
 
         public static class functions {
-            public static final Function<Person, Number> age = new Function<Person, Number>() {
+            public static final Function1<Person, Number> age = new Function1<Person, Number>() {
                 public Number call(Person person) throws Exception {
                     return person.age;
                 }
             };
-            public static final BiFunction<Number, Person, Person> setAge = new BiFunction<Number, Person, Person>() {
+            public static final Function2<Number, Person, Person> setAge = new Function2<Number, Person, Person>() {
                 public Person call(Number newAge, Person person) throws Exception {
                     return new Person(person.name, newAge, person.address);
                 }
             };
-            public static final Function<Person, Address> address = new Function<Person, Address>() {
+            public static final Function1<Person, Address> address = new Function1<Person, Address>() {
                 public Address call(Person person) throws Exception {
                     return person.address;
                 }
             };
-            public static final BiFunction<Address, Person, Person> setAddress = new BiFunction<Address, Person, Person>() {
+            public static final Function2<Address, Person, Person> setAddress = new Function2<Address, Person, Person>() {
                 public Person call(Address newAddress, Person person) throws Exception {
                     return new Person(person.name, person.age, newAddress);
                 }
@@ -106,12 +106,12 @@ public class LenseTest {
         }
 
         public static class functions {
-            public static final Function<Address, Postcode> postcode = new Function<Address, Postcode>() {
+            public static final Function1<Address, Postcode> postcode = new Function1<Address, Postcode>() {
                 public Postcode call(Address address) throws Exception {
                     return address.postcode;
                 }
             };
-            public static final BiFunction<Postcode, Address, Address> setPostcode = new BiFunction<Postcode, Address, Address>() {
+            public static final Function2<Postcode, Address, Address> setPostcode = new Function2<Postcode, Address, Address>() {
                 public Address call(Postcode newPostcode, Address address) throws Exception {
                     return new Address(address.street, newPostcode);
                 }

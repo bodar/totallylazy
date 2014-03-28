@@ -39,7 +39,6 @@ public class Properties {
         return properties;
     }
 
-    @SafeVarargs
     public static java.util.Properties properties(Pair<String, String>... values) {
         return properties(sequence(values));
     }
@@ -62,8 +61,8 @@ public class Properties {
                 .fold(new java.util.Properties(), setProperty());
     }
 
-    public static BiFunction<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties> setProperty() {
-        return new BiFunction<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties>() {
+    public static Function2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties> setProperty() {
+        return new Function2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties>() {
             public java.util.Properties call(java.util.Properties properties, Map.Entry<Object, Object> property) throws Exception {
                 properties.put(property.getKey(), property.getValue());
                 return properties;
@@ -71,10 +70,10 @@ public class Properties {
         };
     }
 
-    public static BiFunction<java.util.Properties, java.util.Properties, java.util.Properties> compose() {
-        return new BiFunction<java.util.Properties, java.util.Properties, java.util.Properties>() {
+    public static Function2<java.util.Properties, java.util.Properties, java.util.Properties> compose() {
+        return new Function2<java.util.Properties, java.util.Properties, java.util.Properties>() {
             public java.util.Properties call(java.util.Properties soFar, java.util.Properties nextProperties) throws Exception {
-                return Properties.compose(soFar, nextProperties);
+                return compose(soFar, nextProperties);
             }
         };
     }
@@ -89,8 +88,8 @@ public class Properties {
         return out.toString();
     }
 
-    public static Function<String, java.util.Properties> propertiesFromString() {
-        return new Function<String, java.util.Properties>() {
+    public static Function1<String, java.util.Properties> propertiesFromString() {
+        return new Function1<String, java.util.Properties>() {
             public java.util.Properties call(String text) throws Exception {
                 return properties(text);
             }

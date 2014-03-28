@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.iterators.NodeIterator;
 import com.googlecode.totallylazy.iterators.PoppingIterator;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -177,14 +178,14 @@ public class Xml {
         return Xml.textContents(Xml.sequence(nodes));
     }
 
-    public static final Function<Node, String> textContent = new Function<Node, String>() {
+    public static final Function1<Node, String> textContent = new Function1<Node, String>() {
         @Override
         public String call(Node node) throws Exception {
             return node.getTextContent();
         }
     };
 
-    public static Function<Node, String> textContent() {
+    public static Function1<Node, String> textContent() {
         return textContent;
     }
 
@@ -197,8 +198,8 @@ public class Xml {
         };
     }
 
-    public static Function<Node, String> contents() {
-        return new Function<Node, String>() {
+    public static Function1<Node, String> contents() {
+        return new Function1<Node, String>() {
             public String call(Node node) throws Exception {
                 return contents(node);
             }
@@ -227,7 +228,7 @@ public class Xml {
     }
 
     public static String contents(Element element) throws Exception {
-        return sequence(element.getChildNodes()).map(new Function<Node, String>() {
+        return sequence(element.getChildNodes()).map(new Callable1<Node, String>() {
             public String call(Node node) throws Exception {
                 if (node instanceof Element) {
                     return asString((Element) node);
@@ -255,12 +256,10 @@ public class Xml {
         return internalTransformer();
     }
 
-    @SafeVarargs
     public static Transformer transformer(Pair<String, Object>... attributes) throws TransformerConfigurationException {
         return internalTransformer(attributes);
     }
 
-    @SafeVarargs
     private static Transformer internalTransformer(Pair<String, Object>... attributes) throws TransformerConfigurationException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         for (Pair<String, Object> attribute : attributes) {
@@ -318,8 +317,8 @@ public class Xml {
         return nodes.map(remove()).realise();
     }
 
-    private static Function<Node, Node> remove() {
-        return new Function<Node, Node>() {
+    private static Function1<Node, Node> remove() {
+        return new Function1<Node, Node>() {
             public Node call(Node node) throws Exception {
                 return node.getParentNode().removeChild(node);
             }
@@ -331,7 +330,6 @@ public class Xml {
         return format(node, new Pair[0]);
     }
 
-    @SafeVarargs
     public static String format(final Node node, final Pair<String, Object>... attributes) throws Exception {
         Transformer transformer = transformer(attributes);
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -347,16 +345,16 @@ public class Xml {
                 escape(value);
     }
 
-    public static Function<Object, String> escape() {
-        return new Function<Object, String>() {
+    public static Function1<Object, String> escape() {
+        return new Function1<Object, String>() {
             public String call(Object value) throws Exception {
                 return escape(value);
             }
         };
     }
 
-    public static Function<Character, String> toXmlEntity() {
-        return new Function<Character, String>() {
+    public static Function1<Character, String> toXmlEntity() {
+        return new Function1<Character, String>() {
             public String call(Character character) throws Exception {
                 return String.format("&#%s;", Integer.toString(character, 10));
             }
@@ -364,8 +362,8 @@ public class Xml {
     }
 
     public static class functions {
-        public static UnaryOperator<Element> modifyTextContent(final Function<? super String, ? extends CharSequence> function) {
-            return new UnaryOperator<Element>() {
+        public static UnaryFunction<Element> modifyTextContent(final Callable1<? super String, ? extends CharSequence> function) {
+            return new UnaryFunction<Element>() {
                 @Override
                 public Element call(Element element) throws Exception {
                     element.setTextContent(function.call(element.getTextContent()).toString());
@@ -374,8 +372,8 @@ public class Xml {
             };
         }
 
-        public static Function<Element, Element> setAttribute(final String name, final String value) {
-            return new UnaryOperator<Element>() {
+        public static Function1<Element, Element> setAttribute(final String name, final String value) {
+            return new UnaryFunction<Element>() {
                 public Element call(Element element) throws Exception {
                     element.setAttribute(name, value);
                     return element;
@@ -384,7 +382,7 @@ public class Xml {
         }
 
         public static Predicate<Node> matches(final String expression) {
-            return new Predicate<Node>() {
+            return new LogicalPredicate<Node>() {
                 @Override
                 public boolean matches(Node node) {
                     return Xml.matches(node, expression);
@@ -392,7 +390,7 @@ public class Xml {
             };
         }
 
-        public static Function<Element, String> attribute(final String attributeName) {
+        public static Function1<Element, String> attribute(final String attributeName) {
             return new Mapper<Element, String>() {
                 public String call(Element element) throws Exception {
                     return element.getAttribute(attributeName);
@@ -400,8 +398,8 @@ public class Xml {
             };
         }
 
-        public static BiFunction<Node, String, String> selectContents() {
-            return new BiFunction<Node, String, String>() {
+        public static Function2<Node, String, String> selectContents() {
+            return new Function2<Node, String, String>() {
                 @Override
                 public String call(Node node, String expression) throws Exception {
                     return Xml.selectContents(node, expression);
@@ -409,7 +407,7 @@ public class Xml {
             };
         }
 
-        public static Function<Node, String> selectContents(final String expression) {
+        public static Function1<Node, String> selectContents(final String expression) {
             return new Mapper<Node, String>() {
                 @Override
                 public String call(Node node) throws Exception {
@@ -418,8 +416,8 @@ public class Xml {
             };
         }
 
-        public static BiFunction<Node, String, Sequence<Node>> selectNodes() {
-            return new BiFunction<Node, String, Sequence<Node>>() {
+        public static Function2<Node, String, Sequence<Node>> selectNodes() {
+            return new Function2<Node, String, Sequence<Node>>() {
                 @Override
                 public Sequence<Node> call(final Node node, final String expression) throws Exception {
                     return Xml.selectNodes(node, expression);
@@ -427,8 +425,8 @@ public class Xml {
             };
         }
 
-        public static Function<String, Document> document() {
-            return new Function<String, Document>() {
+        public static Function1<String, Document> document() {
+            return new Function1<String, Document>() {
                 @Override
                 public Document call(String value) throws Exception {
                     return Xml.document(value);
@@ -436,7 +434,7 @@ public class Xml {
             };
         }
 
-        public static Function<Element, String> textContent() {
+        public static Function1<Element, String> textContent() {
             return new Mapper<Element, String>() {
                 @Override
                 public String call(Element element) throws Exception {

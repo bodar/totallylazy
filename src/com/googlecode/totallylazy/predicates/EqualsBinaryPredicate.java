@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.Objects;
-import com.googlecode.totallylazy.Predicate;
 
 public class EqualsBinaryPredicate<T> extends LogicalBinaryPredicate<T> {
     private EqualsBinaryPredicate() {}
@@ -17,7 +16,7 @@ public class EqualsBinaryPredicate<T> extends LogicalBinaryPredicate<T> {
     }
 
     @Override
-    public Predicate<T> apply(T t) {
+    public LogicalPredicate<T> apply(T t) {
         return EqualsPredicate.equalTo(t);
     }
 

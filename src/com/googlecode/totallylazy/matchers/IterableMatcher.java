@@ -33,7 +33,26 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
         return IterableMatcher.<T>hasExactly(Sequences.<T>empty());
     }
 
-    @SafeVarargs
+    public static <T> Matcher<Iterable<T>> hasExactly(final T first) {
+        return hasExactly(sequence(first));
+    }
+
+    public static <T> Matcher<Iterable<T>> hasExactly(final T first, final T second) {
+        return hasExactly(sequence(first, second));
+    }
+
+    public static <T> Matcher<Iterable<T>> hasExactly(final T first, final T second, final T third) {
+        return hasExactly(sequence(first, second, third));
+    }
+
+    public static <T> Matcher<Iterable<T>> hasExactly(final T first, final T second, final T third, final T fourth) {
+        return hasExactly(sequence(first, second, third, fourth));
+    }
+
+    public static <T> Matcher<Iterable<T>> hasExactly(final T first, final T second, final T third, final T fourth, final T fifth) {
+        return hasExactly(sequence(first, second, third, fourth, fifth));
+    }
+
     public static <T> Matcher<Iterable<T>> hasExactly(final T... items) {
         return hasExactly(sequence(items));
     }
@@ -46,7 +65,6 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
         return new IterableMatcher<T>(expected, true);
     }
 
-    @SafeVarargs
     public static <T> Matcher<Iterable<T>> startsWith(T... items) {
         return startsWith(sequence(items));
     }

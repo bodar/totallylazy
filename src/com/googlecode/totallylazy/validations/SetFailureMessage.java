@@ -1,10 +1,11 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.UnaryOperator;
+import com.googlecode.totallylazy.UnaryFunction;
 
 import static com.googlecode.totallylazy.Functions.returns1;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -13,9 +14,9 @@ import static com.googlecode.totallylazy.validations.ValidationResult.functions.
 
 public class SetFailureMessage<T> extends LogicalValidator<T> {
     private final Validator<? super T> decorated;
-    private final Function<? super T, String> message;
+    private final Callable1<? super T, String> message;
 
-    public SetFailureMessage(Validator<? super T> decorated, Function<? super T, String> message) {
+    public SetFailureMessage(Validator<? super T> decorated, Callable1<? super T, String> message) {
         this.decorated = decorated;
         this.message = message;
     }
@@ -28,11 +29,11 @@ public class SetFailureMessage<T> extends LogicalValidator<T> {
                 fold(pass(), add());
     }
 
-    private static <T> UnaryOperator<Pair<String, Sequence<String>>> overrideMessages(final T instance, final Function<T, String> messageBuilder) {
-        return new UnaryOperator<Pair<String, Sequence<String>>>() {
+    private static <T> UnaryFunction<Pair<String, Sequence<String>>> overrideMessages(final T instance, final Callable1<T, String> messageBuilder) {
+        return new UnaryFunction<Pair<String, Sequence<String>>>() {
             @Override
             public Pair<String, Sequence<String>> call(Pair<String, Sequence<String>> keyAndMessages) throws Exception {
-                String message = messageBuilder.apply(instance);
+                String message = Callers.call(messageBuilder, instance);
                 return pair(keyAndMessages.first(), keyAndMessages.second().map(returns1(message)));
             }
         };
@@ -43,7 +44,7 @@ public class SetFailureMessage<T> extends LogicalValidator<T> {
             return setFailureMessage(decorated, Functions.<T, String>returns1(message));
         }
 
-        public static <T> SetFailureMessage<T> setFailureMessage(Validator<? super T> decorated, Function<? super T, String> message){
+        public static <T> SetFailureMessage<T> setFailureMessage(Validator<? super T> decorated, Callable1<? super T, String> message){
             return new SetFailureMessage<T>(decorated,message);
         }
     }

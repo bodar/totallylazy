@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 
 import java.nio.CharBuffer;
@@ -36,8 +36,8 @@ public class CharacterParser extends Parser<Character> {
         return character(not(value));
     }
 
-    public static Function<Character, Parser<Character>> characterParser() {
-        return new Function<Character, Parser<Character>>() {
+    public static Function1<Character, Parser<Character>> characterParser() {
+        return new Function1<Character, Parser<Character>>() {
             @Override
             public Parser<Character> call(Character character) throws Exception {
                 return character(character);

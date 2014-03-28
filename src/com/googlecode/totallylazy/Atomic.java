@@ -6,12 +6,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Predicates.always;
 
 public interface Atomic<T> extends Value<T> {
-    Atomic<T> modify(Function<? super T, ? extends T> callable);
-
-    <R> R modifyReturn(Function<? super T, ? extends Pair<? extends T, ? extends R>> callable);
+    Atomic<T> modify(Callable1<? super T, ? extends T> callable);
+    <R> R modifyReturn(Callable1<? super T, ? extends Pair<? extends T, ? extends R>> callable);
 
     class constructors {
         public static <T> Atomic<T> atomic(final T t) {
@@ -33,17 +33,17 @@ public interface Atomic<T> extends Value<T> {
         }
 
         @Override
-        public Atomic<T> modify(Function<? super T, ? extends T> function) {
-            return modifyReturn(function.then(Pair.functions.<T, Atomic<T>>toPairWithSecond(this)));
+        public Atomic<T> modify(Callable1<? super T, ? extends T> callable) {
+            return modifyReturn(function(callable).then(Pair.functions.<T, Atomic<T>>toPairWithSecond(this)));
         }
 
         @Override
-        public <R> R modifyReturn(Function<? super T, ? extends Pair<? extends T, ? extends R>> callable) {
+        public <R> R modifyReturn(Callable1<? super T, ? extends Pair<? extends T, ? extends R>> callable) {
             Predicate<? super Integer> retry = call(retryPredicate);
             for (int i = 0; retry.matches(i); i++) {
                 T current = reference.get();
-                Pair<? extends T, ? extends R> modified = callable.apply(current);
-                if (reference.compareAndSet(current, modified.first())) return modified.second();
+                Pair<? extends T, ? extends R> modified = call(callable, current);
+                if (reference.compareAndSet(current, modified.first())) return modified.second() ;
             }
             throw new RejectedExecutionException(String.format("Atomic operation could not be applied due to %s", retry));
         }

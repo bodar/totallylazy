@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+
 import java.lang.reflect.Field;
 
 import static com.googlecode.totallylazy.Fields.modifiers;
@@ -10,7 +12,12 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.startsWith;
 
 public class Reflection {
-    public static Predicate<Integer> synthetic = mod -> (mod & 0x00001000) != 0;
+    public static LogicalPredicate<Integer> synthetic = new LogicalPredicate<Integer>() {
+        @Override
+        public boolean matches(Integer mod) {
+            return (mod & 0x00001000) != 0;
+        }
+    };
 
     public static Object enclosingInstance(Object innerClass) {
         try {
