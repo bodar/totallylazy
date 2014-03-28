@@ -1,67 +1,29 @@
 package com.googlecode.totallylazy;
 
-import java.util.concurrent.Callable;
+import com.googlecode.totallylazy.annotations.tailrec;
 
-import static com.googlecode.totallylazy.Callables.compose;
-import static com.googlecode.totallylazy.Callers.call;
+import java.util.NoSuchElementException;
 
-public abstract class Trampoline<T> implements Functor<T> {
-    public static <T> Trampoline<T> done(T value) {
-        return new Done<T>(value);
+public interface Trampoline<T> extends Returns<T> {
+    default boolean done() { return true; }
+
+    default Trampoline<T> next() { throw new NoSuchElementException(); }
+
+    @tailrec
+    static <T> T trampoline(Trampoline<T> trampoline) {
+        if(trampoline.done()) return trampoline.apply();
+        return trampoline(trampoline.next());
     }
 
-    public static <T> Trampoline<T> more(Callable<? extends Trampoline<T>> function) {
-        return new More<T>(function);
-    }
+    static <T> Trampoline<T> done(T value) { return () -> value; }
 
-    public T trampoline() {
-        return trampoline(this);
-    }
+    static <T> Trampoline<T> more(Returns<? extends Trampoline<T>> next) {
+        return new Trampoline<T>() {
+            @Override public boolean done() { return false; }
 
-    public static <T> T trampoline(Trampoline<? extends T> trampoline) {
-        while (trampoline instanceof More) {
-            trampoline = call(Unchecked.<More<T>>cast(trampoline));
-        }
-        return Unchecked.<Done<T>>cast(trampoline).value();
-    }
+            @Override public T call() throws Exception { return trampoline(this); }
 
-    private static class Done<T> extends Trampoline<T> implements Value<T> {
-        private final T value;
-
-        public Done(T value) {
-            this.value = value;
-        }
-
-        @Override
-        public T value() {
-            return value;
-        }
-
-        @Override
-        public <S> Trampoline<S> map(Function<? super T, ? extends S> callable) {
-            return done(call(callable, value));
-        }
-    }
-
-    private static class More<T> extends Trampoline<T> implements Callable<Trampoline<T>> {
-        private final Callable<? extends Trampoline<T>> callable;
-
-        public More(Callable<? extends Trampoline<T>> callable) {
-            this.callable = callable;
-        }
-
-        public Trampoline<T> call() throws Exception {
-            return callable.call();
-        }
-
-        @Override
-        public <S> Trampoline<S> map(final Function<? super T, ? extends S> callable) {
-            return more(compose(this.callable, new Function<Trampoline<T>, Trampoline<S>>() {
-                @Override
-                public Trampoline<S> call(Trampoline<T> trampoline) throws Exception {
-                    return null; //callable.call(trampoline);
-                }
-            }));
-        }
+            @Override public Trampoline<T> next() { return next.apply(); }
+        };
     }
 }
