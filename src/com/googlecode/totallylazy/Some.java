@@ -66,18 +66,18 @@ public class Some<T> extends Option<T> {
     }
 
     @Override
-    public <S> Option<S> map(Callable1<? super T, ? extends S> callable) {
+    public <S> Option<S> map(Function1<? super T, ? extends S> callable) {
         return option(Callers.call(callable, get()));
     }
 
     @Override
-    public Option<T> each(Callable1<? super T, ?> callable) {
+    public Option<T> each(Function1<? super T, ?> callable) {
         Callers.call(callable, get());
         return this;
     }
 
     @Override
-    public <S> Option<S> flatMap(Callable1<? super T, ? extends Option<? extends S>> callable) {
+    public <S> Option<S> flatMap(Function1<? super T, ? extends Option<? extends S>> callable) {
         return cast(Callers.call(callable, get()));
     }
 

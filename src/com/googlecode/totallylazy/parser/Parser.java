@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
@@ -25,7 +25,7 @@ public abstract class Parser<A> implements Parse<A> {
     public abstract String toString();
 
     @Override
-    public <B> Parser<B> map(Callable1<? super A, ? extends B> callable) {
+    public <B> Parser<B> map(Function1<? super A, ? extends B> callable) {
         return MappingParser.map(this, callable);
     }
 
@@ -111,7 +111,7 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public Parser<List<A>> many(int min) {
-        return times(min).then(many()).map(new Callable1<Pair<List<A>, List<A>>, List<A>>() {
+        return times(min).then(many()).map(new Function1<Pair<List<A>, List<A>>, List<A>>() {
             @Override
             public List<A> call(Pair<List<A>, List<A>> p) throws Exception {
                 return join(p.first(), p.second()).toList();

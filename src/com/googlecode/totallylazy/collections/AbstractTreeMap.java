@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Option;
@@ -144,7 +144,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
-    public <NewV> TreeMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> TreeMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
         return TreeMap.methods.map(transformer, factory, this);
     }
 

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Option;
@@ -120,7 +120,7 @@ public class ListZipper<T> implements Zipper<T> {
         return String.format("focus(%s), breadcrumbs(%s)", focus, breadcrumbs);
     }
 
-    public ListZipper<T> modify(Callable1<? super PersistentList<T>, ? extends PersistentList<T>> callable) {
+    public ListZipper<T> modify(Function1<? super PersistentList<T>, ? extends PersistentList<T>> callable) {
         return zipper(Functions.call(callable, focus), breadcrumbs);
     }
 

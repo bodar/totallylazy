@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
@@ -49,7 +49,7 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
     PersistentMap<K, V> tail() throws NoSuchElementException;
 
     @Override
-    <NewV> PersistentMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
+    <NewV> PersistentMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer);
 
     PersistentList<Pair<K, V>> toPersistentList();
 

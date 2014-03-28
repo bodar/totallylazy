@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Function2;
@@ -66,7 +66,7 @@ public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, R
     }
 
     @Override
-    public <S> TreeList<S> map(Callable1<? super T, ? extends S> callable) {
+    public <S> TreeList<S> map(Function1<? super T, ? extends S> callable) {
         return treeList(toSequence().map(callable));
     }
 

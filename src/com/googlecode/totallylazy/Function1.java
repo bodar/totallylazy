@@ -1,14 +1,16 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.LazyCallable1;
-import com.googlecode.totallylazy.callables.SleepyCallable1;
-import com.googlecode.totallylazy.callables.TimeCallable1;
+import com.googlecode.totallylazy.callables.LazyFunction;
+import com.googlecode.totallylazy.callables.SleepyFunction;
+import com.googlecode.totallylazy.callables.TimeFunction;
 
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Pair.pair;
 
-public interface Function1<A, B> extends Callable1<A, B>, Functor<B> {
+public interface Function1<A, B> extends Functor<B> {
+    B call(A a) throws Exception;
+
     default B apply(final A a) {
         return Functions.call(this, a);
     }
@@ -22,11 +24,11 @@ public interface Function1<A, B> extends Callable1<A, B>, Functor<B> {
     }
 
     default Function1<A, B> lazy() {
-        return LazyCallable1.lazy(this);
+        return LazyFunction.lazy(this);
     }
 
     default Function1<A, B> sleep(int millis) {
-        return SleepyCallable1.sleepy(this, millis);
+        return SleepyFunction.sleepy(this, millis);
     }
 
     default Function1<A, Option<B>> optional() {
@@ -46,11 +48,11 @@ public interface Function1<A, B> extends Callable1<A, B>, Functor<B> {
     }
 
     @Override
-    default <C> Function1<A, C> map(final Callable1<? super B, ? extends C> callable) {
+    default <C> Function1<A, C> map(final Function1<? super B, ? extends C> callable) {
         return Callables.compose(this, callable);
     }
 
-    default <C> Function1<A, C> then(final Callable1<? super B, ? extends C> callable) {
+    default <C> Function1<A, C> then(final Function1<? super B, ? extends C> callable) {
         return map(callable);
     }
 
@@ -71,11 +73,11 @@ public interface Function1<A, B> extends Callable1<A, B>, Functor<B> {
     }
 
     default Function1<A,B> time() {
-        return TimeCallable1.time1(this);
+        return TimeFunction.time1(this);
     }
 
-    default Function1<A,B> time(Callable1<? super Number, ?> reporter) {
-        return TimeCallable1.time1(this, reporter);
+    default Function1<A,B> time(Function1<? super Number, ?> reporter) {
+        return TimeFunction.time1(this, reporter);
     }
 
     default Option<B> $(Option<? extends A> applicative) {

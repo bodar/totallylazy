@@ -140,7 +140,7 @@ public class Sequences {
         return characters(wrap(value));
     }
 
-    public static <T, S> Sequence<S> map(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends S> callable) {
+    public static <T, S> Sequence<S> map(final Iterable<? extends T> iterable, final Function1<? super T, ? extends S> callable) {
         return new Sequence<S>() {
             public final Iterator<S> iterator() {
                 return Iterators.map(iterable.iterator(), callable);
@@ -160,7 +160,7 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> flatMap(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
+    public static <T, S> Sequence<S> flatMap(final Iterable<? extends T> iterable, final Function1<? super T, ? extends Iterable<? extends S>> callable) {
         return new Sequence<S>() {
             public final Iterator<S> iterator() {
                 return Iterators.flatMap(iterable.iterator(), callable);
@@ -168,15 +168,15 @@ public class Sequences {
         };
     }
 
-    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
+    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ? extends Iterable<? extends S>> callable) {
         return flatten(mapConcurrently(iterable, callable));
     }
 
-    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Iterable<? extends S>> callable, final Executor executor) {
+    public static <T, S> Sequence<S> flatMapConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ? extends Iterable<? extends S>> callable, final Executor executor) {
         return flatten(mapConcurrently(iterable, callable, executor));
     }
 
-    public static <T> Sequence<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {
+    public static <T> Sequence<T> iterate(final Function1<? super T, ? extends T> callable, final T t) {
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
                 return Iterators.iterate(callable, t);
@@ -200,27 +200,27 @@ public class Sequences {
         };
     }
 
-    public static <T> void each(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable) {
+    public static <T> void each(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable) {
         forEach(iterable, runnable);
     }
 
-    public static <T> void forEach(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable) {
+    public static <T> void forEach(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable) {
         Iterators.forEach(iterable.iterator(), runnable);
     }
 
-    public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable) {
+    public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable) {
         forEachConcurrently(iterable, runnable);
     }
 
-    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable) {
+    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable) {
         mapConcurrently(iterable, runnable).realise();
     }
 
-    public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable, Executor executor) {
+    public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable, Executor executor) {
         forEachConcurrently(iterable, runnable, executor);
     }
 
-    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ?> runnable, Executor executor) {
+    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable, Executor executor) {
         mapConcurrently(iterable, runnable, executor).realise();
     }
 
@@ -280,7 +280,7 @@ public class Sequences {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+    public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final Function1<? super Pair<T, S>, ? extends S> callable) {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
     }
 
@@ -309,7 +309,7 @@ public class Sequences {
         return Iterators.reduceRight(iterable.iterator(), callable);
     }
 
-    public static <T, S> S reduceRight(final Iterable<? extends T> iterable, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+    public static <T, S> S reduceRight(final Iterable<? extends T> iterable, final Function1<? super Pair<T, S>, ? extends S> callable) {
         return Iterators.reduceRight(iterable.iterator(), callable);
     }
 
@@ -442,11 +442,11 @@ public class Sequences {
         return Iterators.find(iterable.iterator(), predicate);
     }
 
-    public static <T, S> Option<S> tryPick(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Option<? extends S>> callable) {
+    public static <T, S> Option<S> tryPick(final Iterable<? extends T> iterable, final Function1<? super T, ? extends Option<? extends S>> callable) {
         return Iterators.tryPick(iterable.iterator(), callable);
     }
 
-    public static <T, S> S pick(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Option<? extends S>> callable) {
+    public static <T, S> S pick(final Iterable<? extends T> iterable, final Function1<? super T, ? extends Option<? extends S>> callable) {
         return Iterators.pick(iterable.iterator(), callable);
     }
 
@@ -565,7 +565,7 @@ public class Sequences {
         return zip(range(0), iterable);
     }
 
-    public static <T, R extends Comparable<? super R>> Sequence<T> sortBy(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends R> callable) {
+    public static <T, R extends Comparable<? super R>> Sequence<T> sortBy(final Iterable<? extends T> iterable, final Function1<? super T, ? extends R> callable) {
         return sortBy(iterable, ascending(callable));
     }
 
@@ -613,15 +613,15 @@ public class Sequences {
         return flatten(repeat(memorise(iterable)));
     }
 
-    public static <T, S> Sequence<S> mapConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends S> callable) {
+    public static <T, S> Sequence<S> mapConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ? extends S> callable) {
         return callConcurrently(sequence(iterable).map(deferReturn(callable)));
     }
 
-    public static <T, S> Sequence<S> mapConcurrently(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends S> callable, final Executor executor) {
+    public static <T, S> Sequence<S> mapConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ? extends S> callable, final Executor executor) {
         return callConcurrently(sequence(iterable).map(deferReturn(callable)), executor);
     }
 
-    public static <T, K> Sequence<Group<K, T>> groupBy(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends K> callable) {
+    public static <T, K> Sequence<Group<K, T>> groupBy(final Iterable<? extends T> iterable, final Function1<? super T, ? extends K> callable) {
         return Iterators.groupBy(iterable.iterator(), callable);
     }
 
@@ -678,7 +678,7 @@ public class Sequences {
     }
 
     public static <T> Sequence<Sequence<T>> recursive(final Iterable<? extends T> iterable,
-                                                      final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
+                                                      final Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
         return iterate(applyToSecond(callable), Callers.call(callable, sequence(iterable))).
                 takeWhile(Predicates.not(Predicates.<Pair<Sequence<T>, Sequence<T>>>and(
                         where(Callables.<Sequence<T>>first(), Predicates.<T>empty()),
@@ -686,7 +686,7 @@ public class Sequences {
                 map(Callables.<Sequence<T>>first());
     }
 
-    public static <F, S> Function1<Pair<F, S>, Pair<F, S>> applyToSecond(final Callable1<S, Pair<F, S>> callable) {
+    public static <F, S> Function1<Pair<F, S>, Pair<F, S>> applyToSecond(final Function1<S, Pair<F, S>> callable) {
         return new Function1<Pair<F, S>, Pair<F, S>>() {
             public Pair<F, S> call(Pair<F, S> pair) throws Exception {
                 return callable.call(pair.second());
@@ -700,7 +700,7 @@ public class Sequences {
         return sequence(list);
     }
 
-    public static <T, S> Sequence<T> unique(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends S> callable) {
+    public static <T, S> Sequence<T> unique(final Iterable<? extends T> iterable, final Function1<? super T, ? extends S> callable) {
         return new Sequence<T>() {
             @Override
             public Iterator<T> iterator() {
@@ -727,7 +727,7 @@ public class Sequences {
         };
     }
 
-    public static <A, B> Sequence<A> unfoldRight(final Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, final B seed) {
+    public static <A, B> Sequence<A> unfoldRight(final Function1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, final B seed) {
         return new Sequence<A>() {
             @Override
             public Iterator<A> iterator() {
@@ -740,7 +740,7 @@ public class Sequences {
         return Lists.indexIn(sequence(values).toList());
     }
 
-    public static <A, B> Sequence<B> applicate(final Iterable<? extends Callable1<? super A, ? extends B>> applicators, final Iterable<? extends A> iterable) {
+    public static <A, B> Sequence<B> applicate(final Iterable<? extends Function1<? super A, ? extends B>> applicators, final Iterable<? extends A> iterable) {
         return sequence(applicators).flatMap(Sequences.<A, B>map().apply(iterable));
     }
 
@@ -749,7 +749,7 @@ public class Sequences {
     }
 
     public static <A, B> Sequence<Pair<A, B>> cartesianProduct(final Iterable<? extends A> a, final Iterable<? extends B> b) {
-        return sequence(b).flatMap(new Callable1<B, Sequence<Pair<A, B>>>() {
+        return sequence(b).flatMap(new Function1<B, Sequence<Pair<A, B>>>() {
             @Override
             public Sequence<Pair<A, B>> call(final B b) throws Exception {
                 return sequence(a).map(Pair.<A, B>pair()).map(Callables.<B, Pair<A, B>>callWith(b));
@@ -784,10 +784,10 @@ public class Sequences {
         return Functions.identity();
     }
 
-    public static <A, B> Function2<Iterable<? extends A>, Callable1<? super A, ? extends B>, Sequence<B>> map() {
-        return new Function2<Iterable<? extends A>, Callable1<? super A, ? extends B>, Sequence<B>>() {
+    public static <A, B> Function2<Iterable<? extends A>, Function1<? super A, ? extends B>, Sequence<B>> map() {
+        return new Function2<Iterable<? extends A>, Function1<? super A, ? extends B>, Sequence<B>>() {
             @Override
-            public Sequence<B> call(Iterable<? extends A> as, Callable1<? super A, ? extends B> callable) throws Exception {
+            public Sequence<B> call(Iterable<? extends A> as, Function1<? super A, ? extends B> callable) throws Exception {
                 return sequence(as).map(callable);
             }
         };

@@ -18,7 +18,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.BinaryFunction;
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Function1;
@@ -86,7 +86,7 @@ public class Numbers {
         }
     }
 
-    public static Callable1<Object, Number> valueOf = new Callable1<Object, Number>() {
+    public static Function1<Object, Number> valueOf = new Function1<Object, Number>() {
         @Override
         public Number call(Object value) throws Exception {
             return Numbers.valueOf(value.toString()).get();

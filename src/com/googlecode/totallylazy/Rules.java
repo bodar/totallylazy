@@ -15,7 +15,7 @@ public class Rules<A, B> implements Function1<A, B>, Predicate<A>, Value<Sequenc
     }
 
     @Deprecated
-    public Rules<A, B> add(final Predicate<? super A> predicate, final Callable1<? super A, ? extends B> callable) {
+    public Rules<A, B> add(final Predicate<? super A> predicate, final Function1<? super A, ? extends B> callable) {
         return addFirst(predicate, callable);
     }
 
@@ -25,7 +25,7 @@ public class Rules<A, B> implements Function1<A, B>, Predicate<A>, Value<Sequenc
         return this;
     }
 
-    public Rules<A, B> addFirst(final Predicate<? super A> predicate, final Callable1<? super A, ? extends B> callable) {
+    public Rules<A, B> addFirst(final Predicate<? super A> predicate, final Function1<? super A, ? extends B> callable) {
         return addFirst(rule(predicate, callable));
     }
 
@@ -34,7 +34,7 @@ public class Rules<A, B> implements Function1<A, B>, Predicate<A>, Value<Sequenc
         return this;
     }
 
-    public Rules<A, B> addLast(final Predicate<? super A> predicate, final Callable1<? super A, ? extends B> callable) {
+    public Rules<A, B> addLast(final Predicate<? super A> predicate, final Function1<? super A, ? extends B> callable) {
         return addLast(rule(predicate, callable));
     }
 

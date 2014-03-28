@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
@@ -27,7 +27,7 @@ import static com.googlecode.totallylazy.parser.Parsers.wsChar;
 public class Grammar {
     public static final Parser<Void> NULL = string("null").ignore();
 
-    public static final Parser<Boolean> BOOLEAN = string("true").or(string("false")).map(new Callable1<String, Boolean>() {
+    public static final Parser<Boolean> BOOLEAN = string("true").or(string("false")).map(new Function1<String, Boolean>() {
         public Boolean call(String s) {
             return Boolean.valueOf(s);
         }
@@ -42,7 +42,7 @@ public class Grammar {
     public static final Parser<String> STRING = string(is(UNICODE_CHARACTER)).
             or(ESCAPED_CHARACTER).many().map(Parsers.toString).between(isChar('"'), isChar('"'));
 
-    public static final Parser<Number> NUMBER = isChar(Characters.digit.or(among(".eE-+"))).many1().map(Parsers.toString).map(new Callable1<String, Number>() {
+    public static final Parser<Number> NUMBER = isChar(Characters.digit.or(among(".eE-+"))).many1().map(Parsers.toString).map(new Function1<String, Number>() {
         public Number call(String value) {
             return new BigDecimal(value);
         }
@@ -51,7 +51,7 @@ public class Grammar {
     private static final ReferenceParser<Object> ref = Parsers.reference();
     public static final Parser<Object> VALUE = ref;
 
-    public static final Parser<Pair<String, Object>> PAIR = Parsers.tuple(STRING, wsChar(':'), VALUE).map(new Callable1<Triple<String, Character, Object>, Pair<String, Object>>() {
+    public static final Parser<Pair<String, Object>> PAIR = Parsers.tuple(STRING, wsChar(':'), VALUE).map(new Function1<Triple<String, Character, Object>, Pair<String, Object>>() {
         public Pair<String, Object> call(Triple<String, Character, Object> triple) {
             return Pair.pair(triple.first(), triple.third());
         }
@@ -61,7 +61,7 @@ public class Grammar {
 
     public static final Parser<List<Object>> ARRAY = VALUE.sepBy(SEPARATOR).between(wsChar('['), wsChar(']'));
 
-    public static final Parser<java.util.Map<String, Object>> OBJECT = Parsers.between(wsChar('{'), PAIR.sepBy(SEPARATOR), wsChar('}')).map(new Callable1<List<Pair<String, Object>>, java.util.Map<String, Object>>() {
+    public static final Parser<java.util.Map<String, Object>> OBJECT = Parsers.between(wsChar('{'), PAIR.sepBy(SEPARATOR), wsChar('}')).map(new Function1<List<Pair<String, Object>>, java.util.Map<String, Object>>() {
         public java.util.Map<String, Object> call(List<Pair<String, Object>> pairs) {
             return Maps.map(pairs);
         }

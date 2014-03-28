@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Function2;
@@ -56,7 +56,7 @@ public class TreeSet<T> extends AbstractCollection<T> implements PersistentSorte
     }
 
     @Override
-    public <NewT> PersistentSortedSet<NewT> map(Callable1<? super T, ? extends NewT> transformer) {
+    public <NewT> PersistentSortedSet<NewT> map(Function1<? super T, ? extends NewT> transformer) {
         throw new UnsupportedOperationException();
     }
 

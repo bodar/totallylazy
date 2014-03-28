@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Mapper;
@@ -61,7 +61,7 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
         return top().focus;
     }
 
-    public TreeZipper<K, V> modify(Callable1<? super TreeMap<K, V>, ? extends TreeMap<K, V>> callable) {
+    public TreeZipper<K, V> modify(Function1<? super TreeMap<K, V>, ? extends TreeMap<K, V>> callable) {
         TreeMap<K, V> result = Functions.call(callable, focus);
         TreeZipper<K, V> newZipper = zipper(result, breadcrumbs);
         if (newZipper.focus.isEmpty()) return newZipper.up();

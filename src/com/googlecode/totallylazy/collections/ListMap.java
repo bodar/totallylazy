@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.First;
@@ -82,8 +82,8 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
         return contains(head.first()) ? listMap(list.map(replace(head))) : listMap(list.cons(head));
     }
 
-    private Callable1<Pair<K, V>, Pair<K, V>> replace(final Pair<K, V> newValue) {
-        return new Callable1<Pair<K, V>, Pair<K, V>>() {
+    private Function1<Pair<K, V>, Pair<K, V>> replace(final Pair<K, V> newValue) {
+        return new Function1<Pair<K, V>, Pair<K, V>>() {
             @Override
             public Pair<K, V> call(Pair<K, V> oldValue) throws Exception {
                 return oldValue.first().equals(newValue.first()) ? newValue : oldValue;
@@ -142,7 +142,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public <NewV> PersistentMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> PersistentMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
         return listMap(list.map(Callables.<K, V, NewV>second(transformer)));
     }
 
