@@ -16,7 +16,7 @@ public final class LazyFunction<T, R> implements Function1<T, R>, Memory {
     }
 
     public static <T, R> LazyFunction<T, R> lazy(Function1<? super T, ? extends R> callable) {
-        return new LazyFunction<T, R>(callable);
+        return new LazyFunction<>(callable);
     }
 
     public final R call(T instance) throws Exception {

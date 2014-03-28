@@ -31,18 +31,6 @@ public abstract class LogicalPredicate<T> extends Eq implements Function1<T, Boo
         };
     }
 
-    public LogicalPredicate<T> and(Predicate<? super T> predicate){
-        return Predicates.<T>and(this, predicate);
-    }
-
-    public LogicalPredicate<T> or(Predicate<? super T> predicate){
-        return Predicates.<T>or(this, predicate);
-    }
-
-    public LogicalPredicate<T> not() {
-        return Predicates.<T>not(this);
-    }
-
     @Override
     public Boolean call(T t) throws Exception {
         return matches(t);
