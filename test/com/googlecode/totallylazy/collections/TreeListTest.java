@@ -13,6 +13,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TreeListTest {
     @Test
+    public void supportsHashcode() throws Exception {
+        assertThat(treeList("Dan", "Matt").hashCode(), is(treeList("Dan", "Matt").hashCode()));
+    }
+
+    @Test
+    public void supportsEquality() throws Exception {
+        assertThat(treeList("Dan", "Matt"), is(treeList("Dan", "Matt")));
+    }
+
+    @Test
+    public void supportsToString() throws Exception {
+        assertThat(treeList("Dan", "Matt").toString(), is("(Dan,Matt)"));
+    }
+
+    @Test
     public void canFold() throws Exception {
         assertThat(treeList("Dan", "Matt").fold(0, count()).intValue(), is(2));
     }

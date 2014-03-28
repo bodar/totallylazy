@@ -4,7 +4,7 @@
     <option name="BUILD_JARS_ON_MAKE" value="false" />
   </component>
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="jcompilo" />
+    <option name="DEFAULT_COMPILER" value="Javac" />
     <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="!*.java" />

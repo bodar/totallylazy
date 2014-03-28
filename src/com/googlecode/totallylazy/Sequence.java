@@ -34,16 +34,6 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.equalTo(this, other, predicate);
     }
 
-    // Thread-safe Racy Single Check Idiom (Effective Java 2nd Edition p.284)
-    private int hashCode;
-
-    @Override
-    public int hashCode() {
-        if (hashCode == 0) {
-            hashCode = fold(31, asHashCode());
-        }
-        return hashCode;
-    }
 
     public void eachConcurrently(final Callable1<? super T, ?> runnable) {
         forEachConcurrently(runnable);
