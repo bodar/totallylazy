@@ -4,8 +4,6 @@ import com.googlecode.totallylazy.collections.PersistentSortedMap;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Atomic.constructors.atomic;
-import static com.googlecode.totallylazy.Pair.functions.toPairWithFirst;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors.emptySortedMap;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors.sortedMap;

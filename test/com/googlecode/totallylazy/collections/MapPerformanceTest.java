@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;

@@ -127,7 +127,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public PersistentMap<K, V> insert(K key, V value) {
-        return cons(Pair.pair(key, value));
+        return cons(pair(key, value));
     }
 
     @Override

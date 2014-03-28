@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.json;
 
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Randoms;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.Uri;

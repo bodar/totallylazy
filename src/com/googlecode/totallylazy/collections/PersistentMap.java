@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Functor;
-import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -171,11 +170,11 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
         }
 
         public static <K, V, M extends PersistentMap<K, V>> Pair<M, Option<V>> put(M map, K key, V newValue) {
-            return Pair.pair(Unchecked.<M>cast(map.insert(key, newValue)), map.lookup(key));
+            return pair(Unchecked.<M>cast(map.insert(key, newValue)), map.lookup(key));
         }
 
         public static <K, V, M extends PersistentMap<K, V>> Pair<M, Option<V>> remove(M map, K key) {
-            return Pair.pair(Unchecked.<M>cast(map.delete(key)), map.lookup(key));
+            return pair(Unchecked.<M>cast(map.delete(key)), map.lookup(key));
         }
     }
 }

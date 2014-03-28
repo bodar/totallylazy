@@ -27,7 +27,6 @@ import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.deferReturn;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -528,7 +527,7 @@ public class Sequences {
     }
 
     public static <F, S> Pair<Sequence<F>, Sequence<S>> unzip(final Iterable<? extends Pair<F, S>> pairs) {
-        return pair(sequence(pairs).map(Callables.<F>first()),
+        return Pair.pair(sequence(pairs).map(Callables.<F>first()),
                 sequence(pairs).map(Callables.<S>second()));
     }
 
@@ -745,7 +744,7 @@ public class Sequences {
         return sequence(b).flatMap(new Function<B, Sequence<Pair<A, B>>>() {
             @Override
             public Sequence<Pair<A, B>> call(final B b) throws Exception {
-                return sequence(a).map(Pair.<A, B>pair()).map(Callables.<B, Pair<A, B>>callWith(b));
+                return sequence(a).map((Function2<A,B,Pair<A,B>>) Pair::pair).map(Callables.<B, Pair<A, B>>callWith(b));
             }
         });
     }

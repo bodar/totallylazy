@@ -67,7 +67,7 @@ public class PersistentMapTest {
         return new Function<Integer, Pair<Integer, Integer>>() {
             @Override
             public Pair<Integer, Integer> call(Integer integer) throws Exception {
-                return Pair.pair(integer, integer);
+                return pair(integer, integer);
             }
         };
     }
