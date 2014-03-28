@@ -32,8 +32,8 @@ public class ZipSource implements Sources {
                         filterSource(where(name, startsWith(folder)), zipSource(inputStream))));
     }
 
-    private static UnaryFunction<Source> removeFolderFromName(final String folder) {
-        return new UnaryFunction<Source>() {
+    private static Unary<Source> removeFolderFromName(final String folder) {
+        return new Unary<Source>() {
             @Override
             public Source call(Source source) throws Exception {
                 return new Source(source.name.replaceFirst("^" + folder, ""), source.modified, source.input, source.isDirectory);

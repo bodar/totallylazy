@@ -1,4 +1,5 @@
 package com.googlecode.totallylazy;
 
-public abstract class UnaryFunction<T> implements Function<T,T>, Unary<T> {
+@Deprecated
+public abstract class UnaryFunction<T> extends Eq implements Function<T,T>, Unary<T> {
 }

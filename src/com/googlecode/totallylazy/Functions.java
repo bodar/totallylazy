@@ -19,21 +19,11 @@ public class Functions {
     }
 
     public static <A, B> Function<A, B> function(final Function<? super A, ? extends B> callable) {
-        return new Function<A, B>() {
-            @Override
-            public B call(A a) throws Exception {
-                return callable.call(a);
-            }
-        };
+        return callable::call;
     }
 
     public static <A, B, C> Function2<A, B, C> function(final Callable2<? super A, ? super B, ? extends C> callable) {
-        return new Function2<A, B, C>() {
-            @Override
-            public C call(A a, B b) throws Exception {
-                return callable.call(a, b);
-            }
-        };
+        return callable::call;
     }
 
     public static <A, B, C, D> Function3<A, B, C, D> function(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
@@ -147,15 +137,15 @@ public class Functions {
         };
     }
 
-    public static <A> UnaryFunction<A> identity() {
-        return new UnaryFunction<A>() {
+    public static <A> Unary<A> identity() {
+        return new Unary<A>() {
             public A call(A self) throws Exception {
                 return self;
             }
         };
     }
 
-    public static <A> UnaryFunction<A> identity(Class<A> aClass) {
+    public static <A> Unary<A> identity(Class<A> aClass) {
         return identity();
     }
 

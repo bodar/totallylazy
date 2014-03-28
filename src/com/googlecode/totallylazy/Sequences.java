@@ -30,7 +30,6 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Triple.triple;
-import static com.googlecode.totallylazy.Unary.constructors.unary;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static java.nio.CharBuffer.wrap;
@@ -381,16 +380,11 @@ public class Sequences {
     }
 
     public static <T> Function2<Sequence<T>, Integer, Sequence<T>> take() {
-        return new Function2<Sequence<T>, Integer, Sequence<T>>() {
-            @Override
-            public Sequence<T> call(Sequence<T> ts, Integer size) throws Exception {
-                return take(ts, size);
-            }
-        };
+        return Sequences::take;
     }
 
-    public static <T> UnaryFunction<Sequence<T>> take(int count) {
-        return unary(Sequences.<T>take().flip().apply(count));
+    public static <T> Unary<Sequence<T>> take(int count) {
+        return Sequences.<T>take().flip().apply(count)::call;
     }
 
     public static <T> Sequence<T> take(final Iterable<? extends T> iterable, final int count) {
@@ -775,11 +769,11 @@ public class Sequences {
         };
     }
 
-    public static <T> UnaryFunction<Iterable<T>> identity(Class<T> aClass) {
+    public static <T> Unary<Iterable<T>> identity(Class<T> aClass) {
         return identity();
     }
 
-    public static <T> UnaryFunction<Iterable<T>> identity() {
+    public static <T> Unary<Iterable<T>> identity() {
         return Functions.identity();
     }
 
