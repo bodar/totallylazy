@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-public abstract class Function4<A, B, C, D, E> extends Function3<A, B, C, Function<D, E>> implements Callable4<A, B, C, D, E> {
+public abstract class Function4<A, B, C, D, E> implements Function3<A, B, C, Function<D, E>> , Callable4<A, B, C, D, E> {
     @Override
     public Function<D, E> call(final A a, final B b, final C c) throws Exception {
         return Functions.<A, B, C, D, E>apply(this, a).apply(b).apply(c);

@@ -26,7 +26,7 @@ public class Functions {
         return callable::call;
     }
 
-    public static <A, B, C, D> Function3<A, B, C, D> function(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
+    public static <A, B, C, D> Function3<A, B, C, D> function(final Function3<? super A, ? super B, ? super C, ? extends D> callable) {
         return new Function3<A, B, C, D>() {
             @Override
             public D call(A a, B b, C c) throws Exception {
@@ -77,7 +77,7 @@ public class Functions {
         }
     }
 
-    public static <A, B, C, D> D call(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A a, final B b, final C c) {
+    public static <A, B, C, D> D call(final Function3<? super A, ? super B, ? super C, ? extends D> callable, final A a, final B b, final C c) {
         try {
             return callable.call(a, b, c);
         } catch (Exception e) {
@@ -102,21 +102,11 @@ public class Functions {
     }
 
     public static <A, B, C> Function<B, C> apply(final Function2<? super A, ? super B, ? extends C> callable, final A value) {
-        return new Function<B, C>() {
-            @Override
-            public C call(B b) throws Exception {
-                return callable.call(value, b);
-            }
-        };
+        return b -> callable.call(value, b);
     }
 
-    public static <A, B, C, D> Function2<B, C, D> apply(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
-        return new Function2<B, C, D>() {
-            @Override
-            public D call(B b, C c) throws Exception {
-                return callable.call(value, b, c);
-            }
-        };
+    public static <A, B, C, D> Function2<B, C, D> apply(final Function3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
+        return (b, c) -> callable.call(value, b, c);
     }
 
     public static <A, B, C, D, E> Function3<B, C, D, E> apply(final Callable4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A value) {
@@ -231,7 +221,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D>Function<Triple<A, B, C>, D> triple(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
+    public static <A, B, C, D>Function<Triple<A, B, C>, D> triple(final Function3<? super A, ? super B, ? super C, ? extends D> callable) {
         return new Function<Triple<A, B, C>, D>() {
             @Override
             public D call(Triple<A, B, C> triple) throws Exception {

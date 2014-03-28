@@ -371,19 +371,19 @@ public final class Callables {
     }
 
     public static <A, B, C> Function<B, C> apply(final Function2<? super A, ? super B, ? extends C> callable, final A value) {
-        return Functions.apply(callable, value);
+        return b -> callable.call(value, b);
     }
 
-    public static <A, B, C, D> Function2<B, C, D> apply(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
-        return Functions.apply(callable, value);
+    public static <A, B, C, D> Function2<B, C, D> apply(final Function3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
+        return (b, c) -> callable.call(value, b, c);
     }
 
     public static <A, B, C> Function<A, Function<B, C>> curry(final Function2<? super A, ? super B, ? extends C> callable) {
         return Unchecked.cast(callable);
     }
 
-    public static <A, B, C, D> Function<A, Function<B, Function<C, D>>> curry(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
-        return Functions.function(callable);
+    public static <A, B, C, D> Function<A, Function<B, Function<C, D>>> curry(final Function3<? super A, ? super B, ? super C, ? extends D> callable) {
+        return Unchecked.cast(callable);
     }
 
     public static <A, B, C> Function2<A, B, C> uncurry2(final Function<? super A, ? extends Function<? super B, ? extends C>> callable) {
@@ -470,7 +470,7 @@ public final class Callables {
         return Functions.unpair(function);
     }
 
-    public static <A, B, C, D> Function<Triple<A, B, C>, D> triple(final Callable3<? super A, ? super B, ? super C, ? extends D> callable) {
+    public static <A, B, C, D> Function<Triple<A, B, C>, D> triple(final Function3<? super A, ? super B, ? super C, ? extends D> callable) {
         return Functions.triple(callable);
     }
 

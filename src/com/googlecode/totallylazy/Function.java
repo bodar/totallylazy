@@ -57,7 +57,7 @@ public interface Function<A, B> extends Functor<B>, java.util.function.Function<
         return map(callable);
     }
 
-    default <C> Function<A, C> then(final Callable<? extends C> callable) {
+    default <C> Function<A, C> thenReturn(final Callable<? extends C> callable) {
         return Callables.compose(this, callable);
     }
 
