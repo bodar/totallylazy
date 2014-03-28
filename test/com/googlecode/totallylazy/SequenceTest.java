@@ -762,7 +762,7 @@ public class SequenceTest {
     @Test
     public void supportsInterruption() throws Exception {
         final int[] count = new int[]{0};
-        Sequence<Integer> interruptable = repeat(new Function<Integer>() {
+        Sequence<Integer> interruptable = repeat(new Returns<Integer>() {
             @Override
             public Integer call() throws Exception {
                 if (++count[0] == 5) {
