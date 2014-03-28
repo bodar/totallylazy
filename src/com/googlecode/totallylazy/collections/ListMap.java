@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.First;
 import com.googlecode.totallylazy.Option;
@@ -194,7 +194,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public <S> S fold(S seed, Callable2<? super S, ? super Pair<K, V>, ? extends S> callable) {
+    public <S> S fold(S seed, Function2<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return list.fold(seed, callable);
     }
 }

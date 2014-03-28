@@ -17,9 +17,9 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.BinaryFunction;
+import com.googlecode.totallylazy.Binary;
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.Combiner;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -362,44 +362,32 @@ public class Numbers {
     }
 
     public static Comparator<Number> ascending() {
-        return new Comparator<Number>() {
-            public int compare(Number x, Number y) {
-                return Numbers.compare(x, y);
-            }
-        };
+        return Numbers::compare;
     }
 
     public static Comparator<Number> descending() {
-        return new Comparator<Number>() {
-            public int compare(Number x, Number y) {
-                return Numbers.compare(y, x);
-            }
-        };
+        return (x, y) -> compare(y, x);
     }
 
     public static Function<Iterable<Number>, Number> sumIterable() {
-        return new Function<Iterable<Number>, Number>() {
-            public Number call(Iterable<Number> numbers) throws Exception {
-                return Sequences.reduceLeft(numbers, sum());
-            }
-        };
+        return numbers -> Sequences.reduceLeft(numbers, sum());
     }
 
-    public static final CombinerFunction<Number> average = new Average();
-    public static CombinerFunction<Number> average() {
+    public static final Combiner<Number> average = new Average();
+    public static Combiner<Number> average() {
         return average;
     }
 
-    public static final CombinerFunction<Number> sum = new Sum();
-    public static final CombinerFunction<Number> Σ = sum;
+    public static final Combiner<Number> sum = new Sum();
+    public static final Combiner<Number> Σ = sum;
 
-    public static CombinerFunction<Number> sum() {
+    public static Combiner<Number> sum() {
         return sum;
     }
 
-    public static final CombinerFunction<Number> add = sum;
+    public static final Combiner<Number> add = sum;
 
-    public static CombinerFunction<Number> add() {
+    public static Combiner<Number> add() {
         return add;
     }
 
@@ -411,13 +399,13 @@ public class Numbers {
         return operatorsFor(x, y).add(x, y);
     }
 
-    public static BinaryFunction<Number> subtract = new BinaryFunction<Number>() {
+    public static Binary<Number> subtract = new Binary<Number>() {
         public Number call(Number a, Number b) {
             return Numbers.subtract(a, b);
         }
     };
 
-    public static BinaryFunction<Number> subtract() {
+    public static Binary<Number> subtract() {
         return subtract;
     }
 
@@ -429,15 +417,15 @@ public class Numbers {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
-    public static CombinerFunction<Number> product = new Product();
+    public static Combiner<Number> product = new Product();
 
-    public static CombinerFunction<Number> product() {
+    public static Combiner<Number> product() {
         return product;
     }
 
-    public static CombinerFunction<Number> multiply = product;
+    public static Combiner<Number> multiply = product;
 
-    public static CombinerFunction<Number> multiply() {
+    public static Combiner<Number> multiply() {
         return multiply;
     }
 
@@ -458,13 +446,13 @@ public class Numbers {
         return divide.flip().apply(divisor);
     }
 
-    public static BinaryFunction<Number> divide = new BinaryFunction<Number>() {
+    public static Binary<Number> divide = new Binary<Number>() {
         public Number call(Number dividend, Number divisor) throws Exception {
             return divide(dividend, divisor);
         }
     };
 
-    public static BinaryFunction<Number> divide() {
+    public static Binary<Number> divide() {
         return divide;
     }
 
@@ -477,20 +465,20 @@ public class Numbers {
         return mod().apply(divisor);
     }
 
-    public static BinaryFunction<Number> remainder = new BinaryFunction<Number>() {
+    public static Binary<Number> remainder = new Binary<Number>() {
         @Override
         public Number call(Number dividend, Number divisor) throws Exception {
             return remainder(dividend, divisor);
         }
     };
 
-    public static BinaryFunction<Number> remainder() {
+    public static Binary<Number> remainder() {
         return remainder;
     }
 
-    public static BinaryFunction<Number> mod = remainder.flip();
+    public static Binary<Number> mod = remainder.flip();
 
-    public static BinaryFunction<Number> mod() {
+    public static Binary<Number> mod() {
         return mod;
     }
 

@@ -33,7 +33,7 @@ public class Strings {
     public static final String EMPTY = "";
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
-    public static final CombinerFunction<String> join = JoinString.instance;
+    public static final Combiner<String> join = JoinString.instance;
 
     public static Function<String, Boolean> asBoolean() {
         return new Function<String, Boolean>() {
@@ -385,9 +385,9 @@ public class Strings {
         return value.getBytes(UTF8);
     }
 
-    public static Maximum.Function<String> maximum = Maximum.constructors.maximum((String) null);
+    public static Maximum.Function<String> maximum = Maximum.maximum((String) null);
 
-    public static Minimum.Function<String> minimum = Minimum.constructors.minimum((String) null);
+    public static Minimum.Function<String> minimum = Minimum.minimum((String) null);
 
     public static class functions {
         public static Function3<String, String, String, String> replaceAll = new Function3<String, String, String, String>() {

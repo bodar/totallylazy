@@ -139,8 +139,8 @@ public class Exceptions {
         };
     }
 
-    public static <A, B> Mapper<A, B> orElse(final Function<? super A, ? extends B> callable, final B result) {
-        return new Mapper<A, B>() {
+    public static <A, B> Function<A, B> orElse(final Function<? super A, ? extends B> callable, final B result) {
+        return new Function<A, B>() {
             @Override
             public B call(A a) throws Exception {
                 try {

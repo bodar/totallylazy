@@ -14,8 +14,8 @@ public class Debug {
     public static void trace(Exception e) {if (debugging()) e.printStackTrace();}
 
     public static class functions {
-        public static <A,B> Mapper<A,B> trace(final Function<? super A,? extends B> callable) {
-            return new Mapper<A, B>() {
+        public static <A,B> Function<A,B> trace(final Function<? super A,? extends B> callable) {
+            return new Function<A, B>() {
                 @Override
                 public B call(A a) throws Exception {
                     try {

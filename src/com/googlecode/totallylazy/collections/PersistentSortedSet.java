@@ -91,6 +91,7 @@ public interface PersistentSortedSet<T> extends PersistentSet<T>, Sorted<T>, Ind
             return sortedSet(comparator, sequence(value1, value2, value3, value4, value5));
         }
 
+        @SafeVarargs
         public static <A> PersistentSortedSet<A> sortedSet(Comparator<A> comparator, final A head, final A... tail) {
             return sortedSet(comparator, sequence(tail).cons(head));
         }

@@ -266,15 +266,15 @@ public class Sequences {
         };
     }
 
-    public static <T, S> S fold(final Iterable<? extends T> iterable, S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S fold(final Iterable<? extends T> iterable, S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         return Iterators.fold(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> S foldLeft(final Iterable<? extends T> iterable, S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S foldLeft(final Iterable<? extends T> iterable, S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         return Iterators.foldLeft(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
+    public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final Function2<? super T, ? super S, ? extends S> callable) {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
     }
 
@@ -282,28 +282,28 @@ public class Sequences {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> Function2<Sequence<T>, Callable2<S, T, S>, S> reduce() {
-        return new Function2<Sequence<T>, Callable2<S, T, S>, S>() {
+    public static <T, S> Function2<Sequence<T>, Function2<S, T, S>, S> reduce() {
+        return new Function2<Sequence<T>, Function2<S, T, S>, S>() {
             @Override
-            public S call(Sequence<T> sequence, Callable2<S, T, S> callable) throws Exception {
+            public S call(Sequence<T> sequence, Function2<S, T, S> callable) throws Exception {
                 return sequence.reduce(callable);
             }
         };
     }
 
-    public static <T, S> Function<Sequence<T>, S> reduce(final Callable2<S, T, S> callable) {
+    public static <T, S> Function<Sequence<T>, S> reduce(final Function2<S, T, S> callable) {
         return Sequences.<T, S>reduce().flip().apply(callable);
     }
 
-    public static <T, S> S reduce(final Iterable<? extends T> iterable, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S reduce(final Iterable<? extends T> iterable, final Function2<? super S, ? super T, ? extends S> callable) {
         return Iterators.reduce(iterable.iterator(), callable);
     }
 
-    public static <T, S> S reduceLeft(final Iterable<? extends T> iterable, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S reduceLeft(final Iterable<? extends T> iterable, final Function2<? super S, ? super T, ? extends S> callable) {
         return Iterators.reduceLeft(iterable.iterator(), callable);
     }
 
-    public static <T, S> S reduceRight(final Iterable<? extends T> iterable, final Callable2<? super T, ? super S, ? extends S> callable) {
+    public static <T, S> S reduceRight(final Iterable<? extends T> iterable, final Function2<? super T, ? super S, ? extends S> callable) {
         return Iterators.reduceRight(iterable.iterator(), callable);
     }
 

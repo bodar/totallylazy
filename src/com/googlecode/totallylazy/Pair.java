@@ -102,14 +102,14 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return Pair.pair(pair.second(), c);
     }
 
-    public static <A, B, C> Pair<B, C> reduceLeftShift(final Pair<? extends A, ? extends B> pair, final Callable2<? super A, ? super B, ? extends C> callable) {
+    public static <A, B, C> Pair<B, C> reduceLeftShift(final Pair<? extends A, ? extends B> pair, final Function2<? super A, ? super B, ? extends C> callable) {
         return Pair.leftShift(pair, call(callable, pair.first(), pair.second()));
     }
 
-    public static <A, B, C> Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>> reduceLeftShift() {
-        return new Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>>() {
+    public static <A, B, C> Function2<Pair<A, B>, Function2<A, B, C>, Pair<B, C>> reduceLeftShift() {
+        return new Function2<Pair<A, B>, Function2<A, B, C>, Pair<B, C>>() {
             @Override
-            public Pair<B, C> call(Pair<A, B> pair, Callable2<A, B, C> callable) throws Exception {
+            public Pair<B, C> call(Pair<A, B> pair, Function2<A, B, C> callable) throws Exception {
                 return reduceLeftShift(pair, callable);
             }
         };
@@ -126,7 +126,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         };
     }
 
-    public static <A, B, C> Function<Pair<A, B>, Pair<B, C>> reduceLeftShift(Callable2<A, B, C> callable) {
+    public static <A, B, C> Function<Pair<A, B>, Pair<B, C>> reduceLeftShift(Function2<A, B, C> callable) {
         return Pair.<A, B, C>reduceLeftShift().flip().apply(callable);
     }
 
@@ -230,8 +230,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
             };
         }
 
-        public static Mapper<Pair<?,?>, Sequence<Object>> values() {
-            return new Mapper<Pair<?,?>, Sequence<Object>>() {
+        public static Function<Pair<?,?>, Sequence<Object>> values() {
+            return new Function<Pair<?,?>, Sequence<Object>>() {
                 @Override
                 public Sequence<Object> call(Pair<?,?> pair) throws Exception {
                     return pair.values();
@@ -239,8 +239,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
             };
         }
 
-        public static Mapper<Pair<?,?>, String> toString(final String separator) {
-            return new Mapper<Pair<?,?>, String>() {
+        public static Function<Pair<?,?>, String> toString(final String separator) {
+            return new Function<Pair<?,?>, String>() {
                 @Override
                 public String call(Pair<?,?> pair) throws Exception {
                     return pair.toString(separator);
@@ -248,8 +248,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
             };
         }
 
-        public static Mapper<Pair<?,?>, String> toString(final String start, final String separator, final String end) {
-            return new Mapper<Pair<?,?>, String>() {
+        public static Function<Pair<?,?>, String> toString(final String start, final String separator, final String end) {
+            return new Function<Pair<?,?>, String>() {
                 @Override
                 public String call(Pair<?,?> pair) throws Exception {
                     return pair.toString(start, separator, end);

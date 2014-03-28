@@ -1,14 +1,13 @@
 package com.googlecode.totallylazy;
 
-public interface Binary<T> extends Callable2<T, T, T> {
-    class constructors {
-        public static <T> BinaryFunction<T> binary(final Callable2<T,T,T> callable) {
-            return new BinaryFunction<T>() {
-                @Override
-                public T call(T t, T t2) throws Exception {
-                    return callable.call(t, t2);
-                }
-            };
-        }
+public interface Binary<T> extends Function2<T, T, T> {
+    @Override
+    default Unary<T> apply(T t) {
+        return Function2.super.apply(t)::call;
+    }
+
+    @Override
+    default Binary<T> flip() {
+        return Function2.super.flip()::call;
     }
 }

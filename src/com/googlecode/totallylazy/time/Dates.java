@@ -213,12 +213,12 @@ public class Dates {
         return calendar.getTime();
     }
 
-    public static Maximum.Function<Date> maximum() {
-        return Maximum.constructors.maximum(Dates.MIN_VALUE);
+    public static Maximum<Date> maximum() {
+        return Maximum.maximum(Dates.MIN_VALUE);
     }
 
-    public static Minimum.Function<Date> minimum() {
-        return Minimum.constructors.minimum(Dates.MAX_VALUE);
+    public static Minimum<Date> minimum() {
+        return Minimum.minimum(Dates.MAX_VALUE);
     }
 
     public static Date date(Date date) {

@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Iterators;
-import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.multi;
 import com.googlecode.totallylazy.time.Dates;
@@ -72,7 +72,7 @@ public class JsonWriter {
     }
 
     private static <A extends Appendable> A iterate(final Iterator<?> iterator, final A appendable, String start, String separator, String end) {
-        return Iterators.appendTo(Iterators.map(iterator, new Mapper<Object, String>() {
+        return Iterators.appendTo(Iterators.map(iterator, new Function<Object, String>() {
             @Override
             public String call(Object o) throws Exception {
                 write(o, appendable);

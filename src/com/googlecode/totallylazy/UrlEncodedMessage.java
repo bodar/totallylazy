@@ -35,7 +35,7 @@ public class UrlEncodedMessage {
     }
 
     public static String toString(Iterable<? extends Pair<String, String>> pairs) {
-        return sequence(pairs).map(new Mapper<Pair<String, String>, String>() {
+        return sequence(pairs).map(new Function<Pair<String, String>, String>() {
             @Override
             public String call(Pair<String, String> pair) throws Exception {
                 if(pair.second() == null) return encode(pair.first());

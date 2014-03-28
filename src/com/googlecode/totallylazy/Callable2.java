@@ -1,5 +1,5 @@
 package com.googlecode.totallylazy;
 
-public interface Callable2<A, B, C> {
-     C call(A a, B b) throws Exception;
-}
+/** @deprecated Replaced by {@link com.googlecode.totallylazy.Function2} */
+@Deprecated
+public interface Callable2<A, B, C> extends Function2<A, B, C> {}

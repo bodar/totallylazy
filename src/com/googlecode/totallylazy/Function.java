@@ -44,7 +44,7 @@ public interface Function<A, B> extends Functor<B>, java.util.function.Function<
         return either();
     }
 
-    default Mapper<A, B> orElse(final B result) {
+    default Function<A, B> orElse(final B result) {
         return Exceptions.orElse(this, result);
     }
 

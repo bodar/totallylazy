@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.Fields;
-import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Unchecked;
 
 import java.lang.reflect.Field;
@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class FieldInvocation<A, B> extends Mapper<A, B> implements Invocation<A, B> {
+public class FieldInvocation<A, B> implements Function<A, B>, Invocation<A, B> {
     private final Field field;
 
     public FieldInvocation(Field field) {

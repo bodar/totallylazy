@@ -31,7 +31,7 @@ public class CallablesTest {
     @Test
     public void canUnCurryAdd() throws Exception {
         Function<Number, Function<Number, Number>> curried = add();
-        Callable2<Number, Number, Number> unCurriedAdd = Functions.uncurry2(curried);
+        Function2<Number, Number, Number> unCurriedAdd = Functions.uncurry2(curried);
         assertThat(unCurriedAdd.call(1, 2), is(3));
     }
 
