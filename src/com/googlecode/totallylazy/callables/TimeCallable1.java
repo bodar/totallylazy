@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Function1;
 
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
 
-public final class TimeCallable1<A,B> extends Function1<A, B> {
+public final class TimeCallable1<A,B> implements Function1<A, B> {
     private final Callable1<? super A, ? extends B> callable;
     private final Callable1<? super Number, ?> reporter;
 

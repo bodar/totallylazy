@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.callables;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function1;
 
-public final class SleepyCallable1<T,R> extends Function1<T, R> {
+public final class SleepyCallable1<T,R> implements Function1<T, R> {
     private final Callable1<? super T, ? extends R> callable;
     private final int millis;
 

@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
 
-public class Rule<A, B> extends Function1<A, B> implements Predicate<A> {
+public class Rule<A, B> implements Function1<A, B>, Predicate<A> {
     private final Predicate<? super A> predicate;
     private final Callable1<? super A, ? extends B> callable;
 
