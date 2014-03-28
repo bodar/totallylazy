@@ -18,9 +18,9 @@ public class EveryItemValidatorTest {
     @Test
     public void appliesValidationToEachItemAndMergesTheResult() {
         Map<String, String> values = map(
-                pair("one", "not valid"),
-                pair("two", "valid"),
-                pair("three", "not valid")
+                "one", "not valid",
+                "two", "valid",
+                "three", "not valid"
                 );
 
         // EveryItemValidator is called inside Validators.forAll().

@@ -52,7 +52,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
 
     public static <T> Computation<T> memorise(final Iterable<? extends T> iterable) {
         final Callable<Iterator<T>> iterator = lazyIterator(iterable);
-        return computation1(lazyHead(iterator), generate(lazyTail(iterator)));
+        return Computation.<T>computation1(lazyHead(iterator), generate(lazyTail(iterator)));
     }
 
     public static <T> Computation<T> memoize(final Iterator<? extends T> values) {
@@ -61,7 +61,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     
     public static <T> Computation<T> memorise(final Iterator<? extends T> values) {
         final Function<Iterator<T>> iterator = returns(Unchecked.<Iterator<T>>cast(values));
-        return computation1(lazyHead(iterator), generate(lazyTail(iterator)));
+        return Computation.<T>computation1(lazyHead(iterator), generate(lazyTail(iterator)));
     }
 
     private static <T> UnaryFunction<T> lazyTail(final Callable<? extends Iterator<? extends T>> iterator) {

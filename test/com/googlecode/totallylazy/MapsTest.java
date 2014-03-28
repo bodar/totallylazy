@@ -30,41 +30,41 @@ import static org.hamcrest.Matchers.hasEntry;
 public class MapsTest {
     @Test
     public void supportsGettingAValueAsAnOption() throws Exception {
-        assertThat(get(map(pair("Dan", 2)), "Dan"), is(some(2)));
-        assertThat(get(map(pair("Dan", 2)), "Matt"), is(none(Integer.class)));
+        assertThat(get(map("Dan", 2), "Dan"), is(some(2)));
+        assertThat(get(map("Dan", 2), "Matt"), is(none(Integer.class)));
     }
 
     @Test
     public void supportsFindingAValueAsAnOption() throws Exception {
-        assertThat(find(map(pair("Dan", 2)), contains("a")), is(some(2)));
-        assertThat(find(map(pair("Dan", 2)), contains("b")), is(none(Integer.class)));
+        assertThat(find(map("Dan", 2), contains("a")), is(some(2)));
+        assertThat(find(map("Dan", 2), contains("b")), is(none(Integer.class)));
     }
 
     @Test
     public void supportsFilteringByKey() throws Exception {
-        assertThat(filterKeys(map(pair("Dan", 2)), contains("a")), is(map(pair("Dan", 2))));
-        assertThat(filterKeys(map(pair("Dan", 2)), contains("b")), is(Maps.<String, Integer>map()));
+        assertThat(filterKeys(map("Dan", 2), contains("a")), is(map("Dan", 2)));
+        assertThat(filterKeys(map("Dan", 2), contains("b")), is(Maps.<String, Integer>map()));
     }
 
     @Test
     public void supportsFilteringByValue() throws Exception {
-        assertThat(filterValues(map(pair("Dan", 2)), Predicates.is(2)), is(map(pair("Dan", 2))));
-        assertThat(filterValues(map(pair("Dan", 2)), Predicates.is(3)), is(Maps.<String, Integer>map()));
+        assertThat(filterValues(map("Dan", 2), Predicates.is(2)), is(map("Dan", 2)));
+        assertThat(filterValues(map("Dan", 2), Predicates.is(3)), is(Maps.<String, Integer>map()));
     }
 
     @Test
     public void supportsMappingKeys() throws Exception {
-        assertThat(mapKeys(map(pair("Dan", 2)), toLowerCase()), is(map(pair("dan", 2))));
+        assertThat(mapKeys(map("Dan", 2), toLowerCase()), is(map("dan", 2)));
     }
 
     @Test
     public void supportsMappingValues() throws Exception {
-        assertThat(mapValues(map(pair("Dan", 2)), add(2)), is(map(pair("Dan", (Number)4))));
+        assertThat(mapValues(map("Dan", 2), add(2)), is(map("Dan", (Number)4)));
     }
 
     @Test
     public void maintainsMapEntriesOrder() throws Exception {
-        Map<String, String> map = map(Pair.pair("name", "Dan"), Pair.pair("tel", "123432"));
+        Map<String, String> map = map("name", "Dan", "tel", "123432");
         assertThat(map.keySet().iterator().next(), is("name"));
     }
 

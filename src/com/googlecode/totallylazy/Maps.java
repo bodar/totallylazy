@@ -1,9 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.comparators.Comparators;
-
-import java.util.AbstractMap;
-import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -43,27 +39,27 @@ public class Maps {
     }
 
     public static <K, V> Map<K, V> map(K key, V value) {
-        return map(pair(key, value));
+        return mapPairs(pair(key, value));
     }
 
     public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2) {
-        return map(pair(key1, value1), pair(key2, value2));
+        return mapPairs(pair(key1, value1), pair(key2, value2));
     }
 
     public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3) {
-        return map(pair(key1, value1), pair(key2, value2), pair(key3, value3));
+        return mapPairs(pair(key1, value1), pair(key2, value2), pair(key3, value3));
     }
 
     public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
-        return map(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4));
+        return mapPairs(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4));
     }
 
     public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5) {
-        return map(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5));
+        return mapPairs(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5));
     }
 
     @SafeVarargs
-    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V>... entries) {
+    private static <K, V> Map<K, V> mapPairs(final Pair<? extends K, ? extends V>... entries) {
         return map(sequence(entries));
     }
 
