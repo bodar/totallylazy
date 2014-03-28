@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.Memory;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class LazyCallable1<T, R> extends Function1<T, R> implements Memory {
+public final class LazyCallable1<T, R> implements Function1<T, R>, Memory {
     private final Callable1<? super T, ? extends R> callable;
     private final Map<T, R> state = new HashMap<T, R>();
     private final Object lock = new Object();

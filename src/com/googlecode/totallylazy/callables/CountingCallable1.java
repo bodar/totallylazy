@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.Function1;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class CountingCallable1<T,R> extends Function1<T,R> {
+public final class CountingCallable1<T,R> implements Function1<T,R> {
     private final Map<T, Integer> count = new HashMap<T, Integer>();
     private final Callable1<? super T, ? extends R> callable;
 
