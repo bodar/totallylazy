@@ -365,8 +365,8 @@ public class Xml {
     }
 
     public static class functions {
-        public static UnaryFunction<Element> modifyTextContent(final Function<? super String, ? extends CharSequence> function) {
-            return new UnaryFunction<Element>() {
+        public static Unary<Element> modifyTextContent(final Function<? super String, ? extends CharSequence> function) {
+            return new Unary<Element>() {
                 @Override
                 public Element call(Element element) throws Exception {
                     element.setTextContent(function.call(element.getTextContent()).toString());
@@ -376,7 +376,7 @@ public class Xml {
         }
 
         public static Function<Element, Element> setAttribute(final String name, final String value) {
-            return new UnaryFunction<Element>() {
+            return new Unary<Element>() {
                 public Element call(Element element) throws Exception {
                     element.setAttribute(name, value);
                     return element;

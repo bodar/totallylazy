@@ -28,7 +28,8 @@ import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.UnaryFunction;
+import com.googlecode.totallylazy.Unary;
+import com.googlecode.totallylazy.Unary;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
@@ -118,21 +119,21 @@ public class Numbers {
         return Math.sqrt(number.doubleValue());
     }
 
-    public static UnaryFunction<Number> squareRoot = new UnaryFunction<Number>() {
+    public static Unary<Number> squareRoot = new Unary<Number>() {
         @Override
         public Number call(Number number) throws Exception {
             return squareRoot(number);
         }
     };
 
-    public static UnaryFunction<Number> squared = new UnaryFunction<Number>() {
+    public static Unary<Number> squared = new Unary<Number>() {
         @Override
         public Number call(Number number) throws Exception {
             return squared(number);
         }
     };
 
-    public static UnaryFunction<Number> squared() {
+    public static Unary<Number> squared() {
         return squared;
     }
 
@@ -186,8 +187,8 @@ public class Numbers {
         return iterate(nextProbablePrime(), BigInteger.valueOf(2)).map(reduce());
     }
 
-    private static UnaryFunction<BigInteger> nextProbablePrime() {
-        return new UnaryFunction<BigInteger>() {
+    private static Unary<BigInteger> nextProbablePrime() {
+        return new Unary<BigInteger>() {
             @Override
             public BigInteger call(BigInteger bigInteger) throws Exception {
                 return bigInteger.nextProbablePrime();
@@ -195,14 +196,14 @@ public class Numbers {
         };
     }
 
-    public static UnaryFunction<Number> nextPrime = new UnaryFunction<Number>() {
+    public static Unary<Number> nextPrime = new Unary<Number>() {
         @Override
         public Number call(Number number) throws Exception {
             return nextPrime(number);
         }
     };
 
-    public static UnaryFunction<Number> nextPrime() {
+    public static Unary<Number> nextPrime() {
         return nextPrime;
     }
 
@@ -256,13 +257,13 @@ public class Numbers {
         return operatorsFor(value).negate(value);
     }
 
-    public static UnaryFunction<Number> increment = new UnaryFunction<Number>() {
+    public static Unary<Number> increment = new Unary<Number>() {
         public Number call(Number number) throws Exception {
             return Numbers.increment(number);
         }
     };
 
-    public static UnaryFunction<Number> increment() {
+    public static Unary<Number> increment() {
         return increment;
     }
 
@@ -270,13 +271,13 @@ public class Numbers {
         return operatorsFor(value).increment(value);
     }
 
-    public static UnaryFunction<Number> decrement = new UnaryFunction<Number>() {
+    public static Unary<Number> decrement = new Unary<Number>() {
         public Number call(Number number) throws Exception {
             return Numbers.decrement(number);
         }
     };
 
-    public static UnaryFunction<Number> decrement() {
+    public static Unary<Number> decrement() {
         return decrement;
     }
 
@@ -402,7 +403,7 @@ public class Numbers {
         return add;
     }
 
-    public static UnaryFunction<Number> add(final Number amount) {
+    public static Unary<Number> add(final Number amount) {
         return add.apply(amount);
     }
 
@@ -420,7 +421,7 @@ public class Numbers {
         return subtract;
     }
 
-    public static UnaryFunction<Number> subtract(final Number amount) {
+    public static Unary<Number> subtract(final Number amount) {
         return subtract.flip().apply(amount);
     }
 
@@ -440,7 +441,7 @@ public class Numbers {
         return multiply;
     }
 
-    public static UnaryFunction<Number> multiply(final Number multiplicand) {
+    public static Unary<Number> multiply(final Number multiplicand) {
         return multiply.apply(multiplicand);
     }
 
@@ -453,7 +454,7 @@ public class Numbers {
         return operatorsFor(x, y).divide(x, y);
     }
 
-    public static UnaryFunction<Number> divide(final Number divisor) {
+    public static Unary<Number> divide(final Number divisor) {
         return divide.flip().apply(divisor);
     }
 
@@ -472,7 +473,7 @@ public class Numbers {
         return reduce(operatorsFor(x, y).quotient(x, y));
     }
 
-    public static UnaryFunction<Number> mod(final Number divisor) {
+    public static Unary<Number> mod(final Number divisor) {
         return mod().apply(divisor);
     }
 
@@ -493,7 +494,7 @@ public class Numbers {
         return mod;
     }
 
-    public static UnaryFunction<Number> remainder(final Number dividend) {
+    public static Unary<Number> remainder(final Number dividend) {
         return remainder().apply(dividend);
     }
 
@@ -520,8 +521,8 @@ public class Numbers {
         return value;
     }
 
-    public static UnaryFunction<Number> reduce() {
-        return new UnaryFunction<Number>() {
+    public static Unary<Number> reduce() {
+        return new Unary<Number>() {
             @Override
             public Number call(Number number) throws Exception {
                 return reduce(number);

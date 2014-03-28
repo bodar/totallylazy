@@ -464,11 +464,11 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
     }
 
     public static class functions {
-        public static <T> UnaryFunction<Sequence<T>> tail() {
+        public static <T> Unary<Sequence<T>> tail() {
             return Segment.functions.<T, Sequence<T>>tail();
         }
 
-        public static <T> UnaryFunction<Sequence<T>> tail(Class<T> aClass) {
+        public static <T> Unary<Sequence<T>> tail(Class<T> aClass) {
             return tail();
         }
 
