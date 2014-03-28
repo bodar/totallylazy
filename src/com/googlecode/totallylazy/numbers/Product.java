@@ -8,7 +8,7 @@ public class Product extends CombinerFunction<Number> {
     }
 
     @Override
-    public Number identity() {
+    public Number identityElement() {
         return 1;
     }
 }

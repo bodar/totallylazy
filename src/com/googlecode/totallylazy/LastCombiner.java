@@ -12,7 +12,7 @@ public class LastCombiner<T> extends CombinerFunction<T> {
     }
 
     @Override
-    public T identity() {
+    public T identityElement() {
         return null;
     }
 }

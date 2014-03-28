@@ -193,7 +193,7 @@ public class ValidationResult {
                 }
 
                 @Override
-                public ValidationResult identity() {
+                public ValidationResult identityElement() {
                     return pass();
                 }
             };

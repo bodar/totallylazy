@@ -28,7 +28,7 @@ public interface Validator<T> extends Predicate<T> {
                 }
 
                 @Override
-                public ValidationResult identity() {
+                public ValidationResult identityElement() {
                     return pass();
                 }
 

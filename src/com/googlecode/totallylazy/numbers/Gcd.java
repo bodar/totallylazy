@@ -9,7 +9,7 @@ public class Gcd extends CombinerFunction<Number> {
     }
 
     @Override
-    public Number identity() {
+    public Number identityElement() {
         return 0;
     }
 }

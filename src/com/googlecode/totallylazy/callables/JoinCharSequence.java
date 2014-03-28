@@ -18,7 +18,7 @@ public class JoinCharSequence extends CombinerFunction<CharSequence> {
     }
 
     @Override
-    public CharSequence identity() {
+    public CharSequence identityElement() {
         return Strings.EMPTY;
     }
 

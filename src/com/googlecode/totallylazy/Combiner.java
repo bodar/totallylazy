@@ -10,8 +10,8 @@ public interface Combiner<T> extends ReducerCombiner<T, T>, Associative<T> {
                 }
 
                 @Override
-                public Pair<A, B> identity() {
-                    return Pair.pair(aCombiner.identity(), bCombiner.identity());
+                public Pair<A, B> identityElement() {
+                    return Pair.pair(aCombiner.identityElement(), bCombiner.identityElement());
                 }
             };
         }

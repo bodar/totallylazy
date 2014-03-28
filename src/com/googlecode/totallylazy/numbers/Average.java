@@ -8,7 +8,7 @@ public class Average extends CombinerFunction<Number> {
     }
 
     @Override
-    public Number identity() {
+    public Number identityElement() {
         return weighted(0, 0);
     }
 
