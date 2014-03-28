@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
+import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
@@ -23,7 +24,7 @@ public class PredicateValidator<T> extends LogicalValidator<T> {
     public ValidationResult validate(T instance) {
         return predicate.matches(instance)
                 ? pass()
-                : failure(call(message, instance));
+                : failure(message.apply(instance));
     }
 
     public static class constructors {
