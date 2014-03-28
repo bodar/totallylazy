@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Pair.pair;
 
-public interface Function<A, B> extends Functor<B> {
+public interface Function<A, B> extends Functor<B>, java.util.function.Function<A,B> {
     B call(A a) throws Exception;
 
     default B apply(final A a) {
