@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;
@@ -140,7 +140,7 @@ public class MapPerformanceTest {
 
     private Map<Integer, Integer> createMutable(Sequence<Integer> range, Map<Integer, Integer> emptyMap, String name) {
         System.out.print(name + ":\t");
-        return range.fold(emptyMap, new Callable2<Map<Integer, Integer>, Integer, Map<Integer, Integer>>() {
+        return range.fold(emptyMap, new Function2<Map<Integer, Integer>, Integer, Map<Integer, Integer>>() {
             @Override
             public Map<Integer, Integer> call(Map<Integer, Integer> map, Integer integer) throws Exception {
                 map.put(integer, integer);

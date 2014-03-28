@@ -25,8 +25,8 @@ public class Lists {
     }
 
     public static class functions {
-        public static <T> ReducerCombinerFunction<T, List<T>> add() {
-            return new ReducerCombinerFunction<T, List<T>>() {
+        public static <T> ReducerCombiner<T, List<T>> add() {
+            return new ReducerCombiner<T, List<T>>() {
                 @Override
                 public List<T> combine(List<T> a, List<T> b) throws Exception {
                     List<T> result = identityElement();

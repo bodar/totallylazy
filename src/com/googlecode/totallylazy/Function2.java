@@ -1,9 +1,8 @@
 package com.googlecode.totallylazy;
 
-
-public interface Function2<A, B, C> extends Function<A, Function<B, C>>, Callable2<A, B, C> {
-    @Override
-    public abstract C call(A a, B b) throws Exception;
+@FunctionalInterface
+public interface Function2<A, B, C> extends Function<A, Function<B, C>> {
+    C call(A a, B b) throws Exception;
 
     @Override
     default Function<B, C> call(final A a) throws Exception {
@@ -30,7 +29,7 @@ public interface Function2<A, B, C> extends Function<A, Function<B, C>>, Callabl
         return Callables.pair(this);
     }
 
-    default <D, E> Function3<A, B, D, E> then(final Callable2<? super C, ? super D, ? extends E> callable) {
+    default <D, E> Function3<A, B, D, E> then(final Function2<? super C, ? super D, ? extends E> callable) {
         return new Function3<A, B, D, E>() {
             @Override
             public E call(A a, B b, D d) throws Exception {

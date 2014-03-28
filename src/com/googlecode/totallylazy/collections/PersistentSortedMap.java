@@ -120,6 +120,7 @@ public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<P
             return sortedMap(comparator, sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
         }
 
+        @SuppressWarnings("unchecked")
         public static <K, V> PersistentSortedMap<K, V> sortedMap(Comparator<K> comparator, final Pair<K, V> head, final Pair<K, V>... tail) {
             return sortedMap(comparator, sequence(tail).cons(head));
         }

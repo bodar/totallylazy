@@ -277,8 +277,8 @@ public class Uri implements Comparable<Uri> {
             }
         };
 
-        public static Mapper<Uri, Uri> host(final String newHost) {
-            return new Mapper<Uri, Uri>() {
+        public static Function<Uri, Uri> host(final String newHost) {
+            return new Function<Uri, Uri>() {
                 @Override
                 public Uri call(Uri uri) throws Exception {
                     return uri.host(newHost);

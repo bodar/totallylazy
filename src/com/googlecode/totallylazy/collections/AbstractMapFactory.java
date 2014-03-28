@@ -44,6 +44,7 @@ public abstract class AbstractMapFactory<K, V, M extends PersistentMap<K, V>> im
         return map(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
     }
 
+    @SuppressWarnings("unchecked")
     public M map(final Pair<K, V> head, final Pair<K, V>... tail) {
         return map(sequence(tail).cons(head));
     }

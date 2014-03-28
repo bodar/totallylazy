@@ -62,7 +62,7 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public abstract Option<A> filter(Predicate<? super A> predicate);
 
-    public abstract <B> B fold(final B seed, final Callable2<? super B, ? super A, ? extends B> callable);
+    public abstract <B> B fold(final B seed, final Function2<? super B, ? super A, ? extends B> callable);
 
     public abstract Sequence<A> join(final Iterable<? extends A> iterable);
 

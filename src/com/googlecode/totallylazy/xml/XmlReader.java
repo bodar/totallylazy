@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.Xml;
@@ -85,7 +85,7 @@ public class XmlReader extends StatefulIterator<Node> {
     }
 
     public static class functions {
-        public static Mapper<QName, String> localPart = new Mapper<QName, String>() {
+        public static Function<QName, String> localPart = new Function<QName, String>() {
             @Override
             public String call(QName qName) throws Exception {
                 return qName.getLocalPart();

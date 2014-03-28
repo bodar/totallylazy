@@ -122,11 +122,11 @@ public class Iterators {
         return new InitIterator<T>(iterator);
     }
 
-    public static <T, S> S fold(final Iterator<? extends T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S fold(final Iterator<? extends T> iterator, final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         return foldLeft(iterator, seed, callable);
     }
 
-    public static <T, S> S foldLeft(final Iterator<? extends T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S foldLeft(final Iterator<? extends T> iterator, final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         S accumulator = seed;
         while (iterator.hasNext()) {
             accumulator = call(callable, accumulator, iterator.next());
@@ -134,7 +134,7 @@ public class Iterators {
         return accumulator;
     }
 
-    public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
+    public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Function2<? super T, ? super S, ? extends S> callable) {
         Iterator<T> reversed = reverse(iterator);
         S accumilator = seed;
         while (reversed.hasNext()) {
@@ -157,20 +157,20 @@ public class Iterators {
         }));
     }
 
-    public static <T, S> S reduce(final Iterator<? extends T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S reduce(final Iterator<? extends T> iterator, final Function2<? super S, ? super T, ? extends S> callable) {
         return reduceLeft(iterator, callable);
     }
 
-    public static <T, S> S reduceLeft(final Iterator<? extends T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S reduceLeft(final Iterator<? extends T> iterator, final Function2<? super S, ? super T, ? extends S> callable) {
         return foldLeft(iterator, seed(iterator, callable), callable);
     }
 
-    private static <T, S> S seed(Iterator<? extends T> iterator, Callable2<? super S, ? super T, ? extends S> callable) {
+    private static <T, S> S seed(Iterator<? extends T> iterator, Function2<? super S, ? super T, ? extends S> callable) {
         if (callable instanceof Identity) return Unchecked.<Identity<S>>cast(callable).identityElement();
         return Unchecked.<S>cast(iterator.next());
     }
 
-    public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Callable2<? super T, ? super S, ? extends S> callable) {
+    public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Function2<? super T, ? super S, ? extends S> callable) {
         return foldRight(iterator, Unchecked.<S>cast(iterator.next()), callable);
     }
 

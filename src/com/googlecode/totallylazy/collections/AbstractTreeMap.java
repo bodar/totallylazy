@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -138,7 +138,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
-    public <S> S fold(S seed, Callable2<? super S, ? super Pair<K, V>, ? extends S> callable) {
+    public <S> S fold(S seed, Function2<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return right.fold(left.fold(Functions.call(callable, seed, pair()), callable), callable);
     }
 

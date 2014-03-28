@@ -394,7 +394,7 @@ public class Xml {
         }
 
         public static Function<Element, String> attribute(final String attributeName) {
-            return new Mapper<Element, String>() {
+            return new Function<Element, String>() {
                 public String call(Element element) throws Exception {
                     return element.getAttribute(attributeName);
                 }
@@ -411,7 +411,7 @@ public class Xml {
         }
 
         public static Function<Node, String> selectContents(final String expression) {
-            return new Mapper<Node, String>() {
+            return new Function<Node, String>() {
                 @Override
                 public String call(Node node) throws Exception {
                     return Xml.selectContents(node, expression);
@@ -438,7 +438,7 @@ public class Xml {
         }
 
         public static Function<Element, String> textContent() {
-            return new Mapper<Element, String>() {
+            return new Function<Element, String>() {
                 @Override
                 public String call(Element element) throws Exception {
                     return element.getTextContent();

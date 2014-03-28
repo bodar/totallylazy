@@ -87,7 +87,7 @@ public class Some<T> extends Option<T> {
     }
 
     @Override
-    public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> S fold(S seed, Function2<? super S, ? super T, ? extends S> callable) {
         return Callers.call(callable, seed, get());
     }
 

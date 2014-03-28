@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.Combiner;
 
-public class And extends CombinerFunction<Boolean> {
+public class And implements Combiner<Boolean> {
     @Override
     public Boolean call(Boolean a, Boolean b) throws Exception {
         return a && b;

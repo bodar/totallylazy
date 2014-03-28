@@ -22,7 +22,7 @@ public class Functions {
         return callable::call;
     }
 
-    public static <A, B, C> Function2<A, B, C> function(final Callable2<? super A, ? super B, ? extends C> callable) {
+    public static <A, B, C> Function2<A, B, C> function(final Function2<? super A, ? super B, ? extends C> callable) {
         return callable::call;
     }
 
@@ -69,7 +69,7 @@ public class Functions {
         }
     }
 
-    public static <A, B, C> C call(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
+    public static <A, B, C> C call(final Function2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
         try {
             return callable.call(a, b);
         } catch (Exception e) {
@@ -101,7 +101,7 @@ public class Functions {
         }
     }
 
-    public static <A, B, C> Function<B, C> apply(final Callable2<? super A, ? super B, ? extends C> callable, final A value) {
+    public static <A, B, C> Function<B, C> apply(final Function2<? super A, ? super B, ? extends C> callable, final A value) {
         return new Function<B, C>() {
             @Override
             public C call(B b) throws Exception {
@@ -213,7 +213,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C> Function<Pair<A, B>, C> pair(final Callable2<? super A, ? super B, ? extends C> function) {
+    public static <A, B, C> Function<Pair<A, B>, C> pair(final Function2<? super A, ? super B, ? extends C> function) {
         return new Function<Pair<A, B>, C>() {
             @Override
             public C call(Pair<A, B> pair) throws Exception {
@@ -285,9 +285,9 @@ public class Functions {
         };
     }
 
-    public static CombinerFunction<Boolean> and = new And();
-    public static CombinerFunction<Boolean> or = new Or();
-    public static CombinerFunction<Boolean> xor = new Xor();
+    public static Combiner<Boolean> and = new And();
+    public static Combiner<Boolean> or = new Or();
+    public static Combiner<Boolean> xor = new Xor();
 
     public static Function<Pair<Boolean, Boolean>, Boolean> andPair() {
         return new Function<Pair<Boolean, Boolean>, Boolean>() {

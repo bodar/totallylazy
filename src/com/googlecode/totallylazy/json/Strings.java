@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Function;
 
 import static com.googlecode.totallylazy.Sequences.characters;
 import static java.lang.Integer.parseInt;
@@ -47,13 +47,13 @@ public class Strings {
     }
 
     public static class functions {
-        public static Mapper<Character, String> escape = new Mapper<Character, String>() {
+        public static Function<Character, String> escape = new Function<Character, String>() {
             public String call(Character character) throws Exception {
                 return Strings.escape(character);
             }
         };
 
-        public static Mapper<String, String> unescape = new Mapper<String, String>() {
+        public static Function<String, String> unescape = new Function<String, String>() {
             public String call(String escaped) throws Exception {
                 return Strings.unescape(escaped);
             }
