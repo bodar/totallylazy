@@ -30,53 +30,53 @@ public class Exceptions {
                 takeWhile(notNullValue());
     }
 
-    public static Function1<Throwable, Throwable> getCause() {
-        return new Function1<Throwable, Throwable>() {
+    public static Function<Throwable, Throwable> getCause() {
+        return new Function<Throwable, Throwable>() {
             public Throwable call(final Throwable throwable) throws Exception {
                 return throwable.getCause();
             }
         };
     }
 
-    public static final Function1<Exception,String> message = new Function1<Exception, String>() {
+    public static final Function<Exception,String> message = new Function<Exception, String>() {
         @Override
         public String call(Exception e) throws Exception {
             return e.getMessage();
         }
     };
 
-    public static Function1<Exception, String> message() {
+    public static Function<Exception, String> message() {
         return message;
     }
 
-    public static <T, S> Function1<T, Option<S>> ignoringException(final Function1<? super T, ? extends S> callable) {
+    public static <T, S> Function<T, Option<S>> ignoringException(final Function<? super T, ? extends S> callable) {
         return optional(callable);
     }
 
     @SafeVarargs
-    public static <T, S> Function1<T, Option<S>> handleException(final Function1<? super T, ? extends S> callable, final Class<? extends Exception>... exceptionClasses) {
+    public static <T, S> Function<T, Option<S>> handleException(final Function<? super T, ? extends S> callable, final Class<? extends Exception>... exceptionClasses) {
         return handleException(callable, sequence(exceptionClasses).map(asInstanceOf()));
     }
 
-    private static <T> Function1<Class<? extends T>, Predicate<? super T>> asInstanceOf() {
-        return new Function1<Class<? extends T>, Predicate<? super T>>() {
+    private static <T> Function<Class<? extends T>, Predicate<? super T>> asInstanceOf() {
+        return new Function<Class<? extends T>, Predicate<? super T>>() {
             public Predicate<? super T> call(Class<? extends T> aClass) throws Exception {
                 return instanceOf(aClass);
             }
         };
     }
 
-    public static <T, S> Function1<T, Option<S>> handleException(final Function1<? super T, ? extends S> callable, final Predicate<? super Exception> first) {
+    public static <T, S> Function<T, Option<S>> handleException(final Function<? super T, ? extends S> callable, final Predicate<? super Exception> first) {
         return handleException(callable, sequence(first));
     }
 
     @SafeVarargs
-    public static <T, S> Function1<T, Option<S>> handleException(final Function1<? super T, ? extends S> callable, final Predicate<? super Exception>... exceptionClasses) {
+    public static <T, S> Function<T, Option<S>> handleException(final Function<? super T, ? extends S> callable, final Predicate<? super Exception>... exceptionClasses) {
         return handleException(callable, sequence(exceptionClasses));
     }
 
-    public static <T, S> Function1<T, Option<S>> handleException(final Function1<? super T, ? extends S> callable, final Iterable<? extends Predicate<? super Exception>> predicates) {
-        return new Function1<T, Option<S>>() {
+    public static <T, S> Function<T, Option<S>> handleException(final Function<? super T, ? extends S> callable, final Iterable<? extends Predicate<? super Exception>> predicates) {
+        return new Function<T, Option<S>>() {
             public Option<S> call(T t) throws Exception {
                 try {
                     return Option.some(callable.call(t));
@@ -105,8 +105,8 @@ public class Exceptions {
         };
     }
 
-    public static <T, S> Function1<T, Either<S, Throwable>> captureException(final Function1<? super T, ? extends S> callable) {
-        return new Function1<T, Either<S, Throwable>>() {
+    public static <T, S> Function<T, Either<S, Throwable>> captureException(final Function<? super T, ? extends S> callable) {
+        return new Function<T, Either<S, Throwable>>() {
             public Either<S, Throwable> call(T input) throws Exception {
                 try {
                     return left(callable.call(input));
@@ -126,8 +126,8 @@ public class Exceptions {
         };
     }
 
-    public static <A, B> Function1<A, Either<Exception, B>> either(final Function1<? super A, ? extends B> callable) {
-        return new Function1<A, Either<Exception, B>>() {
+    public static <A, B> Function<A, Either<Exception, B>> either(final Function<? super A, ? extends B> callable) {
+        return new Function<A, Either<Exception, B>>() {
             @Override
             public Either<Exception, B> call(A a) throws Exception {
                 try {
@@ -139,7 +139,7 @@ public class Exceptions {
         };
     }
 
-    public static <A, B> Mapper<A, B> orElse(final Function1<? super A, ? extends B> callable, final B result) {
+    public static <A, B> Mapper<A, B> orElse(final Function<? super A, ? extends B> callable, final B result) {
         return new Mapper<A, B>() {
             @Override
             public B call(A a) throws Exception {
@@ -153,8 +153,8 @@ public class Exceptions {
     }
 
 
-    public static <T, S> Function1<T, Option<S>> optional(final Function1<? super T, ? extends S> callable) {
-        return new Function1<T, Option<S>>() {
+    public static <T, S> Function<T, Option<S>> optional(final Function<? super T, ? extends S> callable) {
+        return new Function<T, Option<S>>() {
             public Option<S> call(T t) throws Exception {
                 try {
                     return Option.option(callable.call(t));

@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy;
 
 
-public abstract class Function2<A, B, C> implements Function1<A, Function1<B, C>>, Callable2<A, B, C> {
+public abstract class Function2<A, B, C> implements Function<A, Function<B, C>>, Callable2<A, B, C> {
     @Override
-    public Function1<B, C> call(final A a) throws Exception {
+    public Function<B, C> call(final A a) throws Exception {
         return Functions.apply(this, a);
     }
 
@@ -11,7 +11,7 @@ public abstract class Function2<A, B, C> implements Function1<A, Function1<B, C>
         return Functions.call(this, a, b);
     }
 
-    public Function1<A, C> applySecond(final B b) {
+    public Function<A, C> applySecond(final B b) {
         return flip().apply(b);
     }
 
@@ -23,7 +23,7 @@ public abstract class Function2<A, B, C> implements Function1<A, Function1<B, C>
         return Callables.flip(this);
     }
 
-    public Function1<Pair<A, B>, C> pair() {
+    public Function<Pair<A, B>, C> pair() {
         return Callables.pair(this);
     }
 

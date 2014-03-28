@@ -32,8 +32,8 @@ public class URLs {
     }
 
 
-    public static Function1<File, URL> toURL() {
-        return new Function1<File, URL>() {
+    public static Function<File, URL> toURL() {
+        return new Function<File, URL>() {
             public URL call(File file) throws Exception {
                 return file.toURI().toURL();
             }

@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Functor;
@@ -13,9 +12,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.comparators.Comparators;
 
-import java.util.Comparator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentMap;
@@ -49,7 +46,7 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
     PersistentMap<K, V> tail() throws NoSuchElementException;
 
     @Override
-    <NewV> PersistentMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer);
+    <NewV> PersistentMap<K, NewV> map(Function<? super V, ? extends NewV> transformer);
 
     PersistentList<Pair<K, V>> toPersistentList();
 

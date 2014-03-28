@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Pair;
@@ -14,9 +14,9 @@ import static com.googlecode.totallylazy.validations.ValidationResult.functions.
 
 public class SetFailureMessage<T> extends LogicalValidator<T> {
     private final Validator<? super T> decorated;
-    private final Function1<? super T, String> message;
+    private final Function<? super T, String> message;
 
-    public SetFailureMessage(Validator<? super T> decorated, Function1<? super T, String> message) {
+    public SetFailureMessage(Validator<? super T> decorated, Function<? super T, String> message) {
         this.decorated = decorated;
         this.message = message;
     }
@@ -29,7 +29,7 @@ public class SetFailureMessage<T> extends LogicalValidator<T> {
                 fold(pass(), add());
     }
 
-    private static <T> UnaryFunction<Pair<String, Sequence<String>>> overrideMessages(final T instance, final Function1<T, String> messageBuilder) {
+    private static <T> UnaryFunction<Pair<String, Sequence<String>>> overrideMessages(final T instance, final Function<T, String> messageBuilder) {
         return new UnaryFunction<Pair<String, Sequence<String>>>() {
             @Override
             public Pair<String, Sequence<String>> call(Pair<String, Sequence<String>> keyAndMessages) throws Exception {
@@ -44,7 +44,7 @@ public class SetFailureMessage<T> extends LogicalValidator<T> {
             return setFailureMessage(decorated, Functions.<T, String>returns1(message));
         }
 
-        public static <T> SetFailureMessage<T> setFailureMessage(Validator<? super T> decorated, Function1<? super T, String> message){
+        public static <T> SetFailureMessage<T> setFailureMessage(Validator<? super T> decorated, Function<? super T, String> message){
             return new SetFailureMessage<T>(decorated,message);
         }
     }

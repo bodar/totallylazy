@@ -18,11 +18,9 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.BinaryFunction;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Computation;
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -57,7 +55,7 @@ public class Numbers {
     public static final Number POSITIVE_INFINITY = Double.POSITIVE_INFINITY;
     public static final Number NEGATIVE_INFINITY = Double.NEGATIVE_INFINITY;
     public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
-    public static Function1<Number, Integer> intValue = new Function1<Number, Integer>() {
+    public static Function<Number, Integer> intValue = new Function<Number, Integer>() {
         @Override
         public Integer call(Number number) throws Exception {
             return number.intValue();
@@ -86,7 +84,7 @@ public class Numbers {
         }
     }
 
-    public static Function1<Object, Number> valueOf = new Function1<Object, Number>() {
+    public static Function<Object, Number> valueOf = new Function<Object, Number>() {
         @Override
         public Number call(Object value) throws Exception {
             return Numbers.valueOf(value.toString()).get();
@@ -378,8 +376,8 @@ public class Numbers {
         };
     }
 
-    public static Function1<Iterable<Number>, Number> sumIterable() {
-        return new Function1<Iterable<Number>, Number>() {
+    public static Function<Iterable<Number>, Number> sumIterable() {
+        return new Function<Iterable<Number>, Number>() {
             public Number call(Iterable<Number> numbers) throws Exception {
                 return Sequences.reduceLeft(numbers, sum());
             }
@@ -531,8 +529,8 @@ public class Numbers {
         };
     }
 
-    public static Function1<Number, Character> toCharacter() {
-        return new Function1<Number, Character>() {
+    public static Function<Number, Character> toCharacter() {
+        return new Function<Number, Character>() {
             public Character call(Number number) throws Exception {
                 return (char) number.shortValue();
             }

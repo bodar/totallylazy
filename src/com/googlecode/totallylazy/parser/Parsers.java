@@ -1,15 +1,12 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Characters;
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Lazy;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Triple;
 import com.googlecode.totallylazy.regex.Regex;
 
@@ -19,7 +16,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Parsers {
-    public static Function1<Iterable<?>, String> toString = new Function1<Iterable<?>, String>() {
+    public static Function<Iterable<?>, String> toString = new Function<Iterable<?>, String>() {
         @Override
         public String call(Iterable<?> iterable) throws Exception {
             return sequence(iterable).toString("");
@@ -97,7 +94,7 @@ public class Parsers {
         return PatternParser.pattern(value);
     }
 
-    public static <A, B> Parser<B> map(Parse<? extends A> source, Function1<? super A, ? extends B> callable) {
+    public static <A, B> Parser<B> map(Parse<? extends A> source, Function<? super A, ? extends B> callable) {
         return MappingParser.map(source, callable);
     }
 

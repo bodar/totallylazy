@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-public abstract class Block<T> implements Function1<T, Void> {
+public abstract class Block<T> implements Function<T, Void> {
     @Override
     public Void call(T t) throws Exception {
         execute(t);

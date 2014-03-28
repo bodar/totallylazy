@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Block;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Runnables;
@@ -13,9 +13,9 @@ public final class TimeCallable<T> implements Returns<T> {
     private static final String FORMAT = "Elapsed time: %s msecs";
     public static final Block<Number> DEFAULT_REPORTER = Runnables.printLine(FORMAT);
     private final Callable<? extends T> callable;
-    private final Function1<? super Number, ?> reporter;
+    private final Function<? super Number, ?> reporter;
 
-    private TimeCallable(Callable<? extends T> callable, Function1<? super Number, ?> reporter) {
+    private TimeCallable(Callable<? extends T> callable, Function<? super Number, ?> reporter) {
         this.callable = callable;
         this.reporter = reporter;
     }
@@ -39,15 +39,15 @@ public final class TimeCallable<T> implements Returns<T> {
         return time(callable, DEFAULT_REPORTER);
     }
 
-    public static <T> TimeCallable<T> time(Callable<? extends T> callable, Function1<? super Number, ?> reporter){
+    public static <T> TimeCallable<T> time(Callable<? extends T> callable, Function<? super Number, ?> reporter){
         return new TimeCallable<T>(callable, reporter);
     }
 
-    public static <T,R> TimeCallable<R> time(Function1<? super T,? extends R> callable, T value){
+    public static <T,R> TimeCallable<R> time(Function<? super T,? extends R> callable, T value){
         return time(callable, value, DEFAULT_REPORTER);
     }
 
-    public static <T,R> TimeCallable<R> time(Function1<? super T,? extends R> callable, T value, Function1<? super Number, ?> reporter){
+    public static <T,R> TimeCallable<R> time(Function<? super T,? extends R> callable, T value, Function<? super Number, ?> reporter){
         return new TimeCallable<R>(Callables.deferApply(callable, value), reporter);
     }
 
@@ -55,7 +55,7 @@ public final class TimeCallable<T> implements Returns<T> {
         return time(Callables.<T>realise(), sequence, DEFAULT_REPORTER);
     }
 
-    public static <T> TimeCallable<Sequence<T>> time(Sequence<T> sequence, Function1<? super Number, ?> reporter){
+    public static <T> TimeCallable<Sequence<T>> time(Sequence<T> sequence, Function<? super Number, ?> reporter){
         return time(Callables.<T>realise(), sequence, reporter);
     }
 }

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import net.sf.cglib.proxy.InvocationHandler;
 
 import java.lang.reflect.Method;
@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import static com.googlecode.totallylazy.proxy.Generics.getGenericSuperclassType;
 import static com.googlecode.totallylazy.proxy.Proxy.createProxy;
 
-public abstract class CallOn<T, S> implements Function1<T,S>, InvocationHandler {
+public abstract class CallOn<T, S> implements Function<T,S>, InvocationHandler {
     private MethodInvocation<T,S> invocation;
     protected final T call, instance;
 

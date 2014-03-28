@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.asFunction1;
+import static com.googlecode.totallylazy.Callables.asFunction;
 import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Exceptions.captureException;
@@ -18,7 +18,7 @@ import static org.hamcrest.core.Is.is;
 public class ExceptionsTest {
     @Test
     public void supportsReturningNoneInsteadOfThrowingAnException() throws Exception {
-        Function1<Object, Object> throwingFunction = asFunction1(callThrows(new RuntimeException()));
+        Function<Object, Object> throwingFunction = asFunction(callThrows(new RuntimeException()));
 
         assertThat(handleException(throwingFunction,             always()).call(null), is((Option)none()));
         assertThat(handleException(returnArgument(String.class), always()).call("hi there"), is(option("hi there")));
@@ -27,7 +27,7 @@ public class ExceptionsTest {
     @Test
     public void supportsCapturingExceptions() throws Exception {
         RuntimeException exception = new RuntimeException();
-        Function1<Object, Object> throwingFunction = asFunction1(callThrows(exception));
+        Function<Object, Object> throwingFunction = asFunction(callThrows(exception));
 
         assertThat(captureException(throwingFunction).call(null), is((Either)right(exception)));
         assertThat(captureException(returnArgument(String.class)).call("hi there"), is((Either)left("hi there")));

@@ -309,11 +309,11 @@ public class Predicates {
         };
     }
 
-    public static <T, R> LogicalPredicate<T> where(final Function1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> LogicalPredicate<T> where(final Function<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
         return WherePredicate.where(callable, predicate);
     }
 
-    public static <T, R> LogicalPredicate<T> by(final Function1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> LogicalPredicate<T> by(final Function<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
         return WherePredicate.where(callable, predicate);
     }
 
@@ -366,7 +366,7 @@ public class Predicates {
         return empty();
     }
 
-    public static <T> LogicalPredicate<T> predicate(final Function1<T, Boolean> callable) {
+    public static <T> LogicalPredicate<T> predicate(final Function<T, Boolean> callable) {
         return new LogicalPredicate<T>() {
             @Override
             public boolean matches(T other) {

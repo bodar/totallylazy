@@ -1,9 +1,8 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callers;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
@@ -13,23 +12,23 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 import static java.lang.String.format;
 
 public class WherePredicate<T, R> extends LogicalPredicate<T> {
-    private final Function1<? super T, ? extends R> callable;
+    private final Function<? super T, ? extends R> callable;
     private final Predicate<? super R> predicate;
 
-    private WherePredicate(final Function1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+    private WherePredicate(final Function<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
         this.predicate = predicate;
         this.callable = callable;
     }
 
-    public static <T, R> LogicalPredicate<T> where(final Function1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> LogicalPredicate<T> where(final Function<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
         if(predicate instanceof AlwaysTrue) return Predicates.alwaysTrue();
         if(predicate instanceof AlwaysFalse) return Predicates.alwaysFalse();
         if(predicate instanceof Not) return Predicates.not(where(callable, Unchecked.<Not< ? super R >>cast(predicate).predicate()));
         return new WherePredicate<T, R>(callable, predicate);
     }
 
-    public static <T, R> Function1<T, Predicate<T>> asWhere(final Callable2<? super T, ? super T, ? extends R> callable, final Predicate<? super R> predicate) {
-        return new Function1<T, Predicate<T>>() {
+    public static <T, R> Function<T, Predicate<T>> asWhere(final Callable2<? super T, ? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+        return new Function<T, Predicate<T>>() {
             @Override
             public Predicate<T> call(T t) throws Exception {
                 return where(Functions.function(callable).apply(t), predicate);
@@ -41,7 +40,7 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
         return predicate.matches(Callers.call(callable, o));
     }
 
-    public Function1<T, R> callable() {
+    public Function<T, R> callable() {
         return cast(callable);
     }
 

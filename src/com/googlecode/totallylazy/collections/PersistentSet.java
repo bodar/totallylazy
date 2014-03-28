@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Functor;
@@ -29,7 +29,7 @@ public interface PersistentSet<T> extends Set<T>, Iterable<T>, Segment<T>, Persi
     @Override
     PersistentSet<T> filter(Predicate<? super T> predicate);
 
-    <NewT> PersistentSet<NewT> map(Function1<? super T, ? extends NewT> transformer);
+    <NewT> PersistentSet<NewT> map(Function<? super T, ? extends NewT> transformer);
 
     PersistentList<T> toPersistentList();
 

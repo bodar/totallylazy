@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.First;
@@ -17,7 +17,6 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
 
@@ -82,8 +81,8 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
         return contains(head.first()) ? listMap(list.map(replace(head))) : listMap(list.cons(head));
     }
 
-    private Function1<Pair<K, V>, Pair<K, V>> replace(final Pair<K, V> newValue) {
-        return new Function1<Pair<K, V>, Pair<K, V>>() {
+    private Function<Pair<K, V>, Pair<K, V>> replace(final Pair<K, V> newValue) {
+        return new Function<Pair<K, V>, Pair<K, V>>() {
             @Override
             public Pair<K, V> call(Pair<K, V> oldValue) throws Exception {
                 return oldValue.first().equals(newValue.first()) ? newValue : oldValue;
@@ -142,7 +141,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public <NewV> PersistentMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
+    public <NewV> PersistentMap<K, NewV> map(Function<? super V, ? extends NewV> transformer) {
         return listMap(list.map(Callables.<K, V, NewV>second(transformer)));
     }
 

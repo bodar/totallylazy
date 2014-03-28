@@ -1,8 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Either;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
@@ -27,7 +26,7 @@ public abstract class Success<A> implements Result<A> {
     }
 
     @Override
-    public <S> Result<S> map(Function1<? super A, ? extends S> callable) {
+    public <S> Result<S> map(Function<? super A, ? extends S> callable) {
         return success(Functions.call(callable, value()), remainder());
     }
 
