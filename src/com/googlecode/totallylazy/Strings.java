@@ -11,15 +11,11 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.URI;
-import java.net.URL;
 import java.nio.charset.Charset;
 
 import static com.googlecode.totallylazy.Closeables.using;
@@ -63,8 +59,8 @@ public class Strings {
         return repeat(readLine(new BufferedReader(reader))).takeWhile(notNullValue(String.class)).memorise();
     }
 
-    public static Function<String> readLine(final BufferedReader reader) {
-        return new Function<String>() {
+    public static Returns<String> readLine(final BufferedReader reader) {
+        return new Returns<String>() {
             public String call() throws Exception {
                 String result = reader.readLine();
                 if (result == null) {

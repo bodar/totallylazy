@@ -15,7 +15,7 @@ public abstract class Function2<A, B, C> extends Function1<A, Function1<B, C>> i
         return flip().apply(b);
     }
 
-    public Function<C> deferApply(final A a, final B b) {
+    public Returns<C> deferApply(final A a, final B b) {
         return Callables.deferApply(this, a, b);
     }
 

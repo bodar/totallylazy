@@ -28,7 +28,7 @@ public abstract class Trampoline<T> implements Functor<T> {
     private static class Done<T> extends Trampoline<T> implements Value<T> {
         private final T value;
 
-        public Done(T value) {
+        public Done(T value) {  
             this.value = value;
         }
 

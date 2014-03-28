@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeCallable;
@@ -192,8 +192,8 @@ public class MapPerformanceTest {
         };
     }
 
-    private Function<Integer> mutableRemove(final Map<Integer, Integer> map) {
-        return new Function<Integer>() {
+    private Returns<Integer> mutableRemove(final Map<Integer, Integer> map) {
+        return new Returns<Integer>() {
             @Override
             public Integer call() throws Exception {
                 return map.remove(keys().head());
@@ -211,8 +211,8 @@ public class MapPerformanceTest {
         };
     }
 
-    private Function<Integer> mutablePut(final Map<Integer, Integer> map) {
-        return new Function<Integer>() {
+    private Returns<Integer> mutablePut(final Map<Integer, Integer> map) {
+        return new Returns<Integer>() {
             @Override
             public Integer call() throws Exception {
                 Integer head = SIZE + 1;
