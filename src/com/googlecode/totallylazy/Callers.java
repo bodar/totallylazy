@@ -97,7 +97,7 @@ public final class Callers {
         return Functions.call(callable, a, b);
     }
 
-    public static <A, B, C, D> D call(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A a, final B b, final C c) {
+    public static <A, B, C, D> D call(final Function3<? super A, ? super B, ? super C, ? extends D> callable, final A a, final B b, final C c) {
         return Functions.call(callable, a, b, c);
     }
 

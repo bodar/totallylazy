@@ -32,11 +32,11 @@ public class FunctionsTest {
         assertThat(add(3).$(numbers(9, 1)), Matchers.is(numbers(12, 4)));
     }
 
-    @Test
-    public void canComposeCurriedFunctions() throws Exception {
-        assertThat(add().then(multiply()).apply(2).apply(10).apply(3), is(36));
-        assertThat(add().then(multiply().then(add().then(multiply()))).apply(2).apply(10).apply(3).apply(2).apply(10), is(380));
-    }
+//    @Test
+//    public void canComposeCurriedFunctions() throws Exception {
+//        assertThat(add().then(multiply()).apply(2).apply(10).apply(3), is(36));
+//        assertThat(add().then(multiply().then(add().then(multiply()))).apply(2).apply(10).apply(3).apply(2).apply(10), is(380));
+//    }
 
     @Test
     public void canComposeFunctions() throws Exception {
@@ -53,19 +53,19 @@ public class FunctionsTest {
         assertThat(computations, hasExactly(2, 4, 6, 8, 10));
     }
 
-    @Test
-    public void canPartiallyApplyAFunction3() throws Exception {
-        assertThat(addThenMultiple().apply(10).apply(2).apply(3), is(36));
-        assertThat(addThenMultiple().apply(10, 2).apply(3), is(36));
-        assertThat(addThenMultiple().apply(10, 2, 3), is(36));
-    }
+//    @Test
+//    public void canPartiallyApplyAFunction3() throws Exception {
+//        assertThat(addThenMultiple().apply(10).apply(2).apply(3), is(36));
+//        assertThat(addThenMultiple().apply(10, 2).apply(3), is(36));
+//        assertThat(addThenMultiple().apply(10, 2, 3), is(36));
+//    }
 
     @Test
     public void canCaptureArgument() throws Exception {
         assertThat(multiply(10).capturing().apply(1), equalTo(Pair.<Number,Number>pair(1, 10)));
     }
 
-    private Function3<Number, Number, Number, Number> addThenMultiple() {
-        return uncurry3(add().then(multiply()));
-    }
+//    private Function3<Number, Number, Number, Number> addThenMultiple() {
+//        return uncurry3(add().then(multiply()));
+//    }
 }
