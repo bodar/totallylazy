@@ -18,7 +18,7 @@ import static org.hamcrest.core.Is.is;
 public class ExceptionsTest {
     @Test
     public void supportsReturningNoneInsteadOfThrowingAnException() throws Exception {
-        Function<Object, Object> throwingFunction = asCallable1(callThrows(new RuntimeException()));
+        Callable1<Object, Object> throwingFunction = asCallable1(callThrows(new RuntimeException()));
 
         assertThat(handleException(throwingFunction,             always()).call(null), is((Option)none()));
         assertThat(handleException(returnArgument(String.class), always()).call("hi there"), is(option("hi there")));
@@ -27,7 +27,7 @@ public class ExceptionsTest {
     @Test
     public void supportsCapturingExceptions() throws Exception {
         RuntimeException exception = new RuntimeException();
-        Function<Object, Object> throwingFunction = asCallable1(callThrows(exception));
+        Callable1<Object, Object> throwingFunction = asCallable1(callThrows(exception));
 
         assertThat(captureException(throwingFunction).call(null), is((Either)right(exception)));
         assertThat(captureException(returnArgument(String.class)).call("hi there"), is((Either)left("hi there")));

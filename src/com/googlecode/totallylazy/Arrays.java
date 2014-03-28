@@ -1,19 +1,28 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Arrays {
-    public static <T> Predicate<T[]> exists(final Predicate<? super T> predicate) {
-        return (array) -> sequence(array).exists(predicate);
+    public static <T> LogicalPredicate<T[]> exists(final Predicate<? super T> predicate) {
+        return new LogicalPredicate<T[]>() {
+            public boolean matches(T[] array) {
+                return sequence(array).exists(predicate);
+            }
+        };
     }
 
-    public static <T> Predicate<T[]> empty() {
-        return (array) -> array.length == 0;
+    public static <T> LogicalPredicate<T[]> empty() {
+        return new LogicalPredicate<T[]>() {
+            public boolean matches(T[] array) {
+                return array.length == 0;
+            }
+        };
     }
 
-    @SafeVarargs
     public static <T> List<T> list(T... values) {
         return Lists.list(values);
     }
@@ -22,8 +31,7 @@ public class Arrays {
         return index < array.length;
     }
 
-    @SafeVarargs
-    public static <T> T[] array(T... values) {
+    public static <T> T[] array(T ... values) {
         return values;
     }
 

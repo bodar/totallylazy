@@ -1,4 +1,4 @@
 package com.googlecode.totallylazy;
 
-public interface Associative<T> extends BinaryOperator<T> {
+public interface Associative<T> extends Binary<T> {
 }

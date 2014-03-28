@@ -1,21 +1,21 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callers.callConcurrently;
-import static com.googlecode.totallylazy.callables.CountingFunction.counting;
-import static com.googlecode.totallylazy.callables.LazyFunction.lazy;
+import static com.googlecode.totallylazy.callables.CountingCallable1.counting;
+import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class LazyFunctionTest {
+public class LazyCallable1Test {
     @Test
     public void isThreadSafe() throws Exception {
-        CountingFunction<Number, Number> counting = counting(increment);
-        Function<Number, Number> lazyCallable1 = counting.sleep(10).lazy();
+        CountingCallable1<Number, Number> counting = counting(increment);
+        Function1<Number, Number> lazyCallable1 = counting.sleep(10).lazy();
 
         Sequence<Number> result = callConcurrently(
                 lazyCallable1.deferApply(3), lazyCallable1.deferApply(6),
@@ -29,8 +29,8 @@ public class LazyFunctionTest {
 
     @Test
     public void onlyCallsUnderlyingCallableOnce() throws Exception {
-        CountingFunction<Number, Number> counting = counting(increment);
-        Function<Number, Number> lazyCallable = lazy(counting);
+        CountingCallable1<Number, Number> counting = counting(increment);
+        Function1<Number, Number> lazyCallable = lazy(counting);
 
         assertThat(lazyCallable.call(0), is(1));
         assertThat(lazyCallable.call(0), is(1));

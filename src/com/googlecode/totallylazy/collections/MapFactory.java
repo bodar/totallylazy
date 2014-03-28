@@ -21,7 +21,6 @@ public interface MapFactory<K, V, M extends PersistentMap<K, V>> {
 
     public M map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5);
 
-    @SuppressWarnings("unchecked")
     public M map(final Pair<K, V> head, final Pair<K, V>... tail);
 
     public M map(final Iterable<? extends Pair<K, V>> values);

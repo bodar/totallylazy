@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Either.left;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -44,7 +45,7 @@ public class None<T> extends Option<T>{
 
     @Override
     public Option<T> orElse(Callable<? extends Option<T>> other) {
-        return Callers.call(other);
+        return call(other);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class None<T> extends Option<T>{
 
     @Override
     public T getOrElse(Callable<? extends T> callable) {
-        return Callers.call(callable);
+        return call(callable);
     }
 
     @Override
@@ -68,17 +69,17 @@ public class None<T> extends Option<T>{
     }
 
     @Override
-    public <S> Option<S> map(Function<? super T, ? extends S> callable) {
+    public <S> Option<S> map(Callable1<? super T, ? extends S> callable) {
         return none();
     }
 
     @Override
-    public Option<T> each(Function<? super T, ?> callable) {
+    public Option<T> each(Callable1<? super T, ?> callable) {
         return this;
     }
 
     @Override
-    public <S> Option<S> flatMap(Function<? super T, ? extends Option<? extends S>> callable) {
+    public <S> Option<S> flatMap(Callable1<? super T, ? extends Option<? extends S>> callable) {
         return none();
     }
 
@@ -88,7 +89,7 @@ public class None<T> extends Option<T>{
     }
 
     @Override
-    public <S> S fold(S seed, BiFunction<? super S, ? super T, ? extends S> callable) {
+    public <S> S fold(S seed, Callable2<? super S, ? super T, ? extends S> callable) {
         return seed;
     }
 

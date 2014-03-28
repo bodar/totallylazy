@@ -1,7 +1,10 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Segment;
 
 import java.nio.CharBuffer;
 import java.util.concurrent.Callable;
@@ -22,8 +25,8 @@ public class Success<A> extends Pair<A, CharBuffer> implements Result<A> {
     }
 
     @Override
-    public <S> Success<S> map(Function<? super A, ? extends S> callable) {
-        return success(callable.apply(value()), second());
+    public <S> Success<S> map(Callable1<? super A, ? extends S> callable) {
+        return success(Functions.call(callable, value()), second());
     }
 
     @Override
@@ -32,8 +35,8 @@ public class Success<A> extends Pair<A, CharBuffer> implements Result<A> {
     }
 
     public static class functions {
-        public static <A> Function<Result<A>, CharBuffer> remainder() {
-            return new Function<Result<A>, CharBuffer>() {
+        public static <A> Function1<Result<A>, CharBuffer> remainder() {
+            return new Function1<Result<A>, CharBuffer>() {
                 @Override
                 public CharBuffer call(Result<A> result) throws Exception {
                     return ((Success<A>) result).remainder();

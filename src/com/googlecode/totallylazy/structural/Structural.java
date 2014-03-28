@@ -4,11 +4,9 @@ import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Methods;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.predicates.AbstractPredicate;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -35,8 +33,12 @@ public class Structural {
         return extractMethods(instance, structuralType).map(new Mapper<Map<Method, Method>, T>() {
             @Override
             public T call(final Map<Method, Method> methods) throws Exception {
-                return Unchecked.cast(newProxyInstance(structuralType.getClassLoader(), new Class[]{structuralType},
-                        (o, method, objects) -> Methods.invoke(methods.get(method), instance, objects)));
+                return Unchecked.cast(newProxyInstance(structuralType.getClassLoader(), new Class[]{structuralType}, new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
+                        return Methods.invoke(methods.get(method), instance, objects);
+                    }
+                }));
             }
         });
     }
@@ -65,11 +67,16 @@ public class Structural {
         return instanceMethods.find(structuralMatch(requiredMethod));
     }
 
-    private static Predicate<Method> structuralMatch(final Method required) {
+    private static LogicalPredicate<Method> structuralMatch(final Method required) {
         final Sequence<Type> requiredParameters = sequence(required.getGenericParameterTypes());
         final Sequence<Type> requiredReturnType = sequence(required.getGenericReturnType());
-        return objects -> objects.getName().equals(required.getName()) &&
-                sequence(objects.getGenericParameterTypes()).equals(requiredParameters) &&
-                sequence(objects.getGenericReturnType()).equals(requiredReturnType);
+        return new LogicalPredicate<Method>() {
+            @Override
+            public boolean matches(Method objects) {
+                return objects.getName().equals(required.getName()) &&
+                        sequence(objects.getGenericParameterTypes()).equals(requiredParameters) &&
+                        sequence(objects.getGenericReturnType()).equals(requiredReturnType);
+            }
+        };
     }
 }

@@ -1,7 +1,9 @@
 package com.googlecode.totallylazy.xml;
 
-import com.googlecode.totallylazy.BiFunction;
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
@@ -14,6 +16,8 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.nullValue;
@@ -58,7 +62,7 @@ public class XPathFunctions {
     @XPathFunction("time-in-millis")
     public static Long timeInMillis(NodeList dates) {
         Option<String> date = Xml.textContents(dates).headOption();
-        return date.map(new Function<String, Long>() {
+        return date.map(new Function1<String, Long>() {
             @Override
             public Long call(String s) throws Exception {
                 return Dates.parse(s).getTime();
@@ -69,7 +73,7 @@ public class XPathFunctions {
     @XPathFunction("date-in-millis")
     public static Long dateInMillis(NodeList dates) {
         Option<String> date = Xml.textContents(dates).headOption();
-        return date.map(new Function<String, Long>() {
+        return date.map(new Function1<String, Long>() {
             @Override
             public Long call(String s) throws Exception {
                 return Dates.stripTime(Dates.parse(s)).getTime();
@@ -77,23 +81,23 @@ public class XPathFunctions {
         }).getOrNull();
     }
 
-    private static Function<Node, Sequence<Text>> split(final String pattern) {
-        return new Function<Node, Sequence<Text>>() {
+    private static Function1<Node, Sequence<Text>> split(final String pattern) {
+        return new Function1<Node, Sequence<Text>>() {
             @Override
             public Sequence<Text> call(final Node node) throws Exception {
                 return Regex.regex(pattern).split(node.getTextContent()).map(createText.apply(node));                    }
         };
     }
 
-    private static Function<Node, Text> replace(final String pattern, final String replace) {
-        return new Function<Node, Text>() {
+    private static Function1<Node, Text> replace(final String pattern, final String replace) {
+        return new Function1<Node, Text>() {
             @Override
             public Text call(final Node node) throws Exception {
                 return createText(node, node.getTextContent().replaceAll(pattern, replace));                   }
         };
     }
 
-    public static BiFunction<Node, String, Text> createText = new BiFunction<Node, String, Text>() {
+    public static Function2<Node, String, Text> createText = new Function2<Node, String, Text>() {
         @Override
         public Text call(Node node, String s) throws Exception {
             return createText(node, s);

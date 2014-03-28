@@ -1,10 +1,8 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
-
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class AlwaysFalse extends AbstractPredicate<Object> {
+public class AlwaysFalse extends LogicalPredicate<Object> {
     private static AlwaysFalse instance = new AlwaysFalse();
     private AlwaysFalse() {}
 
@@ -12,7 +10,7 @@ public class AlwaysFalse extends AbstractPredicate<Object> {
         return false;
     }
 
-    public static <T> Predicate<T> alwaysFalse() {
+    public static <T> LogicalPredicate<T> alwaysFalse() {
         return cast(instance);
     }
 

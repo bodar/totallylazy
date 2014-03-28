@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.BiFunction;
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -9,11 +9,13 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Functions.call;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -137,12 +139,12 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
-    public <S> S fold(S seed, BiFunction<? super S, ? super Pair<K, V>, ? extends S> callable) {
+    public <S> S fold(S seed, Callable2<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return right.fold(left.fold(Functions.call(callable, seed, pair()), callable), callable);
     }
 
     @Override
-    public <NewV> TreeMap<K, NewV> map(Function<? super V, ? extends NewV> transformer) {
+    public <NewV> TreeMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
         return TreeMap.methods.map(transformer, factory, this);
     }
 

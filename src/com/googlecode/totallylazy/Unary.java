@@ -1,10 +1,9 @@
 package com.googlecode.totallylazy;
 
-
-public interface UnaryOperator<T> extends Function<T, T>, java.util.function.UnaryOperator<T> {
+public interface Unary<T> extends Callable1<T, T> {
     class constructors {
-        public static <T> UnaryOperator<T> unary(final Function<T, T> callable) {
-            return new UnaryOperator<T>() {
+        public static <T> UnaryFunction<T> unary(final Callable1<T, T> callable) {
+            return new UnaryFunction<T>() {
                 @Override
                 public T call(T t) throws Exception {
                     return callable.call(t);

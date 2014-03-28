@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.matchers.Matchers;
 import org.junit.Test;
@@ -27,15 +26,15 @@ public class OrPredicateTest {
 
     @Test
     public void collapsesTrues() throws Exception {
-        Predicate<String> predicate = is("13");
-        Predicate<String> or = or(alwaysTrue(), predicate, alwaysTrue());
+        LogicalPredicate<String> predicate = is("13");
+        LogicalPredicate<String> or = or(alwaysTrue(), predicate, alwaysTrue());
         assertThat(or, Matchers.is(alwaysTrue(String.class)));
     }
 
     @Test
     public void collapsesFalses() throws Exception {
-        Predicate<String> predicate = is("13");
-        Predicate<String> or = or(alwaysFalse(), predicate, alwaysFalse());
+        LogicalPredicate<String> predicate = is("13");
+        LogicalPredicate<String> or = or(alwaysFalse(), predicate, alwaysFalse());
         assertThat(or.matches("13"), Matchers.is(predicate.matches("13")));
         assertThat(or.matches("12"), Matchers.is(predicate.matches("12")));
         assertThat(or, Matchers.is(predicate));
@@ -54,15 +53,15 @@ public class OrPredicateTest {
 
     @Test
     public void collapsesOne() throws Exception {
-        Predicate<String> or = or(is("13"));
+        LogicalPredicate<String> or = or(is("13"));
         assertThat(or.matches("13"), Matchers.is(true));
         assertThat(or, Matchers.is(is("13")));
     }
 
     @Test
     public void collapesNots() throws Exception {
-        Predicate<String> original = or(not(is("12")), not(is("13")));
-        Predicate<String> collapsed = not(and(is("12"), is("13")));
+        LogicalPredicate<String> original = or(not(is("12")), not(is("13")));
+        LogicalPredicate<String> collapsed = not(and(is("12"), is("13")));
         assertThat(original.matches("14"), Matchers.is(collapsed.matches("14")));
         assertThat(original.matches("13"), Matchers.is(collapsed.matches("13")));
         assertThat(original.matches("12"), Matchers.is(collapsed.matches("12")));

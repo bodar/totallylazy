@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Segment;
 
 import java.nio.CharBuffer;
 
@@ -16,7 +17,7 @@ public class Failure<A> implements Result<A> {
     }
 
     @Override
-    public <B> Failure<B> map(Function<? super A, ? extends B> callable) {
+    public <B> Failure<B> map(Callable1<? super A, ? extends B> callable) {
         return failure(message);
     }
 

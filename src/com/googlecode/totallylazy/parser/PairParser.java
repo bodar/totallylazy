@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Returns;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Pair;
 
 import java.nio.CharBuffer;
@@ -11,8 +11,8 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
 public class PairParser<A, B> extends Parser<Pair<A, B>> {
-    private final Returns<? extends Parse<? extends A>> parserA;
-    private final Returns<? extends Parse<? extends B>> parserB;
+    private final Function<? extends Parse<? extends A>> parserA;
+    private final Function<? extends Parse<? extends B>> parserB;
 
     private PairParser(Callable<? extends Parse<? extends A>> parserA, Callable<? extends Parse<? extends B>> parserB) {
         this.parserA = lazy(parserA);

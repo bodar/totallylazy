@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
@@ -21,7 +21,7 @@ public abstract class LogicalValidator<T> extends AbstractValidator<T> {
         return SetFailureMessage.constructors.setFailureMessage(this, message); // Adding static imports to this class crashes javac 1.6
     }
 
-    public LogicalValidator<T> withMessage(Function<? super T,String> message){
+    public LogicalValidator<T> withMessage(Callable1<? super T,String> message){
         return SetFailureMessage.constructors.setFailureMessage(this, message); // Adding static imports to this class crashes javac 1.6
     }
 

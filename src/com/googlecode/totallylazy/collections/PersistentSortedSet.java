@@ -1,12 +1,14 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
 import java.util.NoSuchElementException;
+import java.util.SortedSet;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.TreeSet.treeSet;
@@ -25,7 +27,7 @@ public interface PersistentSortedSet<T> extends PersistentSet<T>, Sorted<T>, Ind
     PersistentSortedSet<T> filter(Predicate<? super T> predicate);
 
     @Override
-    <NewT> PersistentSortedSet<NewT> map(Function<? super T, ? extends NewT> transformer);
+    <NewT> PersistentSortedSet<NewT> map(Callable1<? super T, ? extends NewT> transformer);
 
     @Override
     Pair<PersistentSortedSet<T>, T> removeFirst() throws NoSuchElementException;
@@ -58,7 +60,6 @@ public interface PersistentSortedSet<T> extends PersistentSet<T>, Sorted<T>, Ind
             return sortedSet(sequence(value1, value2, value3, value4, value5));
         }
 
-        @SafeVarargs
         public static <A extends Comparable<? super A>> PersistentSortedSet<A> sortedSet(final A head, final A... tail) {
             return sortedSet(sequence(tail).cons(head));
         }
@@ -91,7 +92,6 @@ public interface PersistentSortedSet<T> extends PersistentSet<T>, Sorted<T>, Ind
             return sortedSet(comparator, sequence(value1, value2, value3, value4, value5));
         }
 
-        @SafeVarargs
         public static <A> PersistentSortedSet<A> sortedSet(Comparator<A> comparator, final A head, final A... tail) {
             return sortedSet(comparator, sequence(tail).cons(head));
         }

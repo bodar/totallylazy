@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.predicates.AbstractPredicate;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+
+import java.io.File;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Sequences.empty;
@@ -15,8 +17,12 @@ public class Classes {
         }
     }
 
-    public static Predicate<Class<?>> isInstance(final Object instance) {
-        return aClass -> aClass.isInstance(instance);
+    public static LogicalPredicate<Class<?>> isInstance(final Object instance) {
+        return new LogicalPredicate<Class<?>>() {
+            public boolean matches(Class<?> aClass) {
+                return aClass.isInstance(instance);
+            }
+        };
     }
 
     public static  Sequence<Class<?>> allClasses(Class<?> aClass) {

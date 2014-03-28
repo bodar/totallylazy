@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sets;
 import org.junit.Test;
 
@@ -17,7 +16,7 @@ public class InPredicateTest {
     @Test
     public void collapsesEmptyInClauseToFalse() throws Exception {
         Set<Integer> empty = Sets.set();
-        Predicate<Integer> predicate = in(empty);
+        LogicalPredicate<Integer> predicate = in(empty);
         assertThat(empty.contains(1), is(predicate.matches(1)));
         assertThat(predicate, instanceOf(never().getClass()));
     }

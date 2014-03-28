@@ -48,39 +48,39 @@ public class OptionTest {
 
     @Test
     public void supportsApplicativeEquality() throws Exception {
-        final Option<Function<Object, Function<Object, Boolean>>> some = some(equalTo().curry());
+        final Option<Function2<Object, Object, Boolean>> some = some(equalTo());
         final Option<Integer> some1 = some(3);
-        final Option<Function<Object, Boolean>> applicate = applicate(some, some1);
+        final Option<Function1<Object, Boolean>> applicate = applicate(some, some1);
         assertThat(applicate(applicate, some(5)), is(some(false)));
-        assertThat(applicate(applicate(some, some(3)), some(3)), is(some(true)));
-        assertThat(applicate(applicate(some, none(Integer.class)), some(3)), is(none(Boolean.class)));
-        assertThat(applicate(applicate(some, some(3)), none(Integer.class)), is(none(Boolean.class)));
+        assertThat(applicate(applicate(some(equalTo()), some(3)), some(3)), is(some(true)));
+        assertThat(applicate(applicate(some(equalTo()), none(Integer.class)), some(3)), is(none(Boolean.class)));
+        assertThat(applicate(applicate(some(equalTo()), some(3)), none(Integer.class)), is(none(Boolean.class)));
     }
 
     @Test
     public void supportsApplicativeUsage() throws Exception {
         assertThat(none(Number.class).applicate(some(add(3))), is(none(Number.class)));
-        assertThat(some(9).applicate(Option.<Function<Number, Number>>none()), is(none(Number.class)));
+        assertThat(some(9).applicate(Option.<Function1<Number, Number>>none()), is(none(Number.class)));
         assertThat(some(9).applicate(some(add(3))), is(Option.<Number>some(12)));
 
-        assertThat(some(5).applicate(some(3).applicate(some(add().curry()))), is(Option.<Number>some(8)));
-        assertThat(none(Number.class).applicate(some(3).applicate(some(add().curry()))), is(none(Number.class)));
-        assertThat(some(5).applicate(none(Number.class).applicate(some(add().curry()))), is(none(Number.class)));
+        assertThat(some(5).applicate(some(3).applicate(some(add()))), is(Option.<Number>some(8)));
+        assertThat(none(Number.class).applicate(some(3).applicate(some(add()))), is(none(Number.class)));
+        assertThat(some(5).applicate(none(Number.class).applicate(some(add()))), is(none(Number.class)));
 
-        assertThat(applicate(applicate(some(add().curry()), some(3)), some(5)), is(Option.<Number>some(8)));
-        assertThat(applicate(applicate(some(add().curry()), none(Number.class)), some(5)), is(none(Number.class)));
-        assertThat(applicate(applicate(some(add().curry()), some(3)), none(Number.class)), is(none(Number.class)));
+        assertThat(applicate(applicate(some(add()), some(3)), some(5)), is(Option.<Number>some(8)));
+        assertThat(applicate(applicate(some(add()), none(Number.class)), some(5)), is(none(Number.class)));
+        assertThat(applicate(applicate(some(add()), some(3)), none(Number.class)), is(none(Number.class)));
     }
 
     @Test
     public void supportsApplicativeUsageToConstruct() throws Exception {
-        assertThat(some("Dan").applicate(some(35).applicate(some(person().flip().curry()))), is(some(person("Dan", 35))));
-        assertThat(some("Ray").applicate(none(Integer.class).applicate(some(person().flip().curry()))), is(none(Person.class)));
-        assertThat(none(String.class).applicate(some(100).applicate(some(person().flip().curry()))), is(none(Person.class)));
+        assertThat(some("Dan").applicate(some(35).applicate(some(person().flip()))), is(some(person("Dan", 35))));
+        assertThat(some("Ray").applicate(none(Integer.class).applicate(some(person().flip()))), is(none(Person.class)));
+        assertThat(none(String.class).applicate(some(100).applicate(some(person().flip()))), is(none(Person.class)));
 
-        assertThat(applicate(applicate(some(person().curry()), some("Dan")), some(35)), is(some(person("Dan", 35))));
-        assertThat(applicate(applicate(some(person().curry()), some("Ray")), none(Integer.class)), is(none(Person.class)));
-        assertThat(applicate(applicate(some(person().curry()), none(String.class)), some(100)), is(none(Person.class)));
+        assertThat(applicate(applicate(some(person()), some("Dan")), some(35)), is(some(person("Dan", 35))));
+        assertThat(applicate(applicate(some(person()), some("Ray")), none(Integer.class)), is(none(Person.class)));
+        assertThat(applicate(applicate(some(person()), none(String.class)), some(100)), is(none(Person.class)));
     }
 
     @Test
@@ -98,8 +98,8 @@ public class OptionTest {
             this.age = age;
         }
 
-        static BiFunction<String, Integer, Person> person() {
-            return new BiFunction<String, Integer, Person>() {
+        static Function2<String, Integer, Person> person() {
+            return new Function2<String, Integer, Person>() {
                 @Override
                 public Person call(String name, Integer age) throws Exception {
                     return person(name, age);
@@ -209,8 +209,8 @@ public class OptionTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void canThrowIfNone(){
-        assertThat(some("bob").<RuntimeException>getOrThrow(new RuntimeException()), is("bob"));
+    public void canThrowIfNone() {
+        assertThat(some("bob").getOrThrow(new RuntimeException()), is("bob"));
         none().getOrThrow(new RuntimeException());
     }
 
