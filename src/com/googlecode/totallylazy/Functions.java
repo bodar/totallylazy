@@ -35,7 +35,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D, E> Function4<A, B, C, D, E> function(final Callable4<? super A, ? super B, ? super C, ? super D, ? extends E> callable) {
+    public static <A, B, C, D, E> Function4<A, B, C, D, E> function(final Function4<? super A, ? super B, ? super C, ? super D, ? extends E> callable) {
         return new Function4<A, B, C, D, E>() {
             @Override
             public E call(A a, B b, C c, D d) throws Exception {
@@ -85,7 +85,7 @@ public class Functions {
         }
     }
 
-    public static <A, B, C, D, E> E call(final Callable4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A a, final B b, final C c, final D d) {
+    public static <A, B, C, D, E> E call(final Function4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A a, final B b, final C c, final D d) {
         try {
             return callable.call(a, b, c, d);
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class Functions {
         return (b, c) -> callable.call(value, b, c);
     }
 
-    public static <A, B, C, D, E> Function3<B, C, D, E> apply(final Callable4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A value) {
+    public static <A, B, C, D, E> Function3<B, C, D, E> apply(final Function4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A value) {
         return new Function3<B, C, D, E>() {
             @Override
             public E call(B b, C c, D d) throws Exception {
@@ -239,7 +239,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D, E> Function<Quadruple<A, B, C, D>, E> quadruple(final Callable4<? super A, ? super B, ? super C, ? super D, ? extends E> callable) {
+    public static <A, B, C, D, E> Function<Quadruple<A, B, C, D>, E> quadruple(final Function4<? super A, ? super B, ? super C, ? super D, ? extends E> callable) {
         return new Function<Quadruple<A, B, C, D>, E>() {
             @Override
             public E call(Quadruple<A, B, C, D> quadruple) throws Exception {
