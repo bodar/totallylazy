@@ -44,7 +44,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D, E, F> Function5<A, B, C, D, E, F> function(final Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable) {
+    public static <A, B, C, D, E, F> Function5<A, B, C, D, E, F> function(final Function5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable) {
         return new Function5<A, B, C, D, E, F>() {
             @Override
             public F call(A a, B b, C c, D d, E e) throws Exception {
@@ -93,7 +93,7 @@ public class Functions {
         }
     }
 
-    public static <A, B, C, D, E, F> F call(final Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A a, final B b, final C c, final D d, final E e) {
+    public static <A, B, C, D, E, F> F call(final Function5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A a, final B b, final C c, final D d, final E e) {
         try {
             return callable.call(a, b, c, d, e);
         } catch (Exception ex) {
@@ -118,7 +118,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D, E, F> Function4<B, C, D, E, F> apply(final Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A value) {
+    public static <A, B, C, D, E, F> Function4<B, C, D, E, F> apply(final Function5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A value) {
         return new Function4<B, C, D, E, F>() {
             @Override
             public F call(B b, C c, D d, E e) throws Exception {
@@ -257,7 +257,7 @@ public class Functions {
         };
     }
 
-    public static <A, B, C, D, E, F> Function<Quintuple<A, B, C, D, E>, F> quintuple(final Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable) {
+    public static <A, B, C, D, E, F> Function<Quintuple<A, B, C, D, E>, F> quintuple(final Function5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable) {
         return new Function<Quintuple<A, B, C, D, E>, F>() {
             @Override
             public F call(Quintuple<A, B, C, D, E> quintuple) throws Exception {

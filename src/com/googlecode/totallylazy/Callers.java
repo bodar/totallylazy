@@ -105,7 +105,7 @@ public final class Callers {
         return Functions.call(callable, a, b, c, d);
     }
 
-    public static <A, B, C, D, E, F> F call(final Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A a, final B b, final C c, final D d, final E e) {
+    public static <A, B, C, D, E, F> F call(final Function5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A a, final B b, final C c, final D d, final E e) {
         return Functions.call(callable, a, b, c, d, e);
     }
 }
