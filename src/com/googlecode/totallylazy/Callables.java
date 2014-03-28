@@ -25,7 +25,7 @@ public final class Callables {
         return value();
     }
 
-    public static <T, R> Function1<T, R> asCallable1(final Callable<? extends R> callable) {
+    public static <T, R> Function1<T, R> asFunction1(final Callable<? extends R> callable) {
         return new Function1<T, R>() {
             public R call(T t) throws Exception {
                 return callable.call();
@@ -33,7 +33,7 @@ public final class Callables {
         };
     }
 
-    public static <T> UnaryFunction<T> nullGuard(final Callable1<? super T, ? extends T> callable) {
+    public static <T> UnaryFunction<T> nullGuard(final Function1<? super T, ? extends T> callable) {
         return new UnaryFunction<T>() {
             public T call(T o) throws Exception {
                 if (o == null) return null;
@@ -75,11 +75,11 @@ public final class Callables {
         };
     }
 
-    public static <T, R extends Comparable<? super R>> Comparator<T> ascending(final Callable1<? super T, ? extends R> callable) {
+    public static <T, R extends Comparable<? super R>> Comparator<T> ascending(final Function1<? super T, ? extends R> callable) {
         return Comparators.ascending(callable);
     }
 
-    public static <T, R extends Comparable<? super R>> Comparator<T> descending(final Callable1<? super T, ? extends R> callable) {
+    public static <T, R extends Comparable<? super R>> Comparator<T> descending(final Function1<? super T, ? extends R> callable) {
         return Comparators.descending(callable);
     }
 
@@ -137,11 +137,11 @@ public final class Callables {
         };
     }
 
-    public static <F, S, R> Function1<Pair<F, S>, Pair<R, S>> first(final Callable1<? super F, ? extends R> firstCallable, Class<S> sClass) {
+    public static <F, S, R> Function1<Pair<F, S>, Pair<R, S>> first(final Function1<? super F, ? extends R> firstCallable, Class<S> sClass) {
         return first(firstCallable);
     }
 
-    public static <F, S, R> Function1<Pair<F, S>, Pair<R, S>> first(final Callable1<? super F, ? extends R> firstCallable) {
+    public static <F, S, R> Function1<Pair<F, S>, Pair<R, S>> first(final Function1<? super F, ? extends R> firstCallable) {
         return new Function1<Pair<F, S>, Pair<R, S>>() {
             public Pair<R, S> call(Pair<F, S> pair) throws Exception {
                 return Pair.pair(firstCallable.call(pair.first()), pair.second());
@@ -161,7 +161,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, R> Function1<Pair<F, S>, Pair<F, R>> second(final Callable1<? super S, ? extends R> secondCallable) {
+    public static <F, S, R> Function1<Pair<F, S>, Pair<F, R>> second(final Function1<? super S, ? extends R> secondCallable) {
         return new Function1<Pair<F, S>, Pair<F, R>>() {
             public Pair<F, R> call(Pair<F, S> pair) throws Exception {
                 return Pair.pair(pair.first(), secondCallable.call(pair.second()));
@@ -181,7 +181,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, T, R> Function1<Triple<F, S, T>, Triple<F, S, R>> third(final Callable1<? super T, ? extends R> thirdCallable) {
+    public static <F, S, T, R> Function1<Triple<F, S, T>, Triple<F, S, R>> third(final Function1<? super T, ? extends R> thirdCallable) {
         return new Function1<Triple<F, S, T>, Triple<F, S, R>>() {
             public Triple<F, S, R> call(Triple<F, S, T> triple) throws Exception {
                 return Triple.triple(triple.first(), triple.second(), thirdCallable.call(triple.third()));
@@ -201,7 +201,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, T, Fo, R> Function1<Quadruple<F, S, T, Fo>, Quadruple<F, S, T, R>> fourth(final Callable1<? super Fo, ? extends R> fourthCallable) {
+    public static <F, S, T, Fo, R> Function1<Quadruple<F, S, T, Fo>, Quadruple<F, S, T, R>> fourth(final Function1<? super Fo, ? extends R> fourthCallable) {
         return new Function1<Quadruple<F, S, T, Fo>, Quadruple<F, S, T, R>>() {
             public Quadruple<F, S, T, R> call(Quadruple<F, S, T, Fo> quadruple) throws Exception {
                 return Quadruple.quadruple(quadruple.first(), quadruple.second(), quadruple.third(), fourthCallable.call(quadruple.fourth()));
@@ -221,7 +221,7 @@ public final class Callables {
         };
     }
 
-    public static <F, S, T, Fo, Fi, R> Function1<Quintuple<F, S, T, Fo, Fi>, Quintuple<F, S, T, Fo, R>> fifth(final Callable1<? super Fi, ? extends R> callable) {
+    public static <F, S, T, Fo, Fi, R> Function1<Quintuple<F, S, T, Fo, Fi>, Quintuple<F, S, T, Fo, R>> fifth(final Function1<? super Fi, ? extends R> callable) {
         return new Function1<Quintuple<F, S, T, Fo, Fi>, Quintuple<F, S, T, Fo, R>>() {
             public Quintuple<F, S, T, Fo, R> call(Quintuple<F, S, T, Fo, Fi> quintuple) throws Exception {
                 return Quintuple.quintuple(quintuple.first(), quintuple.second(), quintuple.third(), quintuple.fourth(), callable.call(quintuple.fifth()));
@@ -337,9 +337,9 @@ public final class Callables {
         return call();
     }
 
-    public static <T, R> Function1<Callable1<T, R>, R> callWith(final T value) {
-        return new Function1<Callable1<T, R>, R>() {
-            public final R call(final Callable1<T, R> callable) throws Exception {
+    public static <T, R> Function1<Function1<T, R>, R> callWith(final T value) {
+        return new Function1<Function1<T, R>, R>() {
+            public final R call(final Function1<T, R> callable) throws Exception {
                 return callable.call(value);
             }
         };
@@ -354,7 +354,7 @@ public final class Callables {
         };
     }
 
-    public static <A, B> Returns<B> deferApply(final Callable1<? super A, ? extends B> callable, final A value) {
+    public static <A, B> Returns<B> deferApply(final Function1<? super A, ? extends B> callable, final A value) {
         return new Returns<B>() {
             public final B call() throws Exception {
                 return callable.call(value);
@@ -362,7 +362,7 @@ public final class Callables {
         };
     }
 
-    public static <A, B> Function1<A, Returns<B>> deferReturn(final Callable1<? super A, ? extends B> callable) {
+    public static <A, B> Function1<A, Returns<B>> deferReturn(final Function1<? super A, ? extends B> callable) {
         return new Function1<A, Returns<B>>() {
             public Returns<B> call(A a) throws Exception {
                 return Callables.deferApply(callable, a);
@@ -386,11 +386,11 @@ public final class Callables {
         return Functions.function(callable);
     }
 
-    public static <A, B, C> Function2<A, B, C> uncurry2(final Callable1<? super A, ? extends Callable1<? super B, ? extends C>> callable) {
+    public static <A, B, C> Function2<A, B, C> uncurry2(final Function1<? super A, ? extends Function1<? super B, ? extends C>> callable) {
         return Functions.uncurry2(callable);
     }
 
-    public static <A, B, C, D> Function3<A, B, C, D> uncurry3(final Callable1<? super A, ? extends Callable1<? super B, ? extends Callable1<? super C, ? extends D>>> callable) {
+    public static <A, B, C, D> Function3<A, B, C, D> uncurry3(final Function1<? super A, ? extends Function1<? super B, ? extends Function1<? super C, ? extends D>>> callable) {
         return Functions.uncurry3(callable);
     }
 
@@ -426,7 +426,7 @@ public final class Callables {
         };
     }
 
-    public static <A, B, C> Function1<A, C> compose(final Callable1<? super A, ? extends B> first, final Callable1<? super B, ? extends C> second) {
+    public static <A, B, C> Function1<A, C> compose(final Function1<? super A, ? extends B> first, final Function1<? super B, ? extends C> second) {
         return new Function1<A, C>() {
             @Override
             public C call(A a) throws Exception {
@@ -435,7 +435,7 @@ public final class Callables {
         };
     }
 
-    public static <A, B> Function1<A, B> compose(final Callable1<? super A, ?> ignoreResult, final Callable<? extends B> callable) {
+    public static <A, B> Function1<A, B> compose(final Function1<? super A, ?> ignoreResult, final Callable<? extends B> callable) {
         return new Function1<A, B>() {
             public B call(A a) throws Exception {
                 ignoreResult.call(a);
@@ -444,11 +444,11 @@ public final class Callables {
         };
     }
 
-    public static <A, B> Function1<A, B> doThen(final Callable1<? super A, ?> ignoreResult, final Callable<? extends B> callable) {
+    public static <A, B> Function1<A, B> doThen(final Function1<? super A, ?> ignoreResult, final Callable<? extends B> callable) {
         return compose(ignoreResult, callable);
     }
 
-    public static <A, B> Returns<B> compose(final Callable<? extends A> first, final Callable1<? super A, ? extends B> second) {
+    public static <A, B> Returns<B> compose(final Callable<? extends A> first, final Function1<? super A, ? extends B> second) {
         return new Returns<B>() {
             @Override
             public B call() throws Exception {
@@ -458,7 +458,7 @@ public final class Callables {
     }
 
 
-    public static <A, B> Function1<A, B> interruptable(final Callable1<? super A, ? extends B> function) {
+    public static <A, B> Function1<A, B> interruptable(final Function1<? super A, ? extends B> function) {
         return Functions.interruptable(function);
     }
 
@@ -466,7 +466,7 @@ public final class Callables {
         return Functions.pair(function);
     }
 
-    public static <A, B, C> Function2<A, B, C> unpair(final Callable1<? super Pair<? extends A, ? extends B>, ? extends C> function) {
+    public static <A, B, C> Function2<A, B, C> unpair(final Function1<? super Pair<? extends A, ? extends B>, ? extends C> function) {
         return Functions.unpair(function);
     }
 
@@ -474,7 +474,7 @@ public final class Callables {
         return Functions.triple(callable);
     }
 
-    public static <A, B, C, D> Function3<A, B, C, D> untriple(final Callable1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> callable) {
+    public static <A, B, C, D> Function3<A, B, C, D> untriple(final Function1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> callable) {
         return Functions.untriple(callable);
     }
 
@@ -486,11 +486,11 @@ public final class Callables {
         return Either.functions.asRight();
     }
 
-    public static <T> UnaryFunction<T> replace(final Predicate<? super T> predicate, final Callable1<? super T, ? extends T> callable) {
+    public static <T> UnaryFunction<T> replace(final Predicate<? super T> predicate, final Function1<? super T, ? extends T> callable) {
         return when(predicate, callable);
     }
 
-    public static <T> UnaryFunction<T> when(final Predicate<? super T> predicate, final Callable1<? super T, ? extends T> callable) {
+    public static <T> UnaryFunction<T> when(final Predicate<? super T> predicate, final Function1<? super T, ? extends T> callable) {
         return new UnaryFunction<T>() {
             @Override
             public T call(T value) throws Exception {

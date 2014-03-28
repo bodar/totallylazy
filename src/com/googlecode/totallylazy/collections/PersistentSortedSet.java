@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
@@ -27,7 +27,7 @@ public interface PersistentSortedSet<T> extends PersistentSet<T>, Sorted<T>, Ind
     PersistentSortedSet<T> filter(Predicate<? super T> predicate);
 
     @Override
-    <NewT> PersistentSortedSet<NewT> map(Callable1<? super T, ? extends NewT> transformer);
+    <NewT> PersistentSortedSet<NewT> map(Function1<? super T, ? extends NewT> transformer);
 
     @Override
     Pair<PersistentSortedSet<T>, T> removeFirst() throws NoSuchElementException;

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
@@ -84,8 +84,8 @@ public class PersistentSortedMapTest {
         System.out.println(time);
     }
 
-    public static Callable1<Integer, Pair<Integer, Integer>> asPair() {
-        return new Callable1<Integer, Pair<Integer, Integer>>() {
+    public static Function1<Integer, Pair<Integer, Integer>> asPair() {
+        return new Function1<Integer, Pair<Integer, Integer>>() {
             @Override
             public Pair<Integer, Integer> call(Integer integer) throws Exception {
                 return Pair.pair(integer, integer);

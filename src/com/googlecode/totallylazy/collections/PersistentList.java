@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Returns;
@@ -42,7 +42,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     PersistentList<T> reverse();
 
     @Override
-    <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable);
+    <S> PersistentList<S> map(Function1<? super T, ? extends S> callable);
 
     @Override
     PersistentList<T> filter(final Predicate<? super T> predicate);

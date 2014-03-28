@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Option;
@@ -105,7 +105,7 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public <NewV> PersistentMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> PersistentMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
         return hashTreeMap(toSequence().map(Callables.<K, V, NewV>second(transformer)));
     }
 

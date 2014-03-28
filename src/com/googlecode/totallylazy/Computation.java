@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.LazyCallable1;
+import com.googlecode.totallylazy.callables.LazyFunction;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Iterator;
@@ -10,30 +10,30 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Computation.memorise;
 import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
+import static com.googlecode.totallylazy.callables.LazyFunction.lazy;
 
 public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     private final Lazy<T> head;
-    private final LazyCallable1<T, Computation<T>> tail;
+    private final LazyFunction<T, Computation<T>> tail;
 
-    private Computation(Callable<T> head, Callable1<T, Computation<T>> tail) {
+    private Computation(Callable<T> head, Function1<T, Computation<T>> tail) {
         this.head = Lazy.lazy(head);
         this.tail = lazy(tail);
     }
 
-    public static <T> Computation<T> computation1(T value, Callable1<T, Computation<T>> next) {
+    public static <T> Computation<T> computation1(T value, Function1<T, Computation<T>> next) {
         return computation1(returns(value), next);
     }
 
-    public static <T> Computation<T> computation1(Callable<T> callable, Callable1<T, Computation<T>> next) {
+    public static <T> Computation<T> computation1(Callable<T> callable, Function1<T, Computation<T>> next) {
         return new Computation<T>(callable, next);
     }
 
-    public static <T> Computation<T> computation(Callable<T> callable, Callable1<? super T, ? extends T> next) {
+    public static <T> Computation<T> computation(Callable<T> callable, Function1<? super T, ? extends T> next) {
         return computation1(callable, generate(next));
     }
 
-    public static <T> Computation<T> computation(T value, Callable1<? super T, ? extends T> callable) {
+    public static <T> Computation<T> computation(T value, Function1<? super T, ? extends T> callable) {
         return computation1(value, generate(callable));
     }
 
@@ -41,7 +41,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         return computation1(returns(value), Functions.<T, Computation<T>>constant(next));
     }
 
-    public static <T> Computation<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {
+    public static <T> Computation<T> iterate(final Function1<? super T, ? extends T> callable, final T t) {
         return computation(t, callable);
     }
 
@@ -90,8 +90,8 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         }.lazy();
     }
 
-    public static <T> Callable1<T, Computation<T>> generate(final Callable1<? super T, ? extends T> callable) {
-        return new Callable1<T, Computation<T>>() {
+    public static <T> Function1<T, Computation<T>> generate(final Function1<? super T, ? extends T> callable) {
+        return new Function1<T, Computation<T>>() {
             @Override
             public Computation<T> call(T value) throws Exception {
                 return computation1(Callables.deferApply(callable, value), this);

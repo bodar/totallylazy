@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
@@ -89,7 +89,7 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
         }
 
         @Override
-        public <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable) {
+        public <S> PersistentList<S> map(Function1<? super T, ? extends S> callable) {
             return cast(this);
         }
 
@@ -194,7 +194,7 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
         }
 
         @Override
-        public <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable) {
+        public <S> PersistentList<S> map(Function1<? super T, ? extends S> callable) {
             return node(call(callable, head), tail().map(callable));
         }
 
