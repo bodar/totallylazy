@@ -5,8 +5,8 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Functions.returns;
+import static com.googlecode.totallylazy.Lazy.lazy;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
 public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Map.Entry<F,S> {
     private final Lazy<F> first;

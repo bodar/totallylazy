@@ -3,7 +3,6 @@ package com.googlecode.totallylazy;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Functions.returns;
-import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
 
 public class Quintuple<F, S, T, Fo, Fi> extends Quadruple<F, S, T, Fo> implements Fifth<Fi> {
     private final Value<? extends Fi> fifth;
@@ -18,7 +17,7 @@ public class Quintuple<F, S, T, Fo, Fi> extends Quadruple<F, S, T, Fo> implement
 
     protected Quintuple(final Callable<? extends F> first, final Callable<? extends S> second, final Callable<? extends T> third, final Callable<? extends Fo> fourth, final Callable<? extends Fi> fifth) {
         super(first, second, third, fourth);
-        this.fifth = lazy(fifth);
+        this.fifth = Lazy.lazy(fifth);
     }
 
     public final Fi fifth() {
