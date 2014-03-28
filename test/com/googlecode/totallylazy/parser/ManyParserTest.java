@@ -1,9 +1,11 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Lists;
 import org.junit.Test;
 
+import java.util.List;
+
+import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -12,32 +14,31 @@ import static com.googlecode.totallylazy.parser.ManyParser.many;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ManyParserTest {
-
     @Test
     public void doesNotThrowIfNoCharacters() throws Exception {
-        Result<Sequence<Character>> result = many(character('C')).parse("");
-        assertThat(result.value(), is(Sequences.characters("")));
-        assertThat(result.remainder().toString(), is(""));
+        Result<List<Character>> result = many(character('C')).parse("");
+        assertThat(result.value(), is(Lists.<Character>list()));
+        assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
 
     @Test
     public void doesNotThrowIfItConsumesAllCharacters() throws Exception {
-        Result<Sequence<Character>> result = many(character('C')).parse("CCCCC");
-        assertThat(result.value(), is(Sequences.characters("CCCCC")));
-        assertThat(result.remainder().toString(), is(""));
+        Result<List<Character>> result = many(character('C')).parse("CCCCC");
+        assertThat(result.value(), is(list('C', 'C', 'C', 'C', 'C')));
+        assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
 
     @Test
     public void supportMany() throws Exception {
-        Result<Sequence<Character>> result = many(character('C')).parse("CCCCCDEFG");
-        assertThat(result.value(), is(Sequences.characters("CCCCC")));
-        assertThat(result.remainder().toString(), is("DEFG"));
+        Result<List<Character>> result = many(character('C')).parse("CCCCCDEFG");
+        assertThat(result.value(), is(list('C', 'C', 'C', 'C', 'C')));
+        assertThat(result.remainder(), is(characters("DEFG")));
     }
 
     @Test
     public void supportChaining() throws Exception {
-        Result<Sequence<Character>> result = character('C').many().parse("CCCCCDEFG");
-        assertThat(result.value(), is(Sequences.characters("CCCCC")));
-        assertThat(result.remainder().toString(), is("DEFG"));
+        Result<List<Character>> result = character('C').many().parse("CCCCCDEFG");
+        assertThat(result.value(), is(list('C', 'C', 'C', 'C', 'C')));
+        assertThat(result.remainder(), is(characters("DEFG")));
     }
 }

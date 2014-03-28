@@ -8,6 +8,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.Set;
 
+import static com.googlecode.totallylazy.Predicates.not;
+
 public class Characters {
     public static Charset UTF8 = Charset.forName("UTF-8");
     public static Charset UTF16 = Charset.forName("UTF-16");
@@ -47,6 +49,14 @@ public class Characters {
         };
     }
 
+    public static LogicalPredicate<Character> among(String value) {
+        return in(value);
+    }
+
+    public static LogicalPredicate<Character> notAmong(String value) {
+        return not(in(value));
+    }
+
     public static LogicalPredicate<Character> identifierStart = new LogicalPredicate<Character>() {
         @Override
         public boolean matches(Character other) {
@@ -73,6 +83,12 @@ public class Characters {
         }
     };
 
+    public static LogicalPredicate<Character> whitespace = new LogicalPredicate<Character>() {
+        public boolean matches(Character other) {
+            return Character.isWhitespace(other);
+        }
+    };
+
     public static LogicalPredicate<Character> between(final char start, final char end) {
         return new LogicalPredicate<Character>() {
             public boolean matches(Character other) {
@@ -82,6 +98,7 @@ public class Characters {
     }
 
     public static LogicalPredicate<Character> alphaNumeric = between('A', 'Z').or(between('a', 'z')).or(between('0', '9'));
+    public static LogicalPredicate<Character> hexDigit = between('A', 'F').or(between('a', 'F')).or(between('0', '9'));
 
     public static Sequence<Character> range(char start, char end) {
         return Numbers.range((int) start, (int) end).map(new Callable1<Number, Character>() {

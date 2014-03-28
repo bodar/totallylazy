@@ -389,8 +389,6 @@ public class Strings {
         return value.getBytes(UTF8);
     }
 
-
-
     public static Maximum.Function<String> maximum = Maximum.constructors.maximum((String) null);
 
     public static Minimum.Function<String> minimum = Minimum.constructors.minimum((String) null);

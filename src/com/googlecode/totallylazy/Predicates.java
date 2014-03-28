@@ -97,6 +97,11 @@ public class Predicates {
             public boolean matches(Iterable<T> iterable) {
                 return sequence(iterable).exists(predicate);
             }
+
+            @Override
+            public String toString() {
+                return String.format("iterable containing item '%s'", predicate.toString());
+            }
         };
     }
 

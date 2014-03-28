@@ -66,6 +66,10 @@ public class Uri implements Comparable<Uri> {
         return uri(URLs.packageUrl(aClass));
     }
 
+    public static Uri rootUri(Class<?> aClass) {
+        return uri(URLs.rootUrl(aClass));
+    }
+
     public String scheme() {
         return scheme;
     }
@@ -281,6 +285,13 @@ public class Uri implements Comparable<Uri> {
                 }
             };
         }
+
+        public static Function1<Uri, URL> URL = new Function1<Uri, URL>() {
+            @Override
+            public URL call(Uri uri) throws Exception {
+                return uri.toURL();
+            }
+        };
     }
 
     static class Authority {

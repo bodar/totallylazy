@@ -7,6 +7,7 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.OptionalParser.optional;
 import static com.googlecode.totallylazy.parser.StringParser.string;
@@ -18,7 +19,7 @@ public class OptionalParserTest {
         OptionalParser<String> parser = optional(string("foo"));
         Result<Option<String>> result = parser.parse("foo");
         assertThat(result.value(), is(some("foo")));
-        assertThat(result.remainder().toString(), is(""));
+        assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
 
     @Test
@@ -26,6 +27,6 @@ public class OptionalParserTest {
         Parser<Option<String>> parser = string("foo").optional();
         Result<Option<String>> result = parser.parse("bob");
         assertThat(result.value(), is(none(String.class)));
-        assertThat(result.remainder().toString(), is("bob"));
+        assertThat(result.remainder(), is(characters("bob")));
     }
 }

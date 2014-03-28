@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Predicates.contains;
@@ -137,5 +138,9 @@ public class Sets {
             result.removeAll(set);
         }
         return result;
+    }
+
+    public static <T> Set<T> concurrentSet() {
+        return newSetFromMap(new ConcurrentHashMap<T, Boolean>());
     }
 }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.emptyInputStream;
 
 public class FileSource implements Sources {
@@ -33,8 +34,13 @@ public class FileSource implements Sources {
     }
 
     public static FileSource fileSource(File folder, Sequence<File> files) {
-        return new FileSource(files.map(relativeTo(folder)));
+        return fileSource(files.map(relativeTo(folder)));
     }
+
+    public static FileSource fileSource(final Iterable<? extends Pair<String, File>> sources) {
+        return new FileSource(sequence(sources));
+    }
+
 
     @Override
     public Sequence<Source> sources() {

@@ -1,12 +1,11 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Callable1;
-
-import java.nio.CharBuffer;
+import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class MappingParser<A, B> extends Parser<B> {
+class MappingParser<A, B> extends Parser<B> {
     private final Parse<? extends A> source;
     private final Callable1<? super A, ? extends B> callable;
 
@@ -20,8 +19,8 @@ public class MappingParser<A, B> extends Parser<B> {
     }
 
     @Override
-    public Result<B> parse(CharBuffer characters) throws Exception {
-        return source.parse(characters).map(callable);
+    public Result<B> parse(Segment<Character> characters) {
+        return cast(source.parse(characters).map(callable));
     }
 
     @Override

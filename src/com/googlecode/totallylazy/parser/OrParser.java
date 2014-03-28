@@ -1,33 +1,34 @@
 package com.googlecode.totallylazy.parser;
 
-import java.nio.CharBuffer;
+import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
-import static com.googlecode.totallylazy.Unchecked.cast;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class OrParser<A> extends Parser<A> {
-    private final Parse<? extends A> parserA;
-    private final Parse<? extends A> parserB;
+class OrParser<A> extends Parser<A> {
+    private final Sequence<Parse<A>> parsers;
 
-    private OrParser(Parse<? extends A> parserA, Parse<? extends A> parserB) {
-        this.parserA = parserA;
-        this.parserB = parserB;
+    private OrParser(Sequence<Parse<A>> parsers) {
+        this.parsers = parsers;
     }
 
-    public static <A> OrParser<A> or(Parse<? extends A> parserA, Parse<? extends A> parserB) {
-        return new OrParser<A>(parserA, parserB);
+    static <A> OrParser<A> or(Iterable<? extends Parse<? extends A>> parsers) {
+        return new OrParser<A>(Sequences.sequence(parsers).<Parse<A>>unsafeCast());
     }
 
     @Override
     public String toString() {
-        return String.format("%s or %s", parserA, parserB);
+        return parsers.toString(" or ");
     }
 
     @Override
-    public Result<A> parse(CharBuffer characters) throws Exception {
-        Result<? extends A> result = parserA.parse(characters);
-        if (result instanceof Failure) {
-            return cast(parserB.parse(characters));
+    public Result<A> parse(Segment<Character> characters) {
+        Result<A> result = null;
+        for (Parse<A> parser : parsers) {
+            result = parser.parse(characters);
+            if (result.success()) return result;
         }
-        return cast(result);
+        return result;
     }
 }

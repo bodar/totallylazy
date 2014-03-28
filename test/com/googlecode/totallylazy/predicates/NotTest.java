@@ -16,7 +16,7 @@ public class NotTest {
 
     @Test
     public void supportsToString() throws Exception {
-        assertThat(Not.not(Predicates.is(5)).toString(), is("not is '5'"));
+        assertThat(Not.not(Predicates.is(5)).toString(), is("not 5"));
     }
 
 }

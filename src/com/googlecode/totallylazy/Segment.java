@@ -174,11 +174,6 @@ public interface Segment<T> {
         }
 
         @Override
-        public Option<T> headOption() {
-            return some(head);
-        }
-
-        @Override
         public Segment<T> tail() throws NoSuchElementException {
             return tail;
         }
@@ -195,12 +190,6 @@ public interface Segment<T> {
         public T head() throws NoSuchElementException {
             throw new NoSuchElementException();
         }
-
-        @Override
-        public Option<T> headOption() {
-            return none();
-        }
-
 
         @Override
         public Segment<T> tail() throws NoSuchElementException {

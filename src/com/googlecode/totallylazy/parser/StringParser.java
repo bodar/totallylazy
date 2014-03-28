@@ -1,42 +1,36 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.collections.PersistentList;
+import com.googlecode.totallylazy.Segment;
 
-import java.nio.CharBuffer;
-
-import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class StringParser extends Parser<String> {
-    private final CharSequence expected;
+class StringParser extends Parser<String> {
+    private final String expected;
 
-    public StringParser(CharSequence expected) {
+    private StringParser(String expected) {
         this.expected = expected;
     }
 
-    public static StringParser string(CharSequence value) {
-        return new StringParser(value);
+    static StringParser string(String expected) {
+        return new StringParser(expected);
     }
 
     @Override
-    public Result<String> parse(CharBuffer buffer) throws Exception {
-        if (buffer.remaining() < expected.length()) return fail(expected, buffer.toString());
-        buffer.mark();
-        PersistentList<Character> accumulator = empty();
-        for (int i = 0; i < expected.length(); i++) {
+    public Result<String> parse(Segment<Character> characters) {
+        Segment<Character> segment = characters;
+        StringBuilder result = new StringBuilder();
+        for (int i = 0, n = expected.length(); i < n; i++) {
             char e = expected.charAt(i);
-            char a = buffer.get();
-            accumulator = accumulator.cons(a);
-            if (e != a) {
-                buffer.reset();
-                return fail(expected, accumulator.reverse().toSequence().toString(""));
-            }
+            char a = segment.head();
+            result.append(a);
+            if (e != a) return fail(expected, result.toString());
+            segment = segment.tail();
         }
-        return success(expected.toString(), buffer);
+        return success(result.toString(), segment);
     }
 
     @Override
     public String toString() {
-        return expected.toString();
+        return expected;
     }
 }
