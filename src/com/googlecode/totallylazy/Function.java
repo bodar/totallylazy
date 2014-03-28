@@ -11,6 +11,10 @@ import static com.googlecode.totallylazy.Pair.pair;
 public interface Function<A, B> extends Functor<B>, java.util.function.Function<A,B> {
     B call(A a) throws Exception;
 
+    static <A,B> Function<A,B> function(java.util.function.Function<A,B> f) {
+        return f::apply;
+    }
+
     default B apply(final A a) {
         return Functions.call(this, a);
     }
