@@ -8,7 +8,6 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -16,7 +15,6 @@ import java.util.Map;
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Methods.allMethods;
 import static com.googlecode.totallylazy.Monad.methods.sequenceO;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.lang.reflect.Proxy.newProxyInstance;
 

@@ -70,7 +70,7 @@ public class MapsTest {
 
     @Test
     public void supportsMultiValuedMapCreation() throws Exception {
-        Map<String, List<String>> map = Maps.multiMap(Pair.pair("name", "Dan"), Pair.pair("name", "Mat"));
+        Map<String, List<String>> map = Maps.multiMap(pair("name", "Dan"), pair("name", "Mat"));
         List<String> values = map.entrySet().iterator().next().getValue();
         assertThat(values, hasExactly("Dan", "Mat"));
     }

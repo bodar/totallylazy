@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.parser;
 import com.googlecode.totallylazy.Triple;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.matchers.Matchers.is;

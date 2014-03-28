@@ -6,8 +6,6 @@ import com.googlecode.totallylazy.callables.TimeFunction;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Pair.pair;
-
 @FunctionalInterface
 public interface Function<A, B> extends Functor<B>, java.util.function.Function<A,B> {
     B call(A a) throws Exception;
@@ -70,7 +68,7 @@ public interface Function<A, B> extends Functor<B>, java.util.function.Function<
     }
 
     default Function<A, Pair<A, B>> capturing() {
-        return original -> pair(original, Function.this.apply(original));
+        return original -> Pair.pair(original, Function.this.apply(original));
     }
 
     default Function<A,B> time() {

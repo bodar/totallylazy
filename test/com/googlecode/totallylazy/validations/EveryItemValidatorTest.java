@@ -6,7 +6,6 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Maps.entries;
 import static com.googlecode.totallylazy.Maps.map;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;

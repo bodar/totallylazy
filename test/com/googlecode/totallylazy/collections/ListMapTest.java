@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.Pair;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Pair.pair;

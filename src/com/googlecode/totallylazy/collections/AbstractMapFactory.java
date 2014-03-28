@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequences;
 
 import java.util.Map;
 
