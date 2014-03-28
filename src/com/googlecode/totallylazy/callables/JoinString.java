@@ -13,7 +13,7 @@ public class JoinString extends CombinerFunction<String> {
     }
 
     @Override
-    public String identity() {
+    public String identityElement() {
         return Strings.EMPTY;
     }
 

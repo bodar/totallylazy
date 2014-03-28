@@ -9,7 +9,7 @@ public class Or extends CombinerFunction<Boolean> {
     }
 
     @Override
-    public Boolean identity() {
+    public Boolean identityElement() {
         return false;
     }
 }

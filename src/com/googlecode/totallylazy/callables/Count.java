@@ -16,7 +16,7 @@ public class Count extends ReducerCombinerFunction<Object, Number> {
     }
 
     @Override
-    public Number identity() {
+    public Number identityElement() {
         return 0;
     }
 

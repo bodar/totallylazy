@@ -166,7 +166,7 @@ public class Iterators {
     }
 
     private static <T, S> S seed(Iterator<? extends T> iterator, Callable2<? super S, ? super T, ? extends S> callable) {
-        if (callable instanceof Identity) return Unchecked.<Identity<S>>cast(callable).identity();
+        if (callable instanceof Identity) return Unchecked.<Identity<S>>cast(callable).identityElement();
         return Unchecked.<S>cast(iterator.next());
     }
 

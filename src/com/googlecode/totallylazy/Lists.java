@@ -29,7 +29,7 @@ public class Lists {
             return new ReducerCombinerFunction<T, List<T>>() {
                 @Override
                 public List<T> combine(List<T> a, List<T> b) throws Exception {
-                    List<T> result = identity();
+                    List<T> result = identityElement();
                     result.addAll(a);
                     result.addAll(b);
                     return result;
@@ -42,7 +42,7 @@ public class Lists {
                 }
 
                 @Override
-                public List<T> identity() {
+                public List<T> identityElement() {
                     return new ArrayList<T>();
                 }
             };

@@ -10,7 +10,7 @@ public class Maximum extends CombinerFunction<Number> implements com.googlecode.
     }
 
     @Override
-    public Number identity() {
+    public Number identityElement() {
         return Numbers.NEGATIVE_INFINITY;
     }
 }

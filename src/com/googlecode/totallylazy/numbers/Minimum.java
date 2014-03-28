@@ -10,7 +10,7 @@ public class Minimum extends CombinerFunction<Number> implements com.googlecode.
     }
 
     @Override
-    public Number identity() {
+    public Number identityElement() {
         return Numbers.POSITIVE_INFINITY;
     }
 }

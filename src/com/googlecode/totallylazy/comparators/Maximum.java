@@ -27,7 +27,7 @@ public interface Maximum<T> extends Combiner<T> {
         }
 
         @Override
-        public T identity() {
+        public T identityElement() {
             return identity;
         }
     }
