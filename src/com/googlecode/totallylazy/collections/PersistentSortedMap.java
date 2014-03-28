@@ -84,6 +84,7 @@ public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<P
             return sortedMap(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
         }
 
+        @SafeVarargs
         public static <K extends Comparable<? super K>, V> PersistentSortedMap<K, V> sortedMap(final Pair<K, V> head, final Pair<K, V>... tail) {
             return sortedMap(sequence(tail).cons(head));
         }

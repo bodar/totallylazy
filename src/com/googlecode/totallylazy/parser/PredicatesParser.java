@@ -19,6 +19,7 @@ class PredicatesParser extends Parser<String> {
         return new PredicatesParser(Sequences.sequence(predicates));
     }
 
+    @SafeVarargs
     static Parser<String> string(Predicate<? super Character>... predicates) {
         return new PredicatesParser(Sequences.sequence(predicates));
     }

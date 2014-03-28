@@ -84,14 +84,7 @@ public class Parsers {
         return PredicatesParser.string(value);
     }
 
-    public static Parser<String> string(Predicate<? super Character> first) {
-        return PredicatesParser.string(sequence(first));
-    }
-
-    public static Parser<String> string(Predicate<? super Character> first, Predicate<? super Character> second) {
-        return PredicatesParser.string(Sequences.<Predicate<? super Character>>sequence(first, second));
-    }
-
+    @SafeVarargs
     public static Parser<String> string(Predicate<? super Character>... predicates) {
         return PredicatesParser.string(predicates);
     }
@@ -116,20 +109,9 @@ public class Parsers {
         return OrParser.or(parsers);
     }
 
+    @SafeVarargs
     public static <A> Parser<A> or(Parse<? extends A>... parsers) {
         return or(sequence(parsers));
-    }
-
-    public static <A> Parser<A> or(Parse<? extends A> a, Parse<? extends A> b) {
-        return or(sequence(a, b));
-    }
-
-    public static <A> Parser<A> or(Parse<? extends A> a, Parse<? extends A> b, Parse<? extends A> c) {
-        return or(sequence(a, b, c));
-    }
-
-    public static <A> Parser<A> or(Parse<? extends A> a, Parse<? extends A> b, Parse<? extends A> c, Parse<? extends A> d) {
-        return or(sequence(a, b, c, d));
     }
 
     public static <A> Parser<A> returns(A a) {
@@ -144,22 +126,7 @@ public class Parsers {
         return ListParser.list(parsers);
     }
 
-    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b) {
-        return list(sequence(a, b));
-    }
-
-    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c) {
-        return list(sequence(a, b, c));
-    }
-
-    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c, final Parse<? extends A> d) {
-        return list(sequence(a, b, c, d));
-    }
-
-    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c, final Parse<? extends A> d, final Parse<? extends A> e) {
-        return list(sequence(a, b, c, d, e));
-    }
-
+    @SafeVarargs
     public static <A> Parser<List<A>> list(final Parse<? extends A>... parsers) {
         return list(sequence(parsers));
     }

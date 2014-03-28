@@ -22,6 +22,7 @@ public class AllOfValidator<T> extends LogicalValidator<T>{
 
     public static class constructors {
 
+        @SafeVarargs
         public static <T> AllOfValidator<T> allOf(Validator<? super T>... validators) {
             return allOf(sequence(validators));
         }

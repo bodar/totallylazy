@@ -71,6 +71,7 @@ public class Comparators {
         return new DescendingComparator<T, R>(callable);
     }
 
+    @SafeVarargs
     public static <T> Comparator<T> comparators(final Comparator<? super T>... comparators) {
         return comparators(sequence(comparators));
     }

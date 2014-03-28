@@ -61,45 +61,17 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> sequence() {
-        return empty();
-    }
-
-
     @SuppressWarnings("unchecked")
     public static <T> Sequence<T> one(final T first) {
         return internal(first);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> Sequence<T> sequence(final T first) {
-        return internal(first);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Sequence<T> sequence(final T first, final T second) {
-        return internal(first, second);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Sequence<T> sequence(final T first, final T second, final T third) {
-        return internal(first, second, third);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Sequence<T> sequence(final T first, final T second, final T third, final T fourth) {
-        return internal(first, second, third, fourth);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Sequence<T> sequence(final T first, final T second, final T third, final T fourth, final T fifth) {
-        return internal(first, second, third, fourth, fifth);
-    }
-
+    @SafeVarargs
     private static <T> Sequence<T> internal(final T... items) {
         return sequence(items);
     }
 
+    @SafeVarargs
     public static <T> Sequence<T> sequence(final T... items) {
         if (items == null || items.length == 0) {
             return empty();
@@ -486,22 +458,7 @@ public class Sequences {
         };
     }
 
-    public static <T> Sequence<T> join(final Iterable<? extends T> first, final Iterable<? extends T> second) {
-        return join(sequence(first, second));
-    }
-
-    public static <T> Sequence<T> join(final Iterable<? extends T> first, final Iterable<? extends T> second, final Iterable<? extends T> third) {
-        return join(sequence(first, second, third));
-    }
-
-    public static <T> Sequence<T> join(final Iterable<? extends T> first, final Iterable<? extends T> second, final Iterable<? extends T> third, final Iterable<? extends T> fourth) {
-        return join(sequence(first, second, third, fourth));
-    }
-
-    public static <T> Sequence<T> join(final Iterable<? extends T> first, final Iterable<? extends T> second, final Iterable<? extends T> third, final Iterable<? extends T> fourth, final Iterable<? extends T> fifth) {
-        return join(sequence(first, second, third, fourth, fifth));
-    }
-
+    @SafeVarargs
     public static <T> Sequence<T> join(final Iterable<? extends T>... iterables) {
         return join(sequence(iterables));
     }
@@ -572,6 +529,7 @@ public class Sequences {
 
     }
 
+    @SafeVarargs
     public static <T> Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables) {
         return transpose(sequence(iterables));
     }

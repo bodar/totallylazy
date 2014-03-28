@@ -39,6 +39,7 @@ public class Properties {
         return properties;
     }
 
+    @SafeVarargs
     public static java.util.Properties properties(Pair<String, String>... values) {
         return properties(sequence(values));
     }

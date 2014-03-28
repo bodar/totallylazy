@@ -62,30 +62,12 @@ public class Maps {
         return map(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5));
     }
 
-    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first) {
-        return map(sequence(first));
-    }
-
-    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second) {
-        return map(sequence(first, second));
-    }
-
-    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third) {
-        return map(sequence(first, second, third));
-    }
-
-    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third, final Pair<? extends K, ? extends V> fourth) {
-        return map(sequence(first, second, third, fourth));
-    }
-
-    public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third, final Pair<? extends K, ? extends V> fourth, final Pair<? extends K, ? extends V> fifth) {
-        return map(sequence(first, second, third, fourth, fifth));
-    }
-
+    @SafeVarargs
     public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V>... entries) {
         return map(sequence(entries));
     }
 
+    @SafeVarargs
     public static <K, V> Map<K, V> map(final Map<K, V> seed, final Pair<? extends K, ? extends V>... entries) {
         return map(seed, sequence(entries));
     }
@@ -122,26 +104,12 @@ public class Maps {
         return map(seed, iterable.iterator(), callable);
     }
 
-    public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second) {
-        return multiMap(sequence(first, second));
-    }
-
-    public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third) {
-        return multiMap(sequence(first, second, third));
-    }
-
-    public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third, final Pair<? extends K, ? extends V> fourth) {
-        return multiMap(sequence(first, second, third, fourth));
-    }
-
-    public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V> first, final Pair<? extends K, ? extends V> second, final Pair<? extends K, ? extends V> third, final Pair<? extends K, ? extends V> fourth, final Pair<? extends K, ? extends V> fifth) {
-        return multiMap(sequence(first, second, third, fourth, fifth));
-    }
-
+    @SafeVarargs
     public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V>... entries) {
         return multiMap(sequence(entries));
     }
 
+    @SafeVarargs
     public static <K, V> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Pair<? extends K, ? extends V>... entries) {
         return multiMap(seed, sequence(entries));
     }

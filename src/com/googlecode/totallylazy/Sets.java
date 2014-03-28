@@ -16,10 +16,12 @@ public class Sets {
         return new LinkedHashSet<T>();
     }
 
+    @SafeVarargs
     public static <T> Set<T> set(T... values) {
         return set(new LinkedHashSet<T>(), values);
     }
 
+    @SafeVarargs
     public static <T, S extends Set<T>> S set(S result, T... values) {
         return set(result, asList(values));
     }
@@ -47,22 +49,7 @@ public class Sets {
         return newSetFromMap(Maps.<T, Boolean>fifoMap(maximumElements));
     }
 
-    public static <T> Set<T> union(final Set<? extends T> first, final Set<? extends T> second) {
-        return union(sequence(first, second));
-    }
-
-    public static <T> Set<T> union(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third) {
-        return union(sequence(first, second, third));
-    }
-
-    public static <T> Set<T> union(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth) {
-        return union(sequence(first, second, third, fourth));
-    }
-
-    public static <T> Set<T> union(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth, final Set<? extends T> firth) {
-        return union(sequence(first, second, third, fourth, firth));
-    }
-
+    @SafeVarargs
     public static <T> Set<T> union(final Set<? extends T>... sets) {
         return union(asList(sets));
     }
@@ -75,22 +62,7 @@ public class Sets {
         return result;
     }
 
-    public static <T> Set<T> intersection(final Set<? extends T> first, final Set<? extends T> second) {
-        return intersection(sequence(first, second));
-    }
-
-    public static <T> Set<T> intersection(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third) {
-        return intersection(sequence(first, second, third));
-    }
-
-    public static <T> Set<T> intersection(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth) {
-        return intersection(sequence(first, second, third, fourth));
-    }
-
-    public static <T> Set<T> intersection(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth, final Set<? extends T> firth) {
-        return intersection(sequence(first, second, third, fourth, firth));
-    }
-
+    @SafeVarargs
     public static <T> Set<T> intersection(final Set<? extends T>... sets) {
         return intersection(sequence(sets));
     }
@@ -108,22 +80,7 @@ public class Sets {
         return result;
     }
 
-    public static <T> Set<T> complement(final Set<? extends T> first, final Set<? extends T> second) {
-        return complement(sequence(first, second));
-    }
-
-    public static <T> Set<T> complement(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third) {
-        return complement(sequence(first, second, third));
-    }
-
-    public static <T> Set<T> complement(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth) {
-        return complement(sequence(first, second, third, fourth));
-    }
-
-    public static <T> Set<T> complement(final Set<? extends T> first, final Set<? extends T> second, final Set<? extends T> third, final Set<? extends T> fourth, final Set<? extends T> firth) {
-        return complement(sequence(first, second, third, fourth, firth));
-    }
-
+    @SafeVarargs
     public static <T> Set<T> complement(final Set<? extends T>... sets) {
         return complement(asList(sets));
     }
