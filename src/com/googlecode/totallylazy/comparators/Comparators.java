@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.comparators;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
@@ -13,7 +13,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Comparators {
-    public static <T, R> Comparator<T> by(final Function1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
+    public static <T, R> Comparator<T> by(final Function<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
         return new Comparator<T>() {
             public int compare(T instance, T otherInstance) {
                 return comparator.compare(call(callable, instance), call(callable, otherInstance));
@@ -21,7 +21,7 @@ public class Comparators {
         };
     }
 
-    public static <T, R> Comparator<T> where(final Function1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
+    public static <T, R> Comparator<T> where(final Function<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
         return by(callable, comparator);
     }
 
@@ -48,7 +48,7 @@ public class Comparators {
         return Comparators.<T>ascending();
     }
 
-    public static <T, R extends Comparable<? super R>> Comparator<T> ascending(final Function1<? super T, ? extends R> callable) {
+    public static <T, R extends Comparable<? super R>> Comparator<T> ascending(final Function<? super T, ? extends R> callable) {
         return new AscendingComparator<T, R>(callable);
     }
 
@@ -67,7 +67,7 @@ public class Comparators {
         return Comparators.<T>descending();
     }
 
-    public static <T, R extends Comparable<? super R>> Comparator<T> descending(final Function1<? super T, ? extends R> callable) {
+    public static <T, R extends Comparable<? super R>> Comparator<T> descending(final Function<? super T, ? extends R> callable) {
         return new DescendingComparator<T, R>(callable);
     }
 

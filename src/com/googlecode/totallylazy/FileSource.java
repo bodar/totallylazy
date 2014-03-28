@@ -16,7 +16,7 @@ public class FileSource implements Sources {
 
     private FileSource(final Sequence<Pair<String, File>> sources) {
         closeables = new CloseableList();
-        this.sources = sources.map(new Function1<Pair<String, File>, Source>() {
+        this.sources = sources.map(new Function<Pair<String, File>, Source>() {
             @Override
             public Source call(Pair<String, File> pair) throws Exception {
                 return new Source(pair.first(), new Date(pair.second().lastModified()), inputStream(pair.second()), pair.second().isDirectory());
@@ -52,8 +52,8 @@ public class FileSource implements Sources {
         closeables.close();
     }
 
-    public static Function1<File, Pair<String, File>> relativeTo(final File folder) {
-        return new Function1<File, Pair<String, File>>() {
+    public static Function<File, Pair<String, File>> relativeTo(final File folder) {
+        return new Function<File, Pair<String, File>>() {
             @Override
             public Pair<String, File> call(File file) throws Exception {
                 return Pair.pair(Files.relativePath(folder, file), file);

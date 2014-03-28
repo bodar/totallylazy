@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.time;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Sequence;
 
 import java.text.DateFormat;
@@ -16,8 +16,8 @@ public class DateFormatConverter implements DateConverter {
         this(sequence(formats).map(asDateFormat()));
     }
 
-    public static Function1<? super String, DateFormat> asDateFormat() {
-        return new Function1<String, DateFormat>() {
+    public static Function<? super String, DateFormat> asDateFormat() {
+        return new Function<String, DateFormat>() {
             @Override
             public DateFormat call(String value) throws Exception {
                 return Dates.format(value);
@@ -53,8 +53,8 @@ public class DateFormatConverter implements DateConverter {
                 getOrElse(callThrows(new IllegalArgumentException("Invalid date string: " + value), Date.class));
     }
 
-    public static Function1<DateFormat, Date> parseToDate(final String value) {
-        return new Function1<DateFormat, Date>() {
+    public static Function<DateFormat, Date> parseToDate(final String value) {
+        return new Function<DateFormat, Date>() {
             public Date call(DateFormat dateFormat) throws Exception {
                 return dateFormat.parse(value);
             }

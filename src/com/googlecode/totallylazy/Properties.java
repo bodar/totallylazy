@@ -89,8 +89,8 @@ public class Properties {
         return out.toString();
     }
 
-    public static Function1<String, java.util.Properties> propertiesFromString() {
-        return new Function1<String, java.util.Properties>() {
+    public static Function<String, java.util.Properties> propertiesFromString() {
+        return new Function<String, java.util.Properties>() {
             public java.util.Properties call(String text) throws Exception {
                 return properties(text);
             }

@@ -3,9 +3,7 @@ package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.BinaryFunction;
 import com.googlecode.totallylazy.Block;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Mapper;
-import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 

@@ -8,8 +8,8 @@ import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Closeables {
-    public static <T extends Closeable, R> Function1<T, R> closeAfter(final Function1<? super T, R> callable) {
-        return new Function1<T, R>() {
+    public static <T extends Closeable, R> Function<T, R> closeAfter(final Function<? super T, R> callable) {
+        return new Function<T, R>() {
             @Override
             public R call(T t) throws Exception {
                 return using(t, callable);
@@ -96,7 +96,7 @@ public class Closeables {
         return t;
     }
 
-    public static <T extends Closeable, R> R using(T t, Function1<? super T, ? extends R> callable) {
+    public static <T extends Closeable, R> R using(T t, Function<? super T, ? extends R> callable) {
         try {
             return call(callable, t);
         } finally {
@@ -116,7 +116,7 @@ public class Closeables {
         }
     }
 
-    public static <T, R> R using(T instanceWithCloseMethod, Function1<? super T, ? extends R> callable) {
+    public static <T, R> R using(T instanceWithCloseMethod, Function<? super T, ? extends R> callable) {
         try {
             return call(callable, instanceWithCloseMethod);
         } finally {

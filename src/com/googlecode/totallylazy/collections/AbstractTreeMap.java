@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Option;
@@ -9,7 +9,6 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -144,7 +143,7 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
-    public <NewV> TreeMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
+    public <NewV> TreeMap<K, NewV> map(Function<? super V, ? extends NewV> transformer) {
         return TreeMap.methods.map(transformer, factory, this);
     }
 

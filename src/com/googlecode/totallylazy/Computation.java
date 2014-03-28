@@ -16,24 +16,24 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     private final Lazy<T> head;
     private final LazyFunction<T, Computation<T>> tail;
 
-    private Computation(Callable<T> head, Function1<T, Computation<T>> tail) {
+    private Computation(Callable<T> head, Function<T, Computation<T>> tail) {
         this.head = Lazy.lazy(head);
         this.tail = lazy(tail);
     }
 
-    public static <T> Computation<T> computation1(T value, Function1<T, Computation<T>> next) {
+    public static <T> Computation<T> computation1(T value, Function<T, Computation<T>> next) {
         return computation1(returns(value), next);
     }
 
-    public static <T> Computation<T> computation1(Callable<T> callable, Function1<T, Computation<T>> next) {
+    public static <T> Computation<T> computation1(Callable<T> callable, Function<T, Computation<T>> next) {
         return new Computation<T>(callable, next);
     }
 
-    public static <T> Computation<T> computation(Callable<T> callable, Function1<? super T, ? extends T> next) {
+    public static <T> Computation<T> computation(Callable<T> callable, Function<? super T, ? extends T> next) {
         return computation1(callable, generate(next));
     }
 
-    public static <T> Computation<T> computation(T value, Function1<? super T, ? extends T> callable) {
+    public static <T> Computation<T> computation(T value, Function<? super T, ? extends T> callable) {
         return computation1(value, generate(callable));
     }
 
@@ -41,7 +41,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         return computation1(returns(value), Functions.<T, Computation<T>>constant(next));
     }
 
-    public static <T> Computation<T> iterate(final Function1<? super T, ? extends T> callable, final T t) {
+    public static <T> Computation<T> iterate(final Function<? super T, ? extends T> callable, final T t) {
         return computation(t, callable);
     }
 
@@ -90,8 +90,8 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         }.lazy();
     }
 
-    public static <T> Function1<T, Computation<T>> generate(final Function1<? super T, ? extends T> callable) {
-        return new Function1<T, Computation<T>>() {
+    public static <T> Function<T, Computation<T>> generate(final Function<? super T, ? extends T> callable) {
+        return new Function<T, Computation<T>>() {
             @Override
             public Computation<T> call(T value) throws Exception {
                 return computation1(Callables.deferApply(callable, value), this);

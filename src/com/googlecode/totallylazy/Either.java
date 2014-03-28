@@ -31,30 +31,30 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
 
     public abstract <S> S fold(final S seed, final Callable2<? super S, ? super L, ? extends S> left, final Callable2<? super S, ? super R, ? extends S> right);
 
-    public abstract <S> S map(final Function1<? super L, S> left, final Function1<? super R, ? extends S> right);
+    public abstract <S> S map(final Function<? super L, S> left, final Function<? super R, ? extends S> right);
 
     @Override
-    public abstract <S> Either<L, S> map(Function1<? super R, ? extends S> callable);
+    public abstract <S> Either<L, S> map(Function<? super R, ? extends S> callable);
 
-    public abstract <S> Either<L, S> flatMap(Function1<? super R, ? extends Either<L, S>> callable);
+    public abstract <S> Either<L, S> flatMap(Function<? super R, ? extends Either<L, S>> callable);
 
     public static <L, R> Either<L, R> flatten(final Either<L, Either<L, R>> either) {
         return either.flatMap(Either.<L, R>identity());
     }
 
-    public static <L, R> Function1<Either<L, R>, Either<L, R>> identity(Class<L> lClass, Class<R> rClass) {
+    public static <L, R> Function<Either<L, R>, Either<L, R>> identity(Class<L> lClass, Class<R> rClass) {
         return identity();
     }
 
-    public static <L, R> Function1<Either<L, R>, Either<L, R>> identity() { return Functions.identity(); }
+    public static <L, R> Function<Either<L, R>, Either<L, R>> identity() { return Functions.identity(); }
 
     public abstract Object value();
 
-    public <Ro> Either<L, Ro> applicate(Either<L, ? extends Function1<? super R, ? extends Ro>> applicator) {
+    public <Ro> Either<L, Ro> applicate(Either<L, ? extends Function<? super R, ? extends Ro>> applicator) {
         return applicate(applicator, this);
     }
 
-    public static <L, Ri, Ro> Either<L, Ro> applicate(Either<L, ? extends Function1<? super Ri, ? extends Ro>> applicator, Either<L, ? extends Ri> value) {
+    public static <L, Ri, Ro> Either<L, Ro> applicate(Either<L, ? extends Function<? super Ri, ? extends Ro>> applicator, Either<L, ? extends Ri> value) {
         if (applicator.isLeft()) return left(applicator.left());
         return value.map(applicator.right());
     }
@@ -116,8 +116,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
             };
         }
 
-        public static <L, R> Function1<L, Either<L, R>> asLeft() {
-            return new Function1<L, Either<L, R>>() {
+        public static <L, R> Function<L, Either<L, R>> asLeft() {
+            return new Function<L, Either<L, R>>() {
                 @Override
                 public Either<L, R> call(L value) throws Exception {
                     return Either.left(value);
@@ -125,8 +125,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
             };
         }
 
-        public static <L, R> Function1<R, Either<L, R>> asRight() {
-            return new Function1<R, Either<L, R>>() {
+        public static <L, R> Function<R, Either<L, R>> asRight() {
+            return new Function<R, Either<L, R>>() {
                 @Override
                 public Either<L, R> call(R value) throws Exception {
                     return Either.right(value);

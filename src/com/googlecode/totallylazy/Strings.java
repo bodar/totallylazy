@@ -35,8 +35,8 @@ public class Strings {
     public static final Charset UTF8 = Charset.forName("UTF-8");
     public static final CombinerFunction<String> join = JoinString.instance;
 
-    public static Function1<String, Boolean> asBoolean() {
-        return new Function1<String, Boolean>() {
+    public static Function<String, Boolean> asBoolean() {
+        return new Function<String, Boolean>() {
             public Boolean call(String value) throws Exception {
                 return Boolean.parseBoolean(value);
             }
@@ -71,48 +71,48 @@ public class Strings {
         };
     }
 
-    public static Function1<String, String> toLowerCase() {
-        return new Function1<String, String>() {
+    public static Function<String, String> toLowerCase() {
+        return new Function<String, String>() {
             public String call(String value) throws Exception {
                 return value.toLowerCase();
             }
         };
     }
 
-    public static Function1<String, String> replace(final char oldChar, final char newChar) {
-        return new Function1<String, String>() {
+    public static Function<String, String> replace(final char oldChar, final char newChar) {
+        return new Function<String, String>() {
             public String call(String value) throws Exception {
                 return value.replace(oldChar, newChar);
             }
         };
     }
 
-    public static Function1<String, String> replace(final CharSequence target, final CharSequence replacement) {
-        return new Function1<String, String>() {
+    public static Function<String, String> replace(final CharSequence target, final CharSequence replacement) {
+        return new Function<String, String>() {
             public String call(String value) throws Exception {
                 return value.replace(target, replacement);
             }
         };
     }
 
-    public static Function1<String, String> replaceAll(final String regex, final String replacement) {
-        return new Function1<String, String>() {
+    public static Function<String, String> replaceAll(final String regex, final String replacement) {
+        return new Function<String, String>() {
             public String call(String value) throws Exception {
                 return value.replaceAll(regex, replacement);
             }
         };
     }
 
-    public static Function1<String, String> replaceFirst(final String regex, final String replacement) {
-        return new Function1<String, String>() {
+    public static Function<String, String> replaceFirst(final String regex, final String replacement) {
+        return new Function<String, String>() {
             public String call(String value) throws Exception {
                 return value.replaceFirst(regex, replacement);
             }
         };
     }
 
-    public static Function1<String, String> toUpperCase() {
-        return new Function1<String, String>() {
+    public static Function<String, String> toUpperCase() {
+        return new Function<String, String>() {
             public String call(String value) throws Exception {
                 return value.toUpperCase();
             }
@@ -123,8 +123,8 @@ public class Strings {
         return new StartsWithPredicate(value);
     }
 
-    public static Function1<String, Predicate<String>> startsWith() {
-        return new Function1<String, Predicate<String>>() {
+    public static Function<String, Predicate<String>> startsWith() {
+        return new Function<String, Predicate<String>>() {
             public Predicate<String> call(String value) throws Exception {
                 return startsWith(value);
             }
@@ -139,8 +139,8 @@ public class Strings {
         return new EndsWithPredicate(value);
     }
 
-    public static Function1<String, Predicate<String>> endsWith() {
-        return new Function1<String, Predicate<String>>() {
+    public static Function<String, Predicate<String>> endsWith() {
+        return new Function<String, Predicate<String>>() {
             public Predicate<String> call(String value) throws Exception {
                 return endsWith(value);
             }
@@ -155,8 +155,8 @@ public class Strings {
         return new ContainsPredicate(value);
     }
 
-    public static Function1<String, Predicate<String>> equalIgnoringCase() {
-        return new Function1<String, Predicate<String>>() {
+    public static Function<String, Predicate<String>> equalIgnoringCase() {
+        return new Function<String, Predicate<String>>() {
             public Predicate<String> call(String expected) throws Exception {
                 return equalIgnoringCase(expected);
             }
@@ -259,7 +259,7 @@ public class Strings {
 
     public static String toString(final InputStream stream) {
         if (stream == null) return EMPTY;
-        return using(stream, new Function1<InputStream, String>() {
+        return using(stream, new Function<InputStream, String>() {
             @Override
             public String call(InputStream inputStream) throws Exception {
                 return Strings.toString(inputStreamReader(inputStream));
@@ -268,7 +268,7 @@ public class Strings {
     }
 
     public static String toString(Reader reader) {
-        return using(reader, new Function1<Reader, String>() {
+        return using(reader, new Function<Reader, String>() {
             public String call(Reader reader) throws Exception {
                 StringBuilder builder = new StringBuilder();
                 char[] buffer = new char[512];
@@ -282,33 +282,33 @@ public class Strings {
         });
     }
 
-    public static Function1<Object, String> format(final String format) {
-        return new Function1<Object, String>() {
+    public static Function<Object, String> format(final String format) {
+        return new Function<Object, String>() {
             public String call(Object value) throws Exception {
                 return String.format(format, value);
             }
         };
     }
 
-    public static Function1<CharSequence, Sequence<Character>> toCharacters() {
-        return new Function1<CharSequence, Sequence<Character>>() {
+    public static Function<CharSequence, Sequence<Character>> toCharacters() {
+        return new Function<CharSequence, Sequence<Character>>() {
             public Sequence<Character> call(CharSequence value) throws Exception {
                 return characters(value);
             }
         };
     }
 
-    public static Function1<String, String> reverse() {
-        return new Function1<String, String>() {
+    public static Function<String, String> reverse() {
+        return new Function<String, String>() {
             public String call(String value) throws Exception {
                 return reverse(value);
             }
         };
     }
 
-    public static Function1<String, Sequence<String>> split(final String regex) {
+    public static Function<String, Sequence<String>> split(final String regex) {
         if (regex == null) throw new IllegalArgumentException("regex cannot be null");
-        return new Function1<String, Sequence<String>>() {
+        return new Function<String, Sequence<String>>() {
             @Override
             public Sequence<String> call(String s) throws Exception {
                 return sequence(s.split(regex));
@@ -316,8 +316,8 @@ public class Strings {
         };
     }
 
-    public static Function1<String, String> substring(final int beginIndex, final int endIndex) {
-        return new Function1<String, String>() {
+    public static Function<String, String> substring(final int beginIndex, final int endIndex) {
+        return new Function<String, String>() {
             public String call(String value) throws Exception {
                 return substring(value, beginIndex, endIndex);
             }
@@ -347,8 +347,8 @@ public class Strings {
         return index;
     }
 
-    public static Function1<String, Character> characterAt(final int index) {
-        return new Function1<String, Character>() {
+    public static Function<String, Character> characterAt(final int index) {
+        return new Function<String, Character>() {
             @Override
             public Character call(String s) throws Exception {
                 return s.charAt(index);
@@ -357,8 +357,8 @@ public class Strings {
     }
 
 
-    public static Function1<String, String> trim() {
-        return new Function1<String, String>() {
+    public static Function<String, String> trim() {
+        return new Function<String, String>() {
             @Override
             public String call(String value) throws Exception {
                 return value.trim();

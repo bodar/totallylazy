@@ -69,17 +69,17 @@ public class None<T> extends Option<T>{
     }
 
     @Override
-    public <S> Option<S> map(Function1<? super T, ? extends S> callable) {
+    public <S> Option<S> map(Function<? super T, ? extends S> callable) {
         return none();
     }
 
     @Override
-    public Option<T> each(Function1<? super T, ?> callable) {
+    public Option<T> each(Function<? super T, ?> callable) {
         return this;
     }
 
     @Override
-    public <S> Option<S> flatMap(Function1<? super T, ? extends Option<? extends S>> callable) {
+    public <S> Option<S> flatMap(Function<? super T, ? extends Option<? extends S>> callable) {
         return none();
     }
 

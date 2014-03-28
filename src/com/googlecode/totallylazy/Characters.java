@@ -101,7 +101,7 @@ public class Characters {
     public static LogicalPredicate<Character> hexDigit = between('A', 'F').or(between('a', 'F')).or(between('0', '9'));
 
     public static Sequence<Character> range(char start, char end) {
-        return Numbers.range((int) start, (int) end).map(new Function1<Number, Character>() {
+        return Numbers.range((int) start, (int) end).map(new Function<Number, Character>() {
             @Override
             public Character call(Number number) throws Exception {
                 return (char) number.intValue();

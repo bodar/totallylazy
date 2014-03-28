@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Pair.pair;
 
-public interface Function1<A, B> extends Functor<B> {
+public interface Function<A, B> extends Functor<B> {
     B call(A a) throws Exception;
 
     default B apply(final A a) {
@@ -23,23 +23,23 @@ public interface Function1<A, B> extends Functor<B> {
         return Callers.callConcurrently(deferApply(a));
     }
 
-    default Function1<A, B> lazy() {
+    default Function<A, B> lazy() {
         return LazyFunction.lazy(this);
     }
 
-    default Function1<A, B> sleep(int millis) {
+    default Function<A, B> sleep(int millis) {
         return SleepyFunction.sleepy(this, millis);
     }
 
-    default Function1<A, Option<B>> optional() {
+    default Function<A, Option<B>> optional() {
         return Exceptions.optional(this);
     }
 
-    default Function1<A, Either<Exception, B>> either() {
+    default Function<A, Either<Exception, B>> either() {
         return Exceptions.either(this);
     }
 
-    default Function1<A, Either<Exception, B>> orException() {
+    default Function<A, Either<Exception, B>> orException() {
         return either();
     }
 
@@ -48,35 +48,35 @@ public interface Function1<A, B> extends Functor<B> {
     }
 
     @Override
-    default <C> Function1<A, C> map(final Function1<? super B, ? extends C> callable) {
+    default <C> Function<A, C> map(final Function<? super B, ? extends C> callable) {
         return Callables.compose(this, callable);
     }
 
-    default <C> Function1<A, C> then(final Function1<? super B, ? extends C> callable) {
+    default <C> Function<A, C> then(final Function<? super B, ? extends C> callable) {
         return map(callable);
     }
 
-    default <C> Function1<A, C> then(final Callable<? extends C> callable) {
+    default <C> Function<A, C> then(final Callable<? extends C> callable) {
         return Callables.compose(this, callable);
     }
 
-    default Function1<A,B> interruptable() {
+    default Function<A,B> interruptable() {
         return Functions.interruptable(this);
     }
 
-    default Function1<A, Returns<B>> deferExecution() {
+    default Function<A, Returns<B>> deferExecution() {
         return Callables.deferReturn(this);
     }
 
-    default Function1<A, Pair<A, B>> capturing() {
-        return original -> pair(original, Function1.this.apply(original));
+    default Function<A, Pair<A, B>> capturing() {
+        return original -> pair(original, Function.this.apply(original));
     }
 
-    default Function1<A,B> time() {
+    default Function<A,B> time() {
         return TimeFunction.time1(this);
     }
 
-    default Function1<A,B> time(Function1<? super Number, ?> reporter) {
+    default Function<A,B> time(Function<? super Number, ?> reporter) {
         return TimeFunction.time1(this, reporter);
     }
 
@@ -85,7 +85,7 @@ public interface Function1<A, B> extends Functor<B> {
     }
 
     default <L> Either<L, B> $(Either<L, ? extends A> applicative) {
-        return applicative.applicate(Either.<L, Function1<A, B>>right(this));
+        return applicative.applicate(Either.<L, Function<A, B>>right(this));
     }
 
     default Sequence<B> $(Sequence<? extends A> applicative) {
