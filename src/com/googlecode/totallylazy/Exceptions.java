@@ -53,6 +53,7 @@ public class Exceptions {
         return optional(callable);
     }
 
+    @SafeVarargs
     public static <T, S> Function1<T, Option<S>> handleException(final Callable1<? super T, ? extends S> callable, final Class<? extends Exception>... exceptionClasses) {
         return handleException(callable, sequence(exceptionClasses).map(asInstanceOf()));
     }
@@ -69,6 +70,7 @@ public class Exceptions {
         return handleException(callable, sequence(first));
     }
 
+    @SafeVarargs
     public static <T, S> Function1<T, Option<S>> handleException(final Callable1<? super T, ? extends S> callable, final Predicate<? super Exception>... exceptionClasses) {
         return handleException(callable, sequence(exceptionClasses));
     }

@@ -133,6 +133,7 @@ public class Predicates {
         };
     }
 
+    @SafeVarargs
     public static <T> LogicalPredicate<T> in(final T... values) {
         return in(sequence(values));
     }
@@ -181,30 +182,7 @@ public class Predicates {
         return t;
     }
 
-    public static <T> LogicalPredicate<T> and() {
-        return AndPredicate.and(Sequences.<Predicate<T>>empty());
-    }
-
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first) {
-        return logicalPredicate(first);
-    }
-
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second) {
-        return and(Sequences.<Predicate<? super T>>sequence(first, second));
-    }
-
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second, final Predicate<? super T> third) {
-        return and(Sequences.<Predicate<? super T>>sequence(first, second, third));
-    }
-
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second, final Predicate<? super T> third, final Predicate<? super T> fourth) {
-        return and(Sequences.<Predicate<? super T>>sequence(first, second, third, fourth));
-    }
-
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second, final Predicate<? super T> third, final Predicate<? super T> fourth, final Predicate<? super T> fifth) {
-        return and(Sequences.<Predicate<? super T>>sequence(first, second, third, fourth, fifth));
-    }
-
+    @SafeVarargs
     public static <T> LogicalPredicate<T> and(final Predicate<? super T>... predicates) {
         return and(sequence(predicates));
     }
@@ -237,6 +215,7 @@ public class Predicates {
         return or(Sequences.<Predicate<? super T>>sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <T> LogicalPredicate<T> or(final Predicate<? super T>... predicates) {
         return or(sequence(predicates));
     }

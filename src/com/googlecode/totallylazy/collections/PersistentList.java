@@ -113,26 +113,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
             return cons(one, constructors.<T>empty());
         }
 
-        public static <T> PersistentList<T> list(T one) {
-            return cons(one, constructors.<T>empty());
-        }
-
-        public static <T> PersistentList<T> list(T one, T two) {
-            return cons(one, cons(two, constructors.<T>empty()));
-        }
-
-        public static <T> PersistentList<T> list(T one, T two, T three) {
-            return cons(one, cons(two, cons(three, constructors.<T>empty())));
-        }
-
-        public static <T> PersistentList<T> list(T one, T two, T three, T four) {
-            return cons(one, cons(two, cons(three, cons(four, constructors.<T>empty()))));
-        }
-
-        public static <T> PersistentList<T> list(T one, T two, T three, T four, T five) {
-            return cons(one, cons(two, cons(three, cons(four, cons(five, constructors.<T>empty())))));
-        }
-
+        @SafeVarargs
         public static <T> PersistentList<T> list(T... values) {
             return list(sequence(values));
         }

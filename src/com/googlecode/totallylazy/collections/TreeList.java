@@ -55,6 +55,7 @@ public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, R
         return treeList(sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <T> TreeList<T> treeList(T... values) {
         return treeList(sequence(values));
     }

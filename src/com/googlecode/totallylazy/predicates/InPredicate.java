@@ -25,6 +25,7 @@ public class InPredicate<T> extends LogicalPredicate<T> {
         this.original = iterable;
     }
 
+    @SafeVarargs
     public static <T> LogicalPredicate<T> in(final T... items) {
         return in(Sequences.sequence(items));
     }
