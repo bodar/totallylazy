@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.annotations.multimethod;
 public abstract class AbstractTuple extends Eq implements Tuple {
     @Override
     public final String toString() {
-        return toString("[", ",", "]");
+        return toString("(", ",", "])");
     }
 
     @multimethod
