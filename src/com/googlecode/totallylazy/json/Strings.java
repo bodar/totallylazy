@@ -1,21 +1,19 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Function;
-
 import static com.googlecode.totallylazy.Sequences.characters;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 
-public class Strings {
-    public static String toString(CharSequence value) {
+public interface Strings {
+    static String toString(CharSequence value) {
         return quote(escape(value));
     }
 
-    public static String escape(CharSequence value) {
-        return characters(value).map(functions.escape).toString("");
+    static String escape(CharSequence value) {
+        return characters(value).map(Strings::escape).toString("");
     }
 
-    public static String escape(Character character) {
+    static String escape(Character character) {
         switch (character) {
             case '"': return "\\\"";
             case '\\': return "\\\\";
@@ -27,11 +25,11 @@ public class Strings {
         }
     }
 
-    public static String quote(CharSequence value) {
+    static String quote(CharSequence value) {
         return format("\"%s\"", value);
     }
 
-    public static String unescape(CharSequence escaped) {
+    static String unescape(CharSequence escaped) {
         switch (escaped.charAt(0)) {
             case '"': return "\"";
             case '\\': return "\\";
@@ -45,19 +43,4 @@ public class Strings {
             default: throw new UnsupportedOperationException();
         }
     }
-
-    public static class functions {
-        public static Function<Character, String> escape = new Function<Character, String>() {
-            public String call(Character character) throws Exception {
-                return Strings.escape(character);
-            }
-        };
-
-        public static Function<String, String> unescape = new Function<String, String>() {
-            public String call(String escaped) throws Exception {
-                return Strings.unescape(escaped);
-            }
-        };
-    }
 }
-

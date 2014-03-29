@@ -59,11 +59,6 @@ public class Bytes {
     }
 
     public static Function<OutputStream, OutputStream> write(final byte[] value) {
-        return new Function<OutputStream,OutputStream>() {
-            @Override
-            public OutputStream call(OutputStream outputStream) throws Exception {
-                return write(value, outputStream);
-            }
-        };
+        return outputStream -> write(value, outputStream);
     }
 }

@@ -14,11 +14,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callables {
     public static <T> Function<Value<T>, T> value() {
-        return new Function<Value<T>, T>() {
-            public T call(Value<T> value) throws Exception {
-                return value.value();
-            }
-        };
+        return Value<T>::value;
     }
 
     public static <T> Function<Value<T>, T> value(Class<T> aClass) {
@@ -26,11 +22,7 @@ public final class Callables {
     }
 
     public static <T, R> Function<T, R> asFunction(final Callable<? extends R> callable) {
-        return new Function<T, R>() {
-            public R call(T t) throws Exception {
-                return callable.call();
-            }
-        };
+        return t -> callable.call();
     }
 
     public static <T> Unary<T> nullGuard(final Function<? super T, ? extends T> callable) {
