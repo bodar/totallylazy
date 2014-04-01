@@ -799,7 +799,7 @@ public class Sequences {
         });
     }
 
-    public static <T> Sequence<Sequence<T>> windowed(final Iterable<? extends T> sequence, int size) {
+    public static <T> Sequence<Sequence<T>> windowed(final Iterable<? extends T> sequence, final int size) {
         return new Sequence<Sequence<T>>() {
             @Override
             public Iterator<Sequence<T>> iterator() {
