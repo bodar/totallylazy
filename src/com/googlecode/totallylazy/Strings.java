@@ -11,15 +11,11 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.StartsWithPredicate;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.URI;
-import java.net.URL;
 import java.nio.charset.Charset;
 
 import static com.googlecode.totallylazy.Closeables.using;
@@ -48,32 +44,18 @@ public class Strings {
     }
 
     public static Sequence<String> lines(File file) {
-        try {
-            return lines(new FileInputStream(file));
-        } catch (FileNotFoundException e) {
-            throw lazyException(e);
-        }
+        return Streams.lines(file).memorise();
     }
 
     public static Sequence<String> lines(InputStream stream) {
-        return lines(inputStreamReader(stream));
+        return Streams.lines(stream).memorise();
     }
 
     public static Sequence<String> lines(Reader reader) {
-        return repeat(readLine(new BufferedReader(reader))).takeWhile(notNullValue(String.class)).memorise();
+        return Streams.lines(reader).memorise();
     }
 
-    public static Function<String> readLine(final BufferedReader reader) {
-        return new Function<String>() {
-            public String call() throws Exception {
-                String result = reader.readLine();
-                if (result == null) {
-                    reader.close();
-                }
-                return result;
-            }
-        };
-    }
+    public static Function<String> readLine(final BufferedReader reader) { return Streams.readLine(reader); }
 
     public static Function1<String, String> toLowerCase() {
         return new Function1<String, String>() {
