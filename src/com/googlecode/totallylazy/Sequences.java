@@ -800,13 +800,12 @@ public class Sequences {
     }
 
     public static <T> Sequence<Sequence<T>> windowed(final Iterable<? extends T> sequence, int size) {
-        return internalWindowed(memorise(sequence), size).toSequence();
-    }
-
-    private static <T> PersistentList<Sequence<T>> internalWindowed(final Sequence<T> sequence, int size) {
-        Sequence<T> take = sequence.take(size);
-        if (take.size() == size) return PersistentList.constructors.cons(take, internalWindowed(sequence.tail(), size));
-        return PersistentList.constructors.empty();
+        return new Sequence<Sequence<T>>() {
+            @Override
+            public Iterator<Sequence<T>> iterator() {
+                return Iterators.<T>windowed(sequence.iterator(), size);
+            }
+        };
     }
 
     public static <T> Sequence<T> intersperse(final Iterable<? extends T> iterable, final T separator) {
