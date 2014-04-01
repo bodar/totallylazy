@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Unchecked;
 
 import java.lang.reflect.InvocationTargetException;
@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class MethodInvocation<A, B> extends Mapper<A, B> implements Invocation<A, B> {
+public class MethodInvocation<A, B> implements Function<A, B>, Invocation<A, B> {
     private final Method method;
     private final Object[] arguments;
 

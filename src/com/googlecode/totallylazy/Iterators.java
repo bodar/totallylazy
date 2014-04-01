@@ -12,6 +12,7 @@ import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
+import com.googlecode.totallylazy.iterators.WindowedIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.ArrayDeque;
@@ -65,21 +66,21 @@ public class Iterators {
         return !(a.hasNext() || b.hasNext());
     }
 
-    public static <T> void each(final Iterator<? extends T> iterator, final Callable1<? super T, ?> runnable) {
+    public static <T> void each(final Iterator<? extends T> iterator, final Function<? super T, ?> runnable) {
         forEach(iterator, runnable);
     }
 
-    public static <T> void forEach(final Iterator<? extends T> iterator, final Callable1<? super T, ?> runnable) {
+    public static <T> void forEach(final Iterator<? extends T> iterator, final Function<? super T, ?> runnable) {
         while (iterator.hasNext()) {
             Callers.call(runnable, iterator.next());
         }
     }
 
-    public static <T, S> Iterator<S> map(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends S> callable) {
+    public static <T, S> Iterator<S> map(final Iterator<? extends T> iterator, final Function<? super T, ? extends S> callable) {
         return new MapIterator<T, S>(iterator, callable);
     }
 
-    public static <T, S> Iterator<S> flatMap(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
+    public static <T, S> Iterator<S> flatMap(final Iterator<? extends T> iterator, final Function<? super T, ? extends Iterable<? extends S>> callable) {
         return flattenIterable(map(iterator, callable));
     }
 
@@ -87,7 +88,7 @@ public class Iterators {
         return new FilterIterator<T>(iterator, predicate);
     }
 
-    public static <T> Iterator<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {
+    public static <T> Iterator<T> iterate(final Function<? super T, ? extends T> callable, final T t) {
         return new IterateIterator<T>(nullGuard(callable), t);
     }
 
@@ -122,11 +123,11 @@ public class Iterators {
         return new InitIterator<T>(iterator);
     }
 
-    public static <T, S> S fold(final Iterator<? extends T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S fold(final Iterator<? extends T> iterator, final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         return foldLeft(iterator, seed, callable);
     }
 
-    public static <T, S> S foldLeft(final Iterator<? extends T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S foldLeft(final Iterator<? extends T> iterator, final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         S accumulator = seed;
         while (iterator.hasNext()) {
             accumulator = call(callable, accumulator, iterator.next());
@@ -134,7 +135,7 @@ public class Iterators {
         return accumulator;
     }
 
-    public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
+    public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Function2<? super T, ? super S, ? extends S> callable) {
         Iterator<T> reversed = reverse(iterator);
         S accumilator = seed;
         while (reversed.hasNext()) {
@@ -147,9 +148,9 @@ public class Iterators {
         return PersistentList.constructors.reverse(iterator).iterator();
     }
 
-    public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+    public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Function<? super Pair<T, S>, ? extends S> callable) {
         if (!iterator.hasNext()) return seed;
-        return Callers.call(callable, Pair.pair(returns(head(iterator)), new Function<S>() {
+        return Callers.call(callable, Pair.pair(returns(head(iterator)), new Returns<S>() {
             @Override
             public S call() throws Exception {
                 return foldRight(iterator, seed, callable);
@@ -157,24 +158,24 @@ public class Iterators {
         }));
     }
 
-    public static <T, S> S reduce(final Iterator<? extends T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S reduce(final Iterator<? extends T> iterator, final Function2<? super S, ? super T, ? extends S> callable) {
         return reduceLeft(iterator, callable);
     }
 
-    public static <T, S> S reduceLeft(final Iterator<? extends T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public static <T, S> S reduceLeft(final Iterator<? extends T> iterator, final Function2<? super S, ? super T, ? extends S> callable) {
         return foldLeft(iterator, seed(iterator, callable), callable);
     }
 
-    private static <T, S> S seed(Iterator<? extends T> iterator, Callable2<? super S, ? super T, ? extends S> callable) {
-        if (callable instanceof Identity) return Unchecked.<Identity<S>>cast(callable).identity();
+    private static <T, S> S seed(Iterator<? extends T> iterator, Function2<? super S, ? super T, ? extends S> callable) {
+        if (callable instanceof Identity) return Unchecked.<Identity<S>>cast(callable).identityElement();
         return Unchecked.<S>cast(iterator.next());
     }
 
-    public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Callable2<? super T, ? super S, ? extends S> callable) {
+    public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Function2<? super T, ? super S, ? extends S> callable) {
         return foldRight(iterator, Unchecked.<S>cast(iterator.next()), callable);
     }
 
-    public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+    public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Function<? super Pair<T, S>, ? extends S> callable) {
         return foldRight(iterator, Unchecked.<S>cast(iterator.next()), callable);
     }
 
@@ -298,7 +299,7 @@ public class Iterators {
         return none();
     }
 
-    public static <T, S> Option<S> tryPick(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Option<? extends S>> callable) {
+    public static <T, S> Option<S> tryPick(final Iterator<? extends T> iterator, final Function<? super T, ? extends Option<? extends S>> callable) {
         while (iterator.hasNext()) {
             T item = iterator.next();
             Option<S> result = Unchecked.cast(call(callable, item));
@@ -309,12 +310,28 @@ public class Iterators {
         return none();
     }
 
-    public static <T, S> S pick(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Option<? extends S>> callable) {
+    public static <T, S> S pick(final Iterator<? extends T> iterator, final Function<? super T, ? extends Option<? extends S>> callable) {
         return tryPick(iterator, callable).get();
     }
 
     public static <T> Iterator<T> add(final Iterator<? extends T> iterator, final T t) {
         return join(iterator, sequence(t).iterator());
+    }
+
+    public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<? extends T> second) {
+        return join(sequence(first, second));
+    }
+
+    public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<? extends T> second, final Iterator<? extends T> third) {
+        return join(sequence(first, second, third));
+    }
+
+    public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<? extends T> second, final Iterator<? extends T> third, final Iterator<? extends T> fourth) {
+        return join(sequence(first, second, third, fourth));
+    }
+
+    public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<? extends T> second, final Iterator<? extends T> third, final Iterator<? extends T> fourth, final Iterator<? extends T> fifth) {
+        return join(sequence(first, second, third, fourth, fifth));
     }
 
     @SafeVarargs
@@ -384,13 +401,17 @@ public class Iterators {
         return partition(iterator, whileTrue(Predicates.<T>not(predicate)));
     }
 
-    public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Key> callable) {
-        return Maps.entries(Maps.multiMap(iterator, callable)).map(new Callable1<Map.Entry<Key, List<T>>, Group<Key, T>>() {
+    public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterator<? extends T> iterator, final Function<? super T, ? extends Key> callable) {
+        return Maps.entries(Maps.multiMap(iterator, callable)).map(new Function<Map.Entry<Key, List<T>>, Group<Key, T>>() {
             @Override
             public Group<Key, T> call(Map.Entry<Key, List<T>> entry) throws Exception {
                 return new Group<Key, T>(entry.getKey(), entry.getValue());
             }
         });
+    }
+
+    public static <T> Iterator<Sequence<T>> windowed(final Iterator<? extends T> iterator, final int size) {
+        return new WindowedIterator<T>(iterator, size);
     }
 
     public static <T> LogicalPredicate<Iterator<T>> hasNext() {
@@ -401,8 +422,8 @@ public class Iterators {
         };
     }
 
-    public static <T> Function1<Iterator<T>, T> next() {
-        return new Function1<Iterator<T>, T>() {
+    public static <T> Function<Iterator<T>, T> next() {
+        return new Function<Iterator<T>, T>() {
             public T call(Iterator<T> iterator) throws Exception {
                 return iterator.next();
             }
@@ -422,7 +443,7 @@ public class Iterators {
         return map(iterator, Callables.<T>returnArgument().interruptable());
     }
 
-    public static <A, B> Iterator<A> unfoldRight(Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, B seed) {
+    public static <A, B> Iterator<A> unfoldRight(Function<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, B seed) {
         return new UnfoldRightIterator<A, B>(callable, seed);
     }
 

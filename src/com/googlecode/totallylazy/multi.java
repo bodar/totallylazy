@@ -73,8 +73,8 @@ public abstract class multi {
 
     private Object instance(Method method) {return isStatic(method.getModifiers()) ? null : enclosingInstance(this);}
 
-    private static Mapper<Method, Number> distanceFrom(final Sequence<Class<?>> argumentClasses) {
-        return new Mapper<Method, Number>() {
+    private static Function<Method, Number> distanceFrom(final Sequence<Class<?>> argumentClasses) {
+        return new Function<Method, Number>() {
             @Override
             public Number call(Method method) throws Exception {
                 return distanceFrom(argumentClasses, sequence(method.getParameterTypes()));

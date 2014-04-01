@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.collections.PersistentMap;
 import org.junit.Test;

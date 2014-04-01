@@ -1,14 +1,14 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.Combiner;
 
-public class Average extends CombinerFunction<Number> {
+public class Average implements Combiner<Number> {
     public Number call(Number average, Number value) {
         return weighted(average).combine(weighted(value));
     }
 
     @Override
-    public Number identity() {
+    public Number identityElement() {
         return weighted(0, 0);
     }
 

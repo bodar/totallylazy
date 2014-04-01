@@ -1,10 +1,10 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Returns;
 
 import java.util.concurrent.Callable;
 
-public final class CountingCallable<T> extends Function<T> {
+public final class CountingCallable<T> implements Returns<T> {
     private int count = 0;
     private final Callable<? extends T> callable;
 

@@ -1,10 +1,9 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.matchers.IterableMatcher;
 import org.hamcrest.Matcher;
@@ -37,22 +36,6 @@ public class Validators {
     }
 
     public static class anyOf {
-        public static <T> AnyOfValidator<T> anyOf(Validator<? super T> first, Validator<? super T> second) {
-            return anyOf(Sequences.<Validator<? super T>>sequence(first, second));
-        }
-
-        public static <T> AnyOfValidator<T> anyOf(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third) {
-            return anyOf(Sequences.<Validator<? super T>>sequence(first, second, third));
-        }
-
-        public static <T> AnyOfValidator<T> anyOf(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third, Validator<? super T> fourth) {
-            return anyOf(Sequences.<Validator<? super T>>sequence(first, second, third, fourth));
-        }
-
-        public static <T> AnyOfValidator<T> anyOf(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third, Validator<? super T> fourth, Validator<? super T> fifth) {
-            return anyOf(Sequences.<Validator<? super T>>sequence(first, second, third, fourth, fifth));
-        }
-
         @SafeVarargs
         public static <T> AnyOfValidator<T> anyOf(Validator<? super T>... validators) {
             return AnyOfValidator.constructors.anyOf(validators);
@@ -64,22 +47,6 @@ public class Validators {
     }
 
     public static class firstFailure {
-        public static <T> FirstFailureValidator<T> firstFailure(Validator<? super T> first, Validator<? super T> second) {
-            return firstFailure(Sequences.<Validator<? super T>>sequence(first, second));
-        }
-
-        public static <T> FirstFailureValidator<T> firstFailure(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third) {
-            return firstFailure(Sequences.<Validator<? super T>>sequence(first, second, third));
-        }
-
-        public static <T> FirstFailureValidator<T> firstFailure(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third, Validator<? super T> fourth) {
-            return firstFailure(Sequences.<Validator<? super T>>sequence(first, second, third, fourth));
-        }
-
-        public static <T> FirstFailureValidator<T> firstFailure(Validator<? super T> first, Validator<? super T> second, Validator<? super T> third, Validator<? super T> fourth, Validator<? super T> fifth) {
-            return firstFailure(Sequences.<Validator<? super T>>sequence(first, second, third, fourth, fifth));
-        }
-
         @SafeVarargs
         public static <T> FirstFailureValidator<T> firstFailure(Validator<? super T>... validators) {
             return firstFailure(sequence(validators));
@@ -90,27 +57,27 @@ public class Validators {
         }
     }
 
-    public static <T, R> MapAndValidate<T, ? extends Iterable<? extends R>> forAll(Callable1<? super T, ? extends Iterable<? extends R>> map, Validator<? super R> validator) {
+    public static <T, R> MapAndValidate<T, ? extends Iterable<? extends R>> forAll(Function<? super T, ? extends Iterable<? extends R>> map, Validator<? super R> validator) {
         return mapAndValidate(map, everyItem(validator));
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<? super T, ? extends R> map, Validator<? super R> validator) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Validator<? super R> validator) {
         return mapAndValidate(map, validator);
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<? super T, ? extends R> map, Matcher<? super R> matcher) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Matcher<? super R> matcher) {
         return mapAndValidate(map, validateThat(matcher));
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<? super T, ? extends R> map, Predicate<? super R> predicate) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Predicate<? super R> predicate) {
         return mapAndValidate(map, validateThat(predicate));
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<? super T, ? extends R> map, Predicate<? super R> predicate, String message) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Predicate<? super R> predicate, String message) {
         return mapAndValidate(map, validateThat(predicate, message));
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Callable1<? super T, ? extends R> map, Predicate<? super R> predicate, Callable1<? super R, String> message) {
+    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Predicate<? super R> predicate, Function<? super R, String> message) {
         return mapAndValidate(map, validateThat(predicate, message));
     }
 
@@ -126,7 +93,7 @@ public class Validators {
         return validatePredicate(predicate, message);
     }
 
-    public static <T> PredicateValidator<T> validateThat(Predicate<? super T> predicate, Callable1<? super T, String> message) {
+    public static <T> PredicateValidator<T> validateThat(Predicate<? super T> predicate, Function<? super T, String> message) {
         return validatePredicate(predicate, message);
     }
 

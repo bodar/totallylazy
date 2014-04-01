@@ -1,19 +1,18 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
-
-import java.nio.CharBuffer;
+import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class CharacterParser extends Parser<Character> {
-    private final Predicate<Character> value;
+class CharacterParser extends Parser<Character> {
+    private final Predicate<Character> predicate;
 
-    private CharacterParser(Predicate<Character> value) {
-        this.value = value;
+    private CharacterParser(Predicate<Character> predicate) {
+        this.predicate = predicate;
     }
 
     public static CharacterParser character(Predicate<Character> value) {
@@ -36,8 +35,8 @@ public class CharacterParser extends Parser<Character> {
         return character(not(value));
     }
 
-    public static Function1<Character, Parser<Character>> characterParser() {
-        return new Function1<Character, Parser<Character>>() {
+    public static Function<Character, Parser<Character>> characterParser() {
+        return new Function<Character, Parser<Character>>() {
             @Override
             public Parser<Character> call(Character character) throws Exception {
                 return character(character);
@@ -46,19 +45,16 @@ public class CharacterParser extends Parser<Character> {
     }
 
     @Override
-    public Result<Character> parse(final CharBuffer characters) {
-        if (!characters.hasRemaining()) return fail();
-
-        characters.mark();
-        char character = characters.get();
-        if (value.matches(character)) return success(character, characters);
-
-        characters.reset();
-        return fail(value, character);
+    public Result<Character> parse(final Segment<Character> characters) {
+        if(characters.isEmpty()) return fail(predicate, "[EOF]");
+        Character c = characters.head();
+        return predicate.matches(c) ?
+                success(c, characters.tail()) :
+                fail(predicate, c);
     }
 
     @Override
     public String toString() {
-        return value.toString();
+        return predicate.toString();
     }
 }

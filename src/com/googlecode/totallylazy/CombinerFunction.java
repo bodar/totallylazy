@@ -1,8 +1,5 @@
 package com.googlecode.totallylazy;
 
-public abstract class CombinerFunction<T> extends BinaryFunction<T> implements Combiner<T> {
-    @Override
-    public T combine(T a, T b) throws Exception {
-        return call(a, b);
-    }
-}
+/** @deprecated Replaced by {@link com.googlecode.totallylazy.Combiner} */
+@Deprecated
+public abstract class CombinerFunction<T> implements Combiner<T> {}

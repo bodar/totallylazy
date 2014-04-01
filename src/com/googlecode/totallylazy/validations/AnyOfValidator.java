@@ -1,13 +1,11 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Functions.call;
-import static com.googlecode.totallylazy.Functions.returns1;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;

@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import org.hamcrest.Matcher;
 
 import static com.googlecode.totallylazy.Callers.call;
@@ -12,9 +11,9 @@ import static com.googlecode.totallylazy.validations.ValidationResult.constructo
 
 public class MatcherValidator<T> extends LogicalValidator<T> {
 	private final Matcher<? super T> matcher;
-	private final Callable1<? super T, String> message;
+	private final Function<? super T, String> message;
 
-	private MatcherValidator(Matcher<? super T> matcher, Callable1<? super T, String> message) {
+	private MatcherValidator(Matcher<? super T> matcher, Function<? super T, String> message) {
 		this.matcher = matcher;
 		this.message = message;
 	}
@@ -33,12 +32,12 @@ public class MatcherValidator<T> extends LogicalValidator<T> {
 	}
 
     public static class functions{
-        public static <T> Function1<Matcher<? super T>, Validator<T>> matcherAsValidator(Class<T> type){
+        public static <T> Function<Matcher<? super T>, Validator<T>> matcherAsValidator(Class<T> type){
             return matcherAsValidator();
         }
 
-        public static <T> Function1<Matcher<? super T>, Validator<T>> matcherAsValidator(){
-            return new Function1<Matcher<? super T>, Validator<T>>() {
+        public static <T> Function<Matcher<? super T>, Validator<T>> matcherAsValidator(){
+            return new Function<Matcher<? super T>, Validator<T>>() {
                 @Override
                 public Validator<T> call(Matcher<? super T> matcher) throws Exception {
                     return validateMatcher(matcher);

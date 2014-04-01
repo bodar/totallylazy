@@ -16,12 +16,7 @@ public class InPredicate<T> extends LogicalPredicate<T> {
     private final Lazy<Set<T>> set;
 
     private InPredicate(final Iterable<T> iterable) {
-        this.set = new Lazy<Set<T>>() {
-            @Override
-            protected Set<T> get() throws Exception {
-                return set(iterable);
-            }
-        };
+        this.set = Lazy.value(() -> set(iterable));
         this.original = iterable;
     }
 
@@ -31,12 +26,12 @@ public class InPredicate<T> extends LogicalPredicate<T> {
     }
 
     public static <T> LogicalPredicate<T> in(final Iterable<? extends T> iterable) {
-        if(Sequences.isEmpty(iterable)) return never();
+        if (Sequences.isEmpty(iterable)) return never();
         return new InPredicate<T>(Unchecked.<Iterable<T>>cast(iterable));
     }
 
     private Set<T> set(Iterable<T> iterable) {
-        if(iterable instanceof Set) return (Set<T>) iterable;
+        if (iterable instanceof Set) return (Set<T>) iterable;
         return sequence(iterable).toSet();
     }
 

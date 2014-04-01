@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -105,12 +105,12 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public <NewV> PersistentMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
+    public <NewV> PersistentMap<K, NewV> map(Function<? super V, ? extends NewV> transformer) {
         return hashTreeMap(toSequence().map(Callables.<K, V, NewV>second(transformer)));
     }
 
     @Override
-    public <S> S fold(S seed, Callable2<? super S, ? super Pair<K, V>, ? extends S> callable) {
+    public <S> S fold(S seed, Function2<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return toSequence().fold(seed, callable);
     }
 

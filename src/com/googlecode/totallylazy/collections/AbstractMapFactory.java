@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequences;
 
 import java.util.Map;
 
@@ -44,8 +43,8 @@ public abstract class AbstractMapFactory<K, V, M extends PersistentMap<K, V>> im
         return map(sequence(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5)));
     }
 
-    @SafeVarargs
-    public final M map(final Pair<K, V> head, final Pair<K, V>... tail) {
+    @SuppressWarnings("unchecked")
+    public M map(final Pair<K, V> head, final Pair<K, V>... tail) {
         return map(sequence(tail).cons(head));
     }
 

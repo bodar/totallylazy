@@ -1,8 +1,9 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeCallable;
@@ -140,7 +141,7 @@ public class MapPerformanceTest {
 
     private Map<Integer, Integer> createMutable(Sequence<Integer> range, Map<Integer, Integer> emptyMap, String name) {
         System.out.print(name + ":\t");
-        return range.fold(emptyMap, new Callable2<Map<Integer, Integer>, Integer, Map<Integer, Integer>>() {
+        return range.fold(emptyMap, new Function2<Map<Integer, Integer>, Integer, Map<Integer, Integer>>() {
             @Override
             public Map<Integer, Integer> call(Map<Integer, Integer> map, Integer integer) throws Exception {
                 map.put(integer, integer);
@@ -174,8 +175,8 @@ public class MapPerformanceTest {
         return report;
     }
 
-    private Callable1<Integer, Integer> remove(final Map<Integer, Integer> map) {
-        return new Callable1<Integer, Integer>() {
+    private Function<Integer, Integer> remove(final Map<Integer, Integer> map) {
+        return new Function<Integer, Integer>() {
             @Override
             public Integer call(Integer integer) throws Exception {
                 return map.remove(integer);
@@ -183,8 +184,8 @@ public class MapPerformanceTest {
         };
     }
 
-    private Callable1<Integer, Integer> putValueBack(final Map<Integer, Integer> map) {
-        return new Callable1<Integer, Integer>() {
+    private Function<Integer, Integer> putValueBack(final Map<Integer, Integer> map) {
+        return new Function<Integer, Integer>() {
             @Override
             public Integer call(Integer key) throws Exception {
                 return map.put(key, key);
@@ -192,8 +193,8 @@ public class MapPerformanceTest {
         };
     }
 
-    private Function<Integer> mutableRemove(final Map<Integer, Integer> map) {
-        return new Function<Integer>() {
+    private Returns<Integer> mutableRemove(final Map<Integer, Integer> map) {
+        return new Returns<Integer>() {
             @Override
             public Integer call() throws Exception {
                 return map.remove(keys().head());
@@ -211,8 +212,8 @@ public class MapPerformanceTest {
         };
     }
 
-    private Function<Integer> mutablePut(final Map<Integer, Integer> map) {
-        return new Function<Integer>() {
+    private Returns<Integer> mutablePut(final Map<Integer, Integer> map) {
+        return new Returns<Integer>() {
             @Override
             public Integer call() throws Exception {
                 Integer head = SIZE + 1;

@@ -1,16 +1,18 @@
 package com.googlecode.totallylazy;
 
-public abstract class Function3<A, B, C, D> extends Function2<A, B, Function1<C, D>> implements Callable3<A, B, C, D> {
+public interface Function3<A, B, C, D> extends Function2<A, B, Function<C, D>> {
+    D call(A a, B b, C c) throws Exception;
+
     @Override
-    public Function1<C, D> call(final A a, final B b) throws Exception {
+    default Function<C, D> call(final A a, final B b) throws Exception {
         return Functions.<A, B, C, D>apply(this, a).apply(b);
     }
 
-    public D apply(final A a, final B b, final C c) {
+    default D apply(final A a, final B b, final C c) {
         return Functions.call(this, a, b, c);
     }
 
-    public Function1<Triple<A, B, C>, D> triple() {
+    default Function<Triple<A, B, C>, D> triple() {
         return Functions.triple(this);
     }
 }

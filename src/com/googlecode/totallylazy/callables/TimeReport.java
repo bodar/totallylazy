@@ -1,11 +1,9 @@
 package com.googlecode.totallylazy.callables;
 
 
-import com.googlecode.totallylazy.BinaryFunction;
+import com.googlecode.totallylazy.Binary;
 import com.googlecode.totallylazy.Block;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Mapper;
-import com.googlecode.totallylazy.Runnables;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 
@@ -85,7 +83,7 @@ public class TimeReport extends Block<Number> {
     }
 
     public static void timeRatio(final Callable<?> function) {
-        iterate(multiply(2), 125).map(time(function)).reduce(new BinaryFunction<TimeReport>() {
+        iterate(multiply(2), 125).map(time(function)).reduce(new Binary<TimeReport>() {
             @Override
             public TimeReport call(TimeReport previous, TimeReport current) throws Exception {
                 Number ratio = Numbers.divide(current.average(), previous.average());
@@ -95,8 +93,8 @@ public class TimeReport extends Block<Number> {
         });
     }
 
-    private static Mapper<Number, TimeReport> time(final Callable<?> function) {
-        return new Mapper<Number, TimeReport>() {
+    private static Function<Number, TimeReport> time(final Callable<?> function) {
+        return new Function<Number, TimeReport>() {
             @Override
             public TimeReport call(Number number) throws Exception {
                 return TimeReport.time(number.intValue(), function);

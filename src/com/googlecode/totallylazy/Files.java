@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.Set;
 
 import static com.googlecode.totallylazy.Callables.doThen;
 import static com.googlecode.totallylazy.Callables.returns;
@@ -58,32 +59,32 @@ public class Files {
     }
 
 
-    public static Function1<File, String> name() {
-        return new Function1<File, String>() {
+    public static Function<File, String> name() {
+        return new Function<File, String>() {
             public String call(File file) throws Exception {
                 return file.getName();
             }
         };
     }
 
-    public static Function1<File, Sequence<File>> files() {
-        return new Function1<File, Sequence<File>>() {
+    public static Function<File, Sequence<File>> files() {
+        return new Function<File, Sequence<File>>() {
             public Sequence<File> call(File file) throws Exception {
                 return files(file);
             }
         };
     }
 
-    public static Function1<File, String> path() {
-        return new Function1<File, String>() {
+    public static Function<File, String> path() {
+        return new Function<File, String>() {
             public String call(File file) throws Exception {
                 return file.getPath();
             }
         };
     }
 
-    public static Function1<File, File> parent() {
-        return new Function1<File, File>() {
+    public static Function<File, File> parent() {
+        return new Function<File, File>() {
             public File call(File file) throws Exception {
                 return file.getParentFile();
             }
@@ -117,16 +118,16 @@ public class Files {
         return recursiveFiles(file).map(deleteFile()).forAll(is(true));
     }
 
-    public static Function1<File, Boolean> deleteFile() {
-        return new Function1<File, Boolean>() {
+    public static Function<File, Boolean> deleteFile() {
+        return new Function<File, Boolean>() {
             public Boolean call(File file) throws Exception {
                 return file.delete();
             }
         };
     }
 
-    public static Function1<File, Boolean> delete() {
-        return new Function1<File, Boolean>() {
+    public static Function<File, Boolean> delete() {
+        return new Function<File, Boolean>() {
             public Boolean call(File file) throws Exception {
                 return delete(file);
             }
@@ -138,11 +139,20 @@ public class Files {
     }
 
     public static File temporaryFile(File directory) {
+        return temporaryFile(directory, randomFilename());
+    }
+
+    public static File temporaryFile(File directory, String name) {
+        File file = new File(directory, name);
+        file.deleteOnExit();
+        create(file);
+        return file;
+    }
+
+    private static void create(File file) {
         try {
-            File file = new File(directory, randomFilename());
-            file.deleteOnExit();
+            file.getParentFile().mkdirs();
             file.createNewFile();
-            return file;
         } catch (IOException e) {
             throw LazyException.lazyException(e);
         }
@@ -182,8 +192,8 @@ public class Files {
         return files(directory).flatMap(recursiveFiles());
     }
 
-    public static Function1<File, Iterable<File>> recursiveFiles() {
-        return new Function1<File, Iterable<File>>() {
+    public static Function<File, Iterable<File>> recursiveFiles() {
+        return new Function<File, Iterable<File>>() {
             public Iterable<File> call(File file) throws Exception {
                 return file.isDirectory() ? recursiveFiles(file).append(file) : sequence(file);
             }
@@ -194,8 +204,8 @@ public class Files {
         return files(directory).flatMap(recursiveFilesDirectoriesFirst());
     }
 
-    public static Function1<File, Iterable<File>> recursiveFilesDirectoriesFirst() {
-        return new Function1<File, Iterable<File>>() {
+    public static Function<File, Iterable<File>> recursiveFilesDirectoriesFirst() {
+        return new Function<File, Iterable<File>>() {
             public Iterable<File> call(File file) throws Exception {
                 return file.isDirectory() ? recursiveFilesDirectoriesFirst(file).cons(file) : sequence(file);
             }
@@ -218,6 +228,24 @@ public class Files {
         }
     }
 
+    public static File deleteOnExit(File directory) {
+        delete.add(directory);
+        return directory;
+    }
+
+    private static Set<File> delete = Sets.concurrentSet();
+
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (File directory : delete) {
+                    Files.delete(directory);
+                }
+            }
+        }));
+    }
+
     public static Block<InputStream> write(final File output) {
         return new Block<InputStream>() {
             @Override
@@ -227,8 +255,8 @@ public class Files {
         };
     }
 
-    public static Function1<String, File> asFile() {
-        return new Function1<String, File>() {
+    public static Function<String, File> asFile() {
+        return new Function<String, File>() {
             public File call(String name) throws Exception {
                 return new File(name);
             }
@@ -242,17 +270,12 @@ public class Files {
     }
 
     public static File file(File parent, String name) {
-        File child = new File(parent, name);
-        if (child.isDirectory()) {
-            throw new IllegalArgumentException(format("%s is a isDirectory", child));
+        File file = new File(parent, name);
+        if (file.isDirectory()) {
+            throw new IllegalArgumentException(format("%s is a isDirectory", file));
         }
-        try {
-            child.getParentFile().mkdirs();
-            child.createNewFile();
-        } catch (IOException e) {
-            throw LazyException.lazyException(e);
-        }
-        return child;
+        create(file);
+        return file;
     }
 
     public static Option<File> fileOption(File parent, String name) {
@@ -260,12 +283,16 @@ public class Files {
         return file.exists() ? some(file) : none(File.class);
     }
 
-    public static Function1<File, Date> lastModified() {
-        return new Function1<File, Date>() {
+    public static Function<File, Date> lastModified() {
+        return new Function<File, Date>() {
             @Override
             public Date call(File file) throws Exception {
                 return date(file.lastModified());
             }
         };
+    }
+
+    public static File randomFile() {
+        return file(temporaryDirectory(), randomFilename());
     }
 }

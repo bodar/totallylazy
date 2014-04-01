@@ -1,47 +1,57 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Functions;
-import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
 
-import java.nio.CharBuffer;
-import java.util.concurrent.Callable;
+import java.util.NoSuchElementException;
 
-import static com.googlecode.totallylazy.Functions.returns;
+import static com.googlecode.totallylazy.Option.some;
 
-public class Success<A> extends Pair<A, CharBuffer> implements Result<A> {
-    private Success(Callable<? extends A> a, Callable<? extends CharBuffer> remainder) {
-        super(a, remainder);
-    }
+public abstract class Success<A> implements Result<A> {
+    public static <A> Success<A> success(final A value, final Segment<Character> remainder) {
+        return new Success<A>() {
+            @Override
+            public Segment<Character> remainder() {
+                return remainder;
+            }
 
-    public static <A> Success<A> success(A value, CharBuffer second) {
-        return success(returns(value), returns(second));
-    }
-
-    public static <A> Success<A> success(Callable<? extends A> a, Callable<? extends CharBuffer> remainder) {
-        return new Success<A>(a, remainder);
-    }
-
-    @Override
-    public <S> Success<S> map(Callable1<? super A, ? extends S> callable) {
-        return success(Functions.call(callable, value()), second());
+            @Override
+            public A value() {
+                return value;
+            }
+        };
     }
 
     @Override
-    public CharBuffer remainder() {
-        return second();
+    public <S> Result<S> map(Function<? super A, ? extends S> callable) {
+        return success(Functions.call(callable, value()), remainder());
     }
 
-    public static class functions {
-        public static <A> Function1<Result<A>, CharBuffer> remainder() {
-            return new Function1<Result<A>, CharBuffer>() {
-                @Override
-                public CharBuffer call(Result<A> result) throws Exception {
-                    return ((Success<A>) result).remainder();
-                }
-            };
-        }
+    @Override
+    public Option<A> option() {
+        return some(value());
+    }
+
+    @Override
+    public Either<String, A> either() {
+        return Either.right(value());
+    }
+
+    @Override
+    public boolean success() {
+        return true;
+    }
+
+    @Override
+    public boolean failure() {
+        return false;
+    }
+
+    @Override
+    public String message() {
+        throw new NoSuchElementException();
     }
 }

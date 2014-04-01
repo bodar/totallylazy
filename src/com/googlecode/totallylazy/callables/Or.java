@@ -1,15 +1,15 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.Combiner;
 
-public class Or extends CombinerFunction<Boolean> {
+public class Or implements Combiner<Boolean> {
     @Override
     public Boolean call(Boolean a, Boolean b) throws Exception {
         return a || b;
     }
 
     @Override
-    public Boolean identity() {
+    public Boolean identityElement() {
         return false;
     }
 }

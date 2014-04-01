@@ -1,68 +1,54 @@
 package com.googlecode.totallylazy.parser;
 
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.iterators.StatefulIterator;
 
-import java.nio.CharBuffer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.parser.Success.success;
+import static com.googlecode.totallylazy.Sequences.forwardOnly;
 
-public class SequenceParser<A> extends Parser<Sequence<A>> {
-    private final Sequence<? extends Parse<? extends A>> parsers;
+class SequenceParser<A> extends Parser<Sequence<A>> {
+    private final Parse<A> parser;
 
-    private SequenceParser(Iterable<? extends Parse<? extends A>> parsers) {
-        this.parsers = sequence(parsers);
+    private SequenceParser(Parse<A> parser) {
+        this.parser = parser;
     }
 
-    public static <A> SequenceParser<A> sequenceOf(final Iterable<? extends Parse<? extends A>> parsers) {
-        return new SequenceParser<A>(parsers);
+    static <A> SequenceParser<A> sequence(Parse<A> parser) {
+        return new SequenceParser<A>(Unchecked.<Parse<A>>cast(parser));
     }
 
-    public static <A> SequenceParser<A> sequenceOf(final Parse<? extends A> a, final Parse<? extends A> b) {
-        return new SequenceParser<A>(sequence(a, b));
-    }
+    public Result<Sequence<A>> parse(final Segment<Character> characters) {
+        final AtomicReference<Segment<Character>> remainder = new AtomicReference<Segment<Character>>(characters);
 
-    public static <A> SequenceParser<A> sequenceOf(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c) {
-        return new SequenceParser<A>(sequence(a, b, c));
-    }
-
-    public static <A> SequenceParser<A> sequenceOf(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c, final Parse<? extends A> d) {
-        return new SequenceParser<A>(sequence(a, b, c, d));
-    }
-
-    public static <A> SequenceParser<A> sequenceOf(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c, final Parse<? extends A> d, final Parse<? extends A> e) {
-        return new SequenceParser<A>(sequence(a, b, c, d, e));
-    }
-
-    @SafeVarargs
-    public static <A> SequenceParser<A> sequenceOf(final Parse<? extends A>... parsers) {
-        return sequenceOf(sequence(parsers));
-    }
-
-    @Override
-    public Result<Sequence<A>> parse(CharBuffer characters) throws Exception {
-        characters.mark();
-        List<A> parsed = new ArrayList<A>();
-        for (Parse<? extends A> parser : parsers) {
-            Result<? extends A> result = parser.parse(characters);
-            if (result instanceof Failure) {
-                characters.reset();
-                return cast(result);
+        final StatefulIterator<Result<A>> iterator = new StatefulIterator<Result<A>>() {
+            @Override
+            protected Result<A> getNext() throws Exception {
+                Result<A> result = parser.parse(remainder.get());
+                if (result.failure()) return finished();
+                remainder.set(result.remainder());
+                return result;
             }
-            parsed.add(result.value());
-        }
-        return success(sequence(parsed), characters);
+        };
+
+        return new Success<Sequence<A>>() {
+            @Override
+            public Sequence<A> value() {
+                return forwardOnly(iterator).map(Callables.<A>value());
+            }
+
+            @Override
+            public Segment<Character> remainder() {
+                return remainder.get();
+            }
+        };
     }
 
     @Override
     public String toString() {
-        return parsers.toString();
-    }
-
-    public String toString(String separator) {
-        return parsers.toString(separator);
+        return String.format("sequence %s", parser);
     }
 }

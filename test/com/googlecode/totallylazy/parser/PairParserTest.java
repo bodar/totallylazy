@@ -13,14 +13,14 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 public class PairParserTest {
     @Test
     public void canCombineTwoParsers() throws Exception {
-        Result<Pair<Character, Character>> result = PairParser.pairOf(character('A'), character('B')).parse("ABC");
+        Result<Pair<Character, Character>> result = PairParser.pair(character('A'), character('B')).parse("ABC");
         assertThat(result.value(), is(pair('A', 'B')));
-        assertThat(result.remainder().toString(), is("C"));
+        assertThat(result.remainder(), is(characters("C")));
     }
 
     @Test
     public void doesBlowUpWhenLessCharacters() throws Exception {
-        Result<Pair<Character, Character>> result = PairParser.pairOf(character('A'), character('B')).parse("A");
+        Result<Pair<Character, Character>> result = PairParser.pair(character('A'), character('B')).parse("A");
         assertThat(result, instanceOf(Failure.class));
     }
 

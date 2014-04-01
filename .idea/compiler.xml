@@ -16,7 +16,7 @@
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:deprecation -Xlint:unchecked" />
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:unchecked -Xlint:deprecation" />
   </component>
 </project>
 

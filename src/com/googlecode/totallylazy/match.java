@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import static com.googlecode.totallylazy.Predicates.any;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public abstract class match<A, B> extends Mapper<A, Option<B>> {
+public abstract class match<A, B> implements Function<A, Option<B>> {
     private final Extractor<? super A, ?> extractor;
 
     public match(Extractor<? super A, ?> extractor) { this.extractor = extractor; }

@@ -21,7 +21,7 @@ public class WherePredicateTest {
 
     @Test
     public void supportsToString() throws Exception {
-        assertThat(where(toString, is("13")).toString(), Matchers.is("where <toString> is '13'"));
+        assertThat(where(toString, is("13")).toString(), Matchers.is("where toString is 13"));
     }
 
     @Test

@@ -1,14 +1,23 @@
 package com.googlecode.totallylazy.segments;
 
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Iterator;
 
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public abstract class AbstractSegment<T> implements Segment<T>, Iterable<T>{
+public abstract class AbstractSegment<T> implements Segment<T>, Iterable<T> {
+    @Override
+    public Option<T> headOption() {
+        return isEmpty()
+                ? Option.<T>none()
+                : some(head());
+    }
+
     @Override
     public Segment<T> empty() {
         return Segment.constructors.emptySegment();

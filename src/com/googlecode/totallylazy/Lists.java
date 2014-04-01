@@ -15,8 +15,8 @@ public class Lists {
         return sequence(iterable).toList();
     }
 
-    public static <T> Function1<T, Integer> indexIn(final List<? extends T> values) {
-        return new Function1<T, Integer>() {
+    public static <T> Function<T, Integer> indexIn(final List<? extends T> values) {
+        return new Function<T, Integer>() {
             @Override
             public Integer call(T t) throws Exception {
                 return values.indexOf(t);
@@ -25,11 +25,11 @@ public class Lists {
     }
 
     public static class functions {
-        public static <T> ReducerCombinerFunction<T, List<T>> add() {
-            return new ReducerCombinerFunction<T, List<T>>() {
+        public static <T> ReducerCombiner<T, List<T>> add() {
+            return new ReducerCombiner<T, List<T>>() {
                 @Override
                 public List<T> combine(List<T> a, List<T> b) throws Exception {
-                    List<T> result = identity();
+                    List<T> result = identityElement();
                     result.addAll(a);
                     result.addAll(b);
                     return result;
@@ -42,7 +42,7 @@ public class Lists {
                 }
 
                 @Override
-                public List<T> identity() {
+                public List<T> identityElement() {
                     return new ArrayList<T>();
                 }
             };
