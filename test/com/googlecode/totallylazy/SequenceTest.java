@@ -793,6 +793,11 @@ public class SequenceTest {
     }
 
     @Test
+    public void windowedIsLazyAndDoesNotBlowStack() throws Exception {
+        assertThat(range(1).windowed(3), startsWith(sequence(numbers(1, 2, 3), numbers(2, 3, 4), numbers(3, 4, 5))));
+    }
+
+    @Test
     public void supportsIntersperse() {
         assertThat(sequence("a", "b", "c").intersperse("x"), hasExactly("a", "x", "b", "x", "c"));
         assertThat(sequence("a").intersperse("x"), hasExactly("a"));

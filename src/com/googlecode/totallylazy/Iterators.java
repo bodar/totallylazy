@@ -12,6 +12,7 @@ import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
+import com.googlecode.totallylazy.iterators.WindowedIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.ArrayDeque;
@@ -406,6 +407,10 @@ public class Iterators {
                 return new Group<Key, T>(entry.getKey(), entry.getValue());
             }
         });
+    }
+
+    public static <T> Iterator<Sequence<T>> windowed(final Iterator<? extends T> iterator, final int size) {
+        return new WindowedIterator<T>(iterator, size);
     }
 
     public static <T> LogicalPredicate<Iterator<T>> hasNext() {
