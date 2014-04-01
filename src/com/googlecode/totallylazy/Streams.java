@@ -1,12 +1,20 @@
 package com.googlecode.totallylazy;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Reader;
 
 import static com.googlecode.totallylazy.Closeables.using;
+import static com.googlecode.totallylazy.LazyException.lazyException;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.Sequences.repeat;
 
 public class Streams {
     public static void copyAndClose(final InputStream input, final OutputStream out) {
@@ -69,5 +77,31 @@ public class Streams {
 
     public static InputStreamReader inputStreamReader(InputStream stream) {
         return new InputStreamReader(stream, Strings.UTF8);
+    }
+
+    public static Sequence<String> lines(File file) {
+        try {
+            return lines(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            throw lazyException(e);
+        }
+    }
+
+    public static Sequence<String> lines(InputStream stream) {
+        return lines(inputStreamReader(stream));
+    }
+
+    public static Sequence<String> lines(Reader reader) {
+        return repeat(readLine(new BufferedReader(reader))).takeWhile(notNullValue(String.class));
+    }
+
+    public static Returns<String> readLine(final BufferedReader reader) {
+        return () -> {
+            String result = reader.readLine();
+            if (result == null) {
+                reader.close();
+            }
+            return result;
+        };
     }
 }
