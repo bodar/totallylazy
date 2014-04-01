@@ -1,10 +1,10 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.Combiner;
 import com.googlecode.totallylazy.Strings;
 
-public class JoinString extends CombinerFunction<String> {
-    public static final CombinerFunction<String> instance = new JoinString();
+public class JoinString implements Combiner<String> {
+    public static final Combiner<String> instance = new JoinString();
     private JoinString() {}
 
     @Override
@@ -13,7 +13,7 @@ public class JoinString extends CombinerFunction<String> {
     }
 
     @Override
-    public String identity() {
+    public String identityElement() {
         return Strings.EMPTY;
     }
 

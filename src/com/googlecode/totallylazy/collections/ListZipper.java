@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Functions;
-import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.annotations.tailrec;
 
@@ -28,7 +28,7 @@ public class ListZipper<T> implements Zipper<T> {
 
     public Option<ListZipper<T>> nextOption() {
         if(isLast()) return none();
-        return focus.headOption().map(new Mapper<T, ListZipper<T>>() {
+        return focus.headOption().map(new Function<T, ListZipper<T>>() {
             @Override
             public ListZipper<T> call(T t) throws Exception {
                 return zipper(focus.tail(), breadcrumbs.cons(t));
@@ -37,7 +37,7 @@ public class ListZipper<T> implements Zipper<T> {
     }
 
     public Option<ListZipper<T>> previousOption() {
-        return breadcrumbs.headOption().map(new Mapper<T, ListZipper<T>>() {
+        return breadcrumbs.headOption().map(new Function<T, ListZipper<T>>() {
             @Override
             public ListZipper<T> call(T t) throws Exception {
                 return zipper(focus.cons(t), breadcrumbs.tail());
@@ -120,7 +120,7 @@ public class ListZipper<T> implements Zipper<T> {
         return String.format("focus(%s), breadcrumbs(%s)", focus, breadcrumbs);
     }
 
-    public ListZipper<T> modify(Callable1<? super PersistentList<T>, ? extends PersistentList<T>> callable) {
+    public ListZipper<T> modify(Function<? super PersistentList<T>, ? extends PersistentList<T>> callable) {
         return zipper(Functions.call(callable, focus), breadcrumbs);
     }
 

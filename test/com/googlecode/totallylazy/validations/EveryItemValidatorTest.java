@@ -6,7 +6,6 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Maps.entries;
 import static com.googlecode.totallylazy.Maps.map;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;
@@ -18,9 +17,9 @@ public class EveryItemValidatorTest {
     @Test
     public void appliesValidationToEachItemAndMergesTheResult() {
         Map<String, String> values = map(
-                pair("one", "not valid"),
-                pair("two", "valid"),
-                pair("three", "not valid")
+                "one", "not valid",
+                "two", "valid",
+                "three", "not valid"
                 );
 
         // EveryItemValidator is called inside Validators.forAll().

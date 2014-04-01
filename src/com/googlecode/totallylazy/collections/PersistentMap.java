@@ -1,11 +1,9 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Functor;
-import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -13,9 +11,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.comparators.Comparators;
 
-import java.util.Comparator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentMap;
@@ -49,7 +45,7 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
     PersistentMap<K, V> tail() throws NoSuchElementException;
 
     @Override
-    <NewV> PersistentMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
+    <NewV> PersistentMap<K, NewV> map(Function<? super V, ? extends NewV> transformer);
 
     PersistentList<Pair<K, V>> toPersistentList();
 
@@ -140,8 +136,8 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
     }
 
     class functions {
-        public static <K, V> Mapper<PersistentMap<K, V>, Option<V>> get(final K key) {
-            return new Mapper<PersistentMap<K, V>, Option<V>>() {
+        public static <K, V> Function<PersistentMap<K, V>, Option<V>> get(final K key) {
+            return new Function<PersistentMap<K, V>, Option<V>>() {
                 @Override
                 public Option<V> call(PersistentMap<K, V> map) throws Exception {
                     return map.lookup(key);
@@ -149,8 +145,8 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
             };
         }
 
-        public static <K, V> Mapper<PersistentMap<K, V>, PersistentMap<K, V>> remove(final K key) {
-            return new Mapper<PersistentMap<K, V>, PersistentMap<K, V>>() {
+        public static <K, V> Function<PersistentMap<K, V>, PersistentMap<K, V>> remove(final K key) {
+            return new Function<PersistentMap<K, V>, PersistentMap<K, V>>() {
                 @Override
                 public PersistentMap<K, V> call(PersistentMap<K, V> map) throws Exception {
                     return map.delete(key);
@@ -158,8 +154,8 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
             };
         }
 
-        public static <K, V> Mapper<PersistentMap<K, V>, Boolean> contains(final Object other) {
-            return new Mapper<PersistentMap<K, V>, Boolean>() {
+        public static <K, V> Function<PersistentMap<K, V>, Boolean> contains(final Object other) {
+            return new Function<PersistentMap<K, V>, Boolean>() {
                 @Override
                 public Boolean call(PersistentMap<K, V> map) throws Exception {
                     return map.contains(other);
@@ -174,11 +170,11 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
         }
 
         public static <K, V, M extends PersistentMap<K, V>> Pair<M, Option<V>> put(M map, K key, V newValue) {
-            return Pair.pair(Unchecked.<M>cast(map.insert(key, newValue)), map.lookup(key));
+            return pair(Unchecked.<M>cast(map.insert(key, newValue)), map.lookup(key));
         }
 
         public static <K, V, M extends PersistentMap<K, V>> Pair<M, Option<V>> remove(M map, K key) {
-            return Pair.pair(Unchecked.<M>cast(map.delete(key)), map.lookup(key));
+            return pair(Unchecked.<M>cast(map.delete(key)), map.lookup(key));
         }
     }
 }

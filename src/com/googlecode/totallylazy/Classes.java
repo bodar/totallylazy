@@ -2,8 +2,6 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
-import java.io.File;
-
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -41,7 +39,7 @@ public class Classes {
     }
 
     public static byte[] bytes(Class<?> aClass){
-        return Bytes.bytes(aClass.getResourceAsStream("/" + filename(aClass)));
+        return Bytes.bytes(aClass);
     }
 
 }

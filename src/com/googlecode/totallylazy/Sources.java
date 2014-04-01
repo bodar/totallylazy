@@ -55,7 +55,7 @@ public interface Sources extends Closeable {
     }
 
     class functions {
-        public static Mapper<Source, String> name = new Mapper<Source, String>() {
+        public static Function<Source, String> name = new Function<Source, String>() {
             @Override
             public String call(Source source) throws Exception {
                 return source.name;

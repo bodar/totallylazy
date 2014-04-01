@@ -1,10 +1,10 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.Combiner;
 import com.googlecode.totallylazy.Strings;
 
-public class JoinCharSequence extends CombinerFunction<CharSequence> {
-    public static final CombinerFunction<CharSequence> instance = new JoinCharSequence();
+public class JoinCharSequence implements Combiner<CharSequence> {
+    public static final Combiner<CharSequence> instance = new JoinCharSequence();
     private JoinCharSequence() {}
 
     @Override
@@ -18,7 +18,7 @@ public class JoinCharSequence extends CombinerFunction<CharSequence> {
     }
 
     @Override
-    public CharSequence identity() {
+    public CharSequence identityElement() {
         return Strings.EMPTY;
     }
 

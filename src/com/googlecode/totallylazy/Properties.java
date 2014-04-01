@@ -74,7 +74,7 @@ public class Properties {
     public static Function2<java.util.Properties, java.util.Properties, java.util.Properties> compose() {
         return new Function2<java.util.Properties, java.util.Properties, java.util.Properties>() {
             public java.util.Properties call(java.util.Properties soFar, java.util.Properties nextProperties) throws Exception {
-                return compose(soFar, nextProperties);
+                return Properties.compose(soFar, nextProperties);
             }
         };
     }
@@ -89,8 +89,8 @@ public class Properties {
         return out.toString();
     }
 
-    public static Function1<String, java.util.Properties> propertiesFromString() {
-        return new Function1<String, java.util.Properties>() {
+    public static Function<String, java.util.Properties> propertiesFromString() {
+        return new Function<String, java.util.Properties>() {
             public java.util.Properties call(String text) throws Exception {
                 return properties(text);
             }

@@ -17,6 +17,6 @@ public class NullPredicate<T> extends LogicalPredicate<T> {
 
     @Override
     public String toString() {
-        return "is null";
+        return "null";
     }
 }

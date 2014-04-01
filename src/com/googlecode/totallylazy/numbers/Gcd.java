@@ -1,15 +1,15 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.Combiner;
 
-public class Gcd extends CombinerFunction<Number> {
+public class Gcd implements Combiner<Number> {
     @Override
     public Number call(Number x, Number y) throws Exception {
         return Numbers.gcd(x, y);
     }
 
     @Override
-    public Number identity() {
+    public Number identityElement() {
         return 0;
     }
 }

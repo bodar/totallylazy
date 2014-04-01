@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Iterators;
@@ -9,11 +9,8 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sets;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
@@ -66,7 +63,7 @@ public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, R
     }
 
     @Override
-    public <S> TreeList<S> map(Callable1<? super T, ? extends S> callable) {
+    public <S> TreeList<S> map(Function<? super T, ? extends S> callable) {
         return treeList(toSequence().map(callable));
     }
 
@@ -126,7 +123,7 @@ public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, R
     }
 
     @Override
-    public <S> S fold(S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> S fold(S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         return map.fold(seed, new Function2<S, Pair<?, T>, S>() {
             @Override
             public S call(S s, Pair<?, T> pair) throws Exception {

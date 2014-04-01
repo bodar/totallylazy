@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-public class FirstCombiner<T> extends CombinerFunction<T> {
+public class FirstCombiner<T> implements Combiner<T> {
     private FirstCombiner() {}
 
     public static <T> FirstCombiner<T> first() {return new FirstCombiner<T>();}
@@ -12,7 +12,7 @@ public class FirstCombiner<T> extends CombinerFunction<T> {
     }
 
     @Override
-    public T identity() {
+    public T identityElement() {
         return null;
     }
 }

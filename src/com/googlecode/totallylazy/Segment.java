@@ -57,7 +57,7 @@ public interface Segment<T> {
         }
 
         public static Computation<Character> characters(final Reader reader) {
-            return Computation.computation1(read(reader), new Callable1<Character, Computation<Character>>() {
+            return Computation.computation1(read(reader), new Function<Character, Computation<Character>>() {
                 @Override
                 public Computation<Character> call(Character character) throws Exception {
                     return characters(reader);
@@ -65,8 +65,8 @@ public interface Segment<T> {
             });
         }
 
-        private static Function<Character> read(final Reader reader) {
-            return new Function<Character>() {
+        private static Returns<Character> read(final Reader reader) {
+            return new Returns<Character>() {
                 @Override
                 public Character call() throws Exception {
                     int read = reader.read();
@@ -118,8 +118,8 @@ public interface Segment<T> {
             };
         }
 
-        public static <T, Self extends Segment<T>> UnaryFunction<Self> tail() {
-            return new UnaryFunction<Self>() {
+        public static <T, Self extends Segment<T>> Unary<Self> tail() {
+            return new Unary<Self>() {
                 @Override
                 public Self call(Self segment) throws Exception {
                     return cast(segment.tail());
@@ -127,12 +127,12 @@ public interface Segment<T> {
             };
         }
 
-        public static <T, Self extends Segment<T>> Function1<Self, Self> cons(T t) {
+        public static <T, Self extends Segment<T>> Function<Self, Self> cons(T t) {
             return functions.<T, Self>cons().flip().apply(t);
         }
 
-        public static Function1<String, Segment<Character>> characters() {
-            return new Function1<String, Segment<Character>>() {
+        public static Function<String, Segment<Character>> characters() {
+            return new Function<String, Segment<Character>>() {
                 @Override
                 public Segment<Character> call(String value) throws Exception {
                     return constructors.characters(value);
@@ -140,8 +140,8 @@ public interface Segment<T> {
             };
         }
 
-        public static <T> Function1<Segment<T>, Option<T>> headOption() {
-            return new Function1<Segment<T>, Option<T>>() {
+        public static <T> Function<Segment<T>, Option<T>> headOption() {
+            return new Function<Segment<T>, Option<T>>() {
                 @Override
                 public Option<T> call(Segment<T> segment) throws Exception {
                     return segment.headOption();
@@ -174,11 +174,6 @@ public interface Segment<T> {
         }
 
         @Override
-        public Option<T> headOption() {
-            return some(head);
-        }
-
-        @Override
         public Segment<T> tail() throws NoSuchElementException {
             return tail;
         }
@@ -195,12 +190,6 @@ public interface Segment<T> {
         public T head() throws NoSuchElementException {
             throw new NoSuchElementException();
         }
-
-        @Override
-        public Option<T> headOption() {
-            return none();
-        }
-
 
         @Override
         public Segment<T> tail() throws NoSuchElementException {

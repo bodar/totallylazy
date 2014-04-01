@@ -149,7 +149,7 @@ public class SequenceTest {
     @Test
     public void supportsApplicativeUsage() throws Exception {
         assertThat(empty(Number.class).applicate(one(add(3))), Matchers.is(empty(Number.class)));
-        assertThat(numbers(9).applicate(Sequences.<Function1<Number, Number>>empty()), Matchers.is(empty(Number.class)));
+        assertThat(numbers(9).applicate(Sequences.<Function<Number, Number>>empty()), Matchers.is(empty(Number.class)));
         assertThat(numbers(9).applicate(one(add(3))), Matchers.is(numbers(12)));
         assertThat(numbers(9, 1).applicate(one(add(3))), Matchers.is(numbers(12, 4)));
         assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 4, 90, 10)));
@@ -482,7 +482,7 @@ public class SequenceTest {
         assertThat(converted, is("converted"));
     }
 
-    Callable1<Integer, Option<String>> someVeryExpensiveOperation = new Callable1<Integer, Option<String>>() {
+    Function<Integer, Option<String>> someVeryExpensiveOperation = new Function<Integer, Option<String>>() {
         public Option<String> call(Integer number) throws Exception {
             if (Numbers.equalTo(number, 1)) {
                 return none(); // the conversion didn't work
@@ -611,10 +611,10 @@ public class SequenceTest {
 
     @Test
     public void supportsEachConcurrently() throws Exception {
-        AtomicInteger sum = new AtomicInteger(0);
+        final AtomicInteger sum = new AtomicInteger();
         sequence(1, 2).eachConcurrently(new Block<Integer>() {
             public void execute(Integer value) throws InterruptedException {
-                    sum.addAndGet(value);
+                sum.addAndGet(value);
             }
         });
         assertThat(sum.intValue(), is(3));
@@ -762,7 +762,7 @@ public class SequenceTest {
     @Test
     public void supportsInterruption() throws Exception {
         final int[] count = new int[]{0};
-        Sequence<Integer> interruptable = repeat(new Function<Integer>() {
+        Sequence<Integer> interruptable = repeat(new Returns<Integer>() {
             @Override
             public Integer call() throws Exception {
                 if (++count[0] == 5) {
@@ -790,6 +790,11 @@ public class SequenceTest {
     @Test
     public void supportsWindowed() throws Exception {
         assertThat(sequence(1, 2, 3, 4, 5).windowed(3), is(sequence(sequence(1, 2, 3), sequence(2, 3, 4), sequence(3, 4, 5))));
+    }
+
+    @Test
+    public void windowedIsLazyAndDoesNotBlowStack() throws Exception {
+        assertThat(range(1).windowed(3), startsWith(sequence(numbers(1, 2, 3), numbers(2, 3, 4), numbers(3, 4, 5))));
     }
 
     @Test
