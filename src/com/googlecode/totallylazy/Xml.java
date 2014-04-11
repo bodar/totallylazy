@@ -190,20 +190,13 @@ public class Xml {
     }
 
     public static Block<Element> removeAttribute(final String name) {
-        return new Block<Element>() {
-            @Override
-            protected void execute(Element element) throws Exception {
-                element.removeAttribute(name);
-            }
+        return element -> {
+            element.removeAttribute(name);
         };
     }
 
     public static Function<Node, String> contents() {
-        return new Function<Node, String>() {
-            public String call(Node node) throws Exception {
-                return contents(node);
-            }
-        };
+        return Xml::contents;
     }
 
     public static String contents(Node node) throws Exception {
@@ -228,13 +221,11 @@ public class Xml {
     }
 
     public static String contents(Element element) throws Exception {
-        return sequence(element.getChildNodes()).map(new Function<Node, String>() {
-            public String call(Node node) throws Exception {
-                if (node instanceof Element) {
-                    return asString((Element) node);
-                }
-                return contents(node);
+        return sequence(element.getChildNodes()).map(node -> {
+            if (node instanceof Element) {
+                return asString((Element) node);
             }
+            return contents(node);
         }).toString("");
 
     }
@@ -304,11 +295,7 @@ public class Xml {
     }
 
     private static EntityResolver ignoreEntities() {
-        return new EntityResolver() {
-            public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-                return new InputSource(new StringReader(""));
-            }
-        };
+        return (publicId, systemId) -> new InputSource(new StringReader(""));
     }
 
     public static Seq<Node> remove(final Node root, final String expression) {
@@ -320,11 +307,7 @@ public class Xml {
     }
 
     private static Function<Node, Node> remove() {
-        return new Function<Node, Node>() {
-            public Node call(Node node) throws Exception {
-                return node.getParentNode().removeChild(node);
-            }
-        };
+        return node -> node.getParentNode().removeChild(node);
     }
 
     @SuppressWarnings("unchecked")
@@ -349,38 +332,25 @@ public class Xml {
     }
 
     public static Function<Object, String> escape() {
-        return new Function<Object, String>() {
-            public String call(Object value) throws Exception {
-                return escape(value);
-            }
-        };
+        return Xml::escape;
     }
 
     public static Function<Character, String> toXmlEntity() {
-        return new Function<Character, String>() {
-            public String call(Character character) throws Exception {
-                return String.format("&#%s;", Integer.toString(character, 10));
-            }
-        };
+        return character -> String.format("&#%s;", Integer.toString(character, 10));
     }
 
     public static class functions {
         public static Unary<Element> modifyTextContent(final Function<? super String, ? extends CharSequence> function) {
-            return new Unary<Element>() {
-                @Override
-                public Element call(Element element) throws Exception {
-                    element.setTextContent(function.call(element.getTextContent()).toString());
-                    return element;
-                }
+            return element -> {
+                element.setTextContent(function.call(element.getTextContent()).toString());
+                return element;
             };
         }
 
         public static Function<Element, Element> setAttribute(final String name, final String value) {
-            return new Unary<Element>() {
-                public Element call(Element element) throws Exception {
-                    element.setAttribute(name, value);
-                    return element;
-                }
+            return element -> {
+                element.setAttribute(name, value);
+                return element;
             };
         }
 
@@ -394,56 +364,27 @@ public class Xml {
         }
 
         public static Function<Element, String> attribute(final String attributeName) {
-            return new Function<Element, String>() {
-                public String call(Element element) throws Exception {
-                    return element.getAttribute(attributeName);
-                }
-            };
+            return element -> element.getAttribute(attributeName);
         }
 
         public static Function2<Node, String, String> selectContents() {
-            return new Function2<Node, String, String>() {
-                @Override
-                public String call(Node node, String expression) throws Exception {
-                    return Xml.selectContents(node, expression);
-                }
-            };
+            return Xml::selectContents;
         }
 
         public static Function<Node, String> selectContents(final String expression) {
-            return new Function<Node, String>() {
-                @Override
-                public String call(Node node) throws Exception {
-                    return Xml.selectContents(node, expression);
-                }
-            };
+            return node -> Xml.selectContents(node, expression);
         }
 
         public static Function2<Node, String, Seq<Node>> selectNodes() {
-            return new Function2<Node, String, Seq<Node>>() {
-                @Override
-                public Seq<Node> call(final Node node, final String expression) throws Exception {
-                    return Xml.selectNodes(node, expression);
-                }
-            };
+            return Xml::selectNodes;
         }
 
         public static Function<String, Document> document() {
-            return new Function<String, Document>() {
-                @Override
-                public Document call(String value) throws Exception {
-                    return Xml.document(value);
-                }
-            };
+            return Xml::document;
         }
 
         public static Function<Element, String> textContent() {
-            return new Function<Element, String>() {
-                @Override
-                public String call(Element element) throws Exception {
-                    return element.getTextContent();
-                }
-            };
+            return Element::getTextContent;
         }
     }
 }

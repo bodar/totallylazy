@@ -19,11 +19,11 @@ import static com.googlecode.totallylazy.numbers.Numbers.ascending;
 import static com.googlecode.totallylazy.numbers.Numbers.descending;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 
-public class TimeReport extends Block<Number> {
+public class TimeReport implements Block<Number> {
     private final List<Number> times = new ArrayList<Number>();
 
     @Override
-    protected void execute(Number time) throws Exception {
+    public void execute(Number time) throws Exception {
         this.times.add(time);
     }
 

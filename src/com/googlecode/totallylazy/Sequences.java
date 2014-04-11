@@ -197,28 +197,31 @@ public class Sequences {
         };
     }
 
-    public static <T> void each(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable) {
-        forEach(iterable, runnable);
+    public static <T> Seq<T> each(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable) {
+        return forEach(iterable, runnable);
     }
 
-    public static <T> void forEach(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable) {
+    public static <T> Seq<T> forEach(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable) {
         Iterators.forEach(iterable.iterator(), runnable);
+        return sequence(iterable);
     }
 
-    public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable) {
-        forEachConcurrently(iterable, runnable);
+    public static <T> Seq<T> eachConcurrently(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable) {
+        return forEachConcurrently(iterable, runnable);
     }
 
-    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable) {
+    public static <T> Seq<T> forEachConcurrently(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable) {
         mapConcurrently(iterable, runnable).realise();
+        return sequence(iterable);
     }
 
-    public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable, Executor executor) {
-        forEachConcurrently(iterable, runnable, executor);
+    public static <T> Seq<T> eachConcurrently(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable, Executor executor) {
+        return forEachConcurrently(iterable, runnable, executor);
     }
 
-    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable, Executor executor) {
+    public static <T> Seq<T> forEachConcurrently(final Iterable<? extends T> iterable, final Function<? super T, ?> runnable, Executor executor) {
         mapConcurrently(iterable, runnable, executor).realise();
+        return sequence(iterable);
     }
 
     public static <T> T first(final Iterable<? extends T> iterable) {

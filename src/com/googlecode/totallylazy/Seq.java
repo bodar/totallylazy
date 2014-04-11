@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.returnArgument;
@@ -24,28 +25,36 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
         return Sequences.equalTo(this, other, predicate);
     }
 
-    default void eachConcurrently(final Function<? super T, ?> runnable) {
-        forEachConcurrently(runnable);
+    default Seq<T> eachConcurrently(final Function<? super T, ?> runnable) {
+        return forEachConcurrently(runnable);
     }
 
-    default void forEachConcurrently(final Function<? super T, ?> runnable) {
-        Sequences.forEachConcurrently(this, runnable);
+    default Seq<T> forEachConcurrently(final Function<? super T, ?> runnable) {
+        return Sequences.forEachConcurrently(this, runnable);
     }
 
-    default void eachConcurrently(final Function<? super T, ?> runnable, Executor executor) {
-        forEachConcurrently(runnable, executor);
+    default Seq<T> eachConcurrently(final Function<? super T, ?> runnable, Executor executor) {
+        return forEachConcurrently(runnable, executor);
     }
 
-    default void forEachConcurrently(final Function<? super T, ?> runnable, Executor executor) {
-        Sequences.forEachConcurrently(this, runnable, executor);
+    default Seq<T> forEachConcurrently(final Function<? super T, ?> runnable, Executor executor) {
+        return Sequences.forEachConcurrently(this, runnable, executor);
     }
 
-    default void each(final Function<? super T, ?> runnable) {
-        forEach(runnable);
+    default Seq<T> each(final Block<? super T> runnable) {
+        return forEach((Function<? super T, ?>)runnable);
     }
 
-    default void forEach(final Function<? super T, ?> runnable) {
-        Sequences.forEach(this, runnable);
+    default Seq<T> each(final Function<? super T, ?> runnable) {
+        return forEach(runnable);
+    }
+
+    default Seq<T> forEach(final Block<? super T> runnable) {
+        return forEach((Function<? super T, ?>)runnable);
+    }
+
+    default Seq<T> forEach(final Function<? super T, ?> runnable) {
+        return Sequences.forEach(this, runnable);
     }
 
     default <S> Seq<S> mapConcurrently(final Function<? super T, S> callable) {
