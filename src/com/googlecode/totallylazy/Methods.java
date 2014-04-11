@@ -104,7 +104,7 @@ public class Methods {
         };
     }
 
-    public static Sequence<Method> allMethods(Class<?> aClass) {
+    public static Seq<Method> allMethods(Class<?> aClass) {
         return allClasses(aClass).flatMap(Methods.declaredMethods());
     }
 

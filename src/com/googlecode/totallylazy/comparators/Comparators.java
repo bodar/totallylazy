@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.comparators;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequences;
 
 import java.util.Comparator;
@@ -76,7 +76,7 @@ public class Comparators {
         return comparators(sequence(comparators));
     }
 
-    public static <T> Comparator<T> comparators(final Sequence<Comparator<? super T>> comparators) {
+    public static <T> Comparator<T> comparators(final Seq<Comparator<? super T>> comparators) {
         return new CompositeComparator<T>(comparators);
     }
 

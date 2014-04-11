@@ -25,7 +25,7 @@ public class Exceptions {
                 headOption();
     }
 
-    public static Sequence<Throwable> causes(Throwable throwable) {
+    public static Seq<Throwable> causes(Throwable throwable) {
         return iterate(getCause(), throwable).
                 takeWhile(notNullValue());
     }

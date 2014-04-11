@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.Bytes;
 import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 import net.sf.cglib.proxy.InvocationHandler;
@@ -85,12 +86,12 @@ public abstract class FieldOn<T, S> implements Function<T, S>, InvocationHandler
         }
 
         @SuppressWarnings("unchecked")
-        public static Sequence<AbstractInsnNode> instructions(MethodNode method) {
+        public static Seq<AbstractInsnNode> instructions(MethodNode method) {
             return instructions(method.instructions);
         }
 
         @SuppressWarnings("unchecked")
-        public static Sequence<AbstractInsnNode> instructions(final InsnList instructions) {
+        public static Seq<AbstractInsnNode> instructions(final InsnList instructions) {
             return new Sequence<AbstractInsnNode>() {
                 @Override
                 public Iterator<AbstractInsnNode> iterator() {

@@ -12,9 +12,9 @@ import static com.googlecode.totallylazy.Streams.emptyInputStream;
 
 public class FileSource implements Sources {
     private final CloseableList closeables;
-    private final Sequence<Source> sources;
+    private final Seq<Source> sources;
 
-    private FileSource(final Sequence<Pair<String, File>> sources) {
+    private FileSource(final Seq<Pair<String, File>> sources) {
         closeables = new CloseableList();
         this.sources = sources.map(new Function<Pair<String, File>, Source>() {
             @Override
@@ -33,7 +33,7 @@ public class FileSource implements Sources {
         return fileSource(folder, Files.recursiveFilesDirectoriesFirst(folder));
     }
 
-    public static FileSource fileSource(File folder, Sequence<File> files) {
+    public static FileSource fileSource(File folder, Seq<File> files) {
         return fileSource(files.map(relativeTo(folder)));
     }
 
@@ -43,7 +43,7 @@ public class FileSource implements Sources {
 
 
     @Override
-    public Sequence<Source> sources() {
+    public Seq<Source> sources() {
         return sources;
     }
 

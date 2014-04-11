@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Classes.allClasses;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -60,13 +59,13 @@ public class Fields {
         return field;
     }
 
-    public static Sequence<Field> fields(Class<?> aClass) {
+    public static Seq<Field> fields(Class<?> aClass) {
         return allClasses(aClass).flatMap(Fields.fields());
     }
 
-    public static Function<Class<?>, Sequence<Field>> fields() {
-        return new Function<Class<?>, Sequence<Field>>() {
-            public Sequence<Field> call(Class<?> aClass) throws Exception {
+    public static Function<Class<?>, Seq<Field>> fields() {
+        return new Function<Class<?>, Seq<Field>>() {
+            public Seq<Field> call(Class<?> aClass) throws Exception {
                 return sequence(aClass.getDeclaredFields());
             }
         };

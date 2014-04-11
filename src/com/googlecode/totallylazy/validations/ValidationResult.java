@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Combiner;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.collections.PersistentMap;
 import com.googlecode.totallylazy.comparators.Comparators;
@@ -23,9 +23,9 @@ import static com.googlecode.totallylazy.validations.ValidationResult.constructo
  */
 public class ValidationResult {
     public static final String DEFAULT_KEY = "value";
-    private final PersistentMap<String, Sequence<String>> messages;
+    private final PersistentMap<String, Seq<String>> messages;
 
-    public ValidationResult(PersistentMap<String, Sequence<String>> messages) {
+    public ValidationResult(PersistentMap<String, Seq<String>> messages) {
         this.messages = messages;
     }
 
@@ -33,29 +33,29 @@ public class ValidationResult {
         return new ValidationResult(avlTree(key, allMessages()));
     }
 
-    public Sequence<Pair<String, Sequence<String>>> messages() {
+    public Seq<Pair<String, Seq<String>>> messages() {
         return sequence(messages);
     }
 
-    public Sequence<String> messages(String key) {
+    public Seq<String> messages(String key) {
         return messages.lookup(key).getOrElse(empty(String.class));
     }
 
     /**
      * Calls key.toString() and returns messages for that string
      */
-    public Sequence<String> messages(Object key) {
+    public Seq<String> messages(Object key) {
         return messages(key.toString());
     }
 
-    public Sequence<String> allMessages() {
+    public Seq<String> allMessages() {
         return sequence(messages).
-                map(Callables.<Sequence<String>>second()).
+                map(Callables.<Seq<String>>second()).
                 flatMap(identity(String.class));
     }
 
     public ValidationResult add(String key, Iterable<String> messages) {
-        Sequence<String> newMessages = messages(key).join(messages);
+        Seq<String> newMessages = messages(key).join(messages);
         if(newMessages.isEmpty())
             return this;
         return new ValidationResult(this.messages.insert(key, newMessages));
@@ -85,7 +85,7 @@ public class ValidationResult {
         return !succeeded();
     }
 
-    public PersistentMap<String, Sequence<String>> toMap() {
+    public PersistentMap<String, Seq<String>> toMap() {
         return messages;
     }
     public static class constructors {
@@ -105,28 +105,28 @@ public class ValidationResult {
 
     public static class functions {
 
-        public static Function<ValidationResult, Sequence<String>> allMessages(){
-            return new Function<ValidationResult, Sequence<String>>() {
+        public static Function<ValidationResult, Seq<String>> allMessages(){
+            return new Function<ValidationResult, Seq<String>>() {
                 @Override
-                public Sequence<String> call(ValidationResult result) throws Exception {
+                public Seq<String> call(ValidationResult result) throws Exception {
                     return result.allMessages();
                 }
             };
         }
 
-        public static Function<ValidationResult, Sequence<String>> messages(final String key){
-            return new Function<ValidationResult, Sequence<String>>() {
+        public static Function<ValidationResult, Seq<String>> messages(final String key){
+            return new Function<ValidationResult, Seq<String>>() {
                 @Override
-                public Sequence<String> call(ValidationResult result) throws Exception {
+                public Seq<String> call(ValidationResult result) throws Exception {
                     return result.messages(key);
                 }
             };
         }
 
-        public static Function<ValidationResult, Sequence<String>> messages(final Object key){
-            return new Function<ValidationResult, Sequence<String>>() {
+        public static Function<ValidationResult, Seq<String>> messages(final Object key){
+            return new Function<ValidationResult, Seq<String>>() {
                 @Override
-                public Sequence<String> call(ValidationResult result) throws Exception {
+                public Seq<String> call(ValidationResult result) throws Exception {
                     return result.messages(key);
                 }
             };
@@ -201,5 +201,5 @@ public class ValidationResult {
 
     }
 
-    private static final PersistentMap<String, Sequence<String>> emptyMap  = factory.create(Comparators.<String>ascending());
+    private static final PersistentMap<String, Seq<String>> emptyMap  = factory.create(Comparators.<String>ascending());
 }

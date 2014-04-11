@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Methods;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
@@ -38,17 +38,17 @@ public class Structural {
     }
 
     private static <T> Option<Map<Method, Method>> extractMethods(final Object instance, Class<T> structuralType) {
-        final Sequence<Method> requiredMethods = sequence(structuralType.getMethods());
-        final Sequence<Method> instanceMethods = allMethods(instance.getClass());
-        return  sequenceO(requiredMethods.map(findMethod(instanceMethods))).map(new Function<Sequence<Method>, Map<Method, Method>>() {
+        final Seq<Method> requiredMethods = sequence(structuralType.getMethods());
+        final Seq<Method> instanceMethods = allMethods(instance.getClass());
+        return  sequenceO(requiredMethods.map(findMethod(instanceMethods))).map(new Function<Seq<Method>, Map<Method, Method>>() {
             @Override
-            public Map<Method, Method> call(Sequence<Method> foundMethods) throws Exception {
+            public Map<Method, Method> call(Seq<Method> foundMethods) throws Exception {
                 return Maps.map(requiredMethods.zip(foundMethods));
             }
         });
     }
 
-    private static Function<Method, Option<Method>> findMethod(final Sequence<Method> instanceMethods) {
+    private static Function<Method, Option<Method>> findMethod(final Seq<Method> instanceMethods) {
         return new Function<Method, Option<Method>>() {
             @Override
             public Option<Method> call(Method requiredMethod) throws Exception {
@@ -57,13 +57,13 @@ public class Structural {
         };
     }
 
-    private static Option<Method> findMethod(final Method requiredMethod, final Sequence<Method> instanceMethods) {
+    private static Option<Method> findMethod(final Method requiredMethod, final Seq<Method> instanceMethods) {
         return instanceMethods.find(structuralMatch(requiredMethod));
     }
 
     private static LogicalPredicate<Method> structuralMatch(final Method required) {
-        final Sequence<Type> requiredParameters = sequence(required.getGenericParameterTypes());
-        final Sequence<Type> requiredReturnType = sequence(required.getGenericReturnType());
+        final Seq<Type> requiredParameters = sequence(required.getGenericParameterTypes());
+        final Seq<Type> requiredReturnType = sequence(required.getGenericReturnType());
         return new LogicalPredicate<Method>() {
             @Override
             public boolean matches(Method objects) {

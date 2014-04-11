@@ -26,9 +26,9 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.Unary;
 import com.googlecode.totallylazy.Unary;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
@@ -63,16 +63,16 @@ public class Numbers {
         }
     };
 
-    public static Sequence<Number> range(final Number start) {
+    public static Seq<Number> range(final Number start) {
         return iterate(increment, start);
     }
 
-    public static Sequence<Number> range(final Number start, final Number end) {
+    public static Seq<Number> range(final Number start, final Number end) {
         if (lessThan(end, start)) return range(start, end, -1);
         return range(start).takeWhile(lessThanOrEqualTo(end));
     }
 
-    public static Sequence<Number> range(final Number start, final Number end, final Number step) {
+    public static Seq<Number> range(final Number start, final Number end, final Number step) {
         if (lessThan(end, start)) return iterate(add(step), start).takeWhile(greaterThanOrEqualTo(end));
         return iterate(add(step), start).takeWhile(lessThanOrEqualTo(end));
     }
@@ -92,11 +92,11 @@ public class Numbers {
         }
     };
 
-    public static Sequence<Number> numbers(Number... numbers) {
+    public static Seq<Number> numbers(Number... numbers) {
         return Sequences.sequence(numbers);
     }
 
-    public static Sequence<Number> numbers(final int[] numbers) {
+    public static Seq<Number> numbers(final int[] numbers) {
         return new Sequence<Number>() {
             public Iterator<Number> iterator() {
                 return new IntIterator(numbers);
@@ -104,7 +104,7 @@ public class Numbers {
         };
     }
 
-    public static Sequence<Number> primeFactors(final Number number) {
+    public static Seq<Number> primeFactors(final Number number) {
         return Segment.methods.sequence(factor(primes, number));
     }
 
@@ -183,7 +183,7 @@ public class Numbers {
         return new RemainderIs(divisor, remainder);
     }
 
-    public static Sequence<Number> probablePrimes() {
+    public static Seq<Number> probablePrimes() {
         return iterate(nextProbablePrime(), BigInteger.valueOf(2)).map(reduce());
     }
 
@@ -209,7 +209,7 @@ public class Numbers {
 
     public static Computation<Number> primes = computation(2, computation(3, nextPrime));
 
-    public static Sequence<Number> primes() {
+    public static Seq<Number> primes() {
         return primes;
     }
 
@@ -217,11 +217,11 @@ public class Numbers {
         return iterate(add(2), number).filter(prime).second();
     }
 
-    public static Sequence<Number> fibonacci() {
+    public static Seq<Number> fibonacci() {
         return computation(Pair.<Number, Number>pair(0, 1), reduceLeftShift(sum)).map(first(Number.class));
     }
 
-    public static Sequence<Number> powersOf(Number amount) {
+    public static Seq<Number> powersOf(Number amount) {
         return Computation.iterate(multiply(amount), 1);
     }
 

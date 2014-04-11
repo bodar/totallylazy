@@ -1,15 +1,15 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequences;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 class OrParser<A> extends Parser<A> {
-    private final Sequence<Parse<A>> parsers;
+    private final Seq<Parse<A>> parsers;
 
-    private OrParser(Sequence<Parse<A>> parsers) {
+    private OrParser(Seq<Parse<A>> parsers) {
         this.parsers = parsers;
     }
 

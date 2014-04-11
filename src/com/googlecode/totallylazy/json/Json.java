@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.parser.Result;
 
 import java.io.Reader;
@@ -19,9 +19,9 @@ public interface Json {
 
     static Object object(String json) { return parseObject(json).value(); }
 
-    static <V> Sequence<Pair<String, V>> pairs(Reader json) { return Json.<V>parsePairs(json).value(); }
+    static <V> Seq<Pair<String, V>> pairs(Reader json) { return Json.<V>parsePairs(json).value(); }
 
-    static <V> Sequence<V> sequence(Reader json) { return Json.<V>parseSequence(json).value(); }
+    static <V> Seq<V> sequence(Reader json) { return Json.<V>parseSequence(json).value(); }
 
     static <V> Result<Map<String, V>> parseMap(String json) { return cast(Grammar.OBJECT.parse(json)); }
 
@@ -29,9 +29,9 @@ public interface Json {
 
     static Result<Object> parseObject(String json) { return Grammar.VALUE.parse(json); }
 
-    static <V> Result<Sequence<Pair<String, V>>> parsePairs(Reader json) { return cast(Grammar.PAIRS.parse(json)); }
+    static <V> Result<Seq<Pair<String, V>>> parsePairs(Reader json) { return cast(Grammar.PAIRS.parse(json)); }
 
-    static <V> Result<Sequence<V>> parseSequence(Reader json) {
+    static <V> Result<Seq<V>> parseSequence(Reader json) {
         return cast(Grammar.SEQUENCE.parse(json));
     }
 }

@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.iterators.EmptyIterator;
 
@@ -44,7 +44,7 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> ext
     }
 
     @Override
-    public Sequence<Pair<K, V>> toSequence() {
+    public Seq<Pair<K, V>> toSequence() {
         return Sequences.empty();
     }
 
@@ -114,12 +114,12 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> ext
     }
 
     @Override
-    public Sequence<K> keys() {
+    public Seq<K> keys() {
         return Sequences.empty();
     }
 
     @Override
-    public Sequence<V> values() {
+    public Seq<V> values() {
         return Sequences.empty();
     }
 

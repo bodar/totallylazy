@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
 import com.googlecode.totallylazy.parser.ReferenceParser;
@@ -58,7 +58,7 @@ public class Grammar {
         ref.set(ws(Parsers.<Object>or(OBJECT, ARRAY, STRING, NUMBER, BOOLEAN, NULL)));
     }
 
-    public static final Parser<Sequence<Pair<String, Object>>> PAIRS = wsChar('{').next(PAIR.sequence());
+    public static final Parser<Seq<Pair<String, Object>>> PAIRS = wsChar('{').next(PAIR.sequence());
 
-    public static final Parser<Sequence<Object>> SEQUENCE = wsChar('[').next(VALUE.seqBy(SEPARATOR));
+    public static final Parser<Seq<Object>> SEQUENCE = wsChar('[').next(VALUE.seqBy(SEPARATOR));
 }

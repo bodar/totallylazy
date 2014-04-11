@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Triple;
 import com.googlecode.totallylazy.regex.Regex;
 
@@ -102,7 +102,7 @@ public class Parsers {
         return OptionalParser.optional(parserA);
     }
 
-    public static <A> Parser<A> or(Sequence<? extends Parse<? extends A>> parsers) {
+    public static <A> Parser<A> or(Seq<? extends Parse<? extends A>> parsers) {
         return OrParser.or(parsers);
     }
 

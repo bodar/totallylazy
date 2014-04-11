@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -17,8 +17,8 @@ public class FieldOnTest {
 
     @Test
     public void canMapWithAField() throws Exception {
-        Sequence<User> users = sequence(user("Dan", "Bodart"), user("Matt", "Savage"));
-        Sequence<String> firstNames = users.map(new FieldOn<User, String>() { { get(instance.firstName); } });
+        Seq<User> users = sequence(user("Dan", "Bodart"), user("Matt", "Savage"));
+        Seq<String> firstNames = users.map(new FieldOn<User, String>() { { get(instance.firstName); } });
         assertThat(firstNames, hasExactly("Dan", "Matt"));
     }
 }

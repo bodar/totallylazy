@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class MemoriseTest {
     @Test
     public void supportsGetWithIndex() throws Exception {
-        Sequence<Integer> counting = counting().repeat().memorise();
+        Seq<Integer> counting = counting().repeat().memorise();
         assertThat(counting.get(0), is(0));
         assertThat(counting.get(0), is(0));
     }
@@ -26,7 +26,7 @@ public class MemoriseTest {
     @Test
     public void canForget() throws Exception {
         CountingCallable<Integer> counting = counting();
-        Sequence<Integer> memory = repeat(counting).memorise();
+        Seq<Integer> memory = repeat(counting).memorise();
         assertThat(memory.head(), is(0));
         assertThat(counting.count(), is(1));
         
@@ -38,7 +38,7 @@ public class MemoriseTest {
 
     @Test
     public void canTurnAnIteratorIntoAReUsableSequence() throws Exception {
-        Sequence<Integer> reusable = memorise(asList(1, 2).iterator());
+        Seq<Integer> reusable = memorise(asList(1, 2).iterator());
         assertThat(reusable, hasExactly(1, 2));
         assertThat(reusable, hasExactly(1, 2));
     }
@@ -46,16 +46,16 @@ public class MemoriseTest {
     @Test
     public void memoriseIsThreadSafe() throws Exception {
         CountingCallable<Integer> counting = counting();
-        final Sequence<Integer> number = repeat(counting.sleep(10)).memorise();
+        final Seq<Integer> number = repeat(counting.sleep(10)).memorise();
 
-        Sequence<Integer> result = callConcurrently(callHead(number).sleep(10), callHead(number).sleep(10));
+        Seq<Integer> result = callConcurrently(callHead(number).sleep(10), callHead(number).sleep(10));
 
         assertThat(result.first(), is(0));
         assertThat(result.second(), is(0));
         assertThat(counting.count(), is(1));
     }
 
-    private Returns<Integer> callHead(final Sequence<Integer> number) {
+    private Returns<Integer> callHead(final Seq<Integer> number) {
         return new Returns<Integer>() {
             public Integer call() throws Exception {
                 return number.head();
@@ -66,7 +66,7 @@ public class MemoriseTest {
     @Test
     public void supportsMemorise() throws Exception {
         CountingCallable<Integer> counting = counting();
-        Sequence<Integer> sequence = repeat(counting).memorise();
+        Seq<Integer> sequence = repeat(counting).memorise();
         assertThat(sequence.head(), is(0));
         assertThat(sequence.head(), is(0));
         assertThat(counting.count(), is(1));
@@ -75,7 +75,7 @@ public class MemoriseTest {
     @Test
     public void memorisingForEach() throws InterruptedException {
         CountingCallable<Integer> counting = counting();
-        Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
+        Seq<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
         sequence.forEach(doNothing(Integer.class));
         sequence.forEach(doNothing(Integer.class));
 
@@ -85,7 +85,7 @@ public class MemoriseTest {
     @Test
     public void memorisingSize() throws InterruptedException {
         CountingCallable<Integer> counting = counting();
-        Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
+        Seq<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
         assertThat(sequence.size(), NumberMatcher.is(1));
         assertThat(counting.count(), is(1));
         assertThat(sequence.size(), NumberMatcher.is(1));

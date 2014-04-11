@@ -11,19 +11,19 @@ public interface Monad<A> extends Applicative<A> { // Java does not support Type
 //    <B> Self<B> flatMap(Function<? super A, ? extends Self<B>> callable);
 
     class methods {
-        public static <L, R> Either<Sequence<L>, Sequence<R>> sequenceEs(Iterable<? extends Either<? extends L, ? extends R>> iterable) {
-            Sequence<L> errors = sequence(iterable).flatMap(Either.functions.<L>leftOption());
+        public static <L, R> Either<Seq<L>, Seq<R>> sequenceEs(Iterable<? extends Either<? extends L, ? extends R>> iterable) {
+            Seq<L> errors = sequence(iterable).flatMap(Either.functions.<L>leftOption());
             if (!errors.isEmpty()) return left(errors);
             return right(Sequences.<R>flatten(iterable));
         }
 
-        public static <L, R> Either<L, Sequence<R>> sequenceE(Iterable<? extends Either<? extends L, ? extends R>> iterable) {
+        public static <L, R> Either<L, Seq<R>> sequenceE(Iterable<? extends Either<? extends L, ? extends R>> iterable) {
             Option<Either<? extends L, ? extends R>> error = sequence(iterable).find(left);
             if (!error.isEmpty()) return left(error.get().left());
             return right(Sequences.<R>flatten(iterable));
         }
 
-        public static <A> Option<Sequence<A>> sequenceO(Iterable<? extends Option<? extends A>> iterable) {
+        public static <A> Option<Seq<A>> sequenceO(Iterable<? extends Option<? extends A>> iterable) {
             if (sequence(iterable).contains(Option.<A>none())) return none();
             return some(Sequences.<A>flatten(iterable));
         }

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.regex;
 
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Functions.constant;
@@ -21,14 +21,14 @@ public class RegexTest {
 
     @Test
     public void supportsSplittingText() throws Exception {
-        Sequence<String> result = regex("\\s").split("The quick brown fox jumps over the lazy dog");
+        Seq<String> result = regex("\\s").split("The quick brown fox jumps over the lazy dog");
         assertThat(result, hasExactly("The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"));
     }
 
     @Test
     public void supportsReplaceAll() throws Exception {
         Regex regex = regex("\\d+");
-        Sequence<String> matches = sequence("111", "11 11", "AAA").map(regex.then(replace(constant("N"))));
+        Seq<String> matches = sequence("111", "11 11", "AAA").map(regex.then(replace(constant("N"))));
         assertThat(matches, is(sequence("N", "N N", "AAA")));
     }
 }

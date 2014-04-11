@@ -34,9 +34,9 @@ public final class Callables {
         };
     }
 
-    public static <T> Unary<Sequence<T>> reduceAndShift(final Function2<? super T, ? super T, ? extends T> action) {
-        return new Unary<Sequence<T>>() {
-            public final Sequence<T> call(final Sequence<T> values) throws Exception {
+    public static <T> Unary<Seq<T>> reduceAndShift(final Function2<? super T, ? super T, ? extends T> action) {
+        return new Unary<Seq<T>>() {
+            public final Seq<T> call(final Seq<T> values) throws Exception {
                 return values.tail().append(values.reduceLeft(action));
             }
         };
@@ -96,9 +96,9 @@ public final class Callables {
     }
 
 
-    public static <T> Unary<Sequence<T>> realise() {
-        return new Unary<Sequence<T>>() {
-            public final Sequence<T> call(final Sequence<T> sequence) throws Exception {
+    public static <T> Unary<Seq<T>> realise() {
+        return new Unary<Seq<T>>() {
+            public final Seq<T> call(final Seq<T> sequence) throws Exception {
                 return sequence.realise();
             }
         };

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.matchers;
 
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequences;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -12,7 +12,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.Matchers.are;
 
 public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
-    private final Sequence<Matcher<? super T>> expected;
+    private final Seq<Matcher<? super T>> expected;
     private boolean shouldBeSameSize;
 
     private IterableMatcher(Iterable<? extends Matcher<? super T>> expected, boolean shouldBeSameSize) {

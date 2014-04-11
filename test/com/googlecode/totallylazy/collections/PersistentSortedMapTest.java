@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -74,7 +74,7 @@ public class PersistentSortedMapTest {
         //in order - sorted list Elapsed msecs for 11 runs:	Avg:11.016874222222222	Min:6.171428	Max:101.041891	Total:206.36518700000005
         // shuffle - fold / cons Elapsed msecs for 11 runs:	Avg:19.289151888888888	Min:13.316564	Max:113.912953	Total:300.831884
         // shuffle - sorted list Elapsed msecs for 11 runs:	Avg:15.702062000000002	Min:8.892117	Max:125.818735	Total:276.02941000000004
-        final Sequence<Integer> integers = range(0, 10000).safeCast(Integer.class).shuffle();
+        final Seq<Integer> integers = range(0, 10000).safeCast(Integer.class).shuffle();
         TimeReport time = TimeReport.time(10, new Callable<Object>() {
             @Override
             public Object call() throws Exception {

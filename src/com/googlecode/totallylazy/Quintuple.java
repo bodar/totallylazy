@@ -2,7 +2,6 @@ package com.googlecode.totallylazy;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface Quintuple<F, S, T, Fo, Fi> extends Quadruple<F, S, T, Fo>,  Fifth<Fi> {
@@ -29,7 +28,7 @@ public interface Quintuple<F, S, T, Fo, Fi> extends Quadruple<F, S, T, Fo>,  Fif
     }
 
     @Override
-    default Sequence<Object> values() {
+    default Seq<Object> values() {
         return sequence(first(), second(), third(), fourth(), fifth());
     }
 }

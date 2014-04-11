@@ -67,9 +67,9 @@ public class Files {
         };
     }
 
-    public static Function<File, Sequence<File>> files() {
-        return new Function<File, Sequence<File>>() {
-            public Sequence<File> call(File file) throws Exception {
+    public static Function<File, Seq<File>> files() {
+        return new Function<File, Seq<File>>() {
+            public Seq<File> call(File file) throws Exception {
                 return files(file);
             }
         };
@@ -166,7 +166,7 @@ public class Files {
         return randomUUID().toString();
     }
 
-    public static Sequence<File> files(File directory) {
+    public static Seq<File> files(File directory) {
         return sequence(directory.listFiles());
     }
 
@@ -178,17 +178,17 @@ public class Files {
         return where(Files.files(), Predicates.<File>exists(predicate));
     }
 
-    public static Sequence<File> ancestorsAndSelf(File file) {
+    public static Seq<File> ancestorsAndSelf(File file) {
         if (file.getParentFile() == null) return sequence(file);
         return sequence(file).join(ancestorsAndSelf(file.getParentFile()));
     }
 
-    public static Sequence<File> ancestors(File file) {
+    public static Seq<File> ancestors(File file) {
         if (file.getParentFile() == null) return Sequences.empty();
         return sequence(file.getParentFile()).join(ancestors(file.getParentFile()));
     }
 
-    public static Sequence<File> recursiveFiles(final File directory) {
+    public static Seq<File> recursiveFiles(final File directory) {
         return files(directory).flatMap(recursiveFiles());
     }
 
@@ -200,7 +200,7 @@ public class Files {
         };
     }
 
-    public static Sequence<File> recursiveFilesDirectoriesFirst(final File directory) {
+    public static Seq<File> recursiveFilesDirectoriesFirst(final File directory) {
         return files(directory).flatMap(recursiveFilesDirectoriesFirst());
     }
 
