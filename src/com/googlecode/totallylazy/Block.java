@@ -1,11 +1,23 @@
 package com.googlecode.totallylazy;
 
-public abstract class Block<T> implements Function<T, Void> {
+import java.util.function.Consumer;
+
+public interface Block<T> extends Function<T, Void>, Consumer<T> {
     @Override
-    public Void call(T t) throws Exception {
+    default Void call(T t) throws Exception {
         execute(t);
         return Runnables.VOID;
     }
 
-    protected abstract void execute(T t) throws Exception;
+    @Override
+    default void accept(T t) {
+        apply(t);
+    }
+
+    void execute(T t) throws Exception;
+
+    static <T> Block<T> block(Consumer<? super T> callable) {
+        return callable::accept;
+    }
+
 }

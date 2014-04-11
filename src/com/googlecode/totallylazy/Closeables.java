@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import java.io.Closeable;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.function.Consumer;
 
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -96,6 +97,10 @@ public class Closeables {
         return t;
     }
 
+    public static <T extends Closeable> void using(T t, Block<? super T> callable) {
+        using(t, Unchecked.<Function<T, Void>>cast(callable));
+    }
+
     public static <T extends Closeable, R> R using(T t, Function<? super T, ? extends R> callable) {
         try {
             return call(callable, t);
@@ -125,36 +130,25 @@ public class Closeables {
     }
 
     public static <T> Block<T> reflectiveClose() {
-        return new Block<T>() {
-            @Override
-            protected void execute(T instanceWithCloseMethod) throws Exception {
-                close(instanceWithCloseMethod);
-            }
+        return instanceWithCloseMethod -> {
+            close(instanceWithCloseMethod);
         };
     }
 
     public static Block<Closeable> close() {
-        return new Block<Closeable>() {
-            @Override
-            protected void execute(Closeable closeable) throws Exception {
-                close(closeable);
-            }
+        return closeable -> {
+            close(closeable);
         };
     }
 
     public static Block<Closeable> safeClose() {
-        return new Block<Closeable>() {
-            @Override
-            protected void execute(Closeable closeable) throws Exception {
-                safeClose(closeable);
-            }
-        };
+        return Closeables::safeClose;
     }
 
     public static <T> Block<T> reflectiveSafeClose() {
         return new Block<T>() {
             @Override
-            protected void execute(T closeable) throws Exception {
+            public void execute(T closeable) throws Exception {
                 safeClose(closeable);
             }
         };

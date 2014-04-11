@@ -18,16 +18,10 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 
 public class Streams {
     public static void copyAndClose(final InputStream input, final OutputStream out) {
-        using(input, new Block<InputStream>() {
-            @Override
-            protected void execute(InputStream inputStream) throws Exception {
-                using(out, new Block<OutputStream>() {
-                    @Override
-                    protected void execute(OutputStream outputStream) throws Exception {
-                        copy(input, out);
-                    }
-                });
-            }
+        using(input, inputStream -> {
+            using(out, outputStream -> {
+                copy(input, out);
+            });
         });
     }
 

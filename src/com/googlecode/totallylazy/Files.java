@@ -236,30 +236,16 @@ public class Files {
     private static Set<File> delete = Sets.concurrentSet();
 
     static {
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (File directory : delete) {
-                    Files.delete(directory);
-                }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            for (File directory : delete) {
+                Files.delete(directory);
             }
         }));
     }
 
     public static Block<InputStream> write(final File output) {
-        return new Block<InputStream>() {
-            @Override
-            protected void execute(InputStream inputStream) throws Exception {
-                Streams.copyAndClose(inputStream, new FileOutputStream(output));
-            }
-        };
-    }
-
-    public static Function<String, File> asFile() {
-        return new Function<String, File>() {
-            public File call(String name) throws Exception {
-                return new File(name);
-            }
+        return inputStream -> {
+            Streams.copyAndClose(inputStream, new FileOutputStream(output));
         };
     }
 

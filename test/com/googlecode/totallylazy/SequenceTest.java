@@ -601,10 +601,17 @@ public class SequenceTest {
     @Test
     public void supportsForEach() throws Exception {
         final int[] sum = {0};
-        sequence(1, 2).each(new Block<Integer>() {
-            public void execute(Integer value) {
-                sum[0] += value;
-            }
+        sequence(1, 2).forEach(value -> {
+            sum[0] += value;
+        });
+        assertThat(sum[0], is(3));
+    }
+
+    @Test
+    public void supportsEach() throws Exception {
+        final int[] sum = {0};
+        sequence(1, 2).each(value -> {
+            sum[0] += value;
         });
         assertThat(sum[0], is(3));
     }
@@ -612,11 +619,7 @@ public class SequenceTest {
     @Test
     public void supportsEachConcurrently() throws Exception {
         final AtomicInteger sum = new AtomicInteger();
-        sequence(1, 2).eachConcurrently(new Block<Integer>() {
-            public void execute(Integer value) throws InterruptedException {
-                sum.addAndGet(value);
-            }
-        });
+        sequence(1, 2).eachConcurrently(sum::addAndGet);
         assertThat(sum.intValue(), is(3));
     }
 
