@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.regex;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.AbstractSequence;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.GroupIterator;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callers.call;
 
-public class Matches extends Sequence<MatchResult> {
+public class Matches extends AbstractSequence<MatchResult> {
     private final Pattern pattern;
     private final CharSequence text;
 

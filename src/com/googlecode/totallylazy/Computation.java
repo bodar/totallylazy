@@ -12,7 +12,7 @@ import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyFunction.lazy;
 
-public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
+public class Computation<T> extends AbstractSequence<T> implements Sequence<T>, Segment<T>, Memory {
     private final Lazy<T> head;
     private final LazyFunction<T, Computation<T>> tail;
 
@@ -64,12 +64,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     }
 
     private static <T> Unary<T> lazyTail(final Callable<? extends Iterator<? extends T>> iterator) {
-        return new Unary<T>() {
-            @Override
-            public T call(T t) throws Exception {
-                return iterator.call().next();
-            }
-        };
+        return t -> iterator.call().next();
     }
 
     private static <T> Returns<T> lazyHead(final Callable<? extends Iterator<? extends T>> iterator) {

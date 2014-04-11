@@ -1,47 +1,13 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.annotations.multimethod;
-
-import java.lang.reflect.Array;
-import java.util.Collection;
 
 import static com.googlecode.totallylazy.Callables.asHashCode;
-import static com.googlecode.totallylazy.Predicates.in;
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Sequences.sequence;
 
-public abstract class AbstractCollection<T> extends ReadOnlyCollection<T> implements PersistentCollection<T> {
+public abstract class AbstractCollection<T> implements PersistentCollection<T> {
     @Override
     public Sequence<T> toSequence() {
-        return sequence(this);
-    }
-
-    @Override
-    public T[] toArray(final Class<?> aClass) {
-        return toArray(Unchecked.<T[]>cast(Array.newInstance(aClass, 0)));
-    }
-
-    @Override
-    public Object[] toArray() {
-        return toSequence().toList().toArray();
-    }
-
-    @Override
-    public <R> R[] toArray(R[] a) {
-        return toSequence().toList().toArray(a);
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return toSequence().containsAll(c);
-    }
-
-    @Override
-    public PersistentCollection<T> deleteAll(Iterable<? extends T> items) {
-        return filter(not(in(items)));
+        return PersistentCollection.super.toSequence();
     }
 
     @Override
@@ -49,29 +15,9 @@ public abstract class AbstractCollection<T> extends ReadOnlyCollection<T> implem
         return appendTo(new StringBuilder(), "(", ",", ")").toString();
     }
 
-    public String toString(final String separator) {
-        return appendTo(new StringBuilder(), separator).toString();
-    }
-
-    public String toString(final String start, final String separator, final String end) {
-        return appendTo(new StringBuilder(), start, separator, end).toString();
-    }
-
-    public <A extends Appendable> A appendTo(A appendable) {
-        return Sequences.appendTo(this, appendable);
-    }
-
-    public <A extends Appendable> A appendTo(A appendable, final String separator) {
-        return Sequences.appendTo(this, appendable, separator);
-    }
-
-    public <A extends Appendable> A appendTo(A appendable, final String start, final String separator, final String end) {
-        return Sequences.appendTo(this, appendable,start, separator, end);
-    }
-
     @Override
     public boolean equals(Object other) {
-        return other instanceof AbstractCollection && toSequence().equals(other);
+        return other instanceof AbstractCollection && toSequence().equals(((AbstractCollection) other).toSequence());
     }
 
     // Thread-safe Racy Single Check Idiom (Effective Java 2nd Edition p.284)
@@ -84,5 +30,6 @@ public abstract class AbstractCollection<T> extends ReadOnlyCollection<T> implem
         }
         return hashCode;
     }
+
 
 }
