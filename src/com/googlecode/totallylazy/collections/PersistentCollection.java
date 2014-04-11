@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
 
@@ -34,7 +34,7 @@ public interface PersistentCollection<T> extends PersistentContainer<T>, Collect
     @Override
     PersistentCollection<T> filter(Predicate<? super T> predicate);
 
-    default Sequence<T> toSequence() {
+    default Seq<T> toSequence() {
         return sequence(this);
     }
 

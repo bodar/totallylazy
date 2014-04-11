@@ -13,24 +13,24 @@ import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Maps {
-    public static <K, V> Sequence<Pair<K, V>> pairs(final Map<K, V> map) {
+    public static <K, V> Seq<Pair<K, V>> pairs(final Map<K, V> map) {
         return entries(map).map(Maps.<K, V>entryToPair());
     }
 
-    public static <K, V> Function<Map<K, V>, Sequence<Map.Entry<K, V>>> entries(Class<K> keyType, Class<V> valueType) {
+    public static <K, V> Function<Map<K, V>, Seq<Map.Entry<K, V>>> entries(Class<K> keyType, Class<V> valueType) {
         return entries();
     }
 
-    public static <K, V> Function<Map<K, V>, Sequence<Map.Entry<K, V>>> entries() {
-        return new Function<Map<K, V>, Sequence<Map.Entry<K, V>>>() {
+    public static <K, V> Function<Map<K, V>, Seq<Map.Entry<K, V>>> entries() {
+        return new Function<Map<K, V>, Seq<Map.Entry<K, V>>>() {
             @Override
-            public Sequence<Map.Entry<K, V>> call(Map<K, V> map) throws Exception {
+            public Seq<Map.Entry<K, V>> call(Map<K, V> map) throws Exception {
                 return entries(map);
             }
         };
     }
 
-    public static <K, V> Sequence<Map.Entry<K, V>> entries(final Map<K, V> map) {
+    public static <K, V> Seq<Map.Entry<K, V>> entries(final Map<K, V> map) {
         return sequence(map.entrySet());
     }
 

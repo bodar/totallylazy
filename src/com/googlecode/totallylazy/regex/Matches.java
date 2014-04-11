@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.regex;
 
-import com.googlecode.totallylazy.AbstractSequence;
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.iterators.GroupIterator;
 
 import java.util.Iterator;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callers.call;
 
-public class Matches extends AbstractSequence<MatchResult> {
+public class Matches extends Sequence<MatchResult> {
     private final Pattern pattern;
     private final CharSequence text;
 
@@ -57,15 +57,10 @@ public class Matches extends AbstractSequence<MatchResult> {
             };
         }
 
-        public static Function<MatchResult, Sequence<String>> groups = new Function<MatchResult, Sequence<String>>() {
+        public static Function<MatchResult, Seq<String>> groups = matchResult -> new Sequence<String>() {
             @Override
-            public Sequence<String> call(final MatchResult matchResult) throws Exception {
-                return new Sequence<String>() {
-                    @Override
-                    public Iterator<String> iterator() {
-                        return new GroupIterator(matchResult);
-                    }
-                };
+            public Iterator<String> iterator() {
+                return new GroupIterator(matchResult);
             }
         };
     }

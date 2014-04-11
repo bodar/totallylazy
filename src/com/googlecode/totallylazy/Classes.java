@@ -23,7 +23,7 @@ public class Classes {
         };
     }
 
-    public static  Sequence<Class<?>> allClasses(Class<?> aClass) {
+    public static Seq<Class<?>> allClasses(Class<?> aClass) {
         if(aClass == null) return empty();
         return sequence(aClass.getInterfaces()).
                 join(allClasses(aClass.getSuperclass())).

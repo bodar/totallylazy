@@ -1,12 +1,12 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 
 import static com.googlecode.totallylazy.Callables.asHashCode;
 
 public abstract class AbstractCollection<T> implements PersistentCollection<T> {
     @Override
-    public Sequence<T> toSequence() {
+    public Seq<T> toSequence() {
         return PersistentCollection.super.toSequence();
     }
 

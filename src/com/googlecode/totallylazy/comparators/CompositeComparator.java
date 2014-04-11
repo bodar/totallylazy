@@ -1,13 +1,13 @@
 package com.googlecode.totallylazy.comparators;
 
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 
 import java.util.Comparator;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class CompositeComparator<T> implements Comparator<T> {
-    private final Sequence<Comparator<? super T>> comparators;
+    private final Seq<Comparator<? super T>> comparators;
 
     public CompositeComparator(Iterable<Comparator<? super T>> comparators) {this.comparators = sequence(comparators);}
 
@@ -19,7 +19,7 @@ public class CompositeComparator<T> implements Comparator<T> {
         return 0;
     }
 
-    public Sequence<Comparator<? super T>> comparators(){
+    public Seq<Comparator<? super T>> comparators(){
         return comparators;
     }
 }

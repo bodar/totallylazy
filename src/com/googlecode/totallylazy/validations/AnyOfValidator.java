@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,9 @@ import static com.googlecode.totallylazy.validations.ValidationResult.constructo
 public class AnyOfValidator<T> extends LogicalValidator<T>{
     public static final String DEFAULT_MESSAGE = "Please provide a valid value";
 
-    private final Sequence<Validator<? super T>> validators;
+    private final Seq<Validator<? super T>> validators;
 
-    private AnyOfValidator(Sequence<Validator<? super T>> validators) {
+    private AnyOfValidator(Seq<Validator<? super T>> validators) {
         this.validators = validators;
     }
 
@@ -36,7 +36,7 @@ public class AnyOfValidator<T> extends LogicalValidator<T>{
         public static <T> AnyOfValidator<T> anyOf(Validator<? super T>... validators) {
             return anyOf(sequence(validators));
         }
-        public static <T> AnyOfValidator<T> anyOf(Sequence<Validator<? super T>> validators) {
+        public static <T> AnyOfValidator<T> anyOf(Seq<Validator<? super T>> validators) {
             return new AnyOfValidator<T>(validators);
         }
     }

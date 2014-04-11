@@ -16,7 +16,7 @@ import static java.lang.Math.abs;
 public class Randoms {
     private static java.util.Random random = new java.util.Random();
 
-    public static Sequence<Integer> integers() {
+    public static Seq<Integer> integers() {
         return Sequences.forwardOnly(new StatefulIterator<Integer>() {
 
             @Override
@@ -26,7 +26,7 @@ public class Randoms {
         });
     }
 
-    public static Sequence<Long> longs() {
+    public static Seq<Long> longs() {
         return Sequences.forwardOnly(new StatefulIterator<Long>() {
             @Override
             protected Long getNext() throws Exception {
@@ -35,7 +35,7 @@ public class Randoms {
         });
     }
 
-    public static Sequence<Double> doubles() {
+    public static Seq<Double> doubles() {
         return Sequences.forwardOnly(new StatefulIterator<Double>() {
             @Override
             protected Double getNext() throws Exception {
@@ -44,7 +44,7 @@ public class Randoms {
         });
     }
 
-    public static Sequence<Boolean> booleans() {
+    public static Seq<Boolean> booleans() {
         return Sequences.forwardOnly(new StatefulIterator<Boolean>() {
             @Override
             protected Boolean getNext() throws Exception {
@@ -53,7 +53,7 @@ public class Randoms {
         });
     }
 
-    public static Sequence<Date> dates() {
+    public static Seq<Date> dates() {
         return Sequences.forwardOnly(new StatefulIterator<Date>() {
             @Override
             protected Date getNext() throws Exception {
@@ -63,7 +63,7 @@ public class Randoms {
     }
 
     @SafeVarargs
-    public static <T> Sequence<T> values(final T... values) {
+    public static <T> Seq<T> values(final T... values) {
         return Sequences.forwardOnly(new StatefulIterator<T>() {
             @Override
             protected T getNext() throws Exception {
@@ -73,11 +73,11 @@ public class Randoms {
     }
 
     @SafeVarargs
-    public static <T> Sequence<T> takeFromValues(final T... values) {
+    public static <T> Seq<T> takeFromValues(final T... values) {
         return takeFromValues(sequence(values));
     }
 
-    public static <T> Sequence<T> takeFromValues(final Iterable<T> values) {
+    public static <T> Seq<T> takeFromValues(final Iterable<T> values) {
         final List<T> list = sequence(values).toList();
         return Sequences.forwardOnly(new StatefulIterator<T>() {
             @Override
@@ -89,7 +89,7 @@ public class Randoms {
         });
     }
 
-    public static Sequence<Integer> between(final int start, final int end) {
+    public static Seq<Integer> between(final int start, final int end) {
         final Pair<Integer, Integer> bounds = bounds(start, end);
         return Sequences.forwardOnly(new StatefulIterator<Integer>() {
             @Override
@@ -100,7 +100,7 @@ public class Randoms {
         });
     }
 
-    public static Sequence<Double> between(final Double start, final Double end) {
+    public static Seq<Double> between(final Double start, final Double end) {
         final Pair<Double, Double> bounds = bounds(start, end);
         return Sequences.forwardOnly(new StatefulIterator<Double>() {
             @Override
@@ -110,7 +110,7 @@ public class Randoms {
         });
     }
 
-    public static Sequence<Date> between(final Date start, final Date end) {
+    public static Seq<Date> between(final Date start, final Date end) {
         final Pair<Date, Date> bounds = bounds(start, end);
         return Sequences.forwardOnly(new StatefulIterator<Date>() {
             @Override
@@ -124,12 +124,12 @@ public class Randoms {
         });
     }
 
-    public static Sequence<Date> after(final Date date) {
+    public static Seq<Date> after(final Date date) {
         return between(date, new Date(Long.MAX_VALUE));
     }
 
     private static <T extends Comparable<? super T>> Pair<T, T> bounds(T start, T end) {
-        final Sequence<T> sorted = sort(sequence(start, end), Comparators.<T>ascending());
+        final Seq<T> sorted = sort(sequence(start, end), Comparators.<T>ascending());
         return pair(sorted.first(), sorted.second());
     }
 }

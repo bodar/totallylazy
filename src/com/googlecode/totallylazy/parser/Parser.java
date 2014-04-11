@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequences;
 
 import java.io.InputStream;
@@ -56,11 +56,11 @@ public abstract class Parser<A> implements Parse<A> {
         return then(OptionalParser.optional(parser)).map(Callables.<A>first()).many();
     }
 
-    public Parser<Sequence<A>> seqBy(Parse<?> parser) {
+    public Parser<Seq<A>> seqBy(Parse<?> parser) {
         return sequencedBy(parser);
     }
 
-    public Parser<Sequence<A>> sequencedBy(Parse<?> parser) {
+    public Parser<Seq<A>> sequencedBy(Parse<?> parser) {
         return then(OptionalParser.optional(parser)).map(Callables.<A>first()).sequence();
     }
 
@@ -101,7 +101,7 @@ public abstract class Parser<A> implements Parse<A> {
         return ManyParser.many(this);
     }
 
-    public Parser<Sequence<A>> sequence() {
+    public Parser<Seq<A>> sequence() {
         return SequenceParser.sequence(this);
     }
 

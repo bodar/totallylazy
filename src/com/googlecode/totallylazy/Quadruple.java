@@ -2,7 +2,6 @@ package com.googlecode.totallylazy;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface Quadruple<F, S, T, Fo> extends Triple<F, S, T> , Fourth<Fo> {
@@ -27,7 +26,7 @@ public interface Quadruple<F, S, T, Fo> extends Triple<F, S, T> , Fourth<Fo> {
     }
 
     @Override
-    default Sequence<Object> values() {
+    default Seq<Object> values() {
         return sequence(first(), second(), third(), fourth());
     }
 }

@@ -64,9 +64,9 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public abstract <B> B fold(final B seed, final Function2<? super B, ? super A, ? extends B> callable);
 
-    public abstract Sequence<A> join(final Iterable<? extends A> iterable);
+    public abstract Seq<A> join(final Iterable<? extends A> iterable);
 
-    public Sequence<A> toSequence() {
+    public Seq<A> toSequence() {
         return sequence(this);
     }
 

@@ -5,7 +5,6 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.compose;
-import static com.googlecode.totallylazy.Callables.uncurry3;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
@@ -49,7 +48,7 @@ public class FunctionsTest {
 
     @Test
     public void canCallWithAValue() throws Exception {
-        Sequence<Number> computations = range(1, 5).map(multiply()).map(Callables.<Number, Number>callWith(2));
+        Seq<Number> computations = range(1, 5).map(multiply()).map(Callables.<Number, Number>callWith(2));
         assertThat(computations, hasExactly(2, 4, 6, 8, 10));
     }
 

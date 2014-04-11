@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequences;
 
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.parser.Success.success;
 
 class ListParser<A> extends Parser<List<A>> {
-    private final Sequence<? extends Parse<? extends A>> parsers;
+    private final Seq<? extends Parse<? extends A>> parsers;
 
-    private ListParser(Sequence<? extends Parse<? extends A>> parsers) {
+    private ListParser(Seq<? extends Parse<? extends A>> parsers) {
         this.parsers = parsers;
     }
 

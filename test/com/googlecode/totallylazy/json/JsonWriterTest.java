@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import org.junit.Test;
 
 import java.io.StringWriter;
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 public class JsonWriterTest {
     @Test
     public void canStreamAnIterator() throws Exception {
-        Sequence<String> values = sequence("1", "2");
+        Seq<String> values = sequence("1", "2");
         Writer writer = new StringWriter();
 
         JsonWriter.write(values.iterator(), writer);
@@ -45,7 +45,7 @@ public class JsonWriterTest {
 
     @Test
     public void canStreamAnIterable() throws Exception {
-        Sequence<String> values = sequence("1", "2");
+        Seq<String> values = sequence("1", "2");
         Writer writer = new StringWriter();
 
         JsonWriter.write(values, writer);

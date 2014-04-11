@@ -9,5 +9,5 @@ public interface Tuple {
         return values().toString(start, separator, end);
     }
 
-    Sequence<Object> values();
+    Seq<Object> values();
 }

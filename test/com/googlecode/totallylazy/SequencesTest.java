@@ -42,7 +42,7 @@ public class SequencesTest {
     @Test
     @SuppressWarnings("unchecked")
     public void supportsTranspose() {
-        Sequence<Sequence<Integer>> transposed = transpose(sequence(1, 2), sequence(3, 4), sequence(5, 6));
+        Seq<Seq<Integer>> transposed = transpose(sequence(1, 2), sequence(3, 4), sequence(5, 6));
         assertThat(transposed, hasExactly(sequence(1, 3, 5), sequence(2, 4, 6)));
         assertThat(transpose(transposed), hasExactly(sequence(1, 2), sequence(3, 4), sequence(5, 6)));
         assertThat(sequence(1, 2).transpose(sequence(3, 4)), hasExactly(sequence(1, 3), sequence(2, 4)));
@@ -50,14 +50,14 @@ public class SequencesTest {
 
     @Test
     public void supportsUnzip() {
-        Pair<Sequence<Integer>, Sequence<Integer>> pair = Sequences.unzip(sequence(pair(1, 2), pair(3, 4), pair(5, 6)));
+        Pair<Seq<Integer>, Seq<Integer>> pair = Sequences.unzip(sequence(pair(1, 2), pair(3, 4), pair(5, 6)));
         assertThat(pair.first(), hasExactly(1, 3, 5));
         assertThat(pair.second(), hasExactly(2, 4, 6));
     }
 
     @Test
     public void supportsUnzippingTriples() {
-        Triple<Sequence<Integer>, Sequence<Integer>, Sequence<String>> triple = Sequences.unzip3(sequence(triple(1, 2, "car"), triple(3, 4, "cat")));
+        Triple<Seq<Integer>, Seq<Integer>, Seq<String>> triple = Sequences.unzip3(sequence(triple(1, 2, "car"), triple(3, 4, "cat")));
         assertThat(triple.first(), hasExactly(1, 3));
         assertThat(triple.second(), hasExactly(2, 4));
         assertThat(triple.third(), hasExactly("car", "cat"));
@@ -65,7 +65,7 @@ public class SequencesTest {
 
     @Test
     public void supportsUnzippingQuadruples() {
-        Quadruple<Sequence<Integer>, Sequence<Integer>, Sequence<String>, Sequence<Character>> quadruple = Sequences.unzip4(sequence(quadruple(1, 2, "car", 'C'), quadruple(3, 4, "cat", 'D')));
+        Quadruple<Seq<Integer>, Seq<Integer>, Seq<String>, Seq<Character>> quadruple = Sequences.unzip4(sequence(quadruple(1, 2, "car", 'C'), quadruple(3, 4, "cat", 'D')));
         assertThat(quadruple.first(), hasExactly(1, 3));
         assertThat(quadruple.second(), hasExactly(2, 4));
         assertThat(quadruple.third(), hasExactly("car", "cat"));
@@ -74,7 +74,7 @@ public class SequencesTest {
 
     @Test
     public void supportsUnzippingQuintuples() {
-        Quintuple<Sequence<Integer>, Sequence<Integer>, Sequence<String>, Sequence<Character>, Sequence<Integer>> quintuple =
+        Quintuple<Seq<Integer>, Seq<Integer>, Seq<String>, Seq<Character>, Seq<Integer>> quintuple =
                 Sequences.unzip5(sequence(quintuple(1, 2, "car", 'C', 1), quintuple(3, 4, "cat", 'D', 2)));
         assertThat(quintuple.first(), hasExactly(1, 3));
         assertThat(quintuple.second(), hasExactly(2, 4));
@@ -95,16 +95,16 @@ public class SequencesTest {
 
     @Test
     public void joinWorksEvenWhenFirstIterableIsEmpty() throws Exception {
-        final Sequence<Integer> empty = Sequences.<Integer>empty();
+        final Seq<Integer> empty = Sequences.<Integer>empty();
         assertThat(empty.append(1).join(sequence(2, 3)).append(4), hasExactly(1, 2, 3, 4));
         assertThat(join(empty, sequence(1, 2, 3), empty, asList(4, 5, 6)), hasExactly(1, 2, 3, 4, 5, 6));
     }
 
     @Test
     public void supportsJoiningSubTypes() throws Exception {
-        final Sequence<Number> numbers = numbers(2, 3.0D);
-        Sequence<Integer> integers = sequence(2, 3);
-        Sequence<Long> longs = sequence(2L, 3L);
+        final Seq<Number> numbers = numbers(2, 3.0D);
+        Seq<Integer> integers = sequence(2, 3);
+        Seq<Long> longs = sequence(2L, 3L);
         assertThat(numbers.join(integers).join(longs), hasExactly((Number) 2, 3.0D, 2, 3, 2L, 3L));
         assertThat(join(sequence(1L, 2.0D, 3), numbers, asList(4, 5, 6), integers), hasExactly((Number) 1L, 2.0D, 3, 2, 3.0D, 4, 5, 6, 2, 3));
     }
@@ -114,10 +114,10 @@ public class SequencesTest {
         Vector<String> vector = new Vector<String>();
         vector.add("foo");
         Enumeration enumeration = vector.elements();
-        Sequence<String> forwardOnly = Sequences.forwardOnly(enumeration, String.class);
+        Seq<String> forwardOnly = Sequences.forwardOnly(enumeration, String.class);
         assertThat(forwardOnly.headOption().isEmpty(), is(false));
         assertThat(forwardOnly.headOption().isEmpty(), is(true));
-        Sequence<String> forwardOnlyWithType = Sequences.forwardOnly(vector.elements());
+        Seq<String> forwardOnlyWithType = Sequences.forwardOnly(vector.elements());
         assertThat(forwardOnlyWithType.headOption().isEmpty(), is(false));
         assertThat(forwardOnlyWithType.headOption().isEmpty(), is(true));
     }
@@ -127,10 +127,10 @@ public class SequencesTest {
         Vector<String> vector = new Vector<String>();
         vector.add("foo");
         Enumeration enumeration = vector.elements();
-        Sequence<String> memorise = Sequences.memorise(enumeration, String.class);
+        Seq<String> memorise = Sequences.memorise(enumeration, String.class);
         assertThat(memorise.headOption().isEmpty(), is(false));
         assertThat(memorise.headOption().isEmpty(), is(false));
-        Sequence<String> memorisedWithType = Sequences.memorise(vector.elements());
+        Seq<String> memorisedWithType = Sequences.memorise(vector.elements());
         assertThat(memorisedWithType.headOption().isEmpty(), is(false));
         assertThat(memorisedWithType.headOption().isEmpty(), is(false));
     }
@@ -155,7 +155,7 @@ public class SequencesTest {
 
     @Test
     public void supportsIteratingEvenWhenCallableReturnNull() throws Exception {
-        final Sequence<Integer> sequence = iterate(new Function<Integer, Integer>() {
+        final Seq<Integer> sequence = iterate(new Function<Integer, Integer>() {
             public Integer call(Integer integer) throws Exception {
                 assertThat("Should never see a null value", integer, is(Matchers.notNullValue()));
                 return null;
@@ -167,14 +167,14 @@ public class SequencesTest {
 
     @Test
     public void canCombineIterateWithOtherOperations() throws Exception {
-        final Sequence<Number> numbers = iterate(increment, 1);
+        final Seq<Number> numbers = iterate(increment, 1);
         assertThat(numbers.filter(even()), startsWith((Number) 2, 4, 6));
         assertThat(numbers.filter(odd()), startsWith((Number) 1, 3, 5, 7, 9));
     }
 
     @Test
     public void supportsUnfoldRight() throws Exception {
-        Sequence<Number> result = Sequences.unfoldRight(new Function<Number, Option<Pair<Number, Number>>>() {
+        Seq<Number> result = Sequences.unfoldRight(new Function<Number, Option<Pair<Number, Number>>>() {
             @Override
             public Option<Pair<Number, Number>> call(Number number) throws Exception {
                 if (number.equals(0)) return none();

@@ -111,7 +111,7 @@ public class OptionTest {
             return new Person(name, age);
         }
 
-        private Sequence<Object> values() {
+        private Seq<Object> values() {
             return Sequences.<Object>sequence(name, age);
         }
 

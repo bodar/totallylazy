@@ -31,7 +31,7 @@ public class Reflection {
         }
     }
 
-    public static Sequence<Field> syntheticFields(Class<?> aClass) {
+    public static Seq<Field> syntheticFields(Class<?> aClass) {
         return sequence(aClass.getDeclaredFields()).
                 filter(where(modifiers, is(synthetic)));
     }

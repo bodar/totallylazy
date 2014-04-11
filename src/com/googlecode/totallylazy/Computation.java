@@ -12,7 +12,7 @@ import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyFunction.lazy;
 
-public class Computation<T> extends AbstractSequence<T> implements Sequence<T>, Segment<T>, Memory {
+public class Computation<T> extends Sequence<T> implements Seq<T>, Segment<T>, Memory {
     private final Lazy<T> head;
     private final LazyFunction<T, Computation<T>> tail;
 
@@ -105,7 +105,7 @@ public class Computation<T> extends AbstractSequence<T> implements Sequence<T>, 
     }
 
     @Override
-    public Sequence<T> empty() {
+    public Seq<T> empty() {
         return Sequences.empty();
     }
 

@@ -68,9 +68,9 @@ public class Sets {
     }
 
     public static <T> Set<T> intersection(final Iterable<? extends Set<? extends T>> iterables) {
-        Sequence<Set<T>> sets = sequence(iterables).sortBy(size()).unsafeCast();
+        Seq<Set<T>> sets = sequence(iterables).sortBy(size()).unsafeCast();
         Set<T> smallest = sets.head();
-        Sequence<Set<T>> theRest = sets.tail();
+        Seq<Set<T>> theRest = sets.tail();
         Set<T> result = new LinkedHashSet<T>();
         for (T t : smallest) {
             if (theRest.forAll(contains(t))) {
@@ -86,9 +86,9 @@ public class Sets {
     }
 
     public static <T> Set<T> complement(final Iterable<? extends Set<? extends T>> iterables) {
-        Sequence<Set<T>> sets = sequence(iterables).unsafeCast();
+        Seq<Set<T>> sets = sequence(iterables).unsafeCast();
         Set<T> head = sets.head();
-        Sequence<Set<T>> theRest = sets.tail();
+        Seq<Set<T>> theRest = sets.tail();
         Set<T> result = new LinkedHashSet<T>();
         result.addAll(head);
         for (Set<T> set : theRest) {

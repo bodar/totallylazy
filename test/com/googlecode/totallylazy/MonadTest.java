@@ -17,21 +17,21 @@ public class MonadTest {
     @Test
     public void canSwapEitherContainerAndGetAllErrors() throws Exception {
         assertThat(sequenceEs(sequence(Either.<String, Number>right(3), Either.<String, Long>right(4L))),
-                is(Either.<Sequence<String>, Sequence<Number>>right(numbers(3, 4L))));
+                is(Either.<Seq<String>, Seq<Number>>right(numbers(3, 4L))));
         assertThat(sequenceEs(sequence(Either.<String, Number>right(3), Either.<String, Number>left("error1"), Either.<String, Number>left("error2"))),
-                is(Either.<Sequence<String>, Sequence<Number>>left(sequence("error1", "error2"))));
+                is(Either.<Seq<String>, Seq<Number>>left(sequence("error1", "error2"))));
         assertThat(sequenceEs(Sequences.<Either<String, Number>>empty()),
-                is(Either.<Sequence<String>, Sequence<Number>>right(empty(Number.class))));
+                is(Either.<Seq<String>, Seq<Number>>right(empty(Number.class))));
     }
 
     @Test
     public void canSwapEitherContainer() throws Exception {
         assertThat(sequenceE(sequence(Either.<String, Number>right(3), Either.<String, Long>right(4L))),
-                is(Either.<String, Sequence<Number>>right(numbers(3, 4L))));
+                is(Either.<String, Seq<Number>>right(numbers(3, 4L))));
         assertThat(sequenceE(sequence(Either.<String, Number>right(3), Either.<String, Number>left("error"))),
-                is(Either.<String, Sequence<Number>>left("error")));
+                is(Either.<String, Seq<Number>>left("error")));
         assertThat(sequenceE(Sequences.<Either<String, Number>>empty()),
-                is(Either.<String, Sequence<Number>>right(empty(Number.class))));
+                is(Either.<String, Seq<Number>>right(empty(Number.class))));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class MonadTest {
         assertThat(sequenceO(sequence(some(3), some(4))),
                 is(some(sequence(3, 4))));
         assertThat(sequenceO(sequence(some(3), none(Integer.class))),
-                is(Option.<Sequence<Integer>>none()));
+                is(Option.<Seq<Integer>>none()));
         assertThat(sequenceO(Sequences.<Option<Number>>empty()),
                 is(Option.some(empty(Number.class))));
     }

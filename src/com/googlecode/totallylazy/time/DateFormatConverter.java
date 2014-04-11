@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.time;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -10,7 +10,7 @@ import static com.googlecode.totallylazy.Callables.callThrows;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class DateFormatConverter implements DateConverter {
-    private final Sequence<DateFormat> formats;
+    private final Seq<DateFormat> formats;
 
     public DateFormatConverter(String... formats) {
         this(sequence(formats).map(asDateFormat()));
@@ -25,7 +25,7 @@ public class DateFormatConverter implements DateConverter {
         };
     }
 
-    public Sequence<DateFormat> formats() {
+    public Seq<DateFormat> formats() {
         return formats;
     }
 

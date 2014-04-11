@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
@@ -219,7 +219,7 @@ public class NumbersTest {
     public void supportsShort() {
         assertThat(numbers((short)0, (short)0 ,(short)1).reduceLeft(Numbers.maximum), NumberMatcher.is((short) 1));
 
-        Sequence<Short> s = Sequences.sequence((short)0, (short)0 ,(short)1);
+        Seq<Short> s = Sequences.sequence((short)0, (short)0 ,(short)1);
         Number result = s.reduceLeft(Numbers.maximum());
         assertEquals(Short.class, result.getClass());
         assertThat(result, NumberMatcher.is(Short.valueOf((short) 1)));

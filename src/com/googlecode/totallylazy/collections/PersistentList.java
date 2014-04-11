@@ -9,7 +9,7 @@ import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Seq;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -48,7 +48,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
 
     List<T> toMutableList();
 
-    Sequence<T> toSequence();
+    Seq<T> toSequence();
 
     Zipper<T> zipper();
 
