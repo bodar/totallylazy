@@ -7,7 +7,7 @@ import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.not;
 
 @SuppressWarnings("deprecation")
-public abstract class AbstractList<T> extends ReadOnlyList<T> implements PersistentList<T> {
+public abstract class AbstractList<T> extends AbstractCollection<T> implements PersistentList<T> {
     @Override
     public int lastIndexOf(Object o) {
         return toMutableList().lastIndexOf(o);

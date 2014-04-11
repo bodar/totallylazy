@@ -18,8 +18,7 @@ import java.util.Set;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class TreeSet<T> extends AbstractCollection<T> implements PersistentSortedSet<T> {
-    private final PersistentSortedMap<T, T> map;
+public class TreeSet<T> extends AbstractCollection<T> implements PersistentSortedSet<T> { private final PersistentSortedMap<T, T> map;
 
     private TreeSet(PersistentSortedMap<T, T> map) {
         this.map = map;

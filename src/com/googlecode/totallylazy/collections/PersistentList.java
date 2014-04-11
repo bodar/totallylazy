@@ -58,45 +58,67 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     @Override
     PersistentList<T> subList(int fromIndex, int toIndex);
 
-    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#cons(T)} */
-    @Override @Deprecated
-    boolean add(T e);
+    @Override
+    default boolean containsAll(Collection<?> c) { return PersistentCollection.super.containsAll(c);
+    }
+
+    @Override
+    default <R> R[] toArray(R[] a) { return PersistentCollection.super.toArray(a) ;}
+
+    @Override
+    default Object[] toArray() { return PersistentCollection.super.toArray(); }
 
     /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#cons(T)} */
     @Override @Deprecated
-    boolean addAll(Collection<? extends T> c);
+    default boolean add(T e) {
+        throw new IllegalMutationException();
+    }
 
-    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#cons(T)} */
     @Override @Deprecated
-    void add(int index, T element);
-
-    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
-    @Override @Deprecated
-    boolean addAll(int index, Collection<? extends T> c);
-
-    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
-    @Override @Deprecated
-    T set(int index, T element);
-
-    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
-    @Override @Deprecated
-    T remove(int index);
+    default boolean addAll(Collection<? extends T> c) {
+        throw new IllegalMutationException();
+    }
 
     /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#delete(T)} */
     @Override @Deprecated
-    boolean remove(Object o);
+    default boolean remove(Object o) {
+        throw new IllegalMutationException();
+    }
 
-    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#deleteAll(Iterable)}*/
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#deleteAll(Iterable)} */
     @Override @Deprecated
-    boolean removeAll(Collection<?> c);
+    default boolean removeAll(Collection<?> c) {
+        throw new IllegalMutationException();
+    }
 
-    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#filter(Predicate)} */
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#filter(com.googlecode.totallylazy.Predicate)} */
     @Override @Deprecated
-    boolean retainAll(Collection<?> c);
+    default boolean retainAll(Collection<?> c) {
+        throw new IllegalMutationException();
+    }
 
     /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#empty()} */
     @Override @Deprecated
-    void clear();
+    default void clear() {
+        throw new IllegalMutationException();
+    }
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
+    @Override @Deprecated
+    default void add(int index, T element) { throw new IllegalMutationException(); }
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
+    @Override @Deprecated
+    default boolean addAll(int index, Collection<? extends T> c) { throw new IllegalMutationException(); }
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
+    @Override @Deprecated
+    default T set(int index, T element) { throw new IllegalMutationException(); };
+
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentList#append(T)} */
+    @Override @Deprecated
+    default T remove(int index) { throw new IllegalMutationException(); }
 
     class constructors {
         public static <T> PersistentList<T> empty() {

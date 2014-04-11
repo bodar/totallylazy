@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.collections.AbstractCollection;
 import com.googlecode.totallylazy.collections.Indexed;
 import com.googlecode.totallylazy.collections.PersistentCollection;
 import com.googlecode.totallylazy.collections.PersistentList;
@@ -20,447 +19,435 @@ import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-
-public abstract class Sequence<T> extends AbstractCollection<T> implements Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Monad<T>, Foldable<T>, Indexed<T>, Filterable<T> {
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Iterable) return Sequences.equalTo(this, (Iterable<?>) obj);
-        return obj instanceof Segment && Segment.methods.equalTo(this, (Segment<?>) obj);
-    }
-
-    public boolean equals(Iterable<? extends T> other, Predicate<? super Pair<T, T>> predicate) {
+public interface Sequence<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Functor<T>, Segment<T>, PersistentCollection<T>, Applicative<T>, Monad<T>, Foldable<T>, Indexed<T>, Filterable<T> {
+    default boolean equals(Iterable<? extends T> other, Predicate<? super Pair<T, T>> predicate) {
         return Sequences.equalTo(this, other, predicate);
     }
 
-
-    public void eachConcurrently(final Function<? super T, ?> runnable) {
+    default void eachConcurrently(final Function<? super T, ?> runnable) {
         forEachConcurrently(runnable);
     }
 
-    public void forEachConcurrently(final Function<? super T, ?> runnable) {
+    default void forEachConcurrently(final Function<? super T, ?> runnable) {
         Sequences.forEachConcurrently(this, runnable);
     }
 
-    public void eachConcurrently(final Function<? super T, ?> runnable, Executor executor) {
+    default void eachConcurrently(final Function<? super T, ?> runnable, Executor executor) {
         forEachConcurrently(runnable, executor);
     }
 
-    public void forEachConcurrently(final Function<? super T, ?> runnable, Executor executor) {
+    default void forEachConcurrently(final Function<? super T, ?> runnable, Executor executor) {
         Sequences.forEachConcurrently(this, runnable, executor);
     }
 
-    public void each(final Function<? super T, ?> runnable) {
+    default void each(final Function<? super T, ?> runnable) {
         forEach(runnable);
     }
 
-    public void forEach(final Function<? super T, ?> runnable) {
+    default void forEach(final Function<? super T, ?> runnable) {
         Sequences.forEach(this, runnable);
     }
 
-    public <S> Sequence<S> mapConcurrently(final Function<? super T, S> callable) {
+    default <S> Sequence<S> mapConcurrently(final Function<? super T, S> callable) {
         return Sequences.mapConcurrently(this, callable);
     }
 
-    public <S> Sequence<S> mapConcurrently(final Function<? super T, S> callable, final Executor executor) {
+    default <S> Sequence<S> mapConcurrently(final Function<? super T, S> callable, final Executor executor) {
         return Sequences.mapConcurrently(this, callable, executor);
     }
 
     @Override
-    public <S> Sequence<S> map(final Function<? super T, ? extends S> callable) {
+    default <S> Sequence<S> map(final Function<? super T, ? extends S> callable) {
         return Sequences.map(this, callable);
     }
 
-    public Pair<Sequence<T>, Sequence<T>> partition(final Predicate<? super T> predicate) {
+    default Pair<Sequence<T>, Sequence<T>> partition(final Predicate<? super T> predicate) {
         return Sequences.partition(this, predicate);
     }
 
     @Override
-    public Sequence<T> filter(final Predicate<? super T> predicate) {
+    default Sequence<T> filter(final Predicate<? super T> predicate) {
         return Sequences.filter(this, predicate);
     }
 
-    public <S> Sequence<S> flatMap(final Function<? super T, ? extends Iterable<? extends S>> callable) {
+    default <S> Sequence<S> flatMap(final Function<? super T, ? extends Iterable<? extends S>> callable) {
         return Sequences.flatMap(this, callable);
     }
 
-    public <S> Sequence<S> flatMapConcurrently(final Function<? super T, ? extends Iterable<? extends S>> callable) {
+    default <S> Sequence<S> flatMapConcurrently(final Function<? super T, ? extends Iterable<? extends S>> callable) {
         return Sequences.flatMapConcurrently(this, callable);
     }
 
-    public <S> Sequence<S> flatMapConcurrently(final Function<? super T, ? extends Iterable<? extends S>> callable, final Executor executor) {
+    default <S> Sequence<S> flatMapConcurrently(final Function<? super T, ? extends Iterable<? extends S>> callable, final Executor executor) {
         return Sequences.flatMapConcurrently(this, callable, executor);
     }
 
-    public <B> Sequence<B> applicate(final Sequence<? extends Function<? super T, ? extends B>> applicator) {
+    default <B> Sequence<B> applicate(final Sequence<? extends Function<? super T, ? extends B>> applicator) {
         return Sequences.applicate(applicator, this);
     }
 
-    public T first() {
+    default T first() {
         return Sequences.first(this);
     }
 
-    public T last() {
+    default T last() {
         return Sequences.last(this);
     }
 
-    public Option<T> lastOption() {
+    default Option<T> lastOption() {
         return Sequences.lastOption(this);
     }
 
-    public T second() {
+    default T second() {
         return Sequences.second(this);
     }
 
     @Override
-    public T third() {
+    default T third() {
         return Sequences.third(this);
     }
 
-    public T head() {
+    default T head() {
         return Sequences.head(this);
     }
 
-    public Option<T> headOption() {
+    default Option<T> headOption() {
         return Sequences.headOption(this);
     }
 
-    public Sequence<T> tail() {
+    default Sequence<T> tail() {
         return Sequences.tail(this);
     }
 
-    public Sequence<T> init() {
+    default Sequence<T> init() {
         return Sequences.init(this);
     }
 
-    public <S> S fold(final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
+    default <S> S fold(final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         return Sequences.fold(this, seed, callable);
     }
 
-    public <S> S foldLeft(final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
+    default <S> S foldLeft(final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         return Sequences.foldLeft(this, seed, callable);
     }
 
-    public <S> S foldRight(final S seed, final Function2<? super T, ? super S, ? extends S> callable) {
+    default <S> S foldRight(final S seed, final Function2<? super T, ? super S, ? extends S> callable) {
         return Sequences.foldRight(this, seed, callable);
     }
 
-    public <S> S foldRight(final S seed, final Function<? super Pair<T, S>, ? extends S> callable) {
+    default <S> S foldRight(final S seed, final Function<? super Pair<T, S>, ? extends S> callable) {
         return Sequences.foldRight(this, seed, callable);
     }
 
-    public <S> S reduce(final Function2<? super S, ? super T, ? extends S> callable) {
+    default <S> S reduce(final Function2<? super S, ? super T, ? extends S> callable) {
         return Sequences.reduce(this, callable);
     }
 
-    public <S> S reduceLeft(final Function2<? super S, ? super T, ? extends S> callable) {
+    default <S> S reduceLeft(final Function2<? super S, ? super T, ? extends S> callable) {
         return Sequences.reduceLeft(this, callable);
     }
 
-    public <S> S reduceRight(final Function2<? super T, ? super S, ? extends S> callable) {
+    default <S> S reduceRight(final Function2<? super T, ? super S, ? extends S> callable) {
         return Sequences.reduceRight(this, callable);
     }
 
-    public <S> S reduceRight(final Function<? super Pair<T, S>, ? extends S> callable) {
+    default <S> S reduceRight(final Function<? super Pair<T, S>, ? extends S> callable) {
         return Sequences.reduceRight(this, callable);
     }
 
-    public String toString() {
-        return Sequences.toString(this);
-    }
-
-    public String toString(final String separator) {
+    default String toString(final String separator) {
         return Sequences.toString(this, separator);
     }
 
-    public String toString(final String start, final String separator, final String end) {
+    default String toString(final String start, final String separator, final String end) {
         return Sequences.toString(this, start, separator, end);
     }
 
-    public <A extends Appendable> A appendTo(A appendable) {
+    default <A extends Appendable> A appendTo(A appendable) {
         return Sequences.appendTo(this, appendable);
     }
 
-    public <A extends Appendable> A appendTo(A appendable, final String separator) {
+    default <A extends Appendable> A appendTo(A appendable, final String separator) {
         return Sequences.appendTo(this, appendable, separator);
     }
 
-    public <A extends Appendable> A appendTo(A appendable, final String start, final String separator, final String end) {
-        return Sequences.appendTo(this, appendable,start, separator, end);
+    default <A extends Appendable> A appendTo(A appendable, final String start, final String separator, final String end) {
+        return Sequences.appendTo(this, appendable, start, separator, end);
     }
 
-    public Set<T> union(final Iterable<? extends T> other) {
+    default Set<T> union(final Iterable<? extends T> other) {
         return Sets.union(toSet(), Sets.set(other));
     }
 
-    public Set<T> intersection(final Iterable<? extends T> other) {
+    default Set<T> intersection(final Iterable<? extends T> other) {
         return Sets.intersection(sequence(toSet(), Sets.set(other)));
     }
 
-    public <S extends Set<T>> S toSet(S set) {
+    default <S extends Set<T>> S toSet(S set) {
         return Sets.set(set, this);
     }
 
-    public Set<T> toSet() {
-        return toSet(new LinkedHashSet<T>());
+    default Set<T> toSet() {
+        return toSet(new LinkedHashSet<>());
     }
 
-    public Sequence<T> unique() {
+    default Sequence<T> unique() {
         return unique(returnArgument());
     }
 
-    public <S> Sequence<T> unique(Function<? super T, ? extends S> callable) {
+    default <S> Sequence<T> unique(Function<? super T, ? extends S> callable) {
         return Sequences.unique(this, callable);
     }
 
     @Override
-    public Sequence<T> empty() {
+    default Sequence<T> empty() {
         return Sequences.empty();
     }
 
-    public boolean isEmpty() {
+    default boolean isEmpty() {
         return Sequences.isEmpty(this);
     }
 
-    public List<T> toList() {
+    default List<T> toList() {
         return Sequences.toList(this);
     }
 
-    public List<T> toSortedList(Comparator<T> comparator) {
+    default List<T> toSortedList(Comparator<T> comparator) {
         return Sequences.toSortedList(this, comparator);
     }
 
-    public Deque<T> toDeque() {
+    default Deque<T> toDeque() {
         return Sequences.toDeque(this);
     }
 
     @Override
-    public Sequence<T> delete(final T t) {
+    default Sequence<T> delete(final T t) {
         return Sequences.delete(this, t);
     }
 
     @Override
-    public Sequence<T> deleteAll(final Iterable<? extends T> iterable) {
+    default Sequence<T> deleteAll(final Iterable<? extends T> iterable) {
         return Sequences.deleteAll(this, iterable);
     }
 
-    public int size() {
+    default int size() {
         return Sequences.size(this);
     }
 
-    public Number number() {
+    default Number number() {
         return Sequences.number(this);
     }
 
-    public Sequence<T> take(final int count) {
+    default Sequence<T> take(final int count) {
         return Sequences.take(this, count);
     }
 
-    public Sequence<T> takeWhile(final Predicate<? super T> predicate) {
+    default Sequence<T> takeWhile(final Predicate<? super T> predicate) {
         return Sequences.takeWhile(this, predicate);
     }
 
-    public Sequence<T> drop(final int count) {
+    default Sequence<T> drop(final int count) {
         return Sequences.drop(this, count);
     }
 
-    public Sequence<T> dropWhile(final Predicate<? super T> predicate) {
+    default Sequence<T> dropWhile(final Predicate<? super T> predicate) {
         return Sequences.dropWhile(this, predicate);
     }
 
-    public boolean forAll(final Predicate<? super T> predicate) {
+    default boolean forAll(final Predicate<? super T> predicate) {
         return Sequences.forAll(this, predicate);
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    default boolean containsAll(Collection<?> c) {
         return forAll(in(c));
     }
 
     @Override
-    public boolean contains(Object o) {
+    default boolean contains(Object o) {
         return exists(is(o));
     }
 
-    public boolean exists(final Predicate<? super T> predicate) {
+    default boolean exists(final Predicate<? super T> predicate) {
         return Sequences.exists(this, predicate);
     }
 
-    public Option<T> find(final Predicate<? super T> predicate) {
+    default Option<T> find(final Predicate<? super T> predicate) {
         return Sequences.find(this, predicate);
     }
 
-    public <S> Option<S> tryPick(final Function<? super T, ? extends Option<? extends S>> callable) {
+    default <S> Option<S> tryPick(final Function<? super T, ? extends Option<? extends S>> callable) {
         return Sequences.tryPick(this, callable);
     }
 
-    public <S> S pick(final Function<? super T, ? extends Option<? extends S>> callable) {
+    default <S> S pick(final Function<? super T, ? extends Option<? extends S>> callable) {
         return Sequences.pick(this, callable);
     }
 
-    public Sequence<T> append(final T t) {
+    default Sequence<T> append(final T t) {
         return Sequences.append(this, t);
     }
 
-    public Sequence<T> join(final Iterable<? extends T> iterable) {
+    default Sequence<T> join(final Iterable<? extends T> iterable) {
         return Sequences.join(this, iterable);
     }
 
     @Override
-    public <C extends Segment<T>> C joinTo(C rest) {
+    default <C extends Segment<T>> C joinTo(C rest) {
         return Sequences.joinTo(this, rest);
     }
 
-    public Sequence<T> cons(final T t) {
+    default Sequence<T> cons(final T t) {
         return Sequences.cons(t, this);
     }
 
-    public Sequence<T> memoize() {
+    default Sequence<T> memoize() {
         return memorise();
     }
 
-    public Sequence<T> memorise() {
+    default Sequence<T> memorise() {
         return Sequences.memorise(this);
     }
 
-    public ForwardOnlySequence<T> forwardOnly() {
+    default ForwardOnlySequence<T> forwardOnly() {
         return Sequences.forwardOnly(this);
     }
 
-    public <S> Sequence<Pair<T, S>> zip(final Iterable<? extends S> second) {
+    default <S> Sequence<Pair<T, S>> zip(final Iterable<? extends S> second) {
         return Sequences.zip(this, second);
     }
 
     @SuppressWarnings("unchecked")
-    public Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables) {
+    default Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables) {
         return transpose(sequence(iterables));
     }
 
-    public Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<? extends T>> iterables) {
+    default Sequence<Sequence<T>> transpose(final Iterable<? extends Iterable<? extends T>> iterables) {
         return Sequences.transpose(Sequences.cons(this, sequence(iterables).<Iterable<T>>unsafeCast()));
     }
 
-    public <S, Th> Sequence<Triple<T, S, Th>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third) {
+    default <S, Th> Sequence<Triple<T, S, Th>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third) {
         return Sequences.zip(this, second, third);
     }
 
-    public <S, Th, Fo> Sequence<Quadruple<T, S, Th, Fo>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third, final Iterable<? extends Fo> fourth) {
+    default <S, Th, Fo> Sequence<Quadruple<T, S, Th, Fo>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third, final Iterable<? extends Fo> fourth) {
         return Sequences.zip(this, second, third, fourth);
     }
 
-    public <S, Th, Fo, Fi> Sequence<Quintuple<T, S, Th, Fo, Fi>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third, final Iterable<? extends Fo> fourth, final Iterable<? extends Fi> fifth) {
+    default <S, Th, Fo, Fi> Sequence<Quintuple<T, S, Th, Fo, Fi>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third, final Iterable<? extends Fo> fourth, final Iterable<? extends Fi> fifth) {
         return Sequences.zip(this, second, third, fourth, fifth);
     }
 
-    public Sequence<Pair<Number, T>> zipWithIndex() {
+    default Sequence<Pair<Number, T>> zipWithIndex() {
         return Sequences.zipWithIndex(this);
     }
 
-    public <R extends Comparable<? super R>> Sequence<T> sortBy(final Function<? super T, ? extends R> callable) {
+    default <R extends Comparable<? super R>> Sequence<T> sortBy(final Function<? super T, ? extends R> callable) {
         return sortBy(ascending(callable));
     }
 
-    public Sequence<T> sort(final Comparator<? super T> comparator) {
+    default Sequence<T> sort(final Comparator<? super T> comparator) {
         return sortBy(comparator);
     }
 
-    public Sequence<T> sortBy(final Comparator<? super T> comparator) {
+    default Sequence<T> sortBy(final Comparator<? super T> comparator) {
         return Sequences.sortBy(this, comparator);
     }
 
-    public <S> Sequence<S> safeCast(final Class<? extends S> aClass) {
+    default <S> Sequence<S> safeCast(final Class<? extends S> aClass) {
         return Sequences.safeCast(this, aClass);
     }
 
-    public <S> Sequence<S> unsafeCast() {
+    default <S> Sequence<S> unsafeCast() {
         return Sequences.unsafeCast(this);
     }
 
-    public Sequence<T> realise() {
+    default Sequence<T> realise() {
         return Sequences.realise(this);
     }
 
-    public Sequence<T> reverse() {
+    default Sequence<T> reverse() {
         return Sequences.reverse(this);
     }
 
-    public Sequence<T> cycle() {
+    default Sequence<T> cycle() {
         return Sequences.cycle(this);
     }
 
-    public <K> Map<K, List<T>> toMap(final Function<? super T, ? extends K> callable) {
+    default <K> Map<K, List<T>> toMap(final Function<? super T, ? extends K> callable) {
         return Maps.multiMap(this, callable);
     }
 
-    public <K> Sequence<Group<K, T>> groupBy(final Function<? super T, ? extends K> callable) {
+    default <K> Sequence<Group<K, T>> groupBy(final Function<? super T, ? extends K> callable) {
         return Sequences.groupBy(this, callable);
     }
 
-    public Sequence<Sequence<T>> recursive(final Function<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
+    default Sequence<Sequence<T>> recursive(final Function<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
         return Sequences.recursive(this, callable);
     }
 
-    public Pair<Sequence<T>, Sequence<T>> splitAt(final Number index) {
+    default Pair<Sequence<T>, Sequence<T>> splitAt(final Number index) {
         return Sequences.splitAt(this, index);
     }
 
-    public Pair<Sequence<T>, Sequence<T>> splitWhen(final Predicate<? super T> predicate) {
+    default Pair<Sequence<T>, Sequence<T>> splitWhen(final Predicate<? super T> predicate) {
         return Sequences.splitWhen(this, predicate);
     }
 
-    public Pair<Sequence<T>, Sequence<T>> splitOn(final T instance) {
+    default Pair<Sequence<T>, Sequence<T>> splitOn(final T instance) {
         return Sequences.splitOn(this, instance);
     }
 
-    public Pair<Sequence<T>, Sequence<T>> span(final Predicate<? super T> predicate) {
+    default Pair<Sequence<T>, Sequence<T>> span(final Predicate<? super T> predicate) {
         return Sequences.span(this, predicate);
     }
 
-    public Pair<Sequence<T>, Sequence<T>> breakOn(final Predicate<? super T> predicate) {
+    default Pair<Sequence<T>, Sequence<T>> breakOn(final Predicate<? super T> predicate) {
         return Sequences.breakOn(this, predicate);
     }
 
-    public Sequence<T> shuffle() {
+    default Sequence<T> shuffle() {
         return Sequences.shuffle(this);
     }
 
-    public Sequence<T> interruptable() {
+    default Sequence<T> interruptable() {
         return Sequences.interruptable(this);
     }
 
-    public PersistentList<T> toPersistentList() {
+    default PersistentList<T> toPersistentList() {
         return PersistentList.constructors.list(this);
     }
 
-    public Sequence<Pair<T, T>> cartesianProduct() {
+    default Sequence<Pair<T, T>> cartesianProduct() {
         return Sequences.cartesianProduct(this);
     }
 
-    public <S> Sequence<Pair<T, S>> cartesianProduct(final Iterable<? extends S> other) {
+    default <S> Sequence<Pair<T, S>> cartesianProduct(final Iterable<? extends S> other) {
         return Sequences.cartesianProduct(this, other);
     }
 
-    public T get(int index) {
+    default T get(int index) {
         return drop(index).head();
     }
 
-    public Sequence<Sequence<T>> windowed(int size) {
+    default Sequence<Sequence<T>> windowed(int size) {
         return Sequences.windowed(this, size);
     }
 
-    public Sequence<T> intersperse(T separator) {
+    default Sequence<T> intersperse(T separator) {
         return Sequences.intersperse(this, separator);
     }
 
-    public Option<Sequence<T>> flatOption() {
+    default Option<Sequence<T>> flatOption() {
         return Sequences.flatOption(this);
     }
 
     @Override
-    public int indexOf(Object t) {
+    default int indexOf(Object t) {
         return Sequences.indexOf(this, t);
     }
 
-    public Sequence<Sequence<T>> grouped(int size) {
+    default Sequence<Sequence<T>> grouped(int size) {
         return recursive(Sequences.<T>splitAt(size));
     }
 
@@ -474,12 +461,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         }
 
         public static <T> Function2<Iterable<? extends T>, Iterable<? extends T>, Sequence<T>> join() {
-            return new Function2<Iterable<? extends T>, Iterable<? extends T>, Sequence<T>>() {
-                @Override
-                public Sequence<T> call(Iterable<? extends T> a, Iterable<? extends T> b) throws Exception {
-                    return sequence(Iterators.functions.<T>join().call(a, b));
-                }
-            };
+            return (a, b) -> sequence(Iterators.functions.<T>join().call(a, b));
         }
     }
 }
