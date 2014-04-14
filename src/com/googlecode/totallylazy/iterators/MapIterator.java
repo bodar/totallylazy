@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Callers.call;
 
-public final class MapIterator<T, S> extends ReadOnlyIterator<S> {
+public final class MapIterator<T, S> implements ReadOnlyIterator<S> {
     private final Iterator<? extends T> iterator;
     private final Function<? super T, ? extends S> callable;
 

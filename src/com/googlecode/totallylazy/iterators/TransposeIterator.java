@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public final class TransposeIterator<T> extends ReadOnlyIterator<Seq<T>> {
+public final class TransposeIterator<T> implements ReadOnlyIterator<Seq<T>> {
     private final Seq<Iterator<T>> iterators;
 
     public TransposeIterator(Iterable<? extends Iterator<? extends T>> iterators) {

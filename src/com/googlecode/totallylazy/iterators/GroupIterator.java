@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.iterators;
 import java.util.NoSuchElementException;
 import java.util.regex.MatchResult;
 
-public final class GroupIterator extends ReadOnlyIterator<String> {
+public final class GroupIterator implements ReadOnlyIterator<String> {
     private final MatchResult result;
     private int index = 1;
 

@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.iterators;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class NodeIterator extends ReadOnlyIterator<Node> {
+public class NodeIterator implements ReadOnlyIterator<Node> {
     private final NodeList nodes;
     private int index;
 

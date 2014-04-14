@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Function;
 
 import static com.googlecode.totallylazy.Callers.call;
 
-public final class IterateIterator<T> extends ReadOnlyIterator<T> {
+public final class IterateIterator<T> implements ReadOnlyIterator<T> {
     private final Function<? super T, ? extends T> callable;
     private T t;
 

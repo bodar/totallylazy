@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
 
-public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements Peekable<T> {
+public abstract class StatefulIterator<T> implements ReadOnlyIterator<T>, Peekable<T> {
     private State state = State.Ready;
     private T current;
 

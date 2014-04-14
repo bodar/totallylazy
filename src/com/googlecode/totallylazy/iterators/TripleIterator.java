@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Triple;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public final class TripleIterator<F, S, T> extends ReadOnlyIterator<Triple<F, S, T>> {
+public final class TripleIterator<F, S, T> implements ReadOnlyIterator<Triple<F, S, T>> {
     private final Iterator<? extends F> first;
     private final Iterator<? extends S> second;
     private final Iterator<? extends T> third;

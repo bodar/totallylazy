@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.Segment;
 
-public class SegmentIterator<T> extends ReadOnlyIterator<T> {
+public class SegmentIterator<T> implements ReadOnlyIterator<T> {
     private Segment<T> segment;
 
     private SegmentIterator(Segment<T> segment) {
