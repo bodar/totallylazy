@@ -18,7 +18,6 @@ public class Randoms {
 
     public static Seq<Integer> integers() {
         return Sequences.forwardOnly(new StatefulIterator<Integer>() {
-
             @Override
             protected Integer getNext() throws Exception {
                 return random.nextInt();

@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.iterators.ReadOnlyListIterator;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 
-public class ZipperListIterator<T> extends ReadOnlyListIterator<T> {
+public class ZipperListIterator<T> implements ReadOnlyListIterator<T> {
     private Zipper<T> zipper;
     private Option<Direction> lastDirection;
 
