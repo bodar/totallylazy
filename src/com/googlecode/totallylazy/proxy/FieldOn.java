@@ -100,7 +100,7 @@ public abstract class FieldOn<T, S> implements Function<T, S>, InvocationHandler
             };
         }
 
-        public static class InsnIterator extends ReadOnlyIterator<AbstractInsnNode> {
+        public static class InsnIterator implements ReadOnlyIterator<AbstractInsnNode> {
             private final InsnList list;
             private int index = 0;
 

@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.iterators;
 
 import java.util.Enumeration;
 
-public final class EnumerationIterator<T> extends ReadOnlyIterator<T> {
+public final class EnumerationIterator<T> implements ReadOnlyIterator<T> {
     private final Enumeration<T> enumeration;
 
     public EnumerationIterator(final Enumeration<T> enumeration) {

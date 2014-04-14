@@ -4,8 +4,9 @@ import com.googlecode.totallylazy.collections.IllegalMutationException;
 
 import java.util.Iterator;
 
-public abstract class ReadOnlyIterator<T> implements Iterator<T> {
-    public final void remove() {
+public interface ReadOnlyIterator<T> extends Iterator<T> {
+    @Override
+    default void remove() {
         throw new IllegalMutationException();
     }
 }

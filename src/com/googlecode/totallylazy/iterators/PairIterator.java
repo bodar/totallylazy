@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
 
-public final class PairIterator<F, S> extends ReadOnlyIterator<Pair<F, S>> {
+public final class PairIterator<F, S> implements ReadOnlyIterator<Pair<F, S>> {
     private final Iterator<? extends F> left;
     private final Iterator<? extends S> right;
 

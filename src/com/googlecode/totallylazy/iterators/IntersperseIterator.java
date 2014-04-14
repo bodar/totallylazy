@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.iterators;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class IntersperseIterator<T> extends ReadOnlyIterator<T> {
+public class IntersperseIterator<T> implements ReadOnlyIterator<T> {
     private final Iterator<? extends T> iterator;
     private final T separator;
     private boolean useSeparator = false;

@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Quintuple;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public final class QuintupleIterator<F, S, T, Fo, Fi> extends ReadOnlyIterator<Quintuple<F, S, T, Fo, Fi>> {
+public final class QuintupleIterator<F, S, T, Fo, Fi> implements ReadOnlyIterator<Quintuple<F, S, T, Fo, Fi>> {
     private final Iterator<? extends F> first;
     private final Iterator<? extends S> second;
     private final Iterator<? extends T> third;

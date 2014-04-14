@@ -9,13 +9,11 @@ public class PoppingIterator<T> implements Iterator<T> {
         this.iterator = iterator;
     }
 
-    @Override
-    public boolean hasNext() {
+    @Override public boolean hasNext() {
         return iterator.hasNext();
     }
 
-    @Override
-    public T next() {
+    @Override public T next() {
         try {
             return iterator.next();
         } finally {

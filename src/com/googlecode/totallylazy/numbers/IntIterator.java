@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 
 import java.util.NoSuchElementException;
 
-public final class IntIterator extends ReadOnlyIterator<Number> {
+public final class IntIterator implements ReadOnlyIterator<Number> {
     private final int[] array;
     private int index = 0;
 

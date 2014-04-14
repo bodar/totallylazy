@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Quadruple;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public final class QuadrupleIterator<F, S, T, Fo> extends ReadOnlyIterator<Quadruple<F, S, T, Fo>> {
+public final class QuadrupleIterator<F, S, T, Fo> implements ReadOnlyIterator<Quadruple<F, S, T, Fo>> {
     private final Iterator<? extends F> first;
     private final Iterator<? extends S> second;
     private final Iterator<? extends T> third;

@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.iterators;
 
 import java.util.NoSuchElementException;
 
-public final class ArrayIterator<T> extends ReadOnlyIterator<T> {
+public final class ArrayIterator<T> implements ReadOnlyIterator<T> {
     private final T[] array;
     private int index = 0;
 

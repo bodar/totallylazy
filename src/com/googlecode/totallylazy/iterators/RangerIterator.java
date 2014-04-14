@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.numbers.Numbers.lessThan;
 
-public final class RangerIterator extends ReadOnlyIterator<Number> {
+public final class RangerIterator implements ReadOnlyIterator<Number> {
     private Number next;
     private final Number end;
     private final Number step;
