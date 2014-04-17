@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executor;
-import java.util.function.Consumer;
 
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.returnArgument;
@@ -50,7 +49,7 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
     }
 
     default Seq<T> forEach(final Block<? super T> runnable) {
-        return forEach((Function<? super T, ?>)runnable);
+        return forEach((Function<? super T, ?>) runnable);
     }
 
     default Seq<T> forEach(final Function<? super T, ?> runnable) {
@@ -130,6 +129,10 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
 
     default Seq<T> init() {
         return Sequences.init(this);
+    }
+
+    default <S> Reducible<T, S> reducible(){
+        return Seq.this::fold;
     }
 
     default <S> S fold(final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
