@@ -280,40 +280,24 @@ public class Functions {
     public static Combiner<Boolean> xor = new Xor();
 
     public static Function<Pair<Boolean, Boolean>, Boolean> andPair() {
-        return new Function<Pair<Boolean, Boolean>, Boolean>() {
-            @Override
-            public Boolean call(Pair<Boolean, Boolean> pair) throws Exception {
-                return pair.first() && pair.second();
-            }
-        };
+        return pair -> pair.first() && pair.second();
     }
 
     public static Function<Pair<Boolean, Boolean>, Boolean> orPair() {
-        return new Function<Pair<Boolean, Boolean>, Boolean>() {
-            @Override
-            public Boolean call(Pair<Boolean, Boolean> pair) throws Exception {
-                return pair.first() || pair.second();
-            }
-        };
+        return pair -> pair.first() || pair.second();
     }
 
     public static <A, B> Function<A, B> interruptable(final Function<? super A, ? extends B> function) {
-        return new Function<A, B>() {
-            @Override
-            public B call(A a) throws Exception {
-                if (Thread.interrupted()) throw new InterruptedException();
-                return function.call(a);
-            }
+        return a -> {
+            if (Thread.interrupted()) throw new InterruptedException();
+            return function.call(a);
         };
     }
 
     public static <A> Returns<A> interruptable(final Callable<? extends A> function) {
-        return new Returns<A>() {
-            @Override
-            public A call() throws Exception {
-                if (Thread.interrupted()) throw new InterruptedException();
-                return function.call();
-            }
+        return () -> {
+            if (Thread.interrupted()) throw new InterruptedException();
+            return function.call();
         };
     }
 

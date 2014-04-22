@@ -93,9 +93,7 @@ public class Iterators {
     }
 
     public static <T> T head(final Iterator<? extends T> iterator) {
-        if (iterator.hasNext()) {
-            return iterator.next();
-        }
+        if (iterator.hasNext()) return iterator.next();
         throw new NoSuchElementException();
     }
 
@@ -150,12 +148,7 @@ public class Iterators {
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Function<? super Pair<T, S>, ? extends S> callable) {
         if (!iterator.hasNext()) return seed;
-        return Callers.call(callable, Pair.pair(returns(head(iterator)), new Returns<S>() {
-            @Override
-            public S call() throws Exception {
-                return foldRight(iterator, seed, callable);
-            }
-        }));
+        return callable.apply(Pair.<T, S>pair(returns(head(iterator)), () -> foldRight(iterator, seed, callable)));
     }
 
     public static <T, S> S reduce(final Iterator<? extends T> iterator, final Function2<? super S, ? super T, ? extends S> callable) {
