@@ -131,7 +131,7 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
         return Sequences.init(this);
     }
 
-    default <S> Reducible<T, S> reducible(){
+    default <S> Reducible<T> reducible(){
         return Seq.this::fold;
     }
 
