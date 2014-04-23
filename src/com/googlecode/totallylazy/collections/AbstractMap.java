@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
+import static com.googlecode.totallylazy.Predicates.is;
+
 @SuppressWarnings("deprecation")
 public abstract class AbstractMap<K, V> extends ReadOnlyMap<K,V> implements PersistentMap<K, V> {
     @Override
@@ -48,7 +50,7 @@ public abstract class AbstractMap<K, V> extends ReadOnlyMap<K,V> implements Pers
 
     @Override
     public Option<V> find(Predicate<? super K> predicate) {
-        return filter(Predicates.<K>first(predicate)).headOption().map(Callables.<V>second());
+        return filterKeys(predicate).values().headOption();
     }
 
     @Override
@@ -65,7 +67,6 @@ public abstract class AbstractMap<K, V> extends ReadOnlyMap<K,V> implements Pers
     public <C extends Segment<Pair<K, V>>> C joinTo(C rest) {
         return toSequence().joinTo(rest);
     }
-
 
     @Override
     public Set<K> keySet() {

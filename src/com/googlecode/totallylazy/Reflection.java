@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.reflect.Field;
 
-import static com.googlecode.totallylazy.Fields.modifiers;
 import static com.googlecode.totallylazy.Fields.name;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
@@ -21,7 +20,7 @@ public class Reflection {
 
     public static Object enclosingInstance(Object innerClass) {
         try {
-            Field field = syntheticFields(innerClass.getClass()).
+            Field field = Fields.syntheticFields(innerClass.getClass()).
                     find(where(name, startsWith("this$"))).
                     get();
             field.setAccessible(true);
@@ -31,8 +30,4 @@ public class Reflection {
         }
     }
 
-    public static Seq<Field> syntheticFields(Class<?> aClass) {
-        return sequence(aClass.getDeclaredFields()).
-                filter(where(modifiers, is(synthetic)));
-    }
 }

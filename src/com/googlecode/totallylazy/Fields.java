@@ -3,6 +3,9 @@ package com.googlecode.totallylazy;
 import java.lang.reflect.Field;
 
 import static com.googlecode.totallylazy.Classes.allClasses;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -64,10 +67,16 @@ public class Fields {
     }
 
     public static Function<Class<?>, Seq<Field>> fields() {
-        return new Function<Class<?>, Seq<Field>>() {
-            public Seq<Field> call(Class<?> aClass) throws Exception {
-                return sequence(aClass.getDeclaredFields());
-            }
-        };
+        return aClass -> sequence(aClass.getDeclaredFields());
+    }
+
+    public static Seq<Field> syntheticFields(Class<?> aClass) {
+        return sequence(aClass.getDeclaredFields()).
+                filter(where(modifiers, is(Reflection.synthetic)));
+    }
+
+    public static Seq<Field> nonSyntheticFields(Class<?> aClass) {
+        return sequence(aClass.getDeclaredFields()).
+                filter(where(modifiers, not(Reflection.synthetic)));
     }
 }
