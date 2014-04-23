@@ -4,6 +4,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Classes.allClasses;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -70,5 +73,15 @@ public class Fields {
                 return sequence(aClass.getDeclaredFields());
             }
         };
+    }
+
+    public static Sequence<Field> syntheticFields(Class<?> aClass) {
+        return sequence(aClass.getDeclaredFields()).
+                filter(where(modifiers, is(Reflection.synthetic)));
+    }
+
+    public static Sequence<Field> nonSyntheticFields(Class<?> aClass) {
+        return sequence(aClass.getDeclaredFields()).
+                filter(where(modifiers, not(Reflection.synthetic)));
     }
 }
