@@ -3,7 +3,7 @@ package com.googlecode.totallylazy;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Reflection.enclosingInstance;
-import static com.googlecode.totallylazy.Reflection.syntheticFields;
+import static com.googlecode.totallylazy.Fields.syntheticFields;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
