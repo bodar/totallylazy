@@ -10,12 +10,15 @@ public class RecordTest {
     public void supportEquality() throws Exception {
         assertThat(new Record(){ int x = 1; int y = 2; }.equals(new Record(){ int x = 1; int y = 2; }), is(true));
         assertThat(new Record(){ int x = 1; int y = 2; }.equals(new Record(){ int x = 1; int y = 5; }), is(false));
-        assertThat(new Record(){ int x = 1; int y = 2; }.equals(new Record(){ int x = 1; int z = 2; }), is(false));
+        assertThat(new Record(){ int x = 1; int y = 2; }.equals(new Record() {
+            int x = 1;
+            int z = 2;
+        }), is(false));
     }
 
     @Test
-    public void supportsToString() throws Exception {
-        assertThat(new Record(){ int x = 1; int y = 2; }.toString(), is("{x=1, y=2}"));
+    public void toStringIsJson() throws Exception {
+        assertThat(new Record(){ int x = 1; String y = "2"; }.toString(), is("{\"x\":1,\"y\":\"2\"}"));
     }
 
     @Test(expected = UnsupportedOperationException.class)
