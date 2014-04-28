@@ -18,6 +18,7 @@ public class AVLTreeTest extends MapContract {
 
     @Test
     public void balancesRightRightCase() throws Exception {
+        System.out.println(map("C", 1, "B", 2, "A", 3).toString());
         assertThat(map(3, null, 4, null, 5, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
     }
 
