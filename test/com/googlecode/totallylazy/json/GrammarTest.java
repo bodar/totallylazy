@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.json;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -119,7 +120,8 @@ public class GrammarTest {
     }
 
     @Test
-    public void foo() throws Exception {
+    @Ignore("Manual test")
+    public void performanceTest() throws Exception {
         final String json = "{\n" +
                 "    \"graph\": {\n" +
                 "        \"mode\":\"NORMAL\",\n" +
