@@ -17,8 +17,8 @@ public class RecordTest {
     }
 
     @Test
-    public void toStringIsJson() throws Exception {
-        assertThat(new Record(){ int x = 1; String y = "2"; }.toString(), is("{\"x\":1,\"y\":\"2\"}"));
+    public void supportsToString() throws Exception {
+        assertThat(new Record(){ int x = 1; String y = "2"; }.toString(), is("{x=1, y=2}"));
     }
 
     @Test(expected = UnsupportedOperationException.class)
