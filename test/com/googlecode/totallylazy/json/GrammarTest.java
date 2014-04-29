@@ -215,6 +215,9 @@ public class GrammarTest {
                 "        ]\n" +
                 "    }\n" +
                 "}";
-        System.out.println(TimeReport.time(10000, () -> Grammar.OBJECT.parse(json).value()));
+        System.out.println(TimeReport.time(10000, new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {return Grammar.OBJECT.parse(json).value();}
+        }));
     }
 }
