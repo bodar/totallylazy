@@ -86,7 +86,7 @@ public interface Segment<T> {
             return cast(source.joinTo(destination));
         }
 
-        public static <T> Seq<T> sequence(final Segment<T> segments) {
+        public static <T> Sequence<T> sequence(final Segment<T> segments) {
             return new Sequence<T>() {
                 @Override
                 public Iterator<T> iterator() {

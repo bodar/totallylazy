@@ -57,7 +57,6 @@ import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
-import static com.googlecode.totallylazy.Sequences.splitOn;
 import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
@@ -67,6 +66,7 @@ import static com.googlecode.totallylazy.comparators.Comparators.comparators;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
+import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
@@ -75,7 +75,6 @@ import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static java.lang.Thread.currentThread;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
@@ -138,7 +137,7 @@ public class SequenceTest {
     @Test
     @Notes("This test has a very small chance that it could fail")
     public void supportsShuffle() throws Exception {
-        assertThat(range(1, 100).shuffle(), is(not(range(1, 100))));
+        PredicateAssert.assertThat(range(1, 100).shuffle(), Predicates.is(Predicates.not(range(1, 100))));
     }
 
     @Test
@@ -148,25 +147,25 @@ public class SequenceTest {
 
     @Test
     public void supportsApplicativeUsage() throws Exception {
-        assertThat(empty(Number.class).applicate(one(add(3))), Matchers.is(empty(Number.class)));
-        assertThat(numbers(9).applicate(Sequences.<Function<Number, Number>>empty()), Matchers.is(empty(Number.class)));
-        assertThat(numbers(9).applicate(one(add(3))), Matchers.is(numbers(12)));
-        assertThat(numbers(9, 1).applicate(one(add(3))), Matchers.is(numbers(12, 4)));
-        assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 4, 90, 10)));
+        assertThat(empty(Number.class).applicate(one(add(3))), is(empty(Number.class)));
+        assertThat(numbers(9).applicate(Sequences.<Function<Number, Number>>empty()), is(empty(Number.class)));
+        assertThat(numbers(9).applicate(one(add(3))), is(numbers(12)));
+        assertThat(numbers(9, 1).applicate(one(add(3))), is(numbers(12, 4)));
+        assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), is(numbers(12, 4, 90, 10)));
 
         //http://learnyouahaskell.com/functors-applicative-functors-and-monoids#applicative-functors (Lists)
-        assertThat(applicate(applicate(sequence(add(), multiply()), numbers(1, 2)), numbers(3, 4)), Matchers.is(numbers(4, 5, 5, 6, 3, 4, 6, 8)));
+        assertThat(applicate(applicate(sequence(add(), multiply()), numbers(1, 2)), numbers(3, 4)), is(numbers(4, 5, 5, 6, 3, 4, 6, 8)));
     }
 
     @Test
     public void recursiveCallOnlyEndsWhenThereIsNoRemainder() throws Exception {
-        assertThat(sequence(1, 3, 0, 0, 2).recursive(splitOn(0)),
+        assertThat(sequence(1, 3, 0, 0, 2).recursive(sequence -> sequence.splitOn(0)),
                 is(sequence(sequence(1, 3), empty(Integer.class), sequence(2))));
     }
 
     @Test
     public void supportsRecursiveSplitOn() throws Exception {
-        assertThat(sequence(1, 3, -4, 0, 7, -9, 0, 2).recursive(splitOn(0)),
+        assertThat(sequence(1, 3, -4, 0, 7, -9, 0, 2).recursive(sequence -> sequence.splitOn(0)),
                 is(sequence(sequence(1, 3, -4), sequence(7, -9), sequence(2))));
     }
 
@@ -178,7 +177,8 @@ public class SequenceTest {
 
     @Test
     public void supportsRecursiveSplitWhen() throws Exception {
-        assertThat(numbers(1, 3, -4, 5, 7, -9, 0, 2).recursive(Sequences.<Number>splitWhen(Numbers.lessThan(0))),
+        Seq<? extends Seq<Number>> recursive = numbers(1, 3, -4, 5, 7, -9, 0, 2).recursive(sequence -> sequence.splitWhen(Numbers.lessThan(0)));
+        assertThat(recursive,
                 is(sequence(numbers(1, 3), numbers(5, 7), numbers(0, 2))));
     }
 
@@ -236,7 +236,7 @@ public class SequenceTest {
     @Test
     public void supportsRecursiveSplitAt() throws Exception {
         Seq<String> data = sequence("Cat", "Dog", "Mouse", "Rabbit", "Monkey");
-        assertThat(data.recursive(Sequences.<String>splitAt(2)), is(sequence(sequence("Cat", "Dog"), sequence("Mouse", "Rabbit"), sequence("Monkey"))));
+        assertThat(data.recursive(sequence -> sequence.splitAt(2)), is(sequence(sequence("Cat", "Dog"), sequence("Mouse", "Rabbit"), sequence("Monkey"))));
     }
 
     @Test
@@ -309,14 +309,14 @@ public class SequenceTest {
 
     @Test
     public void supportsPartition() throws Exception {
-        Pair<Seq<Integer>, Seq<Integer>> result = sequence(1, 2, 3, 4).partition(even());
+        Pair<Sequence<Integer>, Sequence<Integer>> result = sequence(1, 2, 3, 4).partition(even());
         assertThat(result.first(), hasExactly(2, 4));
         assertThat(result.second(), hasExactly(1, 3));
     }
 
     @Test
     public void supportsPartitionOnForwardOnlySequence() throws Exception {
-        Pair<Seq<Integer>, Seq<Integer>> result = sequence(1, 2, 3, 4).forwardOnly().partition(even());
+        Pair<Sequence<Integer>, Sequence<Integer>> result = sequence(1, 2, 3, 4).forwardOnly().partition(even());
         assertThat(result.first(), hasExactly(2, 4));
         assertThat(result.second(), hasExactly(1, 3));
     }

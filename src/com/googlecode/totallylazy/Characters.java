@@ -17,11 +17,11 @@ public class Characters {
 
     public static final Combiner<CharSequence> join = JoinCharSequence.instance;
 
-    public static Seq<Character> characters(final CharSequence value) {
+    public static Sequence<Character> characters(final CharSequence value) {
         return Sequences.characters(value);
     }
 
-    public static Seq<Character> characters(final char[] value) {
+    public static Sequence<Character> characters(final char[] value) {
         return Sequences.characters(value);
     }
 
@@ -100,24 +100,19 @@ public class Characters {
     public static LogicalPredicate<Character> alphaNumeric = between('A', 'Z').or(between('a', 'z')).or(between('0', '9'));
     public static LogicalPredicate<Character> hexDigit = between('A', 'F').or(between('a', 'F')).or(between('0', '9'));
 
-    public static Seq<Character> range(char start, char end) {
-        return Numbers.range((int) start, (int) end).map(new Function<Number, Character>() {
-            @Override
-            public Character call(Number number) throws Exception {
-                return (char) number.intValue();
-            }
-        });
+    public static Sequence<Character> range(char start, char end) {
+        return Numbers.range((int) start, (int) end).map(number -> (char) number.intValue());
     }
 
     public static Set<Character> set(Charset charset) {
         return characters(charset).toSet();
     }
 
-    public static Seq<Character> characters(Charset charset) {
+    public static Sequence<Character> characters(Charset charset) {
         return characters().filter(in(charset));
     }
 
-    public static Seq<Character> characters() {
+    public static Sequence<Character> characters() {
         return range(Character.MIN_VALUE, Character.MAX_VALUE);
     }
 }

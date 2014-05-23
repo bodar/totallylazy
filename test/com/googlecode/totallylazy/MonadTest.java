@@ -9,8 +9,8 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class MonadTest {

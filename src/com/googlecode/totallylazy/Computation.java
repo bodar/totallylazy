@@ -105,7 +105,7 @@ public class Computation<T> extends Sequence<T> implements Seq<T>, Segment<T>, M
     }
 
     @Override
-    public Seq<T> empty() {
+    public Sequence<T> empty() {
         return Sequences.empty();
     }
 

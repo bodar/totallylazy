@@ -69,7 +69,7 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
         return Sequences.map(this, callable);
     }
 
-    default Pair<Seq<T>, Seq<T>> partition(final Predicate<? super T> predicate) {
+    default Pair<? extends Seq<T>, ? extends Seq<T>> partition(final Predicate<? super T> predicate) {
         return Sequences.partition(this, predicate);
     }
 
@@ -204,7 +204,7 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
     }
 
     default Seq<T> unique() {
-        return unique(returnArgument());
+        return Sequences.unique(this);
     }
 
     default <S> Seq<T> unique(Function<? super T, ? extends S> callable) {
@@ -325,17 +325,16 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
         return Sequences.forwardOnly(this);
     }
 
-    default <S> Seq<Pair<T, S>> zip(final Iterable<? extends S> second) {
-        return Sequences.zip(this, second);
-    }
-
-    @SuppressWarnings("unchecked")
-    default Seq<Seq<T>> transpose(final Iterable<? extends T>... iterables) {
+    default Seq<? extends Seq<T>> transpose(final Iterable<? extends T>... iterables) {
         return transpose(sequence(iterables));
     }
 
-    default Seq<Seq<T>> transpose(final Iterable<? extends Iterable<? extends T>> iterables) {
+    default Seq<? extends Seq<T>> transpose(final Iterable<? extends Iterable<? extends T>> iterables) {
         return Sequences.transpose(Sequences.cons(this, sequence(iterables).<Iterable<T>>unsafeCast()));
+    }
+
+    default <S> Seq<Pair<T, S>> zip(final Iterable<? extends S> second) {
+        return Sequences.zip(this, second);
     }
 
     default <S, Th> Seq<Triple<T, S, Th>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third) {
@@ -394,27 +393,27 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
         return Sequences.groupBy(this, callable);
     }
 
-    default Seq<Seq<T>> recursive(final Function<Seq<T>, Pair<Seq<T>, Seq<T>>> callable) {
+    default Seq<? extends Seq<T>> recursive(final Function<? super Sequence<T>, Pair<? extends Iterable<? extends T>, ? extends Iterable<? extends T>>> callable) {
         return Sequences.recursive(this, callable);
     }
 
-    default Pair<Seq<T>, Seq<T>> splitAt(final Number index) {
+    default Pair<? extends Seq<T>, ? extends Seq<T>> splitAt(final Number index) {
         return Sequences.splitAt(this, index);
     }
 
-    default Pair<Seq<T>, Seq<T>> splitWhen(final Predicate<? super T> predicate) {
+    default Pair<? extends Seq<T>, ? extends Seq<T>> splitWhen(final Predicate<? super T> predicate) {
         return Sequences.splitWhen(this, predicate);
     }
 
-    default Pair<Seq<T>, Seq<T>> splitOn(final T instance) {
+    default Pair<? extends Seq<T>, ? extends Seq<T>> splitOn(final T instance) {
         return Sequences.splitOn(this, instance);
     }
 
-    default Pair<Seq<T>, Seq<T>> span(final Predicate<? super T> predicate) {
+    default Pair<? extends Seq<T>, ? extends Seq<T>> span(final Predicate<? super T> predicate) {
         return Sequences.span(this, predicate);
     }
 
-    default Pair<Seq<T>, Seq<T>> breakOn(final Predicate<? super T> predicate) {
+    default Pair<? extends Seq<T>, ? extends Seq<T>> breakOn(final Predicate<? super T> predicate) {
         return Sequences.breakOn(this, predicate);
     }
 
@@ -442,7 +441,7 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
         return drop(index).head();
     }
 
-    default Seq<Seq<T>> windowed(int size) {
+    default Seq<? extends Seq<T>> windowed(int size) {
         return Sequences.windowed(this, size);
     }
 
@@ -450,7 +449,7 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
         return Sequences.intersperse(this, separator);
     }
 
-    default Option<Seq<T>> flatOption() {
+    default Option<? extends Seq<T>> flatOption() {
         return Sequences.flatOption(this);
     }
 
@@ -459,8 +458,8 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
         return Sequences.indexOf(this, t);
     }
 
-    default Seq<Seq<T>> grouped(int size) {
-        return recursive(Sequences.<T>splitAt(size));
+    default Seq<? extends Seq<T>> grouped(int size) {
+        return Sequences.grouped(this, size);
     }
 
     public static class functions {
