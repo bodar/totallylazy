@@ -397,7 +397,7 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
         return Sequences.recursive(this, callable);
     }
 
-    default Pair<? extends Seq<T>, ? extends Seq<T>> splitAt(final Number index) {
+    default Pair<? extends Seq<T>, ? extends Seq<T>> splitAt(final int index) {
         return Sequences.splitAt(this, index);
     }
 

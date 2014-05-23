@@ -1,14 +1,8 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.collections.AbstractCollection;
-import com.googlecode.totallylazy.collections.PersistentList;
 
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.Deque;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -275,7 +269,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
     }
 
     @Override
-    public Pair<Sequence<T>, Sequence<T>> splitAt(Number index) {
+    public Pair<Sequence<T>, Sequence<T>> splitAt(int index) {
         return Sequences.splitAt(this, index);
     }
 

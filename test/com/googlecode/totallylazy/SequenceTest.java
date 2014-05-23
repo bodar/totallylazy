@@ -3,8 +3,6 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.callables.CountingCallable;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.concurrent.NamedExecutors;
-import com.googlecode.totallylazy.matchers.Matchers;
-import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.yatspec.junit.Notes;
@@ -42,7 +40,10 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.Predicates.greaterThan;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.lessThan;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
@@ -63,10 +64,8 @@ import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.callables.Count.count;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.comparators.Comparators.comparators;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
@@ -75,9 +74,6 @@ import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static java.lang.Thread.currentThread;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
 
 @RunWith(SpecRunner.class)
@@ -137,12 +133,12 @@ public class SequenceTest {
     @Test
     @Notes("This test has a very small chance that it could fail")
     public void supportsShuffle() throws Exception {
-        PredicateAssert.assertThat(range(1, 100).shuffle(), Predicates.is(Predicates.not(range(1, 100))));
+        assertThat(range(1, 100).shuffle(), is(Predicates.not(range(1, 100))));
     }
 
     @Test
     public void supportsReduceWithIdentityFunction() throws Exception {
-        assertThat(sequence("one", "two", "three").reduce(count()), NumberMatcher.is(3));
+        assertThat(sequence("one", "two", "three").reduce(count()), is(3));
     }
 
     @Test
@@ -190,12 +186,12 @@ public class SequenceTest {
 
     @Test
     public void supportsReduceRight() throws Exception {
-        assertThat(numbers(1, 2, 3).reduceRight(add()), NumberMatcher.is(6));
+        assertThat(numbers(1, 2, 3).reduceRight(add()), is(6));
     }
 
     @Test
     public void supportsFoldRight() throws Exception {
-        assertThat(sequence(1, 2, 3).foldRight(0, add()), NumberMatcher.is(6));
+        assertThat(sequence(1, 2, 3).foldRight(0, add()), is(6));
     }
 
     @Test
@@ -278,19 +274,19 @@ public class SequenceTest {
     @Test
     public void supportsGroupByAndPreservesOrder() throws Exception {
         Seq<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(Numbers.mod(2));
-        assertThat(groups.first().key(), NumberMatcher.is(1));
+        assertThat(groups.first().key(), is(1));
         assertThat(groups.first(), hasExactly(1, 3));
-        assertThat(groups.second().key(), NumberMatcher.is(0));
+        assertThat(groups.second().key(), is(0));
         assertThat(groups.second(), hasExactly(2, 4));
     }
 
     @Test
     public void supportsGrouped() throws Exception {
-        Seq<Integer> sequence = sequence(1, 2, 3, 4, 5);
+        Sequence<Integer> sequence = sequence(1, 2, 3, 4, 5);
         assertThat(sequence.grouped(1), is(sequence(sequence(1), sequence(2), sequence(3), sequence(4), sequence(5))));
         assertThat(sequence.grouped(3), is(sequence(sequence(1, 2, 3), sequence(4, 5))));
-        assertThat(sequence.grouped(5), is(Sequences.<Seq<Integer>>sequence(sequence(1, 2, 3, 4, 5))));
-        assertThat(sequence.grouped(6), is(Sequences.<Seq<Integer>>sequence(sequence(1, 2, 3, 4, 5))));
+        assertThat(sequence.grouped(5), is(one(sequence(1, 2, 3, 4, 5))));
+        assertThat(sequence.grouped(6), is(one(sequence(1, 2, 3, 4, 5))));
     }
 
     @Test
@@ -328,7 +324,7 @@ public class SequenceTest {
 
     @Test
     public void supportsSize() throws Exception {
-        assertThat(range(10000000000L, 10000000099L).size(), NumberMatcher.is(100));
+        assertThat(range(10000000000L, 10000000099L).size(), is(100));
     }
 
     @Test
@@ -575,27 +571,27 @@ public class SequenceTest {
 
     @Test
     public void canReduceEmptySequence() {
-        assertThat(numbers().reduce(sum()), NumberMatcher.is(0));
+        assertThat(numbers().reduce(sum()), is(0));
     }
 
     @Test
     public void supportsReduceLeft() throws Exception {
-        assertThat(numbers(1, 2, 3).reduce(sum()), NumberMatcher.is(6));
-        assertThat(numbers(1, 2, 3).reduceLeft(sum()), NumberMatcher.is(6));
+        assertThat(numbers(1, 2, 3).reduce(sum()), is(6));
+        assertThat(numbers(1, 2, 3).reduceLeft(sum()), is(6));
     }
 
     @Test
     public void supportsFoldToACount() throws Exception {
-        assertThat(sequence("Dan", "Matt", "Bob").fold(0, count()), NumberMatcher.is(3));
-        assertThat(sequence("Dan", "Matt").fold(0, count()), NumberMatcher.is(2));
-        assertThat(sequence("Dan").fold(0, count()), NumberMatcher.is(1));
-        assertThat(empty().fold(0, count()), NumberMatcher.is(0));
+        assertThat(sequence("Dan", "Matt", "Bob").fold(0, count()), is(3));
+        assertThat(sequence("Dan", "Matt").fold(0, count()), is(2));
+        assertThat(sequence("Dan").fold(0, count()), is(1));
+        assertThat(empty().fold(0, count()), is(0));
     }
 
     @Test
     public void supportsFoldLeft() throws Exception {
-        assertThat(sequence(1, 2, 3).fold(0, sum()), NumberMatcher.is(6));
-        assertThat(sequence(1, 2, 3).foldLeft(0, sum()), NumberMatcher.is(6));
+        assertThat(sequence(1, 2, 3).fold(0, sum()), is(6));
+        assertThat(sequence(1, 2, 3).foldLeft(0, sum()), is(6));
     }
 
     @Test
@@ -694,32 +690,32 @@ public class SequenceTest {
     public void supportsTake() throws Exception {
         final Seq<Integer> sequence = sequence(1, 2, 3).take(2);
         assertThat(sequence, hasExactly(1, 2));
-        assertThat(sequence(1).take(2).size(), NumberMatcher.is(1));
-        assertThat(sequence().take(2).size(), NumberMatcher.is(0));
+        assertThat(sequence(1).take(2).size(), is(1));
+        assertThat(sequence().take(2).size(), is(0));
     }
 
     @Test
     public void supportsTakeWhile() throws Exception {
         final Seq<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).takeWhile(odd());
         assertThat(sequence, hasExactly(1, 3, 5));
-        assertThat(sequence(1).takeWhile(odd()).size(), NumberMatcher.is(1));
-        assertThat(Sequences.<Number>sequence().takeWhile(odd()).size(), NumberMatcher.is(0));
+        assertThat(sequence(1).takeWhile(odd()).size(), is(1));
+        assertThat(Sequences.<Number>sequence().takeWhile(odd()).size(), is(0));
     }
 
     @Test
     public void supportsDrop() throws Exception {
         final Seq<Integer> sequence = sequence(1, 2, 3).drop(2);
         assertThat(sequence, hasExactly(3));
-        assertThat(sequence(1).drop(2).size(), NumberMatcher.is(0));
-        assertThat(sequence().drop(1).size(), NumberMatcher.is(0));
+        assertThat(sequence(1).drop(2).size(), is(0));
+        assertThat(sequence().drop(1).size(), is(0));
     }
 
     @Test
     public void supportsDropWhile() throws Exception {
         final Seq<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).dropWhile(odd());
         assertThat(sequence, hasExactly(6, 8, 1, 3));
-        assertThat(sequence(1).dropWhile(odd()).size(), NumberMatcher.is(0));
-        assertThat(Sequences.<Number>sequence().dropWhile(odd()).size(), NumberMatcher.is(0));
+        assertThat(sequence(1).dropWhile(odd()).size(), is(0));
+        assertThat(Sequences.<Number>sequence().dropWhile(odd()).size(), is(0));
     }
 
     @Test
@@ -804,7 +800,7 @@ public class SequenceTest {
     public void supportsIntersperse() {
         assertThat(sequence("a", "b", "c").intersperse("x"), hasExactly("a", "x", "b", "x", "c"));
         assertThat(sequence("a").intersperse("x"), hasExactly("a"));
-        assertThat(sequence().intersperse("x"), isEmpty());
+        assertThat(sequence().intersperse("x"), Predicates.empty());
         assertThat(repeat(1).intersperse(0).take(5), hasExactly(1, 0, 1, 0, 1));
         assertThat(repeat(1).intersperse(0).take(6), hasExactly(1, 0, 1, 0, 1, 0));
     }
@@ -814,8 +810,8 @@ public class SequenceTest {
         assertThat(sequence("roger", "ramjet").flatOption(), is(some(sequence("roger", "ramjet"))));
         assertThat(flatOption(sequence("roger", "ramjet")), is(some(sequence("roger", "ramjet"))));
 
-        assertThat(empty(String.class).flatOption(), is(Option.<Seq<String>>none()));
-        assertThat(flatOption(empty(String.class)), is(Option.<Seq<String>>none()));
+        assertThat(empty(String.class).flatOption(), is(Option.<Sequence<String>>none()));
+        assertThat(flatOption(empty(String.class)), is(Option.<Sequence<String>>none()));
     }
 
     @Test
