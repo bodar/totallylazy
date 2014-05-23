@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.annotations.multimethod;
@@ -12,23 +12,23 @@ import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.one;
 
 public class AndPredicate<T> extends LogicalPredicate<T> {
-    private final Seq<Predicate<T>> predicates;
+    private final Sequence<Predicate<T>> predicates;
 
-    private AndPredicate(Seq<Predicate<T>> predicates) {
+    private AndPredicate(Sequence<Predicate<T>> predicates) {
         this.predicates = predicates;
     }
 
     public static <T> LogicalPredicate<T> and(Iterable<? extends Predicate<? super T>> predicates) {
-        Seq<Predicate<T>> sequence = Sequences.sequence(predicates).<Predicate<T>>unsafeCast().
+        Sequence<Predicate<T>> sequence = Sequences.sequence(predicates).<Predicate<T>>unsafeCast().
                 flatMap(AndPredicate.<T>asPredicates());
         if (sequence.exists(instanceOf(AlwaysFalse.class))) return Predicates.alwaysFalse();
 
-        Seq<Predicate<T>> collapsed = sequence.
+        Sequence<Predicate<T>> collapsed = sequence.
                 filter(instanceOf(AlwaysTrue.class).not());
         if (collapsed.isEmpty()) return Predicates.alwaysTrue();
         if (collapsed.size() == 1) return logicalPredicate(collapsed.head());
         if (collapsed.forAll(instanceOf(Not.class)))
-            return Predicates.not(Predicates.<T>or(sequence.<Not<T>>unsafeCast().map(Not.functions.<T>predicate())));
+            return Predicates.not(Predicates.<T>or(sequence.<Not<T>>unsafeCast().map(Not<T>::predicate)));
         return new AndPredicate<T>(collapsed);
     }
 
@@ -36,7 +36,7 @@ public class AndPredicate<T> extends LogicalPredicate<T> {
         return predicates.forAll(Predicates.<T>matches(value));
     }
 
-    public Seq<Predicate<T>> predicates() {
+    public Sequence<Predicate<T>> predicates() {
         return predicates;
     }
 

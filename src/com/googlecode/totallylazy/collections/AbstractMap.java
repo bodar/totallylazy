@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
 
@@ -29,17 +30,17 @@ public abstract class AbstractMap<K, V> extends ReadOnlyMap<K,V> implements Pers
     }
 
     @Override
-    public Seq<Pair<K, V>> toSequence() {
+    public Sequence<Pair<K, V>> toSequence() {
         return Sequences.sequence(this);
     }
 
     @Override
-    public Seq<K> keys() {
+    public Sequence<K> keys() {
         return toSequence().map(Callables.<K>first());
     }
 
     @Override
-    public Seq<V> values() {
+    public Sequence<V> values() {
         return toSequence().map(Callables.<V>second());
     }
 
