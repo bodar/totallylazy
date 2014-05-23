@@ -1,16 +1,17 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.validations.ValidationResult.functions.merge;
 import static com.googlecode.totallylazy.validations.Validator.functions.validateAgainst;
 
-public class AllOfValidator<T> extends LogicalValidator<T>{
-    private final Seq<Validator<? super T>> validators;
+public class AllOfValidator<T> extends LogicalValidator<T> {
+    private final Sequence<Validator<? super T>> validators;
 
-    private AllOfValidator(Seq<Validator<? super T>> validators) {
-        this.validators = validators;
+    private AllOfValidator(Iterable<? extends Validator<? super T>> validators) {
+        this.validators = Sequences.sequence(validators);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class AllOfValidator<T> extends LogicalValidator<T>{
             return allOf(sequence(validators));
         }
 
-        public static <T> AllOfValidator<T> allOf(Seq<Validator<? super T>> validators) {
+        public static <T> AllOfValidator<T> allOf(Iterable<? extends Validator<? super T>> validators) {
             return new AllOfValidator<T>(validators);
         }
     }
