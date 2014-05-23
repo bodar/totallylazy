@@ -8,7 +8,7 @@ public interface PredicateAssert {
 
     public static <T> void assertThat(String reason, T actual, Predicate<? super T> predicate) {
         if (!predicate.matches(actual)) {
-            throw new AssertionError(reason + "\nExpected: " + predicate + "\n     but: " + actual);
+            throw new AssertionError(reason + "\nExpected: " + predicate + "\n  Actual: " + actual);
         }
     }
 

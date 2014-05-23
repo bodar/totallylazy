@@ -778,6 +778,6 @@ public class Sequences {
     }
 
     public static <T> Sequence<Sequence<T>> grouped(Iterable<? extends T> iterable, int size) {
-        return sequence(iterable).recursive(sequence -> Sequences.sequence(sequence).splitAt((Number) size));
+        return sequence(iterable).recursive(s -> s.splitAt(size));
     }
 }
