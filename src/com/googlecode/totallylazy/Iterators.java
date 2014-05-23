@@ -366,45 +366,40 @@ public class Iterators {
         return count;
     }
 
-    public static <T> Pair<Seq<T>, Seq<T>> partition(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         final Queue<T> matchedQueue = new ArrayDeque<T>();
         final Queue<T> unmatchedUnmatched = new ArrayDeque<T>();
         return Pair.pair(Sequences.memorise(new PartitionIterator<T>(iterator, predicate, matchedQueue, unmatchedUnmatched)),
                 Sequences.memorise(new PartitionIterator<T>(iterator, Predicates.<T>not(predicate), unmatchedUnmatched, matchedQueue)));
     }
 
-    public static <T> Pair<Seq<T>, Seq<T>> splitAt(final Iterator<? extends T> iterator, final Number index) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitAt(final Iterator<? extends T> iterator, final Number index) {
         return partition(iterator, Predicates.countTo(index));
     }
 
-    public static <T> Pair<Seq<T>, Seq<T>> splitWhen(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
-        Pair<Seq<T>, Seq<T>> partition = breakOn(iterator, predicate);
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitWhen(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
+        Pair<Sequence<T>, Sequence<T>> partition = breakOn(iterator, predicate);
         return Pair.pair(partition.first(), partition.second().isEmpty() ? Sequences.<T>empty() : partition.second().tail());
     }
 
-    public static <T> Pair<Seq<T>, Seq<T>> splitOn(final Iterator<? extends T> iterator, final T instance) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> splitOn(final Iterator<? extends T> iterator, final T instance) {
         return splitWhen(iterator, is(instance));
     }
 
-    public static <T> Pair<Seq<T>, Seq<T>> span(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> span(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         return partition(iterator, whileTrue(predicate));
     }
 
-    public static <T> Pair<Seq<T>, Seq<T>> breakOn(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
+    public static <T> Pair<Sequence<T>, Sequence<T>> breakOn(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         return partition(iterator, whileTrue(Predicates.<T>not(predicate)));
     }
 
-    public static <T, Key> Seq<Group<Key, T>> groupBy(final Iterator<? extends T> iterator, final Function<? super T, ? extends Key> callable) {
-        return Maps.entries(Maps.multiMap(iterator, callable)).map(new Function<Map.Entry<Key, List<T>>, Group<Key, T>>() {
-            @Override
-            public Group<Key, T> call(Map.Entry<Key, List<T>> entry) throws Exception {
-                return new Group<Key, T>(entry.getKey(), entry.getValue());
-            }
-        });
+    public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterator<? extends T> iterator, final Function<? super T, ? extends Key> callable) {
+        return Maps.entries(Maps.multiMap(iterator, callable)).map(entry -> new Group<Key, T>(entry.getKey(), entry.getValue()));
     }
 
-    public static <T> Iterator<Seq<T>> windowed(final Iterator<? extends T> iterator, final int size) {
-        return new WindowedIterator<T>(iterator, size);
+    public static <T> Iterator<Sequence<T>> windowed(final Iterator<? extends T> iterator, final int size) {
+        return new WindowedIterator<>(iterator, size);
     }
 
     public static <T> LogicalPredicate<Iterator<T>> hasNext() {
@@ -416,11 +411,7 @@ public class Iterators {
     }
 
     public static <T> Function<Iterator<T>, T> next() {
-        return new Function<Iterator<T>, T>() {
-            public T call(Iterator<T> iterator) throws Exception {
-                return iterator.next();
-            }
-        };
+        return Iterator<T>::next;
     }
 
     public static <T> Iterator<T> flatten(final Iterator<? extends Iterator<? extends T>> iterator) {

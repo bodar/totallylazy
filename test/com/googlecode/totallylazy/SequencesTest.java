@@ -42,7 +42,7 @@ public class SequencesTest {
     @Test
     @SuppressWarnings("unchecked")
     public void supportsTranspose() {
-        Seq<Seq<Integer>> transposed = transpose(sequence(1, 2), sequence(3, 4), sequence(5, 6));
+        Sequence<Sequence<Integer>> transposed = transpose(sequence(1, 2), sequence(3, 4), sequence(5, 6));
         assertThat(transposed, hasExactly(sequence(1, 3, 5), sequence(2, 4, 6)));
         assertThat(transpose(transposed), hasExactly(sequence(1, 2), sequence(3, 4), sequence(5, 6)));
         assertThat(sequence(1, 2).transpose(sequence(3, 4)), hasExactly(sequence(1, 3), sequence(2, 4)));
@@ -50,14 +50,14 @@ public class SequencesTest {
 
     @Test
     public void supportsUnzip() {
-        Pair<Seq<Integer>, Seq<Integer>> pair = Sequences.unzip(sequence(pair(1, 2), pair(3, 4), pair(5, 6)));
+        Pair<Sequence<Integer>, Sequence<Integer>> pair = Sequences.unzip(sequence(pair(1, 2), pair(3, 4), pair(5, 6)));
         assertThat(pair.first(), hasExactly(1, 3, 5));
         assertThat(pair.second(), hasExactly(2, 4, 6));
     }
 
     @Test
     public void supportsUnzippingTriples() {
-        Triple<Seq<Integer>, Seq<Integer>, Seq<String>> triple = Sequences.unzip3(sequence(triple(1, 2, "car"), triple(3, 4, "cat")));
+        Triple<Sequence<Integer>, Sequence<Integer>, Sequence<String>> triple = Sequences.unzip3(sequence(triple(1, 2, "car"), triple(3, 4, "cat")));
         assertThat(triple.first(), hasExactly(1, 3));
         assertThat(triple.second(), hasExactly(2, 4));
         assertThat(triple.third(), hasExactly("car", "cat"));
@@ -65,7 +65,7 @@ public class SequencesTest {
 
     @Test
     public void supportsUnzippingQuadruples() {
-        Quadruple<Seq<Integer>, Seq<Integer>, Seq<String>, Seq<Character>> quadruple = Sequences.unzip4(sequence(quadruple(1, 2, "car", 'C'), quadruple(3, 4, "cat", 'D')));
+        Quadruple<Sequence<Integer>, Sequence<Integer>, Sequence<String>, Sequence<Character>> quadruple = Sequences.unzip4(sequence(quadruple(1, 2, "car", 'C'), quadruple(3, 4, "cat", 'D')));
         assertThat(quadruple.first(), hasExactly(1, 3));
         assertThat(quadruple.second(), hasExactly(2, 4));
         assertThat(quadruple.third(), hasExactly("car", "cat"));
@@ -74,7 +74,7 @@ public class SequencesTest {
 
     @Test
     public void supportsUnzippingQuintuples() {
-        Quintuple<Seq<Integer>, Seq<Integer>, Seq<String>, Seq<Character>, Seq<Integer>> quintuple =
+        Quintuple<Sequence<Integer>, Sequence<Integer>, Sequence<String>, Sequence<Character>, Sequence<Integer>> quintuple =
                 Sequences.unzip5(sequence(quintuple(1, 2, "car", 'C', 1), quintuple(3, 4, "cat", 'D', 2)));
         assertThat(quintuple.first(), hasExactly(1, 3));
         assertThat(quintuple.second(), hasExactly(2, 4));
@@ -155,11 +155,9 @@ public class SequencesTest {
 
     @Test
     public void supportsIteratingEvenWhenCallableReturnNull() throws Exception {
-        final Seq<Integer> sequence = iterate(new Function<Integer, Integer>() {
-            public Integer call(Integer integer) throws Exception {
-                assertThat("Should never see a null value", integer, is(Matchers.notNullValue()));
-                return null;
-            }
+        final Sequence<Integer> sequence = iterate(integer -> {
+            assertThat("Should never see a null value", integer, is(Matchers.notNullValue()));
+            return null;
         }, 1).takeWhile(Predicates.notNullValue());
         assertThat(sequence, hasExactly(1));
     }
@@ -174,7 +172,7 @@ public class SequencesTest {
 
     @Test
     public void supportsUnfoldRight() throws Exception {
-        Seq<Number> result = Sequences.unfoldRight(new Function<Number, Option<Pair<Number, Number>>>() {
+        Sequence<Number> result = Sequences.unfoldRight(new Function<Number, Option<Pair<Number, Number>>>() {
             @Override
             public Option<Pair<Number, Number>> call(Number number) throws Exception {
                 if (number.equals(0)) return none();

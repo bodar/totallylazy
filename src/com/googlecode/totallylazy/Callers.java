@@ -32,11 +32,11 @@ public final class Callers {
     }
 
     @SafeVarargs
-    public static <T> Seq<T> callConcurrently(final Callable<? extends T>... callables) {
+    public static <T> Sequence<T> callConcurrently(final Callable<? extends T>... callables) {
         return callConcurrently(sequence(callables));
     }
 
-    public static <T> Seq<T> callConcurrently(final Iterable<? extends Callable<? extends T>> callables) {
+    public static <T> Sequence<T> callConcurrently(final Iterable<? extends Callable<? extends T>> callables) {
         ExecutorService service = executorService();
         try {
             return callConcurrently(callables, service);
@@ -45,7 +45,7 @@ public final class Callers {
         }
     }
 
-    public static <T> Seq<T> callConcurrently(final Iterable<? extends Callable<? extends T>> callables, final Executor executor) {
+    public static <T> Sequence<T> callConcurrently(final Iterable<? extends Callable<? extends T>> callables, final Executor executor) {
         return Sequences.sequence(callables).<Callable<T>>unsafeCast().map(Callers.<T>asFutureTask()).
                 map(Callers.<T>executeWith(executor)).
                 realise().
