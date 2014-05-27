@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Maps;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
@@ -28,8 +28,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class MapPerformanceTest {
     public static final int SIZE = 100000;
     public static final int NUMBER_OF_CALLS = 500;
-    public static final Seq<Integer> range = range(1, SIZE).safeCast(Integer.class).realise();
-    public static final Seq<Integer> keys_ = range.shuffle().cycle().memorise();
+    public static final Sequence<Integer> range = range(1, SIZE).safeCast(Integer.class).realise();
+    public static final Sequence<Integer> keys_ = range.shuffle().cycle().memorise();
 
     @Test
     public void iterateWorksOnLargeData() throws Exception {
@@ -120,7 +120,7 @@ public class MapPerformanceTest {
         };
     }
 
-    private Seq<Integer> keys() {
+    private Sequence<Integer> keys() {
         return keys_.forwardOnly();
     }
 
@@ -134,11 +134,11 @@ public class MapPerformanceTest {
         };
     }
 
-    private Map<Integer, Integer> createMutable(final Seq<Integer> range, final Map<Integer, Integer> emptyMap) throws Exception {
+    private Map<Integer, Integer> createMutable(final Sequence<Integer> range, final Map<Integer, Integer> emptyMap) throws Exception {
         return createMutable(range, emptyMap, emptyMap.getClass().getSimpleName());
     }
 
-    private Map<Integer, Integer> createMutable(Seq<Integer> range, Map<Integer, Integer> emptyMap, String name) {
+    private Map<Integer, Integer> createMutable(Sequence<Integer> range, Map<Integer, Integer> emptyMap, String name) {
         System.out.print(name + ":\t");
         return range.fold(emptyMap, new Function2<Map<Integer, Integer>, Integer, Map<Integer, Integer>>() {
             @Override
@@ -222,13 +222,13 @@ public class MapPerformanceTest {
         };
     }
 
-    public static PersistentSortedMap<Integer, Integer> createPersistent(final Seq<Integer> range) throws Exception {
+    public static PersistentSortedMap<Integer, Integer> createPersistent(final Sequence<Integer> range) throws Exception {
         PersistentSortedMap<Integer, Integer> map = PersistentSortedMap.constructors.sortedMap(range.map(asPair()));
         System.out.print("AVLTree:\t");
         return map;
     }
 
-    public static PersistentMap<Integer, Integer> createHash(final Seq<Integer> range) throws Exception {
+    public static PersistentMap<Integer, Integer> createHash(final Sequence<Integer> range) throws Exception {
         HashTreeMap<Integer, Integer> map = HashTreeMap.hashTreeMap(range.map(asPair()));
         System.out.print("HashTreeMap:\t");
         return map;

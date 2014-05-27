@@ -16,7 +16,7 @@ public class FilterSource implements Sources {
     }
 
     @Override
-    public Seq<Source> sources() {
+    public Sequence<Source> sources() {
         return sources.sources().filter(predicate);
     }
 

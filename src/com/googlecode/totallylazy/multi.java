@@ -54,7 +54,7 @@ public abstract class multi {
     }
 
     private <T> Option<T> invoke(Class<?> aClass, Object instance, String name, Object[] args) {
-        Seq<Class<?>> argumentClasses = sequence(args).map(toClass()).memoize();
+        Sequence<Class<?>> argumentClasses = sequence(args).map(toClass()).memoize();
         return allMethods(aClass).
                 filter(not(enclosing())).
                 filter(where(methodName(), is(name))).
@@ -73,7 +73,7 @@ public abstract class multi {
 
     private Object instance(Method method) {return isStatic(method.getModifiers()) ? null : enclosingInstance(this);}
 
-    private static Function<Method, Number> distanceFrom(final Seq<Class<?>> argumentClasses) {
+    private static Function<Method, Number> distanceFrom(final Sequence<Class<?>> argumentClasses) {
         return new Function<Method, Number>() {
             @Override
             public Number call(Method method) throws Exception {
@@ -82,7 +82,7 @@ public abstract class multi {
         };
     }
 
-    static Number distanceFrom(Seq<Class<?>> argumentClasses, Seq<Class<?>> parameterTypes) {
+    static Number distanceFrom(Sequence<Class<?>> argumentClasses, Sequence<Class<?>> parameterTypes) {
         return argumentClasses.zip(parameterTypes).map(distanceBetween().pair()).reduce(sum);
     }
 
@@ -104,7 +104,7 @@ public abstract class multi {
                 reduce(minimum));
     }
 
-    private static LogicalPredicate<Class<?>[]> matches(final Seq<Class<?>> argumentClasses) {
+    private static LogicalPredicate<Class<?>[]> matches(final Sequence<Class<?>> argumentClasses) {
         return new LogicalPredicate<Class<?>[]>() {
             @Override
             public boolean matches(Class<?>[] classes) {
@@ -118,7 +118,7 @@ public abstract class multi {
         };
     }
 
-    private static LogicalPredicate<Class<?>[]> exactMatch(final Seq<Class<?>> argumentClasses) {
+    private static LogicalPredicate<Class<?>[]> exactMatch(final Sequence<Class<?>> argumentClasses) {
         return new LogicalPredicate<Class<?>[]>() {
             @Override
             public boolean matches(Class<?>[] classes) {

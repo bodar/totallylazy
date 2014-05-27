@@ -1,21 +1,20 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Functions.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
 
-public class AnyOfValidator<T> extends LogicalValidator<T>{
+public class AnyOfValidator<T> extends LogicalValidator<T> {
     public static final String DEFAULT_MESSAGE = "Please provide a valid value";
 
-    private final Seq<Validator<? super T>> validators;
+    private final Sequence<Validator<? super T>> validators;
 
-    private AnyOfValidator(Seq<Validator<? super T>> validators) {
+    private AnyOfValidator(Sequence<Validator<? super T>> validators) {
         this.validators = validators;
     }
 
@@ -24,7 +23,7 @@ public class AnyOfValidator<T> extends LogicalValidator<T>{
         List<ValidationResult> failures = new ArrayList<ValidationResult>();
         for (Validator<? super T> validator : validators) {
             ValidationResult result = validator.validate(instance);
-            if(result.succeeded())
+            if (result.succeeded())
                 return pass();
             failures.add(result);
         }
@@ -36,7 +35,8 @@ public class AnyOfValidator<T> extends LogicalValidator<T>{
         public static <T> AnyOfValidator<T> anyOf(Validator<? super T>... validators) {
             return anyOf(sequence(validators));
         }
-        public static <T> AnyOfValidator<T> anyOf(Seq<Validator<? super T>> validators) {
+
+        public static <T> AnyOfValidator<T> anyOf(Sequence<Validator<? super T>> validators) {
             return new AnyOfValidator<T>(validators);
         }
     }

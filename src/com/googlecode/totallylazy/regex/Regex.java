@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.regex;
 import com.googlecode.totallylazy.Extractor;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
 import java.util.regex.MatchResult;
@@ -34,7 +34,7 @@ public class Regex implements Function<CharSequence, Matches>, Predicate<CharSeq
         return new Matches(pattern, sequence);
     }
 
-    public Seq<String> split(CharSequence value) {
+    public Sequence<String> split(CharSequence value) {
         return sequence(pattern.split(value));
     }
 
@@ -53,7 +53,7 @@ public class Regex implements Function<CharSequence, Matches>, Predicate<CharSeq
     }
 
     @Override
-    public Seq<String> extract(CharSequence value) {
+    public Sequence<String> extract(CharSequence value) {
         return Sequences.flatten(findMatches(value).headOption().map(Matches.functions.groups));
     }
 

@@ -26,7 +26,7 @@ public class CharactersTest {
 
     @Test
     public void canCreateARangeOfCharacters() throws Exception {
-        Seq<Character> range = range(MIN_VALUE, MAX_VALUE);
+        Sequence<Character> range = range(MIN_VALUE, MAX_VALUE);
         assertThat(range.size(), is(65536));
         assertThat(range.contains('λ'), is(true));
     }

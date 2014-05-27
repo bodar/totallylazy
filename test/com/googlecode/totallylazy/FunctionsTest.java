@@ -48,7 +48,7 @@ public class FunctionsTest {
 
     @Test
     public void canCallWithAValue() throws Exception {
-        Seq<Number> computations = range(1, 5).map(multiply()).map(Callables.<Number, Number>callWith(2));
+        Sequence<Number> computations = range(1, 5).map(multiply()).map(Callables.<Number, Number>callWith(2));
         assertThat(computations, hasExactly(2, 4, 6, 8, 10));
     }
 

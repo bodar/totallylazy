@@ -28,7 +28,7 @@ public interface Quintuple<F, S, T, Fo, Fi> extends Quadruple<F, S, T, Fo>,  Fif
     }
 
     @Override
-    default Seq<Object> values() {
+    default Sequence<Object> values() {
         return sequence(first(), second(), third(), fourth(), fifth());
     }
 }

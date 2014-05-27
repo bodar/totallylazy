@@ -62,20 +62,20 @@ public class Fields {
         return field;
     }
 
-    public static Seq<Field> fields(Class<?> aClass) {
+    public static Sequence<Field> fields(Class<?> aClass) {
         return allClasses(aClass).flatMap(Fields.fields());
     }
 
-    public static Function<Class<?>, Seq<Field>> fields() {
+    public static Function<Class<?>, Sequence<Field>> fields() {
         return aClass -> sequence(aClass.getDeclaredFields());
     }
 
-    public static Seq<Field> syntheticFields(Class<?> aClass) {
+    public static Sequence<Field> syntheticFields(Class<?> aClass) {
         return sequence(aClass.getDeclaredFields()).
                 filter(where(modifiers, is(Reflection.synthetic)));
     }
 
-    public static Seq<Field> nonSyntheticFields(Class<?> aClass) {
+    public static Sequence<Field> nonSyntheticFields(Class<?> aClass) {
         return sequence(aClass.getDeclaredFields()).
                 filter(where(modifiers, not(Reflection.synthetic)));
     }

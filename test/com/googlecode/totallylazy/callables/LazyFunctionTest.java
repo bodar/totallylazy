@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callers.callConcurrently;
@@ -17,7 +17,7 @@ public class LazyFunctionTest {
         CountingFunction<Number, Number> counting = counting(increment);
         Function<Number, Number> lazyFunction = counting.sleep(10).lazy();
 
-        Seq<Number> result = callConcurrently(
+        Sequence<Number> result = callConcurrently(
                 lazyFunction.deferApply(3), lazyFunction.deferApply(6),
                 lazyFunction.deferApply(3), lazyFunction.deferApply(6)).realise();
 

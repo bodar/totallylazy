@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -34,7 +34,7 @@ public abstract class LogicalValidator<T> extends AbstractValidator<T> {
     }
 
     public LogicalValidator<T> or(Validator<? super T> validator) {
-        Seq<Validator<? super T>> validators = cast(sequence(this, validator));
+        Sequence<Validator<? super T>> validators = cast(sequence(this, validator));
         return AnyOfValidator.constructors.anyOf(validators);
     }
 }

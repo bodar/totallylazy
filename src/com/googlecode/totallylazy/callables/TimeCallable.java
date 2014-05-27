@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Runnables;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 
 import java.util.concurrent.Callable;
 
@@ -51,11 +51,11 @@ public final class TimeCallable<T> implements Returns<T> {
         return new TimeCallable<R>(Callables.deferApply(callable, value), reporter);
     }
 
-    public static <T> TimeCallable<Seq<T>> time(Seq<T> sequence){
+    public static <T> TimeCallable<Sequence<T>> time(Sequence<T> sequence){
         return time(Callables.<T>realise(), sequence, DEFAULT_REPORTER);
     }
 
-    public static <T> TimeCallable<Seq<T>> time(Seq<T> sequence, Function<? super Number, ?> reporter){
+    public static <T> TimeCallable<Sequence<T>> time(Sequence<T> sequence, Function<? super Number, ?> reporter){
         return time(Callables.<T>realise(), sequence, reporter);
     }
 }

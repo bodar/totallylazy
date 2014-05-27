@@ -44,7 +44,7 @@ public interface Pair<F, S> extends First<F>, Second<S>, Value<F>, Functor<F>, M
         throw new UnsupportedOperationException();
     }
 
-    default Seq<Object> values() {
+    default Sequence<Object> values() {
         return sequence(first(), second());
     }
 
@@ -141,7 +141,7 @@ public interface Pair<F, S> extends First<F>, Second<S>, Value<F>, Functor<F>, M
             return first -> pair(first, second);
         }
 
-        public static Function<Pair<?, ?>, Seq<Object>> values() {
+        public static Function<Pair<?, ?>, Sequence<Object>> values() {
             return Pair::values;
         }
 

@@ -54,11 +54,11 @@ public class Xml {
         return contents(internalSelectNodes(node, expression));
     }
 
-    public static Seq<Node> selectNodes(final Node node, final String expression) {
+    public static Sequence<Node> selectNodes(final Node node, final String expression) {
         return internalSelectNodes(node, expression);
     }
 
-    public static Seq<Node> selectNodesForwardOnly(final Node node, final String expression) {
+    public static Sequence<Node> selectNodesForwardOnly(final Node node, final String expression) {
         return Sequences.forwardOnly(new PoppingIterator<Node>(selectNodes(node, expression).toList().iterator()));
     }
 
@@ -78,7 +78,7 @@ public class Xml {
         }
     }
 
-    private static Seq<Node> internalSelectNodes(final Node node, final String expression) {
+    private static Sequence<Node> internalSelectNodes(final Node node, final String expression) {
         try {
             return sequence((NodeList) xpathExpression(expression).evaluate(node, XPathConstants.NODESET));
         } catch (XPathExpressionException e) {
@@ -107,7 +107,7 @@ public class Xml {
         return selectNodes(node, expression).headOption();
     }
 
-    public static Seq<Element> selectElements(final Node node, final String expression) {
+    public static Sequence<Element> selectElements(final Node node, final String expression) {
         return selectNodes(node, expression).safeCast(Element.class);
     }
 
@@ -154,7 +154,7 @@ public class Xml {
         return expressionMap.get(expression);
     }
 
-    public static Seq<Node> sequence(final NodeList nodes) {
+    public static Sequence<Node> sequence(final NodeList nodes) {
         return new Sequence<Node>() {
             public Iterator<Node> iterator() {
                 return new NodeIterator(nodes);
@@ -162,19 +162,19 @@ public class Xml {
         };
     }
 
-    public static String contents(Seq<Node> nodes) {
+    public static String contents(Sequence<Node> nodes) {
         return contentsSequence(nodes).toString("");
     }
 
-    public static Seq<String> contentsSequence(Seq<Node> nodes) {
+    public static Sequence<String> contentsSequence(Sequence<Node> nodes) {
         return nodes.map(contents());
     }
 
-    public static Seq<String> textContents(Seq<Node> nodes) {
+    public static Sequence<String> textContents(Sequence<Node> nodes) {
         return nodes.map(textContent());
     }
 
-    public static Seq<String> textContents(NodeList nodes) {
+    public static Sequence<String> textContents(NodeList nodes) {
         return Xml.textContents(Xml.sequence(nodes));
     }
 
@@ -298,11 +298,11 @@ public class Xml {
         return (publicId, systemId) -> new InputSource(new StringReader(""));
     }
 
-    public static Seq<Node> remove(final Node root, final String expression) {
+    public static Sequence<Node> remove(final Node root, final String expression) {
         return remove(selectNodes(root, expression));
     }
 
-    public static Seq<Node> remove(final Seq<Node> nodes) {
+    public static Sequence<Node> remove(final Sequence<Node> nodes) {
         return nodes.map(remove()).realise();
     }
 
@@ -375,7 +375,7 @@ public class Xml {
             return node -> Xml.selectContents(node, expression);
         }
 
-        public static Function2<Node, String, Seq<Node>> selectNodes() {
+        public static Function2<Node, String, Sequence<Node>> selectNodes() {
             return Xml::selectNodes;
         }
 

@@ -96,7 +96,7 @@ public class Some<T> extends Option<T> {
         return right(this.value);
     }
 
-    public Seq<T> join(Iterable<? extends T> iterable) {
+    public Sequence<T> join(Iterable<? extends T> iterable) {
         return Sequences.cons(value, iterable);
     }
 

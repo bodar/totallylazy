@@ -35,7 +35,7 @@ public interface Returns<A> extends Callable<A>, Runnable, Functor<A>, Value<A>,
         return SleepyCallable.sleepy(this, millis);
     }
 
-    default Seq<A> repeat() {
+    default Sequence<A> repeat() {
         return Sequences.repeat(this);
     }
 

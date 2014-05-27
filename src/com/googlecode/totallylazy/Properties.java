@@ -48,7 +48,7 @@ public class Properties {
         return properties(pairs(properties));
     }
 
-    public static Seq<Pair<String, String>> pairs(Map properties){
+    public static Sequence<Pair<String, String>> pairs(Map properties){
         return Maps.pairs(Unchecked.<Map<String, String>>cast(properties));
     }
 

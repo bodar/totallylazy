@@ -2,16 +2,16 @@ package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.parser.Success.success;
 
 class PredicatesParser extends Parser<String> {
-    private final Seq<? extends Predicate<? super Character>> predicates;
+    private final Sequence<? extends Predicate<? super Character>> predicates;
 
-    private PredicatesParser(Seq<? extends Predicate<? super Character>> predicates) {
+    private PredicatesParser(Sequence<? extends Predicate<? super Character>> predicates) {
         this.predicates = predicates;
     }
 

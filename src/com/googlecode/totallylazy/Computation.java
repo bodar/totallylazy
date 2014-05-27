@@ -7,12 +7,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Computation.memorise;
 import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyFunction.lazy;
 
-public class Computation<T> extends Sequence<T> implements Seq<T>, Segment<T>, Memory {
+public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     private final Lazy<T> head;
     private final LazyFunction<T, Computation<T>> tail;
 
@@ -57,7 +56,7 @@ public class Computation<T> extends Sequence<T> implements Seq<T>, Segment<T>, M
     public static <T> Computation<T> memoize(final Iterator<? extends T> values) {
         return memorise(values);
     }
-    
+
     public static <T> Computation<T> memorise(final Iterator<? extends T> values) {
         final Returns<Iterator<T>> iterator = returns(Unchecked.<Iterator<T>>cast(values));
         return Computation.<T>computation1(lazyHead(iterator), generate(lazyTail(iterator)));
@@ -116,8 +115,7 @@ public class Computation<T> extends Sequence<T> implements Seq<T>, Segment<T>, M
             return false;
         } catch (NoSuchElementException e) {
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw LazyException.lazyException(e);
         }
     }

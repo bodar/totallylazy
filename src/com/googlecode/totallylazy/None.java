@@ -98,7 +98,7 @@ public class None<T> extends Option<T>{
         return left(value);
     }
 
-    public Seq<T> join(final Iterable<? extends T> iterable){
+    public Sequence<T> join(final Iterable<? extends T> iterable){
         return sequence(iterable);
     }
 

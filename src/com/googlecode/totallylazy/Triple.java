@@ -23,7 +23,7 @@ public interface Triple<F, S, T> extends Pair<F,S>, Third<T> {
         };
     }
 
-    @Override default Seq<Object> values() { return sequence(first(), second(), third()); }
+    @Override default Sequence<Object> values() { return sequence(first(), second(), third()); }
 
     static <A, B, C, D> Triple<B, C, D> leftShift(Triple<A, B, C> triple, D d) {
         return Triple.triple(triple.second(), triple.third(), d);

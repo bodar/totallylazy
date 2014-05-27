@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Binary;
 import com.googlecode.totallylazy.Block;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class TimeReport implements Block<Number> {
         return sequence(times).reduce(add()).doubleValue();
     }
 
-    public static TimeReport time(int numberOfCalls, Seq<?> sequence) {
+    public static TimeReport time(int numberOfCalls, Sequence<?> sequence) {
         TimeReport report = new TimeReport();
         repeat(TimeCallable.time(sequence, report)).take(numberOfCalls).realise();
         return report;

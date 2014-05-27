@@ -59,7 +59,7 @@ public class EitherTest {
 
     @Test
     public void canBeUsedInFilterAndMap() throws Exception {
-        final Seq<Either<String, Integer>> eithers = sequence(Left.<String, Integer>left("error"), Right.<String, Integer>right(3));
+        final Sequence<Either<String, Integer>> eithers = sequence(Left.<String, Integer>left("error"), Right.<String, Integer>right(3));
         assertThat(eithers.filter(isLeft()).map(Callables.left(String.class)), hasExactly("error"));
         assertThat(eithers.filter(isRight()).map(Callables.right(Integer.class)), hasExactly(3));
     }

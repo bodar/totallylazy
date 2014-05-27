@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Lists;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -158,7 +158,7 @@ public abstract class MapContract {
 
     @Test
     public void canGetKeys() throws Exception {
-        Seq<Integer> keys = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").keys();
+        Sequence<Integer> keys = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").keys();
         assertThat(keys, containsInAnyOrder(1,2,3,4));
     }
 

@@ -36,7 +36,7 @@ public class LazyTest {
         CountingCallable<Integer> callable = counting();
         Returns<Integer> lazyCallable = callable.sleep(10).lazy();
 
-        Seq<Integer> result = callConcurrently(lazyCallable, lazyCallable).realise();
+        Sequence<Integer> result = callConcurrently(lazyCallable, lazyCallable).realise();
 
         assertThat(callable.count(), Is.is(1));
         assertThat(result.first(), Is.is(0));

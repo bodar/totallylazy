@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.regex;
 
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.iterators.GroupIterator;
@@ -57,7 +57,7 @@ public class Matches extends Sequence<MatchResult> {
             };
         }
 
-        public static Function<MatchResult, Seq<String>> groups = matchResult -> new Sequence<String>() {
+        public static Function<MatchResult, Sequence<String>> groups = matchResult -> new Sequence<String>() {
             @Override
             public Iterator<String> iterator() {
                 return new GroupIterator(matchResult);

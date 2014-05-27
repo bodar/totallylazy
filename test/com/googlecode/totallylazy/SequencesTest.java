@@ -95,16 +95,16 @@ public class SequencesTest {
 
     @Test
     public void joinWorksEvenWhenFirstIterableIsEmpty() throws Exception {
-        final Seq<Integer> empty = Sequences.<Integer>empty();
+        final Sequence<Integer> empty = Sequences.<Integer>empty();
         assertThat(empty.append(1).join(sequence(2, 3)).append(4), hasExactly(1, 2, 3, 4));
         assertThat(join(empty, sequence(1, 2, 3), empty, asList(4, 5, 6)), hasExactly(1, 2, 3, 4, 5, 6));
     }
 
     @Test
     public void supportsJoiningSubTypes() throws Exception {
-        final Seq<Number> numbers = numbers(2, 3.0D);
-        Seq<Integer> integers = sequence(2, 3);
-        Seq<Long> longs = sequence(2L, 3L);
+        final Sequence<Number> numbers = numbers(2, 3.0D);
+        Sequence<Integer> integers = sequence(2, 3);
+        Sequence<Long> longs = sequence(2L, 3L);
         assertThat(numbers.join(integers).join(longs), hasExactly((Number) 2, 3.0D, 2, 3, 2L, 3L));
         assertThat(join(sequence(1L, 2.0D, 3), numbers, asList(4, 5, 6), integers), hasExactly((Number) 1L, 2.0D, 3, 2, 3.0D, 4, 5, 6, 2, 3));
     }
@@ -114,10 +114,10 @@ public class SequencesTest {
         Vector<String> vector = new Vector<String>();
         vector.add("foo");
         Enumeration enumeration = vector.elements();
-        Seq<String> forwardOnly = Sequences.forwardOnly(enumeration, String.class);
+        Sequence<String> forwardOnly = Sequences.forwardOnly(enumeration, String.class);
         assertThat(forwardOnly.headOption().isEmpty(), is(false));
         assertThat(forwardOnly.headOption().isEmpty(), is(true));
-        Seq<String> forwardOnlyWithType = Sequences.forwardOnly(vector.elements());
+        Sequence<String> forwardOnlyWithType = Sequences.forwardOnly(vector.elements());
         assertThat(forwardOnlyWithType.headOption().isEmpty(), is(false));
         assertThat(forwardOnlyWithType.headOption().isEmpty(), is(true));
     }
@@ -127,10 +127,10 @@ public class SequencesTest {
         Vector<String> vector = new Vector<String>();
         vector.add("foo");
         Enumeration enumeration = vector.elements();
-        Seq<String> memorise = Sequences.memorise(enumeration, String.class);
+        Sequence<String> memorise = Sequences.memorise(enumeration, String.class);
         assertThat(memorise.headOption().isEmpty(), is(false));
         assertThat(memorise.headOption().isEmpty(), is(false));
-        Seq<String> memorisedWithType = Sequences.memorise(vector.elements());
+        Sequence<String> memorisedWithType = Sequences.memorise(vector.elements());
         assertThat(memorisedWithType.headOption().isEmpty(), is(false));
         assertThat(memorisedWithType.headOption().isEmpty(), is(false));
     }
@@ -165,7 +165,7 @@ public class SequencesTest {
 
     @Test
     public void canCombineIterateWithOtherOperations() throws Exception {
-        final Seq<Number> numbers = iterate(increment, 1);
+        final Sequence<Number> numbers = iterate(increment, 1);
         assertThat(numbers.filter(even()), startsWith((Number) 2, 4, 6));
         assertThat(numbers.filter(odd()), startsWith((Number) 1, 3, 5, 7, 9));
     }

@@ -42,7 +42,7 @@ public class ZipSource implements Sources {
     }
 
     @Override
-    public Seq<Source> sources() {
+    public Sequence<Source> sources() {
         return Zip.entries(in).map(new Function<ZipEntry, Source>() {
             @Override
             public Source call(ZipEntry zipEntry) throws Exception {

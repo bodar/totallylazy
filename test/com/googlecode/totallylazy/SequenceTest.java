@@ -173,7 +173,7 @@ public class SequenceTest {
 
     @Test
     public void supportsRecursiveSplitWhen() throws Exception {
-        Seq<? extends Seq<Number>> recursive = numbers(1, 3, -4, 5, 7, -9, 0, 2).recursive(sequence -> sequence.splitWhen(Numbers.lessThan(0)));
+        Sequence<? extends Sequence<Number>> recursive = numbers(1, 3, -4, 5, 7, -9, 0, 2).recursive(sequence -> sequence.splitWhen(Numbers.lessThan(0)));
         assertThat(recursive,
                 is(sequence(numbers(1, 3), numbers(5, 7), numbers(0, 2))));
     }
@@ -223,7 +223,7 @@ public class SequenceTest {
 
     @Test
     public void supportsSplitAt() throws Exception {
-        Seq<String> data = sequence("Cat", "Dog", "Mouse", "Rabbit", "Monkey");
+        Sequence<String> data = sequence("Cat", "Dog", "Mouse", "Rabbit", "Monkey");
         assertThat(data.splitAt(2), is(pair(sequence("Cat", "Dog"), sequence("Mouse", "Rabbit", "Monkey"))));
         assertThat(characters("Hello World!").splitAt(6).first().toString(""), is("Hello "));
         assertThat(characters("Hello World!").splitAt(6).second().toString(""), is("World!"));
@@ -231,7 +231,7 @@ public class SequenceTest {
 
     @Test
     public void supportsRecursiveSplitAt() throws Exception {
-        Seq<String> data = sequence("Cat", "Dog", "Mouse", "Rabbit", "Monkey");
+        Sequence<String> data = sequence("Cat", "Dog", "Mouse", "Rabbit", "Monkey");
         assertThat(data.recursive(sequence -> sequence.splitAt(2)), is(sequence(sequence("Cat", "Dog"), sequence("Mouse", "Rabbit"), sequence("Monkey"))));
     }
 
@@ -273,7 +273,7 @@ public class SequenceTest {
 
     @Test
     public void supportsGroupByAndPreservesOrder() throws Exception {
-        Seq<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(Numbers.mod(2));
+        Sequence<Group<Number, Integer>> groups = sequence(1, 2, 3, 4).groupBy(Numbers.mod(2));
         assertThat(groups.first().key(), is(1));
         assertThat(groups.first(), hasExactly(1, 3));
         assertThat(groups.second().key(), is(0));
@@ -292,7 +292,7 @@ public class SequenceTest {
     @Test
     @Ignore("Manual Test")
     public void groupedDoesNotBlowStack() throws Exception {
-        Seq<Number> elements = range(0).take(100000);
+        Sequence<Number> elements = range(0).take(100000);
         elements.grouped(10000).realise();
     }
 
@@ -330,10 +330,10 @@ public class SequenceTest {
     @Test
     public void canRealiseASequence() throws Exception {
         CountingCallable<Integer> counting = counting();
-        Seq<Integer> lazy = sequence(counting).map(call(Integer.class));
+        Sequence<Integer> lazy = sequence(counting).map(call(Integer.class));
         assertThat(counting.count(), is(0));
         assertThat(lazy, hasExactly(0)); // this will increment count by 1
-        Seq<Integer> realised = lazy.realise(); // this will increment count by 1
+        Sequence<Integer> realised = lazy.realise(); // this will increment count by 1
         assertThat(counting.count(), is(2));
         assertThat(realised, hasExactly(1));
         assertThat(realised, hasExactly(1));
@@ -341,8 +341,8 @@ public class SequenceTest {
 
     @Test
     public void supportsUnsafeCast() throws Exception {
-        Seq<? extends Predicate<?>> wild = sequence(wildCard());
-        Seq<Predicate<Object>> boring = wild.unsafeCast();
+        Sequence<? extends Predicate<?>> wild = sequence(wildCard());
+        Sequence<Predicate<Object>> boring = wild.unsafeCast();
         assertThat(boring.head().matches(new Cat()), is(true));
         assertThat(boring.head().matches(null), is(false));
     }
@@ -355,9 +355,9 @@ public class SequenceTest {
     public void supportsSafeCast() throws Exception {
         Cat freaky = new Cat(), fatty = new Cat();
         Dog buster = new Dog();
-        Seq<Animal> animals = sequence(freaky, fatty, buster);
-        Seq<Cat> cats = animals.safeCast(Cat.class);
-        Seq<Dog> dogs = animals.safeCast(Dog.class);
+        Sequence<Animal> animals = sequence(freaky, fatty, buster);
+        Sequence<Cat> cats = animals.safeCast(Cat.class);
+        Sequence<Dog> dogs = animals.safeCast(Dog.class);
         assertThat(cats, hasExactly(freaky, fatty));
         assertThat(dogs, hasExactly(buster));
     }
@@ -379,11 +379,11 @@ public class SequenceTest {
 
     @Test
     public void supportsUniqueAndCanBeIteratedMultipleTimes() throws Exception {
-        Seq<String> unique = sequence("Matt", "Dan", "Matt", "Bob").unique();
+        Sequence<String> unique = sequence("Matt", "Dan", "Matt", "Bob").unique();
         assertThat(unique, hasExactly("Matt", "Dan", "Bob"));
         assertThat(unique, hasExactly("Matt", "Dan", "Bob"));
 
-        Seq<String> uniqueWithCallable = sequence("Matt", "Dan", "Dominic", "Mary").unique(Strings.characterAt(0));
+        Sequence<String> uniqueWithCallable = sequence("Matt", "Dan", "Dominic", "Mary").unique(Strings.characterAt(0));
         assertThat(uniqueWithCallable, hasExactly("Matt", "Dan"));
         assertThat(uniqueWithCallable, hasExactly("Matt", "Dan"));
     }
@@ -412,7 +412,7 @@ public class SequenceTest {
         int[] small = {1};
         int[] medium = {1, 2, 3};
         int[] large = {1, 2, 3, 4, 5, 6};
-        Seq<int[]> unsorted = sequence(large, small, medium);
+        Sequence<int[]> unsorted = sequence(large, small, medium);
         assertThat(unsorted.sortBy(length()), hasExactly(small, medium, large));
         assertThat(unsorted.sortBy(ascending(length())), hasExactly(small, medium, large));
         assertThat(unsorted.sortBy(descending(length())), hasExactly(large, medium, small));
@@ -421,7 +421,7 @@ public class SequenceTest {
     @Test
     @Notes("This behaviour is like SQL order by, not 100% convinced this is correct so please give feedback")
     public void whenSortingWithNullsTheyAlwaysComeLast() throws Exception {
-        Seq<Integer> unsorted = sequence(2, null, 1);
+        Sequence<Integer> unsorted = sequence(2, null, 1);
         assertThat(unsorted.sortBy(returnArgument(Integer.class)), hasExactly(1, 2, null));
         assertThat(unsorted.sortBy(ascending(returnArgument(Integer.class))), hasExactly(1, 2, null));
         assertThat(unsorted.sortBy(descending(returnArgument(Integer.class))), hasExactly(2, 1, null));
@@ -429,8 +429,8 @@ public class SequenceTest {
 
     @Test
     public void supportsSortByWithCompositeComparator() throws Exception {
-        Seq<String> unsorted = Sequences.sequence("dan", "tom", "mateusz", "stuart");
-        final Seq<String> sorted = unsorted.sortBy(comparators(descending(length()), ascending(Callables.<String>returnArgument())));
+        Sequence<String> unsorted = Sequences.sequence("dan", "tom", "mateusz", "stuart");
+        final Sequence<String> sorted = unsorted.sortBy(comparators(descending(length()), ascending(Callables.<String>returnArgument())));
 
         assertThat(sorted, hasExactly("mateusz", "stuart", "dan", "tom"));
     }
@@ -440,8 +440,8 @@ public class SequenceTest {
         int[] small = {1};
         String medium = "123";
         List<Integer> large = list(1, 2, 3, 4, 5, 6);
-        Seq<Integer> veryLarge = sequence(1, 2, 3, 4, 5, 6, 7, 8, 9);
-        Seq<Object> unsorted = sequence(large, small, veryLarge, medium);
+        Sequence<Integer> veryLarge = sequence(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        Sequence<Object> unsorted = sequence(large, small, veryLarge, medium);
         assertThat(unsorted.sortBy(size()), hasExactly(small, medium, large, veryLarge));
         assertThat(unsorted.sortBy(ascending(size())), hasExactly(small, medium, large, veryLarge));
         assertThat(unsorted.sortBy(descending(length())), hasExactly(veryLarge, large, medium, small));
@@ -455,13 +455,13 @@ public class SequenceTest {
 
     @Test
     public void supportsJoin() throws Exception {
-        Seq<Integer> numbers = sequence(1, 2, 3).join(sequence(4, 5, 6));
+        Sequence<Integer> numbers = sequence(1, 2, 3).join(sequence(4, 5, 6));
         assertThat(numbers, hasExactly(1, 2, 3, 4, 5, 6));
     }
 
     @Test
     public void supportsAdd() throws Exception {
-        Seq<Integer> numbers = sequence(1, 2, 3).append(4);
+        Sequence<Integer> numbers = sequence(1, 2, 3).append(4);
         assertThat(numbers, hasExactly(1, 2, 3, 4));
     }
 
@@ -521,19 +521,19 @@ public class SequenceTest {
 
     @Test
     public void canFilterNull() throws Exception {
-        final Seq<Integer> numbers = sequence(1, null, 3).filter(notNullValue());
+        final Sequence<Integer> numbers = sequence(1, null, 3).filter(notNullValue());
         assertThat(numbers, hasExactly(1, 3));
     }
 
     @Test
     public void supportsRemove() throws Exception {
-        final Seq<Integer> numbers = sequence(1, 2, 3, 2).delete(2);
+        final Sequence<Integer> numbers = sequence(1, 2, 3, 2).delete(2);
         assertThat(numbers, hasExactly(1, 3, 2));
     }
 
     @Test
     public void supportsRemoveAll() throws Exception {
-        final Seq<Integer> numbers = sequence(1, 2, 3, 2).deleteAll(sequence(2));
+        final Sequence<Integer> numbers = sequence(1, 2, 3, 2).deleteAll(sequence(2));
         assertThat(numbers, hasExactly(1, 3));
     }
 
@@ -621,7 +621,7 @@ public class SequenceTest {
 
     @Test
     public void supportsMap() throws Exception {
-        Seq<String> strings = sequence(1, 2).map(toString);
+        Sequence<String> strings = sequence(1, 2).map(toString);
         assertThat(strings, hasExactly("1", "2"));
     }
 
@@ -648,7 +648,7 @@ public class SequenceTest {
 
     @Test
     public void supportsFilter() throws Exception {
-        Seq<Integer> result = sequence(1, 2, 3, 4).filter(even());
+        Sequence<Integer> result = sequence(1, 2, 3, 4).filter(even());
         assertThat(result, hasExactly(2, 4));
     }
 
@@ -662,33 +662,33 @@ public class SequenceTest {
 
     @Test
     public void supportsFlatMap() throws Exception {
-        Seq<Character> characters = sequence("Hello").flatMap(toCharacters());
+        Sequence<Character> characters = sequence("Hello").flatMap(toCharacters());
         assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
     }
 
     @Test
     public void supportsConcurrentFlatMap() throws Exception {
-        Seq<Character> characters = sequence("Hello").flatMapConcurrently(toCharacters());
+        Sequence<Character> characters = sequence("Hello").flatMapConcurrently(toCharacters());
         assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
     }
 
     @Test
     public void supportsConcurrentFlatMapWithCustomExecutor() throws Exception {
         ExecutorService executorService = NamedExecutors.newCachedThreadPool(getClass());
-        Seq<Character> characters = sequence("Hello").flatMapConcurrently(toCharacters(), executorService);
+        Sequence<Character> characters = sequence("Hello").flatMapConcurrently(toCharacters(), executorService);
         assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
         executorService.shutdown();
     }
 
     @Test
     public void supportsFlatten() throws Exception {
-        Seq<Character> characters = flatten(sequence("Hello").map(toCharacters()));
+        Sequence<Character> characters = flatten(sequence("Hello").map(toCharacters()));
         assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
     }
 
     @Test
     public void supportsTake() throws Exception {
-        final Seq<Integer> sequence = sequence(1, 2, 3).take(2);
+        final Sequence<Integer> sequence = sequence(1, 2, 3).take(2);
         assertThat(sequence, hasExactly(1, 2));
         assertThat(sequence(1).take(2).size(), is(1));
         assertThat(sequence().take(2).size(), is(0));
@@ -696,7 +696,7 @@ public class SequenceTest {
 
     @Test
     public void supportsTakeWhile() throws Exception {
-        final Seq<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).takeWhile(odd());
+        final Sequence<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).takeWhile(odd());
         assertThat(sequence, hasExactly(1, 3, 5));
         assertThat(sequence(1).takeWhile(odd()).size(), is(1));
         assertThat(Sequences.<Number>sequence().takeWhile(odd()).size(), is(0));
@@ -704,7 +704,7 @@ public class SequenceTest {
 
     @Test
     public void supportsDrop() throws Exception {
-        final Seq<Integer> sequence = sequence(1, 2, 3).drop(2);
+        final Sequence<Integer> sequence = sequence(1, 2, 3).drop(2);
         assertThat(sequence, hasExactly(3));
         assertThat(sequence(1).drop(2).size(), is(0));
         assertThat(sequence().drop(1).size(), is(0));
@@ -712,7 +712,7 @@ public class SequenceTest {
 
     @Test
     public void supportsDropWhile() throws Exception {
-        final Seq<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).dropWhile(odd());
+        final Sequence<Integer> sequence = sequence(1, 3, 5, 6, 8, 1, 3).dropWhile(odd());
         assertThat(sequence, hasExactly(6, 8, 1, 3));
         assertThat(sequence(1).dropWhile(odd()).size(), is(0));
         assertThat(Sequences.<Number>sequence().dropWhile(odd()).size(), is(0));
@@ -720,7 +720,7 @@ public class SequenceTest {
 
     @Test
     public void supportsZip() {
-        final Seq<Integer> sequence = sequence(1, 3, 5);
+        final Sequence<Integer> sequence = sequence(1, 3, 5);
 
         assertThat(sequence.zip(sequence(2, 4, 6, 8)), hasExactly(pair(1, 2), pair(3, 4), pair(5, 6)));
         assertThat(sequence.zip(sequence(2, 4, 6)), hasExactly(pair(1, 2), pair(3, 4), pair(5, 6)));
@@ -752,7 +752,7 @@ public class SequenceTest {
 
     @Test
     public void supportsForwardOnly() throws Exception {
-        Seq<Integer> sequence = sequence(1, 2, 3, 4).forwardOnly();
+        Sequence<Integer> sequence = sequence(1, 2, 3, 4).forwardOnly();
 
         assertThat(sequence.headOption(), is(option(1)));
         assertThat(sequence.headOption(), is(option(2)));
@@ -761,7 +761,7 @@ public class SequenceTest {
     @Test
     public void supportsInterruption() throws Exception {
         final int[] count = new int[]{0};
-        Seq<Integer> interruptable = repeat(new Returns<Integer>() {
+        Sequence<Integer> interruptable = repeat(new Returns<Integer>() {
             @Override
             public Integer call() throws Exception {
                 if (++count[0] == 5) {

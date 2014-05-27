@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.collections.PersistentMap;
 import org.junit.Test;
 
@@ -52,7 +52,7 @@ public class ValidationResultTest {
                 add("B", "message b 1").
                 add("B", "message b 2");
 
-        PersistentMap<String,Seq<String>> map = result.toMap();
+        PersistentMap<String,Sequence<String>> map = result.toMap();
         assertThat(map.lookup("A").get(), hasExactly("message a 1", "message a 2"));
         assertThat(map.lookup("B").get(), hasExactly("message b 1", "message b 2"));
     }
