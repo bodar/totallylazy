@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.regex;
 
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
@@ -22,7 +22,7 @@ public class RegexTest {
 
     @Test
     public void supportsSplittingText() throws Exception {
-        Seq<String> result = regex("\\s").split("The quick brown fox jumps over the lazy dog");
+        Sequence<String> result = regex("\\s").split("The quick brown fox jumps over the lazy dog");
         assertThat(result, hasExactly("The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"));
     }
 

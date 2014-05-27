@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 

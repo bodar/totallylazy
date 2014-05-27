@@ -73,7 +73,7 @@ public class Streams {
         return new InputStreamReader(stream, Strings.UTF8);
     }
 
-    public static Seq<String> lines(File file) {
+    public static Sequence<String> lines(File file) {
         try {
             return lines(new FileInputStream(file));
         } catch (FileNotFoundException e) {
@@ -81,11 +81,11 @@ public class Streams {
         }
     }
 
-    public static Seq<String> lines(InputStream stream) {
+    public static Sequence<String> lines(InputStream stream) {
         return lines(inputStreamReader(stream));
     }
 
-    public static Seq<String> lines(Reader reader) {
+    public static Sequence<String> lines(Reader reader) {
         return repeat(readLine(new BufferedReader(reader))).takeWhile(notNullValue(String.class));
     }
 

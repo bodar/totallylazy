@@ -72,7 +72,7 @@ public class FilesTest {
         File directory = emptyVMDirectory("filtering-test");
         File aFile = temporaryFile(directory);
         File anOtherFile = temporaryFile(directory);
-        Seq<File> files = files(directory);
+        Sequence<File> files = files(directory);
         assertThat(files, containsInAnyOrder(aFile, anOtherFile));
         assertThat(files.filter(where(name(), Predicates.is(equalTo(aFile.getName())))), hasExactly(aFile));
     }

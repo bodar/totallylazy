@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.matchers;
 
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
@@ -11,7 +11,7 @@ import java.util.Iterator;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class IterablePredicates<T> extends LogicalPredicate<Iterable<T>> {
-    private final Seq<Predicate<? super T>> expected;
+    private final Sequence<Predicate<? super T>> expected;
     private boolean shouldBeSameSize;
 
     private IterablePredicates(Iterable<? extends Predicate<? super T>> expected, boolean shouldBeSameSize) {

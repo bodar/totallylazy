@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
@@ -9,9 +9,9 @@ import static com.googlecode.totallylazy.validations.ValidationResult.functions.
 import static com.googlecode.totallylazy.validations.Validator.functions.validateAgainst;
 
 public class FirstFailureValidator<T> extends LogicalValidator<T> {
-    private final Seq<Validator<? super T>> validators;
+    private final Sequence<Validator<? super T>> validators;
 
-    public FirstFailureValidator(Seq<Validator<? super T>> validators) {
+    public FirstFailureValidator(Sequence<Validator<? super T>> validators) {
         this.validators = validators;
     }
 

@@ -35,7 +35,7 @@ public class Zip {
         return copyAndClose(zipSource(in), fileDestination(folder));
     }
 
-    public static Seq<ZipEntry> entries(final ZipInputStream input) {
+    public static Sequence<ZipEntry> entries(final ZipInputStream input) {
         return new Sequence<ZipEntry>() {
             @Override
             public Iterator<ZipEntry> iterator() {

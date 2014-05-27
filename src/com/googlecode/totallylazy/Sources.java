@@ -14,7 +14,7 @@ import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.ZipSource.zipSource;
 
 public interface Sources extends Closeable {
-    Seq<Source> sources();
+    Sequence<Source> sources();
 
     class constructors {
         public static Sources sources(Uri uri) {

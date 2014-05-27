@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.annotations.multimethod;
@@ -12,18 +12,18 @@ import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.one;
 
 public class OrPredicate<T> extends LogicalPredicate<T> {
-    private final Seq<Predicate<T>> predicates;
+    private final Sequence<Predicate<T>> predicates;
 
-    private OrPredicate(Seq<Predicate<T>> predicates) {
+    private OrPredicate(Sequence<Predicate<T>> predicates) {
         this.predicates = predicates;
     }
 
     public static <T> LogicalPredicate<T> or(Iterable<? extends Predicate<? super T>> predicates) {
-        Seq<Predicate<T>> sequence = Sequences.sequence(predicates).<Predicate<T>>unsafeCast().
+        Sequence<Predicate<T>> sequence = Sequences.sequence(predicates).<Predicate<T>>unsafeCast().
                 flatMap(OrPredicate.<T>asPredicates());
         if (sequence.exists(instanceOf(AlwaysTrue.class))) return Predicates.alwaysTrue();
 
-        Seq<Predicate<T>> collapsed = sequence.
+        Sequence<Predicate<T>> collapsed = sequence.
                 filter(instanceOf(AlwaysFalse.class).not());
         if (collapsed.isEmpty()) return Predicates.alwaysFalse();
         if (collapsed.size() == 1) return logicalPredicate(collapsed.head());
@@ -39,7 +39,7 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
         return false;
     }
 
-    public Seq<Predicate<T>> predicates() {
+    public Sequence<Predicate<T>> predicates() {
         return predicates;
     }
 

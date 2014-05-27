@@ -26,7 +26,7 @@ public interface Quadruple<F, S, T, Fo> extends Triple<F, S, T> , Fourth<Fo> {
     }
 
     @Override
-    default Seq<Object> values() {
+    default Sequence<Object> values() {
         return sequence(first(), second(), third(), fourth());
     }
 }

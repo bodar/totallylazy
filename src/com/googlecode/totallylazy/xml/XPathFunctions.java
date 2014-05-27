@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.regex.Regex;
@@ -77,10 +77,10 @@ public class XPathFunctions {
         }).getOrNull();
     }
 
-    private static Function<Node, Seq<Text>> split(final String pattern) {
-        return new Function<Node, Seq<Text>>() {
+    private static Function<Node, Sequence<Text>> split(final String pattern) {
+        return new Function<Node, Sequence<Text>>() {
             @Override
-            public Seq<Text> call(final Node node) throws Exception {
+            public Sequence<Text> call(final Node node) throws Exception {
                 return Regex.regex(pattern).split(node.getTextContent()).map(createText.apply(node));                    }
         };
     }

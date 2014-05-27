@@ -43,15 +43,15 @@ public class Strings {
         };
     }
 
-    public static Seq<String> lines(File file) {
+    public static Sequence<String> lines(File file) {
         return Streams.lines(file).memorise();
     }
 
-    public static Seq<String> lines(InputStream stream) {
+    public static Sequence<String> lines(InputStream stream) {
         return Streams.lines(stream).memorise();
     }
 
-    public static Seq<String> lines(Reader reader) {
+    public static Sequence<String> lines(Reader reader) {
         return Streams.lines(reader).memorise();
     }
 
@@ -276,9 +276,9 @@ public class Strings {
         };
     }
 
-    public static Function<CharSequence, Seq<Character>> toCharacters() {
-        return new Function<CharSequence, Seq<Character>>() {
-            public Seq<Character> call(CharSequence value) throws Exception {
+    public static Function<CharSequence, Sequence<Character>> toCharacters() {
+        return new Function<CharSequence, Sequence<Character>>() {
+            public Sequence<Character> call(CharSequence value) throws Exception {
                 return characters(value);
             }
         };
@@ -292,11 +292,11 @@ public class Strings {
         };
     }
 
-    public static Function<String, Seq<String>> split(final String regex) {
+    public static Function<String, Sequence<String>> split(final String regex) {
         if (regex == null) throw new IllegalArgumentException("regex cannot be null");
-        return new Function<String, Seq<String>>() {
+        return new Function<String, Sequence<String>>() {
             @Override
-            public Seq<String> call(String s) throws Exception {
+            public Sequence<String> call(String s) throws Exception {
                 return sequence(s.split(regex));
             }
         };

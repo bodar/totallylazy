@@ -65,7 +65,7 @@ public class StringsTest {
     public void parsesLines() throws Exception {
         File file = temporaryFile();
         write(bytes("1\r\n2"), file);
-        Seq<String> lines = lines(file);
+        Sequence<String> lines = lines(file);
         assertThat(lines, hasExactly("1", "2"));
     }
 

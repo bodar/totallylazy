@@ -87,7 +87,7 @@ public interface Function<A, B> extends Functor<B>, java.util.function.Function<
         return applicative.applicate(Either.<L, Function<A, B>>right(this));
     }
 
-    default Seq<B> $(Seq<? extends A> applicative) {
+    default Sequence<B> $(Sequence<? extends A> applicative) {
         return applicative.applicate(Sequences.one(this));
     }
 }

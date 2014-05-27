@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.segments;
 
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 

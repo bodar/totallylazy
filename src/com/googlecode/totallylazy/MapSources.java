@@ -16,7 +16,7 @@ public class MapSources implements Sources {
     }
 
     @Override
-    public Seq<Source> sources() {
+    public Sequence<Source> sources() {
         return sources.sources().map(function);
     }
 

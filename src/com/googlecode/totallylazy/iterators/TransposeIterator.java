@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.iterators;
 
 import com.googlecode.totallylazy.Iterators;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequence;
 
 import java.util.Iterator;

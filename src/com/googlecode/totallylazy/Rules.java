@@ -6,10 +6,10 @@ import java.util.Deque;
 import static com.googlecode.totallylazy.Rule.rule;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Rules<A, B> implements Function<A, B>, Predicate<A>, Value<Seq<Rule<A,B>>> {
+public class Rules<A, B> implements Function<A, B>, Predicate<A>, Value<Sequence<Rule<A,B>>> {
     private final Deque<Rule<A, B>> rules = new ArrayDeque<Rule<A, B>>();
 
-    private Rules(Seq<Rule<A, B>> rules) {
+    private Rules(Sequence<Rule<A, B>> rules) {
         this.rules.addAll(rules.toList());
     }
 
@@ -42,7 +42,7 @@ public class Rules<A, B> implements Function<A, B>, Predicate<A>, Value<Seq<Rule
         return this;
     }
 
-    public Seq<Rule<A,B>> value() {
+    public Sequence<Rule<A,B>> value() {
         return sequence(rules).realise();
     }
 
@@ -60,12 +60,12 @@ public class Rules<A, B> implements Function<A, B>, Predicate<A>, Value<Seq<Rule
         return filter(instance).headOption();
     }
 
-    public Seq<Rule<A, B>> filter(A instance) {
+    public Sequence<Rule<A, B>> filter(A instance) {
         return sequence(rules).
                 filter(Predicates.matches(instance));
     }
 
-    public Seq<B> applyMatching(A instance) {
+    public Sequence<B> applyMatching(A instance) {
         return filter(instance).map(Callables.<A,B>callWith(instance));
     }
 
@@ -73,7 +73,7 @@ public class Rules<A, B> implements Function<A, B>, Predicate<A>, Value<Seq<Rule
         return new Rules<A, B>(Sequences.<Rule<A, B>>empty());
     }
 
-    public static <A, B> Rules<A, B> rules(Seq<Rule<A, B>> rules) {
+    public static <A, B> Rules<A, B> rules(Sequence<Rule<A, B>> rules) {
         return new Rules<A, B>(rules);
     }
 

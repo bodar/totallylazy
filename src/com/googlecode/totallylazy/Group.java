@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public class Group<K, V> extends Sequence<V> implements Seq<V> {
+public class Group<K, V> extends Sequence<V> {
     private final K key;
     private final Iterable<? extends V> values;
 

@@ -312,7 +312,7 @@ public class Sequences {
     }
 
     public static String toString(final Iterable<?> iterable) {
-        Seq<?> sequence = sequence(iterable).take(101);
+        Sequence<?> sequence = sequence(iterable).take(101);
         if (sequence.size() < 101) return Iterators.toString(sequence.iterator(), ",");
         return Iterators.toString(sequence.init().iterator(), ",");
     }
@@ -379,11 +379,11 @@ public class Sequences {
         return Iterators.number(iterable.iterator());
     }
 
-    public static <T> Function2<Seq<T>, Integer, Seq<T>> take() {
+    public static <T> Function2<Sequence<T>, Integer, Sequence<T>> take() {
         return Sequences::take;
     }
 
-    public static <T> Unary<Seq<T>> take(int count) {
+    public static <T> Unary<Sequence<T>> take(int count) {
         return Sequences.<T>take().flip().apply(count)::call;
     }
 
@@ -468,10 +468,10 @@ public class Sequences {
         };
     }
 
-    public static <T> Function<Iterable<? extends T>, Seq<T>> cons(final T value) {
-        return new Function<Iterable<? extends T>, Seq<T>>() {
+    public static <T> Function<Iterable<? extends T>, Sequence<T>> cons(final T value) {
+        return new Function<Iterable<? extends T>, Sequence<T>>() {
             @Override
-            public Seq<T> call(Iterable<? extends T> values) throws Exception {
+            public Sequence<T> call(Iterable<? extends T> values) throws Exception {
                 return cons(value, sequence(values));
             }
         };
@@ -715,9 +715,9 @@ public class Sequences {
     }
 
     public static <A, B> Sequence<Pair<A, B>> cartesianProduct(final Iterable<? extends A> a, final Iterable<? extends B> b) {
-        return sequence(b).flatMap(new Function<B, Seq<Pair<A, B>>>() {
+        return sequence(b).flatMap(new Function<B, Sequence<Pair<A, B>>>() {
             @Override
-            public Seq<Pair<A, B>> call(final B b) throws Exception {
+            public Sequence<Pair<A, B>> call(final B b) throws Exception {
                 return sequence(a).map((Function2<A,B,Pair<A,B>>) Pair::pair).map(Callables.<B, Pair<A, B>>callWith(b));
             }
         });

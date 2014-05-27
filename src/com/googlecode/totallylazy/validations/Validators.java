@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.validations;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Seq;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.matchers.IterableMatcher;
 import org.hamcrest.Matcher;
@@ -30,7 +30,7 @@ public class Validators {
             return AllOfValidator.constructors.allOf(validators);
         }
 
-        public static <T> AllOfValidator<T> allOf(Seq<Validator<? super T>> validators) {
+        public static <T> AllOfValidator<T> allOf(Sequence<Validator<? super T>> validators) {
             return AllOfValidator.constructors.allOf(validators);
         }
     }
@@ -41,7 +41,7 @@ public class Validators {
             return AnyOfValidator.constructors.anyOf(validators);
         }
 
-        public static <T> AnyOfValidator<T> anyOf(Seq<Validator<? super T>> validators) {
+        public static <T> AnyOfValidator<T> anyOf(Sequence<Validator<? super T>> validators) {
             return AnyOfValidator.constructors.anyOf(validators);
         }
     }
@@ -52,7 +52,7 @@ public class Validators {
             return firstFailure(sequence(validators));
         }
 
-        public static <T> FirstFailureValidator<T> firstFailure(Seq<Validator<? super T>> validators) {
+        public static <T> FirstFailureValidator<T> firstFailure(Sequence<Validator<? super T>> validators) {
             return FirstFailureValidator.constructors.firstFailure(validators);
         }
     }
