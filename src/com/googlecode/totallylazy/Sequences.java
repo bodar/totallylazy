@@ -52,7 +52,7 @@ public class Sequences {
     public static <T> Sequence<T> sequence(final Iterable<? extends T> iterable) {
         if (iterable == null) return empty();
 
-        if (iterable instanceof Seq) return cast(iterable);
+        if (iterable instanceof Sequence) return cast(iterable);
 
         return new Sequence<T>() {
             public final Iterator<T> iterator() {
