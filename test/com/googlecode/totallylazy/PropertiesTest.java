@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;

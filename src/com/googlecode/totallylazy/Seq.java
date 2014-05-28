@@ -325,6 +325,7 @@ public interface Seq<T> extends Iterable<T>, First<T>, Second<T>, Third<T>, Func
         return Sequences.forwardOnly(this);
     }
 
+    @SuppressWarnings("unchecked")
     default Seq<? extends Seq<T>> transpose(final Iterable<? extends T>... iterables) {
         return transpose(sequence(iterables));
     }

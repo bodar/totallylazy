@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Strings;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.PredicateAssert.assertThat;
@@ -8,7 +7,7 @@ import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.validations.Validators.firstFailure.firstFailure;
 import static com.googlecode.totallylazy.validations.Validators.validateThat;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 public class FirstFailureValidatorTest {
     @Test
