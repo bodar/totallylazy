@@ -42,7 +42,7 @@ public class IterablePredicates<T> extends LogicalPredicate<Iterable<T>> {
 
     @SafeVarargs
     public static <T> Predicate<Iterable<T>> hasExactly(final T... items) {
-        return hasExactly(sequence(items));
+        return Predicates.is(sequence(items));
     }
 
     public static <T> Predicate<Iterable<T>> hasExactly(Iterable<T> expected) {
