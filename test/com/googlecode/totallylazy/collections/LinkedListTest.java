@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,16 +12,16 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.Count.count;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentSortedSet.constructors.sortedSet;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
 
 public class LinkedListTest {
@@ -103,8 +103,8 @@ public class LinkedListTest {
 
     @Test
     public void supportsFilter() throws Exception {
-        assertThat(list(1, 2, 3, 1, 2, 3).filter(Predicates.is(3).not()), hasExactly(1, 2, 1, 2));
-        assertThat(list(1, 2, 3, 1, 2, 3).filter(Predicates.is(3)), hasExactly(3, 3));
+        assertThat(list(1, 2, 3, 1, 2, 3).filter(is(3).not()), hasExactly(1, 2, 1, 2));
+        assertThat(list(1, 2, 3, 1, 2, 3).filter(is(3)), hasExactly(3, 3));
     }
 
     @Test

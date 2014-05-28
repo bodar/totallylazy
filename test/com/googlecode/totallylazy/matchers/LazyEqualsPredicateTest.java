@@ -1,17 +1,14 @@
 package com.googlecode.totallylazy.matchers;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.totallylazy.matchers.LazyEqualsMatcher.lazyEqualTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.IsNot.not;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.matchers.LazyEqualsPredicate.lazyEqualTo;
 
-public class LazyEqualsMatcherTest {
+public class LazyEqualsPredicateTest {
     private static final String SIMPLE_DESCRIPTION_TEXT = "description";
     private static final String EXPECTED = "myObject";
     private static final String ACTUAL = EXPECTED;
@@ -30,17 +27,11 @@ public class LazyEqualsMatcherTest {
 
     @Test
     public void shouldDescribeEquality() {
-        Description description = new StringDescription();
-        lazyEqualTo(SIMPLE_DESCRIPTION_TEXT, returns(EXPECTED)).describeTo(description);
-        assertThat(description.toString(), is(SIMPLE_DESCRIPTION_TEXT));
+        assertThat(lazyEqualTo(SIMPLE_DESCRIPTION_TEXT, returns(EXPECTED)).toString(), is(SIMPLE_DESCRIPTION_TEXT));
     }
 
     @Test
     public void shouldDescribeEqualityWithExpectedAndActual() {
-        Description description = new StringDescription();
-        Matcher<String> matcher = lazyEqualTo(SIMPLE_DESCRIPTION_TEXT, returns(EXPECTED));
-        matcher.matches(DIFFERENT_ACTUAL);
-        matcher.describeTo(description);
-        assertThat(description.toString(), is(FULL_DESCRIPTION_TEXT));
+        assertThat(lazyEqualTo(SIMPLE_DESCRIPTION_TEXT, returns(EXPECTED)).toString(), is(FULL_DESCRIPTION_TEXT));
     }
 }

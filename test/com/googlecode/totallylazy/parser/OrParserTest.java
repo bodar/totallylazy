@@ -2,11 +2,11 @@ package com.googlecode.totallylazy.parser;
 
 import org.junit.Test;
 
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.Parsers.or;
 import static com.googlecode.totallylazy.parser.StringParser.string;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OrParserTest {
     @Test

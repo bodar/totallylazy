@@ -8,10 +8,10 @@ import org.w3c.dom.Document;
 
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.repeat;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 
 public class XmlTest {
     @Test

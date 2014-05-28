@@ -7,14 +7,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.sameInstance;
 
 public class LazyExceptionTest {
     @Test
     public void neverContainsInvocationTargetException() throws Exception {
         final ParseException expected = new ParseException("blah blah", 1);
-        
+
         final InvocationTargetException invocationTargetException = new InvocationTargetException(expected);
         final LazyException lazyException = lazyException(lazyException(lazyException(invocationTargetException)));
 

@@ -8,8 +8,8 @@ import org.w3c.dom.Node;
 import java.io.StringReader;
 
 import static com.googlecode.totallylazy.Sequences.memorise;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class XmlReaderTest {
     @Test

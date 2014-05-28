@@ -6,11 +6,11 @@ import org.junit.Test;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Predicates.never;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.predicates.InPredicate.in;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.not;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
 
 public class InPredicateTest {
     @Test

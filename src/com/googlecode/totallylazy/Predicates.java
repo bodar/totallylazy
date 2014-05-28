@@ -21,6 +21,8 @@ import com.googlecode.totallylazy.predicates.WherePredicate;
 import com.googlecode.totallylazy.predicates.WhileTrue;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -84,10 +86,27 @@ public class Predicates {
         return AlwaysFalse.alwaysFalse();
     }
 
-    public static <T> LogicalPredicate<Collection<T>> contains(final T t) {
+    public static <T> LogicalPredicate<Collection<T>> contains(final T... t) {
         return new LogicalPredicate<Collection<T>>() {
             public boolean matches(Collection<T> other) {
-                return other.contains(t);
+                return other.containsAll(Lists.list(t));
+            }
+        };
+    }
+
+    public static <K,V> LogicalPredicate<Map<K,V>> containsAll(Map.Entry<? extends K,? extends V>... values) {
+        return Maps.contains(values);
+    }
+
+    public static <T> LogicalPredicate<Collection<T>> containsAll(final Iterable<? extends T> t) {
+        Collection<? extends T> list = Lists.list(t);
+        return containsAll(list);
+    }
+
+    public static <T> LogicalPredicate<Collection<T>> containsAll(final Collection<? extends T> t) {
+        return new LogicalPredicate<Collection<T>>() {
+            public boolean matches(Collection<T> other) {
+                return other.containsAll(t);
             }
         };
     }
@@ -178,8 +197,8 @@ public class Predicates {
         return equalTo(t);
     }
 
-    public static <S, T extends Predicate<S>> T is(final T t) {
-        return t;
+    public static <T> LogicalPredicate<T> is(final Predicate<? super T> t) {
+        return logicalPredicate(t);
     }
 
     @SafeVarargs
@@ -382,5 +401,14 @@ public class Predicates {
 
     public static <S> LogicalPredicate<Second<S>> second(Predicate<? super S> predicate) {
         return where(Callables.<S>second(), predicate);
+    }
+
+    public static <T> LogicalPredicate<T> sameInstance(T expected) {
+        return new LogicalPredicate<T>() {
+            @Override
+            public boolean matches(T other) {
+                return expected == other;
+            }
+        };
     }
 }

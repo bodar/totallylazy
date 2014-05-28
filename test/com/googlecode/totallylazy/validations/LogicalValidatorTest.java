@@ -1,22 +1,23 @@
 package com.googlecode.totallylazy.validations;
 
+import com.googlecode.totallylazy.Strings;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.returnArgument;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.Strings.contains;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.validations.Validators.validateThat;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.internal.matchers.StringContains.containsString;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class LogicalValidatorTest {
     @Test
     public void allowsChainingValidationsUsingFirstFailure() {
-        LogicalValidator<String> containsOne = validateThat(containsString("not there")).
+        LogicalValidator<String> containsOne = validateThat(contains("not there")).
                 withMessage("First validator").
                 castValidator(String.class);
 
         LogicalValidator<String> validator = containsOne.
-                andIfSo(validateThat(containsString("not there")).withMessage("Second validator"));
+                andIfSo(validateThat(contains("not there")).withMessage("Second validator"));
 
         assertThat(
                 validator.validate("some string").allMessages(),
@@ -25,12 +26,12 @@ public class LogicalValidatorTest {
 
     @Test
     public void allowsChainingValidationsUsingAllOf() {
-        LogicalValidator<String> containsOne = validateThat(containsString("not there")).
+        LogicalValidator<String> containsOne = validateThat(contains("not there")).
                 withMessage("First validator").
                 castValidator(String.class);
 
         LogicalValidator<String> validator = containsOne.
-                and(validateThat(containsString("not there")).
+                and(validateThat(contains("not there")).
                         withMessage("Second validator"));
 
         assertThat(
@@ -40,7 +41,7 @@ public class LogicalValidatorTest {
 
     @Test
     public void canReassignMessagesToANewKey() {
-        LogicalValidator<String> validator = validateThat(containsString("not there")).
+        LogicalValidator<String> validator = validateThat(contains("not there")).
                 withMessage("Validation failure").
                 assigningFailuresTo("A").
                 castValidator(String.class);
@@ -53,7 +54,7 @@ public class LogicalValidatorTest {
 
     @Test
     public void canReassignMessagesToANewKeyAndThenChangeTheMessage() {
-        LogicalValidator<String> validator = validateThat(containsString("not there")).
+        LogicalValidator<String> validator = validateThat(contains("not there")).
                 assigningFailuresTo("A").
                 withMessage("Validation failure").
                 castValidator(String.class);
@@ -66,7 +67,7 @@ public class LogicalValidatorTest {
 
     @Test
     public void allowsSettingOfMessageBasedOnValidatedValue() {
-        LogicalValidator<String> validator = validateThat(containsString("not there")).
+        LogicalValidator<String> validator = validateThat(contains("not there")).
                 castValidator(String.class).
                 withMessage(returnArgument(String.class));
 

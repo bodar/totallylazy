@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Predicates.any;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.multi.distanceBetween;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class multiTest {
     public static class StaticSingle {

@@ -4,9 +4,9 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.numbers.Numbers.lcm;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class ReducibleTest {
     static boolean even(int a) { return a % 2 == 0; }

@@ -4,9 +4,9 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class CharacterParserTest {
     @Test

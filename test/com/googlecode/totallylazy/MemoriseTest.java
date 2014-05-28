@@ -6,15 +6,15 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.call;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Runnables.doNothing;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 public class MemoriseTest {
     @Test
     public void supportsGetWithIndex() throws Exception {

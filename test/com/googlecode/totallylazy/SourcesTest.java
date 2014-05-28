@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.io.File;
@@ -10,6 +9,8 @@ import java.util.List;
 import static com.googlecode.totallylazy.Files.emptyVMDirectory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.temporaryFile;
+import static com.googlecode.totallylazy.Predicates.contains;
+import static com.googlecode.totallylazy.Predicates.greaterThan;
 import static com.googlecode.totallylazy.Sources.constructors.sources;
 import static com.googlecode.totallylazy.Sources.functions.directory;
 import static com.googlecode.totallylazy.Sources.functions.name;
@@ -18,9 +19,7 @@ import static com.googlecode.totallylazy.Uri.uri;
 import static com.googlecode.totallylazy.Zip.zip;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.predicates.Not.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.greaterThan;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class SourcesTest {
     @Test
@@ -55,7 +54,7 @@ public class SourcesTest {
 
         Sources sources = sources(uri(String.format("jar:file:%s!/folder/", zipFile)));
         List<String> names = sources.sources().map(Sources.functions.name).toList();
-        assertThat(names, containsInAnyOrder("b.txt", "c.txt"));
+        assertThat(names, contains("b.txt", "c.txt"));
         sources.close();
     }
 
@@ -66,7 +65,7 @@ public class SourcesTest {
 
         Sources sources = sources(uri(String.format("jar:file:%s!/", zipFile)));
         List<String> names = sources.sources().filter(not(directory)).map(name).toList();
-        assertThat(names, containsInAnyOrder("a.txt", "folder/b.txt", "folder/c.txt"));
+        assertThat(names, contains("a.txt", "folder/b.txt", "folder/c.txt"));
         sources.close();
     }
 

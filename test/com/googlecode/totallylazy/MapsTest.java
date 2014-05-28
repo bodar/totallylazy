@@ -21,11 +21,10 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.toLowerCase;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasEntry;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class MapsTest {
     @Test
@@ -84,8 +83,8 @@ public class MapsTest {
             }
         };
 
-        assertThat(map, hasEntry("dan", 1));
-        assertThat(map, hasEntry("matt", 2));
+        assertThat(map, Maps.contains("dan", 1));
+        assertThat(map, Maps.contains("matt", 2));
     }
 
     @Test
@@ -99,8 +98,8 @@ public class MapsTest {
     @Test
     public void supportsConvertingASequenceOfPairsToAMap() throws Exception {
         Map<String, Integer> map = sequence(pair("dan", 1), pair("matt", 2)).fold(Maps.<String, Integer>map(), Maps.<String, Integer>asMap());
-        assertThat(map, hasEntry("dan", 1));
-        assertThat(map, hasEntry("matt", 2));
+        assertThat(map, Maps.contains("dan", 1));
+        assertThat(map, Maps.contains("matt", 2));
     }
 
     @Test

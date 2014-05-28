@@ -2,8 +2,8 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class RecordTest {
     @Test

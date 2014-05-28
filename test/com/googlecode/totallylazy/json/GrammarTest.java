@@ -8,16 +8,15 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.nullValue;
 
 public class GrammarTest {
     @Test
     public void canParseNull() throws Exception {
-        assertThat(Grammar.NULL.parse("null").value(), is(nullValue()));
+        assertThat(Grammar.NULL.parse("null").value(), nullValue());
         assertThat(Grammar.NULL.parse("falure").failure(), is(true));
     }
 

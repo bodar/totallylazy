@@ -7,11 +7,11 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors.sortedMap;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class JsonWriterTest {
     @Test

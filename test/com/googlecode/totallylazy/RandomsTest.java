@@ -7,14 +7,14 @@ import org.junit.Test;
 import java.util.Date;
 
 import static com.googlecode.totallylazy.Functions.identity;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.Predicates.between;
 import static com.googlecode.totallylazy.Predicates.equalTo;
+import static com.googlecode.totallylazy.Predicates.forAll;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.or;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.Matchers.matcher;
-import static org.junit.Assert.assertThat;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 
 public class RandomsTest {
     private static final int TESTS = 100;
@@ -22,32 +22,32 @@ public class RandomsTest {
 
     @Test
     public void integers() {
-        assertThat(Randoms.integers().take(TESTS), matcher(Predicates.<Integer>forAll(between(Integer.MIN_VALUE, Integer.MAX_VALUE))));
+        assertThat(Randoms.integers().take(TESTS), forAll(between(Integer.MIN_VALUE, Integer.MAX_VALUE)));
     }
 
     @Test
     public void longs() {
-        assertThat(Randoms.longs().take(TESTS), matcher(Predicates.<Long>forAll(between(Long.MIN_VALUE, Long.MAX_VALUE))));
+        assertThat(Randoms.longs().take(TESTS), forAll(between(Long.MIN_VALUE, Long.MAX_VALUE)));
     }
 
     @Test
     public void doubles() {
-        assertThat(Randoms.doubles().take(TESTS), matcher(Predicates.<Double>forAll(between(Double.MIN_VALUE, Double.MAX_VALUE))));
+        assertThat(Randoms.doubles().take(TESTS), forAll(between(Double.MIN_VALUE, Double.MAX_VALUE)));
     }
 
     @Test
     public void booleans() {
-        assertThat(Randoms.booleans().take(TESTS), matcher(Predicates.<Boolean>forAll(or(is(true), is(false)))));
+        assertThat(Randoms.booleans().take(TESTS), forAll(or(is(true), is(false))));
     }
 
     @Test
     public void dates() {
-        assertThat(Randoms.dates().take(TESTS), matcher(Predicates.<Date>forAll(between(Dates.MIN_VALUE, Dates.MAX_VALUE))));
+        assertThat(Randoms.dates().take(TESTS), forAll(between(Dates.MIN_VALUE, Dates.MAX_VALUE)));
     }
 
     @Test
     public void values() {
-        assertThat(Randoms.values(1, 2, 3, 4, 5).take(TESTS), matcher(Predicates.<Integer>forAll(in(1, 2, 3, 4, 5))));
+        assertThat(Randoms.values(1, 2, 3, 4, 5).take(TESTS), forAll(in(1, 2, 3, 4, 5)));
     }
 
     @Test
@@ -59,29 +59,29 @@ public class RandomsTest {
 
     @Test
     public void betweenIntegers() {
-        assertThat(Randoms.between(-5, 10).take(TESTS), matcher(Predicates.<Integer>forAll(between(-5, 10))));
-        assertThat(Randoms.between(10, -5).take(TESTS), matcher(Predicates.<Integer>forAll(between(-5, 10))));
-        assertThat(Randoms.between(1, 1).take(TESTS), matcher(Predicates.<Integer>forAll(equalTo(1))));
+        assertThat(Randoms.between(-5, 10).take(TESTS), forAll(between(-5, 10)));
+        assertThat(Randoms.between(10, -5).take(TESTS), forAll(between(-5, 10)));
+        assertThat(Randoms.between(1, 1).take(TESTS), forAll(equalTo(1)));
     }
 
     @Test
     public void betweenDoubles() {
-        assertThat(Randoms.between(-5.4, 10.1).take(TESTS), matcher(Predicates.<Double>forAll(between(-5.4, 10.1))));
-        assertThat(Randoms.between(10.1, -5.4).take(TESTS), matcher(Predicates.<Double>forAll(between(-5.4, 10.1))));
-        assertThat(Randoms.between(1.0, 1.0).take(TESTS), matcher(Predicates.<Double>forAll(equalTo(1.0))));
+        assertThat(Randoms.between(-5.4, 10.1).take(TESTS), forAll(between(-5.4, 10.1)));
+        assertThat(Randoms.between(10.1, -5.4).take(TESTS), forAll(between(-5.4, 10.1)));
+        assertThat(Randoms.between(1.0, 1.0).take(TESTS), forAll(equalTo(1.0)));
     }
 
     @Test
     public void betweenDates() {
         Date yesterday = Days.subtract(NOW, 1);
         Date theFuture = Dates.MAX_VALUE;
-        assertThat(Randoms.between(yesterday, theFuture).take(TESTS), matcher(Predicates.<Date>forAll(between(yesterday, theFuture))));
-        assertThat(Randoms.between(theFuture, yesterday).take(TESTS), matcher(Predicates.<Date>forAll(between(yesterday, theFuture))));
-        assertThat(Randoms.between(NOW, NOW).take(TESTS), matcher(Predicates.<Date>forAll(between(NOW, NOW))));
+        assertThat(Randoms.between(yesterday, theFuture).take(TESTS), forAll(between(yesterday, theFuture)));
+        assertThat(Randoms.between(theFuture, yesterday).take(TESTS), forAll(between(yesterday, theFuture)));
+        assertThat(Randoms.between(NOW, NOW).take(TESTS), forAll(between(NOW, NOW)));
     }
 
     @Test
     public void datesAfter() {
-        assertThat(Randoms.after(NOW).take(TESTS), matcher(Predicates.<Date>forAll(between(NOW, Dates.MAX_VALUE))));
+        assertThat(Randoms.after(NOW).take(TESTS), forAll(between(NOW, Dates.MAX_VALUE)));
     }
 }

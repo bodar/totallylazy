@@ -4,11 +4,11 @@ import com.googlecode.totallylazy.Pair;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 public class PairParserTest {
     @Test

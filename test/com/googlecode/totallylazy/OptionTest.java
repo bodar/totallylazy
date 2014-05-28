@@ -16,15 +16,15 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.OptionTest.Person.person;
+import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.size;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.number;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static org.junit.Assert.fail;
 
 public class OptionTest {
@@ -99,12 +99,7 @@ public class OptionTest {
         }
 
         static Function2<String, Integer, Person> person() {
-            return new Function2<String, Integer, Person>() {
-                @Override
-                public Person call(String name, Integer age) throws Exception {
-                    return person(name, age);
-                }
-            };
+            return Person::person;
         }
 
         static Person person(String name, int age) {

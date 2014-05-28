@@ -7,8 +7,8 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors;
 import static com.googlecode.totallylazy.collections.Trie.trie;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class TrieTest {
     @Test

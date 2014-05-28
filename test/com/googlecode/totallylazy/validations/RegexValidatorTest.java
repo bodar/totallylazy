@@ -2,11 +2,11 @@ package com.googlecode.totallylazy.validations;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.isEmpty;
 import static com.googlecode.totallylazy.validations.ValidationResult.DEFAULT_KEY;
 import static com.googlecode.totallylazy.validations.Validators.matchesRegex;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class RegexValidatorTest {
     @Test

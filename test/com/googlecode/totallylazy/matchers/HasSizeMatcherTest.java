@@ -2,10 +2,10 @@ package com.googlecode.totallylazy.matchers;
 
 import org.junit.Test;
 
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasSize;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasSize;
 
 public class HasSizeMatcherTest {
     @Test

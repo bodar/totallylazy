@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.collections.ListMap.listMap;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class ListMapTest extends MapContract {
 

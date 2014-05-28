@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Lense.lense;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class LenseTest {
     final Person originalBarry = new Person("Barry", 40, new Address("123 Elm St", new Postcode("E1", "1AB")));

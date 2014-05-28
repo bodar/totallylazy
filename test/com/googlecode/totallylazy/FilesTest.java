@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.io.File;
@@ -23,15 +22,15 @@ import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Files.write;
 import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Predicates.contains;
 import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.endsWith;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -73,8 +72,8 @@ public class FilesTest {
         File aFile = temporaryFile(directory);
         File anOtherFile = temporaryFile(directory);
         Sequence<File> files = files(directory);
-        assertThat(files, containsInAnyOrder(aFile, anOtherFile));
-        assertThat(files.filter(where(name(), Predicates.is(equalTo(aFile.getName())))), hasExactly(aFile));
+        assertThat(files, contains(aFile, anOtherFile));
+        assertThat(files.filter(where(name(), is(equalTo(aFile.getName())))), hasExactly(aFile));
     }
 
     @Test
@@ -84,32 +83,32 @@ public class FilesTest {
 
     @Test
     public void handlesDirectoriesThatReturnANullArray() {
-        assertThat(recursiveFiles(new File("doesNotExist")).find(where(name(), Predicates.is("FilesTest.java"))), CoreMatchers.is((Option<File>) none(File.class)));
+        assertThat(recursiveFiles(new File("doesNotExist")).find(where(name(), is("FilesTest.java"))), is(none(File.class)));
     }
 
     @Test
     public void listsAncestors() {
         File fileInWorkingDirectory = recursiveFiles(workingDirectory()).find(where(path(), endsWith("FilesTest.java"))).get();
-        assertFalse(ancestors(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory)));
+        assertFalse(ancestors(fileInWorkingDirectory).exists(is(fileInWorkingDirectory)));
 
-        assertTrue(ancestors(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory.getParentFile())));
-        assertTrue(ancestors(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory.getParentFile().getParentFile())));
-        assertTrue(ancestors(fileInWorkingDirectory).exists(Predicates.is(workingDirectory())));
+        assertTrue(ancestors(fileInWorkingDirectory).exists(is(fileInWorkingDirectory.getParentFile())));
+        assertTrue(ancestors(fileInWorkingDirectory).exists(is(fileInWorkingDirectory.getParentFile().getParentFile())));
+        assertTrue(ancestors(fileInWorkingDirectory).exists(is(workingDirectory())));
     }
 
     @Test
     public void listsAncestorsAndSelf() {
         File fileInWorkingDirectory = recursiveFiles(workingDirectory()).find(where(path(), endsWith("FilesTest.java"))).get();
 
-        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory)));
-        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory.getParentFile())));
-        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(Predicates.is(fileInWorkingDirectory.getParentFile().getParentFile())));
-        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(Predicates.is(workingDirectory())));
+        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(is(fileInWorkingDirectory)));
+        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(is(fileInWorkingDirectory.getParentFile())));
+        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(is(fileInWorkingDirectory.getParentFile().getParentFile())));
+        assertTrue(ancestorsAndSelf(fileInWorkingDirectory).exists(is(workingDirectory())));
     }
 
     @Test
     public void shouldNotFindAFileThatDoesNotExist() {
-        assertThat(recursiveFiles(workingDirectory()).find(where(name(), endsWith("doesNotExist"))), CoreMatchers.is((Option<File>) none(File.class)));
+        assertThat(recursiveFiles(workingDirectory()).find(where(name(), endsWith("doesNotExist"))), is(none(File.class)));
     }
 
     @Test

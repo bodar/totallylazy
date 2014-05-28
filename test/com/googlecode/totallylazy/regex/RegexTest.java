@@ -7,11 +7,11 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Functions.constant;
 import static com.googlecode.totallylazy.Functions.returns1;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.regex.Matches.functions.replace;
 import static com.googlecode.totallylazy.regex.Regex.regex;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class RegexTest {
     @Test

@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.util.Enumeration;
@@ -10,6 +9,7 @@ import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Quintuple.quintuple;
 import static com.googlecode.totallylazy.Sequences.characters;
@@ -20,8 +20,8 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.transpose;
 import static com.googlecode.totallylazy.Triple.triple;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.startsWith;
 import static com.googlecode.totallylazy.numbers.Numbers.decrement;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
@@ -29,8 +29,8 @@ import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.odd;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static java.util.Arrays.asList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class SequencesTest {
     @Test
@@ -156,9 +156,9 @@ public class SequencesTest {
     @Test
     public void supportsIteratingEvenWhenCallableReturnNull() throws Exception {
         final Sequence<Integer> sequence = iterate(integer -> {
-            assertThat("Should never see a null value", integer, is(Matchers.notNullValue()));
+            assertThat("Should never see a null value", integer, is(notNullValue(Integer.class)));
             return null;
-        }, 1).takeWhile(Predicates.notNullValue());
+        }, 1).takeWhile(notNullValue());
         assertThat(sequence, hasExactly(1));
     }
 

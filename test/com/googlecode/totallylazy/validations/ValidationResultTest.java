@@ -7,8 +7,8 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.isEmpty;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
 import static com.googlecode.totallylazy.validations.ValidationResult.functions.add;
@@ -18,7 +18,7 @@ import static com.googlecode.totallylazy.validations.ValidationResult.functions.
 import static com.googlecode.totallylazy.validations.ValidationResult.functions.merge;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class ValidationResultTest {
     @Test

@@ -7,9 +7,9 @@ import java.io.Closeable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class StructuralTest {
     @Test

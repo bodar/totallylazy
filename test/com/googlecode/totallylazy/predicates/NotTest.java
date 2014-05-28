@@ -3,8 +3,8 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.Predicates;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class NotTest {
 

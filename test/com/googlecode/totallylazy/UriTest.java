@@ -4,10 +4,10 @@ import org.junit.Test;
 
 import java.net.URI;
 
+import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Uri.uri;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class UriTest {
     @Test
@@ -26,8 +26,8 @@ public class UriTest {
         assertThat(uri.scheme(), is("jar"));
         assertThat(uri.authority(), is("http://www.foo.com/bar/baz.jar?foo=bar"));
         assertThat(uri.path(), is("/COM/foo/Quux.class"));
-        assertThat(uri.query(), is(nullValue()));
-        assertThat(uri.fragment(), is(nullValue()));
+        assertThat(uri.query(), is(nullValue(String.class)));
+        assertThat(uri.fragment(), is(nullValue(String.class)));
         assertThat(uri.toString(), is("jar:http://www.foo.com/bar/baz.jar?foo=bar!/COM/foo/Quux.class"));
     }
 

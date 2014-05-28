@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Closeables.close;
 import static com.googlecode.totallylazy.Closeables.using;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class CloseablesTest {
     @Test

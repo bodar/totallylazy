@@ -4,9 +4,9 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.time.Dates.date;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class StoppedClockTest {
     @Test

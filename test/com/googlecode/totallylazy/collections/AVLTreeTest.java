@@ -7,8 +7,8 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class AVLTreeTest extends MapContract {
     @Override
