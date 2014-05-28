@@ -4,10 +4,12 @@ import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import org.hamcrest.Description;
 
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Callers.call;
 
 public final class LazyMatcher<A, E> extends LogicalPredicate<A> {
     private final Function<? super A, ? extends E> actualMapper;
@@ -21,6 +23,11 @@ public final class LazyMatcher<A, E> extends LogicalPredicate<A> {
     @Override
     public boolean matches(A actual) {
         return Callers.call(expectedMatcher).matches(Callers.call(actualMapper, actual));
+    }
+
+    @Override
+    public String toString() {
+        return Callers.call(expectedMatcher).toString();
     }
 
     public static <A, E> LazyMatcher<A, E> matchesLazily(String descriptionText, E expected, Function<A, E> actualMapper) {

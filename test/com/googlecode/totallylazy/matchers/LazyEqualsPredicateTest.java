@@ -32,6 +32,8 @@ public class LazyEqualsPredicateTest {
 
     @Test
     public void shouldDescribeEqualityWithExpectedAndActual() {
-        assertThat(lazyEqualTo(SIMPLE_DESCRIPTION_TEXT, returns(EXPECTED)).toString(), is(FULL_DESCRIPTION_TEXT));
+        LazyEqualsPredicate<String> predicate = lazyEqualTo(SIMPLE_DESCRIPTION_TEXT, returns(EXPECTED));
+        predicate.matches(DIFFERENT_ACTUAL); // this is evil
+        assertThat(predicate.toString(), is(FULL_DESCRIPTION_TEXT));
     }
 }

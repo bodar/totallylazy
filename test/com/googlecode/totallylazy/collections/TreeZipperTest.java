@@ -14,7 +14,7 @@ import static com.googlecode.totallylazy.collections.TreeZipper.Direction.left;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.right;
 import static com.googlecode.totallylazy.collections.TreeZipper.zipper;
 import static com.googlecode.totallylazy.Predicates.is;
-import static org.junit.Assert.fail;
+import static com.googlecode.totallylazy.PredicateAssert.fail;
 
 public class TreeZipperTest {
     @Test

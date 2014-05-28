@@ -25,7 +25,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.number;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.PredicateAssert.assertThat;
-import static org.junit.Assert.fail;
+import static com.googlecode.totallylazy.PredicateAssert.fail;
 
 public class OptionTest {
     @Test

@@ -43,7 +43,7 @@ public class OrPredicateTest {
 
     @Test
     public void collapsesOrs() throws Exception {
-        assertThat(or(is("12"), or(is("13"), or(is("14"), is("15")))), is(or(is("12"), is("13"), is("14"), is("15"))));
+        assertThat(or(is("12"), or(is("13"), or(is("14"), is("15")))), equalTo(or(is("12"), is("13"), is("14"), is("15"))));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class OrPredicateTest {
     public void collapsesOne() throws Exception {
         LogicalPredicate<String> or = or(is("13"));
         assertThat(or.matches("13"), is(true));
-        assertThat(or, is(is("13")));
+        assertThat(or, equalTo(is("13")));
     }
 
     @Test

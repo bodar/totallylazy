@@ -7,7 +7,6 @@ import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.validations.Validators.allOf.allOf;
 import static com.googlecode.totallylazy.validations.Validators.validateThat;
-import static org.junit.Assert.assertTrue;
 
 public class AllOfValidatorTest {
     @Test
@@ -16,7 +15,7 @@ public class AllOfValidatorTest {
                 validateThat(contains("one")),
                 validateThat(contains("two")));
 
-        assertTrue("Validation should pass", validator.validate("one two").succeeded());
+        assertThat("Validation should pass", validator.validate("one two").succeeded());
     }
 
     @Test

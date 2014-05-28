@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.validations.Validators.validateThat;
-import static org.junit.Assert.assertTrue;
+import static com.googlecode.totallylazy.PredicateAssert.assertTrue;
 
 public class ConditionalValidatorTest {
     @Test

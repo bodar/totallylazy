@@ -33,8 +33,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sumIterable;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.PredicateAssert.assertThat;
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertSame;
+import static com.googlecode.totallylazy.PredicateAssert.*;
 
 public class NumbersTest {
     @Test
