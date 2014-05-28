@@ -11,7 +11,7 @@ import static com.googlecode.totallylazy.matchers.IterablePredicates.isEmpty;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
 import static com.googlecode.totallylazy.validations.Validators.forAll;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class EveryItemValidatorTest {
     @Test

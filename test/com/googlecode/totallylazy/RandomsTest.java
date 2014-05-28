@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import static com.googlecode.totallylazy.Functions.identity;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.between;
 import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Predicates.forAll;

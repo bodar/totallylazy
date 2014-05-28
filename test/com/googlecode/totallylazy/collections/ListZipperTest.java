@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.collections;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentList.functions.cons;

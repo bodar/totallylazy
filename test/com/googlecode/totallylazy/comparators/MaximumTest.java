@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.comparators;
 import com.googlecode.totallylazy.numbers.Integers;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 

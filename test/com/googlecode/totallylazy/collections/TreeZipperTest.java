@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.TreeMap.functions.replace;
@@ -14,7 +14,7 @@ import static com.googlecode.totallylazy.collections.TreeZipper.Direction.left;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.right;
 import static com.googlecode.totallylazy.collections.TreeZipper.zipper;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.fail;
+import static com.googlecode.totallylazy.Assert.fail;
 
 public class TreeZipperTest {
     @Test

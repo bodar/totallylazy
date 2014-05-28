@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
 import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Xml.document;
 import static com.googlecode.totallylazy.Xml.xpath;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class XPathFunctionsTest {
     @Test

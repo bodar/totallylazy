@@ -15,7 +15,7 @@ import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Predicates.is;
 import static java.lang.Character.MAX_VALUE;
 import static java.lang.Character.MIN_VALUE;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class CharactersTest {
     @Test

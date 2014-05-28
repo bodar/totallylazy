@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 
 public class RecordTest {

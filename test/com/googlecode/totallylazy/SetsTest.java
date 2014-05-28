@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.Sets.intersection;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Sets.union;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class SetsTest {
     @Test

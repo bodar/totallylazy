@@ -9,7 +9,7 @@ import java.io.StringReader;
 
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class XmlReaderTest {
     @Test

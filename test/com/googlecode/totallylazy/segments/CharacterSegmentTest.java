@@ -7,10 +7,10 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.segments.CharacterSegment.characterSegment;
-import static com.googlecode.totallylazy.PredicateAssert.fail;
+import static com.googlecode.totallylazy.Assert.fail;
 
 public class CharacterSegmentTest {
     @Test

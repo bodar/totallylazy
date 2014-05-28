@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.callables;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.PredicateAssert.assertTrue;
+import static com.googlecode.totallylazy.Assert.assertTrue;
 
 public class GenericCallableTest {
     @Test

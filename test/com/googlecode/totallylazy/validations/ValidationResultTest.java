@@ -16,9 +16,9 @@ import static com.googlecode.totallylazy.validations.ValidationResult.functions.
 import static com.googlecode.totallylazy.validations.ValidationResult.functions.addWithKey;
 import static com.googlecode.totallylazy.validations.ValidationResult.functions.assignToKey;
 import static com.googlecode.totallylazy.validations.ValidationResult.functions.merge;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
-import static com.googlecode.totallylazy.PredicateAssert.assertFalse;
-import static com.googlecode.totallylazy.PredicateAssert.assertTrue;
+import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertFalse;
+import static com.googlecode.totallylazy.Assert.assertTrue;
 
 public class ValidationResultTest {
     @Test

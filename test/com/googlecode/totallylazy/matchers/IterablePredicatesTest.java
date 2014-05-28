@@ -6,8 +6,8 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactlyMatching;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertFalse;
-import static com.googlecode.totallylazy.PredicateAssert.assertTrue;
+import static com.googlecode.totallylazy.Assert.assertFalse;
+import static com.googlecode.totallylazy.Assert.assertTrue;
 
 public class IterablePredicatesTest {
     @Test

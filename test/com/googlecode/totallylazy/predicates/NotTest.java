@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Predicates;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class NotTest {
 

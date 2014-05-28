@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.matchers.Matchers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.toString;
@@ -9,7 +8,7 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.never;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 
 public class WherePredicateTest {

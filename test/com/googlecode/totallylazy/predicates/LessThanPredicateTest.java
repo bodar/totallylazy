@@ -5,7 +5,7 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.predicates.LessThanPredicate.lessThan;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class LessThanPredicateTest {
     @Test

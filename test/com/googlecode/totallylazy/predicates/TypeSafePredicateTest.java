@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.Predicate;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 
 @SuppressWarnings("unchecked")

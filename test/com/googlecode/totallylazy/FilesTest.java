@@ -29,10 +29,10 @@ import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertFalse;
-import static com.googlecode.totallylazy.PredicateAssert.assertTrue;
+import static com.googlecode.totallylazy.Assert.assertFalse;
+import static com.googlecode.totallylazy.Assert.assertTrue;
 
 public class FilesTest {
 

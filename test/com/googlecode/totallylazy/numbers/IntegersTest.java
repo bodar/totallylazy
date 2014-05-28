@@ -5,7 +5,7 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.startsWith;
 import static com.googlecode.totallylazy.numbers.Integers.range;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class IntegersTest {
     @Test

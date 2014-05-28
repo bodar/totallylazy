@@ -8,7 +8,7 @@ import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors;
 import static com.googlecode.totallylazy.collections.Trie.trie;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class TrieTest {
     @Test

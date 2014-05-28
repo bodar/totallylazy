@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static com.googlecode.totallylazy.time.Dates.date;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 
 public class DatesTest {

@@ -6,7 +6,7 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.proxy.User.user;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 public class CallOnTest {
     @Test
     public void canUseInstanceInsteadOfCallForReadability() throws Exception {

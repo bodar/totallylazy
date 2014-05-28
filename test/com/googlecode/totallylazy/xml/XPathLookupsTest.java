@@ -10,7 +10,7 @@ import java.util.Map;
 import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Xml.document;
 import static com.googlecode.totallylazy.Xml.xpath;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class XPathLookupsTest {
     @Test

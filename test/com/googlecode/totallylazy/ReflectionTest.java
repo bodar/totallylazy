@@ -6,7 +6,7 @@ import static com.googlecode.totallylazy.Reflection.enclosingInstance;
 import static com.googlecode.totallylazy.Fields.syntheticFields;
 import static com.googlecode.totallylazy.Predicates.is;
 import static java.lang.String.format;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class ReflectionTest {
     @Test

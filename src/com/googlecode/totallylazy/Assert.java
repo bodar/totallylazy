@@ -4,7 +4,7 @@ package com.googlecode.totallylazy;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.sameInstance;
 
-public interface PredicateAssert {
+public interface Assert {
     static <T> void assertThat(T actual, Predicate<? super T> predicate) {
         assertThat("", actual, predicate);
     }

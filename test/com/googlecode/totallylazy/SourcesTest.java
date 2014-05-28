@@ -19,7 +19,7 @@ import static com.googlecode.totallylazy.Uri.uri;
 import static com.googlecode.totallylazy.Zip.zip;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.predicates.Not.not;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class SourcesTest {
     @Test

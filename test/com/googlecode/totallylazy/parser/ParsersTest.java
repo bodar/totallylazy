@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Lists.list;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
 

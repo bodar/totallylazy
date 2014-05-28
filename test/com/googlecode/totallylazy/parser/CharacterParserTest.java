@@ -6,7 +6,7 @@ import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class CharacterParserTest {
     @Test
