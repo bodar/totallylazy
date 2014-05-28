@@ -5,8 +5,8 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Triple.triple;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class TupleTest {
     @Test

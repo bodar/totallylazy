@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy.matchers;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 

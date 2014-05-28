@@ -2,10 +2,10 @@ package com.googlecode.totallylazy.predicates;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.predicates.LessThanPredicate.lessThan;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class LessThanPredicateTest {
     @Test

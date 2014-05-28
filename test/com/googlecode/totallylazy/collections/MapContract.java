@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Lists;
+import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
@@ -13,14 +14,13 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.Predicates.equalTo;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.contains;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.fail;
 
 public abstract class MapContract {
@@ -73,17 +73,17 @@ public abstract class MapContract {
     @SuppressWarnings("unchecked")
     public void canPut() throws Exception {
         PersistentMap<Integer, String> map = map(1, "Dan").insert(3, "Stu").insert(2, "Ray");
-        assertThat(map, containsInAnyOrder(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map, Maps.contains(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void canRemove() throws Exception {
         final PersistentMap<Integer, String> map = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray");
-        assertThat(map.delete(4), containsInAnyOrder(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
-        assertThat(map.delete(3), containsInAnyOrder(pair(4, "Alex"), pair(1, "Dan"), pair(2, "Ray")));
-        assertThat(map.delete(2), containsInAnyOrder(pair(4, "Alex"), pair(1, "Dan"), pair(3, "Stu")));
-        assertThat(map.delete(1), containsInAnyOrder(pair(4, "Alex"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map.delete(4), Maps.contains(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map.delete(3), Maps.contains(pair(4, "Alex"), pair(1, "Dan"), pair(2, "Ray")));
+        assertThat(map.delete(2), Maps.contains(pair(4, "Alex"), pair(1, "Dan"), pair(3, "Stu")));
+        assertThat(map.delete(1), Maps.contains(pair(4, "Alex"), pair(3, "Stu"), pair(2, "Ray")));
         assertThat(map.delete(0), is(map));
     }
 
@@ -111,14 +111,14 @@ public abstract class MapContract {
     @SuppressWarnings("unchecked")
     public void canConvertToPersistentList() throws Exception {
         PersistentList<Pair<Integer, String>> map = map(2, "Ray", 1, "Dan", 3, "Stu").toPersistentList();
-        assertThat(map, containsInAnyOrder(pair(2, "Ray"), pair(1, "Dan"), pair(3, "Stu")));
+        assertThat(map, Predicates.contains(pair(2, "Ray"), pair(1, "Dan"), pair(3, "Stu")));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void canJoin() throws Exception {
         PersistentMap<Integer, String> map = map(3, "Stu", 4, "Matt").joinTo(map(1, "Dan", 2, "Ray"));
-        assertThat(map, containsInAnyOrder(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu"), pair(4, "Matt")));
+        assertThat(map, Predicates.containsAll(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu"), pair(4, "Matt")));
     }
 
     @Test
@@ -135,8 +135,8 @@ public abstract class MapContract {
 
     @Test
     public void supportsFilteringByValue() throws Exception {
-        assertThat(map("Dan", 2).filterValues(Predicates.is(2)), is(map("Dan", 2)));
-        assertThat(map("Dan", 2).filterValues(Predicates.is(3)), is(empty(String.class, Integer.class)));
+        assertThat(map("Dan", 2).filterValues(is(2)), is(map("Dan", 2)));
+        assertThat(map("Dan", 2).filterValues(is(3)), is(empty(String.class, Integer.class)));
     }
 
     @Test
@@ -159,19 +159,19 @@ public abstract class MapContract {
     @Test
     public void canGetKeys() throws Exception {
         Sequence<Integer> keys = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray").keys();
-        assertThat(keys, containsInAnyOrder(1,2,3,4));
+        assertThat(keys, Predicates.contains(1, 2, 3, 4));
     }
 
     @Test
     public void supportsIsEmpty() throws Exception {
         assertThat(empty(Integer.class, String.class).isEmpty(), is(true));
-        assertThat(map(1,"2").isEmpty(), is(false));
-        assertThat(map(1,"2").delete(1).isEmpty(), is(true));
+        assertThat(map(1, "2").isEmpty(), is(false));
+        assertThat(map(1, "2").delete(1).isEmpty(), is(true));
     }
 
     @Test
     public void supportsHead() throws Exception {
-        assertThat(map(1,"2").head(), is(pair(1, "2")));
+        assertThat(map(1, "2").head(), is(pair(1, "2")));
         try {
             empty(Integer.class, String.class).head();
             fail("NoSuchElementException expect on calling head on empty map");
@@ -181,13 +181,13 @@ public abstract class MapContract {
 
     @Test
     public void supportsHeadOption() throws Exception {
-        assertThat(map(1,"2").headOption(), is(some(pair(1, "2"))));
-        assertThat(empty(Integer.class, String.class).headOption(), is(Option.<Pair<Integer, String >>none()));
+        assertThat(map(1, "2").headOption(), is(some(pair(1, "2"))));
+        assertThat(empty(Integer.class, String.class).headOption(), is(Option.<Pair<Integer, String>>none()));
     }
 
     @Test
     public void supportsTail() throws Exception {
-        assertThat(map(1,"2").tail().isEmpty(), is(true));
+        assertThat(map(1, "2").tail().isEmpty(), is(true));
     }
 
     @Test
@@ -198,8 +198,8 @@ public abstract class MapContract {
 
     @Test
     public void exists() throws Exception {
-        assertThat(map(1,"2").exists(equalTo(1)), is(true));
-        assertThat(map(1,"2").exists(equalTo(2)), is(false));
+        assertThat(map(1, "2").exists(equalTo(1)), is(true));
+        assertThat(map(1, "2").exists(equalTo(2)), is(false));
         assertThat(empty(Integer.class, String.class).exists(equalTo(2)), is(false));
     }
 }

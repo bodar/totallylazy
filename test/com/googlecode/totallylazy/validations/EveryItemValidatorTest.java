@@ -6,12 +6,12 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Maps.entries;
 import static com.googlecode.totallylazy.Maps.map;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.isEmpty;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
 import static com.googlecode.totallylazy.validations.Validators.forAll;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class EveryItemValidatorTest {
     @Test

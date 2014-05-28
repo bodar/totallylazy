@@ -5,21 +5,17 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
-import com.googlecode.totallylazy.matchers.IterableMatcher;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
+import com.googlecode.totallylazy.matchers.IterablePredicates;
 
 import java.util.regex.Pattern;
 
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.validations.EveryItemValidator.constructors.everyItem;
 import static com.googlecode.totallylazy.validations.MapAndValidate.constructors.mapAndValidate;
-import static com.googlecode.totallylazy.validations.MatcherValidator.constructors.validateMatcher;
 import static com.googlecode.totallylazy.validations.PredicateValidator.constructors.validatePredicate;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.not;
 
 public class Validators {
     public static final String PLEASE_PROVIDE_A_VALUE = "Please provide a value";
@@ -65,10 +61,6 @@ public class Validators {
         return mapAndValidate(map, validator);
     }
 
-    public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Matcher<? super R> matcher) {
-        return mapAndValidate(map, validateThat(matcher));
-    }
-
     public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Predicate<? super R> predicate) {
         return mapAndValidate(map, validateThat(predicate));
     }
@@ -79,10 +71,6 @@ public class Validators {
 
     public static <T, R> MapAndValidate<T, R> validateThat(Function<? super T, ? extends R> map, Predicate<? super R> predicate, Function<? super R, String> message) {
         return mapAndValidate(map, validateThat(predicate, message));
-    }
-
-    public static <T> MatcherValidator<T> validateThat(Matcher<? super T> matcher) {
-        return validateMatcher(matcher);
     }
 
     public static <T> PredicateValidator<T> validateThat(Predicate<? super T> predicate) {
@@ -102,7 +90,7 @@ public class Validators {
     }
 
     public static <T> LogicalValidator<T> all() {
-        return validateThat(anything());
+        return validateThat(Predicates.anything());
     }
 
     public static <T> LogicalValidator<T> never(Class<T> type) {
@@ -118,7 +106,7 @@ public class Validators {
     }
 
     public static <T> LogicalValidator<Iterable<T>> isNotEmpty() {
-        MatcherValidator<Iterable<T>> notEmpty = validateMatcher(not(IterableMatcher.<T>isEmpty()));
+        LogicalValidator<Iterable<T>> notEmpty = validateThat(not(IterablePredicates.<T>isEmpty()));
         return notEmpty.withMessage(PLEASE_PROVIDE_A_VALUE);
     }
 
@@ -135,7 +123,7 @@ public class Validators {
     }
 
     public static <T> LogicalValidator<T> isNotNull() {
-        MatcherValidator<T> notNull = validateMatcher(not(Matchers.<T>nullValue()));
+        LogicalValidator<T> notNull = validateThat(Predicates.<T>nullValue().not());
         return notNull.withMessage(PLEASE_PROVIDE_A_VALUE);
     }
 

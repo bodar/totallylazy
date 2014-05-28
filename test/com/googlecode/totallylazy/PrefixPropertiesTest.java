@@ -6,9 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.util.Properties;
 
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class PrefixPropertiesTest {
     @Test
@@ -38,7 +37,7 @@ public class PrefixPropertiesTest {
         properties.setProperty("title", "Zen And The Art Of Motorcycle Maintenance");
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         properties.store(output, "");
-        assertThat(output.toString(), containsString("library.book.title=Zen And The Art Of Motorcycle Maintenance"));
+        assertThat(output.toString(), Strings.contains("library.book.title=Zen And The Art Of Motorcycle Maintenance"));
     }
 
     private Properties properties() {

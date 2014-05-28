@@ -8,14 +8,14 @@ import java.util.Set;
 import static com.googlecode.totallylazy.Predicates.assignableTo;
 import static com.googlecode.totallylazy.Predicates.classAssignableTo;
 import static com.googlecode.totallylazy.Predicates.in;
+import static com.googlecode.totallylazy.Predicates.sameInstance;
 import static com.googlecode.totallylazy.Predicates.setEqualityWith;
 import static com.googlecode.totallylazy.Predicates.subsetOf;
 import static com.googlecode.totallylazy.Predicates.supersetOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class PredicatesTest {
     @Test

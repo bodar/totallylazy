@@ -1,16 +1,14 @@
 package com.googlecode.totallylazy.matchers;
 
-import org.hamcrest.Description;
-import org.hamcrest.StringDescription;
+import com.googlecode.totallylazy.Strings;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.matchers.LazyMatcher.matchesLazily;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.IsNot.not;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class LazyMatcherTest {
     private static final String DESCRIPTION_TEXT = "description";
@@ -30,9 +28,7 @@ public class LazyMatcherTest {
 
     @Test
     public void shouldDescribeExpected() {
-        Description description = new StringDescription();
-        matchesLazily(DESCRIPTION_TEXT, EXPECTED, returnArgument(String.class)).describeTo(description);
-        assertThat(description.toString(), is(DESCRIPTION_TEXT));
+        assertThat(matchesLazily(DESCRIPTION_TEXT, EXPECTED, returnArgument(String.class)).toString(), is(DESCRIPTION_TEXT));
     }
 
     @Test
@@ -47,9 +43,7 @@ public class LazyMatcherTest {
 
     @Test
     public void shouldDescribeExpectedLoader() {
-        Description description = new StringDescription();
-        matchesLazily(DESCRIPTION_TEXT, returns(EXPECTED), returnArgument(String.class)).describeTo(description);
-        assertThat(description.toString(), is(DESCRIPTION_TEXT));
+        assertThat(matchesLazily(DESCRIPTION_TEXT, returns(EXPECTED), returnArgument(String.class)).toString(), is(DESCRIPTION_TEXT));
     }
 
     @Test
@@ -64,8 +58,6 @@ public class LazyMatcherTest {
 
     @Test
     public void shouldDescribeExpectedMatcher() {
-        Description description = new StringDescription();
-        matchesLazily(is(EXPECTED), returnArgument(String.class)).describeTo(description);
-        assertThat(description.toString(), containsString(EXPECTED));
+        assertThat(matchesLazily(is(EXPECTED), returnArgument(String.class)).toString(), Strings.contains(EXPECTED));
     }
 }

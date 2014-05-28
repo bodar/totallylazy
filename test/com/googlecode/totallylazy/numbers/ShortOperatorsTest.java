@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -255,6 +255,6 @@ public class ShortOperatorsTest {
     @Test
     public void testPriority() {
         assertThat(ops.priority(),
-                NumberMatcher.lessThan(IntegerOperators.Instance.priority()));
+                Numbers.lessThan(IntegerOperators.Instance.priority()));
     }
 }

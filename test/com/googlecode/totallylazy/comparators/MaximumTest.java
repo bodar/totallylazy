@@ -3,9 +3,9 @@ package com.googlecode.totallylazy.comparators;
 import com.googlecode.totallylazy.numbers.Integers;
 import org.junit.Test;
 
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class MaximumTest {
     @Test

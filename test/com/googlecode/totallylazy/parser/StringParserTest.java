@@ -11,9 +11,9 @@ import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
 import static com.googlecode.totallylazy.Strings.UTF8;
 import static com.googlecode.totallylazy.Strings.bytes;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.parser.StringParser.string;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class StringParserTest {
     @Test

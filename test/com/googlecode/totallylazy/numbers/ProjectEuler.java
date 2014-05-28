@@ -29,7 +29,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.zero;
 import static com.googlecode.totallylazy.numbers.Numbers.Σ;
 import static com.googlecode.totallylazy.predicates.WherePredicate.asWhere;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class ProjectEuler {
     @Test

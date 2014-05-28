@@ -2,12 +2,12 @@ package com.googlecode.totallylazy.collections;
 
 import org.junit.Test;
 
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.collections.ListZipper.zipper;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentList.functions.cons;
 import static com.googlecode.totallylazy.collections.PersistentList.functions.tail;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class ListZipperTest {
     @Test

@@ -4,12 +4,12 @@ import com.googlecode.totallylazy.collections.PersistentSortedMap;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Atomic.constructors.atomic;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors.emptySortedMap;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors.sortedMap;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.functions;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class AtomicTest {
     @Test

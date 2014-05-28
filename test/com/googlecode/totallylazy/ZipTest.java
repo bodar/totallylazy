@@ -8,9 +8,9 @@ import java.util.Date;
 import static com.googlecode.totallylazy.Files.emptyVMDirectory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.temporaryFile;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.time.Dates.date;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ZipTest {
     @Test

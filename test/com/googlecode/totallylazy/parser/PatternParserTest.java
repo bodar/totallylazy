@@ -8,14 +8,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
 import static com.googlecode.totallylazy.Strings.UTF8;
 import static com.googlecode.totallylazy.Strings.bytes;
-import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.PatternParser.pattern;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PatternParserTest {
     @Test

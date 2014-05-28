@@ -19,10 +19,10 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.PersistentSortedMapTest.asPair;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.startsWith;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.startsWith;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 @Ignore("Manual Performance Tests")
 public class MapPerformanceTest {

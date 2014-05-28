@@ -12,9 +12,8 @@ import static com.googlecode.totallylazy.Properties.compose;
 import static com.googlecode.totallylazy.Properties.copy;
 import static com.googlecode.totallylazy.Properties.properties;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class PropertiesTest {
     @Test
@@ -102,7 +101,7 @@ public class PropertiesTest {
             Properties.expectProperty(new java.util.Properties(), "NOT THERE");
             Assert.fail("Expected exception");
         } catch (NoSuchElementException e) {
-            assertThat(e.getMessage(), containsString("NOT THERE"));
+            assertThat(e.getMessage(), Strings.contains("NOT THERE"));
         }
     }
 

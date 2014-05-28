@@ -12,10 +12,10 @@ import static com.googlecode.totallylazy.Characters.range;
 import static com.googlecode.totallylazy.Characters.set;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.workingDirectory;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.is;
 import static java.lang.Character.MAX_VALUE;
 import static java.lang.Character.MIN_VALUE;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class CharactersTest {
     @Test

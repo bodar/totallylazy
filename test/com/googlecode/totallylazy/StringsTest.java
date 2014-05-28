@@ -8,6 +8,7 @@ import java.io.StringReader;
 
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.write;
+import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.bytes;
@@ -23,10 +24,9 @@ import static com.googlecode.totallylazy.Strings.substring;
 import static com.googlecode.totallylazy.Strings.toLowerCase;
 import static com.googlecode.totallylazy.Strings.toUpperCase;
 import static com.googlecode.totallylazy.Uri.uri;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 import static org.junit.Assert.fail;
 
 public class StringsTest {

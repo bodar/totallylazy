@@ -5,9 +5,9 @@ import org.junit.Test;
 import java.util.Formatter;
 
 import static com.googlecode.totallylazy.Enums.name;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 
 public class EnumsTest {
     @Test

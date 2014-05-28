@@ -9,19 +9,19 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.never;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
 
 public class WherePredicateTest {
     @Test
     public void supportsEqualityOnPredicateItself() throws Exception {
-        assertThat(where(toString, is("13")).equals(where(toString, is("13"))), Matchers.is(true));
-        assertThat(where(toString, is("13")).equals(where(toString, is("14"))), Matchers.is(false));
+        assertThat(where(toString, is("13")).equals(where(toString, is("13"))), is(true));
+        assertThat(where(toString, is("13")).equals(where(toString, is("14"))), is(false));
     }
 
     @Test
     public void supportsToString() throws Exception {
-        assertThat(where(toString, is("13")).toString(), Matchers.is("where toString is 13"));
+        assertThat(where(toString, is("13")).toString(), is("where toString is 13"));
     }
 
     @Test
@@ -36,6 +36,6 @@ public class WherePredicateTest {
 
     @Test
     public void supportsDeMorganLawByMovingNotToOutside() throws Exception {
-        assertThat(where(toString, not(is("Dan"))), Matchers.is(not(where(toString, is("Dan")))));
+        assertThat(where(toString, not(is("Dan"))), is(not(where(toString, is("Dan")))));
     }
 }

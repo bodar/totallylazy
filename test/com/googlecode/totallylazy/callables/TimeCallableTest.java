@@ -1,12 +1,11 @@
 package com.googlecode.totallylazy.callables;
 
+import com.googlecode.totallylazy.numbers.Numbers;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
-import static com.googlecode.totallylazy.matchers.NumberMatcher.greaterThanOrEqualTo;
-import static com.googlecode.totallylazy.matchers.NumberMatcher.lessThan;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class TimeCallableTest {
     @Test
@@ -16,7 +15,7 @@ public class TimeCallableTest {
                 time(report).
                 repeat().take(100).realise();
         System.out.println(report);
-        assertThat(report.maximum(), is(greaterThanOrEqualTo(10)));
-        assertThat(report.average(), is(lessThan(1)));
+        assertThat(report.maximum(), is(Numbers.greaterThanOrEqualTo(10)));
+        assertThat(report.average(), is(Numbers.lessThan(1)));
     }
 }

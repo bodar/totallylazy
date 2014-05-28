@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
-import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.util.concurrent.Callable;
@@ -11,8 +10,8 @@ import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Lazy.lazy;
 import static com.googlecode.totallylazy.callables.CountingCallable.counting;
 import static com.googlecode.totallylazy.callables.TimeReport.time;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class LazyTest {
     @Test
@@ -38,9 +37,9 @@ public class LazyTest {
 
         Sequence<Integer> result = callConcurrently(lazyCallable, lazyCallable).realise();
 
-        assertThat(callable.count(), Is.is(1));
-        assertThat(result.first(), Is.is(0));
-        assertThat(result.second(), Is.is(0));
+        assertThat(callable.count(), is(1));
+        assertThat(result.first(), is(0));
+        assertThat(result.second(), is(0));
     }
 
     @Test
@@ -48,9 +47,9 @@ public class LazyTest {
         CountingCallable<Integer> callable = counting();
         Callable<Integer> lazyCallable = callable.lazy();
 
-        assertThat(lazyCallable.call(), Is.is(0));
-        assertThat(lazyCallable.call(), Is.is(0));
-        assertThat(callable.count(), Is.is(1));
+        assertThat(lazyCallable.call(), is(0));
+        assertThat(lazyCallable.call(), is(0));
+        assertThat(callable.count(), is(1));
     }
 
 }

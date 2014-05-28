@@ -7,10 +7,10 @@ import org.w3c.dom.Document;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Predicates.equalTo;
 import static com.googlecode.totallylazy.Xml.document;
 import static com.googlecode.totallylazy.Xml.xpath;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class XPathLookupsTest {
     @Test

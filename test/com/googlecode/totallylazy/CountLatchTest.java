@@ -4,12 +4,11 @@ import com.googlecode.totallylazy.concurrent.NamedExecutors;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.repeat;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CountLatchTest {
     @Test
@@ -24,12 +23,9 @@ public class CountLatchTest {
         for (final AtomicInteger atomicInteger : repeat(number).take(5)) {
             latch.countUp();
 
-            executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-                    atomicInteger.incrementAndGet();
-                    latch.countDown();
-                }
+            executorService.submit(() -> {
+                atomicInteger.incrementAndGet();
+                latch.countDown();
             });
         }
 

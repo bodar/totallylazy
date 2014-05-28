@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.collections.PersistentMap;
+import com.googlecode.totallylazy.predicates.LogicalPredicate;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -234,6 +237,36 @@ public class Maps {
 
     public static <K, V> Set<Map.Entry<K, V>> entrySet(final Iterable<? extends Pair<K, V>> map) {
         return sequence(map).map(Maps.<K, V>pairToEntry()).toSet();
+    }
+
+    public static <K,V> LogicalPredicate<Map<K,V>> contains(K key, V value) {
+        return contains(pair(key,value));
+    }
+
+    public static <K,V> LogicalPredicate<Map<K,V>> contains(K key1, V value1, K key2, V value2) {
+        return Maps.<K,V>contains(pair(key1, value1), pair(key2, value2));
+    }
+
+    public static <K,V> LogicalPredicate<Map<K,V>> contains(K key1, V value1, K key2, V value2, K key3, V value3) {
+        return Maps.<K,V>contains(pair(key1, value1), pair(key2, value2), pair(key3, value3));
+    }
+
+    public static <K,V> LogicalPredicate<Map<K,V>> contains(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
+        return Maps.<K,V>contains(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4));
+    }
+
+    public static <K,V> LogicalPredicate<Map<K,V>> contains(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5) {
+        return Maps.<K,V>contains(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5));
+    }
+
+    @SafeVarargs
+    public static <K,V> LogicalPredicate<Map<K,V>> contains(Map.Entry<? extends K,? extends V>... values) {
+        return new LogicalPredicate<Map<K, V>>() {
+            @Override
+            public boolean matches(Map<K, V> other) {
+                return sequence(values).forAll(e -> get(other, e.getKey()).contains(e.getValue()));
+            }
+        };
     }
 
     public static class functions {

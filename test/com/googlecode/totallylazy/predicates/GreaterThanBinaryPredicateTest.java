@@ -2,10 +2,10 @@ package com.googlecode.totallylazy.predicates;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.predicates.GreaterThanBinaryPredicate.greaterThan;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
 
 public class GreaterThanBinaryPredicateTest {
     public static final GreaterThanBinaryPredicate<Integer> greaterThan = greaterThan(Integer.class);

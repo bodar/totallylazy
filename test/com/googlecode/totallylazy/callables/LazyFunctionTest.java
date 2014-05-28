@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.callables.CountingFunction.counting;
 import static com.googlecode.totallylazy.callables.LazyFunction.lazy;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class LazyFunctionTest {
     @Test

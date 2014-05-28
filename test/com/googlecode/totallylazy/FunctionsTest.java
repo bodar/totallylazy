@@ -1,34 +1,33 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.matchers.Matchers;
-import org.hamcrest.CoreMatchers;
+import com.googlecode.totallylazy.matchers.IterablePredicates;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.compose;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
+import static com.googlecode.totallylazy.Predicates.equalTo;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 import static com.googlecode.totallylazy.numbers.Numbers.numbers;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 
 public class FunctionsTest {
     @Test
     public void supportsApplicativeUsageWithOption() throws Exception {
-        assertThat(add(3).$(some(3)), Matchers.is(some((Number)6)));
+        assertThat(add(3).$(some(3)), Predicates.is(some((Number) 6)));
     }
 
     @Test
     public void supportsApplicativeUsageWithEither() throws Exception {
-        assertThat(add(3).$(Either.<String, Number>right(3)), CoreMatchers.is(Either.<String, Number>right(6)));
+        assertThat(add(3).$(Either.<String, Number>right(3)), Predicates.is(Either.<String, Number>right(6)));
     }
 
     @Test
     public void supportsApplicativeUsageWithSequence() throws Exception {
-        assertThat(add(3).$(numbers(9, 1)), Matchers.is(numbers(12, 4)));
+        assertThat(add(3).$(numbers(9, 1)), Predicates.is(numbers(12, 4)));
     }
 
 //    @Test
@@ -49,7 +48,7 @@ public class FunctionsTest {
     @Test
     public void canCallWithAValue() throws Exception {
         Sequence<Number> computations = range(1, 5).map(multiply()).map(Callables.<Number, Number>callWith(2));
-        assertThat(computations, hasExactly(2, 4, 6, 8, 10));
+        assertThat(computations, IterablePredicates.<Number>hasExactly(sequence(2, 4, 6, 8, 10)));
     }
 
 //    @Test
@@ -61,7 +60,7 @@ public class FunctionsTest {
 
     @Test
     public void canCaptureArgument() throws Exception {
-        assertThat(multiply(10).capturing().apply(1), equalTo(Pair.<Number,Number>pair(1, 10)));
+        assertThat(multiply(10).capturing().apply(1), equalTo(Pair.<Number, Number>pair(1, 10)));
     }
 
 //    private Function3<Number, Number, Number, Number> addThenMultiple() {

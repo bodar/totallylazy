@@ -1,13 +1,11 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Pair;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.TreeMap.functions.replace;
@@ -15,8 +13,7 @@ import static com.googlecode.totallylazy.collections.TreeZipper.Breadcrumb.bread
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.left;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.right;
 import static com.googlecode.totallylazy.collections.TreeZipper.zipper;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 import static org.junit.Assert.fail;
 
 public class TreeZipperTest {
@@ -189,23 +186,23 @@ public class TreeZipperTest {
         TreeZipper<String, String> zipper = TreeZipper.zipper(avlTree("A", "B").insert("C", "D").
                 insert("E", "F").insert("G", "H").
                 insert("I", "J").insert("K", "L")).first();
-        Assert.assertThat(zipper.value(), Matchers.is(pair("A", "B")));
-        Assert.assertThat(zipper.index(), Matchers.is(0));
+        assertThat(zipper.value(), is(pair("A", "B")));
+        assertThat(zipper.index(), is(0));
         zipper = zipper.next();
-        Assert.assertThat(zipper.value(), Matchers.is(pair("C", "D")));
-        Assert.assertThat(zipper.index(), Matchers.is(1));
+        assertThat(zipper.value(), is(pair("C", "D")));
+        assertThat(zipper.index(), is(1));
         zipper = zipper.next();
-        Assert.assertThat(zipper.value(), Matchers.is(pair("E", "F")));
-        Assert.assertThat(zipper.index(), Matchers.is(2));
+        assertThat(zipper.value(), is(pair("E", "F")));
+        assertThat(zipper.index(), is(2));
         zipper = zipper.next();
-        Assert.assertThat(zipper.value(), Matchers.is(pair("G", "H")));
-        Assert.assertThat(zipper.index(), Matchers.is(3));
+        assertThat(zipper.value(), is(pair("G", "H")));
+        assertThat(zipper.index(), is(3));
         zipper = zipper.next();
-        Assert.assertThat(zipper.value(), Matchers.is(pair("I", "J")));
-        Assert.assertThat(zipper.index(), Matchers.is(4));
+        assertThat(zipper.value(), is(pair("I", "J")));
+        assertThat(zipper.index(), is(4));
         zipper = zipper.next();
-        Assert.assertThat(zipper.value(), Matchers.is(pair("K", "L")));
-        Assert.assertThat(zipper.index(), Matchers.is(5));
+        assertThat(zipper.value(), is(pair("K", "L")));
+        assertThat(zipper.index(), is(5));
     }
 
     @Test
@@ -213,11 +210,11 @@ public class TreeZipperTest {
         TreeZipper<String, String> zipper = TreeZipper.zipper(avlTree("A", "B").insert("C", "D").
                 insert("E", "F").insert("G", "H").
                 insert("I", "J").insert("K", "L")).first();
-        Assert.assertThat(zipper.index(5).value(), Matchers.is(pair("K", "L")));
-        Assert.assertThat(zipper.index(1).value(), Matchers.is(pair("C", "D")));
-        Assert.assertThat(zipper.index(3).value(), Matchers.is(pair("G", "H")));
-        Assert.assertThat(zipper.index(4).value(), Matchers.is(pair("I", "J")));
-        Assert.assertThat(zipper.index(2).value(), Matchers.is(pair("E", "F")));
-        Assert.assertThat(zipper.index(0).value(), Matchers.is(pair("A", "B")));
+        assertThat(zipper.index(5).value(), is(pair("K", "L")));
+        assertThat(zipper.index(1).value(), is(pair("C", "D")));
+        assertThat(zipper.index(3).value(), is(pair("G", "H")));
+        assertThat(zipper.index(4).value(), is(pair("I", "J")));
+        assertThat(zipper.index(2).value(), is(pair("E", "F")));
+        assertThat(zipper.index(0).value(), is(pair("A", "B")));
     }
 }

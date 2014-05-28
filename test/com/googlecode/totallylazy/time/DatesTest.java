@@ -1,32 +1,31 @@
 package com.googlecode.totallylazy.time;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import static com.googlecode.totallylazy.time.Dates.date;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class DatesTest {
     @Test
     @SuppressWarnings("deprecation")
     public void whenCreatingDateFromLongSetTimezoneToUtc() throws Exception{
-        assertThat(date(0).getTime(), Matchers.is(0L));
+        assertThat(date(0).getTime(), is(0L));
     }
 
     @Test
     public void canParseAnApacheCommonLogFormatDate() throws Exception{
         Date result = Dates.APACHE().parse("03/Dec/2012:01:02:05 +0000");
-        assertThat(result, Matchers.is(date(2012, 12, 3, 1, 2, 5)));
+        assertThat(result, is(date(2012, 12, 3, 1, 2, 5)));
     }
 
     @Test
     public void canParseALexicalDate() throws Exception{
         Date result = Dates.LEXICAL().parse("20110908071414123");
-        assertThat(result, Matchers.is(date(2011, 9, 8, 7, 14, 14, 123)));
+        assertThat(result, is(date(2011, 9, 8, 7, 14, 14, 123)));
     }
 
     @Test
