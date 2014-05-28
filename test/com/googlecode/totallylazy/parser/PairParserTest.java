@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Pair;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Segment.constructors.characters;

@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.collections.PersistentSortedMap.constru
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors.emptySortedMap;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.constructors.sortedMap;
 import static com.googlecode.totallylazy.collections.PersistentSortedMap.functions;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class AtomicTest {
     @Test

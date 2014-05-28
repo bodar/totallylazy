@@ -6,7 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.util.Properties;
 
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 
 public class PrefixPropertiesTest {

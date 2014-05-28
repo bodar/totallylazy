@@ -7,7 +7,7 @@ import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.matchers.LazyMatcher.matchesLazily;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 
 public class LazyMatcherTest {

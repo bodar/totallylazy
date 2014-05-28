@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.sameInstance;
 
 public class LazyExceptionTest {

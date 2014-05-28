@@ -5,7 +5,7 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Trampoline.done;
 import static com.googlecode.totallylazy.Trampoline.more;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class TrampolineTest {
     Trampoline<Boolean> even(int n) {

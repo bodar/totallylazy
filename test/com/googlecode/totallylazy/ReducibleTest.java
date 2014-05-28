@@ -6,7 +6,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.numbers.Numbers.lcm;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class ReducibleTest {
     static boolean even(int a) { return a % 2 == 0; }

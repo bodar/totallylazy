@@ -24,8 +24,8 @@ import static com.googlecode.totallylazy.numbers.Numbers.add;
 import static com.googlecode.totallylazy.numbers.Numbers.divide;
 import static com.googlecode.totallylazy.numbers.Numbers.number;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
-import static com.googlecode.totallylazy.PredicateAssert.fail;
+import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.Assert.fail;
 
 public class OptionTest {
     @Test

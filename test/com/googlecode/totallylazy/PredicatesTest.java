@@ -15,7 +15,7 @@ import static com.googlecode.totallylazy.Predicates.supersetOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class PredicatesTest {
     @Test

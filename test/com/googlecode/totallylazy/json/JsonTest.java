@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Randoms;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.Uri;
@@ -16,7 +15,7 @@ import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.time.Dates.date;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.is;
 

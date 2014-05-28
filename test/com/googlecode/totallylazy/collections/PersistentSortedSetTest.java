@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.collections.PersistentSet.functions.get
 import static com.googlecode.totallylazy.collections.PersistentSortedSet.constructors.sortedSet;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class PersistentSortedSetTest {
     @Test

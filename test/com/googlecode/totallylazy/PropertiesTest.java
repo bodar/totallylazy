@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.PredicateAssert;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -8,12 +7,12 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.PredicateAssert.fail;
+import static com.googlecode.totallylazy.Assert.fail;
 import static com.googlecode.totallylazy.Properties.compose;
 import static com.googlecode.totallylazy.Properties.copy;
 import static com.googlecode.totallylazy.Properties.properties;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 
 public class PropertiesTest {

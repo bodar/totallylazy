@@ -6,7 +6,7 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.isEmpty;
 import static com.googlecode.totallylazy.validations.Validators.validateThat;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class AnyOfValidatorTest {
     @Test

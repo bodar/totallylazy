@@ -32,8 +32,8 @@ import static com.googlecode.totallylazy.numbers.Numbers.product;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.numbers.Numbers.sumIterable;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
-import static com.googlecode.totallylazy.PredicateAssert.*;
+import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.Assert.*;
 
 public class NumbersTest {
     @Test

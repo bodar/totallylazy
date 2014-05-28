@@ -13,7 +13,7 @@ import static com.googlecode.totallylazy.Strings.UTF8;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.parser.StringParser.string;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class StringParserTest {
     @Test

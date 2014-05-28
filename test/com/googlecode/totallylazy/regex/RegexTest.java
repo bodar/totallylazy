@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.regex;
 
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Functions.constant;
@@ -11,7 +10,7 @@ import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.regex.Matches.functions.replace;
 import static com.googlecode.totallylazy.regex.Regex.regex;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class RegexTest {
     @Test

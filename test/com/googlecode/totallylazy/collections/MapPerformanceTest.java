@@ -22,7 +22,7 @@ import static com.googlecode.totallylazy.collections.PersistentSortedMapTest.asP
 import static com.googlecode.totallylazy.matchers.IterablePredicates.startsWith;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 @Ignore("Manual Performance Tests")
 public class MapPerformanceTest {

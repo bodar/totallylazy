@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.Predicates.never;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.predicates.InPredicate.in;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 
 public class InPredicateTest {

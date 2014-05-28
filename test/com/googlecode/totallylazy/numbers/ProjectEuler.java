@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Callables.toString;
@@ -29,7 +28,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.zero;
 import static com.googlecode.totallylazy.numbers.Numbers.Σ;
 import static com.googlecode.totallylazy.predicates.WherePredicate.asWhere;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class ProjectEuler {
     @Test

@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.validations;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.validations.Validators.allOf.allOf;

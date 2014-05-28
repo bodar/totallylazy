@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.predicates.GreaterThanBinaryPredicate.greaterThan;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 
 public class GreaterThanBinaryPredicateTest {

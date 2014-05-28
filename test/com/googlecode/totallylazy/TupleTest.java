@@ -5,7 +5,7 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Triple.triple;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 
 public class TupleTest {

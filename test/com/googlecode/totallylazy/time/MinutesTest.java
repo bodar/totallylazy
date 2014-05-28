@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 
 public class MinutesTest {

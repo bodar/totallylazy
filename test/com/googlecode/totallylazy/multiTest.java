@@ -2,7 +2,6 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
-import com.googlecode.totallylazy.multi;
 import org.junit.Test;
 
 import java.io.Serializable;
@@ -14,7 +13,7 @@ import java.util.Map;
 import static com.googlecode.totallylazy.Predicates.any;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.multi.distanceBetween;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class multiTest {
     public static class StaticSingle {

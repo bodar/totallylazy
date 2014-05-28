@@ -5,7 +5,7 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Closeables.close;
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.PredicateAssert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class CloseablesTest {
     @Test
