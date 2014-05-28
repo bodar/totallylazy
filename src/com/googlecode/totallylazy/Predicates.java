@@ -86,16 +86,13 @@ public class Predicates {
         return AlwaysFalse.alwaysFalse();
     }
 
+    @SafeVarargs
     public static <T> LogicalPredicate<Collection<T>> contains(final T... t) {
         return new LogicalPredicate<Collection<T>>() {
             public boolean matches(Collection<T> other) {
                 return other.containsAll(Lists.list(t));
             }
         };
-    }
-
-    public static <K,V> LogicalPredicate<Map<K,V>> containsAll(Map.Entry<? extends K,? extends V>... values) {
-        return Maps.contains(values);
     }
 
     public static <T> LogicalPredicate<Collection<T>> containsAll(final Iterable<? extends T> t) {

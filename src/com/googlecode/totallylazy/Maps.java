@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.collections.PersistentMap;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.ArrayList;
@@ -240,31 +239,35 @@ public class Maps {
     }
 
     public static <K,V> LogicalPredicate<Map<K,V>> contains(K key, V value) {
-        return contains(pair(key,value));
+        return containsAll(pair(key, value));
     }
 
     public static <K,V> LogicalPredicate<Map<K,V>> contains(K key1, V value1, K key2, V value2) {
-        return Maps.<K,V>contains(pair(key1, value1), pair(key2, value2));
+        return Maps.<K,V>containsAll(pair(key1, value1), pair(key2, value2));
     }
 
     public static <K,V> LogicalPredicate<Map<K,V>> contains(K key1, V value1, K key2, V value2, K key3, V value3) {
-        return Maps.<K,V>contains(pair(key1, value1), pair(key2, value2), pair(key3, value3));
+        return Maps.<K,V>containsAll(pair(key1, value1), pair(key2, value2), pair(key3, value3));
     }
 
     public static <K,V> LogicalPredicate<Map<K,V>> contains(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
-        return Maps.<K,V>contains(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4));
+        return Maps.<K,V>containsAll(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4));
     }
 
     public static <K,V> LogicalPredicate<Map<K,V>> contains(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5, V value5) {
-        return Maps.<K,V>contains(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5));
+        return Maps.<K,V>containsAll(pair(key1, value1), pair(key2, value2), pair(key3, value3), pair(key4, value4), pair(key5, value5));
     }
 
     @SafeVarargs
-    public static <K,V> LogicalPredicate<Map<K,V>> contains(Map.Entry<? extends K,? extends V>... values) {
+    public static <K,V> LogicalPredicate<Map<K,V>> containsAll(Map.Entry<? extends K, ? extends V>... values) {
+        return containsAll(sequence(values));
+    }
+
+    private static <K, V> LogicalPredicate<Map<K, V>> containsAll(final Iterable<? extends Map.Entry<? extends K, ? extends V>> iterable) {
         return new LogicalPredicate<Map<K, V>>() {
             @Override
             public boolean matches(Map<K, V> other) {
-                return sequence(values).forAll(e -> get(other, e.getKey()).contains(e.getValue()));
+                return sequence(iterable).forAll(e -> get(other, e.getKey()).contains(e.getValue()));
             }
         };
     }

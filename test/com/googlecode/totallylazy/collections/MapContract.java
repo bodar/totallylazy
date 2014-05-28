@@ -73,17 +73,17 @@ public abstract class MapContract {
     @SuppressWarnings("unchecked")
     public void canPut() throws Exception {
         PersistentMap<Integer, String> map = map(1, "Dan").insert(3, "Stu").insert(2, "Ray");
-        assertThat(map, Maps.contains(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map, Maps.containsAll(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void canRemove() throws Exception {
         final PersistentMap<Integer, String> map = map(4, "Alex", 1, "Dan", 3, "Stu", 2, "Ray");
-        assertThat(map.delete(4), Maps.contains(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
-        assertThat(map.delete(3), Maps.contains(pair(4, "Alex"), pair(1, "Dan"), pair(2, "Ray")));
-        assertThat(map.delete(2), Maps.contains(pair(4, "Alex"), pair(1, "Dan"), pair(3, "Stu")));
-        assertThat(map.delete(1), Maps.contains(pair(4, "Alex"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map.delete(4), Maps.containsAll(pair(1, "Dan"), pair(3, "Stu"), pair(2, "Ray")));
+        assertThat(map.delete(3), Maps.containsAll(pair(4, "Alex"), pair(1, "Dan"), pair(2, "Ray")));
+        assertThat(map.delete(2), Maps.containsAll(pair(4, "Alex"), pair(1, "Dan"), pair(3, "Stu")));
+        assertThat(map.delete(1), Maps.containsAll(pair(4, "Alex"), pair(3, "Stu"), pair(2, "Ray")));
         assertThat(map.delete(0), is(map));
     }
 
@@ -118,7 +118,7 @@ public abstract class MapContract {
     @SuppressWarnings("unchecked")
     public void canJoin() throws Exception {
         PersistentMap<Integer, String> map = map(3, "Stu", 4, "Matt").joinTo(map(1, "Dan", 2, "Ray"));
-        assertThat(map, Predicates.containsAll(pair(1, "Dan"), pair(2, "Ray"), pair(3, "Stu"), pair(4, "Matt")));
+        assertThat(map, Maps.contains(1, "Dan", 2, "Ray", 3, "Stu", 4, "Matt"));
     }
 
     @Test
