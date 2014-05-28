@@ -184,6 +184,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Sequence<Sequence<T>> transpose(Iterable<? extends T>... iterables) {
         return transpose(sequence(iterables));
     }

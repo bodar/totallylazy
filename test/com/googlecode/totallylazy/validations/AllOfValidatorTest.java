@@ -7,7 +7,7 @@ import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.validations.Validators.allOf.allOf;
 import static com.googlecode.totallylazy.validations.Validators.validateThat;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 public class AllOfValidatorTest {
     @Test
