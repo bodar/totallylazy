@@ -27,7 +27,7 @@ import static com.googlecode.totallylazy.Uri.uri;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
-import static org.junit.Assert.fail;
+import static com.googlecode.totallylazy.PredicateAssert.fail;
 
 public class StringsTest {
     @Test

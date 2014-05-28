@@ -22,7 +22,7 @@ import static com.googlecode.totallylazy.collections.PersistentList.constructors
 import static com.googlecode.totallylazy.collections.PersistentSortedSet.constructors.sortedSet;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
-import static org.junit.Assert.fail;
+import static com.googlecode.totallylazy.PredicateAssert.fail;
 
 public class LinkedListTest {
     @Test

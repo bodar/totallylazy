@@ -46,7 +46,7 @@ public class AndPredicateTest {
 
     @Test
     public void collapsesAnds() throws Exception {
-        assertThat(and(is("12"), and(is("13"), and(is("14"), is("15")))), is(and(is("12"), is("13"), is("14"), is("15"))));
+        assertThat(and(is("12"), and(is("13"), and(is("14"), is("15")))), equalTo(and(is("12"), is("13"), is("14"), is("15"))));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class AndPredicateTest {
     public void collapsesOne() throws Exception {
         LogicalPredicate<String> and = and(is("13"));
         assertThat(and.matches("13"), is(true));
-        assertThat(and, is(is("13")));
+        assertThat(and, equalTo(is("13")));
     }
 
     @Test

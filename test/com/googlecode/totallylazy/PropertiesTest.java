@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import org.junit.Assert;
+import com.googlecode.totallylazy.PredicateAssert;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.PredicateAssert.fail;
 import static com.googlecode.totallylazy.Properties.compose;
 import static com.googlecode.totallylazy.Properties.copy;
 import static com.googlecode.totallylazy.Properties.properties;
@@ -99,7 +100,7 @@ public class PropertiesTest {
     public void guaranteesPropertiesExist() {
         try {
             Properties.expectProperty(new java.util.Properties(), "NOT THERE");
-            Assert.fail("Expected exception");
+            fail("Expected exception");
         } catch (NoSuchElementException e) {
             assertThat(e.getMessage(), Strings.contains("NOT THERE"));
         }

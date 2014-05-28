@@ -6,7 +6,7 @@ import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.time.Dates.date;
-import static org.junit.Assert.fail;
+import static com.googlecode.totallylazy.PredicateAssert.fail;
 
 public class DateFormatConverterTest {
 

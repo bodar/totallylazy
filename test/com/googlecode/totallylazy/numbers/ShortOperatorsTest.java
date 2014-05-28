@@ -1,10 +1,10 @@
 package com.googlecode.totallylazy.numbers;
 
 import static com.googlecode.totallylazy.PredicateAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static com.googlecode.totallylazy.PredicateAssert.assertEquals;
+import static com.googlecode.totallylazy.PredicateAssert.assertFalse;
+import static com.googlecode.totallylazy.PredicateAssert.assertTrue;
+import static com.googlecode.totallylazy.PredicateAssert.fail;
 
 import java.math.BigInteger;
 

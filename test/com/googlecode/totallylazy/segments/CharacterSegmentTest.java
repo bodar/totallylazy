@@ -10,7 +10,7 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.PredicateAssert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.segments.CharacterSegment.characterSegment;
-import static org.junit.Assert.fail;
+import static com.googlecode.totallylazy.PredicateAssert.fail;
 
 public class CharacterSegmentTest {
     @Test

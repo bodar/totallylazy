@@ -1,3 +1,4 @@
+mvn:org.hamcrest:hamcrest-core:jar|sources:1.3
 mvn:junit:junit:jar|sources:4.11
 
 mvn://repo.bodar.com/com.googlecode.yatspec:yatspec:jar|sources:199
