@@ -96,7 +96,7 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<Collection<T>> containsAll(final Iterable<? extends T> t) {
-        Collection<? extends T> list = Lists.list(t);
+        Collection<T> list = Lists.list(t);
         return containsAll(list);
     }
 

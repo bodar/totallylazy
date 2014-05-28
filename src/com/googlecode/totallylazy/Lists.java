@@ -11,7 +11,7 @@ public class Lists {
         return list(sequence(values));
     }
 
-    public static <T> List<T> list(Iterable<T> iterable) {
+    public static <T> List<T> list(Iterable<? extends T> iterable) {
         return sequence(iterable).toList();
     }
 
