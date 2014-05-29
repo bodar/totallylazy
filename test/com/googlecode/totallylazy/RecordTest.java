@@ -10,10 +10,7 @@ public class RecordTest {
     public void supportEquality() throws Exception {
         assertThat(new Record(){ int x = 1; int y = 2; }.equals(new Record(){ int x = 1; int y = 2; }), is(true));
         assertThat(new Record(){ int x = 1; int y = 2; }.equals(new Record(){ int x = 1; int y = 5; }), is(false));
-        assertThat(new Record(){ int x = 1; int y = 2; }.equals(new Record() {
-            int x = 1;
-            int z = 2;
-        }), is(false));
+        assertThat(new Record(){ int x = 1; int y = 2; }.equals(new Record(){ int x = 1; int z = 2; }), is(false));
     }
 
     @Test

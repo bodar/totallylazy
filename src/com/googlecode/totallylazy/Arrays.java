@@ -37,10 +37,6 @@ public class Arrays {
         return values;
     }
 
-    public static <T> boolean equalTo(Third<T> ts, Iterable<?> obj) {
-        throw new UnsupportedOperationException();
-    }
-
     public static <T> boolean isEmpty(T[] array) {return array.length == 0;}
 
     public static <T> T head(T[] array) {

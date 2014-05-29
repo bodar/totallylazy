@@ -2,11 +2,15 @@ package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Memory;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Value;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public final class LazyFunction<T, R> implements Function<T, R>, Memory {
+import static com.googlecode.totallylazy.Sequences.sequence;
+
+public final class LazyFunction<T, R> implements Function<T, R>, Memory, Value<Sequence<R>> {
     private final Function<? super T, ? extends R> callable;
     private final Map<T, R> state = new HashMap<T, R>();
     private final Object lock = new Object();
@@ -32,5 +36,10 @@ public final class LazyFunction<T, R> implements Function<T, R>, Memory {
         synchronized (lock) {
             state.clear();
         }
+    }
+
+    @Override
+    public Sequence<R> value() {
+        return sequence(state.values());
     }
 }
