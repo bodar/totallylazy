@@ -28,8 +28,7 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
         return observer -> {
             for (T value : values) observer.next(value);
             observer.complete();
-            return () -> {
-            };
+            return () -> { };
         };
     }
 
