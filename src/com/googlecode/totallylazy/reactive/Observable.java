@@ -2,9 +2,12 @@ package com.googlecode.totallylazy.reactive;
 
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Reducer;
 
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public interface Observable<T> extends Filterable<T>, Functor<T> {
@@ -22,7 +25,9 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
 
     @Override
     default Observable<T> filter(Predicate<? super T> predicate) {
-        return observable(observer -> t -> { if (predicate.matches(t)) observer.next(t); });
+        return observable(observer -> t -> {
+            if (predicate.matches(t)) observer.next(t);
+        });
     }
 
     @Override
@@ -32,6 +37,15 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
 
     default <R> Observable<R> flatMap(Function<? super T, ? extends Observable<R>> mapper) {
         return observable(observer -> t -> mapper.apply(t).subscribe(observer));
+    }
+
+    default <S> Observable<S> scan(S seed, Function2<? super S, ? super T, ? extends S> reducer) {
+        AtomicReference<S> reference = new AtomicReference<>(seed);
+        return observable(observer -> t -> observer.next(reference.updateAndGet(s -> reducer.apply(s, t))));
+    }
+
+    default <S> Observable<S> scan(Reducer<? super T, S> reducer) {
+        return scan(reducer.identityElement(), reducer);
     }
 
     default <R> Observable<R> observable(Function<Observer<R>, Consumer<T>> function) {
