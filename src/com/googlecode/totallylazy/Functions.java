@@ -110,29 +110,15 @@ public class Functions {
     }
 
     public static <A, B, C, D, E> Function3<B, C, D, E> apply(final Function4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A value) {
-        return new Function3<B, C, D, E>() {
-            @Override
-            public E call(B b, C c, D d) throws Exception {
-                return callable.call(value, b, c, d);
-            }
-        };
+        return (b, c, d) -> callable.call(value, b, c, d);
     }
 
     public static <A, B, C, D, E, F> Function4<B, C, D, E, F> apply(final Function5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A value) {
-        return new Function4<B, C, D, E, F>() {
-            @Override
-            public F call(B b, C c, D d, E e) throws Exception {
-                return callable.call(value, b, c, d, e);
-            }
-        };
+        return (b, c, d, e) -> callable.call(value, b, c, d, e);
     }
 
     public static <A> Unary<A> identity() {
-        return new Unary<A>() {
-            public A call(A self) throws Exception {
-                return self;
-            }
-        };
+        return self -> self;
     }
 
     public static <A> Unary<A> identity(Class<A> aClass) {
@@ -140,19 +126,11 @@ public class Functions {
     }
 
     public static <A, B> Function<A, B> constant(final B result) {
-        return new Function<A, B>() {
-            public B call(A ignore) throws Exception {
-                return result;
-            }
-        };
+        return ignore -> result;
     }
 
     public static <T> Returns<T> returns(final T t) {
-        return new Returns<T>() {
-            public final T call() throws Exception {
-                return t;
-            }
-        };
+        return () -> t;
     }
 
     public static <A, B> Function<A, B> returns1(final B result) {
@@ -160,20 +138,11 @@ public class Functions {
     }
 
     public static <A, B, C> Function2<A, B, C> returns2(final C result) {
-        return new Function2<A, B, C>() {
-            @Override
-            public C call(A ignore, B ignoreMeToo) throws Exception {
-                return result;
-            }
-        };
+        return (ignore, ignoreMeToo) -> result;
     }
 
     public static <A, B, C> Function2<A, B, C> uncurry2(final Function<? super A, ? extends Function<? super B, ? extends C>> callable) {
-        return new Function2<A, B, C>() {
-            public final C call(final A a, final B b) throws Exception {
-                return callable.call(a).call(b);
-            }
-        };
+        return (a, b) -> callable.call(a).call(b);
     }
 
     public static <A, B, C, D> Function3<A, B, C, D> uncurry3(final Function<? super A, ? extends Function<? super B, ? extends Function<? super C, ? extends D>>> callable) {
