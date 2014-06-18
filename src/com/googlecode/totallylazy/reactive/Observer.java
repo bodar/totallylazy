@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.reactive;
 
-import java.util.function.Consumer;
+import com.googlecode.totallylazy.Block;
 
 public interface Observer<T> {
     void next(T value);
@@ -9,22 +9,7 @@ public interface Observer<T> {
 
     void complete();
 
-    static <T> Observer<T> create(Consumer<T> consumer, Observer<?> observer){
-        return new Observer<T>() {
-            @Override
-            public void next(T value) {
-                consumer.accept(value);
-            }
-
-            @Override
-            public void error(Throwable error) {
-                observer.error(error);
-            }
-
-            @Override
-            public void complete() {
-                observer.complete();
-            }
-        };
+    static <T> Observer<T> create(Block<T> block, Observer<?> observer) {
+        return new ErrorObserver<>(block, observer);
     }
 }

@@ -1,14 +1,16 @@
 package com.googlecode.totallylazy.reactive;
 
+import com.googlecode.totallylazy.Block;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Reducer;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 public interface Observable<T> extends Filterable<T>, Functor<T> {
     AutoCloseable subscribe(Observer<T> observer);
@@ -25,7 +27,9 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
 
     @Override
     default Observable<T> filter(Predicate<? super T> predicate) {
-        return observable(observer -> t -> { if (predicate.matches(t)) observer.next(t); });
+        return observable(observer -> t -> {
+            if (predicate.matches(t)) observer.next(t);
+        });
     }
 
     @Override
@@ -52,13 +56,29 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
 
     default <S> Observable<S> reduce(S seed, Function2<? super S, ? super T, ? extends S> reducer) {
         return scan(seed, reducer).last();
-   }
+    }
 
     default <S> Observable<S> reduce(Reducer<? super T, S> reducer) {
         return scan(reducer).last();
     }
 
-    default <R> Observable<R> observable(Function<Observer<R>, Consumer<T>> function) {
+    default Observable<T> take(int count) {
+        return takeWhile(Predicates.countTo(count));
+    }
+
+    default Observable<T> takeWhile(Predicate<? super T> predicate) {
+        AtomicBoolean complete = new AtomicBoolean(false);
+        return observable(observer -> t -> {
+            if (complete.get()) return;
+            if (predicate.matches(t)) observer.next(t);
+            else {
+                complete.set(true);
+                observer.complete();
+            }
+        });
+    }
+
+    default <R> Observable<R> observable(Function<Observer<R>, Block<T>> function) {
         return observer -> Observable.this.subscribe(Observer.create(
                 function.apply(observer), observer));
     }
