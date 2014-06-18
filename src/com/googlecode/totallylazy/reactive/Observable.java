@@ -5,6 +5,8 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Predicate;
 
+import java.util.function.Consumer;
+
 public interface Observable<T> extends Filterable<T>, Functor<T> {
     AutoCloseable subscribe(Observer<T> observer);
 
@@ -13,24 +15,27 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
         return observer -> {
             for (T value : values) observer.next(value);
             observer.complete();
-            return () -> {};
+            return () -> {
+            };
         };
     }
 
     @Override
-    default Observable<T> filter(Predicate<? super T> predicate){
-        return observer -> Observable.this.subscribe(Observer.create(
-                t -> { if (predicate.matches(t)) observer.next(t); }, observer));
+    default Observable<T> filter(Predicate<? super T> predicate) {
+        return observable(observer -> t -> { if (predicate.matches(t)) observer.next(t); });
     }
 
     @Override
     default <R> Observable<R> map(Function<? super T, ? extends R> mapper) {
-        return observer -> Observable.this.subscribe(Observer.create(
-                t -> observer.next(mapper.apply(t)), observer));
+        return observable(observer -> t -> observer.next(mapper.apply(t)));
     }
 
     default <R> Observable<R> flatMap(Function<? super T, ? extends Observable<R>> mapper) {
+        return observable(observer -> t -> mapper.apply(t).subscribe(observer));
+    }
+
+    default <R> Observable<R> observable(Function<Observer<R>, Consumer<T>> function) {
         return observer -> Observable.this.subscribe(Observer.create(
-                t -> mapper.apply(t).subscribe(observer), observer));
+                function.apply(observer), observer));
     }
 }
