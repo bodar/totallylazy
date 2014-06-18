@@ -46,6 +46,20 @@ public class ObservableTest {
         assertObserved(observer, 0, 1, 2);
     }
 
+    @Test
+    public void supportsLast() throws Exception {
+        CapturingObserver<Integer> observer = new CapturingObserver<>();
+        observable(0, 2, 4).last().subscribe(observer);
+        assertObserved(observer, 4);
+    }
+
+    @Test
+    public void supportsReduce() throws Exception {
+        CapturingObserver<Integer> observer = new CapturingObserver<>();
+        observable(0, 2, 4).reduce(average).map(Number::intValue).subscribe(observer);
+        assertObserved(observer, 2);
+    }
+
     @SafeVarargs
     private final <T> void assertObserved(CapturingObserver<T> observer, T... values) {
         assertThat(observer.items(), hasExactly(values));
