@@ -60,6 +60,20 @@ public class ObservableTest {
         assertObserved(observer, 2);
     }
 
+    @Test
+    public void supportsTake() throws Exception {
+        CapturingObserver<Integer> observer = new CapturingObserver<>();
+        observable(1, 2, 3, 4, 5, 6).take(3).subscribe(observer);
+        assertObserved(observer, 1, 2, 3);
+    }
+
+    @Test
+    public void supportsTakeWhile() throws Exception {
+        CapturingObserver<Integer> observer = new CapturingObserver<>();
+        observable(1, 2, 3, 4, 5, 6).takeWhile(i -> i < 4).subscribe(observer);
+        assertObserved(observer, 1, 2, 3);
+    }
+
     @SafeVarargs
     private final <T> void assertObserved(CapturingObserver<T> observer, T... values) {
         assertThat(observer.items(), hasExactly(values));
