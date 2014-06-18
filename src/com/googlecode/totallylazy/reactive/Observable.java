@@ -25,9 +25,7 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
 
     @Override
     default Observable<T> filter(Predicate<? super T> predicate) {
-        return observable(observer -> t -> {
-            if (predicate.matches(t)) observer.next(t);
-        });
+        return observable(observer -> t -> { if (predicate.matches(t)) observer.next(t); });
     }
 
     @Override
@@ -46,6 +44,18 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
 
     default <S> Observable<S> scan(Reducer<? super T, S> reducer) {
         return scan(reducer.identityElement(), reducer);
+    }
+
+    default Observable<T> last() {
+        return observer -> Observable.this.subscribe(new LastObserver<>(observer));
+    }
+
+    default <S> Observable<S> reduce(S seed, Function2<? super S, ? super T, ? extends S> reducer) {
+        return scan(seed, reducer).last();
+   }
+
+    default <S> Observable<S> reduce(Reducer<? super T, S> reducer) {
+        return scan(reducer).last();
     }
 
     default <R> Observable<R> observable(Function<Observer<R>, Consumer<T>> function) {
