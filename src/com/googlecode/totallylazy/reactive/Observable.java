@@ -6,20 +6,25 @@ import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Reducer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface Observable<T> extends Filterable<T>, Functor<T> {
     AutoCloseable subscribe(Observer<T> observer);
 
     @SafeVarargs
     static <T> Observable<T> observable(T... values) {
+        return observable(sequence(values));
+    }
+
+    static <T> Observable<T> observable(Iterable<? extends T> values) {
         return observer -> {
             for (T value : values) observer.next(value);
             observer.complete();
@@ -66,7 +71,7 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     default Observable<T> take(int count) {
-        return takeWhile(Predicates.countTo(count));
+        return takeWhile(countTo(count));
     }
 
     default Observable<T> takeWhile(Predicate<? super T> predicate) {
@@ -82,7 +87,7 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     default Observable<T> drop(int count) {
-        return dropWhile(Predicates.countTo(count));
+        return dropWhile(countTo(count));
     }
 
     default Observable<T> dropWhile(Predicate<? super T> predicate) {
