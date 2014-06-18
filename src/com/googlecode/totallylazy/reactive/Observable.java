@@ -12,6 +12,9 @@ import com.googlecode.totallylazy.Reducer;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.whileTrue;
+
 public interface Observable<T> extends Filterable<T>, Functor<T> {
     AutoCloseable subscribe(Observer<T> observer);
 
@@ -76,6 +79,14 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
                 observer.complete();
             }
         });
+    }
+
+    default Observable<T> drop(int count) {
+        return dropWhile(Predicates.countTo(count));
+    }
+
+    default Observable<T> dropWhile(Predicate<? super T> predicate) {
+        return filter(not(whileTrue(predicate)));
     }
 
     default <R> Observable<R> observable(Function<Observer<R>, Block<T>> function) {

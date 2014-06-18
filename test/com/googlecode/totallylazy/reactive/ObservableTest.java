@@ -74,6 +74,21 @@ public class ObservableTest {
         assertObserved(observer, 1, 2, 3);
     }
 
+    @Test
+    public void supportsDrop() throws Exception {
+        CapturingObserver<Integer> observer = new CapturingObserver<>();
+        observable(1, 2, 3, 4, 5, 6).drop(3).subscribe(observer);
+        assertObserved(observer, 4, 5, 6);
+    }
+
+    @Test
+    public void supportsDropWhile() throws Exception {
+        CapturingObserver<Integer> observer = new CapturingObserver<>();
+        observable(1, 2, 3, 4, 5, 6).dropWhile(i -> i < 4).subscribe(observer);
+        assertObserved(observer, 4, 5, 6);
+    }
+
+
     @SafeVarargs
     private final <T> void assertObserved(CapturingObserver<T> observer, T... values) {
         assertThat(observer.items(), hasExactly(values));
