@@ -4,6 +4,8 @@ import com.googlecode.totallylazy.Sequences;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.Lists.list;
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.empty;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.nullValue;
@@ -77,8 +79,18 @@ public class ObservableTest {
     public void supportsGroupBy() throws Exception {
         assertObserved(observable(1, 2, 3, 4, 5, 6, 7, 8, 9).
                         groupBy(i -> i % 2).
-                        flatMap(g -> g.reduce(Sequences.empty(Integer.class), (a, b) -> a.append(b))),
-                sequence(2,4,6,8), sequence(1,3,5,7,9));
+                        flatMap(g -> g.toList()),
+                list(2,4,6,8), list(1,3,5,7,9));
+    }
+
+    @Test
+    public void supportsToList() throws Exception {
+        assertObserved(observable(1, 2, 3, 4).toList(), list(1, 2, 3, 4));
+    }
+
+    @Test
+    public void supportsToSequence() throws Exception {
+        assertObserved(observable(1, 2, 3, 4).toSequence(), sequence(1, 2, 3, 4));
     }
 
 
