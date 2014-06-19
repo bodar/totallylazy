@@ -1,11 +1,13 @@
 package com.googlecode.totallylazy.reactive;
 
-import com.googlecode.totallylazy.numbers.Numbers;
+import com.googlecode.totallylazy.Sequences;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.Predicates.empty;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.nullValue;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.reactive.Observable.observable;
@@ -69,6 +71,14 @@ public class ObservableTest {
     public void supportsDropWhile() throws Exception {
         assertObserved(observable(1, 2, 3, 4, 5, 6).dropWhile(i -> i < 4),
                 4, 5, 6);
+    }
+
+    @Test
+    public void supportsGroupBy() throws Exception {
+        assertObserved(observable(1, 2, 3, 4, 5, 6, 7, 8, 9).
+                        groupBy(i -> i % 2).
+                        flatMap(g -> g.reduce(Sequences.empty(Integer.class), (a, b) -> a.append(b))),
+                sequence(2,4,6,8), sequence(1,3,5,7,9));
     }
 
 

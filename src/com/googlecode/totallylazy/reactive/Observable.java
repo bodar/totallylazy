@@ -17,7 +17,11 @@ import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface Observable<T> extends Filterable<T>, Functor<T> {
+
+    AutoCloseable EMPTY_CLOSEABLE = () -> { };
+
     AutoCloseable subscribe(Observer<T> observer);
+
 
     @SafeVarargs
     static <T> Observable<T> observable(T... values) {
@@ -28,15 +32,13 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
         return observer -> {
             for (T value : values) observer.next(value);
             observer.complete();
-            return () -> { };
+            return EMPTY_CLOSEABLE;
         };
     }
 
     @Override
     default Observable<T> filter(Predicate<? super T> predicate) {
-        return observable(observer -> t -> {
-            if (predicate.matches(t)) observer.next(t);
-        });
+        return observable(observer -> t -> { if (predicate.matches(t)) observer.next(t); });
     }
 
     @Override
@@ -96,5 +98,9 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     default <R> Observable<R> observable(Function<Observer<R>, Block<T>> function) {
         return observer -> Observable.this.subscribe(Observer.create(
                 function.apply(observer), observer));
+    }
+
+    default <K> Observable<Group<K, T>> groupBy(Function<? super T, ? extends K> keyExtractor) {
+        return observer -> Observable.this.subscribe(new GroupObserver<>(keyExtractor, observer));
     }
 }

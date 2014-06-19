@@ -1,9 +1,13 @@
 package com.googlecode.totallylazy.reactive;
 
+import com.googlecode.totallylazy.Sequence;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class CapturingObserver<T> implements Observer<T> {
     private final List<T> items = new CopyOnWriteArrayList<>();
@@ -25,8 +29,8 @@ public class CapturingObserver<T> implements Observer<T> {
         completed.set(true);
     }
 
-    public Iterable<T> items() {
-        return items;
+    public Sequence<T> items() {
+        return sequence(items);
     }
 
     public boolean completed() {
