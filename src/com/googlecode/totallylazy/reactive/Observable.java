@@ -7,7 +7,11 @@ import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Reducer;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -18,7 +22,8 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface Observable<T> extends Filterable<T>, Functor<T> {
 
-    AutoCloseable EMPTY_CLOSEABLE = () -> { };
+    AutoCloseable EMPTY_CLOSEABLE = () -> {
+    };
 
     AutoCloseable subscribe(Observer<T> observer);
 
@@ -38,7 +43,9 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
 
     @Override
     default Observable<T> filter(Predicate<? super T> predicate) {
-        return observable(observer -> t -> { if (predicate.matches(t)) observer.next(t); });
+        return observable(observer -> t -> {
+            if (predicate.matches(t)) observer.next(t);
+        });
     }
 
     @Override
@@ -95,12 +102,23 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
         return filter(not(whileTrue(predicate)));
     }
 
+    default <K> Observable<Group<K, T>> groupBy(Function<? super T, ? extends K> keyExtractor) {
+        return observer -> Observable.this.subscribe(new GroupObserver<>(keyExtractor, observer));
+    }
+
     default <R> Observable<R> observable(Function<Observer<R>, Block<T>> function) {
         return observer -> Observable.this.subscribe(Observer.create(
                 function.apply(observer), observer));
     }
 
-    default <K> Observable<Group<K, T>> groupBy(Function<? super T, ? extends K> keyExtractor) {
-        return observer -> Observable.this.subscribe(new GroupObserver<>(keyExtractor, observer));
+    default Observable<List<T>> toList() {
+        return reduce(new ArrayList<>(), (l, t) -> {
+            l.add(t);
+            return l;
+        });
+    }
+
+    default Observable<Sequence<T>> toSequence() {
+        return toList().map(Sequences::<T>sequence);
     }
 }
