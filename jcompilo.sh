@@ -1,8 +1,10 @@
 #!/bin/sh
+set -e
 
-JAVA_OPTS=-Djava.net.useSystemProxies=true ${JAVA_OPTS}
+JAVA_VERSION=${JAVA_VERSION-6}
+JAVA_OPTS="-Djava.net.useSystemProxies=true ${JAVA_OPTS}"
 BUILD_NUMBER=${BUILD_NUMBER-dev.build}
-version=176
+version=180
 artifact=jcompilo
 group=com/googlecode/${artifact}
 repo=repo.bodar.com
@@ -12,6 +14,8 @@ pack=${dir}${artifact}.pack.gz
 url=http://${repo}/${group}/${artifact}/${version}/${artifact}-${version}
 remote_file=${url}.pack.gz
 remote_sh=${url}.sh
+
+type -t setjava > /dev/null && setjava -q ${JAVA_VERSION} || if [ -n "${JAVA_HOME}" ]; then PATH=${JAVA_HOME}/bin:${PATH}; fi
 
 if [ "$1" = "update" ]; then
 	rm ${jar} ${pack}
