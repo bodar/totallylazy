@@ -24,8 +24,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface Observable<T> extends Filterable<T>, Functor<T> {
 
-    AutoCloseable EMPTY_CLOSEABLE = () -> {
-    };
+    AutoCloseable EMPTY_CLOSEABLE = () -> { };
 
     AutoCloseable subscribe(Observer<T> observer);
 
