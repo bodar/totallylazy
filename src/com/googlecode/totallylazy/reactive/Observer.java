@@ -14,26 +14,15 @@ public interface Observer<T> {
 
     void complete();
 
-    static <T> Observer<T> create(Block<T> block, Observer<?> observer) {
-        return new ErrorObserver<>(block, observer);
+    public static <T> Observer<T> observer(Block<? super T> next, Block<? super Throwable> error, Runnable complete) {
+        return new BaseObserver<T>(next, error, complete);
     }
 
-    static <T> Observer<T> observer(Block<? super T> next, Block<? super Throwable> error, Runnable completed ) {
-        return new Observer<T>() {
-            @Override
-            public void next(T value) {
-                next.accept(value);
-            }
+    public static <T> Observer<T> observer(Block<? super T> block, Observer<?> observer) {
+        return observer(block, observer::error, observer::complete);
+    }
 
-            @Override
-            public void error(Throwable throwable) {
-                error.accept(throwable);
-            }
-
-            @Override
-            public void complete() {
-                completed.run();
-            }
-        };
+    public static <T> Observer<T> observer(Observer<T> observer) {
+        return observer(observer::next, observer);
     }
 }

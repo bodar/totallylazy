@@ -6,6 +6,10 @@ import java.util.List;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Lists {
+    public static <T> List<T> list() {
+        return new ArrayList<>();
+    }
+
     @SafeVarargs
     public static <T> List<T> list(T... values) {
         return list(sequence(values));
