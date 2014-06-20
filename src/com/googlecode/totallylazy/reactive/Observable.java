@@ -13,6 +13,7 @@ import com.googlecode.totallylazy.Sequences;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.googlecode.totallylazy.Lists.list;
@@ -84,7 +85,15 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     default Observable<T> takeWhile(Predicate<? super T> predicate) {
-        return filter(whileTrue(predicate));
+        AtomicBoolean complete = new AtomicBoolean(false);
+        return observable(observer -> t -> {
+            if (complete.get()) return;
+            if (predicate.matches(t)) observer.next(t);
+            else {
+                complete.set(true);
+                observer.complete();
+            }
+        });
     }
 
     default Observable<T> drop(int count) {
