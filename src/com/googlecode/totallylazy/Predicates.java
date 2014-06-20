@@ -253,7 +253,11 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> whileTrue(final Predicate<? super T> t) {
-        return new WhileTrue<T>(t);
+        return new WhileTrue<>(t);
+    }
+
+    public static <T> LogicalPredicate<T> whileFalse(final Predicate<? super T> t) {
+        return whileTrue(t).not();
     }
 
     public static <T> LogicalPredicate<T> nullValue() {

@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
+import com.googlecode.totallylazy.Lists;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Reducer;
 import com.googlecode.totallylazy.Sequence;
@@ -12,11 +13,12 @@ import com.googlecode.totallylazy.Sequences;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.whileFalse;
 import static com.googlecode.totallylazy.Predicates.whileTrue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -83,15 +85,7 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     default Observable<T> takeWhile(Predicate<? super T> predicate) {
-        AtomicBoolean complete = new AtomicBoolean(false);
-        return observable(observer -> t -> {
-            if (complete.get()) return;
-            if (predicate.matches(t)) observer.next(t);
-            else {
-                complete.set(true);
-                observer.complete();
-            }
-        });
+        return filter(whileTrue(predicate));
     }
 
     default Observable<T> drop(int count) {
@@ -99,20 +93,20 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     default Observable<T> dropWhile(Predicate<? super T> predicate) {
-        return filter(not(whileTrue(predicate)));
+        return filter(whileFalse(predicate));
     }
 
     default <K> Observable<Group<K, T>> groupBy(Function<? super T, ? extends K> keyExtractor) {
         return observer -> Observable.this.subscribe(new GroupObserver<>(keyExtractor, observer));
     }
 
-    default <R> Observable<R> observable(Function<Observer<R>, Block<T>> function) {
-        return observer -> Observable.this.subscribe(Observer.create(
+    default <R> Observable<R> observable(Function<? super Observer<R>, Block<T>> function) {
+        return observer -> Observable.this.subscribe(Observer.observer(
                 function.apply(observer), observer));
     }
 
     default Observable<List<T>> toList() {
-        return reduce(new ArrayList<>(), (l, t) -> {
+        return reduce(list(), (l, t) -> {
             l.add(t);
             return l;
         });
