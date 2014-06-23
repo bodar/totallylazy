@@ -89,7 +89,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return values().hashCode();
     }
 
-    public static <A, B, C> Function2<Pair<A, B>, C, Pair<B, C>> leftShift() {
+    public static <A, B, C> Function2<Pair<A, B>, C, Pair<B, C>> leftShift2() {
         return new Function2<Pair<A, B>, C, Pair<B, C>>() {
             @Override
             public Pair<B, C> call(Pair<A, B> pair, C c) throws Exception {

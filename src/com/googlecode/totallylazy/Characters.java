@@ -120,8 +120,4 @@ public class Characters {
     public static Sequence<Character> characters() {
         return range(Character.MIN_VALUE, Character.MAX_VALUE);
     }
-
-    public static class parameters {
-        public static char a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,_;
-    }
 }
