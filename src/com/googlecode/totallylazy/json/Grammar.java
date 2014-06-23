@@ -26,6 +26,7 @@ import static com.googlecode.totallylazy.parser.Parsers.string;
 import static com.googlecode.totallylazy.parser.Parsers.ws;
 import static com.googlecode.totallylazy.parser.Parsers.wsChar;
 
+@SuppressWarnings("unchecked")
 public class Grammar {
     public static final Parser<Void> NULL = string("null").ignore();
 

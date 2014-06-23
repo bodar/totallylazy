@@ -56,6 +56,7 @@ public class JsonTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void correctlyRendersAndParsesIntegersAndText() throws Exception {
         Map<String, ?> model = map("root",
                 map("child", list(
