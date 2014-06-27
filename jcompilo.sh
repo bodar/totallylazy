@@ -2,7 +2,7 @@
 set -e
 
 JAVA_VERSION=${JAVA_VERSION-6}
-JAVA_OPTS="-Djava.net.useSystemProxies=true ${JAVA_OPTS}"
+JAVA_OPTS="-server -XX:+TieredCompilation -Djava.net.useSystemProxies=true ${JAVA_OPTS}"
 BUILD_NUMBER=${BUILD_NUMBER-dev.build}
 version=180
 artifact=jcompilo
