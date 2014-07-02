@@ -104,12 +104,9 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
 
     @Override
     public int index() {
-        return focus.indexOf(value()) + breadcrumbs.filter(where(direction, is(right))).fold(0, new Function2<Integer, Breadcrumb<K, V>, Integer>() {
-            @Override
-            public Integer call(Integer integer, Breadcrumb<K, V> breadcrumb) throws Exception {
-                return integer + breadcrumb.other.size() + 1;
-            }
-        });
+        return focus.indexOf(value()) + breadcrumbs.
+                filter(where(direction, is(right))).
+                fold(0, (i, breadcrumb) -> i + breadcrumb.other.size() + 1);
     }
 
     @Override
