@@ -6,14 +6,15 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Predicates.not;
 
 public class Characters {
-    public static Charset UTF8 = Charset.forName("UTF-8");
-    public static Charset UTF16 = Charset.forName("UTF-16");
-    public static Charset ASCII = Charset.forName("ASCII");
+    public static Charset UTF8 = StandardCharsets.UTF_8;
+    public static Charset UTF16 = StandardCharsets.UTF_16;
+    public static Charset ASCII = StandardCharsets.US_ASCII;
 
     public static final Combiner<CharSequence> join = JoinCharSequence.instance;
 

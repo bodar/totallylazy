@@ -1,12 +1,9 @@
 package com.googlecode.totallylazy.reactive;
 
-import com.googlecode.totallylazy.Sequences;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Lists.list;
-import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.empty;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Sequences.sequence;
