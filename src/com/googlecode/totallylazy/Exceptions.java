@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import java.io.PrintWriter;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Option.none;
@@ -127,12 +128,13 @@ public class Exceptions {
     public static <A, B> Function1<A, Either<Exception, B>> either(final Callable1<? super A, ? extends B> callable) {
         return new Function1<A, Either<Exception, B>>() {
             @Override
-            public Either<Exception, B> call(A a) throws Exception {
-                try {
-                    return Either.right(callable.call(a));
-                } catch (Exception e) {
-                    return Either.left(e);
-                }
+            public Either<Exception, B> call(final A a) throws Exception {
+                return Either.either(new Callable<B>() {
+                    @Override
+                    public B call() throws Exception {
+                        return callable.call(a);
+                    }
+                });
             }
         };
     }
@@ -150,15 +152,15 @@ public class Exceptions {
         };
     }
 
-
     public static <T, S> Function1<T, Option<S>> optional(final Callable1<? super T, ? extends S> callable) {
         return new Function1<T, Option<S>>() {
-            public Option<S> call(T t) throws Exception {
-                try {
-                    return Option.option(callable.call(t));
-                } catch (Exception e) {
-                    return none();
-                }
+            public Option<S> call(final T t) throws Exception {
+                return Option.option(new Callable<S>() {
+                    @Override
+                    public S call() throws Exception {
+                        return callable.call(t);
+                    }
+                });
             }
         };
     }
