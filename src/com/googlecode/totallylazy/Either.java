@@ -2,6 +2,8 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
+import java.util.concurrent.Callable;
+
 public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functor<R>, Applicative<R>, Monad<R>, Foldable<R> {
     public static <L, R> Either<L, R> right(R value) {
         return Right.right(value);
@@ -17,6 +19,14 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
 
     public static <L, R> Either<L, R> left(L value, Class<R> rightType) {
         return Left.left(value);
+    }
+
+    public static <R> Either<Exception, R> either(Callable<? extends R> callable) {
+        try {
+            return Either.right(callable.call());
+        } catch (Exception e) {
+            return Either.left(e);
+        }
     }
 
     public abstract boolean isRight();
@@ -62,6 +72,7 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
     public abstract Option<L> leftOption();
 
     public abstract Option<R> rightOption();
+
 
     public static class predicates {
         public static LogicalPredicate<Either<?, ?>> left = new LogicalPredicate<Either<?, ?>>() {
