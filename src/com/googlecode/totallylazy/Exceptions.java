@@ -74,6 +74,8 @@ public class Exceptions {
         return other -> other.matches(instance);
     }
 
+    /** @deprecated Replaced by {@link com.googlecode.totallylazy.Exceptions#either} */
+    @Deprecated
     public static <T, S> Function<T, Either<S, Throwable>> captureException(final Function<? super T, ? extends S> callable) {
         return input -> {
             try {
