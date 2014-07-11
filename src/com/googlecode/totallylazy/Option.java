@@ -12,6 +12,14 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
         return Some.some(a);
     }
 
+    public static <A> Option<A> option(Callable<? extends A> t) {
+        try {
+            return Option.option(t.call());
+        } catch (Exception e) {
+            return none();
+        }
+    }
+
     public static <A> Option<A> some(A a) {
         return Some.some(a);
     }
