@@ -2,34 +2,32 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.asFunction;
-import static com.googlecode.totallylazy.Callables.callThrows;
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Callables.returnArgument;
-import static com.googlecode.totallylazy.Exceptions.captureException;
+import static com.googlecode.totallylazy.Either.left;
+import static com.googlecode.totallylazy.Either.right;
+import static com.googlecode.totallylazy.Exceptions.either;
 import static com.googlecode.totallylazy.Exceptions.handleException;
-import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Predicates.always;
-import static com.googlecode.totallylazy.Right.right;
-import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
 
 public class ExceptionsTest {
     @Test
     public void supportsReturningNoneInsteadOfThrowingAnException() throws Exception {
-        Function<Object, Object> throwingFunction = asFunction(callThrows(new RuntimeException()));
+        Function<Object, Object> throwingFunction = o -> { throw new RuntimeException(); };
 
-        assertThat(handleException(throwingFunction,             always()).call(null), is((Option)none()));
+        assertThat(handleException(throwingFunction, always()).call(null), is((Option) none()));
         assertThat(handleException(returnArgument(String.class), always()).call("hi there"), is(option("hi there")));
     }
 
     @Test
     public void supportsCapturingExceptions() throws Exception {
         RuntimeException exception = new RuntimeException();
-        Function<Object, Object> throwingFunction = asFunction(callThrows(exception));
+        Function<Object, Object> throwingFunction = o -> { throw exception; };
 
-        assertThat(captureException(throwingFunction).call(null), is((Either)right(exception)));
-        assertThat(captureException(returnArgument(String.class)).call("hi there"), is((Either)left("hi there")));
+        assertThat(either(throwingFunction).call(null), is(left(exception)));
+        assertThat(either(returnArgument(String.class)).call("hi there"), is(right("hi there")));
     }
 }
