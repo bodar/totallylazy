@@ -89,13 +89,7 @@ public class Exceptions {
     }
 
     public static <A, B> Function<A, Either<Exception, B>> either(final Function<? super A, ? extends B> callable) {
-        return a -> {
-            try {
-                return Either.right(callable.call(a));
-            } catch (Exception e) {
-                return Either.left(e);
-            }
-        };
+        return a -> Either.<B>either(() -> callable.call(a));
     }
 
     public static <A, B> Function<A, B> orElse(final Function<? super A, ? extends B> callable, final B result) {
@@ -110,12 +104,6 @@ public class Exceptions {
 
 
     public static <T, S> Function<T, Option<S>> optional(final Function<? super T, ? extends S> callable) {
-        return t -> {
-            try {
-                return Option.option(callable.call(t));
-            } catch (Exception e) {
-                return none();
-            }
-        };
+        return t -> Option.<S>option(() -> callable.call(t));
     }
 }
