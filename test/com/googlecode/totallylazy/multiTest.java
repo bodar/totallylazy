@@ -10,8 +10,10 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Dispatcher.dispatcher;
 import static com.googlecode.totallylazy.Predicates.any;
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.callables.TimeReport.time;
 import static com.googlecode.totallylazy.multi.distanceBetween;
 import static com.googlecode.totallylazy.Assert.assertThat;
 
@@ -80,7 +82,8 @@ public class multiTest {
     }
 
     class Instance {
-        public String process(Object o) { return new multi(){}.method(o); }
+        private final Dispatcher dispatcher = Dispatcher.dispatcher(this, "process");
+        public String process(Object o) { return dispatcher.invoke(o); }
         @multimethod String process(String s) { return "String processed"; }
         @multimethod String process(CharSequence s) { return "CharSequence processed"; }
         @multimethod String process(Integer s) { return "Integer processed"; }
@@ -89,6 +92,26 @@ public class multiTest {
     @Test
     public void worksWithInstances() throws Exception {
         assertThat(new Instance().process((Object) "A String"), is("String processed"));
+    }
+
+
+    @Test
+    public void isPrettyFast() throws Exception {
+        Instance instance = new Instance();
+        System.out.println("MultiMethod: " + time(10000, () -> instance.process((Object) "Foo")));
+        System.out.println("Direct: " + time(10000, () -> instance.process("Foo")));
+        System.out.println();
+        System.out.println("MultiMethod: " + time(10000, () -> instance.process((Object) "Foo")));
+        System.out.println("Direct: " + time(10000, () -> instance.process("Foo")));
+        System.out.println();
+        System.out.println("MultiMethod: " + time(10000, () -> instance.process((Object) "Foo")));
+        System.out.println("Direct: " + time(10000, () -> instance.process("Foo")));
+        System.out.println();
+        System.out.println("MultiMethod: " + time(10000, () -> instance.process((Object) "Foo")));
+        System.out.println("Direct: " + time(10000, () -> instance.process("Foo")));
+        System.out.println();
+        System.out.println("MultiMethod: " + time(10000, () -> instance.process((Object) "Foo")));
+        System.out.println("Direct: " + time(10000, () -> instance.process("Foo")));
     }
 
     @Test
