@@ -91,7 +91,7 @@ public class Methods {
     public static Function<Class<?>, Iterable<Method>> methods() {
         return new Function<Class<?>, Iterable<Method>>() {
             public Iterable<Method> call(Class<?> aClass) throws Exception {
-                return sequence(aClass.getMethods());
+                return Methods.publicMethods(aClass);
             }
         };
     }
@@ -99,10 +99,14 @@ public class Methods {
     public static Function<Class<?>, Iterable<Method>> declaredMethods() {
         return new Function<Class<?>, Iterable<Method>>() {
             public Iterable<Method> call(Class<?> aClass) throws Exception {
-                return sequence(aClass.getDeclaredMethods());
+                return Methods.declaredMethods(aClass);
             }
         };
     }
+
+    public static Sequence<Method> publicMethods(Class<?> aClass) {return sequence(aClass.getMethods());}
+
+    public static Sequence<Method> declaredMethods(Class<?> aClass) {return sequence(aClass.getDeclaredMethods());}
 
     public static Sequence<Method> allMethods(Class<?> aClass) {
         return allClasses(aClass).flatMap(Methods.declaredMethods());
