@@ -16,8 +16,10 @@ import static com.googlecode.totallylazy.Appendables.append;
 public class JsonWriter {
     public static final String SEPARATOR = ",";
 
+    private static multi multi;
     public static <A extends Appendable> A write(final Object o, final A appendable) {
-        return new multi(){}.<A>methodOption(o, appendable).getOrElse(new Callable<A>() {
+        if(multi == null) multi = new multi(){};
+        return multi.<A>methodOption(o, appendable).getOrElse(new Callable<A>() {
             @Override
             public A call() throws Exception {
                 return write(o.toString(), appendable);

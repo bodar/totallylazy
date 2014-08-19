@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.multi;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.Serializable;
@@ -11,9 +12,10 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Dispatcher.distanceBetween;
 import static com.googlecode.totallylazy.Predicates.any;
+import static com.googlecode.totallylazy.callables.TimeReport.time;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static com.googlecode.totallylazy.multi.distanceBetween;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class multiTest {
@@ -81,7 +83,11 @@ public class multiTest {
     }
 
     class Instance {
-        public String process(Object o) { return new multi(){}.method(o); }
+        private multi multi;
+        public String process(Object o) {
+            if(multi == null) multi = new multi(){};
+            return multi.method(o);
+        }
         @multimethod String process(String s) { return "String processed"; }
         @multimethod String process(CharSequence s) { return "CharSequence processed"; }
         @multimethod String process(Integer s) { return "Integer processed"; }
@@ -90,6 +96,34 @@ public class multiTest {
     @Test
     public void worksWithInstances() throws Exception {
         assertThat(new Instance().process((Object) "A String"), is("String processed"));
+    }
+
+    @Test @Ignore
+    public void isPrettyFast() throws Exception {
+        final Instance instance = new Instance();
+        Function<Object> multimethod = new Function<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return instance.process((Object) "Foo");
+            }
+        };
+        Function<Object> direct = new Function<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return instance.process("Foo");
+            }
+        };
+        System.out.println("MultiMethod: " + time(10000, multimethod));
+        System.out.println("Direct: " + time(10000, direct));
+        System.out.println();
+        System.out.println("MultiMethod: " + time(10000, multimethod));
+        System.out.println("Direct: " + time(10000, direct));
+        System.out.println();
+        System.out.println("MultiMethod: " + time(10000, multimethod));
+        System.out.println("Direct: " + time(10000, direct));
+        System.out.println();
+        System.out.println("MultiMethod: " + time(10000, multimethod));
+        System.out.println("Direct: " + time(10000, direct));
     }
 
     @Test
