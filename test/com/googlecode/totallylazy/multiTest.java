@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.Serializable;
@@ -10,11 +11,10 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Dispatcher.dispatcher;
+import static com.googlecode.totallylazy.Dispatcher.distanceBetween;
 import static com.googlecode.totallylazy.Predicates.any;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.callables.TimeReport.time;
-import static com.googlecode.totallylazy.multi.distanceBetween;
 import static com.googlecode.totallylazy.Assert.assertThat;
 
 public class multiTest {
@@ -82,8 +82,11 @@ public class multiTest {
     }
 
     class Instance {
-        private final Dispatcher dispatcher = Dispatcher.dispatcher(this, "process");
-        public String process(Object o) { return dispatcher.invoke(o); }
+        private multi multi;
+        public String process(Object o) {
+            if(multi == null) multi = new multi(){};
+            return multi.method(o);
+        }
         @multimethod String process(String s) { return "String processed"; }
         @multimethod String process(CharSequence s) { return "CharSequence processed"; }
         @multimethod String process(Integer s) { return "Integer processed"; }
@@ -95,7 +98,7 @@ public class multiTest {
     }
 
 
-    @Test
+    @Test @Ignore
     public void isPrettyFast() throws Exception {
         Instance instance = new Instance();
         System.out.println("MultiMethod: " + time(10000, () -> instance.process((Object) "Foo")));

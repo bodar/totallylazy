@@ -41,7 +41,7 @@ public class Dispatcher {
     }
 
     public static Dispatcher dispatcher(Class<?> aClass, Predicate<Method> predicate) {
-        return new Dispatcher(aClass, null, predicate);
+        return dispatcher(aClass, null, predicate);
     }
 
     public static Dispatcher dispatcher(Object instance, String name) {
@@ -49,7 +49,11 @@ public class Dispatcher {
     }
 
     public static Dispatcher dispatcher(Object instance, Predicate<Method> predicate) {
-        return new Dispatcher(instance.getClass(), instance, predicate);
+        return dispatcher(instance.getClass(), instance, predicate);
+    }
+
+    public static Dispatcher dispatcher(Class<?> aClass, Object instance, Predicate<Method> predicate) {
+        return new Dispatcher(aClass, instance, predicate);
     }
 
     public <T> T invoke(Object... args) {
