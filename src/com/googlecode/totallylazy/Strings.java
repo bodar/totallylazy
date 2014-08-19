@@ -202,8 +202,10 @@ public class Strings {
         return value == null ? "" : value.toString();
     }
 
+    private static multi multi;
     public static String string(Object value) {
-        return new multi(){}.<String>methodOption(value).getOrElse(String.valueOf(value));
+        if(multi == null) multi = new multi(){};
+        return multi.<String>methodOption(value).getOrElse(String.valueOf(value));
     }
 
     @multimethod
