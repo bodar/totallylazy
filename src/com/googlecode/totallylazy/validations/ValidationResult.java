@@ -11,12 +11,14 @@ import com.googlecode.totallylazy.collections.PersistentMap;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
+import static com.googlecode.totallylazy.Objects.equalTo;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.identity;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
 import static com.googlecode.totallylazy.collections.TreeMap.constructors.factory;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
+import static java.lang.String.format;
 
 /**
  * An immutable map of String keys to sequences of failure messages
@@ -83,6 +85,21 @@ public class ValidationResult {
 
     public boolean failed() {
         return !succeeded();
+    }
+
+    @Override
+    public String toString() {
+        return format("%s%s", succeeded()? "success" : "failure", messages);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof ValidationResult && equalTo(((ValidationResult) o).messages, messages);
+    }
+
+    @Override
+    public int hashCode() {
+        return messages == null ? 19 : messages.hashCode();
     }
 
     public PersistentMap<String, Sequence<String>> toMap() {
