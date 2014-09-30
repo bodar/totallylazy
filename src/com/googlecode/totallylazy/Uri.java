@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.regex.Regex;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.regex.MatchResult;
 
 import static com.googlecode.totallylazy.Strings.isEmpty;
@@ -249,6 +250,11 @@ public class Uri implements Comparable<Uri> {
 
     public File toFile() {
         return new File(toURI());
+    }
+
+    public Uri normalise() {
+        if(Strings.isEmpty(path)) return this;
+        return path(Paths.get(path).normalize().toString());
     }
 
     public static class functions {
