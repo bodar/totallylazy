@@ -11,6 +11,16 @@ import static com.googlecode.totallylazy.Predicates.is;
 
 public class UriTest {
     @Test
+    public void canNormalise() throws Exception {
+        assertThat(uri("build/../build.xml").normalise(), is(uri("build.xml")));
+        assertThat(uri("build/../../build.xml").normalise(), is(uri("../build.xml")));
+        assertThat(uri("build/child/../../build.xml").normalise(), is(uri("build.xml")));
+        assertThat(uri("build/./build.xml").normalise(), is(uri("build/build.xml")));
+        assertThat(uri("build/././build.xml").normalise(), is(uri("build/build.xml")));
+        assertThat(uri("").normalise(), is(uri("")));
+    }
+
+    @Test
     public void correctlyParsesUrls() throws Exception {
         Uri uri = uri("http://www.ics.uci.edu:80/pub/ietf/uri/?foo=bar#Related");
         assertThat(uri.scheme(), is("http"));
