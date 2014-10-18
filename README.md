@@ -29,7 +29,7 @@ Examples
 
 The following are some simple examples of actual Java code (minus any imports). They are using numbers just to make them simple but these could just as well be any types; though you would either need to create some strongly types predicates / callables for your types or use the provided dynamic proxy support.
 
-```
+```java
 sequence(1, 2, 3, 4).filter(even); // lazily returns 2,4
 sequence(1, 2).map(toString); // lazily returns "1", "2"
 sequence(1, 2).mapConcurrently(toString); // lazily distributes the work to background threads
@@ -50,7 +50,7 @@ sequence(1, 2, 3).toString(":"); // eagerly returns "1:2:3"
 Generators
 ==========
 
-```
+```java
 range(1, 4); // lazily returns 1,2,3,4
 repeat("car"); // lazily returns an infinite sequence of "car"s
 iterate(increment, 1); // lazily returns 1,2,3 ... to infinity
@@ -62,7 +62,7 @@ powersOf(3); // lazily returns the powers of 3 (i.e 1,3,9,27 ...)
 
 Naturally you can combine these operations together ... 
 
-```
+```java
 iterate(increment, 1).filter(even).take(10).reduce(average); // returns 11
 ```
 
