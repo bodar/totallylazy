@@ -24,7 +24,8 @@ Records has moved to http://code.google.com/p/lazyrecords/
 
 Now also available in [https://github.com/stuartervine/OCTotallyLazy/ Objective-C] 
 
-==Examples==
+Examples
+========
 
 The following are some simple examples of actual Java code (minus any imports). They are using numbers just to make them simple but these could just as well be any types; though you would either need to create some strongly types predicates / callables for your types or use the provided dynamic proxy support.
 
@@ -46,7 +47,8 @@ sequence(1, 2, 3).toString(); // eagerly returns "1,2,3"
 sequence(1, 2, 3).toString(":"); // eagerly returns "1:2:3"
 }}}
 
-===Generators===
+Generators
+==========
 
 {{{
 range(1, 4); // lazily returns 1,2,3,4
