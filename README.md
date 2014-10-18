@@ -3,26 +3,26 @@ totallylazy
 
 Another functional library for Java
 
-Friendly support is available at our [https://groups.google.com/forum/?fromgroups#!forum/totallylazy Google Group] or post a question on StackOverflow with [http://stackoverflow.com/questions/tagged/totallylazy tag totallylazy]
+Friendly support is available at our [Google Group](https://groups.google.com/forum/?fromgroups#!forum/totallylazy) or post a question on StackOverflow with [tag totallylazy](http://stackoverflow.com/questions/tagged/totallylazy)
 
 A functional library for Java that has the following features
 
- * Tries to be as lazy as possible just like [http://clojure.org/ Clojure]'s collection library
+ * Tries to be as lazy as possible just like [Clojure's](http://clojure.org/) collection library
  * Works with Iterable, Iterator, Arrays, Char Sequences, Dates and Numbers (i.e virtually everything)
- * Follows the [http://hyperpolyglot.org/ml ML family] of function / method names (Standard ML, oCaml, F#, Scala, Haskell)
- * Uses and extends Callable interface for maximum interop (i.e Can use with Clojure, [http://www.hazelcast.com/ Hazelcast])
- * Optionally supports using [http://code.google.com/p/hamcrest/ Hamcrest] matchers as predicates
+ * Follows the [ML family](http://hyperpolyglot.org/ml) of function / method names (Standard ML, oCaml, F#, Scala, Haskell)
+ * Uses and extends Callable interface for maximum interop (i.e Can use with Clojure, [Hazelcast](http://www.hazelcast.com/))
+ * Optionally supports using [Hamcrest](http://code.google.com/p/hamcrest/) matchers as predicates
  * Supports chaining of all methods (Recommended) or the use of static imports for all methods.
- * Optionally supports creating Callables via dynamic proxies (requires [http://cglib.sourceforge.net/ cglib-2.2] and [http://code.google.com/p/objenesis/ objenesis-1.2])
+ * Optionally supports creating Callables via dynamic proxies (requires [cglib-2.2](http://cglib.sourceforge.net/) and [objenesis-1.2](http://code.google.com/p/objenesis/))
  * Contains PersistentSet, PersistentMap, PersistentSortedMap, PersistentList
  * Support Functors and Applicative Functors
  * Supports runtime multi-method dispatch and pattern matching
 
-Tail call optimisation is available in conjunction with [https://code.google.com/p/jcompilo/ JCompilo]
+Tail call optimisation is available in conjunction with [JCompilo](https://code.google.com/p/jcompilo/)
 
 Records has moved to http://code.google.com/p/lazyrecords/
 
-Now also available in [https://github.com/stuartervine/OCTotallyLazy/ Objective-C] 
+Now also available in [Objective-C](https://github.com/stuartervine/OCTotallyLazy/) 
 
 Examples
 ========
