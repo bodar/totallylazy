@@ -76,7 +76,7 @@ Releases
  * Stable releases are version 1.x (Require Java 7)
  * Development releases are version 2.x (Require Java 8)
 
-All releases are created atomically and released to
+All releases are created automically and released to
 
 http://repo.bodar.com/com/googlecode/totallylazy/totallylazy/
 
