@@ -98,7 +98,7 @@ and then
     <dependency>
         <groupId>com.googlecode.totallylazy</groupId>
         <artifactId>totallylazy</artifactId>
-        <version>1049</version>
+        <version>SOME_VERSION</version>
     </dependency>
 </dependencies>
 ```
