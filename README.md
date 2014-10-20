@@ -70,7 +70,38 @@ And because all the operations except reduce are lazy the sequence of numbers is
 
 ----
 
-MavenRepository  => http://repo.bodar.com/
+Releases
+========
+
+ * Stable releases are version 1.x (Require Java 7)
+ * Development releases are version 2.x (Require Java 8)
+
+All releases are created atomically and released to
+
+http://repo.bodar.com/com/googlecode/totallylazy/totallylazy/
+
+This is a maven repository so you can just add the following in you repo section
+
+```xml
+<repositories>
+    <repository>
+        <id>repo.bodar.com</id>
+        <url>http://repo.bodar.com</url>
+    </repository>
+</repositories>
+
+```
+and then 
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.googlecode.totallylazy</groupId>
+        <artifactId>totallylazy</artifactId>
+        <version>1049</version>
+    </dependency>
+</dependencies>
+```
 
 ----
 
