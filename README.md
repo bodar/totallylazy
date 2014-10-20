@@ -89,7 +89,6 @@ This is a maven repository so you can just add the following in you repo section
         <url>http://repo.bodar.com</url>
     </repository>
 </repositories>
-
 ```
 and then 
 
