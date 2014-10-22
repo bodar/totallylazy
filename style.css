@@ -22,7 +22,7 @@
 
 html {
     color: white;
-    background-color: #2B2B2B;
+    background: #000000 linear-gradient(to bottom, #45484d 0%, #000000 100%) no-repeat;
     font-family: sans-serif;
 }
 
@@ -42,5 +42,20 @@ code {
 
 pre > code {
     display: block;
-    padding: 5px 10px;
+    padding: 15px 20px;
 }
+
+h1 {
+    text-align: center;
+}
+
+
+
+/* Scale & Rhythm @ http://lamb.cc/typograph/ */
+body { font-size:100%; line-height:1.25; }
+h1, h2, h3 { margin-top:0; margin-bottom:0; }
+h1 { font-size:3em; }
+h1, h3 { margin:1.25em 0; }
+h2 { font-size:1.75em; margin:1.51786em 0; }
+h3 { font-size:1.33333em; }
+
