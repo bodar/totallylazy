@@ -48,7 +48,26 @@ sequence(1, 2, 3).toString(); // eagerly returns "1,2,3"
 sequence(1, 2, 3).toString(":"); // eagerly returns "1:2:3"</code></pre>
     </section>
 
-   <aside>
+    <h3>Installation</h3>
+
+    <h4><a href="http://maven.apache.org/">Maven</a></h4>
+
+    <p>Add our repo to the repositories section in you pom.xml</p>
+
+    <pre><code class="language-xml">&lt;repository&gt;
+    &lt;id&gt;repo.bodar.com&lt;/id&gt;
+    &lt;url&gt;http://repo.bodar.com&lt;/url&gt;
+&lt;/repository&gt;</code></pre>
+
+    <p>Then add our dependency</p>
+
+    <pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.googlecode.totallylazy&lt;/groupId&gt;
+    &lt;artifactId&gt;totallylazy&lt;/artifactId&gt;
+    &lt;version&gt;1049&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+
+    <aside>
    </aside>
 
     <script>
