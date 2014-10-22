@@ -1,0 +1,46 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
+
+.dark-background {
+    color: #2B2B2B;
+}
+
+.medium-background {
+    color: #323232;
+}
+
+.light-background {
+    color: #3C3F41;
+}
+
+.orange {
+    color:#CC7832;
+}
+
+.purple {
+    color: #9876AA;
+}
+
+html {
+    color: white;
+    background-color: #2B2B2B;
+    font-family: sans-serif;
+}
+
+body {
+    margin: 0 auto;
+    width: 1024px;
+}
+
+a, a:hover, a:visited, a:active, a:focus {
+    color: #9876AA;
+}
+
+code {
+    background-color: #323232;
+    font-family: monospace;
+}
+
+pre > code {
+    display: block;
+    padding: 5px 10px;
+}
