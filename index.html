@@ -34,7 +34,20 @@
             <li>Supports runtime multi-method dispatch and pattern matching</li>
         </ul>
 
-        <pre><code class="language-java">sequence(1, 2, 3, 4).filter(even); // lazily returns 2,4
+    </section>
+
+    <section>
+        <h2>10 second tutorial</h2>
+
+        <p>TotallyLazy heavily uses static imports to make your Java code concise and readable, so lets start with a few to make life easy:</p>
+
+        <pre><code class="language-java">import static com.googlecode.totallylazy.Sequences.* // Where the sequence factory methods live;
+import static com.googlecode.totallylazy.Callables.* // Lots of helper functions;
+import static com.googlecode.totallylazy.numbers.Numbers.*; // Used for working with all Java Number types</code></pre>
+
+        <p>Now we can try some of the following:</p>
+
+                <pre><code class="language-java">sequence(1, 2, 3, 4).filter(even); // lazily returns 2,4
 sequence(1, 2).map(toString); // lazily returns "1", "2"
 sequence(1, 2).mapConcurrently(toString); // lazily distributes the work to background threads
 sequence(1, 2, 3).take(2); // lazily returns 1,2
@@ -52,7 +65,16 @@ sequence(1, 2, 3).toString(":"); // eagerly returns "1:2:3"</code></pre>
     </section>
 
     <section>
-        <h2>Installation</h2>
+        <h2>Download directly</h2>
+
+        <p>You can always download the latest version directly from GitHub</p>
+
+        <a href="https://github.com/bodar/totallylazy/releases/latest" class="button download"><i class="fa fa-download"></i> Latest Jar</a>
+
+    </section>
+
+    <section>
+        <h2>Install using a package manager</h2>
 
         <h4><a href="http://maven.apache.org/">Maven</a></h4>
 

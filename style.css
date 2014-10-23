@@ -53,8 +53,8 @@ h1 {
     padding: 15px;
     color: white;
     font-weight: bold;
-    background-color: #c76ea5;
-    background-image: linear-gradient(top, #ca75aa, #b95891);
+    background-color: #8F6FA0;
+    background-image: linear-gradient(top, #A07CB3, #826591);
     font-size:1.33333em;
     border-radius: 12px;
     display: inline-block;
@@ -65,9 +65,15 @@ h1 {
 .button:hover {
     color: white;
     text-decoration: none;
-    background-color: #d07cb0;
-    background-image: linear-gradient(top, #e89ccc, #ca75aa);
+    background-color: #A07CB3;
+    background-image: linear-gradient(top, #AF88C4, #8F6FA0);
 }
+
+/* Fix Chrome bug */
+body  .button {
+    color: #ffffff;
+}
+
 
 .ruby {
     background-color: #CC342D;
@@ -111,11 +117,6 @@ h1 {
 
 nav > a {
     margin: 0 20px 20px 0;
-}
-
-/* Fix Chrome bug */
-nav > .button {
-    color: #ffffff;
 }
 
 section {

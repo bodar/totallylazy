@@ -66,10 +66,10 @@ document.addEventListener('DOMContentLoaded', function () {
     select('code.language-java').each(function(element) {
         code.highlight(element, [
             {pattern: '"[^"]*"', cssClass: "quote" },
-            {pattern: "(?:public|void|class|true|false|throws|[,.;])", cssClass: "keyword" },
+            {pattern: "(?:public|void|class|import|static|true|false|throws|[,.;])", cssClass: "keyword" },
             {pattern: "\\d+", cssClass: "literal" },
             {pattern: "//.*$", cssClass: "comment" },
-            {pattern: "\\w+\\b(?!\\()", cssClass: "keyword" },
+            {pattern: "\\w+\\b(?![\\(\\.])", cssClass: "keyword" },
         ]);
     })
 });
