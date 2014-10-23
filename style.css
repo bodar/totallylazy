@@ -1,24 +1,10 @@
 @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
 
-.dark-background {
-    color: #2B2B2B;
-}
-
-.medium-background {
-    color: #323232;
-}
-
-.light-background {
-    color: #3C3F41;
-}
-
-.orange {
-    color:#CC7832;
-}
-
-.purple {
-    color: #9876AA;
-}
+.dark-background { color: #2B2B2B; }
+.medium-background { color: #323232; }
+.light-background { color: #3C3F41; }
+.orange { color:#CC7832; }
+.purple { color: #9876AA; }
 
 html {
     color: white;
@@ -27,8 +13,14 @@ html {
 }
 
 body {
-    margin: 0 auto 100px;
-    width: 1024px;
+    margin: 0 20px 100px;
+}
+
+@media screen and (min-width: 1050px) {
+    body {
+        margin: 0 auto 100px;
+        width: 1024px;
+    }
 }
 
 a, a:hover, a:visited, a:active, a:focus {
@@ -42,6 +34,8 @@ a:hover {
 }
 
 code {
+    overflow: auto;
+    overflow-y: hidden;
     background-color: #323232;
     font-family: monospace;
 }
@@ -116,7 +110,7 @@ h1 {
 }
 
 nav > a {
-    margin-right: 20px;
+    margin: 0 20px 20px 0;
 }
 
 /* Fix Chrome bug */
