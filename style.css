@@ -55,16 +55,16 @@ h1 {
 }
 
 .button {
-    padding: 20px;
+    padding: 15px;
     color: white;
     font-weight: bold;
     background-color: #c76ea5;
     background-image: linear-gradient(top, #ca75aa, #b95891);
-    font-size:1.75em;
+    font-size:1.33333em;
     border-radius: 12px;
     display: inline-block;
     font-style: italic;
-    box-shadow: inset 0px 2px 0px 0px rgba(255, 255, 255, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 2px 0 0 rgba(255, 255, 255, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .button:hover {
@@ -85,27 +85,46 @@ h1 {
 }
 
 .objective-c {
+    background-color: #BBB;
+    background-image: linear-gradient(top, #CCC, #AAA);
+}
+
+.objective-c:hover {
     background-color: #CCCCCC;
     background-image: linear-gradient(top, #DEDEDE, #BBB);
 }
 
-.objective-c:hover {
-    background-color: #DEDEDE;
-    background-image: linear-gradient(top, #FBFBFB, #CCCCCC);
+.google-groups {
+    background-color: #3B72D0;
+    background-image: linear-gradient(top, #407CE3, #3668BE);
 }
 
-.languages {
-    overflow: auto;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-
+.google-groups:hover {
+    background-color: #407CE3;
+    background-image: linear-gradient(top, #4586F5, #3B72D0);
 }
 
-.languages li {
-    list-style: none;
-    float: left;
-    padding-right: 20px;
+.stackoverflow {
+    background-color: #DE792D;
+    background-image: linear-gradient(top, #EC8130, #DF7A2D);
+}
+
+.stackoverflow:hover {
+    background-color: #EC8130;
+    background-image: linear-gradient(top, #FE8B34, #DE792D);
+}
+
+nav > a {
+    margin-right: 20px;
+}
+
+/* Fix Chrome bug */
+nav > .button {
+    color: #ffffff;
+}
+
+section {
+    margin-bottom: 50px;
 }
 
 
