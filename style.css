@@ -32,8 +32,9 @@ body {
 }
 
 a, a:hover, a:visited, a:active, a:focus {
-    color: #9876AA;
+    color: #a782bb;
     text-decoration: none;
+    font-weight: bold;
 }
 
 a:hover {
@@ -135,4 +136,35 @@ h1 { font-size:3em; }
 h1, h3 { margin:1.25em 0; }
 h2 { font-size:1.75em; margin:1.51786em 0; }
 h3 { font-size:1.33333em; }
+
+
+code .literal{
+    color:#6897BB;
+}
+
+/*     color: #FFC66D; */
+
+code .keyword{
+    color: #CA7631;
+}
+
+code .quote {
+    color: #9DB85C;
+}
+
+code .comment {
+    color: #808080;
+}
+
+code .field {
+    color: #8F6FA0;
+}
+
+code .literal,
+code .keyword,
+code .constant,
+code .quote {
+    font-weight:bold;
+}
+
 
