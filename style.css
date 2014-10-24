@@ -21,7 +21,7 @@ html {
     border: 3px solid;
     border-radius: 2px;
     display: inline-block;
-    vertical-align: text-bottom;
+    vertical-align: middle;
 }
 
 .logo:before {
