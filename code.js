@@ -1,5 +1,28 @@
 Array.prototype.each = Array.prototype.forEach;
 
+if (!Array.prototype.find) {
+    Array.prototype.find = function(predicate) {
+        if (this == null) {
+            throw new TypeError('Array.prototype.find called on null or undefined');
+        }
+        if (typeof predicate !== 'function') {
+            throw new TypeError('predicate must be a function');
+        }
+        var list = Object(this);
+        var length = list.length >>> 0;
+        var thisArg = arguments[1];
+        var value;
+
+        for (var i = 0; i < length; i++) {
+            value = list[i];
+            if (predicate.call(thisArg, value, i, list)) {
+                return value;
+            }
+        }
+        return undefined;
+    };
+}
+
 RegExp.prototype.replace = function(str, replacer, nonMatchedReplacer) {
     nonMatchedReplacer = nonMatchedReplacer || function(value) {
         return value
@@ -53,6 +76,18 @@ code.highlight = function(element, pairs) {
     });
 };
 
+
+function http(request, responseHandler) {
+    var handler = new XMLHttpRequest();
+    handler.open(request.method, request.url, true);
+    handler.addEventListener("readystatechange" , function() {
+        if (handler.readyState==4) {
+            responseHandler({status: handler.status, entity: handler.responseText });
+        }
+    });
+    handler.send(request.entity);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     select('code.language-xml').each(function(element) {
         code.highlight(element, [
@@ -72,6 +107,19 @@ document.addEventListener('DOMContentLoaded', function () {
             {pattern: "\\w+\\b(?![\\(\\.])", cssClass: "keyword" },
         ]);
     })
+
+    http({method: "GET", url: "https://api.github.com/repos/bodar/totallylazy/releases" }, function(response) {
+        var release = JSON.parse(response.entity).find(function (release) {
+            return release.prerelease == false
+        });
+        select(".latest").each(function(element) {
+            element.innerHTML = element.innerHTML.
+                replace("${LATEST_VERSION}", release.tag_name).
+                replace("Latest", release.tag_name).
+                replace("Release notes", release.body);
+        });
+    });
+
 });
 
 

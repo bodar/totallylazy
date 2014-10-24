@@ -69,7 +69,10 @@ sequence(1, 2, 3).toString(":"); // eagerly returns "1:2:3"</code></pre>
 
         <p>You can always download the latest version directly from GitHub</p>
 
-        <a href="https://github.com/bodar/totallylazy/releases/latest" class="button download"><i class="fa fa-download"></i> Latest Jar</a>
+        <nav class="latest">
+            <a href="https://github.com/bodar/totallylazy/releases/latest" class="button download"><i class="fa fa-download"></i> Download Latest</a>
+            <span>Release notes</span>
+        </nav>
 
     </section>
 
@@ -87,10 +90,10 @@ sequence(1, 2, 3).toString(":"); // eagerly returns "1:2:3"</code></pre>
 
         <p>Then add our dependency</p>
 
-    <pre><code class="language-xml">&lt;dependency&gt;
+    <pre><code class="language-xml latest">&lt;dependency&gt;
     &lt;groupId&gt;com.googlecode.totallylazy&lt;/groupId&gt;
     &lt;artifactId&gt;totallylazy&lt;/artifactId&gt;
-    &lt;version&gt;1049&lt;/version&gt;
+    &lt;version&gt;${LATEST_VERSION}&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 
     </section>
