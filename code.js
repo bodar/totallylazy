@@ -76,16 +76,17 @@ code.highlight = function(element, pairs) {
     });
 };
 
-
-function http(request, responseHandler) {
+function http(request) {
     var handler = new XMLHttpRequest();
     handler.open(request.method, request.url, true);
-    handler.addEventListener("readystatechange" , function() {
-        if (handler.readyState==4) {
-            responseHandler({status: handler.status, entity: handler.responseText });
-        }
-    });
-    handler.send(request.entity);
+    return function(responseHandler) {
+        handler.addEventListener("readystatechange", function () {
+            if (handler.readyState == 4) {
+                responseHandler({status: handler.status, entity: handler.responseText });
+            }
+        });
+        handler.send(request.entity);
+    };
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -108,7 +109,8 @@ document.addEventListener('DOMContentLoaded', function () {
         ]);
     })
 
-    http({method: "GET", url: "https://api.github.com/repos/bodar/totallylazy/releases" }, function(response) {
+    http({method: "GET", url: "https://d39xxm2detz5wm.cloudfront.net/repos/bodar/totallylazy/releases" })(function(response) {
+        if(response.status != 200) return;
         var release = JSON.parse(response.entity).find(function (release) {
             return release.prerelease == false
         });
@@ -119,8 +121,4 @@ document.addEventListener('DOMContentLoaded', function () {
                 replace("Release notes", release.body);
         });
     });
-
 });
-
-
-

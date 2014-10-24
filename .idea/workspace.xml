@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9fa5fbda-05cc-45b2-b93a-55f0c7b62c14" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code.js" afterPath="$PROJECT_DIR$/code.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="totallylazy.site.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,8 +38,8 @@
       <file leaf-file-name="code.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8399353" vertical-offset="1085" max-vertical-offset="2376">
-              <caret line="118" column="38" selection-start-line="118" selection-start-column="38" selection-end-line="118" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.825384" vertical-offset="1067" max-vertical-offset="2322">
+              <caret line="116" column="50" selection-start-line="116" selection-start-column="50" selection-end-line="116" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -434,12 +432,12 @@
       <workItem from="1413981743075" duration="14309000" />
       <workItem from="1414059690376" duration="8885000" />
       <workItem from="1414144880374" duration="3597000" />
-      <workItem from="1414149501898" duration="6670000" />
+      <workItem from="1414149501898" duration="8081000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33461000" />
+    <option name="totallyTimeSpent" value="34872000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="2560" height="1413" extended-state="0" />
@@ -583,8 +581,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/code.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8399353" vertical-offset="1085" max-vertical-offset="2376">
-          <caret line="118" column="38" selection-start-line="118" selection-start-column="38" selection-end-line="118" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.825384" vertical-offset="1067" max-vertical-offset="2322">
+          <caret line="116" column="50" selection-start-line="116" selection-start-column="50" selection-end-line="116" selection-end-column="50" />
           <folding />
         </state>
       </provider>
