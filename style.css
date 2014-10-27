@@ -135,9 +135,55 @@ nav > a {
     margin: 0 20px 20px 0;
 }
 
-section {
+body > section {
     margin-bottom: 50px;
 }
+
+menu {
+    margin: 0 0 6em 0;
+    padding: 0;
+    height: 25em;
+    position: relative;
+}
+
+menu h4, menu section {
+    display: inline;
+}
+
+menu label {
+    font-weight: bold;
+    font-size: 1.2em;
+    box-shadow: inset 0 2px 0 0 rgba(255, 255, 255, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.2);
+    border-bottom-color: transparent;
+    border-radius: 12px 12px 0 0 ;
+    padding: 10px;
+    background-color: #8F6FA0;
+    background-image: linear-gradient(top, #A07CB3, #826591);
+    color: #fff;
+}
+
+menu input {
+    display: none;
+}
+
+menu input:checked + label {
+    background-color: #2B2B2B;
+}
+
+menu > section > section {
+    display: none;
+}
+
+menu input:checked ~ section {
+    display: block;
+    position: absolute;
+    top: 2em;
+    background-color: #2B2B2B;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+}
+
 
 
 /* Scale & Rhythm @ http://lamb.cc/typograph/ */

@@ -77,25 +77,93 @@ sequence(1, 2, 3).toString(":"); // eagerly returns "1:2:3"</code></pre>
     </section>
 
     <section>
-        <h2>Install using a package manager</h2>
+        <h2>Install using a dependency resolver</h2>
 
-        <h4><a href="http://maven.apache.org/">Maven</a></h4>
+        <menu>
+            <section>
+            <input type="radio" checked="checked" name="dependency" id="maven"/><label for="maven">Maven</label>
 
-        <p>Add our repo to the repositories section in you pom.xml</p>
+                <section>
+                <p>Add our repo to the repositories section in your <code>pom.xml</code></p>
 
-    <pre><code class="language-xml">&lt;repository&gt;
+                <pre><code class="language-xml">&lt;repository&gt;
     &lt;id&gt;repo.bodar.com&lt;/id&gt;
     &lt;url&gt;http://repo.bodar.com&lt;/url&gt;
 &lt;/repository&gt;</code></pre>
 
-        <p>Then add our dependency</p>
+                <p>Then add our dependency</p>
 
-    <pre><code class="language-xml latest">&lt;dependency&gt;
+                <pre><code class="language-xml latest">&lt;dependency&gt;
     &lt;groupId&gt;com.googlecode.totallylazy&lt;/groupId&gt;
     &lt;artifactId&gt;totallylazy&lt;/artifactId&gt;
     &lt;version&gt;${LATEST_VERSION}&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 
+                </section>
+
+        </section>
+        <section>
+            <input type="radio" name="dependency" id="shavenmaven"/><label for="shavenmaven">ShavenMaven</label>
+
+            <section>
+            <p>Add the following URL to your <code>runtime.dependencies</code> file</p>
+
+    <pre><code class="language-url latest">mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar:${LATEST_VERSION}</code></pre>
+
+            </section>
+
+        </section>
+
+        <section>
+            <input type="radio" name="dependency" id="buildr"/><label for="buildr">BuildR</label>
+
+            <section>
+            <p>Add to your <code>buildfile</code>:</p>
+
+    <pre><code class="language-generic latest">repositories.remote &lt;&lt; 'http://repo.bodar.com/'
+
+TL = 'com.googlecode.totallylazy:totallylazy:jar:${LATEST_VERSION}'
+
+compile.with TL</code></pre>
+
+            </section>
+
+        </section>
+
+        <section>
+            <input type="radio" name="dependency" id="gradle"/><label for="gradle">Gradle</label>
+
+            <section>
+            <p>Add to your <code>build.gradle</code> file:</p>
+
+    <pre><code class="language-generic latest">repositories {
+    maven {
+        url "http://repo.bodar.com/"
+    }
+}
+
+dependencies {
+    compile group:'com.googlecode.totallylazy', name:'totallylazy', version:'${LATEST_VERSION}'
+}</code></pre>
+
+            </section>
+
+        </section>
+
+            <section>
+            <input type="radio" name="dependency" id="sbt"/><label for="sbt">SBT</label>
+
+            <section>
+            <p>Add to your <code>build.sbt</code> file:</p>
+
+    <pre><code class="language-generic latest">resolvers += "Bodar repo" at "http://repo.bodar.com/"
+
+libraryDependencies += "com.googlecode.totallylazy" % "totallylazy" % "${LATEST_VERSION}"</code></pre>
+
+            </section>
+
+        </section>
+    </menu>
     </section>
 
     <section>

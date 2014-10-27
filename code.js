@@ -90,9 +90,15 @@ function http(request) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    select('code.language-url').each(function(element) {
+        code.highlight(element, [
+            {pattern: "[:/]", cssClass: "keyword" }
+        ]);
+    });
+
     select('code.language-xml').each(function(element) {
         code.highlight(element, [
-            {pattern: '"[^"]*"', cssClass: "quote" },
+            {pattern: '^\\w', cssClass: "quote" },
             {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
             {pattern: "\\??&gt;", cssClass: "keyword" },
             {pattern: "\\s[\\w:-]+=", cssClass: "constant" }
@@ -107,7 +113,15 @@ document.addEventListener('DOMContentLoaded', function () {
             {pattern: "//.*$", cssClass: "comment" },
             {pattern: "\\w+\\b(?![\\(\\.])", cssClass: "keyword" },
         ]);
-    })
+    });
+
+    select('code.language-generic').each(function(element) {
+        code.highlight(element, [
+            {pattern: "'[^']*'", cssClass: "quote" },
+            {pattern: '"[^"]*"', cssClass: "quote" },
+            {pattern: "[.,:;{}<=+%]|&lt;", cssClass: "keyword" }
+        ]);
+    });
 
     http({method: "GET", url: "https://d39xxm2detz5wm.cloudfront.net/repos/bodar/totallylazy/releases" })(function(response) {
         if(response.status != 200) return;
