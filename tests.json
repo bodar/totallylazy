@@ -1,0 +1,3977 @@
+[
+  {
+    "classname": "com.googlecode.totallylazy.AtomicTest",
+    "name": "canModify",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.AtomicTest",
+    "name": "canGetResultAfterModify",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.callables.ComposeTest",
+    "name": "canComposeFunctions",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.callables.GenericCallableTest",
+    "name": "canGetGenericType",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.callables.LazyCallable1Test",
+    "name": "isThreadSafe",
+    "time": "0.021"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.callables.LazyCallable1Test",
+    "name": "onlyCallsUnderlyingCallableOnce",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.callables.LazyCallableTest",
+    "name": "isVeryFast",
+    "time": "0.085"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.callables.LazyCallableTest",
+    "name": "isThreadSafe",
+    "time": "0.011"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.callables.LazyCallableTest",
+    "name": "onlyCallsUnderlyingCallableOnce",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CallablesTest",
+    "name": "canUnCurryAdd",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CallablesTest",
+    "name": "canReplaceInline",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CallablesTest",
+    "name": "functionsAreInherantlyCurried",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CallablesTest",
+    "name": "canDeferApplyOnSingleArgumentFunctions",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.callables.TimeCallableTest",
+    "name": "canTimeACall",
+    "time": "0.034"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CallersTest",
+    "name": "callConcurrentlyIgnoresAnEmptyIterator",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CharactersTest",
+    "name": "canDetectedIfACharsetContainsACharacter",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CharactersTest",
+    "name": "canConvertACharsetIntoARealSet",
+    "time": "0.07"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CharactersTest",
+    "name": "canCreateARangeOfCharacters",
+    "time": "0.073"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CloseablesTest",
+    "name": "shouldSupportObjectsThatHaveCloseMethodButDoNotImplementClosable",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CloseablesTest",
+    "name": "usingAndCloseShouldBeNullSafe",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ArrayTrieTest",
+    "name": "put",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ArrayTrieTest",
+    "name": "get",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ArrayTrieTest",
+    "name": "remove",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ArrayTrieTest",
+    "name": "contains",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "supportsFilteringByValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "canCreateFromAnIterable",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "canIterate",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "balancesRightLeftCase",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "supportsTail",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "supportsHead",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "supportsMappingValues",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "supportsFold",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "canPut",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "canConvertToPersistentList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "supportsHeadOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "canGet",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "canJoin",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "supportsFindingAValueAsAnOption",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "canCheckContains",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "canGetKeys",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "exists",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "supportsFilteringByKey",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "putReplacesValuesWithSameKey",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "balancesRightRightCase",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "canRemove",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "balancesDeletion",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "supportsIsEmpty",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "balancesLeftLeftCase",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.AVLTreeTest",
+    "name": "balancesLeftRightCase",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "supportsFilteringByValue",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "canCreateFromAnIterable",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "canIterate",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "supportsTail",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "supportsHead",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "supportsMappingValues",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "supportsFold",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "canPut",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "canConvertToPersistentList",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "supportsHeadOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "canGet",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "canJoin",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "supportsFindingAValueAsAnOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "canCheckContains",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "canGetKeys",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "exists",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "putReplacesValuesWithSameKey",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "supportsFilteringByKey",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "supportsIsEmpty",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.HashTreeMapTest",
+    "name": "canRemove",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsToList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsCons",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsOneElement",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportIterator",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsRemove",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsFourElements",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsFiveElements",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsHeadOption",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsAdd",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsThreeElements",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsFilter",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "canFold",
+    "time": "0.005"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "canJoin",
+    "time": "0.009"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsSize",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsSubList",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsEquality",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "canLookupLastIndexOf",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "canLookupByIndex",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "canLookupIndexOf",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsVarArgsForMoreThanFive",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsTwoElements",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.LinkedListTest",
+    "name": "supportsRemoveAll",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "supportsFilteringByValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "canCreateFromAnIterable",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "canIterate",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "supportsTail",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "supportsHead",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "supportsMappingValues",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "supportsFold",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "canPut",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "canConvertToPersistentList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "supportsHeadOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "canGet",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "preservesOrder",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "canJoin",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "supportsFindingAValueAsAnOption",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "canCheckContains",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "canGetKeys",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "exists",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "supportsFilteringByKey",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "putReplacesValuesWithSameKey",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "supportsIsEmpty",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListMapTest",
+    "name": "canRemove",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "supportsNext",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "supportsSingleList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "supportsLast",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "supportsAtStart",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "canUseZipperToAddElementInMiddleOfList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "canPerformMultipleModifications",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "supportsCurrent",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "canUseZipperToRemoveElementInMiddleOfList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "canSkipToIndex",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "supportsFirst",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "supportsAtEnd",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "supportsPrevious",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ListZipperTest",
+    "name": "supportsIndex",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "supportsFilteringByValue",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "supportsMappingValues",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "canPut",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "canConvertToPersistentList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "canCreateATreeFromAnIterable",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "canGet",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "canJoin",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "supportsFindingAValueAsAnOption",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "canPutAndReturnOldValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "canCheckContains",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "canCalculateSize",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "canRemoveAndReturnOldValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "supportsFilteringByKey",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "canRemove",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentMapTest",
+    "name": "supportsExists",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "supportsFilteringByValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "supportsMappingValues",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canPut",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canConvertToPersistentList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canGetFirst",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "supportsIndexOf",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canCreateATreeFromAnIterable",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canGet",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canJoin",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canGetLast",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "supportsFindingAValueAsAnOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canPutAndReturnOldValue",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canCheckContains",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canCalculateSize",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canGetByIndex",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canRemoveFirst",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canRemoveAndReturnOldValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "supportsFilteringByKey",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canRemove",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "canRemoveLast",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedMapTest",
+    "name": "supportsExists",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedSetTest",
+    "name": "isASet",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedSetTest",
+    "name": "canCheckContains",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedSetTest",
+    "name": "supportsLookup",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedSetTest",
+    "name": "canInsertAnElement",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedSetTest",
+    "name": "canConvertToPersistentList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedSetTest",
+    "name": "supportsHeadOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedSetTest",
+    "name": "canCreateATreeFromAnIterable",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedSetTest",
+    "name": "isIterableAndOrdered",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.PersistentSortedSetTest",
+    "name": "canJoin",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeListTest",
+    "name": "supportsEasyConstruction",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeListTest",
+    "name": "canConsAnElementOntoTheHead",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeListTest",
+    "name": "supportsEquality",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeListTest",
+    "name": "canLookupByIndex",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeListTest",
+    "name": "supportsToString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeListTest",
+    "name": "supportsHeadOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeListTest",
+    "name": "supportsHashcode",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeListTest",
+    "name": "canAddAnElementOntoTheEnd",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeListTest",
+    "name": "supportsRemoveAll",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeListTest",
+    "name": "canFold",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canGoToTop",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canGoRight",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canDelete",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canGoToNext",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canGoUpFromRight",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canPerformMultipleModifications",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canGoUpFromLeft",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canDeleteRootNode",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canSkipToIndex",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canReplaceElementInMiddleOfTree",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "throwsOnDeletingEmptyNode",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canGoToFirst",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canGoToLast",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canGoToPrevious",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "canGoLeft",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TreeZipperTest",
+    "name": "supportsIndex",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TrieTest",
+    "name": "put",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TrieTest",
+    "name": "get",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TrieTest",
+    "name": "remove",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.TrieTest",
+    "name": "contains",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ZipperListIteratorTest",
+    "name": "canGoBackwards",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ZipperListIteratorTest",
+    "name": "canGoBackwardsAndForwards",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ZipperListIteratorTest",
+    "name": "canGoForward",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.collections.ZipperListIteratorTest",
+    "name": "supportsIndex",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.comparators.MaximumTest",
+    "name": "nullsMoveToEnd",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.comparators.MinimumTest",
+    "name": "nullsMoveToEnd",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.CountLatchTest",
+    "name": "supportsIncrementingAndDecrementing",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "doesNotSupportGettingLeftFromARight",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "supportsFlatten",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "supportsFold",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "supportsFlatMap",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "supportsCreatingLefts",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "eitherToStringDoesNotThrowNullPointer",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "eitherHashCodeDoesNotThrowNullPointer",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "doesNotSupportGettingRightFromALeft",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "eitherEqualityDoesNotThrowNullPointer",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "canMapToRight",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "canMapToLeft",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "supportsApplicativeUsage",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "canBeUsedInFilterAndMap",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "supportsCreatingRights",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "isIterableSoCanFlatMap",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EitherTest",
+    "name": "supportsMap",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.EnumsTest",
+    "name": "canMapName",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.ExceptionsTest",
+    "name": "supportsReturningNoneInsteadOfThrowingAnException",
+    "time": "0.004"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.ExceptionsTest",
+    "name": "supportsCapturingExceptions",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "canDeleteNonEmptyDirectory",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "appendToAFile",
+    "time": "0.005"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "supportsRecursiveSequenceOfFiles",
+    "time": "0.011"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "shouldHaveSuffix",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "shouldNotFindAFileThatDoesNotExist",
+    "time": "0.022"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "supportsFiltering",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "listsAncestorsAndSelf",
+    "time": "0.018"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "listsAncestors",
+    "time": "0.012"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "shouldDeleteDirectoryContents",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "handlesDirectoriesThatReturnANullArray",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FilesTest",
+    "name": "shouldNotHaveSuffix",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FunctionsTest",
+    "name": "canCallWithAValue",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FunctionsTest",
+    "name": "canCaptureArgument",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FunctionsTest",
+    "name": "supportsApplicativeUsageWithEither",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FunctionsTest",
+    "name": "canComposeFunctions",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FunctionsTest",
+    "name": "supportsApplicativeUsageWithSequence",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FunctionsTest",
+    "name": "canComposeCurriedFunctions",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FunctionsTest",
+    "name": "supportsApplicativeUsageWithOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.FunctionsTest",
+    "name": "canPartiallyApplyAFunction3",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.IteratorsTest",
+    "name": "supportsEquality",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.GrammarTest",
+    "name": "canParseNull",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.GrammarTest",
+    "name": "canParseAValue",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.GrammarTest",
+    "name": "canParseNumber",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.GrammarTest",
+    "name": "canParseString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.GrammarTest",
+    "name": "canParseObjectLiteral",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.GrammarTest",
+    "name": "canParseArray",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.GrammarTest",
+    "name": "canParseABoolean",
+    "time": "0.015"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.GrammarTest",
+    "name": "canParsePair",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.GrammarTest",
+    "name": "canParseNestedJson",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.GrammarTest",
+    "name": "canHandleEscapedCharacters",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "correctlyRendersAModel",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "supportsParsingToVariousNativeJavaTypes",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "handlesNulls",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "handlesSpecialCharacters",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "correctlyParsesASingleRootElement",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "shouldPreserveNewLineCharacters",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "correctlyRendersAndParsesIntegersAndText",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "handlesQuotedText",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "handlesOtherDataType",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "handlesNumbers",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "writesDatesInIsoFormat",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "supportsStreaming",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "handlesBooleans",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonTest",
+    "name": "correctlyRendersASingleRootElement",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonWriterTest",
+    "name": "canStreamAnIterator",
+    "time": "0.006"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonWriterTest",
+    "name": "canStreamANestedStructure",
+    "time": "0.012"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonWriterTest",
+    "name": "canStreamAMapEvenIfCastToAnIterable",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonWriterTest",
+    "name": "canStreamAnIterable",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.json.JsonWriterTest",
+    "name": "canStreamAMap",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.LazyExceptionTest",
+    "name": "shouldUnwrapSpecificCheckedCause",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.LazyExceptionTest",
+    "name": "neverContainsItSelf",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.LazyExceptionTest",
+    "name": "shouldUnwrapThrowOriginalExceptionWhenNotSpecifiedCheckedExceptionIsTheCause",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.LazyExceptionTest",
+    "name": "neverContainsInvocationTargetException",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.LazyTest",
+    "name": "canCreateALazyValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.LenseTest",
+    "name": "getValueViewedThroughLens",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.LenseTest",
+    "name": "modifyValueViewThroughLens",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.LenseTest",
+    "name": "setValueViewedThroughLens",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.LenseTest",
+    "name": "lensCanBeComposed",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsFilteringByValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsFindingAValueAsAnOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsConvertingASequenceOfPairToAMultiValuedMap",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsMappingValues",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsConvertingASequenceOfPairsToAMap",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "maintainsMapEntriesOrder",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsMultiValuedMapCreation",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsConvertingMapEntriesToPairs",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsMappingKeys",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsConvertingPairsToMapEntries",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsFilteringByKey",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MapsTest",
+    "name": "supportsGettingAValueAsAnOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.HasSizeMatcherTest",
+    "name": "shouldMatchIterablesWithExpectedSize",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.IterableMatcherTest",
+    "name": "matchesAgainstIterablesOfMatchers",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.IterableMatcherTest",
+    "name": "matchesAgainstValues",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyEqualsMatcherTest",
+    "name": "shouldDescribeEquality",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyEqualsMatcherTest",
+    "name": "shouldNotBeEqual",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyEqualsMatcherTest",
+    "name": "shouldDescribeEqualityWithExpectedAndActual",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyEqualsMatcherTest",
+    "name": "shouldBeEqual",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyMatcherTest",
+    "name": "shouldMatchExpectedMatcher",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyMatcherTest",
+    "name": "shouldNotMatchExpected",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyMatcherTest",
+    "name": "shouldMatchExpected",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyMatcherTest",
+    "name": "shouldMatchExpectedLoader",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyMatcherTest",
+    "name": "shouldDescribeExpectedLoader",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyMatcherTest",
+    "name": "shouldDescribeExpectedMatcher",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyMatcherTest",
+    "name": "shouldDescribeExpected",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyMatcherTest",
+    "name": "shouldNotMatchExpectedLoader",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchers.LazyMatcherTest",
+    "name": "shouldNotMatchExpectedMatcher",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchTest",
+    "name": "worksWithInstances",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchTest",
+    "name": "supportsNoMatch",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchTest",
+    "name": "canDeconstructTypes",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.matchTest",
+    "name": "worksAsAFunction",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MemoriseTest",
+    "name": "canForget",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MemoriseTest",
+    "name": "memorisingSize",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MemoriseTest",
+    "name": "supportsMemorise",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MemoriseTest",
+    "name": "canTurnAnIteratorIntoAReUsableSequence",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MemoriseTest",
+    "name": "memoriseIsThreadSafe",
+    "time": "0.021"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MemoriseTest",
+    "name": "supportsGetWithIndex",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MemoriseTest",
+    "name": "memorisingForEach",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MonadTest",
+    "name": "canSwapEitherContainerAndGetAllErrors",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MonadTest",
+    "name": "canSwapOptionContainer",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.MonadTest",
+    "name": "canSwapEitherContainer",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "handlesNullWhenNoExplicitMatch",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "worksWithInstances",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "supportsOverridingPredicateToAllowInvokingMethodThatIsNotAnnotated",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "byDefaultDoesNotInvokeMethodThatIsNotAnnotated",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "supportsNotMatching",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "doesNotRecurse",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "willUseSuperTypesIfNoExactMatchFound",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "canDispatchMethodBasedOnType",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "canMatchNullToAVoidMethod",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "doesNotCallMethodsWithLessArguments",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "doesNotCallMethodsWithMoreArguments",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "distanceBetweenTwoClass",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "willCallMostSpecific",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "canDispatchWithSingle",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "worksWithInstancesAndSuperClasses",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.multiTest",
+    "name": "prefersInterfacesOverSuperClass",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.IntegersTest",
+    "name": "supportsRange",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportGcdOnIntegrals",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsFibonacci",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsAverage",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsPowersOf",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsShort",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsProbablePrimes",
+    "time": "0.015"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsPrimes",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsStringToNumberConversion",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportLcmOnIntegrals",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsMultiply",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "toStringingAnInfiniteListWillTruncateByDefault",
+    "time": "0.028"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsPrimeFactorsOfLargeNumbers",
+    "time": "0.063"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsDivide",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsPrimeFactorsOfSmallNumbers",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "gcdOfEmptyListIsZero",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsRange",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsProduct",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsMinimum",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsPrimeFactors",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsMaximum",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsNum",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "productOfEmptyListIsOne",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "lcmOfEmptyListIsOne",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.NumbersTest",
+    "name": "supportsSorting",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testRemainderDivideByZero",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testIncrementMin",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testQuotientNormal",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testIncrementMax",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testLessThan",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testMultiplyNormal",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testMultiplyZero",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testDecrementMax",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testAddOverflowMin",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testDecrementZero",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testNegateNormal",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testRemainderNormal",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testDecrementMin",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testDecrementNormal",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testIncrementNormal",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testAddNormal",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testNegateMax",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testIsZero",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testIsPositive",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testEqualTo",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testNegateZero",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testIncrementZero",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testAddZero",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testPriority",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testIsNegative",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testAddOverflowMax",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testForClass",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testNegateMin",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testDivide",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testQuotientDivideByZero",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testMultiplyOverflow0",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testMultiplyOverflow1",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.numbers.ShortOperatorsTest",
+    "name": "testMultiplyOverflow2",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "supportsApplicativeEquality",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "supportsJoin",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "supportsIsAlias",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canFold",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canFlatMap",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canGetOrElseValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canConvertNoneToEitherAsLeft",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "supportsApplicativeUsageToConstruct",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "supportsApplicativeUsage",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canGetOrElseWithCallable",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "cannotGetValueOfNone",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canThrowIfNone",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canSeeIfEmpty",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canFlatten",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "areIterable",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canGetOrNullValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canMap",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canConvertSomeToEitherAsRight",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "supportsContains",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "supportsExists",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.OptionTest",
+    "name": "canGetValueOfSome",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.CharacterParserTest",
+    "name": "handlesNoMatch",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.CharacterParserTest",
+    "name": "doesNotThrowIfItRunsOutOfCharacters",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.CharacterParserTest",
+    "name": "canParseACharacter",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.CharacterSequenceTest",
+    "name": "subSequence",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.CharacterSequenceTest",
+    "name": "charAt",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ListParserTest",
+    "name": "canCombineThreeParsers",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ListParserTest",
+    "name": "canCombineTwoParsers",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ManyParserTest",
+    "name": "supportChaining",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ManyParserTest",
+    "name": "supportMany",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ManyParserTest",
+    "name": "doesNotThrowIfNoCharacters",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ManyParserTest",
+    "name": "doesNotThrowIfItConsumesAllCharacters",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.OptionalParserTest",
+    "name": "canChain",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.OptionalParserTest",
+    "name": "isOptional",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.OrParserTest",
+    "name": "supportsChaining",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.OrParserTest",
+    "name": "canMatchOneParser",
+    "time": "0.016"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.PairParserTest",
+    "name": "canCombineTwoParsers",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.PairParserTest",
+    "name": "doesBlowUpWhenLessCharacters",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ParsersTest",
+    "name": "supportsNext",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ParsersTest",
+    "name": "supportsSeparatedBy",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ParsersTest",
+    "name": "supportsSurroundedBy",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ParsersTest",
+    "name": "supportsBetween",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.ParsersTest",
+    "name": "supportsFollowedBy",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.PatternParserTest",
+    "name": "canParseToEnd",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.PatternParserTest",
+    "name": "canParseUsingRegex",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.PatternParserTest",
+    "name": "doesNotReadMoreThanItNeeds",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.SequenceParserTest",
+    "name": "supportChaining",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.SequenceParserTest",
+    "name": "supportMany",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.SequenceParserTest",
+    "name": "doesNotThrowIfNoCharacters",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.SequenceParserTest",
+    "name": "doesNotThrowIfItConsumesAllCharacters",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.StringParserTest",
+    "name": "canParseAString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.StringParserTest",
+    "name": "printsNiceMessage",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.StringParserTest",
+    "name": "doesNotReadMoreThanItNeeds",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.StringParserTest",
+    "name": "supportsRemainder",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.parser.TripleParserTest",
+    "name": "canCombineThreeParsers",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.AndPredicateTest",
+    "name": "collapsesOne",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.AndPredicateTest",
+    "name": "supportsToString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.AndPredicateTest",
+    "name": "collapsesEmpty",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.AndPredicateTest",
+    "name": "collapsesTrues",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.AndPredicateTest",
+    "name": "collapsesAnds",
+    "time": "0.008"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.AndPredicateTest",
+    "name": "supportsEqualityOnPredicateItself",
+    "time": "0.01"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.AndPredicateTest",
+    "name": "collapsesFalses",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.AndPredicateTest",
+    "name": "collapesNots",
+    "time": "0.006"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.ContainsPredicateTest",
+    "name": "supportsToString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.ContainsPredicateTest",
+    "name": "supportsEqualityOnPredicateItself",
+    "time": "0.016"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.EndsWithPredicateTest",
+    "name": "supportsToString",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.EndsWithPredicateTest",
+    "name": "supportsEqualityOnPredicateItself",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.EqualsPredicateTest",
+    "name": "supportsEqualOfThePredicateItself",
+    "time": "0.016"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.EqualsPredicateTest",
+    "name": "supportsNull",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.EqualsPredicateTest",
+    "name": "supportsToString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.GreaterThanBinaryPredicateTest",
+    "name": "canCallWithOneArgument",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.GreaterThanBinaryPredicateTest",
+    "name": "canMatch",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.GreaterThanBinaryPredicateTest",
+    "name": "canCallWithTwoArguments",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.GreaterThanBinaryPredicateTest",
+    "name": "canApplySecond",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.GreaterThanBinaryPredicateTest",
+    "name": "canApply",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.GreaterThanBinaryPredicateTest",
+    "name": "allMethodsReturnOtherWellKnownPredicates",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.GreaterThanBinaryPredicateTest",
+    "name": "canFlip",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.InPredicateTest",
+    "name": "supportsHashCode",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.InPredicateTest",
+    "name": "supportsEquality",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.InPredicateTest",
+    "name": "collapsesEmptyInClauseToFalse",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.InPredicateTest",
+    "name": "supportsToString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.LessThanPredicateTest",
+    "name": "supportsHashCode",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.LessThanPredicateTest",
+    "name": "supportsEquality",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.LessThanPredicateTest",
+    "name": "supportsToString",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.NotTest",
+    "name": "supportsEqualOfThePredicateItself",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.NotTest",
+    "name": "supportsToString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.OrPredicateTest",
+    "name": "collapsesOne",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.OrPredicateTest",
+    "name": "collapsesOrs",
+    "time": "0.007"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.OrPredicateTest",
+    "name": "supportsToString",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.OrPredicateTest",
+    "name": "collapsesEmpty",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.OrPredicateTest",
+    "name": "collapsesTrues",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.OrPredicateTest",
+    "name": "supportsEqualityOnPredicateItself",
+    "time": "0.009"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.OrPredicateTest",
+    "name": "collapsesFalses",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.OrPredicateTest",
+    "name": "collapesNots",
+    "time": "0.006"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.StartsWithPredicateTest",
+    "name": "supportsToString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.StartsWithPredicateTest",
+    "name": "supportsEqualityOnPredicateItself",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "supportsObjectAssignableTo",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "supportsSubsetOf",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "supportsClassAssignableToClass",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "orWithNoArgumentsIsAlwaysFalse",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "supportsClassAssignableTo",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "andWithNoArgumentsIsAlwaysTrue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "supportsInCollection",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "logicalOrWithOnePredicateReturnsPredicate",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "supportsEqualAsSet",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "logicalAndWithOnePredicateReturnsPredicate",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PredicatesTest",
+    "name": "supportsSupersetOf",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.TypeSafePredicateTest",
+    "name": "willPassThroughValuesOfTheCorrectType",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.TypeSafePredicateTest",
+    "name": "willReturnFalseWhenPassedTheWrongClass",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.TypeSafePredicateTest",
+    "name": "willPassThroughNullValues",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.WherePredicateTest",
+    "name": "supportsDeMorganLawByMovingNotToOutside",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.WherePredicateTest",
+    "name": "combiningAWhereWithNeverReturnsANever",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.WherePredicateTest",
+    "name": "combiningAWhereWithAlwaysReturnsAnAlways",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.WherePredicateTest",
+    "name": "supportsToString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.predicates.WherePredicateTest",
+    "name": "supportsEqualityOnPredicateItself",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PrefixPropertiesTest",
+    "name": "supportsGet",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PrefixPropertiesTest",
+    "name": "supportsStore",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PrefixPropertiesTest",
+    "name": "supportsLoad",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PrefixPropertiesTest",
+    "name": "supportsSet",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PropertiesTest",
+    "name": "guaranteesPropertiesExist",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PropertiesTest",
+    "name": "providesAFunctionToCreatePropertiesFromAString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PropertiesTest",
+    "name": "providesFunctionAllowingCompositionOfPropertiesByFolding",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PropertiesTest",
+    "name": "copiesProperties",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PropertiesTest",
+    "name": "composesTwoPropertyFiles",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PropertiesTest",
+    "name": "doesntThrowIfThePropertyValueIsVeryLong",
+    "time": "0.016"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PropertiesTest",
+    "name": "convertsPropertiesToAString",
+    "time": "0.005"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PropertiesTest",
+    "name": "loadsPropertiesFromAnInputStream",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.PropertiesTest",
+    "name": "createsPropertiesFromPairs",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.proxy.CallOnTest",
+    "name": "canUseInstanceInsteadOfCallForReadability",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.proxy.CallOnTest",
+    "name": "canMapAMethodWithAnArgument",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.proxy.CallOnTest",
+    "name": "canSortByProxy",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.proxy.CallOnTest",
+    "name": "canMapAMethod",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.proxy.CallTest",
+    "name": "canMapAMethodWithAnArgument",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.proxy.CallTest",
+    "name": "canSortByProxy",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.proxy.CallTest",
+    "name": "canMapAMethod",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.proxy.FieldOnTest",
+    "name": "canMapWithAField",
+    "time": "0.118"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.proxy.FieldOnTest",
+    "name": "capturesField",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "integers",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "values",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "takeFromValues",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "longs",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "dates",
+    "time": "0.007"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "betweenDates",
+    "time": "0.023"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "betweenDoubles",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "doubles",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "betweenIntegers",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "booleans",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RandomsTest",
+    "name": "datesAfter",
+    "time": "0.007"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RecordTest",
+    "name": "supportEquality",
+    "time": "0.004"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RecordTest",
+    "name": "supportsToString",
+    "time": "0.006"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.RecordTest",
+    "name": "isImmutable",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.ReflectionTest",
+    "name": "testEnclosingInstance",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.regex.RegexTest",
+    "name": "supportsReplacingText",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.regex.RegexTest",
+    "name": "supportsReplaceAll",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.regex.RegexTest",
+    "name": "supportsSplittingText",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.segments.CharacterSegmentTest",
+    "name": "isEmpty",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.segments.CharacterSegmentTest",
+    "name": "headShouldThrowNoSuchElementException",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.segments.CharacterSegmentTest",
+    "name": "supportsEquality",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.segments.CharacterSegmentTest",
+    "name": "tailShouldThrowNoSuchElementException",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.segments.CharacterSegmentTest",
+    "name": "supportsHeadOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.segments.CharacterSegmentTest",
+    "name": "head",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsJoiningSubTypes",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsUnfoldRight",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsUnzippingQuintuples",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsUnzippingQuadruples",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsCharacters",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsEnumeration",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportRepeat",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "shouldCreateEmptySequenceWhenIterableIsNull",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsCycle",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsAddingToAnEmptyList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "joinWorksEvenWhenFirstIterableIsEmpty",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "canCombineIterateWithOtherOperations",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsIteratingEvenWhenCallableReturnNull",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsTranspose",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsUnzip",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsIterate",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsUnzippingTriples",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequencesTest",
+    "name": "supportsMemorisingAnEnumeration",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSortByWithCompositeComparator",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsFoldRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "canConvertToArray",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "headOption",
+    "time": "0.175"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsShuffle",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsEquality",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsConcurrentMapWithCustomExecutor",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsGrouped",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSplitAt",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsPick",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsGroupByAndPreservesOrder",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "logicalXorOfEmptyListIsFalse",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsForwardOnly",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsIntersperse",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSortingByOtherIterableOrder",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "tail",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsFilter",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "recursiveCallOnlyEndsWhenThereIsNoRemainder",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsTryPick",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsUnsafeCast",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSort",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "windowedIsLazyAndDoesNotBlowStack",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsFoldRight",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsUniqueAndCanBeIteratedMultipleTimes",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsReduceRight",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsConcurrentFlatMapWithCustomExecutor",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsForEach",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsReverse",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsFlatteningToOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsFlatten",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsTakeWhile",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsJoin",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsWindowed",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsIndexAccess",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsExists",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsPartition",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "last",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsToMapAndPreservesOrder",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsDropWhile",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "filterIsLazy",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsToString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSpan",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsFind",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsBreak",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsApplicativeUsage",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "canFilterNull",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSize",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsFoldToACount",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "mapIsLazy",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsReduceWithIdentityFunction",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsZipToTriple",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsUniqueAndPreservesOrder",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsReduceRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsReduceLeft",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsDrop",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "head",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsHashCodes",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsConcurrentMap",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "lastOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsZip",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsZipWithIndex",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "init",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSortBySizeAndLength",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsInterruption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSortBy",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSortDescending",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSplitOn",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "logicalAndOfEmptyListIsTrue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsUniqueWithCallable",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsPartitionOnForwardOnlySequence",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsContains",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "canRealiseASequence",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsCons",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsZipToQuintuple",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSplitWhen",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "logicalOrOfEmptyListIsFalse",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsRecursiveSplitOn",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsAdd",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "whenSortingWithNullsTheyAlwaysComeLast",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "canReduceEmptySequence",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsEachConcurrently",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsFindingTheFirstSome",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsIsEmpty",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsZipToQuadruple",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsSafeCast",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsConcurrentFlatMap",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsMap",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "canConvertToList",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsTake",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsFoldLeft",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsFlatMap",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsRemove",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsForAll",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsRecursiveSplitWhen",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsRecursiveSplitAt",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "canConvertToDeque",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SequenceTest",
+    "name": "supportsRemoveAll",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SetsTest",
+    "name": "supportsUnion",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SetsTest",
+    "name": "supportsComplement",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SetsTest",
+    "name": "supportsIntersection",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SourcesTest",
+    "name": "canReadSourcesFromZipUriSubFolder",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SourcesTest",
+    "name": "canReadSourcesFromZipUri",
+    "time": "0.006"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SourcesTest",
+    "name": "canFilterDirectories",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SourcesTest",
+    "name": "canReadSourcesFromPackageUri",
+    "time": "0.051"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.SourcesTest",
+    "name": "canReadSourcesFromFileUri",
+    "time": "0.005"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "canReplaceCharacters",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "canMapToStringFunctions",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "supportsReverse",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "supportsToString",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "supportsSplit",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "supportsObjectAsString",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "supportsMinimum",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "supportsIsBlank",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "supportsMaximum",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "parsesLines",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "canJoinStrings",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "supportsSubstring",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.StringsTest",
+    "name": "canCoerceToString",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.structural.StructuralTest",
+    "name": "throwsWhenDoesNotFulfillStructuralContract",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.structural.StructuralTest",
+    "name": "canCastOption",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.structural.StructuralTest",
+    "name": "canStructurallyCast",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.structural.StructuralTest",
+    "name": "canCheckInstanceOf",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DateFormatConverterTest",
+    "name": "usesFirst",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DateFormatConverterTest",
+    "name": "triesMultipleFormatsBeforeGivingUp",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DateFormatConverterTest",
+    "name": "canParseSpecificDate",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DatesTest",
+    "name": "canSubtractDaysFromDates",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DatesTest",
+    "name": "canParseALexicalDate",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DatesTest",
+    "name": "exposesConvenienceMethodsForGettingPartsOfDate",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DatesTest",
+    "name": "canParseAtomDate",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DatesTest",
+    "name": "canSubtractSecondsFromDates",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DatesTest",
+    "name": "whenCreatingDateFromLongSetTimezoneToUtc",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DatesTest",
+    "name": "canAddDaysToDates",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DatesTest",
+    "name": "canParseRss2Date",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DatesTest",
+    "name": "canParseAnApacheCommonLogFormatDate",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.DatesTest",
+    "name": "canAddSecondsToDates",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.HoursTest",
+    "name": "betweenReturnsWholeHours",
+    "time": "0.004"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.MinutesTest",
+    "name": "betweenReturnsWholeMinutes",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.SettableClockTest",
+    "name": "changingDateIntoSettableClockDoesNotChangeStoppedClock",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.SettableClockTest",
+    "name": "changingDateOutOfSettableClockDoesNotChangeStoppedClock",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.StoppedClockTest",
+    "name": "changingDateOutOfStoppedClockDoesNotChangeStoppedClock",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.time.StoppedClockTest",
+    "name": "changingDateIntoStoppedClockDoesNotChangeStoppedClock",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.TrampolineTest",
+    "name": "doesntBlowStack",
+    "time": "0.056"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.TupleTest",
+    "name": "canLeftShift",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.TupleTest",
+    "name": "supportsEquality",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.TupleTest",
+    "name": "supportHashCode",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UriTest",
+    "name": "supportsMergingPaths",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UriTest",
+    "name": "supportsDetectingAbsolutePaths",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UriTest",
+    "name": "correctlyParsesUrls",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UriTest",
+    "name": "handlesNonStandardJarUris",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UriTest",
+    "name": "supportsDroppingParts",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UriTest",
+    "name": "supportsHost",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UriTest",
+    "name": "supportsToString",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UriTest",
+    "name": "supportsPort",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UriTest",
+    "name": "canNormalise",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UriTest",
+    "name": "supportsUserInfo",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UrlEncodedMessageTest",
+    "name": "preservesTheDifferenceBetweenNullAndEmptyString",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UrlEncodedMessageTest",
+    "name": "canParseToPairsEvenWhenNoValueIsPresent",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UrlEncodedMessageTest",
+    "name": "canParseToPairs",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.UrlEncodedMessageTest",
+    "name": "canConvertToString",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.AllOfValidatorTest",
+    "name": "combinesManyValidationsIntoOne",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.AllOfValidatorTest",
+    "name": "passesIfAllValidatorsPass",
+    "time": "0.014"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.AnyOfValidatorTest",
+    "name": "shouldPassIfAnyValidatorPasses",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.AnyOfValidatorTest",
+    "name": "shouldFailIfAllValidatorsFail",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ConditionalValidatorTest",
+    "name": "doesNotValidateIfPredicateIsNotMatched",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ConditionalValidatorTest",
+    "name": "returnsResultOfValidatorIfPredicateIsMatched",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.EveryItemValidatorTest",
+    "name": "appliesValidationToEachItemAndMergesTheResult",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.FirstFailureValidatorTest",
+    "name": "passesIfAllValidatorsPass",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.FirstFailureValidatorTest",
+    "name": "onlyReturnsTheFirstFailure",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.LogicalValidatorTest",
+    "name": "canReassignMessagesToANewKey",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.LogicalValidatorTest",
+    "name": "allowsChainingValidationsUsingAllOf",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.LogicalValidatorTest",
+    "name": "allowsSettingOfMessageBasedOnValidatedValue",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.LogicalValidatorTest",
+    "name": "allowsChainingValidationsUsingFirstFailure",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.LogicalValidatorTest",
+    "name": "canReassignMessagesToANewKeyAndThenChangeTheMessage",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.MapAndValidateTest",
+    "name": "appliesAMappingFunctionToTheOriginalValueAndValidatesTheResult",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.RegexValidatorTest",
+    "name": "doesNotMatchNull",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.RegexValidatorTest",
+    "name": "matchesBasedOnPattern",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "tellsUsWhetherItSucceeded",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "exposesAllMessagesForAllKeysAsASequence",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "exposesConvenienceFunctions",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "canGetMessagesByCallingToStringOnAnArbitraryKey",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "exposesFunctionsToMapManyResultsToANewKeyAndThenMergeThem",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "canReassignAllMessagesToANewKey",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "canConvertToMap",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "keysAreCaseSensitive",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "canRemoveKeys",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "isImmutable",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.validations.ValidationResultTest",
+    "name": "shouldStillPassIfThereAreZeroLengthMessagesAssignedToAKey",
+    "time": "0.0"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.XmlTest",
+    "name": "supportsXPathExpressionsWithFunctionsThatReturnStrings",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.XmlTest",
+    "name": "canEscapeXml",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.XmlTest",
+    "name": "supportsReturningANumber",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.XmlTest",
+    "name": "shouldSupportRealWorldNamespacesAndComplexQueries",
+    "time": "0.006"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.XmlTest",
+    "name": "supportsReturningABoolean",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.XmlTest",
+    "name": "canLoadHtml",
+    "time": "0.005"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.XmlTest",
+    "name": "doesNotTruncateString",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XmlReaderTest",
+    "name": "twoItemsWithChild",
+    "time": "0.005"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XmlReaderTest",
+    "name": "twoItems",
+    "time": "0.006"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XmlReaderTest",
+    "name": "supportsAttributes",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XmlReaderTest",
+    "name": "emptyRoot",
+    "time": "0.105"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XmlReaderTest",
+    "name": "supportsAttributesOnNestedStructures",
+    "time": "0.005"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XmlReaderTest",
+    "name": "oneItemWithChild",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XmlReaderTest",
+    "name": "twoItemsWithTwoChild",
+    "time": "0.01"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XmlReaderTest",
+    "name": "singleItem",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XmlReaderTest",
+    "name": "oneItemWithTwoChildren",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathFunctionsTest",
+    "name": "supportsTokenize",
+    "time": "0.004"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathFunctionsTest",
+    "name": "supportsStringTrimAndJoin",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathFunctionsTest",
+    "name": "supportsJoinStringsInXPath",
+    "time": "0.004"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathFunctionsTest",
+    "name": "supportsOr",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathFunctionsTest",
+    "name": "supportsIf",
+    "time": "0.005"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathFunctionsTest",
+    "name": "supportsNewLineChar",
+    "time": "0.01"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathFunctionsTest",
+    "name": "supportsJoinStringsInXPathOnOneNode",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathFunctionsTest",
+    "name": "supportsReplace",
+    "time": "0.004"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathFunctionsTest",
+    "name": "supportsJoinStringsInXPathWithNestedNodes",
+    "time": "0.001"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathFunctionsTest",
+    "name": "supportsJoinStringsInXPathWithNoNodes",
+    "time": "0.002"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.xml.XPathLookupsTest",
+    "name": "supportsLookups",
+    "time": "0.02"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.ZipTest",
+    "name": "canZipAndUnzip",
+    "time": "0.003"
+  },
+  {
+    "classname": "com.googlecode.totallylazy.ZipTest",
+    "name": "preservesModifiedDate",
+    "time": "0.002"
+  }
+]
