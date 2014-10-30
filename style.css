@@ -6,8 +6,8 @@
 
 html {
     color: white;
-    background-color: #000000;
-    background: linear-gradient(to bottom, #45484d 0%, #000000 100%) no-repeat;
+    background-color: #222;
+    background: linear-gradient(to bottom, #333 0%, #111 100%) no-repeat;
     font-family: 'Oxygen', sans-serif;
     font-weight: 300;
 }
