@@ -7,11 +7,25 @@
 html {
     color: white;
     background: #000000 linear-gradient(to bottom, #45484d 0%, #000000 100%) no-repeat;
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: 'Oxygen', sans-serif;
     font-weight: 300;
 }
 
+/* Scale & Rhythm @ http://lamb.cc/typograph/ */
+body { font-size:105%; line-height:1.25; }
+h1, h2, h3 { margin-top:0; margin-bottom:0; }
+h1 { font-size:4.27273em; margin:1.25em 0 0 0; }
+h2 { font-size:1.75em; margin:1.51786em 0 0 0; }
+h3 { font-size:1.33333em; margin:1.25em 0 0 0;}
+
+.fork-me {
+    position: absolute; top: 0; left: 0; border: 0;
+}
+
 .logo {
+    font-family: sans-serif;
+    box-sizing: content-box;
+    margin: 0 .5em 0 -1.75em;
     font-size: 0.5em;
     width: 1.75em;
     height: 1.75em;
@@ -22,10 +36,6 @@ html {
     border-radius: 2px;
     display: inline-block;
     vertical-align: middle;
-}
-
-.fork-me {
-    position: absolute; top: 0; left: 0; border: 0;
 }
 
 .logo:before {
@@ -53,6 +63,12 @@ a:hover {
     text-decoration: underline;
 }
 
+.motivation > p {
+    margin: 1em 3em;
+    font-size: 105%;
+    text-align: justify;
+}
+
 code {
     overflow: auto;
     overflow-y: hidden;
@@ -65,8 +81,12 @@ pre > code {
     padding: 15px 20px;
 }
 
-h1 {
+header {
     text-align: center;
+}
+
+header p {
+    font-size:1.75em; margin: 0.5em 0 1.51786em 0;
 }
 
 .button {
@@ -144,7 +164,7 @@ body > section {
 }
 
 menu {
-    margin: 0 0 6em 0;
+    margin: 1.5em 0 6em 0;
     padding: 0;
     height: 23em;
     position: relative;
@@ -164,6 +184,12 @@ menu label {
     background-color: #8F6FA0;
     background-image: linear-gradient(top, #A07CB3, #826591);
     color: #fff;
+}
+
+menu label:hover {
+    cursor: pointer;
+    background-color: #A07CB3;
+    background-image: linear-gradient(top, #AF88C4, #8F6FA0);
 }
 
 menu input {
@@ -188,15 +214,6 @@ menu input:checked ~ section {
     padding: 15px;
 }
 
-
-
-/* Scale & Rhythm @ http://lamb.cc/typograph/ */
-body { font-size:100%; line-height:1.25; }
-h1, h2, h3 { margin-top:0; margin-bottom:0; }
-h1 { font-size:3em; }
-h1, h3 { margin:1.25em 0; }
-h2 { font-size:1.75em; margin:1.51786em 0; }
-h3 { font-size:1.33333em; }
 
 
 code .literal{
