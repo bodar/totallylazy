@@ -80,6 +80,7 @@ code {
 pre > code {
     display: block;
     padding: 15px 20px;
+    font-size: 100%;
 }
 
 header {
