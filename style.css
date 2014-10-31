@@ -67,8 +67,8 @@ a:hover {
 .motivation > p {
     margin: 1em 3em;
     font-size: 105%;
-    text-align: justify;
     text-indent: 2em;
+    text-align: justify;
 }
 
 code {
@@ -90,6 +90,23 @@ header {
 
 header p {
     font-size:1.75em; margin: 0.5em 0 1.51786em 0;
+}
+
+blockquote > p {
+    font-style: italic;
+    text-align: justify;
+}
+
+blockquote > p:before {
+    content: "\f10d";
+    font-family: FontAwesome;
+    padding-right: .5em;
+}
+
+blockquote > p:after {
+    content: "\f10e";
+    font-family: FontAwesome;
+    padding-left: .5em;
 }
 
 .button {
@@ -205,12 +222,12 @@ menu input {
     display: none;
 }
 
-menu input:checked + label {
-    background-color: #2B2B2B;
-}
-
 menu > section > section {
     display: none;
+}
+
+menu input:checked + label {
+    background-color: #2B2B2B;
 }
 
 menu input:checked ~ section {

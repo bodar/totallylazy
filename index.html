@@ -35,16 +35,16 @@ sequence(1, 2).mapConcurrently(toString); // lazily distributes the work to back
 sequence(1, 2, 3).take(2); // lazily returns 1,2
 sequence(1, 2, 3).drop(2); // lazily returns 3
 sequence(1, 2, 3).tail(); // lazily returns 2,3
-sequence(1, 2, 3).filter(even); // lazily returns 2
 sequence(1, 2, 3).head(); // eagerly returns 1
 sequence(1, 2, 3).reduce(sum); // eagerly return 6
 sequence(1, 3, 5).find(even); // eagerly returns none()
 sequence(1, 2, 3).contains(2); // eagerly returns true
 sequence(1, 2, 3).exists(even); // eagerly return true
 sequence(1, 2, 3).forAll(odd); // eagerly returns false;
-sequence(1, 2, 3).foldLeft(0, add); // eagerly returns 6
-sequence(1, 2, 3).toString(); // eagerly returns "1,2,3"
+sequence(1, 2, 3).fold(0, sum); // eagerly returns 6
 sequence(1, 2, 3).toString(":"); // eagerly returns "1:2:3"</code></pre>
+
+                <p>100+ more methods...</p>
             </section>
 
         </section>
@@ -75,8 +75,8 @@ some("1").map(Integer::parserInt); // returns some(1)
 for (T value : option(...)) System.out.print(value); // Only prints the value if it's defined
 </code></pre>
             </section>
-
         </section>
+
         <section>
             <input type="radio" name="features" id="either"/><label for="either">Either</label>
 
@@ -90,8 +90,7 @@ for (T value : option(...)) System.out.print(value); // Only prints the value if
 
                 <p>Bring in some static imports:</p>
 
-        <pre><code class="language-java">import static com.googlecode.totallylazy.Either.*; // Where the option factory methods live;
-import static com.googlecode.totallylazy.numbers.Numbers.*; // Used for working with Numbers</code></pre>
+        <pre><code class="language-java">import static com.googlecode.totallylazy.Either.*; // Where the option factory methods live;</code></pre>
 
                 <p>Now we can try some of the following:</p>
 
@@ -101,8 +100,43 @@ right(1).isLeft(); // returns false
 left("error").isRight(); // returns false
 right(1).map(Math::cos); // returns right(0.5403023058681398)
 left("error").map(Math::cos); // returns left("error")
-for (T value : either(...)) System.out.print(value); // Only prints the "correct" value 
+for (T value : either(...)) System.out.print(value); // Only prints the "correct" value
 </code></pre>
+            </section>
+
+        </section>
+
+        <section>
+            <input type="radio" name="features" id="persistent"/><label for="persistent">Persistent Data Structures</label>
+
+            <section>
+
+                <blockquote>
+                    <p>In computing, a persistent data structure is a data structure that always preserves the previous version of itself when it is modified.
+                    Such data structures are effectively immutable, as their operations do not (visibly) update the structure in-place, but instead always yield a new updated structure.
+                    (A persistent data structure is not a data structure committed to persistent storage, such as a disk; this is a different and unrelated sense of the word "persistent.")</p>
+                    <cite><a href="http://en.wikipedia.org/wiki/Persistent_data_structure">Peristent Data Structure</a> @ Wikipedia. 2014</cite>
+                </blockquote>
+
+                <p>All peristent data structures in TotallyLazy implement the read only portion of the matching standard collection interface, so:</p>
+                <ul>
+                    <li>PersistentCollection extends Collection</li>
+                    <li>PersistentMap extends Map</li>
+                    <li>PersistentSet extends Set</li>
+                    <li>PersistentList extends List</li>
+                </ul>
+
+                <h3>PersistentMap</h3>
+
+        <pre><code class="language-java">import static com.googlecode.totallylazy.collections.PersistentMap.constructors.*;
+
+PersistentMap&lt;String, Integer&gt; map = map("Dan", 1977, "Matt", 1978);
+map.lookup("Dan"); // returns some(1977)
+map.get("Dan"); // returns 1977
+map.insert("Raymond", 1976); // returns a new map that shares state with the old map
+map.put("Raymond", 1976); // Throw an IllegalMutationException
+map.delete("Dan"); // returns map("Matt", 1978)
+map.remove("Dan"); // Throw an IllegalMutationException</code></pre>
             </section>
 
         </section>
