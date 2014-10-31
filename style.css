@@ -68,6 +68,7 @@ a:hover {
     margin: 1em 3em;
     font-size: 105%;
     text-align: justify;
+    text-indent: 2em;
 }
 
 code {
