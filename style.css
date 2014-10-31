@@ -168,8 +168,15 @@ body > section {
 menu {
     margin: 1.5em 0 6em 0;
     padding: 0;
-    height: 23em;
     position: relative;
+}
+
+.features menu{
+    height: 39em;
+}
+
+.resolver menu{
+    height: 23em;
 }
 
 menu h4, menu section {

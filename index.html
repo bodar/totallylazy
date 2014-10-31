@@ -7,35 +7,27 @@
         TotallyLazy has been built by usage so has hundreds of helper functions and always stives for the highest level of interop with standard Java interfaces.</p>
 </section>
 
-<section>
+<section class="features">
     <h2>Features</h2>
 
-    <p>A functional library for Java that has the following features</p>
+    <p>The following are some of the features in TotallyLazy</p>
+    <menu>
+        <section>
+            <input type="radio" checked="checked" name="features" id="sequence"/><label for="sequence">Sequence</label>
 
-    <ul>
-        <li>Tries to be as lazy as possible just like <a href="http://clojure.org/">Clojure's</a> collection library</li>
-        <li>Works with Iterable, Iterator, Arrays, Char Sequences, Dates and Numbers (i.e virtually everything)</li>
-        <li>Follows the <a href="http://hyperpolyglot.org/ml">ML family</a> of function / method names (Standard ML, oCaml, F#, Scala, Haskell)</li>
-        <li>Uses and extends Callable interface for maximum interop (i.e Can use with Clojure, <a href="http://www.hazelcast.com/">Hazelcast</a>)</li>
-        <li>Optionally supports using <a href="http://code.google.com/p/hamcrest/">Hamcrest</a> matchers as predicates</li>
-        <li>Supports chaining of all methods (Recommended) or the use of static imports for all methods.</li>
-        <li>Optionally supports creating Callables via dynamic proxies (requires <a href="http://cglib.sourceforge.net/">cglib-2.2</a> and <a href="http://code.google.com/p/objenesis/">objenesis-1.2</a>)</li>
-        <li>Contains PersistentSet, PersistentMap, PersistentSortedMap, PersistentList</li>
-        <li>Support Functors and Applicative Functors</li>
-        <li>Supports runtime multi-method dispatch and pattern matching</li>
-    </ul>
-</section>
+            <section>
 
-    <section>
-        <h2>10 second tutorial</h2>
+                <p>The sequence class allows you to build up a computation out of smaller operations.
+                    It's very similar to <a href="http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html">Java 8 Streams</a> but has hundreds more methods and uses explicit parallelism (which tends to be better for IO operations).
+                    It has methods from Clojure, Scala, Haskell and F#.</p>
 
-        <p>TotallyLazy heavily uses static imports to make your Java code concise and readable, so lets start with a few to make life easy:</p>
+                <p>Bring in some static imports:</p>
 
-        <pre><code class="language-java">import static com.googlecode.totallylazy.Sequences.* // Where the sequence factory methods live;
-import static com.googlecode.totallylazy.Callables.* // Lots of helper functions;
+        <pre><code class="language-java">import static com.googlecode.totallylazy.Sequences.*; // Where the sequence factory methods live;
+import static com.googlecode.totallylazy.Callables.*; // Lots of helper functions;
 import static com.googlecode.totallylazy.numbers.Numbers.*; // Used for working with Numbers</code></pre>
 
-        <p>Now we can try some of the following:</p>
+                <p>Now we can try some of the following:</p>
 
                 <pre><code class="language-java">sequence(1, 2, 3, 4).filter(even); // lazily returns 2,4
 sequence(1, 2).map(toString); // lazily returns "1", "2"
@@ -43,6 +35,7 @@ sequence(1, 2).mapConcurrently(toString); // lazily distributes the work to back
 sequence(1, 2, 3).take(2); // lazily returns 1,2
 sequence(1, 2, 3).drop(2); // lazily returns 3
 sequence(1, 2, 3).tail(); // lazily returns 2,3
+sequence(1, 2, 3).filter(even); // lazily returns 2
 sequence(1, 2, 3).head(); // eagerly returns 1
 sequence(1, 2, 3).reduce(sum); // eagerly return 6
 sequence(1, 3, 5).find(even); // eagerly returns none()
@@ -52,7 +45,69 @@ sequence(1, 2, 3).forAll(odd); // eagerly returns false;
 sequence(1, 2, 3).foldLeft(0, add); // eagerly returns 6
 sequence(1, 2, 3).toString(); // eagerly returns "1,2,3"
 sequence(1, 2, 3).toString(":"); // eagerly returns "1:2:3"</code></pre>
-    </section>
+            </section>
+
+        </section>
+
+        <section>
+            <input type="radio" name="features" id="option"/><label for="option">Option</label>
+
+            <section>
+
+                <p>Option is very similar to <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Optional.html">Java 8 Optional</a> class with a few more methods.
+                    The biggest difference is that Option is iterable (and monadic) so can be use in many more places than the Optional class</p>
+
+                <p>Bring in some static imports:</p>
+
+        <pre><code class="language-java">import static com.googlecode.totallylazy.Option.*; // Where the option factory methods live;
+import static com.googlecode.totallylazy.numbers.Numbers.*; // Used for working with Numbers</code></pre>
+
+                <p>Now we can try some of the following:</p>
+
+                <pre><code class="language-java">option(1); // returns some(1)
+option(null); // returns none()
+some(null); // Throws IllegalArgumentException
+some(1).isDefined(); // returns true
+none().isEmpty(); // returns true
+some(3).filter(even); // returns none()
+some(2).fold(1, sum); // returns 3
+some("1").map(Integer::parserInt); // returns some(1)
+for (T value : option(...)) System.out.print(value); // Only prints the value if it's defined
+</code></pre>
+            </section>
+
+        </section>
+        <section>
+            <input type="radio" name="features" id="either"/><label for="either">Either</label>
+
+            <section>
+
+                <p>There is no equivalent in Java 8 but this will be familar for Haskell or Scala progammers.
+                    Either's represent a single value that is either the right (correct) or left (error) value.
+                    This is often referered to as being right biased (just like Haskell but unlike Scala).
+                    Because they are right biased they are iterable and monadic.
+                </p>
+
+                <p>Bring in some static imports:</p>
+
+        <pre><code class="language-java">import static com.googlecode.totallylazy.Either.*; // Where the option factory methods live;
+import static com.googlecode.totallylazy.numbers.Numbers.*; // Used for working with Numbers</code></pre>
+
+                <p>Now we can try some of the following:</p>
+
+                <pre><code class="language-java">right(1); // returns the correct value 1
+left("error"); // returns the "error" value
+right(1).isLeft(); // returns false
+left("error").isRight(); // returns false
+right(1).map(Math::cos); // returns right(0.5403023058681398)
+left("error").map(Math::cos); // returns left("error")
+for (T value : either(...)) System.out.print(value); // Only prints the "correct" value 
+</code></pre>
+            </section>
+
+        </section>
+    </menu>
+</section>
 
     <section>
         <h2>Download directly</h2>
@@ -66,7 +121,7 @@ sequence(1, 2, 3).toString(":"); // eagerly returns "1:2:3"</code></pre>
 
     </section>
 
-    <section>
+    <section class="resolver">
         <h2>Install using a dependency resolver</h2>
 
         <menu>
