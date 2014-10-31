@@ -98,6 +98,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     select('code.language-xml').each(function(element) {
         code.highlight(element, [
+            {pattern: "'[^']*'", cssClass: "quote" },
+            {pattern: '"[^"]*"', cssClass: "quote" },
             {pattern: '^\\w', cssClass: "quote" },
             {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
             {pattern: "\\??&gt;", cssClass: "keyword" },

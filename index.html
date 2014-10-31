@@ -137,6 +137,7 @@ map.insert("Raymond", 1976); // returns a new map that shares state with the old
 map.put("Raymond", 1976); // Throw an IllegalMutationException
 map.delete("Dan"); // returns map("Matt", 1978)
 map.remove("Dan"); // Throw an IllegalMutationException</code></pre>
+
             </section>
 
         </section>
@@ -187,7 +188,7 @@ map.remove("Dan"); // Throw an IllegalMutationException</code></pre>
             <section>
             <p>Add the following URL to your <code>runtime.dependencies</code> file</p>
 
-    <pre><code class="language-url latest">mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar:${LATEST_VERSION}</code></pre>
+    <pre><code class="language-url latest">mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:pack|sources:${LATEST_VERSION}</code></pre>
 
             </section>
 
@@ -229,13 +230,31 @@ dependencies {
 
         </section>
 
+        <section>
+            <input type="radio" name="dependency" id="ivy"/><label for="ivy">Ivy</label>
+
+            <section>
+
+            <p>Add a new resolver to your <code>ivysettings.xml</code></p>
+
+                <pre><code class="language-xml">&lt;ibiblio name="bodar" root="http://repo.bodar.com/"
+         m2compatible="true" useMavenMetadata="false" /&gt;</code></pre>
+
+            <p>Then add the dependency to your <code>ivy.xml</code> file:</p>
+
+    <pre><code class="language-xml latest">&lt;dependency org="com.googlecode.totallylazy" name="totallylazy" rev="${LATEST_VERSION}"/&gt;</code></pre>
+
+            </section>
+
+        </section>
+
             <section>
             <input type="radio" name="dependency" id="sbt"/><label for="sbt">SBT</label>
 
             <section>
             <p>Add to your <code>build.sbt</code> file:</p>
 
-    <pre><code class="language-generic latest">resolvers += "Bodar repo" at "http://repo.bodar.com/"
+    <pre><code class="language-generic latest">resolvers += "bodar" at "http://repo.bodar.com/"
 
 libraryDependencies += "com.googlecode.totallylazy" % "totallylazy" % "${LATEST_VERSION}"</code></pre>
 
