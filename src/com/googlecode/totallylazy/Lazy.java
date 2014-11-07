@@ -2,7 +2,10 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.LazyCallable;
 
+import java.io.Closeable;
 import java.util.concurrent.Callable;
+
+import static com.googlecode.totallylazy.Closeables.safeClose;
 
 public abstract class Lazy<T> extends Function<T> implements Memory {
     private final Object lock = new Object();
@@ -27,8 +30,13 @@ public abstract class Lazy<T> extends Function<T> implements Memory {
     }
 
     public void forget() {
+        close();
+    }
+
+    @Override
+    public void close() {
         synchronized (lock) {
-            state = null;
+            state = safeClose(state);
         }
     }
 }

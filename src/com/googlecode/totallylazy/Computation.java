@@ -145,7 +145,12 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
 
     @Override
     public void forget() {
-        head.forget();
-        tail.forget();
+        close();
+    }
+
+    @Override
+    public void close() {
+        head.close();
+        tail.close();
     }
 }

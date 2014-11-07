@@ -1,11 +1,14 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Closeables;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Memory;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.googlecode.totallylazy.Closeables.safeClose;
 
 public final class LazyCallable1<T, R> extends Function1<T, R> implements Memory {
     private final Callable1<? super T, ? extends R> callable;
@@ -30,7 +33,13 @@ public final class LazyCallable1<T, R> extends Function1<T, R> implements Memory
     }
 
     public void forget() {
+        close();
+    }
+
+    @Override
+    public void close() {
         synchronized (lock) {
+            for (R r : state.values()) safeClose(r);
             state.clear();
         }
     }
