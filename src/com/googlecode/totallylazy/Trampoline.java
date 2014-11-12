@@ -9,12 +9,6 @@ public interface Trampoline<T> extends Returns<T> {
 
     default Trampoline<T> next() { throw new NoSuchElementException(); }
 
-    @tailrec
-    static <T> T trampoline(Trampoline<T> trampoline) {
-        if(trampoline.done()) return trampoline.apply();
-        return trampoline(trampoline.next());
-    }
-
     static <T> Trampoline<T> done(T value) { return () -> value; }
 
     static <T> Trampoline<T> more(Returns<? extends Trampoline<T>> next) {
@@ -24,6 +18,12 @@ public interface Trampoline<T> extends Returns<T> {
             @Override public T call() throws Exception { return trampoline(this); }
 
             @Override public Trampoline<T> next() { return next.apply(); }
+
+            @tailrec
+            T trampoline(Trampoline<T> trampoline) throws Exception {
+                if(trampoline.done()) return trampoline.call();
+                return trampoline(trampoline.next());
+            }
         };
     }
 }
