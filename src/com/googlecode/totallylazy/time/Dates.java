@@ -21,6 +21,7 @@ import static java.util.Calendar.SECOND;
 import static java.util.Calendar.YEAR;
 
 public class Dates {
+    public static final String RFC3339_WITHOUT_TIME = "yyyy-MM-dd";
     public static final String RFC3339 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String RFC3339_WITH_MILLISECONDS = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final String RFC822 = "EEE, dd MMM yyyy HH:mm:ss zzz";
@@ -36,11 +37,11 @@ public class Dates {
 
     @Deprecated
     public static DateFormat LUCENE() {
-        return format(LUCENE);
+        return format(LEXICAL);
     }
 
     public static DateFormatConverter RFC3339() {
-        return new DateFormatConverter(RFC3339_WITH_MILLISECONDS, RFC3339);
+        return new DateFormatConverter(RFC3339_WITH_MILLISECONDS, RFC3339, RFC3339_WITHOUT_TIME);
     }
 
     public static SimpleDateFormat format(final String pattern) {

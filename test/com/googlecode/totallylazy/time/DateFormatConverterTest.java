@@ -12,6 +12,12 @@ import static org.junit.Assert.fail;
 public class DateFormatConverterTest {
 
     @Test
+    public void supportsRFC3339DateOnly() throws Exception{
+        DateFormatConverter converter = new DateFormatConverter(Dates.RFC3339().formats());
+        assertThat(converter.parse("1970-01-06"), Matchers.is(date(1970, 1, 6)));
+    }
+
+    @Test
     public void canParseSpecificDate() throws Exception{
         DateFormatConverter converter = new DateFormatConverter(Dates.RFC3339().formats().join(sequence(Dates.RFC822(), Dates.javaUtilDateToString())));
         assertThat(converter.parse("1970-01-06T18:53:20Z"), Matchers.is(date(1970, 1, 6, 18, 53, 20)));
