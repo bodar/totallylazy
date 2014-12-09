@@ -252,9 +252,9 @@ public class Uri implements Comparable<Uri> {
         return new File(toURI());
     }
 
-    public Uri normalise() {
+    public Uri removeDotSegments() {
         if(Strings.isEmpty(path)) return this;
-        return path(Paths.get(path).normalize().toString());
+        return path(DotSegments.remove(path));
     }
 
     public static class functions {

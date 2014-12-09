@@ -11,13 +11,16 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class UriTest {
     @Test
-    public void canNormalise() throws Exception {
-        assertThat(uri("build/../build.xml").normalise(), is(uri("build.xml")));
-        assertThat(uri("build/../../build.xml").normalise(), is(uri("../build.xml")));
-        assertThat(uri("build/child/../../build.xml").normalise(), is(uri("build.xml")));
-        assertThat(uri("build/./build.xml").normalise(), is(uri("build/build.xml")));
-        assertThat(uri("build/././build.xml").normalise(), is(uri("build/build.xml")));
-        assertThat(uri("").normalise(), is(uri("")));
+    public void canRemoveDotSegments() throws Exception {
+        assertThat(uri("../foo").removeDotSegments(), is(uri("/foo")));
+        assertThat(uri("/foo/").removeDotSegments(), is(uri("/foo/")));
+        assertThat(uri("build/../build.xml").removeDotSegments(), is(uri("/build.xml")));
+        assertThat(uri("build/../../build.xml").removeDotSegments(), is(uri("/build.xml")));
+        assertThat(uri("build/child/../../build.xml").removeDotSegments(), is(uri("/build.xml")));
+        assertThat(uri("build/./build.xml").removeDotSegments(), is(uri("build/build.xml")));
+        assertThat(uri("build/././build.xml").removeDotSegments(), is(uri("build/build.xml")));
+        assertThat(uri("").removeDotSegments(), is(uri("")));
+        assertThat(uri("/").removeDotSegments(), is(uri("/")));
     }
 
     @Test
