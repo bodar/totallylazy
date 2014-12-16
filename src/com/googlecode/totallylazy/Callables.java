@@ -239,7 +239,7 @@ public final class Callables {
 
     public final static Function1<Object, String> toString = new Function1<Object, String>() {
         public final String call(final Object value) {
-            return value.toString();
+            return value != null ? value.toString() : null;
         }
 
         @Override
