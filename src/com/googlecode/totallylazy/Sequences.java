@@ -342,9 +342,7 @@ public class Sequences {
     }
 
     public static String toString(final Iterable<?> iterable) {
-        Sequence<?> sequence = sequence(iterable).take(101);
-        if (sequence.size() < 101) return Iterators.toString(sequence.iterator(), ",");
-        return Iterators.toString(sequence.init().iterator(), ",");
+        return Iterators.toString(sequence(iterable).take(100).iterator(), ",");
     }
 
     public static String toString(final Iterable<?> iterable, final String separator) {

@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Option.none;

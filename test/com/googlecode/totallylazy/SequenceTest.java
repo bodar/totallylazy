@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
+import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -571,6 +572,24 @@ public class SequenceTest {
         assertThat(sequence(1, 2, 3).toString(), is("1,2,3"));
         assertThat(sequence(1, 2, 3).toString(":"), is("1:2:3"));
         assertThat(sequence(1, 2, 3).toString("(", ", ", ")"), is("(1, 2, 3)"));
+    }
+
+    @Test
+    public void toStringOnlyShowsFirstHundredElementsSoItWorksWithInfiniteLists() throws Exception {
+        assertThat(range(1).toString(), is(range(1, 100).toString()));
+    }
+
+    @Test
+    public void shouldNotIterateMultipleTimesWhenCallingToString() throws Exception {
+        final AtomicInteger count = new AtomicInteger(0);
+        sequence("foo").map(new Callable1<String, String>() {
+            @Override
+            public String call(String string) throws Exception {
+                count.incrementAndGet();
+                return string;
+            }
+        }).toString();
+        assertThat(count.get(), is(1));
     }
 
     @Test
