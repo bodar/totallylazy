@@ -31,8 +31,8 @@ public interface CloseableList<T extends Closeable> extends List<T>, Closeable {
             public CloseableDelegatingList(List<? super T> items) {super(items);}
 
             public void close() throws IOException {
-                sequence(this).each(Closeables.safeClose());
-                clear();
+                sequence(delegate).each(Closeables.safeClose());
+                delegate.clear();
             }
 
             public T manage(T instance) {
