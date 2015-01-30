@@ -1,20 +1,24 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.collections.CloseableList;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
+import static com.googlecode.totallylazy.collections.CloseableList.constructors.closeableList;
 
 public class FileDestination implements Destination {
-    private final CloseableList closeables;
+    private final CloseableList<OutputStream> closeables;
     private final File folder;
 
     private FileDestination(File folder) {
         this.folder = folder;
-        closeables = new CloseableList();
+        closeables = closeableList(new CopyOnWriteArrayList<OutputStream>());
     }
 
     public static FileDestination fileDestination(File folder) {
