@@ -7,9 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.emptyInputStream;
@@ -20,7 +18,7 @@ public class FileSource implements Sources {
     private final Sequence<Source> sources;
 
     private FileSource(final Sequence<Pair<String, File>> sources) {
-        closeables = closeableList(new CopyOnWriteArrayList<InputStream>());
+        closeables = closeableList(InputStream.class);
         this.sources = sources.map(new Function1<Pair<String, File>, Source>() {
             @Override
             public Source call(Pair<String, File> pair) throws Exception {

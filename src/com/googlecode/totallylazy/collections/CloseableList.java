@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Closeables;
-import com.googlecode.totallylazy.Lists;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -14,11 +13,17 @@ public interface CloseableList<T extends Closeable> extends List<T>, Closeable {
     T manage(T instance);
 
     public static class constructors {
-        public static <T extends Closeable> CloseableList<T> closeableList(T... items){
-            return closeableList(Lists.list(items));
+        @SuppressWarnings("unchecked")
+        public static <T extends Closeable> CloseableList<T> closeableList(Class<T> aClass) {
+            return closeableList();
         }
 
-        public static <T extends Closeable> CloseableList<T> closeableList(List<? super T> items){
+        @SafeVarargs
+        public static <T extends Closeable> CloseableList<T> closeableList(T... items) {
+            return closeableList(new CopyOnWriteArrayList<T>(items));
+        }
+
+        public static <T extends Closeable> CloseableList<T> closeableList(List<? super T> items) {
             return new CloseableDelegatingList<T>(items);
         }
 

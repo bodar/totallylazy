@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.googlecode.totallylazy.Streams.nullOutputStream;
 import static com.googlecode.totallylazy.collections.CloseableList.constructors.closeableList;
@@ -18,7 +17,7 @@ public class FileDestination implements Destination {
 
     private FileDestination(File folder) {
         this.folder = folder;
-        closeables = closeableList(new CopyOnWriteArrayList<OutputStream>());
+        closeables = closeableList(OutputStream.class);
     }
 
     public static FileDestination fileDestination(File folder) {
