@@ -72,6 +72,12 @@ public class EitherTest {
     }
 
     @Test
+    public void supportsMapLeft() throws Exception {
+        assertThat(Either.<Number, Number>right(3).mapLeft(add(2)), is(Either.<Number, Number>right(3)));
+        assertThat(Either.<Number, Number>left(3).mapLeft(add(2)), is(Either.<Number, Number>left(5)));
+    }
+
+    @Test
     public void supportsFlatMap() throws Exception {
         assertThat(Either.<Exception, Number>right(4).flatMap(divide(2).orException()), is(Either.<Exception, Number>right(2)));
         assertThat(Either.<Exception, Number>right(4).flatMap(divide(0).orException()), is(Either.<Exception, Number>left(DIVIDE_BY_ZERO)));

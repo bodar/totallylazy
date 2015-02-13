@@ -46,6 +46,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
     @Override
     public abstract <S> Either<L, S> map(Callable1<? super R, ? extends S> callable);
 
+    public abstract <S> Either<S, R> mapLeft(Callable1<? super L, ? extends S> callable);
+
     public abstract <S> Either<L, S> flatMap(Callable1<? super R, ? extends Either<L, S>> callable);
 
     public static <L, R> Either<L, R> flatten(final Either<L, Either<L, R>> either) {
