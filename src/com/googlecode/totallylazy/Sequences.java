@@ -14,7 +14,6 @@ import com.googlecode.totallylazy.iterators.TransposeIterator;
 import com.googlecode.totallylazy.iterators.TripleIterator;
 import com.googlecode.totallylazy.predicates.UniquePredicate;
 
-import java.io.Writer;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
@@ -252,6 +251,10 @@ public class Sequences {
         mapConcurrently(iterable, runnable, executor).realise();
     }
 
+    public static <T> void tap(final Iterable<? extends T> iterable, final Block<? super T> block) {
+        Iterators.forEach(iterable.iterator(), block);
+    }
+
     public static <T> T first(final Iterable<? extends T> iterable) {
         return head(iterable);
     }
@@ -361,8 +364,8 @@ public class Sequences {
         return Iterators.appendTo(iterable.iterator(), appendable, separator);
     }
 
-    public static <A extends Appendable> A  appendTo(final Iterable<?> iterable, A appendable, final String start, final String separator, final String end) {
-        return Iterators.appendTo(iterable.iterator(), appendable,start, separator, end);
+    public static <A extends Appendable> A appendTo(final Iterable<?> iterable, A appendable, final String start, final String separator, final String end) {
+        return Iterators.appendTo(iterable.iterator(), appendable, start, separator, end);
     }
 
     public static boolean isEmpty(final Iterable<?> iterable) {

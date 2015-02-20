@@ -9,7 +9,6 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
-import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -637,6 +636,17 @@ public class SequenceTest {
             }
         });
         assertThat(sum.intValue(), is(3));
+    }
+
+    @Test
+    public void supportsTap() throws Exception {
+        final int[] sum = {0};
+        sequence(1, 2).tap(new Block<Integer>() {
+            public void execute(Integer value) {
+                sum[0] += value;
+            }
+        });
+        assertThat(sum[0], is(3));
     }
 
     @Test
