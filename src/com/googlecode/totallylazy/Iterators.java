@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.iterators.MapIterator;
 import com.googlecode.totallylazy.iterators.PartitionIterator;
 import com.googlecode.totallylazy.iterators.PeekingIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
+import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
@@ -467,6 +468,22 @@ public class Iterators {
             if (instance.equals(next)) return i;
         }
         return -1;
+    }
+
+    public static <T> Iterator<T> tap(final Iterator<? extends T> iterator, final Callable1<? super T, ?> callable) {
+        return new ReadOnlyIterator<T>(){
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public T next() {
+                T next = iterator.next();
+                call(callable, next);
+                return next;
+            }
+        };
     }
 
     public static class functions {

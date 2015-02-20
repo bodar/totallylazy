@@ -641,11 +641,12 @@ public class SequenceTest {
     @Test
     public void supportsTap() throws Exception {
         final int[] sum = {0};
-        sequence(1, 2).tap(new Block<Integer>() {
+        Sequence<Integer> result = sequence(1, 2).tap(new Block<Integer>() {
             public void execute(Integer value) {
                 sum[0] += value;
             }
-        });
+        }).realise();
+        assertThat(result, hasExactly(1, 2));
         assertThat(sum[0], is(3));
     }
 

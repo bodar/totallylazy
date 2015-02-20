@@ -57,7 +57,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         Sequences.forEach(this, runnable);
     }
 
-    public void tap(final Block<? super T> block) { Sequences.tap(this, block); }
+    public Sequence<T> tap(final Callable1<? super T, ?> callable) { return Sequences.tap(this, callable); }
 
     public <S> Sequence<S> mapConcurrently(final Callable1<? super T, S> callable) {
         return Sequences.mapConcurrently(this, callable);
