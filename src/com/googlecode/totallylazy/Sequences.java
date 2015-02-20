@@ -251,8 +251,13 @@ public class Sequences {
         mapConcurrently(iterable, runnable, executor).realise();
     }
 
-    public static <T> void tap(final Iterable<? extends T> iterable, final Block<? super T> block) {
-        Iterators.forEach(iterable.iterator(), block);
+    public static <T> Sequence<T> tap(final Iterable<? extends T> iterable, final Callable1<? super T, ?> callable) {
+        return new Sequence<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return Iterators.tap(iterable.iterator(), callable);
+            }
+        };
     }
 
     public static <T> T first(final Iterable<? extends T> iterable) {
