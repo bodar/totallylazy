@@ -5,7 +5,6 @@ import com.googlecode.totallylazy.collections.Indexed;
 import com.googlecode.totallylazy.collections.PersistentCollection;
 import com.googlecode.totallylazy.collections.PersistentList;
 
-import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Deque;
@@ -15,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
-import static com.googlecode.totallylazy.Callables.asHashCode;
 import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Predicates.in;
@@ -58,6 +56,8 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
     public void forEach(final Callable1<? super T, ?> runnable) {
         Sequences.forEach(this, runnable);
     }
+
+    public void tap(final Block<? super T> block) { Sequences.tap(this, block); }
 
     public <S> Sequence<S> mapConcurrently(final Callable1<? super T, S> callable) {
         return Sequences.mapConcurrently(this, callable);
@@ -187,7 +187,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
     }
 
     public <A extends Appendable> A appendTo(A appendable, final String start, final String separator, final String end) {
-        return Sequences.appendTo(this, appendable,start, separator, end);
+        return Sequences.appendTo(this, appendable, start, separator, end);
     }
 
     public Set<T> union(final Iterable<? extends T> other) {
