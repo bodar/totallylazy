@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface CloseableList<T extends Closeable> extends List<T>, Closeable {
-    T manage(T instance);
+    <S extends T> S manage(S instance);
 
     public static class constructors {
         @SuppressWarnings("unchecked")
@@ -35,7 +35,7 @@ public interface CloseableList<T extends Closeable> extends List<T>, Closeable {
                 delegate.clear();
             }
 
-            public T manage(T instance) {
+            public <S extends T> S manage(S instance) {
                 add(instance);
                 return instance;
             }
