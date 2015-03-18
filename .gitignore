@@ -8,7 +8,6 @@ lib/build
 lib/runtime
 lib/optional
 lib/jcompilo.jar
-test/com/googlecode/totallylazy/records/simpledb/AwsCredentials.properties
 .DS_Store
 .idea/misc.xml
 
