@@ -173,11 +173,22 @@ public class Iterators {
     }
 
     public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Callable2<? super T, ? super S, ? extends S> callable) {
-        return foldRight(iterator, Unchecked.<S>cast(iterator.next()), callable);
+        Iterator<T> reversed = reverse(iterator);
+        return foldLeft(reversed, Unchecked.<S>cast(reversed.next()), Callables.flip(callable));
     }
 
     public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Callable1<? super Pair<T, S>, ? extends S> callable) {
-        return foldRight(iterator, Unchecked.<S>cast(iterator.next()), callable);
+        if (!iterator.hasNext())
+            throw new NoSuchElementException();
+        T head = iterator.next();
+        if (!iterator.hasNext())
+            return Unchecked.<S>cast(head);
+        return Callers.call(callable, Pair.pair(returns(head), new Function<S>() {
+            @Override
+            public S call() throws Exception {
+                return reduceRight(iterator, callable);
+            }
+        }));
     }
 
     public static String toString(final Iterator<?> iterator, final String separator) {
