@@ -7,8 +7,6 @@ import com.googlecode.totallylazy.matchers.Matchers;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
-import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.junit.SpecRunner;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,36 +79,30 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
 
-@RunWith(SpecRunner.class)
 public class SequenceTest {
     @Test
-    @Notes("Eagerly return the first element of a sequence, throws NoSuchElementException if empty.")
     public void head() throws Exception {
         assertThat(sequence(1, 2).head(), is(1));
     }
 
     @Test
-    @Notes("Eagerly return the first element of a sequence wrapped in a some, returns none if empty.")
     public void headOption() throws Exception {
         assertThat(sequence(1).headOption(), is(some(1)));
         assertThat(empty().headOption(), is(none()));
     }
 
     @Test
-    @Notes("Eagerly return the last element of a finite sequence, throws NoSuchElementException if empty.")
     public void last() throws Exception {
         assertThat(sequence(1, 2, 3).last(), is(3));
     }
 
     @Test
-    @Notes("Eagerly return the last element of a finite sequence wrapped in a some, returns none if empty.")
     public void lastOption() throws Exception {
         assertThat(sequence(1, 2, 3).lastOption(), is(some(3)));
         assertThat(empty().lastOption(), is(none()));
     }
 
     @Test
-    @Notes("Lazily returns the elements after the head of the sequence. Lazily throws NoSuchElementException if empty. Works with infinite sequences.")
     public void tail() throws Exception {
         assertThat(sequence(1, 2, 3).tail(), hasExactly(2, 3));
         assertThat(sequence(1).tail().isEmpty(), is(true));
@@ -123,7 +115,6 @@ public class SequenceTest {
     }
 
     @Test
-    @Notes("Lazily returns all the elements of a finite sequence except the last one. Lazily throws NoSuchElementException if empty.s")
     public void init() throws Exception {
         assertThat(sequence(1, 2, 3).init(), hasExactly(1, 2));
         assertThat(sequence(1).init().isEmpty(), is(true));
@@ -136,7 +127,6 @@ public class SequenceTest {
     }
 
     @Test
-    @Notes("This test has a very small chance that it could fail")
     public void supportsShuffle() throws Exception {
         assertThat(range(1, 100).shuffle(), is(not(range(1, 100))));
     }
@@ -423,7 +413,6 @@ public class SequenceTest {
     }
 
     @Test
-    @Notes("This behaviour is like SQL order by, not 100% convinced this is correct so please give feedback")
     public void whenSortingWithNullsTheyAlwaysComeLast() throws Exception {
         Sequence<Integer> unsorted = sequence(2, null, 1);
         assertThat(unsorted.sortBy(returnArgument(Integer.class)), hasExactly(1, 2, null));
