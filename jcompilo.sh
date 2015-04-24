@@ -18,14 +18,14 @@ remote_sh=${url}.sh
 type -t setjava > /dev/null && setjava -q ${JAVA_VERSION} || if [ -n "${JAVA_HOME}" ]; then PATH=${JAVA_HOME}/bin:${PATH}; fi
 
 if [ "$1" = "update" ]; then
-	rm ${jar} ${pack}
+	rm -f ${jar} ${pack}
 fi
 
 if [ ! -f ${jar} ]; then
 	mkdir -p ${dir}
 	wget -O ${pack} ${remote_file} || curl -o ${pack} ${remote_file}
 	unpack200 ${pack} ${jar}
-	rm ${pack}
+	rm -f ${pack}
 	#wget -O $0 ${remote_sh} || curl -o $0 ${remote_sh}
 fi
 exec java -showversion -Dbuild.number=${BUILD_NUMBER} ${JAVA_OPTS} -jar ${jar} $*
