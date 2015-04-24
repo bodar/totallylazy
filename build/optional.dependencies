@@ -1,3 +1,4 @@
 mvn:cglib:cglib-nodep:jar:2.2
 mvn:org.ow2.asm:asm-all:jar|sources:5.0.2
 mvn:org.objenesis:objenesis:jar:1.2
+mvn:commons-codec:commons-codec:jar|sources:1.10
