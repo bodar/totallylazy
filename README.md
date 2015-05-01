@@ -24,6 +24,7 @@ Records has moved to http://code.google.com/p/lazyrecords/
 
 Now also available in [Objective-C](https://github.com/stuartervine/OCTotallyLazy/) 
 
+
 Examples
 ========
 
@@ -73,8 +74,8 @@ And because all the operations except reduce are lazy the sequence of numbers is
 Releases
 ========
 
- * Stable releases are version 1.x (Require Java 7)
- * Development releases are version 2.x (Require Java 8)
+ * Stable releases are version 1.x (Require Java 7+) Branch:java7
+ * Development releases are version 2.x (Require Java 8+) HEAD
 
 All releases are created automically and released to
 
