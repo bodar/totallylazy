@@ -84,10 +84,24 @@ public class Predicates {
         return AlwaysFalse.alwaysFalse();
     }
 
-    public static <T> LogicalPredicate<Collection<T>> contains(final T t) {
+    @SafeVarargs
+    public static <T> LogicalPredicate<Collection<T>> contains(final T... t) {
         return new LogicalPredicate<Collection<T>>() {
             public boolean matches(Collection<T> other) {
-                return other.contains(t);
+                return other.containsAll(Lists.list(t));
+            }
+        };
+    }
+
+    public static <T> LogicalPredicate<Collection<T>> containsAll(final Iterable<? extends T> t) {
+        Collection<T> list = Lists.list(t);
+        return containsAll(list);
+    }
+
+    public static <T> LogicalPredicate<Collection<T>> containsAll(final Collection<? extends T> t) {
+        return new LogicalPredicate<Collection<T>>() {
+            public boolean matches(Collection<T> other) {
+                return other.containsAll(t);
             }
         };
     }
@@ -133,6 +147,7 @@ public class Predicates {
         };
     }
 
+    @SafeVarargs
     public static <T> LogicalPredicate<T> in(final T... values) {
         return in(sequence(values));
     }
@@ -177,34 +192,11 @@ public class Predicates {
         return equalTo(t);
     }
 
-    public static <S, T extends Predicate<S>> T is(final T t) {
-        return t;
+    public static <T> LogicalPredicate<T> is(final Predicate<? super T> t) {
+        return logicalPredicate(t);
     }
 
-    public static <T> LogicalPredicate<T> and() {
-        return AndPredicate.and(Sequences.<Predicate<T>>empty());
-    }
-
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first) {
-        return logicalPredicate(first);
-    }
-
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second) {
-        return and(Sequences.<Predicate<? super T>>sequence(first, second));
-    }
-
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second, final Predicate<? super T> third) {
-        return and(Sequences.<Predicate<? super T>>sequence(first, second, third));
-    }
-
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second, final Predicate<? super T> third, final Predicate<? super T> fourth) {
-        return and(Sequences.<Predicate<? super T>>sequence(first, second, third, fourth));
-    }
-
-    public static <T> LogicalPredicate<T> and(final Predicate<? super T> first, final Predicate<? super T> second, final Predicate<? super T> third, final Predicate<? super T> fourth, final Predicate<? super T> fifth) {
-        return and(Sequences.<Predicate<? super T>>sequence(first, second, third, fourth, fifth));
-    }
-
+    @SafeVarargs
     public static <T> LogicalPredicate<T> and(final Predicate<? super T>... predicates) {
         return and(sequence(predicates));
     }
@@ -237,6 +229,7 @@ public class Predicates {
         return or(Sequences.<Predicate<? super T>>sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <T> LogicalPredicate<T> or(final Predicate<? super T>... predicates) {
         return or(sequence(predicates));
     }
@@ -258,7 +251,11 @@ public class Predicates {
     }
 
     public static <T> LogicalPredicate<T> whileTrue(final Predicate<? super T> t) {
-        return new WhileTrue<T>(t);
+        return new WhileTrue<>(t);
+    }
+
+    public static <T> LogicalPredicate<T> whileFalse(final Predicate<? super T> t) {
+        return whileTrue(t).not();
     }
 
     public static <T> LogicalPredicate<T> nullValue() {
@@ -403,5 +400,14 @@ public class Predicates {
 
     public static <S> LogicalPredicate<Second<S>> second(Predicate<? super S> predicate) {
         return where(Callables.<S>second(), predicate);
+    }
+
+    public static <T> LogicalPredicate<T> sameInstance(T expected) {
+        return new LogicalPredicate<T>() {
+            @Override
+            public boolean matches(T other) {
+                return expected == other;
+            }
+        };
     }
 }
