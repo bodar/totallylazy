@@ -4,15 +4,14 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Lazy;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Triple;
 import com.googlecode.totallylazy.regex.Regex;
 
+import java.io.PrintStream;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -47,6 +46,8 @@ public class Parsers {
     public static Parser<Character> character(char value) {
         return CharacterParser.character(value);
     }
+
+    public static Parser<String> characters(Predicate<Character> value) { return CharactersParser.characters(value); }
 
     public static Parser<Character> isChar(Predicate<Character> value) {
         return CharacterParser.character(value);
@@ -84,14 +85,7 @@ public class Parsers {
         return PredicatesParser.string(value);
     }
 
-    public static Parser<String> string(Predicate<? super Character> first) {
-        return PredicatesParser.string(sequence(first));
-    }
-
-    public static Parser<String> string(Predicate<? super Character> first, Predicate<? super Character> second) {
-        return PredicatesParser.string(Sequences.<Predicate<? super Character>>sequence(first, second));
-    }
-
+    @SafeVarargs
     public static Parser<String> string(Predicate<? super Character>... predicates) {
         return PredicatesParser.string(predicates);
     }
@@ -136,6 +130,10 @@ public class Parsers {
         return ReturnsParser.returns(a);
     }
 
+    public static <T> Parser<T> constant(T value) {
+        return returns(value);
+    }
+
     public static <A> Parser<List<A>> many(Parse<? extends A> parser) {
         return ManyParser.many(parser);
     }
@@ -144,22 +142,7 @@ public class Parsers {
         return ListParser.list(parsers);
     }
 
-    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b) {
-        return list(sequence(a, b));
-    }
-
-    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c) {
-        return list(sequence(a, b, c));
-    }
-
-    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c, final Parse<? extends A> d) {
-        return list(sequence(a, b, c, d));
-    }
-
-    public static <A> Parser<List<A>> list(final Parse<? extends A> a, final Parse<? extends A> b, final Parse<? extends A> c, final Parse<? extends A> d, final Parse<? extends A> e) {
-        return list(sequence(a, b, c, d, e));
-    }
-
+    @SafeVarargs
     public static <A> Parser<List<A>> list(final Parse<? extends A>... parsers) {
         return list(sequence(parsers));
     }
@@ -182,5 +165,13 @@ public class Parsers {
 
     public static <A> Parser<A> between(Parse<?> before, Parser<A> parserB, Parse<?> after) {
         return TripleParser.triple(before, parserB, after).map(Callables.<A>second());
+    }
+
+    public static <T> Parser<T> debug(String name, Parser<T> parser) {
+        return debug(System.out, name, parser);
+    }
+
+    public static <T> Parser<T> debug(PrintStream printStream, String name, Parser<T> parser) {
+        return new DebugParser<>(parser, name, printStream);
     }
 }

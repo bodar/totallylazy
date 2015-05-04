@@ -53,16 +53,22 @@ public abstract class Parser<A> implements Parse<A> {
         return separatedBy(parser);
     }
 
-    public Parser<List<A>> separatedBy(Parse<?> parser) {
-        return then(OptionalParser.optional(parser)).map(Callables.<A>first()).many();
+    public Parser<List<A>> sepBy1(Parse<?> parser) {
+        return sep(parser).many(1);
     }
+
+    public Parser<List<A>> separatedBy(Parse<?> parser) {
+        return sep(parser).many();
+    }
+
+    private Parser<A> sep(Parse<?> parser) {return then(OptionalParser.optional(parser)).map(Callables.<A>first());}
 
     public Parser<Sequence<A>> seqBy(Parse<?> parser) {
         return sequencedBy(parser);
     }
 
     public Parser<Sequence<A>> sequencedBy(Parse<?> parser) {
-        return then(OptionalParser.optional(parser)).map(Callables.<A>first()).sequence();
+        return sep(parser).sequence();
     }
 
     public Parser<A> or(Parse<? extends A> parser) {
