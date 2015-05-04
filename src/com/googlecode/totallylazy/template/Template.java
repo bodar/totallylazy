@@ -18,8 +18,9 @@ public class Template implements Renderer<Map<String, Object>> {
         this.objects = sequence(objects);
     }
 
-    public String render(final Map<String, Object> map) throws Exception {
-        return objects.map(functions.render(map)).toString(Strings.EMPTY);
+    @Override
+    public <A extends Appendable> A render(Map<String, Object> instance, A appendable) throws Exception {
+        return objects.fold(appendable, (a, r) -> r.render(instance, a));
     }
 
     @Override

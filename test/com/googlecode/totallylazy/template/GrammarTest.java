@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Predicates.always;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -93,14 +94,11 @@ public class GrammarTest {
     @Test
     public void canParseATemplate() throws Exception {
         Funclate funclate = new CompositeFunclate();
-        funclate.add("template", always(), (Callable1<Object, String>) o -> "Bodart");
-        funclate.add("yourLastName", always(), (Callable1<Map<String, Object>, String>) arg -> "Your last name is " + arg.get("name"));
+        funclate.add("subTemplateA", ignore -> "...");
+        funclate.add("subTemplateB", (Map<String, Object> context) -> "Your last name is " + context.get("name"));
         Grammar grammar = new Grammar(funclate);
-        Template template = grammar.parse("Hello $name$ $template()$ $yourLastName(name=template())$");
-        Map<String, Object> map = new HashMap<String, Object>() {{
-            put("name", "Dan");
-        }};
-        String call = template.render(map);
-        assertThat(call, is("Hello Dan Bodart Your last name is Bodart"));
+        Template template = grammar.parse("Hello $first$ $subTemplateA()$ $subTemplateB(name=last)$");
+        String result = template.render(map("first", "Dan", "last", "Bodart"));
+        assertThat(result, is("Hello Dan ... Your last name is Bodart"));
     }
 }

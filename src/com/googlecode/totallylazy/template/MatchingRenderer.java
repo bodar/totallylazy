@@ -29,12 +29,14 @@ public class MatchingRenderer implements Renderer<Object>{
         return this;
     }
 
-    public String render(Object value) throws Exception {
+    @Override
+    public <A extends Appendable> A render(Object value, A appendable) throws Exception {
         Predicate<Predicate<Object>> matches = Predicates.matches(value);
-        return sequence(pairs).find(where(Callables.<Predicate<Object>>first(), matches)).
+        appendable.append(sequence(pairs).find(where(Callables.<Predicate<Object>>first(), matches)).
                 map(Callables.<Callable1<Object, String>>second()).
                 getOrElse(noMatchRenderer).
-                call(value);
+                call(value));
+        return appendable;
     }
 
     public <T, R> MatchingRenderer add(Predicate<? super T> predicate, Renderer<? super T> renderer) {

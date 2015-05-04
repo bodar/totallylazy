@@ -22,7 +22,9 @@ public class Text implements Value<String>, Renderer<Map<String, Object>> {
         return value;
     }
 
-    public String render(Map<String, Object> map) throws Exception {
-        return value;
+    @Override
+    public <A extends Appendable> A render(Map<String, Object> instance, A appendable) throws Exception {
+        appendable.append(value);
+        return appendable;
     }
 }

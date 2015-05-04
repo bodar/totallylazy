@@ -10,15 +10,11 @@ import java.net.URLEncoder;
 import static com.googlecode.totallylazy.Predicates.always;
 
 public interface Funclate extends RendererContainer, Renderer<Object> {
-    <T> Funclate add(String name, Predicate<? super T> predicate, Renderer<? super T> renderer);
-
     <T> Funclate add(String name, Predicate<? super T> predicate, Callable1<? super T, String> callable);
 
-    <T> Funclate add(Predicate<? super T> predicate, Renderer<? super T> renderer);
+    <T> Funclate add(String name, Callable1<? super T, String> callable);
 
     <T> Funclate add(Predicate<? super T> predicate, Callable1<? super T, String> callable);
-
-    boolean contains(String name);
 
     public static class methods{
         public static Funclate defaultFunclates() {
@@ -34,11 +30,7 @@ public interface Funclate extends RendererContainer, Renderer<Object> {
         }
 
         private static Callable1<String, String> urlEncode() {
-            return new Callable1<String, String>() {
-                public String call(String s) throws Exception {
-                    return URLEncoder.encode(s, "UTF-8");
-                }
-            };
+            return s -> URLEncoder.encode(s, "UTF-8");
         }
 
     }

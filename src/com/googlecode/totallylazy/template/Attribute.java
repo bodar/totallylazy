@@ -18,8 +18,9 @@ public class Attribute implements Value<String>, Renderer<Map<String, Object>> {
         return value;
     }
 
-    public String render(Map<String, Object> map) throws Exception {
-        return funclate.render(map.get(value));
+    @Override
+    public <A extends Appendable> A render(Map<String, Object> instance, A appendable) throws Exception {
+        return funclate.render(instance.get(value), appendable);
     }
 
     @Override

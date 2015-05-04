@@ -15,12 +15,12 @@ import static java.lang.String.format;
 
 public class TemplateCall implements Renderer<Map<String, Object>> {
     private final String name;
-    private final Map<String, Renderer<Map<String, Object>>> arguments;
+    private final Map<String, Renderer<Map<String, Object>>> argumentsExtractors;
     private final Funclate funclate;
 
-    public TemplateCall(final String name, final Map<String, Renderer<Map<String, Object>>> arguments, final Funclate funclate) {
+    public TemplateCall(final String name, final Map<String, Renderer<Map<String, Object>>> argumentsExtractors, final Funclate funclate) {
         this.name = name;
-        this.arguments = arguments;
+        this.argumentsExtractors = argumentsExtractors;
         this.funclate = funclate;
     }
 
@@ -29,20 +29,21 @@ public class TemplateCall implements Renderer<Map<String, Object>> {
     }
 
     public Map<String, Renderer<Map<String, Object>>> arguments() {
-        return arguments;
+        return argumentsExtractors;
     }
 
-    public String render(Map<String, Object> context) throws Exception {
-        return funclate.get(name).render(apply(arguments, context));
+    @Override
+    public <A extends Appendable> A render(Map<String, Object> context, A appendable) throws Exception {
+        return funclate.get(name).render(args(argumentsExtractors, context), appendable);
     }
 
-    private Map<String, String> apply(Map<String, Renderer<Map<String, Object>>> arguments, Map<String, Object> context) {
-        return map(pairs(arguments).map(Callables.<String, Renderer<Map<String, Object>>, String>second(functions.render(context))));
+    private Map<String, String> args(Map<String, Renderer<Map<String, Object>>> arguments, Map<String, Object> context) {
+        return map(pairs(arguments).map(Callables.<String, Renderer<Map<String, Object>>, String>second(r -> r.render(context))));
     }
 
     @Override
     public String toString() {
-        return format("%s(%s)", name, pairs(arguments).map(new Mapper<Pair<?, ?>, String>() {
+        return format("%s(%s)", name, pairs(argumentsExtractors).map(new Mapper<Pair<?, ?>, String>() {
             @Override
             public String call(Pair<?, ?> pair) throws Exception {
                 return renderName(pair) + renderValue(pair.second());
