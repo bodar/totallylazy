@@ -28,8 +28,8 @@ public class GrammarTest {
 
     @Test
     public void literalCanBeSingleOrDoubleQuoted() throws Exception {
-//        assertThat(grammar.LITERAL.parse("\"foo\"").value(), is("foo"));
-//        assertThat(grammar.LITERAL.parse("'foo'").value(), is("foo"));
+        assertThat(Grammar.LITERAL.parse("\"foo\"").value().value(), is("foo"));
+        assertThat(Grammar.LITERAL.parse("'foo'").value().value(), is("foo"));
     }
 
     @Test
