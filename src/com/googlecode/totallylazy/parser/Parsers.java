@@ -106,24 +106,13 @@ public class Parsers {
         return OptionalParser.optional(parserA);
     }
 
-    public static <A> Parser<A> or(Sequence<? extends Parse<? extends A>> parsers) {
+    public static <A> Parser<A> or(Iterable<? extends Parse<? extends A>> parsers) {
         return OrParser.or(parsers);
     }
 
+    @SafeVarargs
     public static <A> Parser<A> or(Parse<? extends A>... parsers) {
         return or(sequence(parsers));
-    }
-
-    public static <A> Parser<A> or(Parse<? extends A> a, Parse<? extends A> b) {
-        return or(sequence(a, b));
-    }
-
-    public static <A> Parser<A> or(Parse<? extends A> a, Parse<? extends A> b, Parse<? extends A> c) {
-        return or(sequence(a, b, c));
-    }
-
-    public static <A> Parser<A> or(Parse<? extends A> a, Parse<? extends A> b, Parse<? extends A> c, Parse<? extends A> d) {
-        return or(sequence(a, b, c, d));
     }
 
     public static <A> Parser<A> returns(A a) {

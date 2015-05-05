@@ -1,10 +1,10 @@
-package com.googlecode.totallylazy.template;
+package com.googlecode.totallylazy.template.ast;
 
-import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.multi;
+import com.googlecode.totallylazy.template.Renderer;
 
 import java.util.Map;
 
@@ -13,37 +13,27 @@ import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Maps.pairs;
 import static java.lang.String.format;
 
-public class TemplateCall implements Renderer<Map<String, Object>> {
+public class TemplateCall implements Node {
     private final String name;
-    private final Map<String, Renderer<Map<String, Object>>> argumentsExtractors;
-    private final Funclate funclate;
+    private final Map<String, Node> arguments;
 
-    public TemplateCall(final String name, final Map<String, Renderer<Map<String, Object>>> argumentsExtractors, final Funclate funclate) {
+    public TemplateCall(final String name, final Map<String, Node> arguments) {
         this.name = name;
-        this.argumentsExtractors = argumentsExtractors;
-        this.funclate = funclate;
+        this.arguments = arguments;
     }
 
     public String name() {
         return name;
     }
 
-    public Map<String, Renderer<Map<String, Object>>> arguments() {
-        return argumentsExtractors;
+    public Map<String, Node> arguments() {
+        return arguments;
     }
 
-    @Override
-    public <A extends Appendable> A render(Map<String, Object> context, A appendable) throws Exception {
-        return funclate.get(name).render(args(argumentsExtractors, context), appendable);
-    }
-
-    private Map<String, String> args(Map<String, Renderer<Map<String, Object>>> arguments, Map<String, Object> context) {
-        return map(pairs(arguments).map(Callables.<String, Renderer<Map<String, Object>>, String>second(r -> r.render(context))));
-    }
 
     @Override
     public String toString() {
-        return format("%s(%s)", name, pairs(argumentsExtractors).map(new Mapper<Pair<?, ?>, String>() {
+        return format("%s(%s)", name, pairs(arguments).map(new Mapper<Pair<?, ?>, String>() {
             @Override
             public String call(Pair<?, ?> pair) throws Exception {
                 return renderName(pair) + renderValue(pair.second());
