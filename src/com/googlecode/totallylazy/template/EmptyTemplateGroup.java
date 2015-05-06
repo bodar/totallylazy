@@ -1,37 +1,35 @@
 package com.googlecode.totallylazy.template;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Strings;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-/**
-* Created by dan on 06/05/15.
-*/
-public class EmptyTemplateGroup implements TemplateGroup {
-    @Override
-    public <T> MutableTemplateGroup add(String name, Callable1<? super T, String> callable) {
-        return null;
-    }
+public enum EmptyTemplateGroup implements TemplateGroup {
+    Instance;
 
     @Override
-    public <T> MutableTemplateGroup add(Predicate<? super T> predicate, Callable1<? super T, String> renderer) {
-        return null;
-    }
-
-    @Override
-    public Renderer<Object> get(String name) {
+    public TemplateGroup add(String name, Renderer<?> renderer) {
         return this;
     }
 
     @Override
-    public boolean contains(String name) {
-        return true;
+    public <T> TemplateGroup add(Predicate<? super T> predicate, Renderer<? super T> renderer) {
+        return this;
     }
 
     @Override
-    public <A extends Appendable> A render(Object instance, A appendable) throws Exception {
-        return cast(appendable.append(Strings.asString(instance)));
+    public Renderer<Object> get(String name) {
+        return DefaultRenderer.Instance;
+    }
+
+    @Override
+    public boolean contains(String name) {
+        return false;
+    }
+
+    @Override
+    public Appendable render(Object instance, Appendable appendable) throws Exception {
+        return DefaultRenderer.Instance.render(instance, appendable);
     }
 }

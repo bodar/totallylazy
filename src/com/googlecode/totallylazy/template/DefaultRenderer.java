@@ -1,7 +1,12 @@
 package com.googlecode.totallylazy.template;
 
-/**
- * Created by dan on 06/05/15.
- */
-public class DefaultRenderer {
+import com.googlecode.totallylazy.Strings;
+
+public enum DefaultRenderer implements Renderer<Object> {
+    Instance;
+
+    @Override
+    public Appendable render(Object instance, Appendable appendable) throws Exception {
+        return appendable.append(Strings.asString(instance));
+    }
 }

@@ -1,32 +1,29 @@
 package com.googlecode.totallylazy.template;
 
-import com.googlecode.totallylazy.Strings;
-
-import static com.googlecode.totallylazy.Unchecked.cast;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Unchecked;
 
 public interface TemplateGroup extends Renderer<Object> {
+    TemplateGroup add(String name, Renderer<?> renderer);
+
+    default TemplateGroup add(String name, Callable1<?, ? extends CharSequence> callable) {
+        return add(name, (instance, appendable) ->
+                appendable.append(Unchecked.<Callable1<Object, CharSequence>>cast(callable).call(instance)));
+    }
+
+    <T> TemplateGroup add(Predicate<? super T> predicate, Renderer<? super T> renderer);
+
+    default <T> TemplateGroup add(Predicate<? super T> predicate, Callable1<? super T, ? extends CharSequence> renderer) {
+        return add(predicate, new Renderer<T>() {
+            @Override
+            public Appendable render(T instance, Appendable appendable) throws Exception {
+                return appendable.append(renderer.call(instance));
+            }
+        });
+    }
+
     Renderer<Object> get(String name);
 
     boolean contains(String name);
-
-    static TemplateGroup defaultTemplateGroup() {
-        return new TemplateGroup() {
-            @Override
-            public Renderer<Object> get(String name) {
-                return this;
-            }
-
-            @Override
-            public boolean contains(String name) {
-                return true;
-            }
-
-            @Override
-            public <A extends Appendable> A render(Object instance, A appendable) throws Exception {
-                return cast(appendable.append(Strings.asString(instance)));
-            }
-        };
-    }
-
-
 }

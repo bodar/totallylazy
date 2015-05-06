@@ -5,47 +5,40 @@ import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Unchecked;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class MatchingRenderer implements Renderer<Object>{
-    private final Deque<Pair<Predicate<Object>, Callable1<Object, String>>> pairs = new ArrayDeque<Pair<Predicate<Object>, Callable1<Object, String>>>();
-    private Callable1<Object, String> noMatchRenderer;
+    private final Deque<Pair<Predicate<Object>, Renderer<Object>>> pairs = new ArrayDeque<>();
+    private final Renderer<Object> defaultRenderer;
 
     public MatchingRenderer() {
-        noMatchRenderer = Callables.asString();
+        this(DefaultRenderer.Instance);
     }
 
-    public MatchingRenderer(Renderer<Object> noMatchRenderer) {
-        this.noMatchRenderer = callable(noMatchRenderer);
-    }
-
-    public MatchingRenderer parent(Renderer<Object> noMatchRenderer) {
-        this.noMatchRenderer = callable(noMatchRenderer);
-        return this;
+    public MatchingRenderer(Renderer<Object> defaultRenderer) {
+        this.defaultRenderer = defaultRenderer;
     }
 
     @Override
-    public <A extends Appendable> A render(Object value, A appendable) throws Exception {
+    public Appendable render(Object value, Appendable appendable) throws Exception {
         Predicate<Predicate<Object>> matches = Predicates.matches(value);
-        appendable.append(sequence(pairs).find(where(Callables.<Predicate<Object>>first(), matches)).
-                map(Callables.<Callable1<Object, String>>second()).
-                getOrElse(noMatchRenderer).
-                call(value));
-        return appendable;
+        return sequence(pairs).find(where(Callables.<Predicate<Object>>first(), matches)).
+                map(Callables.<Renderer<Object>>second()).
+                getOrElse(defaultRenderer).
+                render(value, appendable);
     }
 
     public <T, R> MatchingRenderer add(Predicate<? super T> predicate, Renderer<? super T> renderer) {
-        return add(predicate, callable(renderer));
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T, R> MatchingRenderer add(Predicate<? super T> predicate, Callable1<? super T, String> callable) {
-        pairs.addFirst(Pair.<Predicate<Object>, Callable1<Object, String>>pair((Predicate<Object>) predicate, (Callable1<Object, String>) callable));
+        pairs.addFirst(pair(
+                Unchecked.<Predicate<Object>>cast(predicate),
+                Unchecked.<Renderer<Object>>cast(renderer)));
         return this;
     }
 

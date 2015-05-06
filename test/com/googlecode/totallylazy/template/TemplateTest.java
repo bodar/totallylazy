@@ -30,7 +30,9 @@ public class TemplateTest {
             add("subTemplateA", ignore -> "...").
             add("subTemplateB", (Map<String, Object> context) -> "Your last name is " + context.get("name"));
         Template template = template("Hello $first$ $subTemplateA()$ $subTemplateB(name=last)$", templateGroup);
-        String result = template.render(map("first", "Dan", "last", "Bodart"));
+        String result = template.render(map(
+                "first", "Dan",
+                "last", "Bodart"));
         assertThat(result, Matchers.is("Hello Dan ... Your last name is Bodart"));
     }
 

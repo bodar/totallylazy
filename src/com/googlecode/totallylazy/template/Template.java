@@ -23,17 +23,18 @@ public class Template implements Renderer<Map<String, Object>> {
         this.template = template;
     }
 
-    public static Template template(String template) {return template(template, TemplateGroup.defaultTemplateGroup());}
+    public static Template template(String template) {
+        return template(template, EmptyTemplateGroup.Instance);}
     public static Template template(String template, TemplateGroup parent) {return new Template(template, parent);}
 
     @Override
-    public <A extends Appendable> A render(Map<String, Object> context, A appendable) throws Exception {
+    public Appendable render(Map<String, Object> context, Appendable appendable) throws Exception {
         return sequence(Grammar.TEMPLATE.parse(template).value()).
                 fold(appendable, (a, node) -> append(node, context, a));
     }
 
-    <A extends Appendable> A append(Node node, Map<String, Object> context, A appendable) throws Exception {
-        if(node instanceof Text) return cast(appendable.append(((Text) node).value()));
+    Appendable append(Node node, Map<String, Object> context, Appendable appendable) throws Exception {
+        if(node instanceof Text) return appendable.append(((Text) node).value());
         if(node instanceof Attribute) return parent.render(context.get(((Attribute) node).value()), appendable);
         if(node instanceof TemplateCall){
             TemplateCall templateCall = (TemplateCall) node;

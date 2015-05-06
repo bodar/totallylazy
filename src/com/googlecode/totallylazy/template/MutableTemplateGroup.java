@@ -10,11 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Predicates.always;
-import static com.googlecode.totallylazy.template.TemplateGroup.defaultTemplateGroup;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class MutableTemplateGroup implements TemplateGroup {
     public static final String NO_NAME = "";
-    protected final Map<String, MatchingRenderer> funclates = new HashMap<>();
+    protected final Map<String, MatchingRenderer> functions = new HashMap<>();
     private final TemplateGroup parent;
 
     public MutableTemplateGroup(TemplateGroup parent) {
@@ -22,37 +22,38 @@ public class MutableTemplateGroup implements TemplateGroup {
     }
 
     public MutableTemplateGroup() {
-        this(defaultTemplateGroup());
+        this(EmptyTemplateGroup.Instance);
     }
 
-    public static MutableTemplateGroup defaultEncoders() {
+    public static TemplateGroup defaultEncoders() {
         return new MutableTemplateGroup().
-                add("raw", always(), Callables.asString()).
-                add("html", always(), Xml.escape()).
-                add("xml", always(), Xml.escape()).
-                add("url", always(), urlEncode());
+                add("raw", Callables.asString()).
+                add("html", Xml.escape()).
+                add("xml", Xml.escape()).
+                add("url", urlEncode());
     }
 
     private static Callable1<String, String> urlEncode() {
         return s -> URLEncoder.encode(s, "UTF-8");
     }
 
-
-    public <T> MutableTemplateGroup add(String name, Predicate<? super T> predicate, Callable1<? super T, String> callable) {
+    public <T> MutableTemplateGroup add(String name, Predicate<? super T> predicate, Renderer<? super T> callable) {
         renderersFor(name).add(predicate, callable);
         return this;
     }
 
-    public <T> MutableTemplateGroup add(String name, Callable1<? super T, String> callable) {
-        return add(name, always(), callable);
+    @Override
+    public MutableTemplateGroup add(String name, Renderer<?> callable) {
+        return add(name, always(), cast(callable));
     }
 
-    public <T> MutableTemplateGroup add(Predicate<? super T> predicate, Callable1<? super T, String> renderer) {
+    @Override
+    public <T> MutableTemplateGroup add(Predicate<? super T> predicate, Renderer<? super T> renderer) {
         return add(NO_NAME, predicate, renderer);
     }
 
     @Override
-    public <A extends Appendable> A render(Object instance, A appendable) throws Exception {
+    public Appendable render(Object instance, Appendable appendable) throws Exception {
         return get(NO_NAME).render(instance, appendable);
     }
 
@@ -63,7 +64,7 @@ public class MutableTemplateGroup implements TemplateGroup {
 
     @Override
     public boolean contains(String name) {
-        return funclates.containsKey(normalise(name));
+        return functions.containsKey(normalise(name));
     }
 
     protected MatchingRenderer renderersFor(String name) {
@@ -71,11 +72,11 @@ public class MutableTemplateGroup implements TemplateGroup {
         if (!contains(normalisedName)) {
             create(normalisedName);
         }
-        return funclates.get(normalisedName);
+        return functions.get(normalisedName);
     }
 
     protected void create(String normalisedName) {
-        funclates.put(normalisedName, new MatchingRenderer(parent.get(normalisedName)));
+        functions.put(normalisedName, new MatchingRenderer(parent.get(normalisedName)));
     }
 
     public static String normalise(String name) {
