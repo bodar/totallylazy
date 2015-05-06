@@ -124,4 +124,8 @@ public abstract class Parser<A> implements Parse<A> {
             }
         });
     }
+
+    public Parser<A> debug(String name) {
+        return Parsers.debug(name, this);
+    }
 }

@@ -41,13 +41,10 @@ public interface Grammar {
 
     Parser<Map<String, Object>> NAMED_ARGUMENTS = NAMED_ARGUMENT.sepBy1(SEPARATOR).map(Maps::map);
 
-    Parser<Map<String, Object>> IMPLICIT_ARGUMENTS = VALUE.sepBy1(SEPARATOR).
-            map(renderers -> Maps.map(Sequences.sequence(renderers).zipWithIndex().map(p -> p.map(Object::toString))));
-
-    Parser<Map<String, Object>> NO_ARGUMENTS = Parsers.constant(Maps.<String, Object>map());
+    Parser<List<Object>> IMPLICIT_ARGUMENTS = VALUE.sepBy(SEPARATOR);
 
     Parser<FunctionCall> FUNCTION_CALL =
-            Parsers.pair(IDENTIFIER, between(isChar('('), Parsers.or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS, NO_ARGUMENTS), isChar(')'))).
+            Parsers.pair(IDENTIFIER, between(isChar('('), Parsers.or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS), isChar(')'))).
             map(pair -> new FunctionCall(pair.first(), pair.second()));
 
     static Parser<FunctionCall> FUNCTION_CALL() { return FUNCTION_CALL; }

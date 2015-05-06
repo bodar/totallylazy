@@ -1,10 +1,12 @@
 package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Maps.map;
@@ -30,29 +32,37 @@ public class Template implements Renderer<Map<String, Object>> {
                 fold(appendable, (a, node) -> append(node, context, a));
     }
 
-    Appendable append(Object node, Map<String, Object> context, Appendable appendable) throws Exception {
-        if(node instanceof CharSequence) return appendable.append(((CharSequence) node));
-        if(node instanceof Attribute) return parent.render(context.get(((Attribute) node).value()), appendable);
-        if(node instanceof FunctionCall){
-            FunctionCall functionCall = (FunctionCall) node;
+    Appendable append(Object expression, Map<String, Object> context, Appendable appendable) throws Exception {
+        if(expression instanceof CharSequence) return appendable.append(((CharSequence) expression));
+        if(expression instanceof Attribute) return parent.render(context.get(((Attribute) expression).value()), appendable);
+        if(expression instanceof FunctionCall){
+            FunctionCall functionCall = (FunctionCall) expression;
             return parent.get(functionCall.name()).render(values(functionCall.arguments(), context), appendable);
         }
-        return appendable;
+        throw new IllegalArgumentException("Unknown expression type: " + expression);
     }
 
-    private Map<String, Object> values(Map<String, Object> arguments, Map<String, Object> context) {
-        if(arguments.isEmpty()) return context;
-        return map(pairs(arguments).map(Callables.<String, Object, Object>second(n -> value(n, context))));
+    private Object values(Object arguments, Map<String, Object> context) throws Exception {
+        if(arguments instanceof List) {
+            List<?> args = (List<?>) arguments;
+            if(args.isEmpty()) return context;
+            if(args.size() == 1) return value(args.get(0), context);
+            return sequence(args).map(arg -> value(arg, context)).toList();
+        }
+        if(arguments instanceof Map) {
+            return map(pairs(Unchecked.<Map<String, Object>>cast(arguments)).map(Callables.<String, Object, Object>second(n -> value(n, context))));
+        }
+        throw new IllegalArgumentException("Unknown arguments type: " + arguments);
     }
 
-    Object value(Object node, Map<String, Object> context) throws Exception {
-        if(node instanceof CharSequence) return node;
-        if(node instanceof Attribute) return context.get(((Attribute) node).value());
-        if(node instanceof FunctionCall) {
-            FunctionCall functionCall = (FunctionCall) node;
+    Object value(Object value, Map<String, Object> context) throws Exception {
+        if(value instanceof CharSequence) return value;
+        if(value instanceof Attribute) return context.get(((Attribute) value).value());
+        if(value instanceof FunctionCall) {
+            FunctionCall functionCall = (FunctionCall) value;
             return parent.get(functionCall.name()).render(values(functionCall.arguments(), context));
         }
-        throw new IllegalArgumentException("Unknown Node Type");
+        throw new IllegalArgumentException("Unknown value type: " + value);
     }
 
     @Override
