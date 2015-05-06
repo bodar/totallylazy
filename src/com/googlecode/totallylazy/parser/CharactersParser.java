@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.Strings;
 
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class CharactersParser extends Parser<String> {
+public class CharactersParser extends Parser<CharSequence> {
     private final Predicate<Character> predicate;
 
     private CharactersParser(Predicate<Character> predicate) {
@@ -22,7 +22,7 @@ public class CharactersParser extends Parser<String> {
 
 
     @Override
-    public Result<String> parse(Segment<Character> characters) {
+    public Result<CharSequence> parse(Segment<Character> characters) {
         if(characters.isEmpty()) return fail(predicate, "");
         Segment<Character> segment = characters;
         StringBuilder result = new StringBuilder();
@@ -32,8 +32,7 @@ public class CharactersParser extends Parser<String> {
             result.append(head);
             segment = segment.tail();
         }
-        String value = result.toString();
-        if(Strings.isEmpty(value)) return fail(predicate, characters.head());
-        return success(value, segment);
+        if(result.length() == 0) return fail(predicate, characters.head());
+        return success(result, segment);
     }
 }

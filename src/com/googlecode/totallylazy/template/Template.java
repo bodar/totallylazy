@@ -3,16 +3,13 @@ package com.googlecode.totallylazy.template;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Grammar;
-import com.googlecode.totallylazy.template.ast.Node;
 import com.googlecode.totallylazy.template.ast.TemplateCall;
-import com.googlecode.totallylazy.template.ast.Text;
 
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Maps.pairs;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Template implements Renderer<Map<String, Object>> {
     private final String template;
@@ -33,8 +30,8 @@ public class Template implements Renderer<Map<String, Object>> {
                 fold(appendable, (a, node) -> append(node, context, a));
     }
 
-    Appendable append(Node node, Map<String, Object> context, Appendable appendable) throws Exception {
-        if(node instanceof Text) return appendable.append(((Text) node).value());
+    Appendable append(Object node, Map<String, Object> context, Appendable appendable) throws Exception {
+        if(node instanceof CharSequence) return appendable.append(((CharSequence) node));
         if(node instanceof Attribute) return parent.render(context.get(((Attribute) node).value()), appendable);
         if(node instanceof TemplateCall){
             TemplateCall templateCall = (TemplateCall) node;
@@ -43,13 +40,13 @@ public class Template implements Renderer<Map<String, Object>> {
         return appendable;
     }
 
-    private Map<String, Object> values(Map<String, Node> arguments, Map<String, Object> context) {
+    private Map<String, Object> values(Map<String, Object> arguments, Map<String, Object> context) {
         if(arguments.isEmpty()) return context;
-        return map(pairs(arguments).map(Callables.<String, Node, Object>second(n -> value(n, context))));
+        return map(pairs(arguments).map(Callables.<String, Object, Object>second(n -> value(n, context))));
     }
 
-    Object value(Node node, Map<String, Object> context) throws Exception {
-        if(node instanceof Text) return ((Text) node).value();
+    Object value(Object node, Map<String, Object> context) throws Exception {
+        if(node instanceof CharSequence) return node;
         if(node instanceof Attribute) return context.get(((Attribute) node).value());
         if(node instanceof TemplateCall) {
             TemplateCall templateCall = (TemplateCall) node;

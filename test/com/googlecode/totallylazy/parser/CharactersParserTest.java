@@ -14,14 +14,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class CharactersParserTest {
     @Test
     public void parsesMultipleCharacters() throws Exception {
-        Result<String> result = characters(alphaNumeric).parse("ABC");
+        Result<CharSequence> result = characters(alphaNumeric).parse("ABC");
         assertThat(result.value(), is("ABC"));
         assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
 
     @Test
     public void leavesRemainder() throws Exception {
-        Result<String> result = characters(alphaNumeric).parse("ABC+");
+        Result<CharSequence> result = characters(alphaNumeric).parse("ABC+");
         assertThat(result.value(), is("ABC"));
         assertThat(result.remainder(), is(Segment.constructors.characters("+")));
     }

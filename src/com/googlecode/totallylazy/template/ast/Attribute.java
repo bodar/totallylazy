@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.template.ast;
 import com.googlecode.totallylazy.Value;
 
 
-public class Attribute implements Value<String>, Node {
+public class Attribute implements Value<String>, Expression {
     private final String value;
 
     public Attribute(String value) {

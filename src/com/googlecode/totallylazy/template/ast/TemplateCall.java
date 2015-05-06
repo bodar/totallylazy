@@ -2,11 +2,11 @@ package com.googlecode.totallylazy.template.ast;
 
 import java.util.Map;
 
-public class TemplateCall implements Node {
+public class TemplateCall implements Expression {
     private final String name;
-    private final Map<String, Node> arguments;
+    private final Map<String, Object> arguments;
 
-    public TemplateCall(final String name, final Map<String, Node> arguments) {
+    public TemplateCall(final String name, final Map<String, Object> arguments) {
         this.name = name;
         this.arguments = arguments;
     }
@@ -15,7 +15,7 @@ public class TemplateCall implements Node {
         return name;
     }
 
-    public Map<String, Node> arguments() {
+    public Map<String, Object> arguments() {
         return arguments;
     }
 }

@@ -39,7 +39,7 @@ public class Grammar {
     public static final Parser<String> STRING = characters(UNICODE_CHARACTER).
             or(ESCAPED_CHARACTER).many().map(Parsers.toString).between(isChar('"'), isChar('"'));
 
-    public static final Parser<Number> NUMBER = Parsers.characters(Characters.digit.or(among(".eE-+"))).map(BigDecimal::new);
+    public static final Parser<Number> NUMBER = Parsers.characters(Characters.digit.or(among(".eE-+"))).map(chars -> new BigDecimal(chars.toString()));
 
     public static final Parser<Object> VALUE = Parsers.lazy(new Callable<Parse<Object>>() {
         @Override

@@ -3,11 +3,9 @@ package com.googlecode.totallylazy.template;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.TemplateCall;
-import com.googlecode.totallylazy.template.ast.Text;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Maps.map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -20,14 +18,14 @@ public class GrammarTest {
 
     @Test
     public void canParseText() throws Exception {
-        Text text = Grammar.TEXT.parse("Some other text").value();
-        assertThat(text.value(), is("Some other text"));
+        CharSequence text = Grammar.TEXT.parse("Some other text").value();
+        assertThat(text.toString(), is("Some other text"));
     }
 
     @Test
     public void literalCanBeSingleOrDoubleQuoted() throws Exception {
-        assertThat(Grammar.LITERAL.parse("\"foo\"").value().value(), is("foo"));
-        assertThat(Grammar.LITERAL.parse("'foo'").value().value(), is("foo"));
+        assertThat(Grammar.LITERAL.parse("\"foo\"").value().toString(), is("foo"));
+        assertThat(Grammar.LITERAL.parse("'foo'").value().toString(), is("foo"));
     }
 
     @Test
@@ -63,7 +61,7 @@ public class GrammarTest {
     public void canParseTemplateCallLiteralParameters() throws Exception {
         TemplateCall unnamed = Grammar.TEMPLATE_CALL.parse("template(\"foo\")").value();
         assertThat(unnamed.name(), is("template"));
-        assertThat(((Text) unnamed.arguments().get("0")).value(), is("foo"));
+        assertThat(((CharSequence) unnamed.arguments().get("0")).toString(), is("foo"));
     }
 
     @Test
@@ -71,19 +69,19 @@ public class GrammarTest {
         assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a").value().get("0"), Matchers.instanceOf(Attribute.class));
         assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().get("1"), Matchers.instanceOf(Attribute.class));
         assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().get("1"), Matchers.instanceOf(Attribute.class));
-        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("\"a\"").value().get("0"), Matchers.instanceOf(Text.class));
+        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("\"a\"").value().get("0"), Matchers.instanceOf(CharSequence.class));
     }
 
     @Test
     public void canParseValue() throws Exception {
         assertThat(Grammar.VALUE.parse("a").value(), Matchers.instanceOf(Attribute.class));
-        assertThat(Grammar.VALUE.parse("\"a\"").value(), Matchers.instanceOf(Text.class));
+        assertThat(Grammar.VALUE.parse("\"a\"").value(), Matchers.instanceOf(CharSequence.class));
     }
 
     @Test
     public void canParseLiteral() throws Exception {
-        Text text = Grammar.LITERAL.parse("\"Some other text\"").value();
-        assertThat(text.value(), is("Some other text"));
+        CharSequence text = Grammar.LITERAL.parse("\"Some other text\"").value();
+        assertThat(text.toString(), is("Some other text"));
     }
 
 

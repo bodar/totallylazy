@@ -47,7 +47,7 @@ public class Parsers {
         return CharacterParser.character(value);
     }
 
-    public static Parser<String> characters(Predicate<Character> value) { return CharactersParser.characters(value); }
+    public static Parser<CharSequence> characters(Predicate<Character> value) { return CharactersParser.characters(value); }
 
     public static Parser<Character> isChar(Predicate<Character> value) {
         return CharacterParser.character(value);
