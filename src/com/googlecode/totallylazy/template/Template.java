@@ -1,13 +1,12 @@
-package com.googlecode.totallylazy.template.ast;
+package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.parser.Parser;
-import com.googlecode.totallylazy.parser.Parsers;
-import com.googlecode.totallylazy.template.Funclate;
-import com.googlecode.totallylazy.template.Grammar;
-import com.googlecode.totallylazy.template.Renderer;
+import com.googlecode.totallylazy.template.ast.Attribute;
+import com.googlecode.totallylazy.template.ast.Grammar;
+import com.googlecode.totallylazy.template.ast.Node;
+import com.googlecode.totallylazy.template.ast.TemplateCall;
+import com.googlecode.totallylazy.template.ast.Text;
 
-import java.util.List;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Maps.map;
@@ -16,13 +15,16 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Template implements Renderer<Map<String, Object>> {
-    private final Funclate funclate;
     private final String template;
+    private final TemplateGroup parent;
 
-    public Template(Funclate funclate, String template) {
-        this.funclate = funclate;
+    private Template(String template, TemplateGroup parent) {
+        this.parent = parent;
         this.template = template;
     }
+
+    public static Template template(String template) {return template(template, TemplateGroup.defaultTemplateGroup());}
+    public static Template template(String template, TemplateGroup parent) {return new Template(template, parent);}
 
     @Override
     public <A extends Appendable> A render(Map<String, Object> context, A appendable) throws Exception {
@@ -31,11 +33,11 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     <A extends Appendable> A append(Node node, Map<String, Object> context, A appendable) throws Exception {
-        if(node instanceof Attribute) return funclate.render(context.get(((Attribute) node).value()), appendable);
-        if(node instanceof Text) return cast(appendable.append(((Text)node).value()));
+        if(node instanceof Text) return cast(appendable.append(((Text) node).value()));
+        if(node instanceof Attribute) return parent.render(context.get(((Attribute) node).value()), appendable);
         if(node instanceof TemplateCall){
             TemplateCall templateCall = (TemplateCall) node;
-            return funclate.get(templateCall.name()).render(values(templateCall.arguments(), context), appendable);
+            return parent.get(templateCall.name()).render(values(templateCall.arguments(), context), appendable);
         }
         return appendable;
     }
@@ -46,11 +48,11 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     Object value(Node node, Map<String, Object> context) throws Exception {
-        if(node instanceof Attribute) return context.get(((Attribute) node).value());
         if(node instanceof Text) return ((Text) node).value();
+        if(node instanceof Attribute) return context.get(((Attribute) node).value());
         if(node instanceof TemplateCall) {
             TemplateCall templateCall = (TemplateCall) node;
-            return funclate.get(templateCall.name()).render(values(templateCall.arguments(), context));
+            return parent.get(templateCall.name()).render(values(templateCall.arguments(), context));
         }
         throw new IllegalArgumentException("Unknown Node Type");
     }

@@ -1,13 +1,11 @@
 package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.template.ast.Attribute;
-import com.googlecode.totallylazy.template.ast.Template;
+import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.TemplateCall;
 import com.googlecode.totallylazy.template.ast.Text;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-
-import java.util.Map;
 
 import static com.googlecode.totallylazy.Maps.map;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -89,13 +87,4 @@ public class GrammarTest {
     }
 
 
-    @Test
-    public void canParseATemplate() throws Exception {
-        Funclate funclate = new CompositeFunclate();
-        funclate.add("subTemplateA", ignore -> "...");
-        funclate.add("subTemplateB", (Map<String, Object> context) -> "Your last name is " + context.get("name"));
-        Template template = new Template(funclate, "Hello $first$ $subTemplateA()$ $subTemplateB(name=last)$");
-        String result = template.render(map("first", "Dan", "last", "Bodart"));
-        assertThat(result, is("Hello Dan ... Your last name is Bodart"));
-    }
 }

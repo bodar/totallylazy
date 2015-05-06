@@ -1,14 +1,10 @@
-package com.googlecode.totallylazy.template;
+package com.googlecode.totallylazy.template.ast;
 
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
-import com.googlecode.totallylazy.template.ast.Attribute;
-import com.googlecode.totallylazy.template.ast.Node;
-import com.googlecode.totallylazy.template.ast.TemplateCall;
-import com.googlecode.totallylazy.template.ast.Text;
 
 import java.util.List;
 import java.util.Map;

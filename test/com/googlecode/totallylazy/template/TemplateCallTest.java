@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.template;
 
+import com.googlecode.totallylazy.template.ast.Grammar;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.matchers.Matchers.is;
