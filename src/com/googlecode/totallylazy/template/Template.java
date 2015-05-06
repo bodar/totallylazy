@@ -1,16 +1,13 @@
 package com.googlecode.totallylazy.template;
 
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.template.ast.Attribute;
-import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
+import com.googlecode.totallylazy.template.ast.Grammar;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Maps.map;
-import static com.googlecode.totallylazy.Maps.pairs;
+import static com.googlecode.totallylazy.Maps.mapValues;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Template implements Renderer<Map<String, Object>> {
@@ -37,20 +34,21 @@ public class Template implements Renderer<Map<String, Object>> {
         if(expression instanceof Attribute) return parent.render(context.get(((Attribute) expression).value()), appendable);
         if(expression instanceof FunctionCall){
             FunctionCall functionCall = (FunctionCall) expression;
-            return parent.get(functionCall.name()).render(values(functionCall.arguments(), context), appendable);
+            return parent.get(functionCall.name()).render(arguments(functionCall.arguments(), context), appendable);
         }
         throw new IllegalArgumentException("Unknown expression type: " + expression);
     }
 
-    private Object values(Object arguments, Map<String, Object> context) throws Exception {
+    private Object arguments(Object arguments, Map<String, Object> context) throws Exception {
         if(arguments instanceof List) {
-            List<?> args = (List<?>) arguments;
-            if(args.isEmpty()) return context;
-            if(args.size() == 1) return value(args.get(0), context);
-            return sequence(args).map(arg -> value(arg, context)).toList();
+            List<?> list = (List<?>) arguments;
+            if(list.isEmpty()) return context;
+            if(list.size() == 1) return value(list.get(0), context);
+            return sequence(list).map(arg -> value(arg, context)).toList();
         }
         if(arguments instanceof Map) {
-            return map(pairs(Unchecked.<Map<String, Object>>cast(arguments)).map(Callables.<String, Object, Object>second(n -> value(n, context))));
+            Map<?, ?> map = (Map<?, ?>) arguments;
+            return mapValues(map, n -> value(n, context));
         }
         throw new IllegalArgumentException("Unknown arguments type: " + arguments);
     }
@@ -60,7 +58,7 @@ public class Template implements Renderer<Map<String, Object>> {
         if(value instanceof Attribute) return context.get(((Attribute) value).value());
         if(value instanceof FunctionCall) {
             FunctionCall functionCall = (FunctionCall) value;
-            return parent.get(functionCall.name()).render(values(functionCall.arguments(), context));
+            return parent.get(functionCall.name()).render(arguments(functionCall.arguments(), context));
         }
         throw new IllegalArgumentException("Unknown value type: " + value);
     }

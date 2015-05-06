@@ -6,8 +6,6 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Xml;
 
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.googlecode.totallylazy.Predicates.always;
@@ -26,8 +24,12 @@ public class MutableTemplateGroup implements TemplateGroup {
         this(EmptyTemplateGroup.Instance);
     }
 
-    public static TemplateGroup defaultEncoders() {
-        return new MutableTemplateGroup().
+    public static MutableTemplateGroup defaultEncoders() {
+        return defaultEncoders(new MutableTemplateGroup());
+    }
+
+    private static MutableTemplateGroup defaultEncoders(MutableTemplateGroup mutableTemplateGroup) {
+        return mutableTemplateGroup.
                 add("raw", Callables.asString()).
                 add("html", Xml.escape()).
                 add("xml", Xml.escape()).
@@ -40,6 +42,18 @@ public class MutableTemplateGroup implements TemplateGroup {
 
     public <T> MutableTemplateGroup add(String name, Predicate<? super T> predicate, Renderer<? super T> callable) {
         renderersFor(name).add(predicate, callable);
+        return this;
+    }
+
+    @Override
+    public MutableTemplateGroup add(String name, Callable1<?, ? extends CharSequence> callable) {
+        TemplateGroup.super.add(name, callable);
+        return this;
+    }
+
+    @Override
+    public <T> MutableTemplateGroup add(Predicate<? super T> predicate, Callable1<? super T, ? extends CharSequence> renderer) {
+        TemplateGroup.super.add(predicate, renderer);
         return this;
     }
 
