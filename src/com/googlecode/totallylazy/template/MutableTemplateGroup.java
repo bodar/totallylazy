@@ -8,13 +8,14 @@ import com.googlecode.totallylazy.Xml;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class MutableTemplateGroup implements TemplateGroup {
     public static final String NO_NAME = "";
-    protected final Map<String, MatchingRenderer> functions = new HashMap<>();
+    private final ConcurrentHashMap<String, MatchingRenderer> functions = new ConcurrentHashMap<>();
     private final TemplateGroup parent;
 
     public MutableTemplateGroup(TemplateGroup parent) {
@@ -62,21 +63,9 @@ public class MutableTemplateGroup implements TemplateGroup {
         return renderersFor(name);
     }
 
-    @Override
-    public boolean contains(String name) {
-        return functions.containsKey(normalise(name));
-    }
-
     protected MatchingRenderer renderersFor(String name) {
-        String normalisedName = normalise(name);
-        if (!contains(normalisedName)) {
-            create(normalisedName);
-        }
-        return functions.get(normalisedName);
-    }
-
-    protected void create(String normalisedName) {
-        functions.put(normalisedName, new MatchingRenderer(parent.get(normalisedName)));
+        return functions.computeIfAbsent(normalise(name),
+                (n) -> new MatchingRenderer(parent.get(n)));
     }
 
     public static String normalise(String name) {

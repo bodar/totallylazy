@@ -24,11 +24,6 @@ public enum EmptyTemplateGroup implements TemplateGroup {
     }
 
     @Override
-    public boolean contains(String name) {
-        return false;
-    }
-
-    @Override
     public Appendable render(Object instance, Appendable appendable) throws Exception {
         return DefaultRenderer.Instance.render(instance, appendable);
     }

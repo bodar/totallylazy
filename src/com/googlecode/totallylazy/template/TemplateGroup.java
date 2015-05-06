@@ -24,6 +24,4 @@ public interface TemplateGroup extends Renderer<Object> {
     }
 
     Renderer<Object> get(String name);
-
-    boolean contains(String name);
 }
