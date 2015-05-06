@@ -34,7 +34,7 @@ public interface Grammar {
         return Parsers.characters(not(c));
     }
     
-    Parser<Object> VALUE = Parsers.lazy(() -> ws(Parsers.or(LITERAL, TEMPLATE_CALL(), ATTRIBUTE)));
+    Parser<Object> VALUE = Parsers.lazy(() -> ws(Parsers.or(LITERAL, FUNCTION_CALL(), ATTRIBUTE)));
 
     Parser<Pair<String, Object>> NAMED_ARGUMENT = Parsers.tuple(IDENTIFIER, isChar('='), VALUE).
             map(triple -> Pair.pair(triple.first(), triple.third()));
@@ -46,13 +46,13 @@ public interface Grammar {
 
     Parser<Map<String, Object>> NO_ARGUMENTS = Parsers.constant(Maps.<String, Object>map());
 
-    Parser<TemplateCall> TEMPLATE_CALL =
+    Parser<FunctionCall> FUNCTION_CALL =
             Parsers.pair(IDENTIFIER, between(isChar('('), Parsers.or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS, NO_ARGUMENTS), isChar(')'))).
-            map(pair -> new TemplateCall(pair.first(), pair.second()));
+            map(pair -> new FunctionCall(pair.first(), pair.second()));
 
-    static Parser<TemplateCall> TEMPLATE_CALL() { return TEMPLATE_CALL; }
+    static Parser<FunctionCall> FUNCTION_CALL() { return FUNCTION_CALL; }
 
-    Parser<Expression> EXPRESSION = Parsers.or(TEMPLATE_CALL, ATTRIBUTE).between(isChar(del), isChar(del));
+    Parser<Expression> EXPRESSION = Parsers.or(FUNCTION_CALL, ATTRIBUTE).between(isChar(del), isChar(del));
 
     Parser<List<Object>> TEMPLATE = Parsers.or(EXPRESSION, TEXT).many1();
 }

@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Segment;
 import org.junit.Test;
 
@@ -15,14 +14,14 @@ public class CharactersParserTest {
     @Test
     public void parsesMultipleCharacters() throws Exception {
         Result<CharSequence> result = characters(alphaNumeric).parse("ABC");
-        assertThat(result.value(), is("ABC"));
+        assertThat(result.value().toString(), is("ABC"));
         assertThat(result.remainder(), is(emptySegment(Character.class)));
     }
 
     @Test
     public void leavesRemainder() throws Exception {
         Result<CharSequence> result = characters(alphaNumeric).parse("ABC+");
-        assertThat(result.value(), is("ABC"));
+        assertThat(result.value().toString(), is("ABC"));
         assertThat(result.remainder(), is(Segment.constructors.characters("+")));
     }
 

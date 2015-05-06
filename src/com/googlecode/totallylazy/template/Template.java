@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.template;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Grammar;
-import com.googlecode.totallylazy.template.ast.TemplateCall;
+import com.googlecode.totallylazy.template.ast.FunctionCall;
 
 import java.util.Map;
 
@@ -33,9 +33,9 @@ public class Template implements Renderer<Map<String, Object>> {
     Appendable append(Object node, Map<String, Object> context, Appendable appendable) throws Exception {
         if(node instanceof CharSequence) return appendable.append(((CharSequence) node));
         if(node instanceof Attribute) return parent.render(context.get(((Attribute) node).value()), appendable);
-        if(node instanceof TemplateCall){
-            TemplateCall templateCall = (TemplateCall) node;
-            return parent.get(templateCall.name()).render(values(templateCall.arguments(), context), appendable);
+        if(node instanceof FunctionCall){
+            FunctionCall functionCall = (FunctionCall) node;
+            return parent.get(functionCall.name()).render(values(functionCall.arguments(), context), appendable);
         }
         return appendable;
     }
@@ -48,9 +48,9 @@ public class Template implements Renderer<Map<String, Object>> {
     Object value(Object node, Map<String, Object> context) throws Exception {
         if(node instanceof CharSequence) return node;
         if(node instanceof Attribute) return context.get(((Attribute) node).value());
-        if(node instanceof TemplateCall) {
-            TemplateCall templateCall = (TemplateCall) node;
-            return parent.get(templateCall.name()).render(values(templateCall.arguments(), context));
+        if(node instanceof FunctionCall) {
+            FunctionCall functionCall = (FunctionCall) node;
+            return parent.get(functionCall.name()).render(values(functionCall.arguments(), context));
         }
         throw new IllegalArgumentException("Unknown Node Type");
     }

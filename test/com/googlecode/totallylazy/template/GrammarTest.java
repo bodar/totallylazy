@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Grammar;
-import com.googlecode.totallylazy.template.ast.TemplateCall;
+import com.googlecode.totallylazy.template.ast.FunctionCall;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -30,19 +30,19 @@ public class GrammarTest {
 
     @Test
     public void canParseNoArgumentTemplateCall() throws Exception {
-        TemplateCall noArguments = Grammar.TEMPLATE_CALL.parse("template()").value();
+        FunctionCall noArguments = Grammar.FUNCTION_CALL.parse("template()").value();
         assertThat(noArguments.name(), is("template"));
     }
 
     @Test
     public void canParseAnExpression() throws Exception {
-        assertThat(Grammar.EXPRESSION.parse("$template()$").value(), Matchers.instanceOf(TemplateCall.class));
+        assertThat(Grammar.EXPRESSION.parse("$template()$").value(), Matchers.instanceOf(FunctionCall.class));
         assertThat(Grammar.EXPRESSION.parse("$template$").value(), Matchers.instanceOf(Attribute.class));
     }
 
     @Test
     public void canParseTemplateCallWithNamedParameters() throws Exception {
-        TemplateCall namedArguments = Grammar.TEMPLATE_CALL.parse("template(foo=bar, baz=dan)").value();
+        FunctionCall namedArguments = Grammar.FUNCTION_CALL.parse("template(foo=bar, baz=dan)").value();
         assertThat(namedArguments.name(), is("template"));
         assertThat(((Attribute) namedArguments.arguments().get("foo")).value(), is("bar"));
         assertThat(((Attribute) namedArguments.arguments().get("baz")).value(), is("dan"));
@@ -50,7 +50,7 @@ public class GrammarTest {
 
     @Test
     public void canParseTemplateCallImplicitParameters() throws Exception {
-        TemplateCall unnamed = Grammar.TEMPLATE_CALL.parse("template(foo, bar, baz)").value();
+        FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template(foo, bar, baz)").value();
         assertThat(unnamed.name(), is("template"));
         assertThat(((Attribute) unnamed.arguments().get("0")).value(), is("foo"));
         assertThat(((Attribute) unnamed.arguments().get("1")).value(), is("bar"));
@@ -59,7 +59,7 @@ public class GrammarTest {
 
     @Test
     public void canParseTemplateCallLiteralParameters() throws Exception {
-        TemplateCall unnamed = Grammar.TEMPLATE_CALL.parse("template(\"foo\")").value();
+        FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template(\"foo\")").value();
         assertThat(unnamed.name(), is("template"));
         assertThat(((CharSequence) unnamed.arguments().get("0")).toString(), is("foo"));
     }
