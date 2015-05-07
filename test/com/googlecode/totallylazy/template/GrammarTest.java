@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.template.ast.AnonymousTemplate;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
+import com.googlecode.totallylazy.template.ast.Mapping;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Lists.list;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 public class GrammarTest {
@@ -99,5 +101,12 @@ public class GrammarTest {
     public void canParseAnonymousTemplate() throws Exception {
         AnonymousTemplate template = Grammar.ANONYMOUS_TEMPLATE.parse("{ name | Hello $name$ }").value();
         assertThat(template.paramaeterNames(), is(list("name")));
+    }
+
+    @Test
+    public void supportsMapping() throws Exception {
+        Mapping mapping = Grammar.MAPPING.parse("users:{ user | Hello $user$ }").value();
+        assertThat(mapping.attribute().value(), is("users"));
+        assertThat(mapping.expression(), is(instanceOf(AnonymousTemplate.class)));
     }
 }

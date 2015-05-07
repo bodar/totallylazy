@@ -5,18 +5,13 @@ import org.junit.Test;
 
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.template.Template.template;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TemplateTest {
-    @Test
-    public void supportsToString() throws Exception {
-        String template = "Hello $name$ $template()$ $yourLastName(template())$";
-        assertThat(template(template).toString(), is(template));
-    }
-
     @Test
     public void canParseATemplate() throws Exception {
         Template template = template("Hello $first$ $last$");
@@ -36,4 +31,18 @@ public class TemplateTest {
         assertThat(result, Matchers.is("Hello Dan ... Your last name is Bodart"));
     }
 
+    @Test
+    public void supportsMappingList() throws Exception {
+        Template template = template("$users:{ user | Hello $user$ }$");
+        String result = template.render(map("users", list("Dan", "Bob")));
+        assertThat(result, is("Hello Dan Hello Bob "));
+    }
+
+    @Test
+    public void supportsMappingListWithIndex() throws Exception {
+        Template template = template("$users:{ user, index | Hello $user$ you are number $index$!\n}$");
+        String result = template.render(map("users", list("Dan", "Bob")));
+        assertThat(result, is("Hello Dan you are number 0!\n" +
+                "Hello Bob you are number 1!\n"));
+    }
 }

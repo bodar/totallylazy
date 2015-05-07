@@ -1,31 +1,36 @@
 package com.googlecode.totallylazy.template;
 
+import com.googlecode.totallylazy.template.ast.AnonymousTemplate;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
 import com.googlecode.totallylazy.template.ast.Grammar;
+import com.googlecode.totallylazy.template.ast.Mapping;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Maps.mapValues;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Template implements Renderer<Map<String, Object>> {
-    private final String template;
+    private final List<Object> template;
     private final TemplateGroup parent;
 
-    private Template(String template, TemplateGroup parent) {
-        this.parent = parent;
+    private Template(List<Object> template, TemplateGroup parent) {
         this.template = template;
+        this.parent = parent;
     }
 
     public static Template template(String template) {
         return template(template, EmptyTemplateGroup.Instance);}
-    public static Template template(String template, TemplateGroup parent) {return new Template(template, parent);}
+    public static Template template(String template, TemplateGroup parent) {
+        return new Template(Grammar.TEMPLATE.parse(template).value(), parent);
+    }
 
     @Override
     public Appendable render(Map<String, Object> context, Appendable appendable) throws Exception {
-        return sequence(Grammar.TEMPLATE.parse(template).value()).
+        return sequence(template).
                 fold(appendable, (a, node) -> append(node, context, a));
     }
 
@@ -35,6 +40,19 @@ public class Template implements Renderer<Map<String, Object>> {
         if(expression instanceof FunctionCall){
             FunctionCall functionCall = (FunctionCall) expression;
             return parent.get(functionCall.name()).render(arguments(functionCall.arguments(), context), appendable);
+        }
+        if(expression instanceof Mapping){
+            Mapping mapping = (Mapping) expression;
+            Object value = context.get(mapping.attribute().value());
+            AnonymousTemplate anonymousTemplate = (AnonymousTemplate) mapping.expression();
+            Template template = new Template(anonymousTemplate.template(), parent);
+            if(value instanceof Iterable) {
+                return sequence((Iterable<?>) value).zipWithIndex().fold(appendable, (a, p) -> {
+                    List<String> params = anonymousTemplate.paramaeterNames();
+                    if(params.size() == 1) params.add("index");
+                    return template.render(map(params.get(0), p.second(), params.get(1), p.first()), a);
+                });
+            }
         }
         throw new IllegalArgumentException("Unknown expression type: " + expression);
     }
@@ -65,6 +83,6 @@ public class Template implements Renderer<Map<String, Object>> {
 
     @Override
     public String toString() {
-        return template;
+        return sequence(template).toString("");
     }
 }

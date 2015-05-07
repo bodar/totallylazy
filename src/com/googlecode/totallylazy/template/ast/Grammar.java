@@ -3,11 +3,13 @@ package com.googlecode.totallylazy.template.ast;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.parser.Parse;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Characters.alphaNumeric;
 import static com.googlecode.totallylazy.Characters.among;
@@ -40,7 +42,19 @@ public interface Grammar {
         return Parsers.characters(not(predicate));
     }
     
-    Parser<Object> VALUE = Parsers.lazy(() -> ws(or(LITERAL, FUNCTION_CALL(), ATTRIBUTE)));
+    Parser<Object> VALUE = Parsers.lazy(new Callable<Parse<Object>>() {
+        @Override
+        public Parse<Object> call() throws Exception {
+            return ws(or(LITERAL, FUNCTION_CALL, ATTRIBUTE));
+        }
+    });
+
+    Parser<Expression> EXPRESSION = Parsers.lazy(new Callable<Parse<Expression>>() {
+        @Override
+        public Parse<Expression> call() throws Exception {
+            return or(FUNCTION_CALL, MAPPING, ATTRIBUTE).surroundedBy(isChar(DELIMETER));
+        }
+    });
 
     Parser<Pair<String, Object>> NAMED_ARGUMENT = IDENTIFIER.followedBy(isChar('=')).then(VALUE);
 
@@ -52,13 +66,13 @@ public interface Grammar {
             IDENTIFIER.then(between(isChar('('), or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS), isChar(')'))).
             map(pair -> new FunctionCall(pair.first(), pair.second()));
 
-    static Parser<FunctionCall> FUNCTION_CALL() { return FUNCTION_CALL; }
-
-    Parser<Expression> EXPRESSION = or(FUNCTION_CALL, ATTRIBUTE).between(isChar(DELIMETER), isChar(DELIMETER));
-
     Parser<List<Object>> TEMPLATE = or(EXPRESSION, TEXT).many1();
 
-    Parser<List<String>> PARAMETERS_NAMES = IDENTIFIER.sepBy1(SEPARATOR).debug("NAMES");
+    Parser<List<String>> PARAMETERS_NAMES = IDENTIFIER.sepBy1(SEPARATOR);
     Parser<AnonymousTemplate> ANONYMOUS_TEMPLATE = between(wsChar('{'), PARAMETERS_NAMES.followedBy(wsChar('|')).then(TEMPLATE) , wsChar('}')).
-            map(pair -> new AnonymousTemplate(pair.first(), pair.second())).debug("ANON");
+            map(pair -> new AnonymousTemplate(pair.first(), pair.second()));
+
+    Parser<Mapping> MAPPING = ATTRIBUTE.followedBy(isChar(':')).then(ANONYMOUS_TEMPLATE).
+            map(pair -> new Mapping(pair.first(), pair.second()));
+
 }
