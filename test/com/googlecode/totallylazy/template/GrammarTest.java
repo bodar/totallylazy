@@ -100,6 +100,4 @@ public class GrammarTest {
         AnonymousTemplate template = Grammar.ANONYMOUS_TEMPLATE.parse("{ name | Hello $name$ }").value();
         assertThat(template.paramaeterNames(), is(list("name")));
     }
-
-
 }
