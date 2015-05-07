@@ -9,6 +9,10 @@ public interface Renderer<T> {
 
     Appendable render(final T instance, final Appendable appendable) throws Exception;
 
+    static Renderer<Object> defaultRenderer(){
+        return Default.Instance;
+    }
+
     enum Default implements Renderer<Object> {
         Instance;
 

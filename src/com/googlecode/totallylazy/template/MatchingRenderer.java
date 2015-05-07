@@ -19,7 +19,7 @@ public class MatchingRenderer implements Renderer<Object>{
     private final Renderer<Object> defaultRenderer;
 
     public MatchingRenderer() {
-        this(DefaultRenderer.Instance);
+        this(Default.Instance);
     }
 
     public MatchingRenderer(Renderer<Object> defaultRenderer) {
