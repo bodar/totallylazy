@@ -16,6 +16,6 @@ public class Attribute implements Value<String>, Expression {
 
     @Override
     public String toString() {
-        return value;
+        return getClass().getSimpleName() + "(" + value + ")";
     }
 }

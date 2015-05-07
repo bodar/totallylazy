@@ -14,5 +14,4 @@ public class TemplateGroupTest {
         String result = template.render(map("first", "<Dan>"));
         assertThat(result, is("Hello &lt;Dan&gt;"));
     }
-
 }

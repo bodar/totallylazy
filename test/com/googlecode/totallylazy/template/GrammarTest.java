@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.template;
 
+import com.googlecode.totallylazy.template.ast.AnonymousTemplate;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Lists.list;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -91,6 +93,12 @@ public class GrammarTest {
     public void canParseLiteral() throws Exception {
         CharSequence text = Grammar.LITERAL.parse("\"Some other text\"").value();
         assertThat(text.toString(), is("Some other text"));
+    }
+
+    @Test
+    public void canParseAnonymousTemplate() throws Exception {
+        AnonymousTemplate template = Grammar.ANONYMOUS_TEMPLATE.parse("{ name | Hello $name$ }").value();
+        assertThat(template.paramaeterNames(), is(list("name")));
     }
 
 

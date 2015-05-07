@@ -17,7 +17,7 @@ class DebugParser<T> extends DelegateParser<T> {
     @Override
     public Result<T> parse(Segment<Character> characters) {
         Result<T> result = delegate.parse(characters);
-        printStream.println(name + " result:" + result);
+        printStream.println(name + " -> " + result);
         return result;
     }
 }

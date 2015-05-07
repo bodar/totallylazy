@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.template.ast;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class FunctionCall implements Expression {
@@ -17,5 +18,11 @@ public class FunctionCall implements Expression {
 
     public <T> T arguments() {
         return cast(arguments);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" + name + '(' +
+                sequence(arguments) + "))";
     }
 }

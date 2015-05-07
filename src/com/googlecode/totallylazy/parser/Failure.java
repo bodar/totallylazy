@@ -60,4 +60,9 @@ public abstract class Failure<A> implements Result<A>{
     private RuntimeException fail() {
         return new RuntimeException(message());
     }
+
+    @Override
+    public String toString() {
+        return "Failure(\"" + message() + "\")";
+    }
 }
