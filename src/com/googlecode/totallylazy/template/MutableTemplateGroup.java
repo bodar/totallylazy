@@ -14,14 +14,14 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 public class MutableTemplateGroup implements TemplateGroup {
     public static final String NO_NAME = "";
     private final ConcurrentHashMap<String, MatchingRenderer> functions = new ConcurrentHashMap<>();
-    private final TemplateGroup parent;
+    private final Renderers parent;
 
-    public MutableTemplateGroup(TemplateGroup parent) {
+    public MutableTemplateGroup(Renderers parent) {
         this.parent = parent;
     }
 
     public MutableTemplateGroup() {
-        this(EmptyTemplateGroup.Instance);
+        this(Renderers.Empty.Instance);
     }
 
     public static MutableTemplateGroup defaultEncoders() {

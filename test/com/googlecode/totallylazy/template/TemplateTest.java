@@ -66,6 +66,4 @@ public class TemplateTest {
         String result = template.render(map("user", map("name","Dan", "age", 12)));
         assertThat(result, is("Dan 12 "));
     }
-
-
 }

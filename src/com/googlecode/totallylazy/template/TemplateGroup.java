@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Unchecked;
 
-public interface TemplateGroup extends Renderer<Object> {
+public interface TemplateGroup extends Renderers {
     TemplateGroup add(String name, Renderer<?> renderer);
 
     default TemplateGroup add(String name, Callable1<?, ? extends CharSequence> callable) {
@@ -22,6 +22,4 @@ public interface TemplateGroup extends Renderer<Object> {
             }
         });
     }
-
-    Renderer<Object> get(String name);
 }

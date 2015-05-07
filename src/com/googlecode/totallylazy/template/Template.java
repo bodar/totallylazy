@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.template.ast.AnonymousTemplate;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
@@ -20,16 +19,16 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Template implements Renderer<Map<String, Object>> {
     private final List<Object> template;
-    private final TemplateGroup parent;
+    private final Renderers parent;
 
-    private Template(List<Object> template, TemplateGroup parent) {
+    private Template(List<Object> template, Renderers parent) {
         this.template = template;
         this.parent = parent;
     }
 
     public static Template template(String template) {
-        return template(template, EmptyTemplateGroup.Instance);}
-    public static Template template(String template, TemplateGroup parent) {
+        return template(template, Renderers.Empty.Instance);}
+    public static Template template(String template, Renderers parent) {
         return new Template(Grammar.TEMPLATE.parse(template).value(), parent);
     }
 
@@ -62,18 +61,13 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     private Appendable appendIterable(AnonymousTemplate anonymousTemplate, Iterable<?> values, Appendable appendable) throws Exception {
-        Sequence<Pair<Number, Object>> pairs = sequence(values).zipWithIndex();
-        return appendPairs(anonymousTemplate, pairs, appendable);
+        return appendPairs(anonymousTemplate, sequence(values).zipWithIndex(), appendable);
     }
 
     private Appendable appendPairs(AnonymousTemplate anonymousTemplate, Iterable<? extends Pair<?, ?>> pairs, Appendable appendable) throws Exception {
-        return sequence(pairs).fold(appendable, (a, p) -> {
-            List<String> params = anonymousTemplate.paramaeterNames();
-            if (params.size() == 0) params.add("value");
-            if (params.size() == 1) params.add("key");
-            Map<String, Object> subContext = map(params.get(0), p.second(), params.get(1), p.first());
-            return append(anonymousTemplate, subContext, a);
-        });
+        return sequence(pairs).fold(appendable, (a, p) ->
+                append(anonymousTemplate,
+                        map(sequence(anonymousTemplate.paramaeterNames()).zip(sequence(p.second(), p.first()))), a));
     }
 
     private Object arguments(Object arguments, Map<String, Object> context) throws Exception {
