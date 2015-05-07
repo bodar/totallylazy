@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy.template;
 
+import com.googlecode.totallylazy.Maps;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.template.ast.AnonymousTemplate;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
@@ -11,7 +14,9 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Maps.mapValues;
+import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Template implements Renderer<Map<String, Object>> {
     private final List<Object> template;
@@ -41,20 +46,34 @@ public class Template implements Renderer<Map<String, Object>> {
             FunctionCall functionCall = (FunctionCall) expression;
             return parent.get(functionCall.name()).render(arguments(functionCall.arguments(), context), appendable);
         }
+        if(expression instanceof AnonymousTemplate) {
+            AnonymousTemplate anonymousTemplate = (AnonymousTemplate) expression;
+            return new Template(anonymousTemplate.template(), parent).render(context, appendable);
+        }
         if(expression instanceof Mapping){
             Mapping mapping = (Mapping) expression;
-            Object value = context.get(mapping.attribute().value());
             AnonymousTemplate anonymousTemplate = (AnonymousTemplate) mapping.expression();
-            Template template = new Template(anonymousTemplate.template(), parent);
-            if(value instanceof Iterable) {
-                return sequence((Iterable<?>) value).zipWithIndex().fold(appendable, (a, p) -> {
-                    List<String> params = anonymousTemplate.paramaeterNames();
-                    if(params.size() == 1) params.add("index");
-                    return template.render(map(params.get(0), p.second(), params.get(1), p.first()), a);
-                });
-            }
+            Object value = context.get(mapping.attribute().value());
+            if(value instanceof Map) return appendPairs(anonymousTemplate, Maps.pairs(cast(value)), appendable);
+            if(value instanceof Iterable) return appendIterable(anonymousTemplate, (Iterable<?>) value, appendable);
+            return appendIterable(anonymousTemplate, one(value), appendable);
         }
         throw new IllegalArgumentException("Unknown expression type: " + expression);
+    }
+
+    private Appendable appendIterable(AnonymousTemplate anonymousTemplate, Iterable<?> values, Appendable appendable) throws Exception {
+        Sequence<Pair<Number, Object>> pairs = sequence(values).zipWithIndex();
+        return appendPairs(anonymousTemplate, pairs, appendable);
+    }
+
+    private Appendable appendPairs(AnonymousTemplate anonymousTemplate, Iterable<? extends Pair<?, ?>> pairs, Appendable appendable) throws Exception {
+        return sequence(pairs).fold(appendable, (a, p) -> {
+            List<String> params = anonymousTemplate.paramaeterNames();
+            if (params.size() == 0) params.add("value");
+            if (params.size() == 1) params.add("key");
+            Map<String, Object> subContext = map(params.get(0), p.second(), params.get(1), p.first());
+            return append(anonymousTemplate, subContext, a);
+        });
     }
 
     private Object arguments(Object arguments, Map<String, Object> context) throws Exception {
