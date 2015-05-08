@@ -13,7 +13,7 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class MutableTemplateGroup implements TemplateGroup {
     public static final String NO_NAME = "";
-    private final ConcurrentHashMap<String, MatchingRenderer> functions = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, CompositeRenderer> functions = new ConcurrentHashMap<>();
     private final Renderers parent;
 
     public MutableTemplateGroup(Renderers parent) {
@@ -77,9 +77,9 @@ public class MutableTemplateGroup implements TemplateGroup {
         return renderersFor(name);
     }
 
-    protected MatchingRenderer renderersFor(String name) {
+    protected CompositeRenderer renderersFor(String name) {
         return functions.computeIfAbsent(normalise(name),
-                (n) -> new MatchingRenderer(parent.get(n)));
+                (n) -> new CompositeRenderer(parent.get(n)));
     }
 
     public static String normalise(String name) {

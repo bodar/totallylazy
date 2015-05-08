@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
 
+import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Sequences.join;
 import static com.googlecode.totallylazy.Strings.UTF8;
 
@@ -84,11 +85,11 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public Result<A> parse(Reader value) {
-        return parse(Segment.constructors.characters(value));
+        return using(value, reader -> parse(Segment.constructors.characters(reader)));
     }
 
     public Result<A> parse(InputStream value) {
-        return parse(Segment.constructors.characters(new InputStreamReader(value, UTF8)));
+        return using(value, inputStream -> parse(Segment.constructors.characters(new InputStreamReader(inputStream, UTF8))));
     }
 
     public Parser<Void> ignore() {

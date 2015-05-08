@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.template.ast.FunctionCall;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.Mapping;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +28,15 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     public static Template template(String template) {
-        return template(template, Renderers.Empty.Instance);}
+        return template(template, Renderers.Empty.Instance);
+    }
     public static Template template(String template, Renderers parent) {
+        return new Template(Grammar.TEMPLATE.parse(template).value(), parent);
+    }
+    public static Template template(InputStream template) {
+        return template(template, Renderers.Empty.Instance);
+    }
+    public static Template template(InputStream template, Renderers parent) {
         return new Template(Grammar.TEMPLATE.parse(template).value(), parent);
     }
 

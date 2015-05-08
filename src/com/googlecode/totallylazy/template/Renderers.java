@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.template;
 
+import com.googlecode.totallylazy.Uri;
+
 public interface Renderers extends Renderer<Object> {
     Renderer<Object> get(String name);
 
