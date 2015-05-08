@@ -21,10 +21,10 @@ public class TemplateTest {
 
     @Test
     public void canCallSubTemplates() throws Exception {
-        TemplateGroup templateGroup = new MutableTemplateGroup().
+        Templates templates = Templates.templates().
             add("subTemplateA", ignore -> "...").
             add("subTemplateB", (Map<String, Object> context) -> "Your last name is " + context.get("name"));
-        Template template = template("Hello $first$ $subTemplateA()$ $subTemplateB(name=last)$", templateGroup);
+        Template template = template("Hello $first$ $subTemplateA()$ $subTemplateB(name=last)$", templates);
         String result = template.render(map(
                 "first", "Dan",
                 "last", "Bodart"));
