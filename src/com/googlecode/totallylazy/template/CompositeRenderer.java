@@ -2,36 +2,37 @@ package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.collections.PersistentList;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class CompositeRenderer implements Renderer<Object>{
-    private final Deque<Pair<Predicate<Object>, Renderer<Object>>> pairs = new ArrayDeque<>();
-    private final Renderer<Object> defaultRenderer;
+    private final PersistentList<Pair<Predicate<Object>, Renderer<Object>>> pairs;
 
-    public CompositeRenderer() {
-        this(Default.Instance);
+    private CompositeRenderer(PersistentList<Pair<Predicate<Object>, Renderer<Object>>> pairs) {
+        this.pairs = pairs;
     }
 
-    public CompositeRenderer(Renderer<Object> defaultRenderer) {
-        this.defaultRenderer = defaultRenderer;
+    public static CompositeRenderer compositeRenderer() {
+        return compositeRenderer(Default.Instance);
+    }
+
+    public static CompositeRenderer compositeRenderer(Renderer<Object> defaultRenderer) {
+        return new CompositeRenderer(PersistentList.constructors.list(pair(Predicates.always(), defaultRenderer)));
     }
 
     @Override
     public Appendable render(Object value, Appendable appendable) throws Exception {
-        return sequence(pairs).find(p -> p.first().matches(value)).
-                map(Pair::second).
-                getOrElse(defaultRenderer).
-                render(value, appendable);
+        return pairs.find(p -> p.first().matches(value)).
+                get().second().render(value, appendable);
     }
 
     public <T> CompositeRenderer add(Predicate<? super T> predicate, Renderer<? super T> renderer) {
-        pairs.addFirst(pair(cast(predicate), cast(renderer)));
-        return this;
+        return new CompositeRenderer(pairs.cons(pair(Unchecked.<Predicate<Object>>cast(predicate), cast(renderer))));
     }
 }

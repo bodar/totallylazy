@@ -9,7 +9,9 @@ import java.net.URLEncoder;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.googlecode.totallylazy.Predicates.always;
+import static com.googlecode.totallylazy.Predicates.predicate;
 import static com.googlecode.totallylazy.Unchecked.cast;
+import static com.googlecode.totallylazy.template.CompositeRenderer.compositeRenderer;
 
 public class MutableTemplateGroup implements TemplateGroup {
     public static final String NO_NAME = "";
@@ -41,7 +43,7 @@ public class MutableTemplateGroup implements TemplateGroup {
     }
 
     public <T> MutableTemplateGroup add(String name, Predicate<? super T> predicate, Renderer<? super T> callable) {
-        renderersFor(name).add(predicate, callable);
+        functions.compute(name, (n, old) -> (old == null ? create(n) : old).add(predicate, callable));
         return this;
     }
 
@@ -78,12 +80,8 @@ public class MutableTemplateGroup implements TemplateGroup {
     }
 
     protected CompositeRenderer renderersFor(String name) {
-        return functions.computeIfAbsent(normalise(name),
-                (n) -> new CompositeRenderer(parent.get(n)));
+        return functions.computeIfAbsent(name, this::create);
     }
 
-    public static String normalise(String name) {
-        return name.trim().toLowerCase();
-    }
-
+    private CompositeRenderer create(String name) {return compositeRenderer(parent.get(name));}
 }
