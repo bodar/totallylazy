@@ -9,7 +9,9 @@ import com.googlecode.totallylazy.collections.PersistentList;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Unchecked.cast;
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 
 public class CompositeRenderer implements Renderer<Object>{
     private final PersistentList<Pair<Predicate<Object>, Renderer<Object>>> pairs;
@@ -23,7 +25,7 @@ public class CompositeRenderer implements Renderer<Object>{
     }
 
     public static CompositeRenderer compositeRenderer(Renderer<Object> defaultRenderer) {
-        return new CompositeRenderer(PersistentList.constructors.list(pair(Predicates.always(), defaultRenderer)));
+        return new CompositeRenderer(list(pair(always(), defaultRenderer)));
     }
 
     @Override

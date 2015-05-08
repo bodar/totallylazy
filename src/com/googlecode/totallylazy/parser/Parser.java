@@ -85,11 +85,11 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public Result<A> parse(Reader value) {
-        return using(value, reader -> parse(Segment.constructors.characters(reader)));
+        return parse(Segment.constructors.characters(value));
     }
 
     public Result<A> parse(InputStream value) {
-        return using(value, inputStream -> parse(Segment.constructors.characters(new InputStreamReader(inputStream, UTF8))));
+        return parse(Segment.constructors.characters(new InputStreamReader(value, UTF8)));
     }
 
     public Parser<Void> ignore() {

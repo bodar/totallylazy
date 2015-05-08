@@ -9,17 +9,17 @@ import java.net.URLEncoder;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.googlecode.totallylazy.Predicates.always;
-import static com.googlecode.totallylazy.Predicates.predicate;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.template.CompositeRenderer.compositeRenderer;
 
 public class MutableTemplateGroup implements TemplateGroup {
-    public static final String NO_NAME = "";
-    private final ConcurrentHashMap<String, CompositeRenderer> functions = new ConcurrentHashMap<>();
     private final Renderers parent;
+    private final ConcurrentHashMap<String, CompositeRenderer> named = new ConcurrentHashMap<>();
+    private CompositeRenderer implicit;
 
     public MutableTemplateGroup(Renderers parent) {
         this.parent = parent;
+        implicit = compositeRenderer(parent);
     }
 
     public MutableTemplateGroup() {
@@ -43,7 +43,7 @@ public class MutableTemplateGroup implements TemplateGroup {
     }
 
     public <T> MutableTemplateGroup add(String name, Predicate<? super T> predicate, Renderer<? super T> callable) {
-        functions.compute(name, (n, old) -> (old == null ? create(n) : old).add(predicate, callable));
+        named.compute(name, (n, old) -> (old == null ? create(n) : old).add(predicate, callable));
         return this;
     }
 
@@ -66,12 +66,13 @@ public class MutableTemplateGroup implements TemplateGroup {
 
     @Override
     public <T> MutableTemplateGroup add(Predicate<? super T> predicate, Renderer<? super T> renderer) {
-        return add(NO_NAME, predicate, renderer);
+        implicit = implicit.add(predicate, renderer);
+        return this;
     }
 
     @Override
     public Appendable render(Object instance, Appendable appendable) throws Exception {
-        return get(NO_NAME).render(instance, appendable);
+        return implicit.render(instance, appendable);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class MutableTemplateGroup implements TemplateGroup {
     }
 
     protected CompositeRenderer renderersFor(String name) {
-        return functions.computeIfAbsent(name, this::create);
+        return named.computeIfAbsent(name, this::create);
     }
 
     private CompositeRenderer create(String name) {return compositeRenderer(parent.get(name));}
