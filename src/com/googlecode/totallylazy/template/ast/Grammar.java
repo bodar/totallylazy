@@ -31,7 +31,7 @@ public interface Grammar {
 
     char DELIMETER = '$';
 
-    Parser<Attribute> ATTRIBUTE = IDENTIFIER.map(Attribute::new);
+    Parser<Attribute> ATTRIBUTE = IDENTIFIER.sepBy1(isChar('.')).map(Attribute::new);
     Parser<CharSequence> TEXT = textExcept(is(DELIMETER).or(is('}')));
     Parser<CharSequence> SINGLE_QUOTED = between(SINGLE_QUOTE, textExcept('\''), SINGLE_QUOTE);
     Parser<CharSequence> DOUBLE_QUOTED = between(DOUBLE_QUOTE, textExcept('"'), DOUBLE_QUOTE);

@@ -18,9 +18,15 @@ import static org.hamcrest.Matchers.is;
 
 public class GrammarTest {
     @Test
-    public void canParseAttribute() throws Exception {
+    public void canParseSingleAttribute() throws Exception {
         Attribute attribute = Grammar.ATTRIBUTE.parse("foo").value();
-        assertThat(attribute.value(), is("foo"));
+        assertThat(attribute.value(), is(list("foo")));
+    }
+
+    @Test
+    public void canParseAttributeWithSubAttribute() throws Exception {
+        Attribute attribute = Grammar.ATTRIBUTE.parse("foo.bar").value();
+        assertThat(attribute.value(), is(list("foo", "bar")));
     }
 
     @Test
@@ -54,8 +60,8 @@ public class GrammarTest {
         FunctionCall namedArguments = Grammar.FUNCTION_CALL.parse("template(foo=bar, baz=dan)").value();
         assertThat(namedArguments.name(), is("template"));
         Map<String, Attribute> arguments = namedArguments.arguments();
-        assertThat(arguments.get("foo").value(), is("bar"));
-        assertThat(arguments.get("baz").value(), is("dan"));
+        assertThat(arguments.get("foo").value(), is(list("bar")));
+        assertThat(arguments.get("baz").value(), is(list("dan")));
     }
 
     @Test
@@ -63,9 +69,9 @@ public class GrammarTest {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template(foo, bar, baz)").value();
         assertThat(unnamed.name(), is("template"));
         List<Attribute> arguments = unnamed.arguments();
-        assertThat(arguments.get(0).value(), is("foo"));
-        assertThat(arguments.get(1).value(), is("bar"));
-        assertThat(arguments.get(2).value(), is("baz"));
+        assertThat(arguments.get(0).value(), is(list("foo")));
+        assertThat(arguments.get(1).value(), is(list("bar")));
+        assertThat(arguments.get(2).value(), is(list("baz")));
     }
 
 
@@ -106,7 +112,7 @@ public class GrammarTest {
     @Test
     public void supportsMapping() throws Exception {
         Mapping mapping = Grammar.MAPPING.parse("users:{ user | Hello $user$ }").value();
-        assertThat(mapping.attribute().value(), is("users"));
+        assertThat(mapping.attribute().value(), is(list("users")));
         assertThat(mapping.expression(), is(instanceOf(AnonymousTemplate.class)));
     }
 }

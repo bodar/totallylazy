@@ -2,20 +2,24 @@ package com.googlecode.totallylazy.template.ast;
 
 import com.googlecode.totallylazy.Value;
 
+import java.util.List;
 
-public class Attribute implements Value<String>, Expression {
-    private final String value;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
-    public Attribute(String value) {
+
+public class Attribute implements Value<List<String>>, Expression {
+    private final List<String> value;
+
+    public Attribute(List<String> value) {
         this.value = value;
     }
 
-    public String value() {
+    public List<String> value() {
         return value;
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" + value + ")";
+        return getClass().getSimpleName() + sequence(value).toString("(" , ".", ")") ;
     }
 }
