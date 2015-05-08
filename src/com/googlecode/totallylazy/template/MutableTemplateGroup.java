@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Xml;
 
@@ -32,7 +31,7 @@ public class MutableTemplateGroup implements TemplateGroup {
 
     private static MutableTemplateGroup defaultEncoders(MutableTemplateGroup mutableTemplateGroup) {
         return mutableTemplateGroup.
-                add("raw", Callables.asString()).
+                add("raw", Default.Instance).
                 add("html", Xml.escape()).
                 add("xml", Xml.escape()).
                 add("url", urlEncode());
@@ -77,10 +76,6 @@ public class MutableTemplateGroup implements TemplateGroup {
 
     @Override
     public Renderer<Object> get(String name) {
-        return renderersFor(name);
-    }
-
-    protected CompositeRenderer renderersFor(String name) {
         return named.computeIfAbsent(name, this::create);
     }
 

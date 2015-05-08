@@ -9,15 +9,12 @@ public interface Renderer<T> {
 
     Appendable render(final T instance, final Appendable appendable) throws Exception;
 
-    static Renderer<Object> defaultRenderer(){
-        return Default.Instance;
-    }
-
     enum Default implements Renderer<Object> {
         Instance;
 
         @Override
         public Appendable render(Object instance, Appendable appendable) throws Exception {
+            if(instance instanceof CharSequence) return appendable.append((CharSequence) instance);
             return appendable.append(Strings.asString(instance));
         }
     }
