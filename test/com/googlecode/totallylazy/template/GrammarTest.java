@@ -5,16 +5,15 @@ import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
 import com.googlecode.totallylazy.template.ast.Mapping;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Lists.list;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Predicates.is;
 
 public class GrammarTest {
     @Test
@@ -43,8 +42,8 @@ public class GrammarTest {
 
     @Test
     public void canParseAnExpression() throws Exception {
-        assertThat(Grammar.EXPRESSION.parse("$template()$").value(), Matchers.instanceOf(FunctionCall.class));
-        assertThat(Grammar.EXPRESSION.parse("$template$").value(), Matchers.instanceOf(Attribute.class));
+        assertThat(Grammar.EXPRESSION.parse("$template()$").value(), instanceOf(FunctionCall.class));
+        assertThat(Grammar.EXPRESSION.parse("$template$").value(), instanceOf(Attribute.class));
     }
 
     @Test
@@ -85,16 +84,16 @@ public class GrammarTest {
 
     @Test
     public void canParseImplicits() throws Exception {
-        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a").value().get(0), Matchers.instanceOf(Attribute.class));
-        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().get(1), Matchers.instanceOf(Attribute.class));
-        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().get(1), Matchers.instanceOf(Attribute.class));
-        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("\"a\"").value().get(0), Matchers.instanceOf(CharSequence.class));
+        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a").value().get(0), instanceOf(Attribute.class));
+        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().get(1), instanceOf(Attribute.class));
+        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().get(1), instanceOf(Attribute.class));
+        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("\"a\"").value().get(0), instanceOf(CharSequence.class));
     }
 
     @Test
     public void canParseValue() throws Exception {
-        assertThat(Grammar.VALUE.parse("a").value(), Matchers.instanceOf(Attribute.class));
-        assertThat(Grammar.VALUE.parse("\"a\"").value(), Matchers.instanceOf(CharSequence.class));
+        assertThat(Grammar.VALUE.parse("a").value(), instanceOf(Attribute.class));
+        assertThat(Grammar.VALUE.parse("\"a\"").value(), instanceOf(CharSequence.class));
     }
 
     @Test
@@ -114,5 +113,12 @@ public class GrammarTest {
         Mapping mapping = Grammar.MAPPING.parse("users:{ user | Hello $user$ }").value();
         assertThat(mapping.attribute().value(), is(list("users")));
         assertThat(mapping.expression(), is(instanceOf(AnonymousTemplate.class)));
+    }
+
+    @Test
+    public void supportsIndirection() throws Exception {
+        FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("(template)(foo, bar, baz)").value();
+        Attribute attribute = (Attribute) unnamed.name();
+        assertThat(attribute.value(), is(list("template")));
     }
 }

@@ -4,15 +4,15 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class FunctionCall implements Expression {
-    private final String name;
+    private final Object name;
     private final Object arguments;
 
-    public FunctionCall(final String name, final Object arguments) {
+    public FunctionCall(final Object name, final Object arguments) {
         this.name = name;
         this.arguments = arguments;
     }
 
-    public String name() {
+    public Object name() {
         return name;
     }
 

@@ -24,4 +24,12 @@ public class TemplatesTest {
         String result = templates.get("hello").render(map("name", "Dan"));
         assertThat(result, is("Hello Dan"));
     }
+
+    @Test
+    public void supportsIndirection() throws Exception {
+        Templates templates = defaultTemplates();
+        Template template = Template.template("Hello $(encoding)(first)$", templates);
+        String result = template.render(map("first", "<Dan>", "encoding", "html"));
+        assertThat(result, is("Hello &lt;Dan&gt;"));
+    }
 }
