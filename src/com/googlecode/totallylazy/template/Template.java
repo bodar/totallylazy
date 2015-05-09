@@ -50,71 +50,68 @@ public class Template implements Renderer<Map<String, Object>> {
 
     Appendable append(Object expression, Map<String, Object> context, Appendable appendable) throws Exception {
         if(expression instanceof CharSequence) return appendable.append(((CharSequence) expression));
-        if(expression instanceof Attribute) return parent.render(attribute((Attribute) expression, context), appendable);
-        if(expression instanceof FunctionCall){
-            FunctionCall functionCall = (FunctionCall) expression;
-            return parent.get(indirection(functionCall.expression(), context)).render(arguments(functionCall.arguments(), context), appendable);
-        }
-        if(expression instanceof AnonymousTemplate) {
-            AnonymousTemplate anonymousTemplate = (AnonymousTemplate) expression;
-            return new Template(anonymousTemplate.template(), parent).render(context, appendable);
-        }
-        if(expression instanceof Mapping){
-            Mapping mapping = (Mapping) expression;
-            AnonymousTemplate anonymousTemplate = (AnonymousTemplate) mapping.expression();
-            Object value = attribute(mapping.attribute(), context);
-            if(value instanceof Map) return appendPairs(anonymousTemplate, Maps.pairs(cast(value)), appendable);
-            if(value instanceof Iterable) return appendIterable(anonymousTemplate, (Iterable<?>) value, appendable);
-            return appendIterable(anonymousTemplate, one(value), appendable);
-        }
+        if(expression instanceof Attribute) return parent.render(value((Attribute) expression, context), appendable);
+        if(expression instanceof FunctionCall) return append((FunctionCall) expression, context, appendable);
+        if(expression instanceof Indirection) return append(((Indirection) expression).expression(), context, appendable);
+        if(expression instanceof AnonymousTemplate) return append((AnonymousTemplate) expression, context, appendable);
+        if(expression instanceof Mapping) return append((Mapping) expression, context, appendable);
         throw new IllegalArgumentException("Unknown expression type: " + expression);
     }
 
-    private String indirection(Object value, Map<String, Object> context) {
-        if(value instanceof Indirection) return indirection(((Indirection) value).expression(), context);
-        if(value instanceof Attribute) return string(attribute((Attribute) value, context));
-        return string(value);
+    Appendable append(FunctionCall functionCall, Map<String, Object> context, Appendable appendable) throws Exception {
+        return parent.get(name(functionCall.expression(), context)).render(value((Object) functionCall.arguments(), context), appendable);
     }
 
-    private Object attribute(Attribute attribute, Map<String, Object> context) {
-        return sequence(attribute.value()).fold(context, (Object container, Object name) -> {
-            if(container instanceof Map) return ((Map<?,?>) container).get(name);
-            return container;
-        });
+    Appendable append(AnonymousTemplate anonymousTemplate, Map<String, Object> context, Appendable appendable) throws Exception {
+        return new Template(anonymousTemplate.template(), parent).render(context, appendable);
     }
 
-    private Appendable appendIterable(AnonymousTemplate anonymousTemplate, Iterable<?> values, Appendable appendable) throws Exception {
+    Appendable append(Mapping mapping, Map<String, Object> context, Appendable appendable) throws Exception {AnonymousTemplate anonymousTemplate = mapping.expression();
+        Object value = value(mapping.attribute(), context);
+        if(value instanceof Map) return appendPairs(anonymousTemplate, Maps.pairs(cast(value)), appendable);
+        if(value instanceof Iterable) return appendIterable(anonymousTemplate, (Iterable<?>) value, appendable);
+        return appendIterable(anonymousTemplate, one(value), appendable);
+    }
+
+    Appendable appendIterable(AnonymousTemplate anonymousTemplate, Iterable<?> values, Appendable appendable) throws Exception {
         return appendPairs(anonymousTemplate, sequence(values).zipWithIndex(), appendable);
     }
 
-    private Appendable appendPairs(AnonymousTemplate anonymousTemplate, Iterable<? extends Pair<?, ?>> pairs, Appendable appendable) throws Exception {
+    Appendable appendPairs(AnonymousTemplate anonymousTemplate, Iterable<? extends Pair<?, ?>> pairs, Appendable appendable) throws Exception {
         return sequence(pairs).fold(appendable, (a, p) ->
                 append(anonymousTemplate,
                         map(sequence(anonymousTemplate.paramaeterNames()).zip(sequence(p.second(), p.first()))), a));
     }
 
-    private Object arguments(Object arguments, Map<String, Object> context) throws Exception {
-        if(arguments instanceof List) {
-            List<?> list = (List<?>) arguments;
-            if(list.isEmpty()) return context;
-            if(list.size() == 1) return value(list.get(0), context);
-            return sequence(list).map(arg -> value(arg, context)).toList();
-        }
-        if(arguments instanceof Map) {
-            Map<?, ?> map = (Map<?, ?>) arguments;
-            return mapValues(map, n -> value(n, context));
-        }
-        throw new IllegalArgumentException("Unknown arguments type: " + arguments);
+    String name(Object value, Map<String, Object> context) throws Exception {
+        return string(value(value, context));
     }
 
     Object value(Object value, Map<String, Object> context) throws Exception {
         if(value instanceof CharSequence) return value;
-        if(value instanceof Attribute) return attribute((Attribute) value, context);
-        if(value instanceof FunctionCall) {
-            FunctionCall functionCall = (FunctionCall) value;
-            return parent.get(indirection(functionCall.expression(), context)).render(arguments(functionCall.arguments(), context));
-        }
+        if(value instanceof Attribute) return value((Attribute) value, context);
+        if(value instanceof FunctionCall) return value((FunctionCall) value, context);
+        if(value instanceof Indirection) return value(((Indirection) value).expression(), context);
+        if(value instanceof List) return value((List<?>) value, context);
+        if(value instanceof Map) return mapValues((Map<?, ?>) value, n -> value(n, context));
         throw new IllegalArgumentException("Unknown value type: " + value);
+    }
+
+    String value(FunctionCall functionCall, Map<String, Object> context) throws Exception {
+        return parent.get(name(functionCall.expression(), context)).render(value((Object) functionCall.arguments(), context));
+    }
+
+    Object value(List<?> list, Map<String, Object> context) throws Exception {
+        if(list.isEmpty()) return context;
+        if(list.size() == 1) return value(list.get(0), context);
+        return sequence(list).map(arg -> value(arg, context)).toList();
+    }
+
+    Object value(Attribute attribute, Map<String, Object> context) {
+        return sequence(attribute.value()).fold(context, (Object container, Object name) -> {
+            if(container instanceof Map) return ((Map<?,?>) container).get(name);
+            return container;
+        });
     }
 
     @Override
