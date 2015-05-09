@@ -90,14 +90,13 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     Object value(Object value, Map<String, Object> context) throws Exception {
-        if(value instanceof CharSequence) return value;
         if(value instanceof Text) return ((Text)value).charSequence();
         if(value instanceof Attribute) return value((Attribute) value, context);
         if(value instanceof FunctionCall) return value((FunctionCall) value, context);
         if(value instanceof Indirection) return value(((Indirection) value).expression(), context);
         if(value instanceof List) return value((List<?>) value, context);
         if(value instanceof Map) return mapValues((Map<?, ?>) value, n -> value(n, context));
-        throw new IllegalArgumentException("Unknown value type: " + value);
+        return value;
     }
 
     String value(FunctionCall functionCall, Map<String, Object> context) throws Exception {
