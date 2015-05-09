@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.template.ast.AnonymousTemplate;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
 import com.googlecode.totallylazy.template.ast.Grammar;
+import com.googlecode.totallylazy.template.ast.Indirection;
 import com.googlecode.totallylazy.template.ast.Mapping;
 
 import java.io.InputStream;
@@ -52,7 +53,7 @@ public class Template implements Renderer<Map<String, Object>> {
         if(expression instanceof Attribute) return parent.render(attribute((Attribute) expression, context), appendable);
         if(expression instanceof FunctionCall){
             FunctionCall functionCall = (FunctionCall) expression;
-            return parent.get(name(functionCall.name(), context)).render(arguments(functionCall.arguments(), context), appendable);
+            return parent.get(indirection(functionCall.expression(), context)).render(arguments(functionCall.arguments(), context), appendable);
         }
         if(expression instanceof AnonymousTemplate) {
             AnonymousTemplate anonymousTemplate = (AnonymousTemplate) expression;
@@ -69,9 +70,10 @@ public class Template implements Renderer<Map<String, Object>> {
         throw new IllegalArgumentException("Unknown expression type: " + expression);
     }
 
-    private String name(Object name, Map<String, Object> context) {
-        if(name instanceof Attribute) return string(attribute((Attribute) name, context));
-        return string(name);
+    private String indirection(Object value, Map<String, Object> context) {
+        if(value instanceof Indirection) return indirection(((Indirection) value).expression(), context);
+        if(value instanceof Attribute) return string(attribute((Attribute) value, context));
+        return string(value);
     }
 
     private Object attribute(Attribute attribute, Map<String, Object> context) {
@@ -110,7 +112,7 @@ public class Template implements Renderer<Map<String, Object>> {
         if(value instanceof Attribute) return attribute((Attribute) value, context);
         if(value instanceof FunctionCall) {
             FunctionCall functionCall = (FunctionCall) value;
-            return parent.get(name(functionCall.name(), context)).render(arguments(functionCall.arguments(), context));
+            return parent.get(indirection(functionCall.expression(), context)).render(arguments(functionCall.arguments(), context));
         }
         throw new IllegalArgumentException("Unknown value type: " + value);
     }

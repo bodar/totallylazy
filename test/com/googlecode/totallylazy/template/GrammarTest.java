@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.template.ast.AnonymousTemplate;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
+import com.googlecode.totallylazy.template.ast.Indirection;
 import com.googlecode.totallylazy.template.ast.Mapping;
 import org.junit.Test;
 
@@ -49,7 +50,7 @@ public class GrammarTest {
     @Test
     public void canParseFunctionCallWithNoParameters() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template()").value();
-        assertThat(unnamed.name(), is("template"));
+        assertThat(unnamed.expression(), is("template"));
         List<Attribute> arguments = unnamed.arguments();
         assertThat(arguments.isEmpty(), is(true));
     }
@@ -57,7 +58,7 @@ public class GrammarTest {
     @Test
     public void canParseFunctionCallWithNamedParameters() throws Exception {
         FunctionCall namedArguments = Grammar.FUNCTION_CALL.parse("template(foo=bar, baz=dan)").value();
-        assertThat(namedArguments.name(), is("template"));
+        assertThat(namedArguments.expression(), is("template"));
         Map<String, Attribute> arguments = namedArguments.arguments();
         assertThat(arguments.get("foo").value(), is(list("bar")));
         assertThat(arguments.get("baz").value(), is(list("dan")));
@@ -66,7 +67,7 @@ public class GrammarTest {
     @Test
     public void canParseFunctionCallImplicitParameters() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template(foo, bar, baz)").value();
-        assertThat(unnamed.name(), is("template"));
+        assertThat(unnamed.expression(), is("template"));
         List<Attribute> arguments = unnamed.arguments();
         assertThat(arguments.get(0).value(), is(list("foo")));
         assertThat(arguments.get(1).value(), is(list("bar")));
@@ -77,7 +78,7 @@ public class GrammarTest {
     @Test
     public void canParseFunctionCallLiteralParameters() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template(\"foo\")").value();
-        assertThat(unnamed.name(), is("template"));
+        assertThat(unnamed.expression(), is("template"));
         List<CharSequence> arguments = unnamed.arguments();
         assertThat(arguments.get(0).toString(), is("foo"));
     }
@@ -116,9 +117,10 @@ public class GrammarTest {
     }
 
     @Test
-    public void supportsIndirection() throws Exception {
+    public void supportsIndirectionInFunctionCall() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("(template)(foo, bar, baz)").value();
-        Attribute attribute = (Attribute) unnamed.name();
+        Indirection indirection = (Indirection) unnamed.expression();
+        Attribute attribute = (Attribute) indirection.expression();
         assertThat(attribute.value(), is(list("template")));
     }
 }

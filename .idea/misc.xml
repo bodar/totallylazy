@@ -403,7 +403,7 @@
     <option name="projectName" value="totallylazy" />
   </component>
   <component name="ProjectKey">
-    <option name="state" value="project:///projects/totallylazy/.idea/misc.xml" />
+    <option name="state" value="git@github.com:bodar/totallylazy.git" />
   </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>

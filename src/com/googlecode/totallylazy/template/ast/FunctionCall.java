@@ -12,7 +12,7 @@ public class FunctionCall implements Expression {
         this.arguments = arguments;
     }
 
-    public Object name() {
+    public Object expression() {
         return name;
     }
 

@@ -62,7 +62,7 @@ public interface Grammar {
 
     Parser<List<Object>> IMPLICIT_ARGUMENTS = VALUE.sepBy(SEPARATOR);
 
-    Parser<Attribute> INDIRECTION = ATTRIBUTE.between(isChar('('), isChar(')'));
+    Parser<Indirection> INDIRECTION = ATTRIBUTE.between(isChar('('), isChar(')')).map(Indirection::new);
 
     Parser<FunctionCall> FUNCTION_CALL =
             Parsers.or(IDENTIFIER, INDIRECTION).then(between(isChar('('), or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS), isChar(')'))).
