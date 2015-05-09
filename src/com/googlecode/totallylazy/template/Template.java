@@ -65,14 +65,15 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     Appendable append(FunctionCall functionCall, Map<String, Object> context, Appendable appendable) throws Exception {
-        return parent.get(name(functionCall.name(), context)).render(value((Object) functionCall.arguments(), context), appendable);
+        return parent.get(name(functionCall.name(), context)).render(arguments(functionCall.arguments(), context), appendable);
     }
 
     Appendable append(Anonymous anonymous, Map<String, Object> context, Appendable appendable) throws Exception {
         return new Template(anonymous.template(), parent).render(context, appendable);
     }
 
-    Appendable append(Mapping mapping, Map<String, Object> context, Appendable appendable) throws Exception {Anonymous anonymous = mapping.expression();
+    Appendable append(Mapping mapping, Map<String, Object> context, Appendable appendable) throws Exception {
+        Anonymous anonymous = mapping.expression();
         Object value = value(mapping.attribute(), context);
         if(value instanceof Map) return appendPairs(anonymous, Maps.pairs(cast(value)), appendable);
         if(value instanceof Iterable) return appendIterable(anonymous, (Iterable<?>) value, appendable);
@@ -86,7 +87,7 @@ public class Template implements Renderer<Map<String, Object>> {
     Appendable appendPairs(Anonymous anonymous, Iterable<? extends Pair<?, ?>> pairs, Appendable appendable) throws Exception {
         return sequence(pairs).fold(appendable, (a, p) ->
                 append(anonymous,
-                map(sequence(anonymous.paramaeterNames()).zip(sequence(p.second(), p.first()))), a));
+                        map(sequence(anonymous.paramaeterNames()).zip(sequence(p.second(), p.first()))), a));
     }
 
     String name(Object value, Map<String, Object> context) throws Exception {
@@ -98,27 +99,31 @@ public class Template implements Renderer<Map<String, Object>> {
         if(value instanceof Attribute) return value((Attribute) value, context);
         if(value instanceof FunctionCall) return value((FunctionCall) value, context);
         if(value instanceof Indirection) return value(((Indirection) value).expression(), context);
-        if(value instanceof ImplicitArguments) return value((ImplicitArguments) value, context);
-        if(value instanceof NamedArguments) return mapValues(((NamedArguments) value).value(), n -> value(n, context));
         return value;
     }
 
     String value(FunctionCall functionCall, Map<String, Object> context) throws Exception {
-        return parent.get(name(functionCall.name(), context)).render(value((Object) functionCall.arguments(), context));
-    }
-
-    Object value(ImplicitArguments arguments, Map<String, Object> context) throws Exception {
-        List<Expression> list = arguments.value();
-        if(list.isEmpty()) return context;
-        if(list.size() == 1) return value(list.get(0), context);
-        return sequence(list).map(arg -> value(arg, context)).toList();
+        return parent.get(name(functionCall.name(), context)).render(arguments(functionCall.arguments(), context));
     }
 
     Object value(Attribute attribute, Map<String, Object> context) {
         return sequence(attribute.value()).fold(context, (Object container, Object name) -> {
-            if(container instanceof Map) return ((Map<?,?>) container).get(name);
+            if (container instanceof Map) return ((Map<?, ?>) container).get(name);
             return container;
         });
+    }
+
+    Object arguments(Arguments<?> arguments, Map<String, Object> context) throws Exception {
+        if(arguments instanceof ImplicitArguments) return arguments((ImplicitArguments) arguments, context);
+        if(arguments instanceof NamedArguments) return mapValues(((NamedArguments) arguments).value(), n -> value(n, context));
+        throw new IllegalArgumentException("Unknown arguments type: " + arguments);
+    }
+
+    Object arguments(ImplicitArguments arguments, Map<String, Object> context) throws Exception {
+        List<Expression> list = arguments.value();
+        if(list.isEmpty()) return context;
+        if(list.size() == 1) return value(list.get(0), context);
+        return sequence(list).map(arg -> value(arg, context)).toList();
     }
 
     @Override
