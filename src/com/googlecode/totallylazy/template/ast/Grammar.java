@@ -8,7 +8,6 @@ import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Characters.alphaNumeric;
@@ -54,11 +53,11 @@ public interface Grammar {
         }
     });
 
-    Parser<Pair<String, Object>> NAMED_ARGUMENT = IDENTIFIER.followedBy(isChar('=')).then(VALUE);
+    Parser<Pair<String, Expression>> NAMED_ARGUMENT = IDENTIFIER.followedBy(isChar('=')).then(VALUE);
 
-    Parser<Map<String, Object>> NAMED_ARGUMENTS = NAMED_ARGUMENT.sepBy1(SEPARATOR).map(Maps::map);
+    Parser<NamedArguments> NAMED_ARGUMENTS = NAMED_ARGUMENT.sepBy1(SEPARATOR).map(Maps::map).map(NamedArguments::new);
 
-    Parser<List<Expression>> IMPLICIT_ARGUMENTS = VALUE.sepBy(SEPARATOR);
+    Parser<ImplicitArguments> IMPLICIT_ARGUMENTS = VALUE.sepBy(SEPARATOR).map(ImplicitArguments::new);
 
     Parser<Indirection> INDIRECTION = ATTRIBUTE.between(isChar('('), isChar(')')).map(Indirection::new);
 

@@ -3,14 +3,18 @@ package com.googlecode.totallylazy.template;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.template.ast.Anonymous;
+import com.googlecode.totallylazy.template.ast.Arguments;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Expression;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
 import com.googlecode.totallylazy.template.ast.Grammar;
+import com.googlecode.totallylazy.template.ast.ImplicitArguments;
 import com.googlecode.totallylazy.template.ast.Indirection;
 import com.googlecode.totallylazy.template.ast.Mapping;
+import com.googlecode.totallylazy.template.ast.NamedArguments;
 import com.googlecode.totallylazy.template.ast.Text;
 
+import javax.lang.model.element.Name;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -94,8 +98,8 @@ public class Template implements Renderer<Map<String, Object>> {
         if(value instanceof Attribute) return value((Attribute) value, context);
         if(value instanceof FunctionCall) return value((FunctionCall) value, context);
         if(value instanceof Indirection) return value(((Indirection) value).expression(), context);
-        if(value instanceof List) return value((List<?>) value, context);
-        if(value instanceof Map) return mapValues((Map<?, ?>) value, n -> value(n, context));
+        if(value instanceof ImplicitArguments) return value((ImplicitArguments) value, context);
+        if(value instanceof NamedArguments) return mapValues(((NamedArguments) value).value(), n -> value(n, context));
         return value;
     }
 
@@ -103,7 +107,8 @@ public class Template implements Renderer<Map<String, Object>> {
         return parent.get(name(functionCall.name(), context)).render(value((Object) functionCall.arguments(), context));
     }
 
-    Object value(List<?> list, Map<String, Object> context) throws Exception {
+    Object value(ImplicitArguments arguments, Map<String, Object> context) throws Exception {
+        List<Expression> list = arguments.value();
         if(list.isEmpty()) return context;
         if(list.size() == 1) return value(list.get(0), context);
         return sequence(list).map(arg -> value(arg, context)).toList();

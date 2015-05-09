@@ -5,9 +5,9 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class FunctionCall implements Expression {
     private final Object name;
-    private final Object arguments;
+    private final Arguments<?> arguments;
 
-    public FunctionCall(final Object name, final Object arguments) {
+    public FunctionCall(final Object name, final Arguments<?> arguments) {
         this.name = name;
         this.arguments = arguments;
     }
@@ -16,7 +16,7 @@ public class FunctionCall implements Expression {
         return name;
     }
 
-    public <T> T arguments() {
+    public Arguments<?> arguments() {
         return cast(arguments);
     }
 

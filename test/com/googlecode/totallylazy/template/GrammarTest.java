@@ -1,11 +1,15 @@
 package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.template.ast.Anonymous;
+import com.googlecode.totallylazy.template.ast.Arguments;
 import com.googlecode.totallylazy.template.ast.Attribute;
+import com.googlecode.totallylazy.template.ast.Expression;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
+import com.googlecode.totallylazy.template.ast.ImplicitArguments;
 import com.googlecode.totallylazy.template.ast.Indirection;
 import com.googlecode.totallylazy.template.ast.Mapping;
+import com.googlecode.totallylazy.template.ast.NamedArguments;
 import com.googlecode.totallylazy.template.ast.Text;
 import org.junit.Test;
 
@@ -52,27 +56,28 @@ public class GrammarTest {
     public void canParseFunctionCallWithNoParameters() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template()").value();
         assertThat(unnamed.name(), is("template"));
-        List<Attribute> arguments = unnamed.arguments();
-        assertThat(arguments.isEmpty(), is(true));
+        ImplicitArguments arguments = (ImplicitArguments) unnamed.arguments();
+        assertThat(arguments.value().isEmpty(), is(true));
     }
 
     @Test
     public void canParseFunctionCallWithNamedParameters() throws Exception {
         FunctionCall namedArguments = Grammar.FUNCTION_CALL.parse("template(foo=bar, baz=dan)").value();
         assertThat(namedArguments.name(), is("template"));
-        Map<String, Attribute> arguments = namedArguments.arguments();
-        assertThat(arguments.get("foo").value(), is(list("bar")));
-        assertThat(arguments.get("baz").value(), is(list("dan")));
+        NamedArguments arguments = (NamedArguments) namedArguments.arguments();
+        assertThat(((Attribute) arguments.value().get("foo")).value(), is(list("bar")));
+        assertThat(((Attribute) arguments.value().get("baz")).value(), is(list("dan")));
     }
 
     @Test
     public void canParseFunctionCallImplicitParameters() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template(foo, bar, baz)").value();
         assertThat(unnamed.name(), is("template"));
-        List<Attribute> arguments = unnamed.arguments();
-        assertThat(arguments.get(0).value(), is(list("foo")));
-        assertThat(arguments.get(1).value(), is(list("bar")));
-        assertThat(arguments.get(2).value(), is(list("baz")));
+        ImplicitArguments arguments = (ImplicitArguments) unnamed.arguments();
+        List<Expression> value = arguments.value();
+        assertThat(((Attribute)value.get(0)).value(), is(list("foo")));
+        assertThat(((Attribute)value.get(1)).value(), is(list("bar")));
+        assertThat(((Attribute)value.get(2)).value(), is(list("baz")));
     }
 
 
@@ -80,16 +85,16 @@ public class GrammarTest {
     public void canParseFunctionCallLiteralParameters() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template(\"foo\")").value();
         assertThat(unnamed.name(), is("template"));
-        List<Text> arguments = unnamed.arguments();
-        assertThat(arguments.get(0).charSequence().toString(), is("foo"));
+        ImplicitArguments arguments = (ImplicitArguments) unnamed.arguments();
+        assertThat(((Text)arguments.value().get(0)).charSequence().toString(), is("foo"));
     }
 
     @Test
     public void canParseImplicits() throws Exception {
-        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a").value().get(0), instanceOf(Attribute.class));
-        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().get(1), instanceOf(Attribute.class));
-        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().get(1), instanceOf(Attribute.class));
-        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("\"a\"").value().get(0), instanceOf(Text.class));
+        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a").value().value().get(0), instanceOf(Attribute.class));
+        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().value().get(1), instanceOf(Attribute.class));
+        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().value().get(1), instanceOf(Attribute.class));
+        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("\"a\"").value().value().get(0), instanceOf(Text.class));
     }
 
     @Test
