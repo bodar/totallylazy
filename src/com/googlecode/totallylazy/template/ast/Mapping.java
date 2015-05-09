@@ -2,9 +2,9 @@ package com.googlecode.totallylazy.template.ast;
 
 public class Mapping implements Expression {
     private final Attribute attribute;
-    private final AnonymousTemplate expression;
+    private final Anonymous expression;
 
-    public Mapping(Attribute attribute, AnonymousTemplate expression) {
+    public Mapping(Attribute attribute, Anonymous expression) {
         this.attribute = attribute;
         this.expression = expression;
     }
@@ -13,7 +13,7 @@ public class Mapping implements Expression {
         return attribute;
     }
 
-    public AnonymousTemplate expression() {
+    public Anonymous expression() {
         return expression;
     }
 }

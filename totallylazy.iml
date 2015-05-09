@@ -12,7 +12,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/artifacts" />
       <excludeFolder url="file://$MODULE_DIR$/lib" />
     </content>
-    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="build" level="project" />
     <orderEntry type="library" name="optional" level="project" />

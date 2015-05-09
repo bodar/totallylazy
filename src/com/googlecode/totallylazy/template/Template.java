@@ -2,12 +2,14 @@ package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.template.ast.AnonymousTemplate;
+import com.googlecode.totallylazy.template.ast.Anonymous;
 import com.googlecode.totallylazy.template.ast.Attribute;
+import com.googlecode.totallylazy.template.ast.Expression;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.Indirection;
 import com.googlecode.totallylazy.template.ast.Mapping;
+import com.googlecode.totallylazy.template.ast.Text;
 
 import java.io.InputStream;
 import java.util.List;
@@ -21,10 +23,10 @@ import static com.googlecode.totallylazy.Strings.string;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Template implements Renderer<Map<String, Object>> {
-    private final List<Object> template;
+    private final List<Expression> template;
     private final Renderers parent;
 
-    private Template(List<Object> template, Renderers parent) {
+    private Template(List<Expression> template, Renderers parent) {
         this.template = template;
         this.parent = parent;
     }
@@ -48,39 +50,39 @@ public class Template implements Renderer<Map<String, Object>> {
                 fold(appendable, (a, node) -> append(node, context, a));
     }
 
-    Appendable append(Object expression, Map<String, Object> context, Appendable appendable) throws Exception {
-        if(expression instanceof CharSequence) return appendable.append(((CharSequence) expression));
+    Appendable append(Expression expression, Map<String, Object> context, Appendable appendable) throws Exception {
+        if(expression instanceof Text) return appendable.append(((Text) expression).charSequence());
         if(expression instanceof Attribute) return parent.render(value((Attribute) expression, context), appendable);
         if(expression instanceof FunctionCall) return append((FunctionCall) expression, context, appendable);
         if(expression instanceof Indirection) return append(((Indirection) expression).expression(), context, appendable);
-        if(expression instanceof AnonymousTemplate) return append((AnonymousTemplate) expression, context, appendable);
+        if(expression instanceof Anonymous) return append((Anonymous) expression, context, appendable);
         if(expression instanceof Mapping) return append((Mapping) expression, context, appendable);
         throw new IllegalArgumentException("Unknown expression type: " + expression);
     }
 
     Appendable append(FunctionCall functionCall, Map<String, Object> context, Appendable appendable) throws Exception {
-        return parent.get(name(functionCall.expression(), context)).render(value((Object) functionCall.arguments(), context), appendable);
+        return parent.get(name(functionCall.name(), context)).render(value((Object) functionCall.arguments(), context), appendable);
     }
 
-    Appendable append(AnonymousTemplate anonymousTemplate, Map<String, Object> context, Appendable appendable) throws Exception {
-        return new Template(anonymousTemplate.template(), parent).render(context, appendable);
+    Appendable append(Anonymous anonymous, Map<String, Object> context, Appendable appendable) throws Exception {
+        return new Template(anonymous.template(), parent).render(context, appendable);
     }
 
-    Appendable append(Mapping mapping, Map<String, Object> context, Appendable appendable) throws Exception {AnonymousTemplate anonymousTemplate = mapping.expression();
+    Appendable append(Mapping mapping, Map<String, Object> context, Appendable appendable) throws Exception {Anonymous anonymous = mapping.expression();
         Object value = value(mapping.attribute(), context);
-        if(value instanceof Map) return appendPairs(anonymousTemplate, Maps.pairs(cast(value)), appendable);
-        if(value instanceof Iterable) return appendIterable(anonymousTemplate, (Iterable<?>) value, appendable);
-        return appendIterable(anonymousTemplate, one(value), appendable);
+        if(value instanceof Map) return appendPairs(anonymous, Maps.pairs(cast(value)), appendable);
+        if(value instanceof Iterable) return appendIterable(anonymous, (Iterable<?>) value, appendable);
+        return appendIterable(anonymous, one(value), appendable);
     }
 
-    Appendable appendIterable(AnonymousTemplate anonymousTemplate, Iterable<?> values, Appendable appendable) throws Exception {
-        return appendPairs(anonymousTemplate, sequence(values).zipWithIndex(), appendable);
+    Appendable appendIterable(Anonymous anonymous, Iterable<?> values, Appendable appendable) throws Exception {
+        return appendPairs(anonymous, sequence(values).zipWithIndex(), appendable);
     }
 
-    Appendable appendPairs(AnonymousTemplate anonymousTemplate, Iterable<? extends Pair<?, ?>> pairs, Appendable appendable) throws Exception {
+    Appendable appendPairs(Anonymous anonymous, Iterable<? extends Pair<?, ?>> pairs, Appendable appendable) throws Exception {
         return sequence(pairs).fold(appendable, (a, p) ->
-                append(anonymousTemplate,
-                        map(sequence(anonymousTemplate.paramaeterNames()).zip(sequence(p.second(), p.first()))), a));
+                append(anonymous,
+                map(sequence(anonymous.paramaeterNames()).zip(sequence(p.second(), p.first()))), a));
     }
 
     String name(Object value, Map<String, Object> context) throws Exception {
@@ -89,6 +91,7 @@ public class Template implements Renderer<Map<String, Object>> {
 
     Object value(Object value, Map<String, Object> context) throws Exception {
         if(value instanceof CharSequence) return value;
+        if(value instanceof Text) return ((Text)value).charSequence();
         if(value instanceof Attribute) return value((Attribute) value, context);
         if(value instanceof FunctionCall) return value((FunctionCall) value, context);
         if(value instanceof Indirection) return value(((Indirection) value).expression(), context);
@@ -98,7 +101,7 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     String value(FunctionCall functionCall, Map<String, Object> context) throws Exception {
-        return parent.get(name(functionCall.expression(), context)).render(value((Object) functionCall.arguments(), context));
+        return parent.get(name(functionCall.name(), context)).render(value((Object) functionCall.arguments(), context));
     }
 
     Object value(List<?> list, Map<String, Object> context) throws Exception {

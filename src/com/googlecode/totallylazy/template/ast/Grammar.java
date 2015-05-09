@@ -12,13 +12,11 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Characters.alphaNumeric;
-import static com.googlecode.totallylazy.Characters.among;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.parser.Parsers.between;
 import static com.googlecode.totallylazy.parser.Parsers.isChar;
 import static com.googlecode.totallylazy.parser.Parsers.or;
-import static com.googlecode.totallylazy.parser.Parsers.returns;
 import static com.googlecode.totallylazy.parser.Parsers.ws;
 import static com.googlecode.totallylazy.parser.Parsers.wsChar;
 
@@ -32,19 +30,19 @@ public interface Grammar {
     char DELIMETER = '$';
 
     Parser<Attribute> ATTRIBUTE = IDENTIFIER.sepBy1(isChar('.')).map(Attribute::new);
-    Parser<CharSequence> TEXT = textExcept(is(DELIMETER).or(is('}')));
-    Parser<CharSequence> SINGLE_QUOTED = between(SINGLE_QUOTE, textExcept('\''), SINGLE_QUOTE);
-    Parser<CharSequence> DOUBLE_QUOTED = between(DOUBLE_QUOTE, textExcept('"'), DOUBLE_QUOTE);
-    Parser<CharSequence> LITERAL = SINGLE_QUOTED.or(DOUBLE_QUOTED);
+    Parser<Text> TEXT = textExcept(is(DELIMETER).or(is('}')));
+    Parser<Text> SINGLE_QUOTED = between(SINGLE_QUOTE, textExcept('\''), SINGLE_QUOTE);
+    Parser<Text> DOUBLE_QUOTED = between(DOUBLE_QUOTE, textExcept('"'), DOUBLE_QUOTE);
+    Parser<Text> LITERAL = SINGLE_QUOTED.or(DOUBLE_QUOTED);
 
-    static Parser<CharSequence> textExcept(char c) {return textExcept(is(c));}
-    static Parser<CharSequence> textExcept(Predicate<Character> predicate) {
-        return Parsers.characters(not(predicate));
+    static Parser<Text> textExcept(char c) {return textExcept(is(c));}
+    static Parser<Text> textExcept(Predicate<Character> predicate) {
+        return Parsers.characters(not(predicate)).map(Text::new);
     }
     
-    Parser<Object> VALUE = Parsers.lazy(new Callable<Parse<Object>>() {
+    Parser<Expression> VALUE = Parsers.lazy(new Callable<Parse<Expression>>() {
         @Override
-        public Parse<Object> call() throws Exception {
+        public Parse<Expression> call() throws Exception {
             return ws(or(LITERAL, FUNCTION_CALL, ATTRIBUTE));
         }
     });
@@ -60,7 +58,7 @@ public interface Grammar {
 
     Parser<Map<String, Object>> NAMED_ARGUMENTS = NAMED_ARGUMENT.sepBy1(SEPARATOR).map(Maps::map);
 
-    Parser<List<Object>> IMPLICIT_ARGUMENTS = VALUE.sepBy(SEPARATOR);
+    Parser<List<Expression>> IMPLICIT_ARGUMENTS = VALUE.sepBy(SEPARATOR);
 
     Parser<Indirection> INDIRECTION = ATTRIBUTE.between(isChar('('), isChar(')')).map(Indirection::new);
 
@@ -68,11 +66,11 @@ public interface Grammar {
             Parsers.or(IDENTIFIER, INDIRECTION).then(between(isChar('('), or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS), isChar(')'))).
             map(pair -> new FunctionCall(pair.first(), pair.second()));
 
-    Parser<List<Object>> TEMPLATE = or(EXPRESSION, TEXT).many1();
+    Parser<List<Expression>> TEMPLATE = or(EXPRESSION, TEXT).many1();
 
     Parser<List<String>> PARAMETERS_NAMES = IDENTIFIER.sepBy1(SEPARATOR);
-    Parser<AnonymousTemplate> ANONYMOUS_TEMPLATE = between(wsChar('{'), PARAMETERS_NAMES.followedBy(wsChar('|')).then(TEMPLATE) , wsChar('}')).
-            map(pair -> new AnonymousTemplate(pair.first(), pair.second()));
+    Parser<Anonymous> ANONYMOUS_TEMPLATE = between(wsChar('{'), PARAMETERS_NAMES.followedBy(wsChar('|')).then(TEMPLATE) , wsChar('}')).
+            map(pair -> new Anonymous(pair.first(), pair.second()));
 
     Parser<Mapping> MAPPING = ATTRIBUTE.followedBy(isChar(':')).then(ANONYMOUS_TEMPLATE).
             map(pair -> new Mapping(pair.first(), pair.second()));

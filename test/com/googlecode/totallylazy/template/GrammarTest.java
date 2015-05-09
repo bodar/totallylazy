@@ -1,11 +1,12 @@
 package com.googlecode.totallylazy.template;
 
-import com.googlecode.totallylazy.template.ast.AnonymousTemplate;
+import com.googlecode.totallylazy.template.ast.Anonymous;
 import com.googlecode.totallylazy.template.ast.Attribute;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
 import com.googlecode.totallylazy.template.ast.Indirection;
 import com.googlecode.totallylazy.template.ast.Mapping;
+import com.googlecode.totallylazy.template.ast.Text;
 import org.junit.Test;
 
 import java.util.List;
@@ -31,14 +32,14 @@ public class GrammarTest {
 
     @Test
     public void canParseText() throws Exception {
-        CharSequence text = Grammar.TEXT.parse("Some other text").value();
-        assertThat(text.toString(), is("Some other text"));
+        Text text = Grammar.TEXT.parse("Some other text").value();
+        assertThat(text.charSequence().toString(), is("Some other text"));
     }
 
     @Test
     public void literalCanBeSingleOrDoubleQuoted() throws Exception {
-        assertThat(Grammar.LITERAL.parse("\"foo\"").value().toString(), is("foo"));
-        assertThat(Grammar.LITERAL.parse("'foo'").value().toString(), is("foo"));
+        assertThat(Grammar.LITERAL.parse("\"foo\"").value().charSequence().toString(), is("foo"));
+        assertThat(Grammar.LITERAL.parse("'foo'").value().charSequence().toString(), is("foo"));
     }
 
     @Test
@@ -50,7 +51,7 @@ public class GrammarTest {
     @Test
     public void canParseFunctionCallWithNoParameters() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template()").value();
-        assertThat(unnamed.expression(), is("template"));
+        assertThat(unnamed.name(), is("template"));
         List<Attribute> arguments = unnamed.arguments();
         assertThat(arguments.isEmpty(), is(true));
     }
@@ -58,7 +59,7 @@ public class GrammarTest {
     @Test
     public void canParseFunctionCallWithNamedParameters() throws Exception {
         FunctionCall namedArguments = Grammar.FUNCTION_CALL.parse("template(foo=bar, baz=dan)").value();
-        assertThat(namedArguments.expression(), is("template"));
+        assertThat(namedArguments.name(), is("template"));
         Map<String, Attribute> arguments = namedArguments.arguments();
         assertThat(arguments.get("foo").value(), is(list("bar")));
         assertThat(arguments.get("baz").value(), is(list("dan")));
@@ -67,7 +68,7 @@ public class GrammarTest {
     @Test
     public void canParseFunctionCallImplicitParameters() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template(foo, bar, baz)").value();
-        assertThat(unnamed.expression(), is("template"));
+        assertThat(unnamed.name(), is("template"));
         List<Attribute> arguments = unnamed.arguments();
         assertThat(arguments.get(0).value(), is(list("foo")));
         assertThat(arguments.get(1).value(), is(list("bar")));
@@ -78,9 +79,9 @@ public class GrammarTest {
     @Test
     public void canParseFunctionCallLiteralParameters() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("template(\"foo\")").value();
-        assertThat(unnamed.expression(), is("template"));
-        List<CharSequence> arguments = unnamed.arguments();
-        assertThat(arguments.get(0).toString(), is("foo"));
+        assertThat(unnamed.name(), is("template"));
+        List<Text> arguments = unnamed.arguments();
+        assertThat(arguments.get(0).charSequence().toString(), is("foo"));
     }
 
     @Test
@@ -88,24 +89,24 @@ public class GrammarTest {
         assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a").value().get(0), instanceOf(Attribute.class));
         assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().get(1), instanceOf(Attribute.class));
         assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("a,b").value().get(1), instanceOf(Attribute.class));
-        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("\"a\"").value().get(0), instanceOf(CharSequence.class));
+        assertThat(Grammar.IMPLICIT_ARGUMENTS.parse("\"a\"").value().get(0), instanceOf(Text.class));
     }
 
     @Test
     public void canParseValue() throws Exception {
         assertThat(Grammar.VALUE.parse("a").value(), instanceOf(Attribute.class));
-        assertThat(Grammar.VALUE.parse("\"a\"").value(), instanceOf(CharSequence.class));
+        assertThat(Grammar.VALUE.parse("\"a\"").value(), instanceOf(Text.class));
     }
 
     @Test
     public void canParseLiteral() throws Exception {
-        CharSequence text = Grammar.LITERAL.parse("\"Some other text\"").value();
-        assertThat(text.toString(), is("Some other text"));
+        Text text = Grammar.LITERAL.parse("\"Some other text\"").value();
+        assertThat(text.charSequence().toString(), is("Some other text"));
     }
 
     @Test
     public void canParseAnonymousTemplate() throws Exception {
-        AnonymousTemplate template = Grammar.ANONYMOUS_TEMPLATE.parse("{ name | Hello $name$ }").value();
+        Anonymous template = Grammar.ANONYMOUS_TEMPLATE.parse("{ name | Hello $name$ }").value();
         assertThat(template.paramaeterNames(), is(list("name")));
     }
 
@@ -113,13 +114,13 @@ public class GrammarTest {
     public void supportsMapping() throws Exception {
         Mapping mapping = Grammar.MAPPING.parse("users:{ user | Hello $user$ }").value();
         assertThat(mapping.attribute().value(), is(list("users")));
-        assertThat(mapping.expression(), is(instanceOf(AnonymousTemplate.class)));
+        assertThat(mapping.expression(), is(instanceOf(Anonymous.class)));
     }
 
     @Test
     public void supportsIndirectionInFunctionCall() throws Exception {
         FunctionCall unnamed = Grammar.FUNCTION_CALL.parse("(template)(foo, bar, baz)").value();
-        Indirection indirection = (Indirection) unnamed.expression();
+        Indirection indirection = (Indirection) unnamed.name();
         Attribute attribute = (Attribute) indirection.expression();
         assertThat(attribute.value(), is(list("template")));
     }

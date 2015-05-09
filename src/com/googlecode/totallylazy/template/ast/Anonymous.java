@@ -4,11 +4,11 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class AnonymousTemplate implements Expression {
+public class Anonymous implements Expression {
     private final List<String> paramaeterNames;
-    private final List<Object> template;
+    private final List<Expression> template;
 
-    public AnonymousTemplate(List<String> paramaeterNames, List<Object> template) {
+    public Anonymous(List<String> paramaeterNames, List<Expression> template) {
         this.paramaeterNames = paramaeterNames;
         this.template = template;
     }
@@ -17,7 +17,7 @@ public class AnonymousTemplate implements Expression {
         return paramaeterNames;
     }
 
-    public List<Object> template() {
+    public List<Expression> template() {
         return template;
     }
 
