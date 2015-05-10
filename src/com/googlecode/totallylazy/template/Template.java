@@ -11,10 +11,10 @@ import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.ImplicitArguments;
 import com.googlecode.totallylazy.template.ast.Indirection;
 import com.googlecode.totallylazy.template.ast.Mapping;
+import com.googlecode.totallylazy.template.ast.Name;
 import com.googlecode.totallylazy.template.ast.NamedArguments;
 import com.googlecode.totallylazy.template.ast.Text;
 
-import javax.lang.model.element.Name;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -55,13 +55,17 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     Appendable append(Expression expression, Map<String, Object> context, Appendable appendable) throws Exception {
-        if(expression instanceof Text) return appendable.append(((Text) expression).charSequence());
-        if(expression instanceof Attribute) return parent.render(value((Attribute) expression, context), appendable);
+        if(expression instanceof Text) return appendable.append(((Text) expression).value());
+        if(expression instanceof Attribute) return append((Attribute) expression, context, appendable);
         if(expression instanceof FunctionCall) return append((FunctionCall) expression, context, appendable);
-        if(expression instanceof Indirection) return append(((Indirection) expression).expression(), context, appendable);
+        if(expression instanceof Indirection) return append(((Indirection) expression).value(), context, appendable);
         if(expression instanceof Anonymous) return append((Anonymous) expression, context, appendable);
         if(expression instanceof Mapping) return append((Mapping) expression, context, appendable);
         throw new IllegalArgumentException("Unknown expression type: " + expression);
+    }
+
+    Appendable append(Attribute attribute, Map<String, Object> context, Appendable appendable) throws Exception {
+        return parent.render(value(attribute, context), appendable);
     }
 
     Appendable append(FunctionCall functionCall, Map<String, Object> context, Appendable appendable) throws Exception {
@@ -90,15 +94,18 @@ public class Template implements Renderer<Map<String, Object>> {
                         map(sequence(anonymous.paramaeterNames()).zip(sequence(p.second(), p.first()))), a));
     }
 
-    String name(Object value, Map<String, Object> context) throws Exception {
-        return string(value(value, context));
+    String name(Expression value, Map<String, Object> context) throws Exception {
+        if(value instanceof Name) return ((Name) value).value();
+        if(value instanceof Indirection) return string(value(value, context));
+        throw new IllegalArgumentException("Unknown name type: " + value);
     }
 
-    Object value(Object value, Map<String, Object> context) throws Exception {
-        if(value instanceof Text) return ((Text)value).charSequence();
+    Object value(Expression value, Map<String, Object> context) throws Exception {
+        if(value instanceof Text) return ((Text)value).value();
+        if(value instanceof Name) return context.get(((Name) value).value());
         if(value instanceof Attribute) return value((Attribute) value, context);
         if(value instanceof FunctionCall) return value((FunctionCall) value, context);
-        if(value instanceof Indirection) return value(((Indirection) value).expression(), context);
+        if(value instanceof Indirection) return value(((Indirection) value).value(), context);
         return value;
     }
 
@@ -107,9 +114,9 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     Object value(Attribute attribute, Map<String, Object> context) {
-        return sequence(attribute.value()).fold(context, (Object container, Object name) -> {
-            if (container instanceof Map) return ((Map<?, ?>) container).get(name);
-            return container;
+        return sequence(attribute.value()).fold(context, (Object container, Expression name) -> {
+            if (container instanceof Map) return value(name, context);
+            throw new IllegalArgumentException("Unknown container type: " + container);
         });
     }
 

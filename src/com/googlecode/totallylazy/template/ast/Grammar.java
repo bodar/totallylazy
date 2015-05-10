@@ -28,7 +28,7 @@ public interface Grammar {
 
     char DELIMETER = '$';
 
-    Parser<Attribute> ATTRIBUTE = IDENTIFIER.sepBy1(isChar('.')).map(Attribute::new);
+    Parser<Name> NAME = IDENTIFIER.map(Name::name);
     Parser<Text> TEXT = textExcept(is(DELIMETER).or(is('}')));
     Parser<Text> SINGLE_QUOTED = between(SINGLE_QUOTE, textExcept('\''), SINGLE_QUOTE);
     Parser<Text> DOUBLE_QUOTED = between(DOUBLE_QUOTE, textExcept('"'), DOUBLE_QUOTE);
@@ -36,9 +36,9 @@ public interface Grammar {
 
     static Parser<Text> textExcept(char c) {return textExcept(is(c));}
     static Parser<Text> textExcept(Predicate<Character> predicate) {
-        return Parsers.characters(not(predicate)).map(Text::new);
+        return Parsers.characters(not(predicate)).map(Text::text);
     }
-    
+
     Parser<Expression> VALUE = Parsers.lazy(new Callable<Parse<Expression>>() {
         @Override
         public Parse<Expression> call() throws Exception {
@@ -49,29 +49,38 @@ public interface Grammar {
     Parser<Expression> EXPRESSION = Parsers.lazy(new Callable<Parse<Expression>>() {
         @Override
         public Parse<Expression> call() throws Exception {
-            return or(FUNCTION_CALL, MAPPING, ATTRIBUTE).surroundedBy(isChar(DELIMETER));
+            return Parsers.<Expression>or(FUNCTION_CALL, MAPPING, ATTRIBUTE).surroundedBy(isChar(DELIMETER));
         }
     });
 
+    Parser<Expression> NAMES = Parsers.lazy(new Callable<Parse<Expression>>() {
+        @Override
+        public Parse<Expression> call() throws Exception {
+            return or(NAME, INDIRECTION);
+        }
+    });
+
+    Parser<Attribute> ATTRIBUTE = NAMES.sepBy1(isChar('.')).map(Attribute::attribute);
+
     Parser<Pair<String, Expression>> NAMED_ARGUMENT = IDENTIFIER.followedBy(isChar('=')).then(VALUE);
 
-    Parser<NamedArguments> NAMED_ARGUMENTS = NAMED_ARGUMENT.sepBy1(SEPARATOR).map(Maps::map).map(NamedArguments::new);
+    Parser<NamedArguments> NAMED_ARGUMENTS = NAMED_ARGUMENT.sepBy1(SEPARATOR).map(Maps::map).map(NamedArguments::namedArguments);
 
-    Parser<ImplicitArguments> IMPLICIT_ARGUMENTS = VALUE.sepBy(SEPARATOR).map(ImplicitArguments::new);
+    Parser<ImplicitArguments> IMPLICIT_ARGUMENTS = VALUE.sepBy(SEPARATOR).map(ImplicitArguments::implicitArguments);
 
-    Parser<Indirection> INDIRECTION = ATTRIBUTE.between(isChar('('), isChar(')')).map(Indirection::new);
+    Parser<Indirection> INDIRECTION = ATTRIBUTE.between(isChar('('), isChar(')')).map(Indirection::indirection);
 
     Parser<FunctionCall> FUNCTION_CALL =
-            Parsers.or(IDENTIFIER, INDIRECTION).then(between(isChar('('), or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS), isChar(')'))).
-            map(pair -> new FunctionCall(pair.first(), pair.second()));
+            NAMES.then(between(isChar('('), or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS), isChar(')'))).
+            map(pair -> FunctionCall.functionCall(pair.first(), pair.second()));
 
     Parser<List<Expression>> TEMPLATE = or(EXPRESSION, TEXT).many1();
 
     Parser<List<String>> PARAMETERS_NAMES = IDENTIFIER.sepBy1(SEPARATOR);
     Parser<Anonymous> ANONYMOUS_TEMPLATE = between(wsChar('{'), PARAMETERS_NAMES.followedBy(wsChar('|')).then(TEMPLATE) , wsChar('}')).
-            map(pair -> new Anonymous(pair.first(), pair.second()));
+            map(pair -> Anonymous.anonymous(pair.first(), pair.second()));
 
     Parser<Mapping> MAPPING = ATTRIBUTE.followedBy(isChar(':')).then(ANONYMOUS_TEMPLATE).
-            map(pair -> new Mapping(pair.first(), pair.second()));
+            map(pair -> Mapping.mapping(pair.first(), pair.second()));
 
 }

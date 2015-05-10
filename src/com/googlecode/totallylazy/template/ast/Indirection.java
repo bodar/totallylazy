@@ -1,13 +1,11 @@
 package com.googlecode.totallylazy.template.ast;
 
-public class Indirection implements Expression {
-    private final Expression expression;
+import com.googlecode.totallylazy.Value;
 
-    public Indirection(Expression expression) {
-        this.expression = expression;
+public class Indirection extends Value.Type<Expression> implements Expression {
+    private Indirection(Expression value) {
+        super(value);
     }
 
-    public Expression expression() {
-        return expression;
-    }
+    public static Indirection indirection(Expression value) {return new Indirection(value);}
 }

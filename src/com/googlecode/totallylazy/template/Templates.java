@@ -51,12 +51,8 @@ public class Templates implements Renderers {
     }
 
     public <T> Templates add(Predicate<? super T> predicate, Callable1<? super T, ? extends CharSequence> renderer) {
-        return add(predicate, new Renderer<T>() {
-            @Override
-            public Appendable render(T instance, Appendable appendable) throws Exception {
-                return appendable.append(renderer.call(instance));
-            }
-        });
+        return add(predicate, (instance, appendable) ->
+                appendable.append(renderer.call(instance)));
     }
 
     public Templates add(String name, Renderer<?> callable) {

@@ -1,18 +1,21 @@
 package com.googlecode.totallylazy.template.ast;
 
-public class Text implements Expression {
-    private CharSequence charSequence;
+import com.googlecode.totallylazy.Characters;
+import com.googlecode.totallylazy.Value;
+import com.googlecode.totallylazy.annotations.multimethod;
 
-    public Text(CharSequence charSequence) {
-        this.charSequence = charSequence;
-    }
+public class Text extends Value.Type<CharSequence> implements Expression {
+    private Text(CharSequence value) { super(value); }
 
-    public CharSequence charSequence() {
-        return charSequence;
+    public static Text text(CharSequence value) {return new Text(value);}
+
+    @multimethod
+    public boolean equals(Text other) {
+        return Characters.equals(value, other.value);
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" + charSequence() + ")";
+    public int hashCode() {
+        return Characters.hashCode(value);
     }
 }
