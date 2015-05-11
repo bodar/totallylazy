@@ -66,4 +66,11 @@ public class TemplateTest {
         String result = template.render(map("user", map("name","Dan", "age", 12)));
         assertThat(result, is("Dan 12 "));
     }
+
+    @Test
+    public void supportsIndirection() throws Exception {
+        Template template = template("$(method)$");
+        String result = template.render(map("method", "PUT", "PUT", "Indirect"));
+        assertThat(result, is("Indirect"));
+    }
 }

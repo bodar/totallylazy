@@ -96,17 +96,17 @@ public class Template implements Renderer<Map<String, Object>> {
 
     String name(Expression value, Map<String, Object> context) throws Exception {
         if(value instanceof Name) return ((Name) value).value();
-        if(value instanceof Indirection) return string(value(value, context));
+        if(value instanceof Indirection) return string(value(((Indirection) value).value(), context));
         throw new IllegalArgumentException("Unknown name type: " + value);
     }
 
     Object value(Expression value, Map<String, Object> context) throws Exception {
         if(value instanceof Text) return ((Text)value).value();
-        if(value instanceof Name) return context.get(((Name) value).value());
+        if(value instanceof Name) return context.get(name(value, context));
+        if(value instanceof Indirection) return context.get(name(value, context));
         if(value instanceof Attribute) return value((Attribute) value, context);
         if(value instanceof FunctionCall) return value((FunctionCall) value, context);
-        if(value instanceof Indirection) return value(((Indirection) value).value(), context);
-        return value;
+        throw new IllegalArgumentException("Unknown value type: " + value);
     }
 
     String value(FunctionCall functionCall, Map<String, Object> context) throws Exception {
@@ -115,7 +115,7 @@ public class Template implements Renderer<Map<String, Object>> {
 
     Object value(Attribute attribute, Map<String, Object> context) {
         return sequence(attribute.value()).fold(context, (Object container, Expression name) -> {
-            if (container instanceof Map) return value(name, context);
+            if (container instanceof Map) return value(name, cast(container));
             throw new IllegalArgumentException("Unknown container type: " + container);
         });
     }
