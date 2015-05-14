@@ -56,7 +56,7 @@ public class TemplateTest {
     @Test
     public void supportsMappingMaps() throws Exception {
         Template template = template("$user:{ value, key | $key$ $value$, }$");
-        String result = template.render(map("user", map("name","Dan", "age", 12)));
+        String result = template.render(map("user", map("name", "Dan", "age", 12)));
         assertThat(result, is("name Dan, age 12, "));
     }
 
@@ -71,6 +71,13 @@ public class TemplateTest {
     public void supportsIndirection() throws Exception {
         Template template = template("$(method)$");
         String result = template.render(map("method", "PUT", "PUT", "Indirect"));
+        assertThat(result, is("Indirect"));
+    }
+
+    @Test
+    public void supportsIndirectionWithAnonymousTemplate() throws Exception {
+        Template template = template("$({a-$name$-c})$");
+        String result = template.render(map("name", "b", "a-b-c", "Indirect"));
         assertThat(result, is("Indirect"));
     }
 }

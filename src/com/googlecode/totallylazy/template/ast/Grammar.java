@@ -10,6 +10,7 @@ import com.googlecode.totallylazy.parser.Parsers;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Characters.alphaNumeric;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
@@ -68,7 +69,6 @@ public interface Grammar {
 
     Parser<ImplicitArguments> IMPLICIT_ARGUMENTS = VALUE.sepBy(SEPARATOR).map(ImplicitArguments::implicitArguments);
 
-    Parser<Indirection> INDIRECTION = ATTRIBUTE.between(isChar('('), isChar(')')).map(Indirection::indirection);
 
     Parser<FunctionCall> FUNCTION_CALL =
             NAMES.then(between(isChar('('), or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS), isChar(')'))).
@@ -77,10 +77,14 @@ public interface Grammar {
     Parser<List<Expression>> TEMPLATE = or(EXPRESSION, TEXT).many1();
 
     Parser<List<String>> PARAMETERS_NAMES = IDENTIFIER.sepBy1(SEPARATOR);
-    Parser<Anonymous> ANONYMOUS_TEMPLATE = between(wsChar('{'), PARAMETERS_NAMES.followedBy(wsChar('|')).then(TEMPLATE) , wsChar('}')).
+    Parser<Anonymous> ANONYMOUS_TEMPLATE = between(wsChar('{'),
+            PARAMETERS_NAMES.followedBy(wsChar('|')).optional().map(o -> o.getOrElse(list())).
+            then(TEMPLATE) , wsChar('}')).
             map(pair -> Anonymous.anonymous(pair.first(), pair.second()));
 
     Parser<Mapping> MAPPING = ATTRIBUTE.followedBy(isChar(':')).then(ANONYMOUS_TEMPLATE).
             map(pair -> Mapping.mapping(pair.first(), pair.second()));
 
+    Parser<Indirection> INDIRECTION = Parsers.<Expression>or(ATTRIBUTE, ANONYMOUS_TEMPLATE).between(isChar('('), isChar(')')).
+            map(Indirection::indirection);
 }

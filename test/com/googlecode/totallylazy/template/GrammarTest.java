@@ -111,6 +111,12 @@ public class GrammarTest {
     }
 
     @Test
+    public void anonymousTemplateCanHaveNoArguments() throws Exception {
+        Anonymous template = Grammar.ANONYMOUS_TEMPLATE.parse("{Hello $name$ }").value();
+        assertThat(template.paramaeterNames(), is(list()));
+    }
+
+    @Test
     public void supportsMapping() throws Exception {
         Mapping mapping = Grammar.MAPPING.parse("users:{ user | Hello $user$ }").value();
         assertThat(mapping.attribute(), is(attribute(name("users"))));

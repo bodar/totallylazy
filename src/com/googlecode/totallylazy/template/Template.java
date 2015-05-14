@@ -106,7 +106,12 @@ public class Template implements Renderer<Map<String, Object>> {
         if(value instanceof Indirection) return context.get(name(value, context));
         if(value instanceof Attribute) return value((Attribute) value, context);
         if(value instanceof FunctionCall) return value((FunctionCall) value, context);
+        if(value instanceof Anonymous) return value((Anonymous) value, context);
         throw new IllegalArgumentException("Unknown value type: " + value);
+    }
+
+    String value(Anonymous anonymous, Map<String, Object> context) throws Exception {
+        return new Template(anonymous.template(), parent).render(context);
     }
 
     String value(FunctionCall functionCall, Map<String, Object> context) throws Exception {
