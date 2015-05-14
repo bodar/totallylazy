@@ -55,4 +55,9 @@ public abstract class Success<A> implements Result<A> {
     public String message() {
         throw new NoSuchElementException();
     }
+
+    @Override
+    public String toString() {
+        return "Success(" + value() + ")";
+    }
 }

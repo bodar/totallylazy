@@ -9,6 +9,7 @@ import java.nio.charset.CharsetEncoder;
 import java.util.Set;
 
 import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Sequences.forwardOnly;
 
 public class Characters {
     public static Charset UTF8 = Charset.forName("UTF-8");
@@ -119,5 +120,13 @@ public class Characters {
 
     public static Sequence<Character> characters() {
         return range(Character.MIN_VALUE, Character.MAX_VALUE);
+    }
+
+    public static boolean equals(CharSequence a, CharSequence b) {
+        return Iterators.equalsTo(a.chars().iterator(), b.chars().iterator());
+    }
+
+    public static int hashCode(CharSequence value) {
+        return forwardOnly(value.chars().iterator()).hashCode();
     }
 }

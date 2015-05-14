@@ -57,12 +57,7 @@ public interface Segment<T> {
         }
 
         public static Computation<Character> characters(final Reader reader) {
-            return Computation.computation1(read(reader), new Callable1<Character, Computation<Character>>() {
-                @Override
-                public Computation<Character> call(Character character) throws Exception {
-                    return characters(reader);
-                }
-            });
+            return Computation.computation1(read(reader), (Character character) -> characters(reader));
         }
 
         private static Function<Character> read(final Reader reader) {
