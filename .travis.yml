@@ -1,4 +1,7 @@
 language: bash
 
+jdk:
+  - oraclejdk8
+
 script:
   - bash jcompilo.sh
