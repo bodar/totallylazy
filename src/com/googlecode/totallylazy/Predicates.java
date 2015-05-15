@@ -192,8 +192,8 @@ public class Predicates {
         return equalTo(t);
     }
 
-    public static <T> LogicalPredicate<T> is(final Predicate<? super T> t) {
-        return logicalPredicate(t);
+    public static <S, T extends Predicate<S>> T is(final T t) {
+        return t;
     }
 
     @SafeVarargs
