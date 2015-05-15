@@ -2,10 +2,10 @@ language: java
 
 sudo: required
 
-jdk:
-  - oraclejdk8
+jdk: oraclejdk8
 
-install: sudo apt-get update && sudo apt-get install oracle-java8-installer
+install: 
+  - sudo apt-get update 
+  - sudo apt-get install oracle-java8-installer
 
-script:
-  - bash ./jcompilo.sh
+script: bash ./jcompilo.sh
