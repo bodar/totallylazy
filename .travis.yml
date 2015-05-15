@@ -9,3 +9,6 @@ install:
   - sudo apt-get install oracle-java8-installer
 
 script: bash ./jcompilo.sh
+
+notifications:
+  email: false
