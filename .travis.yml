@@ -1,13 +1,12 @@
 language: java
 
-env:
-  global:
-    - JDK_URL=http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-x64.tar.gz
-    - JDK_HOME=jdk1.8.0_45
-    - PATH==${JDK_HOME}/bin:${PATH}
+sudo: required
 
-before_script:
-  - curl -v -j -k -L -H "Cookie: oraclelicense=accept-securebackup-cookie" ${JDK_URL} | tar xv
+jdk:
+  - oraclejdk8
+
+install: true
 
 script:
-  - bash jcompilo.sh
+  - sudo apt-get update && sudo apt-get install oracle-java8-installer
+  - bash ./jcompilo.sh
