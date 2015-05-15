@@ -85,6 +85,6 @@ public interface Grammar {
     Parser<Mapping> MAPPING = ATTRIBUTE.followedBy(isChar(':')).then(ANONYMOUS_TEMPLATE).
             map(pair -> Mapping.mapping(pair.first(), pair.second()));
 
-    Parser<Indirection> INDIRECTION = Parsers.<Expression>or(ATTRIBUTE, ANONYMOUS_TEMPLATE).between(isChar('('), isChar(')')).
+    Parser<Indirection> INDIRECTION = Parsers.<Expression>or(ATTRIBUTE, ANONYMOUS_TEMPLATE, LITERAL).between(isChar('('), isChar(')')).
             map(Indirection::indirection);
 }

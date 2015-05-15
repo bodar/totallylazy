@@ -128,4 +128,10 @@ public class GrammarTest {
         FunctionCall functionCall = Grammar.FUNCTION_CALL.parse("(template)()").value();
         assertThat(functionCall, is(functionCall(indirection(attribute(name("template"))), implicitArguments())));
     }
+
+    @Test
+    public void supportsIndirectionInAttribute() throws Exception {
+        Attribute result = Grammar.ATTRIBUTE.parse("root.('parent').child").value();
+        assertThat(result, is(attribute(name("root"), indirection(text("parent")), name("child"))));
+    }
 }

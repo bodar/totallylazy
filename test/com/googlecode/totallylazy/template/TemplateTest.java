@@ -80,4 +80,11 @@ public class TemplateTest {
         String result = template.render(map("name", "b", "a-b-c", "Indirect"));
         assertThat(result, is("Indirect"));
     }
+
+    @Test
+    public void supportsIndirectionWithNestedMaps() throws Exception {
+        Template template = template("$root.('parent').child$");
+        String result = template.render(map("root", map("parent", map("child", "Hello"))));
+        assertThat(result, is("Hello"));
+    }
 }
