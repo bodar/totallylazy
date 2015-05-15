@@ -6,6 +6,6 @@ jdk: oraclejdk8
 
 install: 
   - sudo apt-get update -qq
-  - sudo apt-get install oracle-java8-installer -qq
+  - sudo apt-get install -qq oracle-java8-installer
 
 script: bash ./jcompilo.sh
