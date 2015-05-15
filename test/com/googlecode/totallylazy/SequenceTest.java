@@ -673,6 +673,12 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsReject() throws Exception {
+        Sequence<Integer> result = sequence(1, 2, 3, 4).reject(even());
+        assertThat(result, hasExactly(1, 3));
+    }
+
+    @Test
     public void filterIsLazy() throws Exception {
         Iterable<Integer> result = sequence(returns(1), returns(2), callThrows(new Exception(), Integer.class)).
                 map(call(Integer.class)).

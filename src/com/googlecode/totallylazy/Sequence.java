@@ -18,6 +18,8 @@ import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Sequences.filter;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
@@ -79,6 +81,11 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
     @Override
     public Sequence<T> filter(final Predicate<? super T> predicate) {
         return Sequences.filter(this, predicate);
+    }
+
+    @Override
+    public Sequence<T> reject(final Predicate<? super T> predicate) {
+        return filter(not(predicate));
     }
 
     public <S> Sequence<S> flatMap(final Callable1<? super T, ? extends Iterable<? extends S>> callable) {

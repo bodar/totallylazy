@@ -28,6 +28,7 @@ import static com.googlecode.totallylazy.Callables.deferReturn;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.Unary.constructors.unary;
@@ -185,6 +186,10 @@ public class Sequences {
                 return Iterators.filter(iterable.iterator(), predicate);
             }
         };
+    }
+
+    public static <T> Sequence<T> reject(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
+        return filter(iterable, not(predicate));
     }
 
     public static <T, S> Sequence<S> flatMap(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
@@ -728,7 +733,7 @@ public class Sequences {
     public static <T> Sequence<Sequence<T>> recursive(final Iterable<? extends T> iterable,
                                                       final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
         return iterate(applyToSecond(callable), Callers.call(callable, sequence(iterable))).
-                takeWhile(Predicates.not(Predicates.<Pair<Sequence<T>, Sequence<T>>>and(
+                takeWhile(not(Predicates.<Pair<Sequence<T>, Sequence<T>>>and(
                         where(Callables.<Sequence<T>>first(), Predicates.<T>empty()),
                         where(Callables.<Sequence<T>>second(), Predicates.<T>empty())))).
                 map(Callables.<Sequence<T>>first());

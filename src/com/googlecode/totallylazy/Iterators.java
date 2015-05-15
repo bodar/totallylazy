@@ -89,6 +89,10 @@ public class Iterators {
         return new FilterIterator<T>(iterator, predicate);
     }
 
+    public static <T> Iterator<T> reject(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
+        return filter(iterator, not(predicate));
+    }
+
     public static <T> Iterator<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {
         return new IterateIterator<T>(nullGuard(callable), t);
     }
