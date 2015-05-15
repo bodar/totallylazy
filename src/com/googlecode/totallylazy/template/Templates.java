@@ -84,5 +84,7 @@ public class Templates implements Renderers {
         return named.computeIfAbsent(name, this::create);
     }
 
-    private CompositeRenderer create(String name) {return compositeRenderer(parent.get(name));}
+    private CompositeRenderer create(String name) {
+        return compositeRenderer(Renderer.lazy( () -> parent.get(name)));
+    }
 }

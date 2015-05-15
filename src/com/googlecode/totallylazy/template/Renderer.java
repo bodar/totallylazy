@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.template;
 import com.googlecode.totallylazy.Strings;
 
 import java.io.IOException;
+import java.util.concurrent.Callable;
 
 public interface Renderer<T> {
     default String render(T instance) throws IOException {
@@ -19,5 +20,15 @@ public interface Renderer<T> {
             if(instance instanceof CharSequence) return appendable.append((CharSequence) instance);
             return appendable.append(Strings.asString(instance));
         }
+    }
+
+    static <T> Renderer<T> lazy(Callable<Renderer<T>> callable){
+        return (instance, appendable) -> {
+            try {
+                return callable.call().render(instance, appendable);
+            } catch (Exception e) {
+                throw new IOException(e);
+            }
+        };
     }
 }

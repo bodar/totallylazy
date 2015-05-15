@@ -32,4 +32,12 @@ public class TemplatesTest {
         String result = template.render(map("first", "<Dan>", "encoding", "html"));
         assertThat(result, is("Hello &lt;Dan&gt;"));
     }
+
+    @Test
+    public void canUseTemplatesFromClassPathAndDefaultTemplates() throws Exception {
+        Templates templates = defaultTemplates(getClass());
+        Template template = Template.template("Say $hello()$", templates);
+        String result = template.render(map("name", "Dan"));
+        assertThat(result, is("Say Hello Dan"));
+    }
 }
