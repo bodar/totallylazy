@@ -24,6 +24,7 @@ import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Maps.mapValues;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.string;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
@@ -122,6 +123,7 @@ public class Template implements Renderer<Map<String, Object>> {
     Object value(Attribute attribute, Map<String, Object> context) {
         return sequence(attribute.value()).fold(context, (Object container, Expression name) -> {
             if (container instanceof Map) return value(name, cast(container));
+            if (container == null) return null;
             throw new IllegalArgumentException("Unknown container type: " + container);
         });
     }

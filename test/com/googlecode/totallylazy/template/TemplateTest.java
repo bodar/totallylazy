@@ -87,4 +87,11 @@ public class TemplateTest {
         String result = template.render(map("root", map("parent", map("child", "Hello"))));
         assertThat(result, is("Hello"));
     }
+
+    @Test
+    public void doesntBlowWithMissingChildren() throws Exception {
+        Template template = template("$root.parent.child$");
+        String result = template.render(map("root", null));
+        assertThat(result, is(""));
+    }
 }
