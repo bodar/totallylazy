@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.template;
 
+import java.io.IOException;
+
 public interface Renderers extends Renderer<Object> {
     Renderer<Object> get(String name);
 
@@ -12,7 +14,7 @@ public interface Renderers extends Renderer<Object> {
         }
 
         @Override
-        public Appendable render(Object instance, Appendable appendable) throws Exception {
+        public Appendable render(Object instance, Appendable appendable) throws IOException {
             return Default.Instance.render(instance, appendable);
         }
     }

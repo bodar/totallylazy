@@ -15,6 +15,7 @@ import com.googlecode.totallylazy.template.ast.Name;
 import com.googlecode.totallylazy.template.ast.NamedArguments;
 import com.googlecode.totallylazy.template.ast.Text;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     @Override
-    public Appendable render(Map<String, Object> context, Appendable appendable) throws Exception {
+    public Appendable render(Map<String, Object> context, Appendable appendable) throws IOException {
         return sequence(template).
                 fold(appendable, (a, node) -> append(node, context, a));
     }

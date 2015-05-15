@@ -2,11 +2,10 @@ package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.collections.PersistentList;
 
-import java.util.concurrent.Callable;
+import java.io.IOException;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.always;
@@ -29,7 +28,7 @@ public class CompositeRenderer implements Renderer<Object>{
     }
 
     @Override
-    public Appendable render(Object value, Appendable appendable) throws Exception {
+    public Appendable render(Object value, Appendable appendable) throws IOException {
         return pairs.find(p -> p.first().matches(value)).
                 get().second().render(value, appendable);
     }

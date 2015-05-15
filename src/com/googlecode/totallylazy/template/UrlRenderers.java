@@ -45,7 +45,7 @@ public class UrlRenderers implements Renderers {
     }
 
     @Override
-    public Appendable render(Object instance, Appendable appendable) throws Exception {
+    public Appendable render(Object instance, Appendable appendable) throws IOException {
         return parent.render(instance, appendable);
     }
 }

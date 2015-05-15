@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.Uri;
 import com.googlecode.totallylazy.Xml;
 
-import java.net.URL;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -46,13 +46,23 @@ public class Templates implements Renderers {
     }
 
     public Templates add(String name, Callable1<?, ? extends CharSequence> callable) {
-        return add(name, (instance, appendable) ->
-                appendable.append(Unchecked.<Callable1<Object, CharSequence>>cast(callable).call(instance)));
+        return add(name, (instance, appendable) -> {
+            try {
+                return appendable.append(Unchecked.<Callable1<Object, CharSequence>>cast(callable).call(instance));
+            } catch (Exception e) {
+                throw new IOException(e);
+            }
+        });
     }
 
     public <T> Templates add(Predicate<? super T> predicate, Callable1<? super T, ? extends CharSequence> renderer) {
-        return add(predicate, (instance, appendable) ->
-                appendable.append(renderer.call(instance)));
+        return add(predicate, (instance, appendable) -> {
+            try {
+                return appendable.append(renderer.call(instance));
+            } catch (Exception e) {
+                throw new IOException(e);
+            }
+        });
     }
 
     public Templates add(String name, Renderer<?> callable) {
@@ -65,7 +75,7 @@ public class Templates implements Renderers {
     }
 
     @Override
-    public Appendable render(Object instance, Appendable appendable) throws Exception {
+    public Appendable render(Object instance, Appendable appendable) throws IOException {
         return implicit.render(instance, appendable);
     }
 
