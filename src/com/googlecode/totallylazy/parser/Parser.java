@@ -133,4 +133,12 @@ public abstract class Parser<A> implements Parse<A> {
     public <R> Parser<R> returns(R value) {
         return next(Parsers.returns(value));
     }
+
+    public Parser<A> peek() {
+        return new PeekParser<>(this);
+    }
+
+    public Parser<A> peek(Parser<A> parser) {
+        return followedBy(parser.peek());
+    }
 }
