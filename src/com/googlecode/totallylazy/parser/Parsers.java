@@ -90,12 +90,11 @@ public class Parsers {
         return PredicatesParser.string(predicates);
     }
 
-    public static Parser<String> pattern(Regex regex) {
-        return PatternParser.pattern(regex);
+    public static Parser<String> pattern(String value, String pretty) {
+        return PatternParser.pattern(value, pretty);
     }
-
     public static Parser<String> pattern(String value) {
-        return PatternParser.pattern(value);
+        return PatternParser.pattern(value, "");
     }
 
     public static <A, B> Parser<B> map(Parse<? extends A> source, Callable1<? super A, ? extends B> callable) {

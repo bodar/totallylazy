@@ -12,12 +12,17 @@ import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
 import static com.googlecode.totallylazy.Strings.UTF8;
 import static com.googlecode.totallylazy.Strings.bytes;
-import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static com.googlecode.totallylazy.parser.PatternParser.pattern;
+import static com.googlecode.totallylazy.parser.Parsers.pattern;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PatternParserTest {
+    @Test
+    public void supportsPrettyFailureMessage() throws Exception {
+        Result<String> result = pattern("\\d{4}/\\d{1,2}/\\d{1,2}", "dddd/MM/yy").parse("ABC");
+        assertThat(result.message(), is("dddd/MM/yy expected, A encountered."));
+    }
+
     @Test
     public void canParseUsingRegex() throws Exception {
         Result<String> result = pattern("\\d{4}/\\d{1,2}/\\d{1,2}").parse("1977/1/10ABC");
@@ -51,7 +56,6 @@ public class PatternParserTest {
     }
 
     @Test
-    @Ignore("Not sure if this possible")
     public void doesNotConsumeMoreThanItShouldWithStar() throws Exception {
         Result<String> result = pattern("[a-zA-Z][_0-9a-zA-Z]*").parse("hello world");
         assertThat(result.value(), is("hello"));
