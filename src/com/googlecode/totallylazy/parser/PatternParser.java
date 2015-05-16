@@ -37,16 +37,11 @@ class PatternParser extends Parser<String> {
     public Result<String> parse(Segment<Character> characters) {
         CharacterSequence sequence = charSequence(characters);
         Matcher matcher = pattern.matcher(sequence);
-        if (matcher.lookingAt()) {
-            int end = matcher.end();
-            String value = matcher.group();
-            Segment<Character> remainder = drop(end, characters);
-            return success(value, remainder);
-        }
+        if (matcher.lookingAt()) return success(matcher.group(), drop(matcher.end(), characters));
         return fail(toString(), sequence);
     }
 
-    private <T> Segment<T> drop(int count, Segment<T> segment) {
+    private static <T> Segment<T> drop(int count, Segment<T> segment) {
         Segment<T> current = segment;
         for (int i = 0; i < count; i++) {
             if(current.isEmpty()) return current;

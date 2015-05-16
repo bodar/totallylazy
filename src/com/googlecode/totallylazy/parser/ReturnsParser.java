@@ -9,10 +9,6 @@ class ReturnsParser<A> extends Parser<A> {
         this.a = a;
     }
 
-    static <A> ReturnsParser<A> returns(A a) {
-        return new ReturnsParser<>(a);
-    }
-
     @Override
     public Result<A> parse(Segment<Character> characters) {
         return Success.success(a, characters);

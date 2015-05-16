@@ -129,4 +129,8 @@ public abstract class Parser<A> implements Parse<A> {
     public Parser<A> debug(String name) {
         return Parsers.debug(name, this);
     }
+
+    public <R> Parser<R> returns(R value) {
+        return next(Parsers.returns(value));
+    }
 }

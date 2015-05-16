@@ -7,9 +7,7 @@ import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Triple;
-import com.googlecode.totallylazy.regex.Regex;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -115,7 +113,7 @@ public class Parsers {
     }
 
     public static <A> Parser<A> returns(A a) {
-        return ReturnsParser.returns(a);
+        return new ReturnsParser<>(a);
     }
 
     public static <T> Parser<T> constant(T value) {

@@ -11,10 +11,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ParsersTest {
     @Test
-    public void supportsNext() throws Exception {
-        Result<Character> result = character('A').next(character('B')).parse("ABC");
-        assertThat(result.value(), is('B'));
-        assertThat(result.remainder().head(), is('C'));
+    public void supportsReturns() throws Exception {
+        Result<Integer> result = character('A').returns(1).parse("ABC");
+        assertThat(result.value(), is(1));
+        assertThat(result.remainder().head(), is('B'));
     }
 
     @Test
