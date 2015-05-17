@@ -9,11 +9,19 @@ import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
+import static com.googlecode.totallylazy.parser.Parsers.isChar;
 import static com.googlecode.totallylazy.parser.Parsers.pattern;
 import static com.googlecode.totallylazy.parser.Parsers.string;
 import static java.lang.String.format;
 
 public class ParsersTest {
+    @Test
+    public void supportsPrefix() throws Exception {
+        Parser<String> parser = pattern("[0-9]").prefix(isChar('+').map(ignore -> a -> format("positive(%s)", a)));
+        String result = parser.parse(characters("+1")).value();
+        assertThat(result, is("positive(1)"));
+    }
+
     @Test
     public void supportsLeftAssociativeInfix() throws Exception {
         Parser<String> parser = pattern("[A-C]").infixLeft(string(" AND ").map(ignore -> (a, b) -> format("( %s + %s )", a, b)));

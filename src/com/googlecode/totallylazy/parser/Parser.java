@@ -10,6 +10,7 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Unary;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -141,14 +142,18 @@ public abstract class Parser<A> implements Parse<A> {
         return followedBy(parser.peek());
     }
 
-    public Parser<A> infixLeft(Parser<? extends Callable2<? super A, ? super A, ? extends A>> op){
-        return this.then(op.then(this).many()).map(pair -> Sequences.sequence(pair.second()).
+    public Parser<A> infixLeft(Parser<? extends Binary<A>> op){
+        return then(op.then(this).many()).map(pair -> Sequences.sequence(pair.second()).
                 fold(pair.first(), (a, p) -> p.first().call(a, p.second())));
     }
 
     public Parser<A> infixRight(Parser<? extends Binary<A>> op){
-        return this.then(op).many().then(this).map(pair -> Sequences.reverse(pair.first()).
+        return then(op).many().then(this).map(pair -> Sequences.reverse(pair.first()).
                 fold(pair.second(), (a, p) -> p.second().call(p.first(), a)));
     }
 
+    public Parser<A> prefix(Parser<? extends Unary<A>> op){
+        return op.many().then(this).map(pair -> Sequences.sequence(pair.first()).
+            fold(pair.second(), (a, p) -> p.call(a) ));
+    }
 }
