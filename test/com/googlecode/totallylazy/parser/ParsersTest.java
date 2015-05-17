@@ -18,8 +18,10 @@ public class ParsersTest {
     @Test
     public void supportsPrefix() throws Exception {
         Parser<String> parser = pattern("[0-9]").prefix(isChar('+').map(ignore -> a -> format("positive(%s)", a)));
-        String result = parser.parse(characters("+1")).value();
-        assertThat(result, is("positive(1)"));
+        assertThat(parser.parse(characters("+1")).value(), is("positive(1)"));
+        assertThat(parser.parse(characters("++1")).value(), is("positive(positive(1))"));
+        assertThat(parser.parse(characters("1")).value(), is("1"));
+        assertThat(parser.parse(characters("1")).value(), is("1"));
     }
 
     @Test

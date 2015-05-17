@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import static com.googlecode.totallylazy.Assert.assertTrue;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Segment.constructors.emptySegment;
 import static com.googlecode.totallylazy.Strings.UTF8;
@@ -53,6 +54,15 @@ public class PatternParserTest {
         Result<String> result = pattern("[a-zA-Z][_0-9a-zA-Z]*").parse("hello");
         assertThat(result.value(), is("hello"));
         assertThat(result.remainder(), is(emptySegment(Character.class)));
+    }
+
+    @Test
+    public void doesnNotBlowIfPatternDoesNotCompletelyMatch() throws Exception {
+        Parser<String> pattern = pattern("\\d{4}/\\d{1,2}/\\d{1,2}", "yyyyMMdd");
+        Result<String> result = pattern.parse("13");
+        assertThat(result.failure(), is(true));
+        assertThat(result.message(), is("yyyyMMdd expected, 13 encountered."));
+        assertTrue(pattern.parse("1977/01/10").success());
     }
 
     @Test

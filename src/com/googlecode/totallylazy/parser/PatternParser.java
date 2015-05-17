@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.regex.Regex;
 
+import java.util.NoSuchElementException;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,8 +38,16 @@ class PatternParser extends Parser<String> {
     public Result<String> parse(Segment<Character> characters) {
         CharacterSequence sequence = charSequence(characters);
         Matcher matcher = pattern.matcher(sequence);
-        if (matcher.lookingAt()) return success(matcher.group(), drop(matcher.end(), characters));
+        if (matches(matcher)) return success(matcher.group(), drop(matcher.end(), characters));
         return fail(toString(), sequence);
+    }
+
+    private boolean matches(Matcher matcher) {
+        try {
+            return matcher.lookingAt();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
     private static <T> Segment<T> drop(int count, Segment<T> segment) {
