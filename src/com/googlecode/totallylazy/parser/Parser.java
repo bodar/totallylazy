@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
@@ -15,8 +16,10 @@ import java.io.Reader;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Closeables.using;
+import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Sequences.join;
 import static com.googlecode.totallylazy.Strings.UTF8;
+import static com.googlecode.totallylazy.callables.Compose.compose;
 
 public abstract class Parser<A> implements Parse<A> {
     protected Failure<A> fail(Object expected, Object actual) {
@@ -118,12 +121,7 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public Parser<List<A>> many(int min) {
-        return times(min).then(many()).map(new Callable1<Pair<List<A>, List<A>>, List<A>>() {
-            @Override
-            public List<A> call(Pair<List<A>, List<A>> p) throws Exception {
-                return join(p.first(), p.second()).toList();
-            }
-        });
+        return times(min).then(many()).map(p -> join(p.first(), p.second()).toList());
     }
 
     public Parser<A> debug(String name) {
@@ -141,4 +139,12 @@ public abstract class Parser<A> implements Parse<A> {
     public Parser<A> peek(Parser<A> parser) {
         return followedBy(parser.peek());
     }
+
+    public Parser<A> infixLeft(Parser<? extends Callable2<? super A, ? super A, ? extends A>> op){
+        Parser<Function1<A, A>> function = op.then(this).map(p -> function(p.first()).applySecond(p.second())).many().
+                map(list -> Sequences.sequence(list).reduce(compose()));
+
+        return this.then(function).map(p -> p.second().call(p.first()));
+    }
+
 }

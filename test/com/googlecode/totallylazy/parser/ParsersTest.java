@@ -4,13 +4,23 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Lists.list;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.parser.Parsers.pattern;
+import static com.googlecode.totallylazy.parser.Parsers.string;
+import static java.lang.String.format;
 
 public class ParsersTest {
+    @Test
+    public void supportsLeftAssociativeInfix() throws Exception {
+        Parser<String> parser = pattern("[A-C]").infixLeft(string(" AND ").map(ignore -> (a, b) -> format("( %s + %s )", a, b)));
+        String result = parser.parse(characters("A AND B AND C")).value();
+        assertThat(result, is("( ( A + B ) + C )"));
+    }
+
     @Test
     public void supportsPeek() throws Exception {
         Parser<Character> parser = character('A').peek(character('B'));
