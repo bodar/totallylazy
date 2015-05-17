@@ -22,6 +22,13 @@ public class ParsersTest {
     }
 
     @Test
+    public void supportsRightAssociativeInfix() throws Exception {
+        Parser<String> parser = pattern("[A-C]").infixRight(string(" AND ").map(ignore -> (a, b) -> format("( %s + %s )", a, b)));
+        String result = parser.parse(characters("A AND B AND C")).value();
+        assertThat(result, is("( A + ( B + C ) )"));
+    }
+
+    @Test
     public void supportsPeek() throws Exception {
         Parser<Character> parser = character('A').peek(character('B'));
         Result<Character> success = parser.parse("ABC");

@@ -20,6 +20,7 @@ class StringParser extends Parser<String> {
         Segment<Character> segment = characters;
         StringBuilder result = new StringBuilder();
         for (int i = 0, n = expected.length(); i < n; i++) {
+            if(segment.isEmpty()) return fail(expected, result.toString());
             char e = expected.charAt(i);
             char a = segment.head();
             result.append(a);

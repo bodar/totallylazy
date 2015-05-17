@@ -24,7 +24,9 @@ public class CharacterSegment extends AbstractSegment<Character> {
 
     @Override
     public Character head() throws NoSuchElementException {
-        if (isEmpty()) throw new NoSuchElementException();
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
         return charSequence.charAt(offset);
     }
 

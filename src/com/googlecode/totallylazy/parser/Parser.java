@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
+import com.googlecode.totallylazy.Binary;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callables;
@@ -141,10 +142,13 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public Parser<A> infixLeft(Parser<? extends Callable2<? super A, ? super A, ? extends A>> op){
-        Parser<Function1<A, A>> function = op.then(this).map(p -> function(p.first()).applySecond(p.second())).many().
-                map(list -> Sequences.sequence(list).reduce(compose()));
+        return this.then(op.then(this).many()).map(pair -> Sequences.sequence(pair.second()).
+                fold(pair.first(), (a, p) -> p.first().call(a, p.second())));
+    }
 
-        return this.then(function).map(p -> p.second().call(p.first()));
+    public Parser<A> infixRight(Parser<? extends Binary<A>> op){
+        return this.then(op).many().then(this).map(pair -> Sequences.reverse(pair.first()).
+                fold(pair.second(), (a, p) -> p.second().call(p.first(), a)));
     }
 
 }
