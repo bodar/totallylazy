@@ -206,6 +206,11 @@ public class SequenceTest {
     @Test
     public void supportsFoldRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs() throws Exception {
         assertThat(repeat(false).foldRight(false, andPair()), is(false));
+        assertThat(repeat("a").foldRight("z", p -> p.first()), is("a"));
+        assertThat(Sequences.<String>sequence().foldRight("d", join.pair()), is("d"));
+        assertThat(sequence("a").foldRight("d", join.pair()), is("ad"));
+        assertThat(sequence("a", "b").foldRight("d", join.pair()), is("abd"));
+        assertThat(sequence("a", "b", "c").foldRight("d", join.pair()), is("abcd"));
     }
 
     @Test
