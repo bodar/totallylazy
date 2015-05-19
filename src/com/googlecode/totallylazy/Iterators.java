@@ -32,6 +32,7 @@ import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.is;
@@ -62,7 +63,7 @@ public class Iterators {
 
     public static <T> boolean equalsTo(Iterator<? extends T> a, Iterator<? extends T> b, Predicate<? super Pair<T, T>> predicate) {
         while (a.hasNext() && b.hasNext()) {
-            if (!predicate.matches(Pair.pair(a.next(), b.next()))) return false;
+            if (!predicate.matches(pair(a.next(), b.next()))) return false;
         }
         return !(a.hasNext() || b.hasNext());
     }
@@ -87,6 +88,10 @@ public class Iterators {
 
     public static <T> Iterator<T> filter(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         return new FilterIterator<T>(iterator, predicate);
+    }
+
+    public static <T> Iterator<T> reject(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
+        return filter(iterator, not(predicate));
     }
 
     public static <T> Iterator<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {
@@ -151,7 +156,7 @@ public class Iterators {
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
         if (!iterator.hasNext()) return seed;
-        return Callers.call(callable, Pair.pair(returns(head(iterator)), new Function<S>() {
+        return Callers.call(callable, pair(returns(head(iterator)), new Function<S>() {
             @Override
             public S call() throws Exception {
                 return foldRight(iterator, seed, callable);
@@ -164,20 +169,43 @@ public class Iterators {
     }
 
     public static <T, S> S reduceLeft(final Iterator<? extends T> iterator, final Callable2<? super S, ? super T, ? extends S> callable) {
-        return foldLeft(iterator, seed(iterator, callable), callable);
+        S seed = seed(iterator, callable);
+        return foldLeft(iterator, seed, callable);
     }
 
-    private static <T, S> S seed(Iterator<? extends T> iterator, Callable2<? super S, ? super T, ? extends S> callable) {
+    private static <T, S> S seed(Iterator<? extends T> iterator, Object callable) {
         if (callable instanceof Identity) return Unchecked.<Identity<S>>cast(callable).identity();
         return Unchecked.<S>cast(iterator.next());
     }
 
     public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Callable2<? super T, ? super S, ? extends S> callable) {
-        return foldRight(iterator, Unchecked.<S>cast(iterator.next()), callable);
+        Iterator<T> reversed = reverse(iterator);
+        S accumulator = seed(reversed, callable);
+        while (reversed.hasNext()) {
+            accumulator = Callers.call(callable, reversed.next(), accumulator);
+        }
+        return accumulator;
     }
 
-    public static <T, S> S reduceRight(final Iterator<? extends T> iterator, final Callable1<? super Pair<T, S>, ? extends S> callable) {
-        return foldRight(iterator, Unchecked.<S>cast(iterator.next()), callable);
+    public static <T, S> S reduceRight(final Iterator<? extends T> raw, final Callable1<? super Pair<T, S>, ? extends S> callable){
+        Iterator<? extends T> iterator = addSeed(raw, callable);
+        return internalReduceRight(iterator, callable);
+    }
+
+    public static <T, S> S internalReduceRight(final Iterator<? extends T> iterator, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+        T head = iterator.next();
+        if(!iterator.hasNext()) return cast(head);
+        return Callers.call(callable, pair(returns(head), new Callable<S>() {
+            @Override
+            public S call() throws Exception {
+                return internalReduceRight(iterator, callable);
+            }
+        }));
+    }
+
+    private static <T> Iterator<T> addSeed(Iterator<T> iterator, final Object callable) {
+        if(callable instanceof Identity) return add(iterator, Unchecked.<Identity<T>>cast(callable).identity());
+        return iterator;
     }
 
     public static String toString(final Iterator<?> iterator, final String separator) {
@@ -316,7 +344,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> add(final Iterator<? extends T> iterator, final T t) {
-        return join(iterator, sequence(t).iterator());
+        return join(iterator, one(t).iterator());
     }
 
     public static <T> Iterator<T> join(final Iterator<? extends T> first, final Iterator<? extends T> second) {
@@ -376,7 +404,7 @@ public class Iterators {
     public static <T> Pair<Sequence<T>, Sequence<T>> partition(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         final Queue<T> matchedQueue = new ArrayDeque<T>();
         final Queue<T> unmatchedUnmatched = new ArrayDeque<T>();
-        return Pair.pair(Sequences.memorise(new PartitionIterator<T>(iterator, predicate, matchedQueue, unmatchedUnmatched)),
+        return pair(Sequences.memorise(new PartitionIterator<T>(iterator, predicate, matchedQueue, unmatchedUnmatched)),
                 Sequences.memorise(new PartitionIterator<T>(iterator, Predicates.<T>not(predicate), unmatchedUnmatched, matchedQueue)));
     }
 
@@ -386,7 +414,7 @@ public class Iterators {
 
     public static <T> Pair<Sequence<T>, Sequence<T>> splitWhen(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
         Pair<Sequence<T>, Sequence<T>> partition = breakOn(iterator, predicate);
-        return Pair.pair(partition.first(), partition.second().isEmpty() ? Sequences.<T>empty() : partition.second().tail());
+        return pair(partition.first(), partition.second().isEmpty() ? Sequences.<T>empty() : partition.second().tail());
     }
 
     public static <T> Pair<Sequence<T>, Sequence<T>> splitOn(final Iterator<? extends T> iterator, final T instance) {
