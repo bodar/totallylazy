@@ -82,10 +82,12 @@ public class Maps {
         return map(sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <K, V> Map<K, V> map(final Pair<? extends K, ? extends V>... entries) {
         return map(sequence(entries));
     }
 
+    @SafeVarargs
     public static <K, V> Map<K, V> map(final Map<K, V> seed, final Pair<? extends K, ? extends V>... entries) {
         return map(seed, sequence(entries));
     }
@@ -138,10 +140,12 @@ public class Maps {
         return multiMap(sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <K, V> Map<K, List<V>> multiMap(final Pair<? extends K, ? extends V>... entries) {
         return multiMap(sequence(entries));
     }
 
+    @SafeVarargs
     public static <K, V> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Pair<? extends K, ? extends V>... entries) {
         return multiMap(seed, sequence(entries));
     }

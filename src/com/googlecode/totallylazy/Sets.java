@@ -16,10 +16,12 @@ public class Sets {
         return new LinkedHashSet<T>();
     }
 
+    @SafeVarargs
     public static <T> Set<T> set(T... values) {
         return set(new LinkedHashSet<T>(), values);
     }
 
+    @SafeVarargs
     public static <T, S extends Set<T>> S set(S result, T... values) {
         return set(result, asList(values));
     }
@@ -63,6 +65,7 @@ public class Sets {
         return union(sequence(first, second, third, fourth, firth));
     }
 
+    @SafeVarargs
     public static <T> Set<T> union(final Set<? extends T>... sets) {
         return union(asList(sets));
     }
@@ -91,6 +94,7 @@ public class Sets {
         return intersection(sequence(first, second, third, fourth, firth));
     }
 
+    @SafeVarargs
     public static <T> Set<T> intersection(final Set<? extends T>... sets) {
         return intersection(sequence(sets));
     }
@@ -124,6 +128,7 @@ public class Sets {
         return complement(sequence(first, second, third, fourth, firth));
     }
 
+    @SafeVarargs
     public static <T> Set<T> complement(final Set<? extends T>... sets) {
         return complement(asList(sets));
     }

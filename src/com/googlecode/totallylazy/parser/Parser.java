@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Functions.function;
+import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Sequences.foldLeft;
 import static com.googlecode.totallylazy.Sequences.foldRight;
 import static com.googlecode.totallylazy.Sequences.join;
@@ -88,24 +89,19 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public Result<A> parse(CharSequence value) {
-        return parse(Segment.constructors.characters(value));
+        return parse(characters(value));
     }
 
     public Result<A> parse(Reader value) {
-        return parse(Segment.constructors.characters(value));
+        return parse(characters(value));
     }
 
     public Result<A> parse(InputStream value) {
-        return parse(Segment.constructors.characters(new InputStreamReader(value, UTF8)));
+        return parse(characters(new InputStreamReader(value, UTF8)));
     }
 
     public Parser<Void> ignore() {
-        return map(new Function1<A, Void>() {
-            @Override
-            public Void call(A value) throws Exception {
-                return null;
-            }
-        });
+        return map(value -> null);
     }
 
     public Parser<List<A>> times(int number) {
@@ -155,7 +151,7 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public Parser<A> prefix(Parser<? extends Unary<A>> op){
-        return op.many().then(this).map(pair -> Sequences.sequence(pair.first()).
-            fold(pair.second(), (a, p) -> p.call(a) ));
+        return op.many().then(this).map(pair ->
+                foldLeft(pair.first(), pair.second(), (a, p) -> p.call(a) ));
     }
 }

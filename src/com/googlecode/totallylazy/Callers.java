@@ -48,6 +48,7 @@ public final class Callers {
         return callConcurrently(sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <T> Sequence<T> callConcurrently(final Callable<? extends T>... callables) {
         return callConcurrently(sequence(callables));
     }

@@ -96,10 +96,12 @@ public class Sequences {
         return internal(first, second, third, fourth, fifth);
     }
 
+    @SafeVarargs
     private static <T> Sequence<T> internal(final T... items) {
         return sequence(items);
     }
 
+    @SafeVarargs
     public static <T> Sequence<T> sequence(final T... items) {
         if (items == null || items.length == 0) {
             return empty();
@@ -513,6 +515,7 @@ public class Sequences {
         return join(sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <T> Sequence<T> join(final Iterable<? extends T>... iterables) {
         return join(sequence(iterables));
     }
@@ -583,6 +586,7 @@ public class Sequences {
 
     }
 
+    @SafeVarargs
     public static <T> Sequence<Sequence<T>> transpose(final Iterable<? extends T>... iterables) {
         return transpose(sequence(iterables));
     }

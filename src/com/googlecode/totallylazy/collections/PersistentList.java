@@ -136,6 +136,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
             return cons(one, cons(two, cons(three, cons(four, cons(five, constructors.<T>empty())))));
         }
 
+        @SafeVarargs
         public static <T> PersistentList<T> list(T... values) {
             return list(sequence(values));
         }

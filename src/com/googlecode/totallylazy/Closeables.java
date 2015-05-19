@@ -42,6 +42,7 @@ public class Closeables {
         reflectiveSafeClose(sequence(t1, t2, t3, t4, t5));
     }
 
+    @SafeVarargs
     public static <T> void safeClose(final T... t) {
         reflectiveSafeClose(sequence(t));
     }
@@ -75,6 +76,7 @@ public class Closeables {
         safeClose(sequence(t1, t2, t3, t4, t5));
     }
 
+    @SafeVarargs
     public static <T extends Closeable> void safeClose(final T... t) {
         safeClose(sequence(t));
     }

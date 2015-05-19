@@ -355,6 +355,7 @@ public class Iterators {
         return join(sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <T> Iterator<T> join(final Iterator<? extends T>... iterators) {
         return join(sequence(iterators));
     }

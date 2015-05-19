@@ -256,10 +256,12 @@ public class Xml {
         return internalTransformer();
     }
 
+    @SafeVarargs
     public static Transformer transformer(Pair<String, Object>... attributes) throws TransformerConfigurationException {
         return internalTransformer(attributes);
     }
 
+    @SafeVarargs
     private static Transformer internalTransformer(Pair<String, Object>... attributes) throws TransformerConfigurationException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         for (Pair<String, Object> attribute : attributes) {
@@ -330,6 +332,7 @@ public class Xml {
         return format(node, new Pair[0]);
     }
 
+    @SafeVarargs
     public static String format(final Node node, final Pair<String, Object>... attributes) throws Exception {
         Transformer transformer = transformer(attributes);
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");

@@ -53,6 +53,7 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
         return hasExactly(sequence(first, second, third, fourth, fifth));
     }
 
+    @SafeVarargs
     public static <T> Matcher<Iterable<T>> hasExactly(final T... items) {
         return hasExactly(sequence(items));
     }
@@ -65,6 +66,7 @@ public class IterableMatcher<T> extends TypeSafeMatcher<Iterable<T>> {
         return new IterableMatcher<T>(expected, true);
     }
 
+    @SafeVarargs
     public static <T> Matcher<Iterable<T>> startsWith(T... items) {
         return startsWith(sequence(items));
     }
