@@ -15,7 +15,6 @@ import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
 import com.googlecode.totallylazy.iterators.WindowedIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
-import com.googlecode.totallylazy.template.ast.Expression;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -123,11 +122,6 @@ public class Iterators {
             iterator.next();
             return new PeekingIterator<T>(iterator);
         }
-        throw new NoSuchElementException();
-    }
-
-    public static <T> Pair<T, Iterator<T>> headTail(final Iterator<? extends T> iterator) {
-        if (iterator.hasNext()) return pair(iterator.next(), new PeekingIterator<T>(iterator));
         throw new NoSuchElementException();
     }
 

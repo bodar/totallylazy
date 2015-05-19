@@ -19,6 +19,8 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Functions.function;
+import static com.googlecode.totallylazy.Sequences.foldLeft;
+import static com.googlecode.totallylazy.Sequences.foldRight;
 import static com.googlecode.totallylazy.Sequences.join;
 import static com.googlecode.totallylazy.Strings.UTF8;
 import static com.googlecode.totallylazy.callables.Compose.compose;
@@ -143,13 +145,13 @@ public abstract class Parser<A> implements Parse<A> {
     }
 
     public Parser<A> infixLeft(Parser<? extends Binary<A>> op){
-        return then(op.then(this).many()).map(pair -> Sequences.sequence(pair.second()).
-                fold(pair.first(), (a, p) -> p.first().call(a, p.second())));
+        return then(op.then(this).many()).map(pair ->
+                foldLeft(pair.second(), pair.first(), (a, p) -> p.first().call(a, p.second())));
     }
 
     public Parser<A> infixRight(Parser<? extends Binary<A>> op){
-        return then(op).many().then(this).map(pair -> Sequences.reverse(pair.first()).
-                fold(pair.second(), (a, p) -> p.second().call(p.first(), a)));
+        return then(op).many().then(this).map(pair ->
+                foldRight(pair.first(), pair.second(), (p, a) -> p.second().call(p.first(), a)));
     }
 
     public Parser<A> prefix(Parser<? extends Unary<A>> op){
