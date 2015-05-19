@@ -25,12 +25,4 @@ public class IteratorsTest {
         assertThat(Iterators.equalsTo(sequence(1, 2, 3).iterator(), sequence(1, null, 3).iterator()), is(false));
         assertThat(Iterators.equalsTo(sequence(1, null, 3).iterator(), sequence(1, null, 3).iterator()), is(true));
     }
-
-    @Test
-    public void supportsReduceAndFold() throws Exception {
-        assertThat(Iterators.reduceRight(sequence("a", "b", "c").iterator(), join), is("abc"));
-        assertThat(Iterators.reduceLeft(sequence("a", "b", "c").iterator(), join), is("abc"));
-        assertThat(Iterators.foldRight(sequence("a", "b", "c").iterator(), "d", join), is("abcd"));
-        assertThat(Iterators.foldLeft(sequence("a", "b", "c").iterator(), "0", join), is("0abc"));
-    }
 }

@@ -223,7 +223,22 @@ public class Functions {
         };
     }
 
+    static abstract class IdentityFunction<A,B> extends Function1<A,B> implements Identity<B> {}
+
     public static <A, B, C> Function1<Pair<A, B>, C> pair(final Callable2<? super A, ? super B, ? extends C> function) {
+        if(function instanceof Identity) {
+            return new IdentityFunction<Pair<A, B>, C>() {
+                @Override
+                public C identity() {
+                    return Unchecked.<Identity<C>>cast(function).identity();
+                }
+
+                @Override
+                public C call(Pair<A, B> pair) throws Exception {
+                    return function.call(pair.first(), pair.second());
+                }
+            };
+        }
         return new Function1<Pair<A, B>, C>() {
             @Override
             public C call(Pair<A, B> pair) throws Exception {

@@ -57,6 +57,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sequences.sort;
 import static com.googlecode.totallylazy.Sequences.splitOn;
 import static com.googlecode.totallylazy.Sequences.zip;
+import static com.googlecode.totallylazy.Strings.join;
 import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.callables.Count.count;
@@ -180,14 +181,26 @@ public class SequenceTest {
 
     @Test
     public void supportsReduceRight() throws Exception {
-        assertThat(numbers(1, 2, 3).reduceRight(add()), NumberMatcher.is(6));
-        assertThat(sequence("1", "2", "3").reduceRight(Strings.join), is("123"));
+        assertThat(numbers().reduceRight(sum), NumberMatcher.is(0));
+        assertThat(numbers(1).reduceRight(sum), NumberMatcher.is(1));
+        assertThat(numbers(1, 2).reduceRight(sum), NumberMatcher.is(3));
+        assertThat(numbers(1, 2, 3).reduceRight(sum), NumberMatcher.is(6));
+        assertThat(Sequences.<String>sequence().reduceRight(join), is(""));
+        assertThat(sequence("1").reduceRight(join), is("1"));
+        assertThat(sequence("1", "2").reduceRight(join), is("12"));
+        assertThat(sequence("1", "2", "3").reduceRight(join), is("123"));
     }
 
     @Test
     public void supportsFoldRight() throws Exception {
-        assertThat(sequence(1, 2, 3).foldRight(0, add()), NumberMatcher.is(6));
-        assertThat(sequence("1", "2", "3").foldRight("4", Strings.join), is("1234"));
+        assertThat(numbers().foldRight(4, sum), NumberMatcher.is(4));
+        assertThat(numbers(1).foldRight(4, sum), NumberMatcher.is(5));
+        assertThat(numbers(1, 2).foldRight(4, sum), NumberMatcher.is(7));
+        assertThat(numbers(1, 2, 3).foldRight(4, sum), NumberMatcher.is(10));
+        assertThat(Sequences.<String>sequence().foldRight("4", join), is("4"));
+        assertThat(sequence("1").foldRight("4", join), is("14"));
+        assertThat(sequence("1", "2").foldRight("4", join), is("124"));
+        assertThat(sequence("1", "2", "3").foldRight("4", join), is("1234"));
     }
 
     @Test
@@ -198,15 +211,11 @@ public class SequenceTest {
     @Test
     public void supportsReduceRightWithInfiniteSequenceIfFunctionTerminatesEarlyAndUsesPairs() throws Exception {
         assertThat(repeat(true).reduceRight(orPair()), is(true));
-        // first() implemented using reduceRight(pair)
-        assertThat(range(0).reduceRight(new Function1<Pair<Number, Number>, Number>() {
-            @Override
-            public Number call(Pair<Number, Number> p) throws Exception {
-                return p.first();
-            }
-        }), NumberMatcher.is(0));
-        // works well with finite sequence
-        assertThat(sequence("a", "b", "c").reduceRight(Strings.join.pair()), is("abc"));
+        assertThat(range(0).reduceRight(p -> p.first()), NumberMatcher.is(0));
+        assertThat(Sequences.<String>sequence().reduceRight(join.pair()), is(""));
+        assertThat(sequence("a").reduceRight(join.pair()), is("a"));
+        assertThat(sequence("a", "b").reduceRight(join.pair()), is("ab"));
+        assertThat(sequence("a", "b", "c").reduceRight(join.pair()), is("abc"));
     }
 
     @Test
@@ -600,8 +609,8 @@ public class SequenceTest {
     public void supportsReduceLeft() throws Exception {
         assertThat(numbers(1, 2, 3).reduce(sum()), NumberMatcher.is(6));
         assertThat(numbers(1, 2, 3).reduceLeft(sum()), NumberMatcher.is(6));
-        assertThat(sequence("1", "2", "3").reduce(Strings.join), is("123"));
-        assertThat(sequence("1", "2", "3").reduceLeft(Strings.join), is("123"));
+        assertThat(sequence("1", "2", "3").reduce(join), is("123"));
+        assertThat(sequence("1", "2", "3").reduceLeft(join), is("123"));
     }
 
     @Test
@@ -616,8 +625,8 @@ public class SequenceTest {
     public void supportsFoldLeft() throws Exception {
         assertThat(sequence(1, 2, 3).fold(0, sum()), NumberMatcher.is(6));
         assertThat(sequence(1, 2, 3).foldLeft(0, sum()), NumberMatcher.is(6));
-        assertThat(sequence("1", "2", "3").fold("0", Strings.join), is("0123"));
-        assertThat(sequence("1", "2", "3").foldLeft("0", Strings.join), is("0123"));
+        assertThat(sequence("1", "2", "3").fold("0", join), is("0123"));
+        assertThat(sequence("1", "2", "3").foldLeft("0", join), is("0123"));
     }
 
     @Test
