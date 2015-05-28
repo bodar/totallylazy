@@ -27,18 +27,18 @@ import static com.googlecode.totallylazy.Sequences.forwardOnly;
 
 public class XmlReader extends StatefulIterator<Node> {
     private final XMLEventReader reader;
-    private final Predicate<? super QName> predicate;
+    private final Predicate<StartElement> predicate;
 
-    private XmlReader(XMLEventReader reader, Predicate<? super QName> predicate) {
+    private XmlReader(XMLEventReader reader, Predicate<StartElement> predicate) {
         this.reader = reader;
         this.predicate = predicate;
     }
 
     public static XmlReader xmlReader(Reader reader, String localName) throws LazyException {
-        return xmlReader(reader, where(functions.localPart, is(localName)));
+        return xmlReader(reader, element -> element.getName().getLocalPart().equals(localName));
     }
 
-    public static XmlReader xmlReader(Reader reader, Predicate<? super QName> predicate) {
+    public static XmlReader xmlReader(Reader reader, Predicate<StartElement> predicate) {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             return new XmlReader(factory.createXMLEventReader(reader), predicate);
@@ -53,8 +53,7 @@ public class XmlReader extends StatefulIterator<Node> {
             XMLEvent event = reader.nextEvent();
             if (event instanceof StartElement) {
                 StartElement start = (StartElement) event;
-                QName qName = start.getName();
-                if (predicate.matches(qName)) return children(copyAttributes(start, element(qName.getLocalPart())));
+                if (predicate.matches(start)) return children(copyAttributes(start, element(start.getName().getLocalPart())));
             }
         }
         return finished();
@@ -82,16 +81,6 @@ public class XmlReader extends StatefulIterator<Node> {
             destination.setAttribute(attribute.getName().getLocalPart(), attribute.getValue());
         }
         return destination;
-    }
-
-    public static class functions {
-        public static Mapper<QName, String> localPart = new Mapper<QName, String>() {
-            @Override
-            public String call(QName qName) throws Exception {
-                return qName.getLocalPart();
-            }
-        };
-
     }
 
 }
