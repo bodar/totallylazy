@@ -1,50 +1,51 @@
 package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.collections.PersistentList;
 import org.w3c.dom.Node;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.events.StartElement;
 import java.util.ArrayDeque;
 
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
+
 public class Location {
-    private final ArrayDeque<StartElement> path;
+    private final PersistentList<StartElement> path;
     private final XMLEventReader xmlReader;
 
     public Location(XMLEventReader xmlReader) {
-        this(xmlReader, new ArrayDeque<>());
+        this(xmlReader, empty());
     }
 
-    public Location(XMLEventReader xmlReader, ArrayDeque<StartElement> path) {
+    public Location(XMLEventReader xmlReader, PersistentList<StartElement> path) {
         this.xmlReader = xmlReader;
         this.path = path;
     }
 
     public Location add(StartElement value) {
-        path.addLast(value);
-        return this;
+        return new Location(xmlReader, path.cons(value));
     }
 
     public Location remove() {
-        path.removeLast();
-        return this;
+        return new Location(xmlReader, path.tail());
     }
 
     public StartElement current() {
-        return path.getLast();
+        return path.head();
     }
 
     @Override
     public String toString() {
-        return Sequences.toString(path, "/");
+        return Sequences.toString(reverse(path), "/");
     }
 
     public XMLEventReader reader() {
         return xmlReader;
     }
 
-    public Location clone() {
-        return new Location(xmlReader, path.clone());
+    public XmlReader stream() {
+        return new XmlReader(xmlReader);
     }
-
 }

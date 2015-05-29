@@ -19,16 +19,16 @@ import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
 
-public class XmlReader<T> {
+public class XmlReader {
     private final XMLEventReader reader;
-    private XmlReader(XMLEventReader reader) {
+    public XmlReader(XMLEventReader reader) {
         this.reader = reader;
     }
 
-    public static <T> XmlReader<T> xmlReader(Reader reader) {
+    public static XmlReader xmlReader(Reader reader) {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            return new XmlReader<>(factory.createXMLEventReader(reader));
+            return new XmlReader(factory.createXMLEventReader(reader));
         } catch (XMLStreamException e) {
             throw lazyException(e);
         }
@@ -45,18 +45,20 @@ public class XmlReader<T> {
 
     public StatefulIterator<Location> iterator(Predicate<Location> predicate) {
         return new StatefulIterator<Location>() {
-            private final Location path = new Location(reader);
+            private Location path = new Location(reader);
             @Override
             protected Location getNext() throws Exception {
                 while (reader.hasNext()) {
                     XMLEvent event = reader.nextEvent();
-                    if (event instanceof EndElement) path.remove();
+                    if (event instanceof EndElement) {
+                        path = path.remove();
+                    }
                     if (event instanceof StartElement) {
                         StartElement start = (StartElement) event;
-                        path.add(start);
+                        path = path.add(start);
                         if (predicate.matches(path)) {
-                            Location result = path.clone();
-                            path.remove();
+                            Location result = path;
+                            path = path.remove();
                             return result;
                         }
                     }

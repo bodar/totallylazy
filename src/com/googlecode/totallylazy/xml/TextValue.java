@@ -13,7 +13,11 @@ public class TextValue implements com.googlecode.totallylazy.Callable1<Location,
         while (reader.hasNext()) {
             XMLEvent xmlEvent = reader.nextEvent();
             if(xmlEvent instanceof EndElement) return result.toString();
-            if(xmlEvent instanceof Characters) result.append(((Characters) xmlEvent).getData());
+            if(xmlEvent instanceof Characters) {
+                result.append(((Characters) xmlEvent).getData());
+                continue;
+            }
+            throw new UnsupportedOperationException("Errrrr");
         }
         throw new UnsupportedOperationException("Errrrr");
     }
