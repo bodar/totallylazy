@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
@@ -13,11 +14,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XmlReaderTest {
     @Test
-    public void copiesText() throws Exception {
-        String xml = "<stream>Hello</stream>";
+    public void currentlyItEscapesCData() throws Exception {
+        String xml = "<stream><![CDATA[Hello <> ]]></stream>";
         Sequence<Node> stream = memorise(XmlReader.xmlReader(new StringReader(xml), "stream"));
         assertThat(stream.size(), is(1));
-        assertThat(Xml.asString(stream.head()), is("<stream>Hello</stream>"));
+        assertThat(Xml.asString(stream.head()), is("<stream>Hello &lt;&gt; </stream>"));
+    }
+
+    @Test
+    public void copiesAllText() throws Exception {
+        String xml = "<stream>Hello &amp; World</stream>";
+        Sequence<Node> stream = memorise(XmlReader.xmlReader(new StringReader(xml), "stream"));
+        assertThat(stream.size(), is(1));
+        assertThat(Xml.asString(stream.head()), is("<stream>Hello &amp; World</stream>"));
     }
 
     @Test
