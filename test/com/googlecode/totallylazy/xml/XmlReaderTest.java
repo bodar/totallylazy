@@ -13,6 +13,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XmlReaderTest {
     @Test
+    public void copiesText() throws Exception {
+        String xml = "<stream>Hello</stream>";
+        Sequence<Node> stream = memorise(XmlReader.xmlReader(new StringReader(xml), "stream"));
+        assertThat(stream.size(), is(1));
+        assertThat(Xml.asString(stream.head()), is("<stream>Hello</stream>"));
+    }
+
+    @Test
     public void emptyRoot() throws Exception {
         String xml = "<stream/>";
         Sequence<Node> stream = memorise(XmlReader.xmlReader(new StringReader(xml), "stream"));

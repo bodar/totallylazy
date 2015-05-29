@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
+import com.sun.xml.internal.stream.events.CharacterEvent;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -74,6 +75,10 @@ public class XmlReader extends StatefulIterator<Node> {
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
             if (event instanceof EndElement) return parent;
+            if (event instanceof CharacterEvent) {
+                parent.setTextContent(((CharacterEvent) event).getData());
+                return parent;
+            }
             if (event instanceof StartElement) children(child(parent, (StartElement) event));
         }
         return parent;
