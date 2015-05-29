@@ -2,6 +2,10 @@ package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Rules;
@@ -27,51 +31,51 @@ import static com.googlecode.totallylazy.Sequences.forwardOnly;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
 
-public class XmlReader<T> extends StatefulIterator<T> {
+public class XmlReader<T> {
     private final XMLEventReader reader;
-    private final Predicate<Location> predicate;
-    private final Callable2<Location, XMLEventReader, T> function;
-    private final Location path = new Location();
-
-    private XmlReader(XMLEventReader reader, Predicate<Location> predicate, Callable2<Location, XMLEventReader, T> function) {
+    private XmlReader(XMLEventReader reader) {
         this.reader = reader;
-        this.predicate = predicate;
-        this.function = function;
     }
 
-    public static XmlReader<Node> xmlReader(Reader reader, String localName) throws LazyException {
-        return xmlReader(reader, descendant(name(localName)));
-    }
-
-    public static XmlReader<Node> xmlReader(Reader reader, Predicate<Location> predicate) {
-            return xmlReader(reader, predicate, (location, xmlEventReader) -> new NodeCreator(xmlEventReader).call(location));
-    }
-
-    public static <T> XmlReader<T> xmlReader(Reader reader, Predicate<Location> predicate, Callable2<Location, XMLEventReader, T> function) {
+    public static <T> XmlReader<T> xmlReader(Reader reader) {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            return new XmlReader<>(factory.createXMLEventReader(reader), predicate, function);
+            return new XmlReader<>(factory.createXMLEventReader(reader));
         } catch (XMLStreamException e) {
             throw lazyException(e);
         }
     }
 
-    @Override
-    protected T getNext() throws Exception {
-        while (reader.hasNext()) {
-            XMLEvent event = reader.nextEvent();
-            if (event instanceof EndElement) path.remove();
-            if (event instanceof StartElement) {
-                StartElement start = (StartElement) event;
-                path.add(start);
-                if (predicate.matches(path)) {
-                    T t = function.call(path, reader);
-                    path.remove();
-                    return t;
+    public static Iterator<Node> xmlReader(Reader reader, String localName) throws LazyException {
+        return xmlReader(reader, descendant(name(localName)));
+    }
+
+    public static Iterator<Node> xmlReader(Reader reader, Predicate<Location> predicate) {
+        return Iterators.map(xmlReader(reader).iterator(predicate),
+                location -> new NodeCreator(location.reader()).call(location));
+    }
+
+    public StatefulIterator<Location> iterator(Predicate<Location> predicate) {
+        return new StatefulIterator<Location>() {
+            private final Location path = new Location(reader);
+            @Override
+            protected Location getNext() throws Exception {
+                while (reader.hasNext()) {
+                    XMLEvent event = reader.nextEvent();
+                    if (event instanceof EndElement) path.remove();
+                    if (event instanceof StartElement) {
+                        StartElement start = (StartElement) event;
+                        path.add(start);
+                        if (predicate.matches(path)) {
+                            Location result = path.clone();
+                            path.remove();
+                            return result;
+                        }
+                    }
                 }
+                return finished();
             }
-        }
-        return finished();
+        };
     }
 
     private static class NodeCreator implements Callable1<Location, Node> {
