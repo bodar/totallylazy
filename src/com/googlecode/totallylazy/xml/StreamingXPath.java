@@ -19,7 +19,7 @@ public class StreamingXPath {
         return element -> value.matches(element.getAttributeByName(new QName(name)).getValue());
     }
 
-    public static Predicate<StreamingPath> descendant(Predicate<StartElement> predicate) {
+    public static Predicate<Location> descendant(Predicate<? super StartElement> predicate) {
         return path -> predicate.matches(path.current());
     }
 

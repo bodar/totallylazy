@@ -5,15 +5,15 @@ import com.googlecode.totallylazy.Sequences;
 import javax.xml.stream.events.StartElement;
 import java.util.ArrayDeque;
 
-public class StreamingPath {
+public class Location {
     private final ArrayDeque<StartElement> path = new ArrayDeque<>();
 
-    public StreamingPath add(StartElement value) {
+    public Location add(StartElement value) {
         path.addLast(value);
         return this;
     }
 
-    public StreamingPath remove() {
+    public Location remove() {
         path.removeLast();
         return this;
     }

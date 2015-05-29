@@ -1,16 +1,13 @@
 package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.Xml;
-import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -19,12 +16,10 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.Reader;
-import java.util.ArrayDeque;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.forwardOnly;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
@@ -33,10 +28,10 @@ import static com.googlecode.totallylazy.xml.StreamingXPath.name;
 
 public class XmlReader extends StatefulIterator<Node> {
     private final XMLEventReader reader;
-    private final Predicate<StreamingPath> predicate;
-    private final StreamingPath path = new StreamingPath();
+    private final Predicate<Location> predicate;
+    private final Location path = new Location();
 
-    private XmlReader(XMLEventReader reader, Predicate<StreamingPath> predicate) {
+    private XmlReader(XMLEventReader reader, Predicate<Location> predicate) {
         this.reader = reader;
         this.predicate = predicate;
     }
@@ -45,7 +40,7 @@ public class XmlReader extends StatefulIterator<Node> {
         return xmlReader(reader, descendant(name(localName)));
     }
 
-    public static XmlReader xmlReader(Reader reader, Predicate<StreamingPath> predicate) {
+    public static XmlReader xmlReader(Reader reader, Predicate<Location> predicate) {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             return new XmlReader(factory.createXMLEventReader(reader), predicate);
