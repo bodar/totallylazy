@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.Xml;
+import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -18,27 +19,33 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.Reader;
+import java.util.ArrayDeque;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.forwardOnly;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
+import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
+import static com.googlecode.totallylazy.xml.StreamingXPath.name;
 
 public class XmlReader extends StatefulIterator<Node> {
     private final XMLEventReader reader;
-    private final Predicate<StartElement> predicate;
+    private final Predicate<StreamingPath> predicate;
+    private final StreamingPath path = new StreamingPath();
 
-    private XmlReader(XMLEventReader reader, Predicate<StartElement> predicate) {
+    private XmlReader(XMLEventReader reader, Predicate<StreamingPath> predicate) {
         this.reader = reader;
         this.predicate = predicate;
     }
 
     public static XmlReader xmlReader(Reader reader, String localName) throws LazyException {
-        return xmlReader(reader, element -> element.getName().getLocalPart().equals(localName));
+        return xmlReader(reader, descendant(name(localName)));
     }
 
-    public static XmlReader xmlReader(Reader reader, Predicate<StartElement> predicate) {
+    public static XmlReader xmlReader(Reader reader, Predicate<StreamingPath> predicate) {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             return new XmlReader(factory.createXMLEventReader(reader), predicate);
@@ -51,9 +58,14 @@ public class XmlReader extends StatefulIterator<Node> {
     protected Node getNext() throws Exception {
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
+            if (event instanceof EndElement) path.remove();
             if (event instanceof StartElement) {
                 StartElement start = (StartElement) event;
-                if (predicate.matches(start)) return children(copyAttributes(start, element(start.getName().getLocalPart())));
+                path.add(start);
+                if (predicate.matches(path)) {
+                    path.remove();
+                    return children(copyAttributes(start, element(start.getName().getLocalPart())));
+                }
             }
         }
         return finished();
