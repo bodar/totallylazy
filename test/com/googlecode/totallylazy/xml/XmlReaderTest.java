@@ -8,22 +8,20 @@ import org.w3c.dom.Node;
 import java.io.StringReader;
 
 import static com.googlecode.totallylazy.Sequences.memorise;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.xml.StreamingXPath.name;
 import static com.googlecode.totallylazy.xml.XmlReader.xmlReader;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XmlReaderTest {
-//    @Test
-//    public void canStreamIntoAMap() throws Exception {
-//        String xml = "<stream><user><name>Dan</name></user><user><name>Jason</name></user></stream>";
-//        Sequence<Location> users =  memorise(xmlReader(new StringReader(xml)).iterator("user"));
-//        Sequence<Location> names =  users.map(location -> (Location)location.reader().iterator("name").next());
-////        xmlReader(new StringReader(xml), Rules.<Location, Function1<XMLEventReader, T>>rules().addFirst(predicate, Functions.function(function)))
-//
-//        assertThat(names.size(), is(2));
-//        assertThat(names.first().value(), is("Dan"));
-//        assertThat(names.second().value(), is("Jason"));
-//    }
+    @Test
+    public void canStreamIntoAMap() throws Exception {
+        String xml = "<stream><user>Dan</user><user>Jason</user></stream>";
+        Sequence<Location> users =  memorise(xmlReader(new StringReader(xml)).iterator(StreamingXPath.descendant(name("user"))));
+        Sequence<String> names = users.map(new TextValue());
+        assertThat(names, hasExactly("Dan", "Jason"));
+    }
 
     @Test
     public void currentlyItEscapesCData() throws Exception {
