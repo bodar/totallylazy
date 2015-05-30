@@ -97,7 +97,16 @@ public class Maps {
     }
 
     public static <K, V> Map<K, V> map(final Map<K, V> seed, final Iterable<? extends Pair<? extends K, ? extends V>> entries) {
-        for (Pair<? extends K, ? extends V> entry : entries) {
+        return map(seed, entries.iterator());
+    }
+
+    public static <K, V> Map<K, V> map(final Iterator<? extends Pair<? extends K, ? extends V>> entries) {
+        return map(new LinkedHashMap<K, V>(), entries);
+    }
+
+    public static <K, V> Map<K, V> map(final Map<K, V> seed, final Iterator<? extends Pair<? extends K, ? extends V>> entries) {
+        while(entries.hasNext()){
+            Pair<? extends K, ? extends V> entry = entries.next();
             seed.put(entry.first(), entry.second());
         }
         return seed;

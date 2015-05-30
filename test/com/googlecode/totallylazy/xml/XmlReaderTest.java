@@ -1,9 +1,11 @@
 package com.googlecode.totallylazy.xml;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Rules;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
@@ -17,6 +19,8 @@ import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
+import static com.googlecode.totallylazy.xml.StreamingXml.currentName;
+import static com.googlecode.totallylazy.xml.StreamingXml.text;
 import static com.googlecode.totallylazy.xml.XmlReader.xmlReader;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -26,12 +30,14 @@ public class XmlReaderTest {
         String xml = "<stream><user><first>Dan</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
         Sequence<Location> locations =  memorise(xmlReader(new StringReader(xml)).iterator(descendant(name("user"))));
         Sequence<Map<String, String>> users = locations.map(user -> {
-            StatefulIterator<Location> iterator = user.stream().iterator(descendant(name("first").or(name("dob"))));
-            return map(memorise(iterator).map(
-                    field -> pair(field.current().getName().getLocalPart(), new TextValue().call(field))));
+            StatefulIterator<Pair<String, String>> iterator = user.stream().
+                    iterator(Rules.<Location, Pair<String, String>>rules().
+                    addFirst(descendant(name("first").or(name("dob"))), field -> pair(currentName(field), text(field))));
+            return map(memorise(iterator));
         }).memoize();
         assertThat(users, hasExactly(map("first", "Dan", "dob", "1977"), map("first", "Jason", "dob", "1978")));
     }
+
 
     @Test
     public void currentlyItEscapesCData() throws Exception {
@@ -67,12 +73,11 @@ public class XmlReaderTest {
 
     @Test
     public void twoItems() throws Exception {
-        String xml = "<stream><item/><item/></stream>";
+        String xml = "<stream><item id=\"1\"/><item id=\"2\"/></stream>";
         Sequence<Node> stream = memorise(xmlReader(new StringReader(xml), "item"));
         assertThat(stream.size(), is(2));
-        assertThat(Xml.asString(stream.first()), is("<item/>"));
-        assertThat(Xml.asString(stream.second()), is("<item/>"));
-
+        assertThat(Xml.asString(stream.first()), is("<item id=\"1\"/>"));
+        assertThat(Xml.asString(stream.second()), is("<item id=\"2\"/>"));
     }
 
     @Test
