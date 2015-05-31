@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.LazyCallable;
 import com.googlecode.totallylazy.callables.LazyCallable1;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
@@ -8,38 +7,39 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Computation.memorise;
+import static com.googlecode.totallylazy.Callables.compose;
 import static com.googlecode.totallylazy.Functions.returns;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.callables.LazyCallable1.lazy;
 
 public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
-    private final LazyCallable<T> head;
+    private final Lazy<Option<T>> head;
     private final LazyCallable1<T, Computation<T>> tail;
 
-    private Computation(Callable<T> head, Callable1<T, Computation<T>> tail) {
-        this.head = LazyCallable.lazy(head);
+    private Computation(Callable<Option<T>> head, Callable1<T, Computation<T>> tail) {
+        this.head = Lazy.lazy(head);
         this.tail = lazy(tail);
     }
 
-    public static <T> Computation<T> computation1(T value, Callable1<T, Computation<T>> next) {
-        return computation1(returns(value), next);
-    }
-
-    public static <T> Computation<T> computation1(Callable<T> callable, Callable1<T, Computation<T>> next) {
+    public static <T> Computation<T> computation1(Callable<Option<T>> callable, Callable1<T, Computation<T>> next) {
         return new Computation<T>(callable, next);
     }
 
-    public static <T> Computation<T> computation(Callable<T> callable, Callable1<? super T, ? extends T> next) {
-        return computation1(callable, generate(next));
+    public static <T> Computation<T> computation1(T value, Callable1<T, Computation<T>> next) {
+        return computation1(returns(some(value)), next);
     }
 
-    public static <T> Computation<T> computation(T value, Callable1<? super T, ? extends T> callable) {
-        return computation1(value, generate(callable));
+    public static <T> Computation<T> computation(Callable<Option<T>> callable, Callable1<? super T, ? extends T> next) {
+        return computation1(callable, generate((T t) -> Option.option(next.call(t))));
     }
 
-    public static <T> Computation<T> computation(T value, Computation<T> next) {
-        return computation1(returns(value), Functions.<T, Computation<T>>constant(next));
+    public static <T> Computation<T> computation(T value, Callable1<? super T, ? extends T> next) {
+        return computation1(value, generate((T t) -> Option.option(next.call(t))));
+    }
+
+    public static <T> Computation<T> cons(T value, Computation<T> next) {
+        return computation1(returns(some(value)), Functions.<T, Computation<T>>constant(next));
     }
 
     public static <T> Computation<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {
@@ -51,62 +51,29 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     }
 
     public static <T> Computation<T> memorise(final Iterable<? extends T> iterable) {
-        final Callable<Iterator<T>> iterator = lazyIterator(iterable);
-        return Computation.<T>computation1(lazyHead(iterator), generate(lazyTail(iterator)));
+        Lazy<? extends Iterator<? extends T>> iterator = Lazy.lazy(iterable::iterator);
+        return Computation.<T>computation1(
+                () -> Iterators.headOption(iterator.value()),
+                t -> memorise(iterator.value()));
     }
 
     public static <T> Computation<T> memoize(final Iterator<? extends T> values) {
         return memorise(values);
     }
-    
-    public static <T> Computation<T> memorise(final Iterator<? extends T> values) {
-        final Function<Iterator<T>> iterator = returns(Unchecked.<Iterator<T>>cast(values));
-        return Computation.<T>computation1(lazyHead(iterator), generate(lazyTail(iterator)));
+
+    public static <T> Computation<T> memorise(final Iterator<? extends T> iterator) {
+        return Computation.<T>computation1(
+                () -> Iterators.headOption(iterator),
+                t -> memorise(iterator));
     }
 
-    private static <T> UnaryFunction<T> lazyTail(final Callable<? extends Iterator<? extends T>> iterator) {
-        return new UnaryFunction<T>() {
-            @Override
-            public T call(T t) throws Exception {
-                Iterator<? extends T> it = iterator.call();
-                if(!it.hasNext()) throw new EndOfComputation();
-                return it.next();
-            }
-        };
-    }
-
-    private static <T> Function<T> lazyHead(final Callable<? extends Iterator<? extends T>> iterator) {
-        return new Function<T>() {
-            @Override
-            public T call() throws Exception {
-                Iterator<? extends T> it = iterator.call();
-                if(!it.hasNext()) throw new EndOfComputation();
-                return it.next();
-            }
-        };
-    }
-
-    private static <T> Function<Iterator<T>> lazyIterator(final Iterable<? extends T> iterable) {
-        return new Function<Iterator<T>>() {
-            @Override
-            public Iterator<T> call() throws Exception {
-                return Unchecked.cast(iterable.iterator());
-            }
-        }.lazy();
-    }
-
-    public static <T> Callable1<T, Computation<T>> generate(final Callable1<? super T, ? extends T> callable) {
-        return new Callable1<T, Computation<T>>() {
-            @Override
-            public Computation<T> call(T value) throws Exception {
-                return computation1(Callables.deferApply(callable, value), this);
-            }
-        };
+    public static <T> Callable1<T, Computation<T>> generate(final Callable1<? super T, ? extends Option<T>> callable) {
+        return value -> computation1(Callables.deferApply(callable, value), generate(callable));
     }
 
     @Override
     public Computation<T> cons(T t) {
-        return computation(t, this);
+        return cons(t, this);
     }
 
     @Override
@@ -121,25 +88,17 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
 
     @Override
     public boolean isEmpty() {
-        try {
-            head.call();
-            return false;
-        } catch (EndOfComputation e) {
-            return true;
-        }
-        catch (Exception e) {
-            throw LazyException.lazyException(e);
-        }
+        return head.apply().isEmpty();
     }
 
     @Override
     public T head() {
-        return head.value();
+        return head.value().get();
     }
 
     @Override
     public Computation<T> tail() throws NoSuchElementException {
-        return tail.apply(head.value());
+        return tail.apply(head());
     }
 
     @Override

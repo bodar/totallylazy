@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.segments.CharacterSegment;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -57,19 +58,13 @@ public interface Segment<T> {
         }
 
         public static Computation<Character> characters(final Reader reader) {
-            return Computation.computation1(read(reader), (Character character) -> characters(reader));
+            return Computation.computation1((Callable<Option<Character>>) () -> {
+                int read = reader.read();
+                if (read == -1) return none();
+                return some((char) read);
+            }, (Character character) -> characters(reader));
         }
 
-        private static Function<Character> read(final Reader reader) {
-            return new Function<Character>() {
-                @Override
-                public Character call() throws Exception {
-                    int read = reader.read();
-                    if (read == -1) throw new EndOfComputation();
-                    return (char) read;
-                }
-            };
-        }
     }
 
     class methods {
