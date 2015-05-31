@@ -1,12 +1,12 @@
 package com.googlecode.totallylazy.xml;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Rules;
+import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Sequences.forwardOnly;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
@@ -27,16 +28,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XmlReaderTest {
     @Test
-    @Ignore
     public void canStreamIntoAMap() throws Exception {
         String xml = "<stream><user><first>Dan</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Sequence<Location> locations =  memorise(xmlReader(new StringReader(xml)).iterator(descendant(name("user"))));
+        Sequence<Location> locations =  forwardOnly(xmlReader(new StringReader(xml)).iterator(descendant(name("user"))));
         Sequence<Map<String, String>> users = locations.map(user -> {
             StatefulIterator<Pair<String, String>> iterator = user.stream().
                     iterator(Rules.<Location, Pair<String, String>>rules().
                     addFirst(descendant(name("first").or(name("dob"))), field -> pair(currentName(field), text(field))));
-            return map(iterator);
-        }).memoize();
+            return map(Iterators.map(iterator, pair -> pair));
+        });
         assertThat(users, hasExactly(map("first", "Dan", "dob", "1977"), map("first", "Jason", "dob", "1978")));
     }
 

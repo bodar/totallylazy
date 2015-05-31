@@ -48,4 +48,8 @@ public class Location {
     public XmlReader stream() {
         return new XmlReader(xmlReader);
     }
+
+    public boolean isEmpty() {
+        return path.isEmpty();
+    }
 }

@@ -17,6 +17,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.Reader;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Option.none;
@@ -64,6 +65,7 @@ public class XmlReader {
                 while (reader.hasNext()) {
                     XMLEvent event = reader.nextEvent();
                     if (event instanceof EndElement) {
+                        if(path.isEmpty()) return finished();
                         path = path.remove();
                     }
                     if (event instanceof StartElement) {
