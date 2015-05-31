@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.Closeables.safeClose;
 
 public abstract class Lazy<T> extends Function<T> implements Memory {
     private final Object lock = new Object();
-    private volatile T state;
+    private volatile Either<Exception, T> state;
 
     protected abstract T get() throws Exception;
 
@@ -22,11 +22,18 @@ public abstract class Lazy<T> extends Function<T> implements Memory {
         if (state == null) {
             synchronized (lock) {
                 if (state == null) {
-                    state = get();
+                    try {
+                        state = Either.right(get());
+                    } catch (Exception e) {
+                        state = Either.left(e);
+                    }
                 }
             }
         }
-        return state;
+        if(state.isLeft()){
+            throw state.left();
+        }
+        return state.right();
     }
 
     public void forget() {
@@ -36,7 +43,10 @@ public abstract class Lazy<T> extends Function<T> implements Memory {
     @Override
     public void close() {
         synchronized (lock) {
-            state = safeClose(state);
+            if(state != null) {
+                safeClose(state.value());
+                state = null;
+            }
         }
     }
 }
