@@ -2,6 +2,8 @@ out
 *.iws
 build/artifacts
 .idea/workspace.xml
+.idea/misc.xml
+.idea/shelf/*
 .ant-targets-build.xml
 *.orig
 lib/build
@@ -9,5 +11,4 @@ lib/runtime
 lib/optional
 lib/jcompilo.jar
 .DS_Store
-.idea/misc.xml
 

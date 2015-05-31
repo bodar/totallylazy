@@ -2,10 +2,37 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LazyTest {
+    @Test
+    public void remembersException() throws Exception {
+        final AtomicInteger count = new AtomicInteger();
+
+        Lazy<String> lazy = new Lazy<String>() {
+            protected String get() {
+                int i = count.incrementAndGet();
+                throw new RuntimeException(format("Called %d times.", i));
+            }
+        };
+
+        try {
+            lazy.call();
+        } catch (Exception e){
+            assertThat(e.getMessage(), is("Called 1 times."));
+        }
+        try {
+            lazy.call();
+        } catch (Exception e){
+            assertThat(e.getMessage(), is("Called 1 times."));
+        }
+
+    }
+
     @Test
     public void canCreateALazyValue() throws Exception {
         final int[] count = {0};
