@@ -184,6 +184,12 @@ public class Predicates {
         return new InstanceOf<T>(t);
     }
 
+    public static <A, B extends A> LogicalPredicate<A> instanceOf(Class<B> subCLass, Predicate<B> predicate) {
+        return logicalPredicate((A other) ->
+                        subCLass.isInstance(other) && predicate.matches(subCLass.cast(other))
+        );
+    }
+
     public static <T> LogicalPredicate<T> equalTo(final T t) {
         return EqualsPredicate.equalTo(t);
     }

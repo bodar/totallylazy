@@ -18,53 +18,52 @@ import static com.googlecode.totallylazy.Sequences.forwardOnly;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
-import static com.googlecode.totallylazy.xml.StreamingXPath.descendantLP;
+import static com.googlecode.totallylazy.xml.StreamingXPath.descendantOld;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
 import static com.googlecode.totallylazy.xml.StreamingXml.currentName;
-import static com.googlecode.totallylazy.xml.StreamingXml.currentNameLP;
 import static com.googlecode.totallylazy.xml.StreamingXml.text;
-import static com.googlecode.totallylazy.xml.StreamingXml.textLP;
 import static com.googlecode.totallylazy.xml.XmlReader.xmlReader;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XmlReaderTest {
-    @Test
-    public void supportsLocations() throws Exception {
-        String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Sequence<LocationPath> users = XmlReader.locations(new StringReader(xml)).
-                filter(descendantLP(name("user")));
-        for (LocationPath path : users) {
-            System.out.println("path = " + path);
-        }
-        Sequence<Map<String, String>> locations = users.
-                map(user -> {
-                    Sequence<LocationPath> paths = user.paths();
-                    Sequence<LocationPath> filter = paths.
-                            filter(descendantLP(name("first").or(name("dob"))));
-                    for (LocationPath sub : filter) {
-                        System.out.println("sub = " + sub);
-                    }
-                    return map(filter.
-                            map(field -> {
-                                String name = currentNameLP(field);
-                                String value = textLP(field);
-                                System.out.println(name + " = " + value);
-                                return pair(name, value);
-                            })
-                            );
-                });
-        System.out.println(locations.toString("\n"));
-    }
+//    @Test
+//    public void supportsLocations() throws Exception {
+//        String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
+//        Sequence<Context> all = XmlReader.locations(new StringReader(xml));
+//        System.out.println("all = " + all.toString("\n"));
+//        Sequence<Context> users = all.
+//                filter(descendant(name("user")));
+//        for (Context path : users) {
+//            System.out.println("path = " + path);
+//        }
+//        Sequence<Map<String, String>> locations = users.
+//                map(user -> {
+//                    Sequence<Context> paths = user.paths();
+//                    Sequence<Context> filter = paths.
+//                            filter(descendant(name("first").or(name("dob"))));
+//                    for (Context sub : filter) {
+//                        System.out.println("sub = " + sub);
+//                    }
+//                    return map(filter.
+//                            map(field -> {
+//                                String name = currentNameLP(field);
+//                                String value = textLP(field);
+//                                System.out.println(name + " = " + value);
+//                                return pair(name, value);
+//                            })
+//                            );
+//                });
+//        System.out.println(locations.toString("\n"));
+//    }
 
     @Test
     public void canStreamIntoAMap() throws Exception {
         String xml = "<stream><user><first>Dan</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Sequence<Location> locations =  forwardOnly(xmlReader(new StringReader(xml)).iterator(descendant(name("user"))));
+        Sequence<Location> locations =  forwardOnly(xmlReader(new StringReader(xml)).iterator(descendantOld(name("user"))));
         Sequence<Map<String, String>> users = locations.map(user -> {
             StatefulIterator<Pair<String, String>> iterator = user.stream().
                     iterator(Rules.<Location, Pair<String, String>>rules().
-                    addFirst(descendant(name("first").or(name("dob"))), field -> pair(currentName(field), text(field))));
+                    addFirst(descendantOld(name("first").or(name("dob"))), field -> pair(currentName(field), text(field))));
             return map(Iterators.map(iterator, pair -> pair));
         });
         assertThat(users, hasExactly(map("first", "Dan", "dob", "1977"), map("first", "Jason", "dob", "1978")));

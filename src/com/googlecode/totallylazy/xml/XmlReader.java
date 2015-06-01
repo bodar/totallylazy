@@ -24,7 +24,7 @@ import java.util.Iterator;
 import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
+import static com.googlecode.totallylazy.xml.StreamingXPath.descendantOld;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
 
 public class XmlReader {
@@ -41,6 +41,7 @@ public class XmlReader {
     private static XMLEventReader xmlEventReader(Reader reader) {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
+            factory.setProperty(XMLInputFactory.IS_COALESCING, true);
             return factory.createXMLEventReader(reader);
         } catch (XMLStreamException e) {
             throw lazyException(e);
@@ -48,7 +49,7 @@ public class XmlReader {
     }
 
     public static Iterator<Node> xmlReader(Reader reader, String localName) throws LazyException {
-        return xmlReader(reader, descendant(name(localName)));
+        return xmlReader(reader, descendantOld(name(localName)));
     }
 
     public static Iterator<Node> xmlReader(Reader reader, Predicate<Location> predicate) {
@@ -95,14 +96,14 @@ public class XmlReader {
         return Computation.memoize(Unchecked.<Iterator<XMLEvent>>cast(xmlEventReader(reader)));
     }
 
-    public static Sequence<LocationPath> locations(Reader reader) {
-        return locations(new LocationPath(xmlEvents(reader)).next().get());
+    public static Sequence<Context> locations(Reader reader) {
+        return locations(new Context(xmlEvents(reader)).next().get());
     }
 
-    public static Computation<LocationPath> locations(LocationPath locationPath) {
+    public static Computation<Context> locations(Context context) {
         return Computation.compute(
-                locationPath,
-                LocationPath::next
+                context,
+                Context::next
         );
     }
 
