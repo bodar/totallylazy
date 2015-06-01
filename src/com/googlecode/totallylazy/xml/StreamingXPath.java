@@ -25,4 +25,8 @@ public class StreamingXPath {
     public static Predicate<Location> descendant(Predicate<? super StartElement> predicate) {
         return path -> predicate.matches(path.current());
     }
+
+    public static Predicate<LocationPath> descendantLP(Predicate<? super StartElement> predicate) {
+        return path -> path.current().is(predicate);
+    }
 }

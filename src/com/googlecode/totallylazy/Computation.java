@@ -31,11 +31,19 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     }
 
     public static <T> Computation<T> computation(Callable<Option<T>> callable, Callable1<? super T, ? extends T> next) {
-        return computation1(callable, generate((T t) -> Option.option(next.call(t))));
+        return compute(callable, (T t) -> Option.option(next.call(t)));
+    }
+
+    public static <T> Computation<T> compute(Callable<Option<T>> callable, Callable1<T, Option<T>> call) {
+        return computation1(callable, generate(call));
     }
 
     public static <T> Computation<T> computation(T value, Callable1<? super T, ? extends T> next) {
-        return computation1(value, generate((T t) -> Option.option(next.call(t))));
+        return compute(value, (T t) -> Option.option(next.call(t)));
+    }
+
+    public static <T> Computation<T> compute(T value, Callable1<T, Option<T>> call) {
+        return computation1(value, generate(call));
     }
 
     public static <T> Computation<T> cons(T value, Computation<T> next) {

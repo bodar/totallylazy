@@ -635,6 +635,14 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsScanLeft() throws Exception {
+        assertThat(numbers().scanLeft(0, sum()), is(numbers(0)));
+        assertThat(numbers(1).scanLeft(0, sum()), is(numbers(0, 1)));
+        assertThat(numbers(1, 2).scanLeft(0, sum()), is(numbers(0, 1, 3)));
+        assertThat(numbers(1, 2, 3).scanLeft(0, sum()), is(numbers(0, 1, 3, 6)));
+    }
+
+    @Test
     public void supportsForEach() throws Exception {
         final int[] sum = {0};
         sequence(1, 2).each(new Block<Integer>() {

@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.xml;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Rules;
-import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
@@ -20,13 +19,44 @@ import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
+import static com.googlecode.totallylazy.xml.StreamingXPath.descendantLP;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
 import static com.googlecode.totallylazy.xml.StreamingXml.currentName;
+import static com.googlecode.totallylazy.xml.StreamingXml.currentNameLP;
 import static com.googlecode.totallylazy.xml.StreamingXml.text;
+import static com.googlecode.totallylazy.xml.StreamingXml.textLP;
 import static com.googlecode.totallylazy.xml.XmlReader.xmlReader;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XmlReaderTest {
+    @Test
+    public void supportsLocations() throws Exception {
+        String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
+        Sequence<LocationPath> users = XmlReader.locations(new StringReader(xml)).
+                filter(descendantLP(name("user")));
+        for (LocationPath path : users) {
+            System.out.println("path = " + path);
+        }
+        Sequence<Map<String, String>> locations = users.
+                map(user -> {
+                    Sequence<LocationPath> paths = user.paths();
+                    Sequence<LocationPath> filter = paths.
+                            filter(descendantLP(name("first").or(name("dob"))));
+                    for (LocationPath sub : filter) {
+                        System.out.println("sub = " + sub);
+                    }
+                    return map(filter.
+                            map(field -> {
+                                String name = currentNameLP(field);
+                                String value = textLP(field);
+                                System.out.println(name + " = " + value);
+                                return pair(name, value);
+                            })
+                            );
+                });
+        System.out.println(locations.toString("\n"));
+    }
+
     @Test
     public void canStreamIntoAMap() throws Exception {
         String xml = "<stream><user><first>Dan</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";

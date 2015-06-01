@@ -319,6 +319,15 @@ public class Sequences {
         return Iterators.foldLeft(iterable.iterator(), seed, callable);
     }
 
+    public static <T, S> Sequence<S> scanLeft(final Iterable<? extends T> iterable, S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+        return new Sequence<S>() {
+            @Override
+            public Iterator<S> iterator() {
+                return Iterators.scanLeft(iterable.iterator(), seed, callable);
+            }
+        };
+    }
+
     public static <T, S> S foldRight(final Iterable<? extends T> iterable, S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
     }

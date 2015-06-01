@@ -7,8 +7,8 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.LazyException.lazyException;
 
 public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements Peekable<T> {
-    private State state = State.Ready;
-    private T current;
+    protected State state = State.Ready;
+    protected T current;
 
     protected abstract T getNext() throws Exception;
 
@@ -46,8 +46,13 @@ public abstract class StatefulIterator<T> extends ReadOnlyIterator<T> implements
         throw new NoSuchElementException();
     }
 
-    private T pop() {
+    protected T pop() {
         state = State.Ready;
         return current;
+    }
+
+    protected void push(T value){
+        current = value;
+        state = State.Loaded;
     }
 }

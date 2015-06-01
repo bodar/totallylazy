@@ -11,6 +11,7 @@ import com.googlecode.totallylazy.iterators.PeekingIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
+import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
 import com.googlecode.totallylazy.iterators.WindowedIterator;
@@ -139,6 +140,18 @@ public class Iterators {
             accumulator = call(callable, accumulator, iterator.next());
         }
         return accumulator;
+    }
+
+    public static <T, S> Iterator<S> scanLeft(final Iterator<? extends T> iterator, final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+        return new StatefulIterator<S>() {{push(seed);}
+            @Override
+            protected S getNext() throws Exception {
+                if(iterator.hasNext()){
+                    return callable.call(current, iterator.next());
+                }
+                return finished();
+            }
+        };
     }
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {

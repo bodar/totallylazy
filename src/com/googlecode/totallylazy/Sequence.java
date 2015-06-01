@@ -149,6 +149,10 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.foldLeft(this, seed, callable);
     }
 
+    public <S> Sequence<S> scanLeft(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+        return Sequences.scanLeft(this, seed, callable);
+    }
+
     public <S> S foldRight(final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
         return Sequences.foldRight(this, seed, callable);
     }
