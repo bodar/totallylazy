@@ -16,6 +16,8 @@ import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
+import static com.googlecode.totallylazy.xml.StreamingXPath.child;
+import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 
 public class Context {
     private final PersistentList<XMLEvent> path;
@@ -87,6 +89,6 @@ public class Context {
     public String text() {
         XMLEvent head = path.head();
         if(head instanceof Characters) return ((Characters) head).getData();
-        throw new UnsupportedOperationException("Foo");
+        return relative().filter(xpath(child(StreamingXPath.text()))).toString("");
     }
 }

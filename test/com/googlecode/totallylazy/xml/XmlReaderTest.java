@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Iterators;
+import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Rules;
 import com.googlecode.totallylazy.Sequence;
@@ -22,6 +23,7 @@ import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendantOld;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
+import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 import static com.googlecode.totallylazy.xml.StreamingXml.currentName;
 import static com.googlecode.totallylazy.xml.StreamingXml.text;
 import static com.googlecode.totallylazy.xml.XmlReader.xmlReader;
@@ -32,16 +34,12 @@ public class XmlReaderTest {
     @Ignore
     public void supportsLocations() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Sequence<Context> users = XmlReader.locations(new StringReader(xml)).filter(descendant(name("user")));
+        Sequence<Context> users = XmlReader.locations(new StringReader(xml)).filter(xpath(descendant(name("user"))));
         Sequence<Map<String, String>> locations = users.
-                map(user -> {
-                    System.out.println("user = " + user);
-                    Sequence<Context> filter = user.relative().
-                            filter(descendant(name("first").or(name("dob"))));
-                    System.out.println("relative = " + filter.toString("\n"));
-                    return map(filter.map(field -> pair(field.name(), field.text())));
-                });
-        System.out.println(locations.toString("\n"));
+                map(user -> Maps.map(user.relative().
+                        filter(xpath(descendant(name("first").or(name("dob"))))).map(field -> pair(field.name(), field.text()))));
+        System.out.println("locations = " + locations);
+
     }
 
     @Test

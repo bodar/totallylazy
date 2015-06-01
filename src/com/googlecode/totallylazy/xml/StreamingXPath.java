@@ -1,7 +1,15 @@
 package com.googlecode.totallylazy.xml;
 
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Unary;
+import com.googlecode.totallylazy.callables.Compose;
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
@@ -10,21 +18,27 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import java.util.NoSuchElementException;
+
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.callables.Compose.compose;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;
 
 public class StreamingXPath {
-    public static LogicalPredicate<XMLEvent> name(String value){
+    public static LogicalPredicate<XMLEvent> name(String value) {
         return name(value.equals("*") ? Predicates.any() : is(value));
     }
 
-    public static LogicalPredicate<XMLEvent> name(Predicate<? super String> predicate){
+    public static LogicalPredicate<XMLEvent> name(Predicate<? super String> predicate) {
         return instanceOf(StartElement.class, element ->
                 predicate.matches(element.getName().getLocalPart()));
     }
 
-    public static LogicalPredicate<XMLEvent> attribute(String name, Predicate<? super String> predicate){
+    public static LogicalPredicate<XMLEvent> attribute(String name, Predicate<? super String> predicate) {
         return instanceOf(StartElement.class, element ->
                 predicate.matches(element.getAttributeByName(new QName(name)).getValue()));
     }
@@ -33,18 +47,44 @@ public class StreamingXPath {
         return path -> predicate.matches(path.current());
     }
 
-    public static Predicate<Context> descendant(Predicate<? super XMLEvent> predicate) {
-        return path -> path.current().is(predicate);
+    public static Unary<PersistentList<XMLEvent>> descendant(Predicate<? super XMLEvent> predicate) {
+        return steps -> descendant(steps, predicate);
     }
 
-    public static Predicate<Context> child(Predicate<? super XMLEvent> predicate) {
-        return context -> {
-            PersistentList<XMLEvent> steps = context.path();
-            return steps.size() == 1 && predicate.matches(steps.head());
+    private static PersistentList<XMLEvent> descendant(PersistentList<XMLEvent> steps, Predicate<? super XMLEvent> predicate){
+        PersistentList<XMLEvent> position = steps;
+        PersistentList<XMLEvent> lastMatch = null;
+        while(!position.isEmpty()){
+            if(predicate.matches(position.head())) lastMatch = position.tail();
+            position = position.tail();
+        }
+        if(lastMatch == null) throw new NoSuchElementException();
+        return lastMatch;
+    }
+
+    public static Unary<PersistentList<XMLEvent>> child(Predicate<? super XMLEvent> predicate) {
+        return steps -> {
+            if(predicate.matches(steps.head())) return steps.tail();
+            throw new NoSuchElementException();
         };
     }
 
     public static LogicalPredicate<XMLEvent> text() {
         return instanceOf(Characters.class);
+    }
+
+    @SafeVarargs
+    public static Predicate<Context> xpath(Callable1<? super PersistentList<XMLEvent>, ? extends PersistentList<XMLEvent>>... steps) {
+        return context -> {
+            try {
+                return sequence(steps).
+                        map(Functions::function).
+                        reduce(compose()).
+                        call(context.path()).
+                        isEmpty();
+            } catch (Exception e) {
+                return false;
+            }
+        };
     }
 }

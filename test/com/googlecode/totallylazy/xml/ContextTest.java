@@ -16,6 +16,7 @@ import static com.googlecode.totallylazy.xml.StreamingXPath.child;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
 import static com.googlecode.totallylazy.xml.StreamingXPath.text;
+import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 
 public class ContextTest {
     @Test
@@ -24,7 +25,7 @@ public class ContextTest {
         Document document = Xml.document(xml);
 
         Sequence<Node> nodes = Xml.selectNodes(document, "child::*");
-        Sequence<Context> locations = XmlReader.locations(new StringReader(xml)).filter(child(name("*")));
+        Sequence<Context> locations = XmlReader.locations(new StringReader(xml)).filter(xpath(child(name("*"))));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
@@ -39,7 +40,7 @@ public class ContextTest {
 
         Sequence<Node> nodes = Xml.selectNodes(document, "descendant::*");
 
-        Sequence<Context> locations = XmlReader.locations(new StringReader(xml)).filter(descendant(name("*")));
+        Sequence<Context> locations = XmlReader.locations(new StringReader(xml)).filter(xpath(descendant(name("*"))));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
@@ -54,7 +55,7 @@ public class ContextTest {
 
         Sequence<Node> nodes = Xml.selectNodes(document, "descendant::user");
 
-        Sequence<Context> locations = XmlReader.locations(new StringReader(xml)).filter(descendant(name("user")));
+        Sequence<Context> locations = XmlReader.locations(new StringReader(xml)).filter(xpath(descendant(name("user"))));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
@@ -70,7 +71,7 @@ public class ContextTest {
         Sequence<Node> nodes = Xml.selectNodes(document, "descendant::user[@first='Dan']");
 
         Sequence<Context> locations = XmlReader.locations(new StringReader(xml)).
-                filter(descendant(name("user").and(attribute("first", is("Dan")))));
+                filter(xpath(descendant(name("user").and(attribute("first", is("Dan"))))));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
@@ -86,7 +87,7 @@ public class ContextTest {
 
         Sequence<Node> nodes = Xml.selectNodes(document, "descendant::text()");
 
-        Sequence<Context> locations = XmlReader.locations(new StringReader(xml)).filter(descendant(text()));
+        Sequence<Context> locations = XmlReader.locations(new StringReader(xml)).filter(xpath(descendant(text())));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
@@ -95,21 +96,14 @@ public class ContextTest {
     }
 
     @Test
-    @Ignore
-    public void textCollapses() throws Exception {
+    public void canSelectTextNodes() throws Exception {
         String xml = "<stream>Hello <b>Dan</b> Bodart</stream>";
         Document document = Xml.document(xml);
 
         Sequence<Node> nodes = Xml.selectNodes(document, "child::stream/child::text()");
-        System.out.println("nodes = " + nodes.toString("\n"));
 
         Sequence<Context> locations = XmlReader.locations(new StringReader(xml)).
-                filter(child(name("stream"))).
-                flatMap(stream -> {
-                    Sequence<Context> relative = stream.relative();
-                    System.out.println("relative = " + relative.toString("\n"));
-                    return relative.filter(child(text()));
-                });
+                filter(xpath(child(name("stream")), child(text())));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
