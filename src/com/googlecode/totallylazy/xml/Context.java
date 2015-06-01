@@ -75,7 +75,7 @@ public class Context {
         return skip().next();
     }
 
-    public Sequence<Context> paths() {
+    public Sequence<Context> relative() {
         return XmlReader.locations(new Context(remainder));
     }
 
@@ -86,6 +86,7 @@ public class Context {
 
     public String text() {
         XMLEvent head = path.head();
-        return ((Characters) head).getData();
+        if(head instanceof Characters) return ((Characters) head).getData();
+        throw new UnsupportedOperationException("Foo");
     }
 }
