@@ -46,10 +46,14 @@ public class StreamingXPath {
     }
 
     private static PersistentList<XMLEvent> descendant(Predicate<? super XMLEvent> predicate, PersistentList<XMLEvent> steps){
-        return steps.tails().
-                filter(tail -> predicate.matches(tail.head())).
-                lastOption().
-                getOrThrow(new NoSuchElementException());
+        PersistentList<XMLEvent> position = steps;
+        PersistentList<XMLEvent> lastMatch = null;
+        while(!position.isEmpty()){
+            if(predicate.matches(position.head())) lastMatch = position.tail();
+            position = position.tail();
+        }
+        if(lastMatch == null) throw new NoSuchElementException();
+        return lastMatch;
     }
 
     public static Unary<PersistentList<XMLEvent>> child(Predicate<? super XMLEvent> predicate) {

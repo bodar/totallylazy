@@ -33,7 +33,19 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     PersistentList<T> tail() throws NoSuchElementException;
 
     default PersistentList<PersistentList<T>> tails() {
-        return methods.tails(this);
+        if(isEmpty()) return constructors.empty();
+        return constructors.cons(this, tail().tails());
+    }
+
+    default T last() {
+        if(tail().isEmpty()) return head();
+        return tail().last();
+    }
+
+    default Option<T> lastOption() {
+        if(isEmpty()) return Option.none();
+        if(tail().isEmpty()) return headOption();
+        return tail().lastOption();
     }
 
     PersistentList<T> append(T value);
@@ -213,9 +225,4 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
         }
     }
 
-    class methods {
-        public static <T> PersistentList<PersistentList<T>> tails(PersistentList<T> list) {
-            return constructors.cons(list, tails(list.tail()));
-        }
-    }
 }
