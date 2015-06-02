@@ -32,7 +32,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XmlReaderTest {
     @Test
-    @Ignore
     public void supportsLocations() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
         Sequence<Map<String, String>> users = XmlReader.locations(new StringReader(xml)).filter(xpath(descendant(name("user")))).
