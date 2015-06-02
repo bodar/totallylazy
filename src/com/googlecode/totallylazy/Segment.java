@@ -20,6 +20,16 @@ public interface Segment<T> {
 
     Option<T> headOption();
 
+    default T last() {
+        if(tail().isEmpty()) return head();
+        return tail().last();
+    }
+
+    default Option<T> lastOption() {
+        if(tail().isEmpty()) return headOption();
+        return tail().lastOption();
+    }
+
     Segment<T> empty();
 
     Segment<T> cons(T head);

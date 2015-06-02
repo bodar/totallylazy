@@ -32,6 +32,10 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     @Override
     PersistentList<T> tail() throws NoSuchElementException;
 
+    default PersistentList<PersistentList<T>> tails() {
+        return methods.tails(this);
+    }
+
     PersistentList<T> append(T value);
 
     @Override
@@ -206,6 +210,12 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
                     return list.headOption();
                 }
             };
+        }
+    }
+
+    class methods {
+        public static <T> PersistentList<PersistentList<T>> tails(PersistentList<T> list) {
+            return constructors.cons(list, tails(list.tail()));
         }
     }
 }

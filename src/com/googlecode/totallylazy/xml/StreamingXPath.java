@@ -1,15 +1,10 @@
 package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unary;
-import com.googlecode.totallylazy.callables.Compose;
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
@@ -21,7 +16,6 @@ import javax.xml.stream.events.XMLEvent;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -48,18 +42,14 @@ public class StreamingXPath {
     }
 
     public static Unary<PersistentList<XMLEvent>> descendant(Predicate<? super XMLEvent> predicate) {
-        return steps -> descendant(steps, predicate);
+        return steps -> descendant(predicate, steps);
     }
 
-    private static PersistentList<XMLEvent> descendant(PersistentList<XMLEvent> steps, Predicate<? super XMLEvent> predicate){
-        PersistentList<XMLEvent> position = steps;
-        PersistentList<XMLEvent> lastMatch = null;
-        while(!position.isEmpty()){
-            if(predicate.matches(position.head())) lastMatch = position.tail();
-            position = position.tail();
-        }
-        if(lastMatch == null) throw new NoSuchElementException();
-        return lastMatch;
+    private static PersistentList<XMLEvent> descendant(Predicate<? super XMLEvent> predicate, PersistentList<XMLEvent> steps){
+        return steps.tails().
+                filter(tail -> predicate.matches(tail.head())).
+                lastOption().
+                getOrThrow(new NoSuchElementException());
     }
 
     public static Unary<PersistentList<XMLEvent>> child(Predicate<? super XMLEvent> predicate) {
