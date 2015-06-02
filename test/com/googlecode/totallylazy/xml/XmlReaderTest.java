@@ -7,7 +7,6 @@ import com.googlecode.totallylazy.Rules;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
@@ -34,26 +33,12 @@ public class XmlReaderTest {
     @Test
     public void supportsLocations() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Sequence<Map<String, String>> users = XmlReader.locations(new StringReader(xml)).filter(xpath(descendant(name("user")))).
+        Sequence<Map<String, String>> users = XmlReader.contexts(new StringReader(xml)).filter(xpath(descendant(name("user")))).
                 map(user -> Maps.map(user.relative().
                         filter(xpath(child(name("first").or(name("dob"))))).
                         map(field -> pair(field.name(), field.text()))));
         assertThat(users, hasExactly(map("first", "Dan & Bod", "dob", "1977"), map("first", "Jason", "dob", "1978")));
     }
-
-    @Test
-    public void canStreamIntoAMap() throws Exception {
-        String xml = "<stream><user><first>Dan</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Sequence<Location> locations =  forwardOnly(xmlReader(new StringReader(xml)).iterator(descendantOld(name("user"))));
-        Sequence<Map<String, String>> users = locations.map(user -> {
-            StatefulIterator<Pair<String, String>> iterator = user.stream().
-                    iterator(Rules.<Location, Pair<String, String>>rules().
-                    addFirst(descendantOld(name("first").or(name("dob"))), field -> pair(currentName(field), text(field))));
-            return map(Iterators.map(iterator, pair -> pair));
-        });
-        assertThat(users, hasExactly(map("first", "Dan", "dob", "1977"), map("first", "Jason", "dob", "1978")));
-    }
-
 
     @Test
     public void currentlyItEscapesCData() throws Exception {

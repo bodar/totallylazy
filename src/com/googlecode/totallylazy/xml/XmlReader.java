@@ -24,8 +24,10 @@ import java.util.Iterator;
 import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendantOld;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
+import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 
 public class XmlReader {
     private final XMLEventReader reader;
@@ -96,11 +98,11 @@ public class XmlReader {
         return Computation.memoize(Unchecked.<Iterator<XMLEvent>>cast(xmlEventReader(reader)));
     }
 
-    public static Sequence<Context> locations(Reader reader) {
-        return locations(new Context(xmlEvents(reader)).next().get());
+    public static Sequence<Context> contexts(Reader reader) {
+        return contexts(new Context(xmlEvents(reader)).next().get());
     }
 
-    public static Computation<Context> locations(Context context) {
+    public static Computation<Context> contexts(Context context) {
         return Computation.compute(
                 context,
                 Context::next

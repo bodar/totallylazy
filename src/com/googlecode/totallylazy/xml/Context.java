@@ -1,21 +1,29 @@
 package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.collections.PersistentList;
+import com.googlecode.totallylazy.collections.PersistentMap;
 
+import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Sequences.forwardOnly;
+import static com.googlecode.totallylazy.Sequences.memoize;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
-import static com.googlecode.totallylazy.xml.StreamingXPath.child;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
 import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 
@@ -34,7 +42,9 @@ public class Context {
 
     public Context push() {
         return new Context(remainder.tail(),
-                path.headOption().is(instanceOf(Characters.class)) ? path.tail().cons(remainder.head()) : path.cons(remainder.head()));
+                path.headOption().is(instanceOf(Characters.class)) ?
+                        path.tail().cons(remainder.head()) :
+                        path.cons(remainder.head()));
     }
 
     public Context skip() {
@@ -76,20 +86,33 @@ public class Context {
     }
 
     public Sequence<Context> relative() {
-        return XmlReader.locations(new Context(remainder)).tail();
+        return XmlReader.contexts(new Context(remainder)).tail();
     }
 
     public String name() {
-        XMLEvent head = path.head();
-        return ((StartElement) head).getName().getLocalPart();
+        return startElement().getName().getLocalPart();
     }
 
+    private StartElement startElement() {return (StartElement) path.head();}
+
     public String text() {
-        XMLEvent head = path.head();
-        if(head instanceof Characters) return ((Characters) head).getData();
+        if(isText()) return ((Characters) path.head()).getData();
         return relative().
                 filter(xpath(descendant(StreamingXPath.text()))).
                 map(Context::text).
                 toString("");
+    }
+
+    public boolean isText() {
+        return path.headOption().is(instanceOf(Characters.class));
+    }
+
+    public boolean isElement() {
+        return path.headOption().is(instanceOf(StartElement.class));
+    }
+
+    public PersistentMap<String, String> attributes() {
+        return PersistentMap.constructors.map(forwardOnly(Unchecked.<Iterator<Attribute>>cast(startElement().getAttributes())).
+                map((Attribute attribute) -> Pair.pair(attribute.getName().getLocalPart(), attribute.getValue())));
     }
 }
