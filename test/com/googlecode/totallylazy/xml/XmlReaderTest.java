@@ -20,6 +20,7 @@ import static com.googlecode.totallylazy.Sequences.forwardOnly;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.xml.StreamingXPath.child;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendantOld;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
@@ -34,13 +35,11 @@ public class XmlReaderTest {
     @Ignore
     public void supportsLocations() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Sequence<Context> users = XmlReader.locations(new StringReader(xml)).filter(xpath(descendant(name("user"))));
-        Sequence<Map<String, String>> locations = users.
+        Sequence<Map<String, String>> users = XmlReader.locations(new StringReader(xml)).filter(xpath(descendant(name("user")))).
                 map(user -> Maps.map(user.relative().
-                        filter(xpath(descendant(name("first").or(name("dob"))))).
+                        filter(xpath(child(name("first").or(name("dob"))))).
                         map(field -> pair(field.name(), field.text()))));
-        System.out.println("locations = " + locations);
-
+        assertThat(users, hasExactly(map("first", "Dan & Bod", "dob", "1977"), map("first", "Jason", "dob", "1978")));
     }
 
     @Test

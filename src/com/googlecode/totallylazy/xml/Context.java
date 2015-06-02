@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.xml;
 
-import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
@@ -15,11 +14,9 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
-import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
 import static com.googlecode.totallylazy.xml.StreamingXPath.child;
-import static com.googlecode.totallylazy.xml.StreamingXPath.name;
-import static com.googlecode.totallylazy.xml.StreamingXPath.text;
+import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
 import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 
 public class Context {
@@ -35,14 +32,9 @@ public class Context {
         this.path = path;
     }
 
-    public Context add(XMLEvent value) {
+    public Context push() {
         return new Context(remainder.tail(),
-                path.headOption().is(instanceOf(Characters.class)) ? path.tail().cons(value) : path.cons(value));
-    }
-
-    public Context remove() {
-        return new Context(remainder.tail(),
-                path.headOption().is(instanceOf(Characters.class)) ? path.tail().tail() : path.tail());
+                path.headOption().is(instanceOf(Characters.class)) ? path.tail().cons(remainder.head()) : path.cons(remainder.head()));
     }
 
     public Context skip() {
@@ -71,17 +63,20 @@ public class Context {
     public Option<Context> next() {
         if (remainder.isEmpty()) return none(Context.class);
         XMLEvent head = remainder.head();
-        if (head instanceof StartElement) return some(add(head));
-        if (head instanceof Characters) return some(add(head));
-        if (head instanceof EndElement) {
-            if(path.isEmpty()) return none();
-            return remove().next();
-        }
+        if (head instanceof StartElement) return some(push());
+        if (head instanceof Characters) return some(push());
+        if (head instanceof EndElement) return pop(((EndElement) head).getName().getLocalPart());
         return skip().next();
     }
 
+    private Option<Context> pop(String name) {
+        return path.tails().
+                find(path -> path.headOption().is(StreamingXPath.name(name))).
+                flatMap(newPath -> new Context(remainder.tail(), newPath.tail()).next());
+    }
+
     public Sequence<Context> relative() {
-        return XmlReader.locations(new Context(remainder));
+        return XmlReader.locations(new Context(remainder)).tail();
     }
 
     public String name() {
@@ -92,8 +87,9 @@ public class Context {
     public String text() {
         XMLEvent head = path.head();
         if(head instanceof Characters) return ((Characters) head).getData();
-        Sequence<Context> filter = XmlReader.locations(this).
-                filter(xpath(child(StreamingXPath.name(name())), child(StreamingXPath.text())));
-        return filter.map(Context::text).toString("");
+        return relative().
+                filter(xpath(descendant(StreamingXPath.text()))).
+                map(Context::text).
+                toString("");
     }
 }
