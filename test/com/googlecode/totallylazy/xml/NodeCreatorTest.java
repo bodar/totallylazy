@@ -14,12 +14,12 @@ import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
-public class NodeCreator2Test {
+public class NodeCreatorTest {
     @Test
     public void works() throws Exception {
         String xml = "<stream>Hello &amp; World</stream>";
-        Sequence<Context> contexts = XmlReader.contexts(new StringReader(xml)).filter(xpath(child(name("stream"))));
-        Sequence<Node> stream = contexts.map(new NodeCreator2());
+        Sequence<Context> contexts = Context.contexts(new StringReader(xml)).filter(xpath(child(name("stream"))));
+        Sequence<Node> stream = contexts.map(new NodeCreator());
         assertThat(stream.size(), is(1));
         assertThat(Xml.asString(stream.head()), is("<stream>Hello &amp; World</stream>"));
     }

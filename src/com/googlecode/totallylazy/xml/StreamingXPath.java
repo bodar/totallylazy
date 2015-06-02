@@ -37,10 +37,6 @@ public class StreamingXPath {
                 predicate.matches(element.getAttributeByName(new QName(name)).getValue()));
     }
 
-    public static Predicate<Location> descendantOld(Predicate<? super StartElement> predicate) {
-        return path -> predicate.matches(path.current());
-    }
-
     public static Unary<PersistentList<XMLEvent>> descendant(Predicate<? super XMLEvent> predicate) {
         return steps -> descendant(predicate, steps);
     }
@@ -77,5 +73,9 @@ public class StreamingXPath {
                 return false;
             }
         };
+    }
+
+    public static Predicate<XMLEvent> node() {
+        return Predicates.any();
     }
 }

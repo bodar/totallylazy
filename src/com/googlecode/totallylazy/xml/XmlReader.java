@@ -1,45 +1,25 @@
 package com.googlecode.totallylazy.xml;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Computation;
-import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Rules;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.iterators.StatefulIterator;
 import org.w3c.dom.Node;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.EndElement;
-import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.Reader;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
-import static com.googlecode.totallylazy.xml.StreamingXPath.descendantOld;
 import static com.googlecode.totallylazy.xml.StreamingXPath.name;
 import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 
 public class XmlReader {
-    private final XMLEventReader reader;
-
-    public XmlReader(XMLEventReader reader) {
-        this.reader = reader;
-    }
-
-    public static XmlReader xmlReader(Reader reader) {
-        return new XmlReader(xmlEventReader(reader));
-    }
-
     private static XMLEventReader xmlEventReader(Reader reader) {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -50,64 +30,16 @@ public class XmlReader {
         }
     }
 
-    public static Iterator<Node> xmlReader(Reader reader, String localName) throws LazyException {
-        return xmlReader(reader, descendantOld(name(localName)));
+    public static Sequence<Node> xmlReader(Reader reader, String localName) throws LazyException {
+        return xmlReader(reader, xpath(descendant(name(localName))));
     }
 
-    public static Iterator<Node> xmlReader(Reader reader, Predicate<Location> predicate) {
-        return Iterators.map(xmlReader(reader).iterator(predicate),
-                location -> new NodeCreator(location.reader()).call(location));
-    }
-
-    public StatefulIterator<Location> iterator(Predicate<? super Location> predicate) {
-        return iterator((Location location) -> predicate.matches(location) ? some(location) : none());
-    }
-
-    public <T> StatefulIterator<T> iterator(Rules<? super Location, ? extends T> rules) {
-        return iterator((Location location) -> rules.find(location).map(rule -> rule.call(location)));
-    }
-
-    public <T> StatefulIterator<T> iterator(Callable1<? super Location, ? extends Option<T>> callable) {
-        return new StatefulIterator<T>() {
-            private Location path = new Location(reader);
-
-            @Override
-            protected T getNext() throws Exception {
-                while (reader.hasNext()) {
-                    XMLEvent event = reader.nextEvent();
-                    if (event instanceof EndElement) {
-                        if (path.isEmpty()) return finished();
-                        path = path.remove();
-                    }
-                    if (event instanceof StartElement) {
-                        StartElement start = (StartElement) event;
-                        path = path.add(start);
-                        Option<T> option = callable.call(path);
-                        if (option.isDefined()) {
-                            path = path.remove();
-                            return option.get();
-                        }
-                    }
-                }
-                return finished();
-            }
-        };
+    public static Sequence<Node> xmlReader(Reader reader, Predicate<Context> predicate) {
+        return Context.contexts(reader).filter(predicate).map(
+                location -> new NodeCreator().call(location));
     }
 
     public static Sequence<XMLEvent> xmlEvents(Reader reader) {
         return Computation.memoize(Unchecked.<Iterator<XMLEvent>>cast(xmlEventReader(reader)));
     }
-
-    public static Sequence<Context> contexts(Reader reader) {
-        return contexts(new Context(xmlEvents(reader)).next().get());
-    }
-
-    public static Computation<Context> contexts(Context context) {
-        return Computation.compute(
-                context,
-                Context::next
-        );
-    }
-
-
 }

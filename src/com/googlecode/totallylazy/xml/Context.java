@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.xml;
 
+import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
@@ -14,8 +15,8 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import java.io.Reader;
 import java.util.Iterator;
-import java.util.Map;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -38,6 +39,14 @@ public class Context {
     public Context(Sequence<XMLEvent> remainder, PersistentList<XMLEvent> path) {
         this.remainder = remainder;
         this.path = path;
+    }
+
+    public static Sequence<Context> contexts(Reader reader) {
+        return contexts(new Context(XmlReader.xmlEvents(reader)).next().get());
+    }
+
+    public static Computation<Context> contexts(Context context) {
+        return Computation.compute(context, Context::next);
     }
 
     public Context push() {
@@ -86,7 +95,7 @@ public class Context {
     }
 
     public Sequence<Context> relative() {
-        return XmlReader.contexts(new Context(remainder)).tail();
+        return contexts(new Context(remainder)).tail();
     }
 
     public String name() {
