@@ -55,7 +55,7 @@ public class StreamingXPath {
 
     public static Unary<PersistentList<XMLEvent>> child(Predicate<? super XMLEvent> predicate) {
         return steps -> {
-            if(predicate.matches(steps.head())) return steps.tail();
+            if(steps.headOption().is(predicate)) return steps.tail();
             throw new NoSuchElementException();
         };
     }

@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.xml;
 
+import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
@@ -17,6 +18,8 @@ import static com.googlecode.totallylazy.collections.PersistentList.constructors
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
 import static com.googlecode.totallylazy.xml.StreamingXPath.child;
+import static com.googlecode.totallylazy.xml.StreamingXPath.name;
+import static com.googlecode.totallylazy.xml.StreamingXPath.text;
 import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 
 public class Context {
@@ -89,6 +92,8 @@ public class Context {
     public String text() {
         XMLEvent head = path.head();
         if(head instanceof Characters) return ((Characters) head).getData();
-        return relative().filter(xpath(child(StreamingXPath.text()))).toString("");
+        Sequence<Context> filter = XmlReader.locations(this).
+                filter(xpath(child(StreamingXPath.name(name())), child(StreamingXPath.text())));
+        return filter.map(Context::text).toString("");
     }
 }

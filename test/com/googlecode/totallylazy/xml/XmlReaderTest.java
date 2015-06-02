@@ -37,7 +37,8 @@ public class XmlReaderTest {
         Sequence<Context> users = XmlReader.locations(new StringReader(xml)).filter(xpath(descendant(name("user"))));
         Sequence<Map<String, String>> locations = users.
                 map(user -> Maps.map(user.relative().
-                        filter(xpath(descendant(name("first").or(name("dob"))))).map(field -> pair(field.name(), field.text()))));
+                        filter(xpath(descendant(name("first").or(name("dob"))))).
+                        map(field -> pair(field.name(), field.text()))));
         System.out.println("locations = " + locations);
 
     }
