@@ -2,41 +2,33 @@ package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.collections.PersistentMap;
 
-import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-
 import java.io.Reader;
-import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Predicates.instanceOf;
-import static com.googlecode.totallylazy.Sequences.forwardOnly;
-import static com.googlecode.totallylazy.Sequences.memoize;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
 import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
 import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 
-public class Context {
-    private final PersistentList<XMLEvent> path;
+public class Context implements XmlNode {
+    private final PersistentList<XmlNode> path;
     private final Sequence<XMLEvent> remainder;
 
     public Context(Sequence<XMLEvent> remainder) {
         this(remainder, empty());
     }
 
-    public Context(Sequence<XMLEvent> remainder, PersistentList<XMLEvent> path) {
+    public Context(Sequence<XMLEvent> remainder, PersistentList<XmlNode> path) {
         this.remainder = remainder;
         this.path = path;
     }
@@ -49,11 +41,11 @@ public class Context {
         return Computation.compute(context, Context::next);
     }
 
-    public Context push() {
+    public Context push(XmlNode node) {
         return new Context(remainder.tail(),
-                path.headOption().is(instanceOf(Characters.class)) ?
-                        path.tail().cons(remainder.head()) :
-                        path.cons(remainder.head()));
+                path.headOption().is(XmlNode::isText) ?
+                        path.tail().cons(node) :
+                        path.cons(node));
     }
 
     public Context skip() {
@@ -65,15 +57,11 @@ public class Context {
         return Sequences.toString(path(), "/");
     }
 
-    public Option<XMLEvent> current() {
+    public Option<XmlNode> current() {
         return path.headOption();
     }
 
-    public PersistentList<XMLEvent> path() {return reverse(path);}
-
-    public Sequence<XMLEvent> remainder() {
-        return remainder;
-    }
+    public PersistentList<XmlNode> path() {return reverse(path);}
 
     public boolean isEmpty() {
         return path.isEmpty();
@@ -82,8 +70,8 @@ public class Context {
     public Option<Context> next() {
         if (remainder.isEmpty()) return none(Context.class);
         XMLEvent head = remainder.head();
-        if (head instanceof StartElement) return some(push());
-        if (head instanceof Characters) return some(push());
+        if (head instanceof StartElement) return some(push(XmlNode.element((StartElement) head)));
+        if (head instanceof Characters) return some(push(XmlNode.text((Characters) head)));
         if (head instanceof EndElement) return pop(((EndElement) head).getName().getLocalPart());
         return skip().next();
     }
@@ -98,30 +86,32 @@ public class Context {
         return contexts(new Context(remainder)).tail();
     }
 
+    @Override
     public String name() {
-        return startElement().getName().getLocalPart();
+        return path.head().name();
     }
 
-    private StartElement startElement() {return (StartElement) path.head();}
-
+    @Override
     public String text() {
-        if(isText()) return ((Characters) path.head()).getData();
+        if(isText()) return path.head().text();
         return relative().
                 filter(xpath(descendant(StreamingXPath.text()))).
                 map(Context::text).
                 toString("");
     }
 
+    @Override
     public boolean isText() {
-        return path.headOption().is(instanceOf(Characters.class));
+        return path.head().isText();
     }
 
+    @Override
     public boolean isElement() {
-        return path.headOption().is(instanceOf(StartElement.class));
+        return path.head().isElement();
     }
 
+    @Override
     public PersistentMap<String, String> attributes() {
-        return PersistentMap.constructors.map(forwardOnly(Unchecked.<Iterator<Attribute>>cast(startElement().getAttributes())).
-                map((Attribute attribute) -> Pair.pair(attribute.getName().getLocalPart(), attribute.getValue())));
+        return path.head().attributes();
     }
 }
