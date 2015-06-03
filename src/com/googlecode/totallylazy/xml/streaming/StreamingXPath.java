@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.xml;
+package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Functions;
@@ -25,7 +25,7 @@ public class StreamingXPath {
     }
 
     public static LogicalPredicate<XmlNode> attribute(String name, Predicate<? super String> predicate) {
-        return logicalPredicate( (XmlNode node) -> {
+        return logicalPredicate((XmlNode node) -> {
             String value = node.attributes().get(name);
             return predicate.matches(value);
         });

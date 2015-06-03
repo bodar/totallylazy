@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.xml;
+package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.LazyException;
@@ -15,9 +15,9 @@ import java.io.Reader;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
-import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
-import static com.googlecode.totallylazy.xml.StreamingXPath.name;
-import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.descendant;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.name;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.xpath;
 
 public class XmlReader {
     private static XMLEventReader xmlEventReader(Reader reader) {

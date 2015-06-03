@@ -1,14 +1,12 @@
-package com.googlecode.totallylazy.xml;
+package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.collections.PersistentMap;
 
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
-
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Sequences.forwardOnly;

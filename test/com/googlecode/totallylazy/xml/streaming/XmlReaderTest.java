@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.xml;
+package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;
@@ -13,11 +13,11 @@ import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static com.googlecode.totallylazy.xml.StreamingXPath.child;
-import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
-import static com.googlecode.totallylazy.xml.StreamingXPath.name;
-import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
-import static com.googlecode.totallylazy.xml.XmlReader.xmlReader;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.child;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.descendant;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.name;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.xpath;
+import static com.googlecode.totallylazy.xml.streaming.XmlReader.xmlReader;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XmlReaderTest {

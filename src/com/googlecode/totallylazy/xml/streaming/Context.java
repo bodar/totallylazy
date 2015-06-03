@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.xml;
+package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Option;
@@ -17,8 +17,6 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
-import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
-import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 
 public class Context implements XmlNode {
     private final PersistentList<XmlNode> path;
@@ -95,7 +93,7 @@ public class Context implements XmlNode {
     public String text() {
         if(isText()) return path.head().text();
         return relative().
-                filter(xpath(descendant(StreamingXPath.text()))).
+                filter(StreamingXPath.xpath(StreamingXPath.descendant(StreamingXPath.text()))).
                 map(Context::text).
                 toString("");
     }

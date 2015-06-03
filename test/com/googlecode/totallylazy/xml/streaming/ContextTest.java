@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.xml;
+package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
@@ -10,12 +10,12 @@ import java.io.StringReader;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.xml.StreamingXPath.attribute;
-import static com.googlecode.totallylazy.xml.StreamingXPath.child;
-import static com.googlecode.totallylazy.xml.StreamingXPath.descendant;
-import static com.googlecode.totallylazy.xml.StreamingXPath.name;
-import static com.googlecode.totallylazy.xml.StreamingXPath.text;
-import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.attribute;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.child;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.descendant;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.name;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.text;
+import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.xpath;
 
 public class ContextTest {
     @Test

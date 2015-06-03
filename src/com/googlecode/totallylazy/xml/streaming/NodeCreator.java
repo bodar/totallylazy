@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.xml;
+package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
@@ -8,8 +8,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import javax.xml.stream.XMLStreamException;
-
-import static com.googlecode.totallylazy.xml.StreamingXPath.xpath;
 
 public class NodeCreator implements Callable1<Context, Node> {
     @Override
@@ -23,7 +21,7 @@ public class NodeCreator implements Callable1<Context, Node> {
 
     private Node children(Node parent, Sequence<Context> contexts) throws XMLStreamException {
         if(contexts.isEmpty()) return parent;
-        for (Context child : contexts.filter(xpath(StreamingXPath.child(StreamingXPath.node())))) {
+        for (Context child : contexts.filter(StreamingXPath.xpath(StreamingXPath.child(StreamingXPath.node())))) {
             if(child.isText()) parent.appendChild(parent.getOwnerDocument().createTextNode(child.text()));
             if(child.isElement()) children(child(parent, child), child.relative());
         }
