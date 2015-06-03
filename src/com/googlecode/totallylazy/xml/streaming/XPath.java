@@ -15,27 +15,27 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.Compose.compose;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;
 
-public class StreamingXPath {
-    public static LogicalPredicate<XmlNode> name(String value) {
+public class XPath {
+    public static LogicalPredicate<Node> name(String value) {
         return name(value.equals("*") ? Predicates.any() : is(value));
     }
 
-    public static LogicalPredicate<XmlNode> name(Predicate<? super String> predicate) {
-        return logicalPredicate((XmlNode element) -> element.isElement() && predicate.matches(element.name()));
+    public static LogicalPredicate<Node> name(Predicate<? super String> predicate) {
+        return logicalPredicate((Node element) -> element.isElement() && predicate.matches(element.name()));
     }
 
-    public static LogicalPredicate<XmlNode> attribute(String name, Predicate<? super String> predicate) {
-        return logicalPredicate((XmlNode node) -> {
+    public static LogicalPredicate<Node> attribute(String name, Predicate<? super String> predicate) {
+        return logicalPredicate((Node node) -> {
             String value = node.attributes().get(name);
             return predicate.matches(value);
         });
     }
 
-    public static Unary<PersistentList<XmlNode>> descendant(Predicate<? super XmlNode> predicate) {
+    public static Unary<PersistentList<Node>> descendant(Predicate<? super Node> predicate) {
         return steps -> descendant(predicate, steps);
     }
 
-    private static PersistentList<XmlNode> descendant(Predicate<? super XmlNode> predicate, PersistentList<XmlNode> steps){
+    private static PersistentList<Node> descendant(Predicate<? super Node> predicate, PersistentList<Node> steps){
         return steps.tails().
                 filter(tail -> predicate.matches(tail.head())).
                 lastOption().
@@ -43,19 +43,19 @@ public class StreamingXPath {
                 getOrThrow(new NoSuchElementException());
     }
 
-    public static Unary<PersistentList<XmlNode>> child(Predicate<? super XmlNode> predicate) {
+    public static Unary<PersistentList<Node>> child(Predicate<? super Node> predicate) {
         return steps -> {
             if(steps.headOption().is(predicate)) return steps.tail();
             throw new NoSuchElementException();
         };
     }
 
-    public static LogicalPredicate<XmlNode> text() {
-        return logicalPredicate(XmlNode::isText);
+    public static LogicalPredicate<Node> text() {
+        return logicalPredicate(Node::isText);
     }
 
     @SafeVarargs
-    public static Predicate<Context> xpath(Callable1<? super PersistentList<XmlNode>, ? extends PersistentList<XmlNode>>... steps) {
+    public static Predicate<Context> xpath(Callable1<? super PersistentList<Node>, ? extends PersistentList<Node>>... steps) {
         return context -> {
             try {
                 return sequence(steps).
@@ -69,7 +69,7 @@ public class StreamingXPath {
         };
     }
 
-    public static Predicate<XmlNode> node() {
+    public static Predicate<Node> node() {
         return Predicates.any();
     }
 }

@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Xml;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -10,19 +9,22 @@ import java.io.StringReader;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.attribute;
-import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.child;
-import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.descendant;
-import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.name;
-import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.text;
-import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.xpath;
+import static com.googlecode.totallylazy.Xml.document;
+import static com.googlecode.totallylazy.Xml.selectNodes;
+import static com.googlecode.totallylazy.xml.streaming.XPath.attribute;
+import static com.googlecode.totallylazy.xml.streaming.XPath.child;
+import static com.googlecode.totallylazy.xml.streaming.XPath.descendant;
+import static com.googlecode.totallylazy.xml.streaming.XPath.name;
+import static com.googlecode.totallylazy.xml.streaming.XPath.text;
+import static com.googlecode.totallylazy.xml.streaming.XPath.xpath;
+import static com.googlecode.totallylazy.xml.streaming.Xml.contexts;
 
 public class ContextTest {
     @Test
     public void unfilteredHasCorrectNumberOfContexts() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
 
-        Sequence<Context> locations = Context.contexts(new StringReader(xml));
+        Sequence<Context> locations = contexts(xml);
         org.junit.Assert.assertEquals(locations.toString("\n"), "<stream>\n" +
                 "<stream>/<user>\n" +
                 "<stream>/<user>/<first>\n" +
@@ -39,7 +41,7 @@ public class ContextTest {
     @Test
     public void unfilteredStillWorksEvenWhenTextHasNestedElement() throws Exception {
         String xml = "<stream>Hello <b>Dan</b> Bodart</stream>";
-        Sequence<Context> locations = Context.contexts(new StringReader(xml));
+        Sequence<Context> locations = contexts(xml);
         org.junit.Assert.assertEquals(locations.toString("\n"), "<stream>\n" +
                 "<stream>/Hello \n" +
                 "<stream>/<b>\n" +
@@ -51,10 +53,10 @@ public class ContextTest {
     @Test
     public void shouldSupportChild() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Document document = Xml.document(xml);
+        Document document = document(xml);
 
-        Sequence<Node> nodes = Xml.selectNodes(document, "child::*");
-        Sequence<Context> locations = Context.contexts(new StringReader(xml)).filter(xpath(child(name("*"))));
+        Sequence<Node> nodes = selectNodes(document, "child::*");
+        Sequence<Context> locations = contexts(xml).filter(xpath(child(name("*"))));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
@@ -65,11 +67,11 @@ public class ContextTest {
     @Test
     public void shouldSupportDescendant() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Document document = Xml.document(xml);
+        Document document = document(xml);
 
-        Sequence<Node> nodes = Xml.selectNodes(document, "descendant::*");
+        Sequence<Node> nodes = selectNodes(document, "descendant::*");
 
-        Sequence<Context> locations = Context.contexts(new StringReader(xml)).filter(xpath(descendant(name("*"))));
+        Sequence<Context> locations = contexts(xml).filter(xpath(descendant(name("*"))));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
@@ -80,11 +82,11 @@ public class ContextTest {
     @Test
     public void shouldSupportDescendantWithNames() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Document document = Xml.document(xml);
+        Document document = document(xml);
 
-        Sequence<Node> nodes = Xml.selectNodes(document, "descendant::user");
+        Sequence<Node> nodes = selectNodes(document, "descendant::user");
 
-        Sequence<Context> locations = Context.contexts(new StringReader(xml)).filter(xpath(descendant(name("user"))));
+        Sequence<Context> locations = contexts(xml).filter(xpath(descendant(name("user"))));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
@@ -95,11 +97,11 @@ public class ContextTest {
     @Test
     public void shouldSupportAttributes() throws Exception {
         String xml = "<stream><user first='Dan'></user><user first='Jason'></user></stream>";
-        Document document = Xml.document(xml);
+        Document document = document(xml);
 
-        Sequence<Node> nodes = Xml.selectNodes(document, "descendant::user[@first='Dan']");
+        Sequence<Node> nodes = selectNodes(document, "descendant::user[@first='Dan']");
 
-        Sequence<Context> locations = Context.contexts(new StringReader(xml)).
+        Sequence<Context> locations = contexts(xml).
                 filter(xpath(descendant(name("user").and(attribute("first", is("Dan"))))));
         assertThat(locations.size(), is(nodes.size()));
 
@@ -112,11 +114,11 @@ public class ContextTest {
     @Test
     public void shouldSupportTextNodes() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Document document = Xml.document(xml);
+        Document document = document(xml);
 
-        Sequence<Node> nodes = Xml.selectNodes(document, "descendant::text()");
+        Sequence<Node> nodes = selectNodes(document, "descendant::text()");
 
-        Sequence<Context> locations = Context.contexts(new StringReader(xml)).filter(xpath(descendant(text())));
+        Sequence<Context> locations = contexts(xml).filter(xpath(descendant(text())));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
@@ -127,11 +129,11 @@ public class ContextTest {
     @Test
     public void canGetTextOfElement() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Document document = Xml.document(xml);
+        Document document = document(xml);
 
-        Sequence<Node> nodes = Xml.selectNodes(document, "descendant::user");
+        Sequence<Node> nodes = selectNodes(document, "descendant::user");
 
-        Sequence<Context> locations = Context.contexts(new StringReader(xml)).filter(xpath(descendant(name("user"))));
+        Sequence<Context> locations = contexts(xml).filter(xpath(descendant(name("user"))));
         assertThat(locations.size(), is(nodes.size()));
 
         Node root = nodes.head();
@@ -142,11 +144,11 @@ public class ContextTest {
     @Test
     public void canSelectTextNodes() throws Exception {
         String xml = "<stream>Hello <b>Dan</b> Bodart</stream>";
-        Document document = Xml.document(xml);
+        Document document = document(xml);
 
-        Sequence<Node> nodes = Xml.selectNodes(document, "child::stream/child::text()");
+        Sequence<Node> nodes = selectNodes(document, "child::stream/child::text()");
 
-        Sequence<Context> all = Context.contexts(new StringReader(xml));
+        Sequence<Context> all = contexts(xml);
         Sequence<Context> locations = all.
                 filter(xpath(child(name("stream")), child(text())));
         assertThat(locations.size(), is(nodes.size()));
@@ -159,11 +161,11 @@ public class ContextTest {
     @Test
     public void supportsRelative() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
-        Document document = Xml.document(xml);
+        Document document = document(xml);
 
-        Sequence<Node> userNodes = Xml.selectNodes(document, "descendant::user");
+        Sequence<Node> userNodes = selectNodes(document, "descendant::user");
 
-        Sequence<Context> usersContexts = Context.contexts(new StringReader(xml)).
+        Sequence<Context> usersContexts = contexts(xml).
                 filter(xpath(descendant(name("user"))));
         assertThat(usersContexts.size(), is(userNodes.size()));
 
@@ -179,7 +181,7 @@ public class ContextTest {
     public void oneItemWithTwoChildren() throws Exception {
         String xml = "<stream><item><child/><child/></item></stream>";
 
-        Sequence<Context> locations = Context.contexts(new StringReader(xml));
+        Sequence<Context> locations = contexts(xml);
         org.junit.Assert.assertEquals(locations.toString("\n"), "<stream>\n" +
                 "<stream>/<item>\n" +
                 "<stream>/<item>/<child>\n" +

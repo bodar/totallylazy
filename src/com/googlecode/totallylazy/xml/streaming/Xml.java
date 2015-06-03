@@ -12,14 +12,15 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
-import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.descendant;
-import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.name;
-import static com.googlecode.totallylazy.xml.streaming.StreamingXPath.xpath;
+import static com.googlecode.totallylazy.xml.streaming.XPath.descendant;
+import static com.googlecode.totallylazy.xml.streaming.XPath.name;
+import static com.googlecode.totallylazy.xml.streaming.XPath.xpath;
 
-public class XmlReader {
+public class Xml {
     private static XMLEventReader xmlEventReader(Reader reader) {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -30,16 +31,27 @@ public class XmlReader {
         }
     }
 
-    public static Sequence<Node> xmlReader(Reader reader, String localName) throws LazyException {
-        return xmlReader(reader, xpath(descendant(name(localName))));
+    public static Sequence<Node> nodes(Reader reader, String localName) throws LazyException {
+        return nodes(reader, xpath(descendant(name(localName))));
     }
 
-    public static Sequence<Node> xmlReader(Reader reader, Predicate<Context> predicate) {
-        return Context.contexts(reader).filter(predicate).map(
-                location -> new NodeCreator().call(location));
+    public static Sequence<Node> nodes(Reader reader, Predicate<Context> predicate) {
+        return contexts(reader).filter(predicate).map(DomConverter::convert);
     }
 
-    public static Sequence<XMLEvent> xmlEvents(Reader reader) {
+    public static Sequence<XMLEvent> events(Reader reader) {
         return Computation.memoize(Unchecked.<Iterator<XMLEvent>>cast(xmlEventReader(reader)));
+    }
+
+    public static Sequence<Context> contexts(String xml) {
+        return contexts(new StringReader(xml));
+    }
+
+    public static Sequence<Context> contexts(Reader reader) {
+        return contexts(new Context(events(reader)).next().get());
+    }
+
+    public static Computation<Context> contexts(Context context) {
+        return Computation.compute(context, Context::next);
     }
 }
