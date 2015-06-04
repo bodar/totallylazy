@@ -22,6 +22,11 @@ public final class BigDecimalOperators implements Operators<BigDecimal> {
         return 4;
     }
 
+    @Override
+    public Number absolute(BigDecimal value) {
+        return value.abs();
+    }
+
     public final Number negate(BigDecimal value) {
         return value.negate();
     }

@@ -23,6 +23,11 @@ public final class IntegerOperators implements Operators<Integer>, IntegralOpera
         return 0;
     }
 
+    @Override
+    public Number absolute(Integer value) {
+        return Math.abs(value);
+    }
+
     public final Number negate(Integer value) {
         if (value > MIN_VALUE)
             return -value;

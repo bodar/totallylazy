@@ -36,6 +36,11 @@ public final class LongOperators implements Operators<Long>, IntegralOperators {
         return BigIntegerOperators.Instance.decrement(valueOf(value));
     }
 
+    @Override
+    public Number absolute(Long value) {
+        return Math.abs(value);
+    }
+
     public final Number negate(Long value) {
         if (value > MIN_VALUE)
             return -value;

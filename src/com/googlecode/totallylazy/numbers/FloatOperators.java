@@ -19,6 +19,11 @@ public final class FloatOperators implements Operators<Float> {
         return 6;
     }
 
+    @Override
+    public Number absolute(Float value) {
+        return isNegative(value) ? negate(value) : value ;
+    }
+
     public final Number negate(Float value) {
         return -value;
     }

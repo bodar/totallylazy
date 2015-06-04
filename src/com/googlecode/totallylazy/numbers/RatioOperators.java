@@ -20,6 +20,11 @@ public final class RatioOperators implements Operators<Ratio> {
         return 5;
     }
 
+    @Override
+    public Number absolute(Ratio value) {
+        return isNegative(value) ? negate(value) : value ;
+    }
+
     public final Number negate(Ratio value) {
         return new Ratio(value.numerator.negate(), value.denominator);
     }
