@@ -19,6 +19,11 @@ public final class DoubleOperators implements Operators<Double> {
         return 7;
     }
 
+    @Override
+    public Number absolute(Double value) {
+        return Math.abs(value);
+    }
+
     public final Number negate(Double value) {
         return -value;
     }

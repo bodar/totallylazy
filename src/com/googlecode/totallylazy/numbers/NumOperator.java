@@ -11,6 +11,11 @@ public class NumOperator implements Operators<Number> {
     }
 
     @Override
+    public Number absolute(Number value) {
+        return operators.absolute(raw(value));
+    }
+
+    @Override
     public Number negate(Number value) {
         return operators.negate(raw(value));
     }

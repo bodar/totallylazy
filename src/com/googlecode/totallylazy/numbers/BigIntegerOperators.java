@@ -51,6 +51,11 @@ public final class BigIntegerOperators implements Operators<BigInteger>, Integra
         return bigInteger(x).compareTo(bigInteger(y)) < 0;
     }
 
+    @Override
+    public Number absolute(BigInteger value) {
+        return value.abs();
+    }
+
     public final Number negate(BigInteger value) {
         return value.negate();
     }

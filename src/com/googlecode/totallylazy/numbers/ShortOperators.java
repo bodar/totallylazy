@@ -7,6 +7,11 @@ public final class ShortOperators implements Operators<Short> {
     }
 
     @Override
+    public Number absolute(Short value) {
+        return isNegative(value) ? negate(value) : value ;
+    }
+
+    @Override
     public Number negate(Short value) {
         if (value == Short.MIN_VALUE) {
             return -value;

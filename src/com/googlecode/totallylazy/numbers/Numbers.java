@@ -69,13 +69,18 @@ public class Numbers {
     }
 
     public static Sequence<Number> range(final Number start, final Number end) {
-        if (lessThan(end, start)) return range(start, end, -1);
+        if (lessThan(end, start)) return range(start, end, 1);
         return range(start).takeWhile(lessThanOrEqualTo(end));
     }
 
     public static Sequence<Number> range(final Number start, final Number end, final Number step) {
-        if (lessThan(end, start)) return iterate(add(step), start).takeWhile(greaterThanOrEqualTo(end));
-        return iterate(add(step), start).takeWhile(lessThanOrEqualTo(end));
+        Number absoluteStep = Numbers.absolute(step);
+        if (lessThan(end, start)) return iterate(subtract(absoluteStep), start).takeWhile(greaterThanOrEqualTo(end));
+        return iterate(add(absoluteStep), start).takeWhile(lessThanOrEqualTo(end));
+    }
+
+    public static Number absolute(Number number) {
+        return operatorsFor(number.getClass()).absolute(number);
     }
 
     public static Option<Number> valueOf(String string) {

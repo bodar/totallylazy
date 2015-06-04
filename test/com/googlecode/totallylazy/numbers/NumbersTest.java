@@ -126,6 +126,12 @@ public class NumbersTest {
     }
 
     @Test
+    public void supportsRangeUsesAbsoluteStepValue() throws Exception {
+        assertThat(range(0, 4, -2), hasExactly(0, 2, 4));
+        assertThat(range(4, 0, 2), hasExactly(4, 2, 0));
+    }
+
+    @Test
     public void supportsSorting() throws Exception {
         assertThat(numbers(5d, 1, 4L, bigInteger(2), 3f).sortBy(descending()), hasExactly(5d, 4L, 3f, bigInteger(2), 1));
     }
