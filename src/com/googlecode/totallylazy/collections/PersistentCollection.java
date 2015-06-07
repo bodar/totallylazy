@@ -10,6 +10,9 @@ import java.util.NoSuchElementException;
 
 public interface PersistentCollection<T> extends PersistentContainer<T>, Collection<T>, Segment<T>, Filterable<T> {
     @Override
+    boolean isEmpty();
+
+    @Override
     PersistentCollection<T> empty();
 
     @Override

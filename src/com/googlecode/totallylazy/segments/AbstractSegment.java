@@ -19,21 +19,6 @@ public abstract class AbstractSegment<T> implements Segment<T>, Iterable<T> {
     }
 
     @Override
-    public Segment<T> empty() {
-        return Segment.constructors.emptySegment();
-    }
-
-    @Override
-    public Segment<T> cons(T head) {
-        return Segment.constructors.segment(head, this);
-    }
-
-    @Override
-    public <C extends Segment<T>> C joinTo(C rest) {
-        return cast(tail().joinTo(rest).cons(head()));
-    }
-
-    @Override
     public String toString() {
         return sequence().toString();
     }

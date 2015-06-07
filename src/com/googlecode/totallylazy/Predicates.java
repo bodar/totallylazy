@@ -414,6 +414,11 @@ public class Predicates {
             public boolean matches(T other) {
                 return expected == other;
             }
+
+            @Override
+            public String toString() {
+                return "sameInstance(" + expected + ")";
+            }
         };
     }
 }

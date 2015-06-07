@@ -24,6 +24,9 @@ import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Segment<Pair<K, V>>, PersistentContainer<K>, Functor<V>, Foldable<Pair<K, V>>, Filterable<Pair<K, V>> {
+    @Override
+    boolean isEmpty();
+
     Option<V> lookup(K key);
 
     Option<V> find(Predicate<? super K> predicate);

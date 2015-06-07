@@ -14,19 +14,29 @@ import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public interface Segment<T> {
-    boolean isEmpty();
-
-    T head() throws NoSuchElementException;
-
     Option<T> headOption();
-
-    Segment<T> empty();
-
-    Segment<T> cons(T head);
 
     Segment<T> tail() throws NoSuchElementException;
 
-    <C extends Segment<T>> C joinTo(C rest);
+    default boolean isEmpty() {
+        return headOption().isEmpty();
+    }
+
+    default T head() throws NoSuchElementException {
+        return headOption().get();
+    }
+
+    default Segment<T> empty() {
+        return constructors.emptySegment();
+    }
+
+    default Segment<T> cons(T head) {
+        return constructors.cons(head, this);
+    }
+
+    default <C extends Segment<T>> C joinTo(C rest) {
+        return cast(tail().joinTo(rest).cons(head()));
+    }
 
     class constructors {
         public static <T> Segment<T> emptySegment(Class<T> aClass) {
