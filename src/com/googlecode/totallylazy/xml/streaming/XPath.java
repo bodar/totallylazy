@@ -1,7 +1,9 @@
 package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Unary;
@@ -10,6 +12,8 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.Compose.compose;
@@ -31,22 +35,22 @@ public class XPath {
         });
     }
 
-    public static Unary<PersistentList<Node>> descendant(Predicate<? super Node> predicate) {
+    public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> descendant(Predicate<? super Node> predicate) {
         return steps -> descendant(predicate, steps);
     }
 
-    private static PersistentList<Node> descendant(Predicate<? super Node> predicate, PersistentList<Node> steps){
+    private static Option<PersistentList<Node>> descendant(Predicate<? super Node> predicate, PersistentList<Node> steps) {
         return steps.tails().
                 filter(tail -> predicate.matches(tail.head())).
                 lastOption().
-                map(PersistentList::tail).
-                getOrThrow(new NoSuchElementException());
+                map(PersistentList::tail);
+
     }
 
-    public static Unary<PersistentList<Node>> child(Predicate<? super Node> predicate) {
+    public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> child(Predicate<? super Node> predicate) {
         return steps -> {
-            if(steps.headOption().is(predicate)) return steps.tail();
-            throw new NoSuchElementException();
+            if (steps.headOption().is(predicate)) return some(steps.tail());
+            return none();
         };
     }
 
@@ -55,18 +59,10 @@ public class XPath {
     }
 
     @SafeVarargs
-    public static Predicate<Context> xpath(Callable1<? super PersistentList<Node>, ? extends PersistentList<Node>>... steps) {
-        return context -> {
-            try {
-                return sequence(steps).
-                        map(Functions::function).
-                        reduce(compose()).
-                        call(context.path()).
-                        isEmpty();
-            } catch (Exception e) {
-                return false;
-            }
-        };
+    public static Predicate<Context> xpath(Callable1<? super PersistentList<Node>, ? extends Option<PersistentList<Node>>>... steps) {
+        return context -> sequence(steps).
+                fold(some(context.path()), Option::flatMap).
+                contains(PersistentList.constructors.empty());
     }
 
     public static Predicate<Node> node() {
