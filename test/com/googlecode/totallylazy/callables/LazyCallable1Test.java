@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.callables;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Lazy;
 import com.googlecode.totallylazy.Sequence;
@@ -21,9 +22,12 @@ public class LazyCallable1Test {
     public void remembersException() throws Exception {
         final AtomicInteger count = new AtomicInteger();
 
-        LazyCallable1<String, String> lazy = LazyCallable1.lazy( s -> {
-            int i = count.incrementAndGet();
-            throw new RuntimeException(format("Called %d times.", i));
+        LazyCallable1<String, String> lazy = LazyCallable1.lazy(new Callable1<String, String>() {
+            @Override
+            public String call(String s) throws Exception {
+                int i = count.incrementAndGet();
+                throw new RuntimeException(format("Called %d times.", i));
+            }
         });
 
         try {

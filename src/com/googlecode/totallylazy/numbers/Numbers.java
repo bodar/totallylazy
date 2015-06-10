@@ -213,7 +213,7 @@ public class Numbers {
         return nextPrime;
     }
 
-    public static Computation<Number> primes = computation(2, computation(3, nextPrime));
+    public static Computation<Number> primes = Computation.cons(2, computation(3, nextPrime));
 
     public static Sequence<Number> primes() {
         return primes;
