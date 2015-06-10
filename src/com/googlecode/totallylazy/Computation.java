@@ -68,7 +68,9 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         return new UnaryFunction<T>() {
             @Override
             public T call(T t) throws Exception {
-                return iterator.call().next();
+                Iterator<? extends T> it = iterator.call();
+                if(!it.hasNext()) throw new EndOfComputation();
+                return it.next();
             }
         };
     }
@@ -77,7 +79,9 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         return new Function<T>() {
             @Override
             public T call() throws Exception {
-                return iterator.call().next();
+                Iterator<? extends T> it = iterator.call();
+                if(!it.hasNext()) throw new EndOfComputation();
+                return it.next();
             }
         };
     }
@@ -120,7 +124,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         try {
             head.call();
             return false;
-        } catch (NoSuchElementException e) {
+        } catch (EndOfComputation e) {
             return true;
         }
         catch (Exception e) {
@@ -153,4 +157,5 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         head.close();
         tail.close();
     }
+
 }

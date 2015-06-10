@@ -70,7 +70,7 @@ public interface Segment<T> {
                 @Override
                 public Character call() throws Exception {
                     int read = reader.read();
-                    if (read == -1) throw new NoSuchElementException();
+                    if (read == -1) throw new EndOfComputation();
                     return (char) read;
                 }
             };
