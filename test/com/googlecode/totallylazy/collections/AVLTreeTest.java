@@ -18,22 +18,25 @@ public class AVLTreeTest extends MapContract {
 
     @Test
     public void balancesRightRightCase() throws Exception {
-        System.out.println(map("C", 1, "B", 2, "A", 3).toString());
         assertThat(map(3, null, 4, null, 5, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
+        assertThat(avlTree(3, null).insert(4, null).insert(5, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
     }
 
     @Test
     public void balancesRightLeftCase() throws Exception {
         assertThat(map(3, null, 5, null, 4, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
+        assertThat(avlTree(3, null).insert(5, null).insert(4, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
     }
 
     @Test
     public void balancesLeftLeftCase() throws Exception {
         assertThat(map(5, null, 4, null, 3, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
+        assertThat(avlTree(5, null).insert(4, null).insert(3, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
     }
 
     @Test
     public void balancesLeftRightCase() throws Exception {
+        assertThat(map(5, null, 3, null, 4, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
         assertThat(avlTree(5, null).insert(3, null).insert(4, null).toString(), is("(( 3=null ) 4=null ( 5=null ))"));
     }
 

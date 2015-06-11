@@ -65,25 +65,6 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
 
     TreeFactory factory();
 
-    enum constructors implements TreeFactory {
-        factory;
-
-        @Override
-        public <K, V> TreeMap<K, V> create(Comparator<K> comparator) {
-            return new AbstractEmptyTreeMap<K, V, TreeMap<K, V>>(comparator, this) {};
-        }
-
-        @Override
-        public <K, V> TreeMap<K, V> create(Comparator<K> comparator, K key, V value) {
-            return create(comparator, key, value, this.<K, V>create(comparator), this.<K, V>create(comparator));
-        }
-
-        @Override
-        public <K, V> TreeMap<K, V> create(Comparator<K> comparator, K key, V value, TreeMap<K, V> left, TreeMap<K, V> right) {
-            return new AbstractTreeMap<K, V, TreeMap<K, V>>(comparator, key, value, left, right, constructors.factory) {};
-        }
-    }
-
     class methods {
         public static <K, V, NewV> TreeMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer, final TreeFactory factory, final TreeMap<K, V> treeMap) {
             return factory.create(treeMap.comparator(), treeMap.key(), call(transformer, treeMap.value()), treeMap.left().map(transformer), treeMap.right().map(transformer));
@@ -99,7 +80,7 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
         }
     }
 
-    static class functions {
+    class functions {
         public static <K, V> Function1<TreeMap<K, V>, TreeMap<K, V>> replace(final K key, final V value) {
             return new Function1<TreeMap<K, V>, TreeMap<K, V>>() {
                 @Override

@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import static com.googlecode.totallylazy.Pair.pair;
@@ -27,7 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Ignore("Manual Performance Tests")
 public class MapPerformanceTest {
     public static final int SIZE = 100000;
-    public static final int NUMBER_OF_CALLS = 500;
+    public static final int NUMBER_OF_CALLS = 1000;
     public static final Sequence<Integer> range = range(1, SIZE).safeCast(Integer.class).realise();
     public static final Sequence<Integer> keys_ = range.shuffle().cycle().memorise();
 
@@ -44,6 +45,7 @@ public class MapPerformanceTest {
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new HashMap<Integer, Integer>()))));
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new java.util.TreeMap<Integer, Integer>()))));
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap "))));
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new ConcurrentHashMap<Integer, Integer>(), "CHMap "))));
             System.out.println("");
         }
     }
@@ -55,28 +57,33 @@ public class MapPerformanceTest {
         TimeReport treeMapReport = new TimeReport();
         TimeReport cslMapReport = new TimeReport();
         TimeReport avlTreeReport = new TimeReport();
+        TimeReport hashTreeReport = new TimeReport();
 
         Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
         Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
         Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
         PersistentMap<Integer, Integer> avlTree = createPersistent(range);
+        PersistentMap<Integer, Integer> hashTreeMap = createHash(range);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             timeRemove(NUMBER_OF_CALLS, hashMap, hashMapReport);
             timeRemove(NUMBER_OF_CALLS, treeMap, treeMapReport);
             timeRemove(NUMBER_OF_CALLS, cslMap, cslMapReport);
             time(NUMBER_OF_CALLS, removePersistent(avlTree), avlTreeReport);
+            time(NUMBER_OF_CALLS, removePersistent(hashTreeMap), hashTreeReport);
         }
 
         assertThat(hashMap.size(), is(SIZE));
         assertThat(treeMap.size(), is(SIZE));
         assertThat(cslMap.size(), is(SIZE));
         assertThat(avlTree.size(), is(SIZE));
+        assertThat(hashTreeMap.size(), is(SIZE));
         System.out.println();
         System.out.println("HashMap: " + hashMapReport);
         System.out.println("TreeMap: " + treeMapReport);
         System.out.println("CSLMap: " + cslMapReport);
         System.out.println("AvlTree: " + avlTreeReport);
+        System.out.println("HashTree: " + hashTreeReport);
     }
 
     @Test
@@ -86,28 +93,33 @@ public class MapPerformanceTest {
         TimeReport treeMapReport = new TimeReport();
         TimeReport cslMapReport = new TimeReport();
         TimeReport avlTreeReport = new TimeReport();
+        TimeReport hashTreeReport = new TimeReport();
 
         Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
         Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
         Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
         PersistentMap<Integer, Integer> avlTree = createHash(range);
+        PersistentMap<Integer, Integer> hashTreeMap = createHash(range);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             timePut(NUMBER_OF_CALLS, hashMap, hashMapReport);
             timePut(NUMBER_OF_CALLS, treeMap, treeMapReport);
             timePut(NUMBER_OF_CALLS, cslMap, cslMapReport);
             time(NUMBER_OF_CALLS, persistentPut(avlTree), avlTreeReport);
+            time(NUMBER_OF_CALLS, persistentPut(hashTreeMap), hashTreeReport);
         }
 
         assertThat(hashMap.size(), is(SIZE));
         assertThat(treeMap.size(), is(SIZE));
         assertThat(cslMap.size(), is(SIZE));
         assertThat(avlTree.size(), is(SIZE));
+        assertThat(hashTreeMap.size(), is(SIZE));
         System.out.println();
         System.out.println("HashMap: " + hashMapReport);
         System.out.println("TreeMap: " + treeMapReport);
         System.out.println("CSLMap: " + cslMapReport);
         System.out.println("AvlTree: " + avlTreeReport);
+        System.out.println("HashTree: " + hashTreeReport);
     }
 
     @SuppressWarnings("unchecked")

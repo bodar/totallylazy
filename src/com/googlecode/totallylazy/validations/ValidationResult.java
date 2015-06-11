@@ -16,7 +16,7 @@ import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.identity;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.AVLTree.constructors.avlTree;
-import static com.googlecode.totallylazy.collections.TreeMap.constructors.factory;
+import static com.googlecode.totallylazy.collections.AVLTree.constructors.factory;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
 import static java.lang.String.format;
 
