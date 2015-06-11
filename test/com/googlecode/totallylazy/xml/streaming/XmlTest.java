@@ -3,11 +3,15 @@ package com.googlecode.totallylazy.xml.streaming;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
+import com.googlecode.totallylazy.callables.TimeReport;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import java.io.StringReader;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -31,6 +35,26 @@ public class XmlTest {
                         map(field -> pair(field.name(), field.text()))));
         assertThat(users, hasExactly(map("first", "Dan & Bod", "dob", "1977"), map("first", "Jason", "dob", "1978")));
     }
+
+    @Test
+    @Ignore("manual test")
+    public void xpathIsPrettyFast() throws Exception {
+        final Sequence<Context> document = contexts("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa 1.0//EN\" \"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd\">\n" +
+                "<xh:html xmlns:xh=\"http://www.w3.org/1999/xhtml\" xmlns:og=\"http://opengraphprotocol.org/schema/\" xml:lang=\"en-GB\" xmlns=\"\">\n" +
+                "<xh:head><xh:meta content=\"Foo\"/><xh:meta content=\"Bar\"/></xh:head>" +
+                "<foo>baz</foo>" +
+                "<og:boo>far</og:boo>" +
+                "</xh:html>");
+        TimeReport report = TimeReport.time(1000, new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return document.filter(xpath(descendant(name("meta")))).map(context -> context.attributes().get("content")).realise();
+            }
+        });
+        System.out.println(report);
+    }
+
+
 
     @Test
     public void currentlyItEscapesCData() throws Exception {

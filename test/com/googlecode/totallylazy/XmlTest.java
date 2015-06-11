@@ -39,8 +39,7 @@ public class XmlTest {
         TimeReport report = TimeReport.time(1000, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                Xml.selectNodes(document, "//meta/@content");
-                return null;
+                return Xml.selectNodes(document, "//meta/@content");
             }
         });
         System.out.println(report);

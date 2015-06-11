@@ -9,6 +9,7 @@ import org.w3c.dom.Node;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLResolver;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import java.io.Reader;
@@ -25,6 +26,11 @@ public class Xml {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             factory.setProperty(XMLInputFactory.IS_COALESCING, true);
+            factory.setProperty(XMLInputFactory.IS_VALIDATING, false);
+            factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
+            factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
+            factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+            factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
             return factory.createXMLEventReader(reader);
         } catch (XMLStreamException e) {
             throw lazyException(e);
