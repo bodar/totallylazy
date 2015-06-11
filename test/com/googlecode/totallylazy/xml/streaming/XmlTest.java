@@ -45,11 +45,8 @@ public class XmlTest {
                 "<foo>baz</foo>" +
                 "<og:boo>far</og:boo>" +
                 "</xh:html>");
-        TimeReport report = TimeReport.time(1000, new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                return document.filter(xpath(descendant(name("meta")))).map(context -> context.attributes().get("content")).realise();
-            }
+        TimeReport report = TimeReport.time(1000, () -> {
+            return document.filter(xpath(descendant(name("meta")))).map(context -> context.attributes().get("content")).realise();
         });
         System.out.println(report);
     }

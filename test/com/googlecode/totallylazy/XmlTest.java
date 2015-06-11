@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import java.util.concurrent.Callable;
 
@@ -36,11 +37,8 @@ public class XmlTest {
     @Ignore("manual test")
     public void xpathIsPrettyFast() throws Exception {
         final Document document = example();
-        TimeReport report = TimeReport.time(1000, new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                return Xml.selectNodes(document, "//meta/@content");
-            }
+        TimeReport report = TimeReport.time(1000, () -> {
+            return Xml.selectNodes(document, "//meta/@content");
         });
         System.out.println(report);
     }

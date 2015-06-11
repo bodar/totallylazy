@@ -29,10 +29,7 @@ public class XPath {
     }
 
     public static LogicalPredicate<Node> attribute(String name, Predicate<? super String> predicate) {
-        return logicalPredicate((Node node) -> {
-            String value = node.attributes().get(name);
-            return predicate.matches(value);
-        });
+        return logicalPredicate((Node node) -> predicate.matches(node.attributes().get(name)));
     }
 
     public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> descendant(Predicate<? super Node> predicate) {
