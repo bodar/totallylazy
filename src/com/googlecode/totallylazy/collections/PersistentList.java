@@ -11,6 +11,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.annotations.tailrec;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -37,15 +38,19 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
         return constructors.cons(this, tail().tails());
     }
 
+    @tailrec
     default T last() {
-        if(tail().isEmpty()) return head();
-        return tail().last();
+        PersistentList<T> tail = tail();
+        if(tail.isEmpty()) return head();
+        return tail.last();
     }
 
+    @tailrec
     default Option<T> lastOption() {
         if(isEmpty()) return Option.none();
-        if(tail().isEmpty()) return headOption();
-        return tail().lastOption();
+        PersistentList<T> tail = tail();
+        if(tail.isEmpty()) return headOption();
+        return tail.lastOption();
     }
 
     PersistentList<T> append(T value);
