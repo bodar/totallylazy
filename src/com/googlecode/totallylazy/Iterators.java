@@ -157,17 +157,14 @@ public class Iterators {
     }
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
-        return foldRightTail(iterator, function(callable), Functions.identity()).apply(seed);
+        Iterator<T> reversed = reverse(iterator);
+        S accumilator = seed;
+        while (reversed.hasNext()) {
+            accumilator = call(callable, reversed.next(), accumilator);
+        }
+        return accumilator;
     }
 
-    @tailrec
-    private static <T, S> Function1<? super S, ? extends S> foldRightTail(Iterator<? extends T> iterator,
-                                                                         Function2<? super T, ? super S, ? extends S> callable,
-                                                                         Function1<? super S, ? extends S> partial) {
-        if (!iterator.hasNext()) return partial;
-        T item = iterator.next();
-        return foldRightTail(iterator, callable, callable.apply(item).then(partial));
-    }
 
     public static <T> Iterator<T> reverse(Iterator<? extends T> iterator) {
         return PersistentList.constructors.reverse(iterator).iterator();

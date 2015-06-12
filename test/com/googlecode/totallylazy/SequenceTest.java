@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.concurrent.NamedExecutors;
 import com.googlecode.totallylazy.matchers.Matchers;
@@ -189,6 +190,15 @@ public class SequenceTest {
         assertThat(sequence("1").reduceRight(join), is("1"));
         assertThat(sequence("1", "2").reduceRight(join), is("12"));
         assertThat(sequence("1", "2", "3").reduceRight(join), is("123"));
+    }
+
+    @Test
+    @Ignore
+    public void foldRightIsPrettyFastAndDoesntBlowStack() throws Exception {
+        TimeReport timeReport = TimeReport.time(1000, () -> {
+            return range(0, 10000).foldRight(0, sum);
+        });
+        System.out.println("timeReport = " + timeReport);
     }
 
     @Test
