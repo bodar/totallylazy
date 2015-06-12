@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.annotations.tailrec;
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.iterators.FilterIterator;
 import com.googlecode.totallylazy.iterators.FlattenIterator;
@@ -31,6 +32,7 @@ import static com.googlecode.totallylazy.Appendables.append;
 import static com.googlecode.totallylazy.Callables.nullGuard;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -155,12 +157,16 @@ public class Iterators {
     }
 
     public static <T, S> S foldRight(final Iterator<? extends T> iterator, final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
-        Iterator<T> reversed = reverse(iterator);
-        S accumilator = seed;
-        while (reversed.hasNext()) {
-            accumilator = call(callable, reversed.next(), accumilator);
-        }
-        return accumilator;
+        return foldRightTail(iterator, function(callable), Functions.identity()).apply(seed);
+    }
+
+    @tailrec
+    private static <T, S> Function1<? super S, ? extends S> foldRightTail(Iterator<? extends T> iterator,
+                                                                         Function2<? super T, ? super S, ? extends S> callable,
+                                                                         Function1<? super S, ? extends S> partial) {
+        if (!iterator.hasNext()) return partial;
+        T item = iterator.next();
+        return foldRightTail(iterator, callable, callable.apply(item).then(partial));
     }
 
     public static <T> Iterator<T> reverse(Iterator<? extends T> iterator) {
