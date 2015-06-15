@@ -32,6 +32,10 @@ public class XPath {
         return logicalPredicate((Node node) -> predicate.matches(node.attributes().get(name)));
     }
 
+    public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> descendant(String name) {
+        return descendant(name(name));
+    }
+
     public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> descendant(Predicate<? super Node> predicate) {
         return steps -> descendant(predicate, steps);
     }
@@ -42,6 +46,10 @@ public class XPath {
                 lastOption().
                 map(PersistentList::tail);
 
+    }
+
+    public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> child(String name) {
+        return child(name(name));
     }
 
     public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> child(Predicate<? super Node> predicate) {

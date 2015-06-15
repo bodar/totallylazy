@@ -1,39 +1,44 @@
 package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Maps;
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.StringReader;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
+import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.Functions.option;
+import static com.googlecode.totallylazy.Functions.or;
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.xml.streaming.XPath.attribute;
 import static com.googlecode.totallylazy.xml.streaming.XPath.child;
 import static com.googlecode.totallylazy.xml.streaming.XPath.descendant;
 import static com.googlecode.totallylazy.xml.streaming.XPath.name;
 import static com.googlecode.totallylazy.xml.streaming.XPath.xpath;
 import static com.googlecode.totallylazy.xml.streaming.Xml.contexts;
 import static com.googlecode.totallylazy.xml.streaming.Xml.nodes;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XmlTest {
     @Test
     public void supportsLocations() throws Exception {
         String xml = "<stream><user><first>Dan &amp; Bod</first><dob>1977</dob></user><user><first>Jason</first><dob>1978</dob></user></stream>";
         Sequence<Map<String, String>> users = contexts(xml).filter(xpath(descendant(name("user")))).
-                map(user -> Maps.map(user.relative().
-                        filter(xpath(child(name("first").or(name("dob"))))).
-                        map(field -> pair(field.name(), field.text()))));
-        assertThat(users, hasExactly(map("first", "Dan & Bod", "dob", "1977"), map("first", "Jason", "dob", "1978")));
+                map(user -> Maps.<String,String>map(user.relative().collect(
+                        xpath(child("first")), field -> pair("name", field.text()),
+                        xpath(child("dob")), field -> pair(field.name(), field.text())
+                )));
+        assertThat(users, is(sequence(map("name", "Dan & Bod", "dob", "1977"), map("name", "Jason", "dob", "1978"))));
     }
 
     @Test
@@ -46,12 +51,30 @@ public class XmlTest {
                 "<og:boo>far</og:boo>" +
                 "</xh:html>");
         TimeReport report = TimeReport.time(1000, () -> {
-            return document.filter(xpath(descendant(name("meta")))).map(context -> context.attributes().get("content")).realise();
+            return document.filter(xpath(descendant("meta"))).map(context -> context.attributes().get("content")).realise();
         });
         System.out.println(report);
     }
 
-
+    @Test
+    @Ignore("manual test")
+    public void canLoadCitations() throws Exception {
+        String path = "an-article-with-many-references.xml";
+        try (FileReader fileReader = new FileReader(path) ) {
+            Sequence<Context> document = contexts(new BufferedReader(fileReader));
+            TimeReport report = TimeReport.time(10, () -> document.
+                    filter(xpath(descendant("Citation"), child("BibArticle"))).
+                    map(citation -> Maps.map(citation.relative().collect(
+                        option(xpath(child("ArticleTitle")), field -> pair("title", field.text())),
+                        option(xpath(child("BibAuthorName")), field -> pair("authors", field.text())),
+                        option(xpath(child("VolumeID")), field -> pair("volume", field.text())),
+                        option(xpath(child("Year")), field -> pair("pubYear", field.text())),
+                        option(xpath(child("JournalTitle")), field -> pair("journalTitle", field.text())),
+                        option(xpath(child(name("Occurrence").and(attribute("Type", is("DOI")))), child("Handle")), field -> pair("doi", field.text()))
+                ))).realise());
+            System.out.println(report);
+        }
+    }
 
     @Test
     public void currentlyItEscapesCData() throws Exception {

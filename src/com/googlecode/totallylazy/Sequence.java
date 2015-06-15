@@ -92,6 +92,31 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.flatMap(this, callable);
     }
 
+    @SafeVarargs
+    public final <S> Sequence<S> collect(Callable1<? super T, ? extends Option<S>>... callables) {
+        return flatMap(Functions.or(callables));
+    }
+
+    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Callable1<? super T, ? extends S> callable1) {
+        return collect(Functions.option(predicate1, callable1));
+    }
+
+    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Callable1<? super T, ? extends S> callable1, Predicate<? super T> predicate2, Callable1<? super T, ? extends S> callable2) {
+        return collect(Functions.option(predicate1, callable1), Functions.option(predicate2, callable2));
+    }
+
+    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Callable1<? super T, ? extends S> callable1, Predicate<? super T> predicate2, Callable1<? super T, ? extends S> callable2, Predicate<? super T> predicate3, Callable1<? super T, ? extends S> callable3) {
+        return collect(Functions.option(predicate1, callable1), Functions.option(predicate2, callable2), Functions.option(predicate3, callable3));
+    }
+
+    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Callable1<? super T, ? extends S> callable1, Predicate<? super T> predicate2, Callable1<? super T, ? extends S> callable2, Predicate<? super T> predicate3, Callable1<? super T, ? extends S> callable3, Predicate<? super T> predicate4, Callable1<? super T, ? extends S> callable4) {
+        return collect(Functions.option(predicate1, callable1), Functions.option(predicate2, callable2), Functions.option(predicate3, callable3), Functions.option(predicate4, callable4));
+    }
+
+    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Callable1<? super T, ? extends S> callable1, Predicate<? super T> predicate2, Callable1<? super T, ? extends S> callable2, Predicate<? super T> predicate3, Callable1<? super T, ? extends S> callable3, Predicate<? super T> predicate4, Callable1<? super T, ? extends S> callable4, Predicate<? super T> predicate5, Callable1<? super T, ? extends S> callable5) {
+        return collect(Functions.option(predicate1, callable1), Functions.option(predicate2, callable2), Functions.option(predicate3, callable3), Functions.option(predicate4, callable4), Functions.option(predicate5, callable5));
+    }
+
     public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
         return Sequences.flatMapConcurrently(this, callable);
     }

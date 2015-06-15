@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.CountingCallable;
-import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.concurrent.NamedExecutors;
 import com.googlecode.totallylazy.matchers.Matchers;
@@ -32,6 +31,7 @@ import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Functions.and;
 import static com.googlecode.totallylazy.Functions.andPair;
+import static com.googlecode.totallylazy.Functions.constant;
 import static com.googlecode.totallylazy.Functions.or;
 import static com.googlecode.totallylazy.Functions.orPair;
 import static com.googlecode.totallylazy.Functions.xor;
@@ -190,15 +190,6 @@ public class SequenceTest {
         assertThat(sequence("1").reduceRight(join), is("1"));
         assertThat(sequence("1", "2").reduceRight(join), is("12"));
         assertThat(sequence("1", "2", "3").reduceRight(join), is("123"));
-    }
-
-    @Test
-    @Ignore
-    public void foldRightIsPrettyFastAndDoesntBlowStack() throws Exception {
-        TimeReport timeReport = TimeReport.time(1000, () -> {
-            return range(0, 10000).foldRight(0, sum);
-        });
-        System.out.println("timeReport = " + timeReport);
     }
 
     @Test
@@ -737,6 +728,23 @@ public class SequenceTest {
     public void supportsFlatMap() throws Exception {
         Sequence<Character> characters = sequence("Hello").flatMap(toCharacters());
         assertThat(characters, hasExactly('H', 'e', 'l', 'l', 'o'));
+    }
+
+    @Test
+    public void supportsCollect() throws Exception {
+        assertThat(sequence("1", 2, 3.0, 'F').collect(
+                Predicates.is("1"), one -> 4,
+                Predicates.is(2), two -> 3,
+                Predicates.is(3.0), three -> 2,
+                Predicates.is('F'), f -> 1
+        ), hasExactly(4, 3, 2, 1));
+
+        assertThat(sequence("1", 2, 3.0, 'F').collect(
+                Functions.instanceOf(String.class, Double::parseDouble),
+                Functions.instanceOf(Integer.class, Object::toString),
+                Functions.instanceOf(Double.class, Double::intValue),
+                Functions.option(Predicates.is('F'), f -> 4)
+        ), hasExactly(1.0, "2", 3, 4));
     }
 
     @Test

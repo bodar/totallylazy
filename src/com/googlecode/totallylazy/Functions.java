@@ -4,9 +4,11 @@ import com.googlecode.totallylazy.callables.And;
 import com.googlecode.totallylazy.callables.Or;
 import com.googlecode.totallylazy.callables.Xor;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.LazyException.lazyException;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Functions {
     public static <A> Function<A> function(final Callable<? extends A> callable) {
@@ -350,6 +352,28 @@ public class Functions {
                 return function.call();
             }
         };
+    }
+
+    public static <A,B> Function1<A, Option<B>> option(Predicate<? super A> predicate, Callable1<? super A, ? extends B> callable) {
+        return function(a -> predicate.matches(a) ? Option.some(callable.call(a)) : Option.none());
+    }
+
+    public static <A, B extends A, C> Function1<A, Option<C>> instanceOf(Class<B> subCLass, Callable1<? super B, ? extends C> callable) {
+        return function(a -> subCLass.isInstance(a) ? Option.some(callable.call(subCLass.cast(a))) : Option.none());
+    }
+
+    @SafeVarargs
+    public static <A,B> Function1<A, Option<B>> or(Callable1<? super A, ? extends Option<B>>... callables) {
+        return function(a -> sequence(callables).flatMap(fun -> fun.call(a)).headOption());
+    }
+
+    @SafeVarargs
+    public static <A,B> Function1<A, List<B>> and(Callable1<? super A, ? extends Option<B>>... callables) {
+        return function(a -> {
+            List<B> result = sequence(callables).flatMap(fun -> fun.call(a)).toList();
+            if(result.size() != callables.length) return Lists.list();
+            return result;
+        });
     }
 
 }
