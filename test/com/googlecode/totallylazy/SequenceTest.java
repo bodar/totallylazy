@@ -9,7 +9,6 @@ import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.time.Dates;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.Deque;
 import java.util.List;
@@ -842,7 +841,7 @@ public class SequenceTest {
     @Test
     public void supportsInterruption() throws Exception {
         final int[] count = new int[]{0};
-        Sequence<Integer> interruptable = repeat(new Function<Integer>() {
+        Sequence<Integer> interruptable = repeat(new Returns<Integer>() {
             @Override
             public Integer call() throws Exception {
                 if (++count[0] == 5) {

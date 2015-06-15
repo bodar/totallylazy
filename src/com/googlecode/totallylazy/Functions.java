@@ -11,8 +11,8 @@ import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Functions {
-    public static <A> Function<A> function(final Callable<? extends A> callable) {
-        return new Function<A>() {
+    public static <A> Returns<A> function(final Callable<? extends A> callable) {
+        return new Returns<A>() {
             @Override
             public A call() throws Exception {
                 return callable.call();
@@ -169,8 +169,8 @@ public class Functions {
         };
     }
 
-    public static <T> Function<T> returns(final T t) {
-        return new Function<T>() {
+    public static <T> Returns<T> returns(final T t) {
+        return new Returns<T>() {
             public final T call() throws Exception {
                 return t;
             }
@@ -344,8 +344,8 @@ public class Functions {
         };
     }
 
-    public static <A> Function<A> interruptable(final Callable<? extends A> function) {
-        return new Function<A>() {
+    public static <A> Returns<A> interruptable(final Callable<? extends A> function) {
+        return new Returns<A>() {
             @Override
             public A call() throws Exception {
                 if (Thread.interrupted()) throw new InterruptedException();

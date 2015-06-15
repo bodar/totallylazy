@@ -55,7 +55,7 @@ public class Strings {
         return Streams.lines(reader).memorise();
     }
 
-    public static Function<String> readLine(final BufferedReader reader) { return Streams.readLine(reader); }
+    public static Returns<String> readLine(final BufferedReader reader) { return Streams.readLine(reader); }
 
     public static Function1<String, String> toLowerCase() {
         return new Function1<String, String>() {

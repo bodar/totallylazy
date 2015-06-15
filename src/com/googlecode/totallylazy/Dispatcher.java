@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static com.googlecode.totallylazy.Callables.flip;
-import static com.googlecode.totallylazy.Callables.pair;
 import static com.googlecode.totallylazy.Callables.toClass;
 import static com.googlecode.totallylazy.Methods.methodName;
 import static com.googlecode.totallylazy.Methods.parameterTypes;
@@ -62,7 +60,7 @@ public class Dispatcher {
 
     public <T> Option<T> invokeOption(Object... args) {
         final List<Class<?>> argumentClasses = sequence(args).map(toClass()).toList();
-        return computeIfAbsent(cache, argumentClasses, new Function<Option<Method>>() {
+        return computeIfAbsent(cache, argumentClasses, new Returns<Option<Method>>() {
             @Override
             public Option<Method> call() throws Exception {
                 return Methods.allMethods(aClass).
@@ -75,10 +73,10 @@ public class Dispatcher {
     }
 
     // Backported from Java 8
-    private <K,V> V computeIfAbsent(ConcurrentMap<K, V> cache, K key, Function<V> function) {
+    private <K,V> V computeIfAbsent(ConcurrentMap<K, V> cache, K key, Returns<V> returns) {
         V v, newValue;
         return ((v = cache.get(key)) == null &&
-                (newValue = function.apply()) != null &&
+                (newValue = returns.apply()) != null &&
                 (v = cache.putIfAbsent(key, newValue)) == null) ? newValue : v;
 
     }

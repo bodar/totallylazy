@@ -2,12 +2,11 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.callables.LazyCallable;
 
-import java.io.Closeable;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Closeables.safeClose;
 
-public abstract class Lazy<T> extends Function<T> implements Memory {
+public abstract class Lazy<T> extends Returns<T> implements Memory {
     private final Object lock = new Object();
     private volatile Either<Exception, T> state;
 

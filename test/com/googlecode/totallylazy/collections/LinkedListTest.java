@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
@@ -10,7 +9,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
@@ -113,7 +111,7 @@ public class LinkedListTest {
     @Ignore
     public void supportsFilterIsPrettyFast() throws Exception {
         final PersistentList<Number> range = range(1, 1000).toPersistentList();
-        TimeReport report = TimeReport.time(100000, new Function<PersistentList<Number>>() {
+        TimeReport report = TimeReport.time(100000, new Returns<PersistentList<Number>>() {
             @Override
             public PersistentList<Number> call() throws Exception {
                 return range.filter(Predicates.<Number>is(3));
@@ -132,7 +130,7 @@ public class LinkedListTest {
     @Ignore
     public void removeIsPrettyFast() throws Exception {
         final PersistentList<Number> range = range(1, 1000).toPersistentList();
-        TimeReport report = TimeReport.time(1000000, new Function<PersistentList<Number>>() {
+        TimeReport report = TimeReport.time(1000000, new Returns<PersistentList<Number>>() {
             @Override
             public PersistentList<Number> call() throws Exception {
                 return range.delete(3);

@@ -2,7 +2,6 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
-import com.googlecode.totallylazy.multi;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -101,13 +100,13 @@ public class multiTest {
     @Test @Ignore
     public void isPrettyFast() throws Exception {
         final Instance instance = new Instance();
-        Function<Object> multimethod = new Function<Object>() {
+        Returns<Object> multimethod = new Returns<Object>() {
             @Override
             public Object call() throws Exception {
                 return instance.process((Object) "Foo");
             }
         };
-        Function<Object> direct = new Function<Object>() {
+        Returns<Object> direct = new Returns<Object>() {
             @Override
             public Object call() throws Exception {
                 return instance.process("Foo");

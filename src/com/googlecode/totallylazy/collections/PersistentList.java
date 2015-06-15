@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Returns;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Functor;
@@ -192,11 +192,11 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
             return Segment.functions.cons();
         }
 
-        public static <T> Function<PersistentList<T>> emptyPersistentList(Class<T> type) {
+        public static <T> Returns<PersistentList<T>> emptyPersistentList(Class<T> type) {
             return emptyPersistentList();
         }
 
-        public static <T> Function<PersistentList<T>> emptyPersistentList() {
+        public static <T> Returns<PersistentList<T>> emptyPersistentList() {
             return returns(PersistentList.constructors.<T>empty());
         }
 

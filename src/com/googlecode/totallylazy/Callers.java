@@ -5,7 +5,6 @@ import com.googlecode.totallylazy.concurrent.NamedExecutors;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -13,11 +12,11 @@ import java.util.concurrent.TimeUnit;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callers {
-    public static <T> Function<T> callConcurrently(Callable<? extends T> callable) {
+    public static <T> Returns<T> callConcurrently(Callable<? extends T> callable) {
         ExecutorService service = executorService();
         try {
             final Future<? extends T> future = service.submit(callable);
-            return new Function<T>() {
+            return new Returns<T>() {
                 @Override
                 public T call() throws Exception {
                     return future.get();

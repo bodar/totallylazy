@@ -13,11 +13,11 @@ public abstract class Function1<A, B> extends Eq implements Callable1<A, B>, Fun
         return Functions.call(this, a);
     }
 
-    public Function<B> deferApply(final A a) {
+    public Returns<B> deferApply(final A a) {
         return Callables.deferApply(this, a);
     }
 
-    public Function<B> callConcurrently(final A a) {
+    public Returns<B> callConcurrently(final A a) {
         return Callers.callConcurrently(deferApply(a));
     }
 
@@ -62,7 +62,7 @@ public abstract class Function1<A, B> extends Eq implements Callable1<A, B>, Fun
         return Functions.interruptable(this);
     }
 
-    public Function1<A, Function<B>> deferExecution() {
+    public Function1<A, Returns<B>> deferExecution() {
         return Callables.deferReturn(this);
     }
 
