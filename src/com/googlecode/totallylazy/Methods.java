@@ -14,8 +14,8 @@ import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Methods {
-    public static Function<Method, String> methodName() {
-        return new Function<Method, String>() {
+    public static Function1<Method, String> methodName() {
+        return new Function1<Method, String>() {
             @Override
             public String call(Method method) throws Exception {
                 return method.getName();
@@ -23,8 +23,8 @@ public class Methods {
         };
     }
 
-    public static Function<Method,? extends Class<?>> returnType() {
-        return new Function<Method, Class<?>>() {
+    public static Function1<Method,? extends Class<?>> returnType() {
+        return new Function1<Method, Class<?>>() {
             @Override
             public Class<?> call(Method method) throws Exception {
                 return method.getReturnType();
@@ -32,32 +32,32 @@ public class Methods {
         };
     }
 
-    public static Function<Method, Class<?>[]> parameterTypes() {
-        return new Function<Method, Class<?>[]>() {
+    public static Function1<Method, Class<?>[]> parameterTypes() {
+        return new Function1<Method, Class<?>[]>() {
             public Class<?>[] call(Method method) throws Exception {
                 return method.getParameterTypes();
             }
         };
     }
 
-    public static <T extends Annotation> Function<Method, T> annotation(final Class<T> annotationClass) {
-        return new Function<Method, T>() {
+    public static <T extends Annotation> Function1<Method, T> annotation(final Class<T> annotationClass) {
+        return new Function1<Method, T>() {
             public T call(Method method) throws Exception {
                 return method.getAnnotation(annotationClass);
             }
         };
     }
 
-    public static Function<Method, Type> genericReturnType() {
-        return new Function<Method, Type>() {
+    public static Function1<Method, Type> genericReturnType() {
+        return new Function1<Method, Type>() {
             public Type call(Method method) throws Exception {
                 return method.getGenericReturnType();
             }
         };
     }
 
-    public static Function<Method, Type[]> genericParameterTypes() {
-        return new Function<Method, Type[]>() {
+    public static Function1<Method, Type[]> genericParameterTypes() {
+        return new Function1<Method, Type[]>() {
             public Type[] call(Method method) throws Exception {
                 return method.getGenericParameterTypes();
             }
@@ -72,8 +72,8 @@ public class Methods {
         };
     }
 
-    public static Function<Class<?>, Method> method(final String name, final Class<?>... parameters) {
-        return new Function<Class<?>, Method>() {
+    public static Function1<Class<?>, Method> method(final String name, final Class<?>... parameters) {
+        return new Function1<Class<?>, Method>() {
             public Method call(Class<?> aClass) throws Exception {
                 return aClass.getMethod(name, parameters);
             }
@@ -88,16 +88,16 @@ public class Methods {
         return call(handleException(method(name, parameters), instanceOf(NoSuchMethodException.class)), aClass);
     }
 
-    public static Function<Class<?>, Iterable<Method>> methods() {
-        return new Function<Class<?>, Iterable<Method>>() {
+    public static Function1<Class<?>, Iterable<Method>> methods() {
+        return new Function1<Class<?>, Iterable<Method>>() {
             public Iterable<Method> call(Class<?> aClass) throws Exception {
                 return sequence(aClass.getMethods());
             }
         };
     }
 
-    public static Function<Class<?>, Iterable<Method>> declaredMethods() {
-        return new Function<Class<?>, Iterable<Method>>() {
+    public static Function1<Class<?>, Iterable<Method>> declaredMethods() {
+        return new Function1<Class<?>, Iterable<Method>>() {
             public Iterable<Method> call(Class<?> aClass) throws Exception {
                 return sequence(aClass.getDeclaredMethods());
             }
@@ -119,8 +119,8 @@ public class Methods {
         }
     }
 
-    public static <R> Function<Method, R> invokeOn(final Object instance, final Object... arguments) {
-        return new Function<Method, R>() {
+    public static <R> Function1<Method, R> invokeOn(final Object instance, final Object... arguments) {
+        return new Function1<Method, R>() {
             public R call(Method method) throws Exception {
                 return Unchecked.cast(invoke(method, instance, arguments));
             }

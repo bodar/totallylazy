@@ -1,7 +1,8 @@
 package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.Bytes;
-import com.googlecode.totallylazy.Mapper;
+
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 import net.sf.cglib.proxy.InvocationHandler;
@@ -26,7 +27,7 @@ import static com.googlecode.totallylazy.proxy.Generics.getGenericSuperclassType
 import static com.googlecode.totallylazy.proxy.Proxy.createProxy;
 import static java.lang.Class.forName;
 
-public abstract class FieldOn<T, S> extends Mapper<T, S> implements InvocationHandler {
+public abstract class FieldOn<T, S> implements Function1<T, S>, InvocationHandler {
     private final FieldInvocation<T, S> invocation;
     protected final T instance;
 

@@ -22,7 +22,6 @@ import com.googlecode.totallylazy.predicates.WhileTrue;
 
 import java.util.Collection;
 
-import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;
@@ -333,11 +332,11 @@ public class Predicates {
         };
     }
 
-    public static <T, R> LogicalPredicate<T> where(final Callable1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> LogicalPredicate<T> where(final Function1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
         return WherePredicate.where(callable, predicate);
     }
 
-    public static <T, R> LogicalPredicate<T> by(final Callable1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+    public static <T, R> LogicalPredicate<T> by(final Function1<? super T, ? extends R> callable, final Predicate<? super R> predicate) {
         return WherePredicate.where(callable, predicate);
     }
 
@@ -390,11 +389,11 @@ public class Predicates {
         return empty();
     }
 
-    public static <T> LogicalPredicate<T> predicate(final Callable1<T, Boolean> callable) {
+    public static <T> LogicalPredicate<T> predicate(final Function1<T, Boolean> callable) {
         return new LogicalPredicate<T>() {
             @Override
             public boolean matches(T other) {
-                Boolean result = function(callable).apply(other);
+                Boolean result = callable.apply(other);
                 return result == null ? false : result;
             }
         };

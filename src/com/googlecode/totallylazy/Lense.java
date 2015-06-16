@@ -1,15 +1,15 @@
 package com.googlecode.totallylazy;
 
 public class Lense<A, B> {
-    private final Function<A, B> get;
+    private final Function1<A, B> get;
     private final Function2<B, A, A> set;
 
-    private Lense(Function<A, B> get, Function2<B, A, A> set) {
+    private Lense(Function1<A, B> get, Function2<B, A, A> set) {
         this.get = get;
         this.set = set;
     }
 
-    public static <A, B> Lense<A, B> lense(Function<A, B> get, Function2<B, A, A> set) {
+    public static <A, B> Lense<A, B> lense(Function1<A, B> get, Function2<B, A, A> set) {
         return new Lense<A, B>(get, set);
     }
 
@@ -21,8 +21,8 @@ public class Lense<A, B> {
         return set.apply(b, a);
     }
 
-    public A modify(A a, Function<B, B> updateFunction) throws Exception {
-        return set(updateFunction.call(get(a)), a);
+    public A modify(A a, Function1<B, B> update) throws Exception {
+        return set(update.call(get(a)), a);
     }
 
     public <C> Lense<A, C> then(final Lense<B, C> other) {

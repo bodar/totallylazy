@@ -257,33 +257,33 @@ public class Uri implements Comparable<Uri> {
     }
 
     public static class functions {
-        public static Function<String, Uri> uri = new Function<String, Uri>() {
+        public static Function1<String, Uri> uri = new Function1<String, Uri>() {
             @Override
             public Uri call(String value) throws Exception {
                 return Uri.uri(value);
             }
         };
 
-        public static Function<String, Uri> uri() {
+        public static Function1<String, Uri> uri() {
             return uri;
         }
 
-        public static final Function<Uri, String> path = new Function<Uri, String>() {
+        public static final Function1<Uri, String> path = new Function1<Uri, String>() {
             @Override
             public String call(Uri uri) throws Exception {
                 return uri.path();
             }
         };
 
-        public static final Function<Uri, String> host = new Function<Uri, String>() {
+        public static final Function1<Uri, String> host = new Function1<Uri, String>() {
             @Override
             public String call(Uri uri) throws Exception {
                 return uri.host();
             }
         };
 
-        public static Mapper<Uri, Uri> host(final String newHost) {
-            return new Mapper<Uri, Uri>() {
+        public static Function1<Uri, Uri> host(final String newHost) {
+            return new Function1<Uri, Uri>() {
                 @Override
                 public Uri call(Uri uri) throws Exception {
                     return uri.host(newHost);
@@ -291,7 +291,7 @@ public class Uri implements Comparable<Uri> {
             };
         }
 
-        public static Function<Uri, URL> URL = new Function<Uri, URL>() {
+        public static Function1<Uri, URL> URL = new Function1<Uri, URL>() {
             @Override
             public URL call(Uri uri) throws Exception {
                 return uri.toURL();

@@ -1,11 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Maps;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;
@@ -41,7 +36,7 @@ public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<P
     PersistentSortedMap<K, V> filterValues(Predicate<? super V> predicate);
 
     @Override
-    <NewV> PersistentSortedMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
+    <NewV> PersistentSortedMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer);
 
     @Override
     Pair<? extends PersistentSortedMap<K, V>, Pair<K, V>> removeFirst();
@@ -136,8 +131,8 @@ public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<P
     }
 
     class functions{
-        public static <K, V> Function<PersistentSortedMap<K, V>, PersistentSortedMap<K, V>> remove(final K key) {
-            return new Function<PersistentSortedMap<K, V>, PersistentSortedMap<K, V>>() {
+        public static <K, V> Function1<PersistentSortedMap<K, V>, PersistentSortedMap<K, V>> remove(final K key) {
+            return new Function1<PersistentSortedMap<K, V>, PersistentSortedMap<K, V>>() {
                 @Override
                 public PersistentSortedMap<K, V> call(PersistentSortedMap<K, V> map) throws Exception {
                     return map.delete(key);

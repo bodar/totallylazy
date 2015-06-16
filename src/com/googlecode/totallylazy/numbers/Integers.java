@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.comparators.Maximum;
 import com.googlecode.totallylazy.comparators.Minimum;
@@ -14,11 +14,11 @@ import static com.googlecode.totallylazy.numbers.Integers.functions.lessThanOrEq
 
 public class Integers {
     public static Maximum.Function<Integer> maximum() {
-        return Maximum.constructors.maximum(Integer.MIN_VALUE);
+        return Maximum.maximum(Integer.MIN_VALUE);
     }
 
     public static Minimum.Function<Integer> minimum() {
-        return Minimum.constructors.minimum(Integer.MAX_VALUE);
+        return Minimum.minimum(Integer.MAX_VALUE);
     }
 
     public static Sequence<Integer> range(final int start) {
@@ -36,15 +36,10 @@ public class Integers {
     }
 
     public static class functions {
-        public static final Function<Integer, Integer> increment = add(1);
+        public static final Function1<Integer, Integer> increment = add(1);
 
-        public static Function<Integer, Integer> add(final int value) {
-            return new Function<Integer, Integer>() {
-                @Override
-                public Integer call(Integer i) throws Exception {
-                    return i + value;
-                }
-            };
+        public static Function1<Integer, Integer> add(final int value) {
+            return i -> i + value;
         }
 
         public static LogicalPredicate<Integer> lessThanOrEqualTo(final int end) {

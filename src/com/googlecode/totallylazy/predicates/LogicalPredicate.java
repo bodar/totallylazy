@@ -1,12 +1,8 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.*;
 
-public abstract class LogicalPredicate<T> extends Function<T, Boolean> implements Predicate<T> {
+public abstract class LogicalPredicate<T> extends Eq implements Predicate<T>, Function1<T, Boolean> {
     public static <T> LogicalPredicate<T> logicalPredicate(Predicate<? super T> predicate) {
         if(predicate instanceof LogicalPredicate){
             return Unchecked.cast(predicate);
@@ -14,7 +10,7 @@ public abstract class LogicalPredicate<T> extends Function<T, Boolean> implement
         return new DelegatingPredicate<T>(predicate);
     }
 
-    public static <T> LogicalPredicate<T> logicalPredicate(final Callable1<? super T, Boolean> predicate) {
+    public static <T> LogicalPredicate<T> logicalPredicate(final Function1<? super T, Boolean> predicate) {
         if(predicate instanceof LogicalPredicate){
             return Unchecked.cast(predicate);
         }
@@ -30,20 +26,25 @@ public abstract class LogicalPredicate<T> extends Function<T, Boolean> implement
         };
     }
 
-    public LogicalPredicate<T> and(Predicate<? super T> predicate){
-        return Predicates.<T>and(this, predicate);
-    }
-
-    public LogicalPredicate<T> or(Predicate<? super T> predicate){
-        return Predicates.<T>or(this, predicate);
-    }
-
-    public LogicalPredicate<T> not() {
-        return Predicates.<T>not(this);
-    }
-
     @Override
     public Boolean call(T t) throws Exception {
         return matches(t);
     }
+
+    @Override
+    public LogicalPredicate<T> and(Predicate<? super T> predicate){
+        return Predicates.<T>and(this, predicate);
+    }
+
+    @Override
+    public LogicalPredicate<T> or(Predicate<? super T> predicate){
+        return Predicates.<T>or(this, predicate);
+    }
+
+    @Override
+    public LogicalPredicate<T> not() {
+        return Predicates.<T>not(this);
+    }
+
+
 }

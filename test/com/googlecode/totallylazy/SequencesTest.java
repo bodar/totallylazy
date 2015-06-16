@@ -155,7 +155,7 @@ public class SequencesTest {
 
     @Test
     public void supportsIteratingEvenWhenCallableReturnNull() throws Exception {
-        final Sequence<Integer> sequence = iterate(new Callable1<Integer, Integer>() {
+        final Sequence<Integer> sequence = iterate(new Function1<Integer, Integer>() {
             public Integer call(Integer integer) throws Exception {
                 assertThat("Should never see a null value", integer, is(Matchers.notNullValue()));
                 return null;
@@ -174,7 +174,7 @@ public class SequencesTest {
 
     @Test
     public void supportsUnfoldRight() throws Exception {
-        Sequence<Number> result = Sequences.unfoldRight(new Function<Number, Option<Pair<Number, Number>>>() {
+        Sequence<Number> result = Sequences.unfoldRight(new Function1<Number, Option<Pair<Number, Number>>>() {
             @Override
             public Option<Pair<Number, Number>> call(Number number) throws Exception {
                 if (number.equals(0)) return none();

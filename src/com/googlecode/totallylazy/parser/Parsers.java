@@ -1,13 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Characters;
-import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Triple;
+import com.googlecode.totallylazy.*;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -16,12 +9,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Parsers {
-    public static Function<Iterable<?>, String> toString = new Function<Iterable<?>, String>() {
-        @Override
-        public String call(Iterable<?> iterable) throws Exception {
-            return sequence(iterable).toString("");
-        }
-    };
+    public static Function1<Iterable<?>, String> toString = iterable -> sequence(iterable).toString("");
 
     public static <A> Parser<A> parser(final Parse<? extends A> parser) {
         return MappingParser.map(parser, Callables.<A>returnArgument());
@@ -30,11 +18,6 @@ public class Parsers {
     // Use in Java 7+, for Java 6 use Parsers.reference
     public static <T> Parser<T> lazy(Callable<? extends Parse<T>> value) {
         return LazyParser.lazy(value);
-    }
-
-    // Use in Java 6, for Java 7+ use Parsers.lazy
-    public static <T> ReferenceParser<T> reference(){
-        return ReferenceParser.reference();
     }
 
     public static Parser<Character> character(Predicate<Character> value) {
@@ -95,7 +78,7 @@ public class Parsers {
         return PatternParser.pattern(value, "");
     }
 
-    public static <A, B> Parser<B> map(Parse<? extends A> source, Callable1<? super A, ? extends B> callable) {
+    public static <A, B> Parser<B> map(Parse<? extends A> source, Function1<? super A, ? extends B> callable) {
         return MappingParser.map(source, callable);
     }
 

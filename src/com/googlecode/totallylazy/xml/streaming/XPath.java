@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.xml.streaming;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
@@ -27,11 +27,11 @@ public class XPath {
         return logicalPredicate((Node node) -> predicate.matches(node.attributes().get(name)));
     }
 
-    public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> descendant(String name) {
+    public static Function1<PersistentList<Node>, Option<PersistentList<Node>>> descendant(String name) {
         return descendant(name(name));
     }
 
-    public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> descendant(Predicate<? super Node> predicate) {
+    public static Function1<PersistentList<Node>, Option<PersistentList<Node>>> descendant(Predicate<? super Node> predicate) {
         return steps -> descendant(predicate, steps);
     }
 
@@ -43,11 +43,11 @@ public class XPath {
 
     }
 
-    public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> child(String name) {
+    public static Function1<PersistentList<Node>, Option<PersistentList<Node>>> child(String name) {
         return child(name(name));
     }
 
-    public static Callable1<PersistentList<Node>, Option<PersistentList<Node>>> child(Predicate<? super Node> predicate) {
+    public static Function1<PersistentList<Node>, Option<PersistentList<Node>>> child(Predicate<? super Node> predicate) {
         return steps -> {
             if (steps.headOption().is(predicate)) return some(steps.tail());
             return none();
@@ -59,7 +59,7 @@ public class XPath {
     }
 
     @SafeVarargs
-    public static Predicate<Context> xpath(Callable1<? super PersistentList<Node>, ? extends Option<PersistentList<Node>>>... steps) {
+    public static Predicate<Context> xpath(Function1<? super PersistentList<Node>, ? extends Option<PersistentList<Node>>>... steps) {
         return context -> sequence(steps).
                 fold(some(context.path()), Option::flatMap).
                 contains(PersistentList.constructors.empty());

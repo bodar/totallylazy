@@ -17,32 +17,32 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     private final Lazy<Option<T>> head;
     private final LazyFunction<T, Computation<T>> tail;
 
-    private Computation(Callable<Option<T>> head, Callable1<T, Computation<T>> tail) {
+    private Computation(Callable<Option<T>> head, Function1<T, Computation<T>> tail) {
         this.head = Lazy.lazy(head);
         this.tail = lazy(tail);
     }
 
-    public static <T> Computation<T> computation1(Callable<Option<T>> callable, Callable1<T, Computation<T>> next) {
+    public static <T> Computation<T> computation1(Callable<Option<T>> callable, Function1<T, Computation<T>> next) {
         return new Computation<T>(callable, next);
     }
 
-    public static <T> Computation<T> computation1(T value, Callable1<T, Computation<T>> next) {
+    public static <T> Computation<T> computation1(T value, Function1<T, Computation<T>> next) {
         return computation1(returns(some(value)), next);
     }
 
-    public static <T> Computation<T> computation(Callable<Option<T>> callable, Callable1<? super T, ? extends T> next) {
+    public static <T> Computation<T> computation(Callable<Option<T>> callable, Function1<? super T, ? extends T> next) {
         return compute(callable, (T t) -> Option.option(next.call(t)));
     }
 
-    public static <T> Computation<T> compute(Callable<Option<T>> callable, Callable1<T, Option<T>> call) {
+    public static <T> Computation<T> compute(Callable<Option<T>> callable, Function1<T, Option<T>> call) {
         return computation1(callable, generate(call));
     }
 
-    public static <T> Computation<T> computation(T value, Callable1<? super T, ? extends T> next) {
+    public static <T> Computation<T> computation(T value, Function1<? super T, ? extends T> next) {
         return compute(value, (T t) -> Option.option(next.call(t)));
     }
 
-    public static <T> Computation<T> compute(T value, Callable1<T, Option<T>> call) {
+    public static <T> Computation<T> compute(T value, Function1<T, Option<T>> call) {
         return computation1(value, generate(call));
     }
 
@@ -50,7 +50,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
         return computation1(returns(some(value)), Functions.<T, Computation<T>>constant(next));
     }
 
-    public static <T> Computation<T> iterate(final Callable1<? super T, ? extends T> callable, final T t) {
+    public static <T> Computation<T> iterate(final Function1<? super T, ? extends T> callable, final T t) {
         return computation(t, callable);
     }
 
@@ -75,7 +75,7 @@ public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
                 t -> memorise(iterator));
     }
 
-    public static <T> Callable1<T, Computation<T>> generate(final Callable1<? super T, ? extends Option<T>> callable) {
+    public static <T> Function1<T, Computation<T>> generate(final Function1<? super T, ? extends Option<T>> callable) {
         return value -> computation1(Callables.deferApply(callable, value), generate(callable));
     }
 

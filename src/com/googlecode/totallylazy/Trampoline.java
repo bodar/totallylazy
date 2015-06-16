@@ -38,7 +38,7 @@ public abstract class Trampoline<T> implements Functor<T> {
         }
 
         @Override
-        public <S> Trampoline<S> map(Callable1<? super T, ? extends S> callable) {
+        public <S> Trampoline<S> map(Function1<? super T, ? extends S> callable) {
             return done(call(callable, value));
         }
     }
@@ -55,8 +55,8 @@ public abstract class Trampoline<T> implements Functor<T> {
         }
 
         @Override
-        public <S> Trampoline<S> map(final Callable1<? super T, ? extends S> callable) {
-            return more(compose(this.callable, new Callable1<Trampoline<T>, Trampoline<S>>() {
+        public <S> Trampoline<S> map(final Function1<? super T, ? extends S> callable) {
+            return more(compose(this.callable, new Function1<Trampoline<T>, Trampoline<S>>() {
                 @Override
                 public Trampoline<S> call(Trampoline<T> trampoline) throws Exception {
                     return null; //callable.call(trampoline);

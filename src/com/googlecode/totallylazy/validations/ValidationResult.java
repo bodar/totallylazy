@@ -1,12 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.CombinerFunction;
-import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Function2;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.collections.PersistentMap;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
@@ -122,31 +116,16 @@ public class ValidationResult {
 
     public static class functions {
 
-        public static Function<ValidationResult, Sequence<String>> allMessages(){
-            return new Function<ValidationResult, Sequence<String>>() {
-                @Override
-                public Sequence<String> call(ValidationResult result) throws Exception {
-                    return result.allMessages();
-                }
-            };
+        public static Function1<ValidationResult, Sequence<String>> allMessages(){
+            return ValidationResult::allMessages;
         }
 
-        public static Function<ValidationResult, Sequence<String>> messages(final String key){
-            return new Function<ValidationResult, Sequence<String>>() {
-                @Override
-                public Sequence<String> call(ValidationResult result) throws Exception {
-                    return result.messages(key);
-                }
-            };
+        public static Function1<ValidationResult, Sequence<String>> messages(final String key){
+            return result -> result.messages(key);
         }
 
-        public static Function<ValidationResult, Sequence<String>> messages(final Object key){
-            return new Function<ValidationResult, Sequence<String>>() {
-                @Override
-                public Sequence<String> call(ValidationResult result) throws Exception {
-                    return result.messages(key);
-                }
-            };
+        public static Function1<ValidationResult, Sequence<String>> messages(final Object key){
+            return result -> result.messages(key);
         }
 
         public static LogicalPredicate<ValidationResult> succeeded() {
@@ -157,53 +136,28 @@ public class ValidationResult {
                 }
             };
         }
-        public static Function<ValidationResult, ValidationResult> assignToKey(final String key) {
-            return new Function<ValidationResult, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult) throws Exception {
-                    return validationResult.assignToKey(key);
-                }
-            };
+        public static Function1<ValidationResult, ValidationResult> assignToKey(final String key) {
+            return validationResult -> validationResult.assignToKey(key);
         }
 
         public static Function2<ValidationResult, Iterable<String>, ValidationResult> addWithKey(final String key) {
-            return new Function2<ValidationResult, Iterable<String>, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult, Iterable<String> messages) throws Exception {
-                    return validationResult.add(key, messages);
-                }
-            };
+            return (validationResult, messages1) -> validationResult.add(key, messages1);
         }
 
         public static Function2<ValidationResult, Pair<String, String>, ValidationResult> addSingleMessage() {
-            return new Function2<ValidationResult, Pair<String, String>, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult, Pair<String, String> keyAndMessage) throws Exception {
-                    return validationResult.add(keyAndMessage.first(), keyAndMessage.second());
-                }
-            };
+            return (validationResult, keyAndMessage) -> validationResult.add(keyAndMessage.first(), keyAndMessage.second());
         }
 
         public static Function2<ValidationResult, String, ValidationResult> addSingleMessageWithKey(final String key) {
-            return new Function2<ValidationResult, String, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult, String message) throws Exception {
-                    return validationResult.add(key, message);
-                }
-            };
+            return (validationResult, message) -> validationResult.add(key, message);
         }
 
         public static Function2<ValidationResult, Pair<String, ? extends Iterable<String>>, ValidationResult> add() {
-            return new Function2<ValidationResult, Pair<String, ? extends Iterable<String>>, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult, Pair<String, ? extends Iterable<String>> keyAndMessages) throws Exception {
-                    return validationResult.add(keyAndMessages.first(), keyAndMessages.second());
-                }
-            };
+            return (validationResult, keyAndMessages) -> validationResult.add(keyAndMessages.first(), keyAndMessages.second());
         }
 
-        public static CombinerFunction<ValidationResult> merge() {
-            return new CombinerFunction<ValidationResult>() {
+        public static Monoid<ValidationResult> merge() {
+            return new Monoid<ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult seed, ValidationResult value) throws Exception {
                     return seed.merge(value);

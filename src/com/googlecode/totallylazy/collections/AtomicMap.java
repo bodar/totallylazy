@@ -1,13 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Atomic;
-import com.googlecode.totallylazy.Mapper;
-import com.googlecode.totallylazy.Maps;
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.UnaryFunction;
-import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.*;
 
 import java.util.Collection;
 import java.util.Map;
@@ -59,12 +52,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public V put(final K key, final V value) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
-            @Override
-            public Pair<PersistentMap<K, V>, V> call(PersistentMap<K, V> map) throws Exception {
-                return AtomicMap.this.put(map, key, value);
-            }
-        });
+        return atomic.modifyReturn(map -> AtomicMap.this.put(map, key, value));
     }
 
     private Pair<PersistentMap<K, V>, V> put(PersistentMap<K, V> map, K key, V value) {
@@ -74,33 +62,18 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public void putAll(final Map<? extends K, ? extends V> m) {
-        atomic.modify(new UnaryFunction<PersistentMap<K, V>>() {
-            @Override
-            public PersistentMap<K, V> call(PersistentMap<K, V> map) throws Exception {
-                return Maps.pairs(m).<Pair<K, V>>unsafeCast().fold(map, Segment.functions.<Pair<K, V>, PersistentMap<K, V>>cons());
-            }
-        });
+        atomic.modify(map -> Maps.pairs(m).<Pair<K, V>>unsafeCast().fold(map, Segment.functions.<Pair<K, V>, PersistentMap<K, V>>cons()));
     }
 
     @Override
     public V remove(final Object key) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
-            @Override
-            public Pair<PersistentMap<K, V>, V> call(PersistentMap<K, V> map) throws Exception {
-                return PersistentMap.methods.remove(map, key(key)).
-                        second(Option.functions.<V>getOrNull());
-            }
-        });
+        return atomic.modifyReturn(map -> PersistentMap.methods.remove(map, key(key)).
+                second(Option.functions.<V>getOrNull()));
     }
 
     @Override
     public void clear() {
-        atomic.modify(new UnaryFunction<PersistentMap<K, V>>() {
-            @Override
-            public PersistentMap<K, V> call(PersistentMap<K, V> map) throws Exception {
-                return map.empty();
-            }
-        });
+        atomic.modify(PersistentMap<K, V>::empty);
     }
 
     @Override
@@ -120,47 +93,35 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public V putIfAbsent(final K key, final V value) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
-            @Override
-            public Pair<PersistentMap<K, V>, V> call(PersistentMap<K, V> map) throws Exception {
-                if (!map.contains(key)) return put(map, key, value);
-                return pair(map, map.lookup(key).getOrNull());
-            }
+        return atomic.modifyReturn(map -> {
+            if (!map.contains(key)) return put(map, key, value);
+            return pair(map, map.lookup(key).getOrNull());
         });
     }
 
     @Override
     public boolean remove(final Object rawKey, final Object value) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, Boolean>>() {
-            @Override
-            public Pair<PersistentMap<K, V>, Boolean> call(PersistentMap<K, V> map) throws Exception {
-                K key = key(rawKey);
-                if (map.lookup(key).contains(Unchecked.<V>cast(value))) return pair(map.delete(key), true);
-                return pair(map, false);
-            }
+        return atomic.modifyReturn(map -> {
+            K key = key(rawKey);
+            if (map.lookup(key).contains(Unchecked.<V>cast(value))) return pair(map.delete(key), true);
+            return pair(map, false);
         });
     }
 
     @Override
     public boolean replace(final K rawKey, final V oldValue, final V newValue) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, Boolean>>() {
-            @Override
-            public Pair<PersistentMap<K, V>, Boolean> call(PersistentMap<K, V> map) throws Exception {
-                K key = key(rawKey);
-                if (map.lookup(key).contains(Unchecked.<V>cast(oldValue))) return pair(map.insert(key, newValue), true);
-                return pair(map, false);
-            }
+        return atomic.modifyReturn(map -> {
+            K key = key(rawKey);
+            if (map.lookup(key).contains(Unchecked.<V>cast(oldValue))) return pair(map.insert(key, newValue), true);
+            return pair(map, false);
         });
     }
 
     @Override
     public V replace(final K key, final V value) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
-            @Override
-            public Pair<PersistentMap<K, V>, V> call(PersistentMap<K, V> map) throws Exception {
-                if (map.contains(key)) return AtomicMap.this.put(map, key, value);
-                return pair(map, null);
-            }
+        return atomic.modifyReturn(map -> {
+            if (map.contains(key)) return AtomicMap.this.put(map, key, value);
+            return pair(map, null);
         });
     }
 }

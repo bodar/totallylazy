@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Mapper;
+
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.parser.Result;
@@ -54,19 +54,5 @@ public class Json {
 
     public static <V> Result<Sequence<V>> parseSequence(Reader json) {
         return cast(Grammar.SEQUENCE.parse(json));
-    }
-
-    public static class functions {
-        public static Mapper<String, Map<String, Object>> toMap = new Mapper<String, Map<String, Object>>() {
-            public Map<String, Object> call(String json) throws Exception {
-                return Json.map(json);
-            }
-        };
-
-        public static Mapper<Object, String> toJson = new Mapper<Object, String>() {
-            public String call(Object value) throws Exception {
-                return Json.json(value);
-            }
-        };
     }
 }

@@ -17,20 +17,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.BinaryFunction;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.CombinerFunction;
-import com.googlecode.totallylazy.Computation;
-import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.UnaryFunction;
-import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
 
@@ -56,12 +43,7 @@ public class Numbers {
     public static final Number POSITIVE_INFINITY = Double.POSITIVE_INFINITY;
     public static final Number NEGATIVE_INFINITY = Double.NEGATIVE_INFINITY;
     public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
-    public static Function<Number, Integer> intValue = new Function<Number, Integer>() {
-        @Override
-        public Integer call(Number number) throws Exception {
-            return number.intValue();
-        }
-    };
+    public static Function1<Number, Integer> intValue = Number::intValue;
 
     public static Sequence<Number> range(final Number start) {
         return iterate(increment, start);
@@ -90,12 +72,7 @@ public class Numbers {
         }
     }
 
-    public static Callable1<Object, Number> valueOf = new Callable1<Object, Number>() {
-        @Override
-        public Number call(Object value) throws Exception {
-            return Numbers.valueOf(value.toString()).get();
-        }
-    };
+    public static Function1<Object, Number> valueOf = value -> Numbers.valueOf(value.toString()).get();
 
     public static Sequence<Number> numbers(Number... numbers) {
         return Sequences.sequence(numbers);
@@ -124,19 +101,9 @@ public class Numbers {
         return Math.sqrt(number.doubleValue());
     }
 
-    public static UnaryFunction<Number> squareRoot = new UnaryFunction<Number>() {
-        @Override
-        public Number call(Number number) throws Exception {
-            return squareRoot(number);
-        }
-    };
+    public static UnaryFunction<Number> squareRoot = Numbers::squareRoot;
 
-    public static UnaryFunction<Number> squared = new UnaryFunction<Number>() {
-        @Override
-        public Number call(Number number) throws Exception {
-            return squared(number);
-        }
-    };
+    public static UnaryFunction<Number> squared = Numbers::squared;
 
     public static UnaryFunction<Number> squared() {
         return squared;
@@ -172,14 +139,6 @@ public class Numbers {
         }
     };
 
-    public static LogicalPredicate<Number> prime() {
-        return prime;
-    }
-
-    public static LogicalPredicate<Number> isPrime() {
-        return prime;
-    }
-
     public static boolean isPrime(Number candidate) {
         return primes().takeWhile(where(squared, lessThanOrEqualTo(candidate))).forAll(where(remainder(candidate), is(not(zero))));
     }
@@ -189,30 +148,10 @@ public class Numbers {
     }
 
     public static Sequence<Number> probablePrimes() {
-        return iterate(nextProbablePrime(), BigInteger.valueOf(2)).map(reduce());
+        return iterate(BigInteger::nextProbablePrime, BigInteger.valueOf(2)).map(reduce());
     }
 
-    private static UnaryFunction<BigInteger> nextProbablePrime() {
-        return new UnaryFunction<BigInteger>() {
-            @Override
-            public BigInteger call(BigInteger bigInteger) throws Exception {
-                return bigInteger.nextProbablePrime();
-            }
-        };
-    }
-
-    public static UnaryFunction<Number> nextPrime = new UnaryFunction<Number>() {
-        @Override
-        public Number call(Number number) throws Exception {
-            return nextPrime(number);
-        }
-    };
-
-    public static UnaryFunction<Number> nextPrime() {
-        return nextPrime;
-    }
-
-    public static Computation<Number> primes = Computation.cons(2, computation(3, nextPrime));
+    public static Computation<Number> primes = Computation.cons(2, computation(3, Numbers::nextPrime));
 
     public static Sequence<Number> primes() {
         return primes;
@@ -262,11 +201,7 @@ public class Numbers {
         return operatorsFor(value).negate(value);
     }
 
-    public static UnaryFunction<Number> increment = new UnaryFunction<Number>() {
-        public Number call(Number number) throws Exception {
-            return Numbers.increment(number);
-        }
-    };
+    public static UnaryFunction<Number> increment = Numbers::increment;
 
     public static UnaryFunction<Number> increment() {
         return increment;
@@ -276,11 +211,7 @@ public class Numbers {
         return operatorsFor(value).increment(value);
     }
 
-    public static UnaryFunction<Number> decrement = new UnaryFunction<Number>() {
-        public Number call(Number number) throws Exception {
-            return Numbers.decrement(number);
-        }
-    };
+    public static UnaryFunction<Number> decrement = Numbers::decrement;
 
     public static UnaryFunction<Number> decrement() {
         return decrement;
@@ -367,44 +298,32 @@ public class Numbers {
     }
 
     public static Comparator<Number> ascending() {
-        return new Comparator<Number>() {
-            public int compare(Number x, Number y) {
-                return Numbers.compare(x, y);
-            }
-        };
+        return Numbers::compare;
     }
 
     public static Comparator<Number> descending() {
-        return new Comparator<Number>() {
-            public int compare(Number x, Number y) {
-                return Numbers.compare(y, x);
-            }
-        };
+        return (x, y) -> compare(y, x);
     }
 
-    public static Function<Iterable<Number>, Number> sumIterable() {
-        return new Function<Iterable<Number>, Number>() {
-            public Number call(Iterable<Number> numbers) throws Exception {
-                return Sequences.reduceLeft(numbers, sum());
-            }
-        };
+    public static Function1<Iterable<Number>, Number> sumIterable() {
+        return numbers -> Sequences.reduceLeft(numbers, sum());
     }
 
-    public static final CombinerFunction<Number> average = new Average();
-    public static CombinerFunction<Number> average() {
+    public static final Monoid<Number> average = new Average();
+    public static Monoid<Number> average() {
         return average;
     }
 
-    public static final CombinerFunction<Number> sum = new Sum();
-    public static final CombinerFunction<Number> Σ = sum;
+    public static final Monoid<Number> sum = new Sum();
+    public static final Monoid<Number> Σ = sum;
 
-    public static CombinerFunction<Number> sum() {
+    public static Monoid<Number> sum() {
         return sum;
     }
 
-    public static final CombinerFunction<Number> add = sum;
+    public static final Monoid<Number> add = sum;
 
-    public static CombinerFunction<Number> add() {
+    public static Monoid<Number> add() {
         return add;
     }
 
@@ -416,11 +335,7 @@ public class Numbers {
         return operatorsFor(x, y).add(x, y);
     }
 
-    public static BinaryFunction<Number> subtract = new BinaryFunction<Number>() {
-        public Number call(Number a, Number b) {
-            return Numbers.subtract(a, b);
-        }
-    };
+    public static BinaryFunction<Number> subtract = Numbers::subtract;
 
     public static BinaryFunction<Number> subtract() {
         return subtract;
@@ -434,15 +349,15 @@ public class Numbers {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
-    public static CombinerFunction<Number> product = new Product();
+    public static Monoid<Number> product = new Product();
 
-    public static CombinerFunction<Number> product() {
+    public static Monoid<Number> product() {
         return product;
     }
 
-    public static CombinerFunction<Number> multiply = product;
+    public static Monoid<Number> multiply = product;
 
-    public static CombinerFunction<Number> multiply() {
+    public static Monoid<Number> multiply() {
         return multiply;
     }
 
@@ -463,11 +378,7 @@ public class Numbers {
         return divide.flip().apply(divisor);
     }
 
-    public static BinaryFunction<Number> divide = new BinaryFunction<Number>() {
-        public Number call(Number dividend, Number divisor) throws Exception {
-            return divide(dividend, divisor);
-        }
-    };
+    public static BinaryFunction<Number> divide = Numbers::divide;
 
     public static BinaryFunction<Number> divide() {
         return divide;
@@ -482,12 +393,7 @@ public class Numbers {
         return mod().apply(divisor);
     }
 
-    public static BinaryFunction<Number> remainder = new BinaryFunction<Number>() {
-        @Override
-        public Number call(Number dividend, Number divisor) throws Exception {
-            return remainder(dividend, divisor);
-        }
-    };
+    public static BinaryFunction<Number> remainder = Numbers::remainder;
 
     public static BinaryFunction<Number> remainder() {
         return remainder;
@@ -527,20 +433,11 @@ public class Numbers {
     }
 
     public static UnaryFunction<Number> reduce() {
-        return new UnaryFunction<Number>() {
-            @Override
-            public Number call(Number number) throws Exception {
-                return reduce(number);
-            }
-        };
+        return Numbers::reduce;
     }
 
-    public static Function<Number, Character> toCharacter() {
-        return new Function<Number, Character>() {
-            public Character call(Number number) throws Exception {
-                return (char) number.shortValue();
-            }
-        };
+    public static Function1<Number, Character> toCharacter() {
+        return number -> (char) number.shortValue();
     }
 
     public static String toLexicalString(Number value, final Number minValue, final Number maxValue) {

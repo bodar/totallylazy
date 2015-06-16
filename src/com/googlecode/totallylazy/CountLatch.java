@@ -39,12 +39,12 @@ public class CountLatch {
         return String.format("Latch(%d)", sync.count());
     }
 
-    public <A> Returns<A> monitor(Callable<? extends A> callable) {
+    public <A> Function0<A> monitor(Callable<? extends A> callable) {
         return monitor(callable, this);
     }
 
-    public static <A> Returns<A> monitor(final Callable<? extends A> callable, final CountLatch latch) {
-        return new Returns<A>() {
+    public static <A> Function0<A> monitor(final Callable<? extends A> callable, final CountLatch latch) {
+        return new Function0<A>() {
             @Override
             public A call() throws Exception {
                 latch.countUp();
@@ -57,12 +57,12 @@ public class CountLatch {
         };
     }
 
-    public <A, B> Function<A, B> monitor(Callable1<? super A, ? extends B> callable) {
+    public <A, B> Function1<A, B> monitor(Function1<? super A, ? extends B> callable) {
         return monitor(this, callable);
     }
 
-    public static <A, B> Function<A, B> monitor(final CountLatch latch, final Callable1<? super A, ? extends B> callable) {
-        return new Function<A, B>() {
+    public static <A, B> Function1<A, B> monitor(final CountLatch latch, final Function1<? super A, ? extends B> callable) {
+        return new Function1<A, B>() {
             @Override
             public B call(A a) throws Exception {
                 latch.countUp();

@@ -8,7 +8,7 @@ import static com.googlecode.totallylazy.matchers.NumberMatcher.lessThan;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class TimeCallableTest {
+public class TimeFunction10Test {
     @Test
     public void canTimeACall() throws Exception {
         TimeReport report = new TimeReport();

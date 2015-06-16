@@ -1,10 +1,10 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.Monoid;
 import com.googlecode.totallylazy.Strings;
 
-public class JoinCharSequence extends CombinerFunction<CharSequence> {
-    public static final CombinerFunction<CharSequence> instance = new JoinCharSequence();
+public class JoinCharSequence implements Monoid<CharSequence> {
+    public static final Monoid<CharSequence> instance = new JoinCharSequence();
     private JoinCharSequence() {}
 
     @Override

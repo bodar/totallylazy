@@ -1,10 +1,6 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Characters;
-import com.googlecode.totallylazy.Maps;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.parser.Parse;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
@@ -32,7 +28,7 @@ public class Grammar {
 
     public static final Parser<String> ESCAPED_CHARACTER = isChar('\\').next(
             string(Characters.among("\"\\/bfnrt")).or(string(cons(is('u'), repeat(hexDigit).take(4)))).
-                    map(Strings.functions.unescape));
+                    map(Strings::unescape));
 
     public static final Predicate<Character> UNICODE_CHARACTER = Characters.notAmong("\"\\");
 

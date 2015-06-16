@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.security;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Value;
@@ -84,30 +84,20 @@ public class Key implements Value<String> {
         return value();
     }
 
-    public Function<? super String, String> encrypt() {
+    public Function1<? super String, String> encrypt() {
         return functions.encrypt().apply(this);
     }
 
-    public Function<? super String, String> decrypt() {
+    public Function1<? super String, String> decrypt() {
         return functions.decrypt().apply(this);
     }
 
     public static class functions {
         public static Function2<Key, ? super String, String> encrypt() {
-            return new Function2<Key, String, String>() {
-                @Override
-                public String call(Key key, String value) throws Exception {
-                    return key.encrypt(value);
-                }
-            };
+            return Key::encrypt;
         }
         public static Function2<Key, ? super String, String> decrypt() {
-            return new Function2<Key, String, String>() {
-                @Override
-                public String call(Key key, String value) throws Exception {
-                    return key.decrypt(value);
-                }
-            };
+            return Key::decrypt;
         }
     }
 }

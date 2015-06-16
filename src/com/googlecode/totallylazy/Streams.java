@@ -18,17 +18,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 
 public class Streams {
     public static void copyAndClose(final InputStream input, final OutputStream out) {
-        using(input, new Block<InputStream>() {
-            @Override
-            protected void execute(InputStream inputStream) throws Exception {
-                using(out, new Block<OutputStream>() {
-                    @Override
-                    protected void execute(OutputStream outputStream) throws Exception {
-                        copy(input, out);
-                    }
-                });
-            }
-        });
+        using(input, inputStream -> using(out, (Block<OutputStream>) outputStream -> copy(input, out)));
     }
 
     public static void copy(InputStream input, OutputStream out) throws IOException {
@@ -95,15 +85,13 @@ public class Streams {
         return repeat(readLine(new BufferedReader(reader))).takeWhile(notNullValue(String.class));
     }
 
-    public static Returns<String> readLine(final BufferedReader reader) {
-        return new Returns<String>() {
-            public String call() throws Exception {
-                String result = reader.readLine();
-                if (result == null) {
-                    reader.close();
-                }
-                return result;
+    public static Function0<String> readLine(final BufferedReader reader) {
+        return () -> {
+            String result = reader.readLine();
+            if (result == null) {
+                reader.close();
             }
+            return result;
         };
     }
 }

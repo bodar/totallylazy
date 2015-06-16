@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -36,37 +35,18 @@ public interface Sources extends Closeable {
 
     class methods {
         public static int copyAndClose(Sources source, final Destination destination) {
-            return using(source, destination, new Function2<Sources, Destination, Integer>() {
-                @Override
-                public Integer call(Sources source, Destination destination) throws Exception {
-                    return copy(source, destination);
-                }
-            });
+            return using(source, destination, methods::copy);
         }
 
         public static int copy(Sources sources, final Destination destination) {
-            return sources.sources().map(new Block<Source>() {
-                @Override
-                protected void execute(Source source) throws Exception {
-                    Streams.copyAndClose(source.input, destination.destination(source.name, source.modified));
-                }
-            }).size();
+            return sources.sources().map((Block<Source>) source ->
+                    Streams.copyAndClose(source.input, destination.destination(source.name, source.modified))).size();
         }
     }
 
     class functions {
-        public static Mapper<Source, String> name = new Mapper<Source, String>() {
-            @Override
-            public String call(Source source) throws Exception {
-                return source.name;
-            }
-        };
-        public static LogicalPredicate<Source> directory = new LogicalPredicate<Source>() {
-            @Override
-            public boolean matches(Source source) {
-                return source.isDirectory;
-            }
-        };
+        public static Function1<Source, String> name = source -> source.name;
+        public static Predicate<Source> directory = source -> source.isDirectory;
     }
 
     class Source extends Eq {

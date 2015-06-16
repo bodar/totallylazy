@@ -3,17 +3,17 @@ package com.googlecode.totallylazy;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Functions.returns;
-import static com.googlecode.totallylazy.callables.LazyCallable.lazy;
+import static com.googlecode.totallylazy.Lazy.lazy;
 
 public class Quintuple<F, S, T, Fo, Fi> extends Quadruple<F, S, T, Fo> implements Fifth<Fi> {
     private final Value<? extends Fi> fifth;
 
     public static <F, S, T, Fo, Fi> Quintuple<F, S, T, Fo, Fi> quintuple(final F first, final S second, final T third, final Fo fourth, final Fi fifth) {
-        return new Quintuple<F, S, T, Fo, Fi>(returns(first), returns(second), returns(third), returns(fourth), returns(fifth));
+        return new Quintuple<>(returns(first), returns(second), returns(third), returns(fourth), returns(fifth));
     }
 
     public static <F, S, T, Fo, Fi> Quintuple<F, S, T, Fo, Fi> quintuple(final Callable<? extends F> first, final Callable<? extends S> second, final Callable<? extends T> third, final Callable<? extends Fo> fourth, final Callable<? extends Fi> fifth) {
-        return new Quintuple<F, S, T, Fo, Fi>(first, second, third, fourth, fifth);
+        return new Quintuple<>(first, second, third, fourth, fifth);
     }
 
     protected Quintuple(final Callable<? extends F> first, final Callable<? extends S> second, final Callable<? extends T> third, final Callable<? extends Fo> fourth, final Callable<? extends Fi> fifth) {

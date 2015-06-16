@@ -19,7 +19,6 @@ import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Sequences.filter;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
@@ -35,42 +34,42 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
     }
 
 
-    public void eachConcurrently(final Callable1<? super T, ?> runnable) {
+    public void eachConcurrently(final Function1<? super T, ?> runnable) {
         forEachConcurrently(runnable);
     }
 
-    public void forEachConcurrently(final Callable1<? super T, ?> runnable) {
+    public void forEachConcurrently(final Function1<? super T, ?> runnable) {
         Sequences.forEachConcurrently(this, runnable);
     }
 
-    public void eachConcurrently(final Callable1<? super T, ?> runnable, Executor executor) {
+    public void eachConcurrently(final Function1<? super T, ?> runnable, Executor executor) {
         forEachConcurrently(runnable, executor);
     }
 
-    public void forEachConcurrently(final Callable1<? super T, ?> runnable, Executor executor) {
+    public void forEachConcurrently(final Function1<? super T, ?> runnable, Executor executor) {
         Sequences.forEachConcurrently(this, runnable, executor);
     }
 
-    public void each(final Callable1<? super T, ?> runnable) {
+    public void each(final Function1<? super T, ?> runnable) {
         forEach(runnable);
     }
 
-    public void forEach(final Callable1<? super T, ?> runnable) {
+    public void forEach(final Function1<? super T, ?> runnable) {
         Sequences.forEach(this, runnable);
     }
 
-    public Sequence<T> tap(final Callable1<? super T, ?> callable) { return Sequences.tap(this, callable); }
+    public Sequence<T> tap(final Function1<? super T, ?> callable) { return Sequences.tap(this, callable); }
 
-    public <S> Sequence<S> mapConcurrently(final Callable1<? super T, S> callable) {
+    public <S> Sequence<S> mapConcurrently(final Function1<? super T, S> callable) {
         return Sequences.mapConcurrently(this, callable);
     }
 
-    public <S> Sequence<S> mapConcurrently(final Callable1<? super T, S> callable, final Executor executor) {
+    public <S> Sequence<S> mapConcurrently(final Function1<? super T, S> callable, final Executor executor) {
         return Sequences.mapConcurrently(this, callable, executor);
     }
 
     @Override
-    public <S> Sequence<S> map(final Callable1<? super T, ? extends S> callable) {
+    public <S> Sequence<S> map(final Function1<? super T, ? extends S> callable) {
         return Sequences.map(this, callable);
     }
 
@@ -88,44 +87,44 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return filter(not(predicate));
     }
 
-    public <S> Sequence<S> flatMap(final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
+    public <S> Sequence<S> flatMap(final Function1<? super T, ? extends Iterable<? extends S>> callable) {
         return Sequences.flatMap(this, callable);
     }
 
     @SafeVarargs
-    public final <S> Sequence<S> collect(Callable1<? super T, ? extends Option<S>>... callables) {
+    public final <S> Sequence<S> collect(Function1<? super T, ? extends Option<S>>... callables) {
         return flatMap(Functions.or(callables));
     }
 
-    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Callable1<? super T, ? extends S> callable1) {
-        return collect(Functions.option(predicate1, callable1));
+    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Function1<? super T, ? extends S> function1) {
+        return collect(Functions.option(predicate1, function1));
     }
 
-    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Callable1<? super T, ? extends S> callable1, Predicate<? super T> predicate2, Callable1<? super T, ? extends S> callable2) {
-        return collect(Functions.option(predicate1, callable1), Functions.option(predicate2, callable2));
+    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Function1<? super T, ? extends S> function1, Predicate<? super T> predicate2, Function1<? super T, ? extends S> callable2) {
+        return collect(Functions.option(predicate1, function1), Functions.option(predicate2, callable2));
     }
 
-    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Callable1<? super T, ? extends S> callable1, Predicate<? super T> predicate2, Callable1<? super T, ? extends S> callable2, Predicate<? super T> predicate3, Callable1<? super T, ? extends S> callable3) {
-        return collect(Functions.option(predicate1, callable1), Functions.option(predicate2, callable2), Functions.option(predicate3, callable3));
+    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Function1<? super T, ? extends S> function1, Predicate<? super T> predicate2, Function1<? super T, ? extends S> callable2, Predicate<? super T> predicate3, Function1<? super T, ? extends S> callable3) {
+        return collect(Functions.option(predicate1, function1), Functions.option(predicate2, callable2), Functions.option(predicate3, callable3));
     }
 
-    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Callable1<? super T, ? extends S> callable1, Predicate<? super T> predicate2, Callable1<? super T, ? extends S> callable2, Predicate<? super T> predicate3, Callable1<? super T, ? extends S> callable3, Predicate<? super T> predicate4, Callable1<? super T, ? extends S> callable4) {
-        return collect(Functions.option(predicate1, callable1), Functions.option(predicate2, callable2), Functions.option(predicate3, callable3), Functions.option(predicate4, callable4));
+    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Function1<? super T, ? extends S> function1, Predicate<? super T> predicate2, Function1<? super T, ? extends S> callable2, Predicate<? super T> predicate3, Function1<? super T, ? extends S> callable3, Predicate<? super T> predicate4, Function1<? super T, ? extends S> callable4) {
+        return collect(Functions.option(predicate1, function1), Functions.option(predicate2, callable2), Functions.option(predicate3, callable3), Functions.option(predicate4, callable4));
     }
 
-    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Callable1<? super T, ? extends S> callable1, Predicate<? super T> predicate2, Callable1<? super T, ? extends S> callable2, Predicate<? super T> predicate3, Callable1<? super T, ? extends S> callable3, Predicate<? super T> predicate4, Callable1<? super T, ? extends S> callable4, Predicate<? super T> predicate5, Callable1<? super T, ? extends S> callable5) {
-        return collect(Functions.option(predicate1, callable1), Functions.option(predicate2, callable2), Functions.option(predicate3, callable3), Functions.option(predicate4, callable4), Functions.option(predicate5, callable5));
+    public <S> Sequence<S> collect(Predicate<? super T> predicate1, Function1<? super T, ? extends S> function1, Predicate<? super T> predicate2, Function1<? super T, ? extends S> callable2, Predicate<? super T> predicate3, Function1<? super T, ? extends S> callable3, Predicate<? super T> predicate4, Function1<? super T, ? extends S> callable4, Predicate<? super T> predicate5, Function1<? super T, ? extends S> callable5) {
+        return collect(Functions.option(predicate1, function1), Functions.option(predicate2, callable2), Functions.option(predicate3, callable3), Functions.option(predicate4, callable4), Functions.option(predicate5, callable5));
     }
 
-    public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<? extends S>> callable) {
+    public <S> Sequence<S> flatMapConcurrently(final Function1<? super T, ? extends Iterable<? extends S>> callable) {
         return Sequences.flatMapConcurrently(this, callable);
     }
 
-    public <S> Sequence<S> flatMapConcurrently(final Callable1<? super T, ? extends Iterable<? extends S>> callable, final Executor executor) {
+    public <S> Sequence<S> flatMapConcurrently(final Function1<? super T, ? extends Iterable<? extends S>> callable, final Executor executor) {
         return Sequences.flatMapConcurrently(this, callable, executor);
     }
 
-    public <B> Sequence<B> applicate(final Sequence<? extends Callable1<? super T, ? extends B>> applicator) {
+    public <B> Sequence<B> applicate(final Sequence<? extends Function1<? super T, ? extends B>> applicator) {
         return Sequences.applicate(applicator, this);
     }
 
@@ -166,39 +165,39 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.init(this);
     }
 
-    public <S> S fold(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> S fold(final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         return Sequences.fold(this, seed, callable);
     }
 
-    public <S> S foldLeft(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> S foldLeft(final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         return Sequences.foldLeft(this, seed, callable);
     }
 
-    public <S> Sequence<S> scanLeft(final S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> Sequence<S> scanLeft(final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
         return Sequences.scanLeft(this, seed, callable);
     }
 
-    public <S> S foldRight(final S seed, final Callable2<? super T, ? super S, ? extends S> callable) {
+    public <S> S foldRight(final S seed, final Function2<? super T, ? super S, ? extends S> callable) {
         return Sequences.foldRight(this, seed, callable);
     }
 
-    public <S> S foldRight(final S seed, final Callable1<? super Pair<T, S>, ? extends S> callable) {
+    public <S> S foldRight(final S seed, final Function1<? super Pair<T, S>, ? extends S> callable) {
         return Sequences.foldRight(this, seed, callable);
     }
 
-    public <S> S reduce(final Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> S reduce(final Function2<? super S, ? super T, ? extends S> callable) {
         return Sequences.reduce(this, callable);
     }
 
-    public <S> S reduceLeft(final Callable2<? super S, ? super T, ? extends S> callable) {
+    public <S> S reduceLeft(final Function2<? super S, ? super T, ? extends S> callable) {
         return Sequences.reduceLeft(this, callable);
     }
 
-    public <S> S reduceRight(final Callable2<? super T, ? super S, ? extends S> callable) {
+    public <S> S reduceRight(final Function2<? super T, ? super S, ? extends S> callable) {
         return Sequences.reduceRight(this, callable);
     }
 
-    public <S> S reduceRight(final Callable1<? super Pair<T, S>, ? extends S> callable) {
+    public <S> S reduceRight(final Function1<? super Pair<T, S>, ? extends S> callable) {
         return Sequences.reduceRight(this, callable);
     }
 
@@ -246,7 +245,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return unique(returnArgument());
     }
 
-    public <S> Sequence<T> unique(Callable1<? super T, ? extends S> callable) {
+    public <S> Sequence<T> unique(Function1<? super T, ? extends S> callable) {
         return Sequences.unique(this, callable);
     }
 
@@ -327,11 +326,11 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.find(this, predicate);
     }
 
-    public <S> Option<S> tryPick(final Callable1<? super T, ? extends Option<? extends S>> callable) {
+    public <S> Option<S> tryPick(final Function1<? super T, ? extends Option<? extends S>> callable) {
         return Sequences.tryPick(this, callable);
     }
 
-    public <S> S pick(final Callable1<? super T, ? extends Option<? extends S>> callable) {
+    public <S> S pick(final Function1<? super T, ? extends Option<? extends S>> callable) {
         return Sequences.pick(this, callable);
     }
 
@@ -393,7 +392,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.zipWithIndex(this);
     }
 
-    public <R extends Comparable<? super R>> Sequence<T> sortBy(final Callable1<? super T, ? extends R> callable) {
+    public <R extends Comparable<? super R>> Sequence<T> sortBy(final Function1<? super T, ? extends R> callable) {
         return sortBy(ascending(callable));
     }
 
@@ -425,15 +424,15 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.cycle(this);
     }
 
-    public <K> Map<K, List<T>> toMap(final Callable1<? super T, ? extends K> callable) {
+    public <K> Map<K, List<T>> toMap(final Function1<? super T, ? extends K> callable) {
         return Maps.multiMap(this, callable);
     }
 
-    public <K> Sequence<Group<K, T>> groupBy(final Callable1<? super T, ? extends K> callable) {
+    public <K> Sequence<Group<K, T>> groupBy(final Function1<? super T, ? extends K> callable) {
         return Sequences.groupBy(this, callable);
     }
 
-    public Sequence<Sequence<T>> recursive(final Callable1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
+    public Sequence<Sequence<T>> recursive(final Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> callable) {
         return Sequences.recursive(this, callable);
     }
 

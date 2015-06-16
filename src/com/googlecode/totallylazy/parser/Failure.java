@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Either;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
 
@@ -23,7 +23,7 @@ public abstract class Failure<A> implements Result<A>{
     }
 
     @Override
-    public <B> Failure<B> map(Callable1<? super A, ? extends B> callable) {
+    public <B> Failure<B> map(Function1<? super A, ? extends B> callable) {
         return cast(this);
     }
 

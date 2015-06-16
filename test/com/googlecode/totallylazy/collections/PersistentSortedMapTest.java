@@ -1,10 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -75,22 +71,14 @@ public class PersistentSortedMapTest {
         // shuffle - fold / cons Elapsed msecs for 11 runs:	Avg:19.289151888888888	Min:13.316564	Max:113.912953	Total:300.831884
         // shuffle - sorted list Elapsed msecs for 11 runs:	Avg:15.702062000000002	Min:8.892117	Max:125.818735	Total:276.02941000000004
         final Sequence<Integer> integers = range(0, 10000).safeCast(Integer.class).shuffle();
-        TimeReport time = TimeReport.time(10, new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                return sortedMap(integers.map(asPair()));
-            }
+        TimeReport time = TimeReport.time(10, () -> {
+            return sortedMap(integers.map(asPair()));
         });
         System.out.println(time);
     }
 
-    public static Callable1<Integer, Pair<Integer, Integer>> asPair() {
-        return new Callable1<Integer, Pair<Integer, Integer>>() {
-            @Override
-            public Pair<Integer, Integer> call(Integer integer) throws Exception {
-                return Pair.pair(integer, integer);
-            }
-        };
+    public static Function1<Integer, Pair<Integer, Integer>> asPair() {
+        return integer -> Pair.pair(integer, integer);
     }
 
     @Test

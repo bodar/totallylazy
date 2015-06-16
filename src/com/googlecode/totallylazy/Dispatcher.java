@@ -60,7 +60,7 @@ public class Dispatcher {
 
     public <T> Option<T> invokeOption(Object... args) {
         final List<Class<?>> argumentClasses = sequence(args).map(toClass()).toList();
-        return computeIfAbsent(cache, argumentClasses, new Returns<Option<Method>>() {
+        return computeIfAbsent(cache, argumentClasses, new Function0<Option<Method>>() {
             @Override
             public Option<Method> call() throws Exception {
                 return Methods.allMethods(aClass).
@@ -73,15 +73,15 @@ public class Dispatcher {
     }
 
     // Backported from Java 8
-    private <K,V> V computeIfAbsent(ConcurrentMap<K, V> cache, K key, Returns<V> returns) {
+    private <K,V> V computeIfAbsent(ConcurrentMap<K, V> cache, K key, Function0<V> function0) {
         V v, newValue;
         return ((v = cache.get(key)) == null &&
-                (newValue = returns.apply()) != null &&
+                (newValue = function0.apply()) != null &&
                 (v = cache.putIfAbsent(key, newValue)) == null) ? newValue : v;
 
     }
-    private static Mapper<Method, Number> distanceFrom(final Iterable<Class<?>> argumentClasses) {
-        return new Mapper<Method, Number>() {
+    private static Function1<Method, Number> distanceFrom(final Iterable<Class<?>> argumentClasses) {
+        return new Function1<Method, Number>() {
             @Override
             public Number call(Method method) throws Exception {
                 return distanceFrom(argumentClasses, sequence(method.getParameterTypes()));

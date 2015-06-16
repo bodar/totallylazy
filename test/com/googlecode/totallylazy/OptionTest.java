@@ -50,7 +50,7 @@ public class OptionTest {
     public void supportsApplicativeEquality() throws Exception {
         final Option<Function2<Object, Object, Boolean>> some = some(equalTo());
         final Option<Integer> some1 = some(3);
-        final Option<Function<Object, Boolean>> applicate = applicate(some, some1);
+        final Option<Function1<Object, Boolean>> applicate = applicate(some, some1);
         assertThat(applicate(applicate, some(5)), is(some(false)));
         assertThat(applicate(applicate(some(equalTo()), some(3)), some(3)), is(some(true)));
         assertThat(applicate(applicate(some(equalTo()), none(Integer.class)), some(3)), is(none(Boolean.class)));
@@ -60,7 +60,7 @@ public class OptionTest {
     @Test
     public void supportsApplicativeUsage() throws Exception {
         assertThat(none(Number.class).applicate(some(add(3))), is(none(Number.class)));
-        assertThat(some(9).applicate(Option.<Function<Number, Number>>none()), is(none(Number.class)));
+        assertThat(some(9).applicate(Option.<Function1<Number, Number>>none()), is(none(Number.class)));
         assertThat(some(9).applicate(some(add(3))), is(Option.<Number>some(12)));
 
         assertThat(some(5).applicate(some(3).applicate(some(add()))), is(Option.<Number>some(8)));

@@ -1,10 +1,6 @@
 package com.googlecode.totallylazy.comparators;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.*;
 
 import java.util.Comparator;
 
@@ -13,15 +9,11 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Comparators {
-    public static <T, R> Comparator<T> by(final Callable1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
-        return new Comparator<T>() {
-            public int compare(T instance, T otherInstance) {
-                return comparator.compare(call(callable, instance), call(callable, otherInstance));
-            }
-        };
+    public static <T, R> Comparator<T> by(final Function1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
+        return (instance, otherInstance) -> comparator.compare(call(callable, instance), call(callable, otherInstance));
     }
 
-    public static <T, R> Comparator<T> where(final Callable1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
+    public static <T, R> Comparator<T> where(final Function1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
         return by(callable, comparator);
     }
 
@@ -34,11 +26,7 @@ public class Comparators {
     }
 
     @SuppressWarnings("unchecked")
-    private static final Comparator<Comparable> ASCENDING = new Comparator<Comparable>() {
-        public int compare(Comparable a, Comparable b) {
-            return a.compareTo(b);
-        }
-    };
+    private static final Comparator<Comparable> ASCENDING = Comparable::compareTo;
 
     public static <T extends Comparable<? super T>> Comparator<T> ascending() {
         return cast(ASCENDING);
@@ -48,16 +36,12 @@ public class Comparators {
         return Comparators.<T>ascending();
     }
 
-    public static <T, R extends Comparable<? super R>> Comparator<T> ascending(final Callable1<? super T, ? extends R> callable) {
-        return new AscendingComparator<T, R>(callable);
+    public static <T, R extends Comparable<? super R>> Comparator<T> ascending(final Function1<? super T, ? extends R> callable) {
+        return new AscendingComparator<>(callable);
     }
 
     @SuppressWarnings("unchecked")
-    private static final Comparator<Comparable> DESCENDING = new Comparator<Comparable>() {
-        public int compare(Comparable a, Comparable b) {
-            return b.compareTo(a);
-        }
-    };
+    private static final Comparator<Comparable> DESCENDING = (a, b) -> b.compareTo(a);
 
     public static <T extends Comparable<? super T>> Comparator<T> descending() {
         return cast(DESCENDING);
@@ -67,8 +51,8 @@ public class Comparators {
         return Comparators.<T>descending();
     }
 
-    public static <T, R extends Comparable<? super R>> Comparator<T> descending(final Callable1<? super T, ? extends R> callable) {
-        return new DescendingComparator<T, R>(callable);
+    public static <T, R extends Comparable<? super R>> Comparator<T> descending(final Function1<? super T, ? extends R> callable) {
+        return new DescendingComparator<>(callable);
     }
 
     @SafeVarargs
@@ -79,25 +63,4 @@ public class Comparators {
     public static <T> Comparator<T> comparators(final Sequence<Comparator<? super T>> comparators) {
         return new CompositeComparator<T>(comparators);
     }
-
-    public static <T> Comparator<T> comparators(final Comparator<? super T>  first) {
-        return comparators(Sequences.<Comparator<? super T>>sequence(first));
-    }
-
-    public static <T> Comparator<T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second) {
-        return comparators(Sequences.<Comparator<? super T>>sequence(first, second));
-    }
-
-    public static <T> Comparator<T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second, final Comparator<? super T> third) {
-        return comparators(Sequences.<Comparator<? super T>>sequence(first, second, third));
-    }
-
-    public static <T> Comparator<T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second, final Comparator<? super T> third, final Comparator<? super T> fourth) {
-        return comparators(Sequences.<Comparator<? super T>>sequence(first, second, third, fourth));
-    }
-
-    public static <T> Comparator<T> comparators(final Comparator<? super T>  first, final Comparator<? super T>  second, final Comparator<? super T> third, final Comparator<? super T> fourth, final Comparator<? super T>  fifth) {
-        return comparators(Sequences.<Comparator<? super T>>sequence(first, second, third, fourth, fifth));
-    }
-
 }
