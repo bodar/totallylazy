@@ -3,9 +3,9 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.BinaryPredicate;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 
-public abstract class LogicalBinaryPredicate<T> extends Function1<T, LogicalPredicate<T>> implements BinaryPredicate<T>, Callable1<T, LogicalPredicate<T>>, Callable2<T, T, Boolean> {
+public abstract class LogicalBinaryPredicate<T> extends Function<T, LogicalPredicate<T>> implements BinaryPredicate<T>, Callable1<T, LogicalPredicate<T>>, Callable2<T, T, Boolean> {
     public abstract LogicalBinaryPredicate<T> flip();
 
     @Override

@@ -1,16 +1,11 @@
 package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Unary;
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
-
-import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;

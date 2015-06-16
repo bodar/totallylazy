@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.annotations.tailrec;
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.iterators.FilterIterator;
 import com.googlecode.totallylazy.iterators.FlattenIterator;
@@ -459,8 +458,8 @@ public class Iterators {
         };
     }
 
-    public static <T> Function1<Iterator<T>, T> next() {
-        return new Function1<Iterator<T>, T>() {
+    public static <T> Function<Iterator<T>, T> next() {
+        return new Function<Iterator<T>, T>() {
             public T call(Iterator<T> iterator) throws Exception {
                 return iterator.next();
             }

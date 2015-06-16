@@ -1,9 +1,5 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.comparators.Comparators;
-
-import java.util.AbstractMap;
-import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -21,12 +17,12 @@ public class Maps {
         return entries(map).map(Maps.<K, V>entryToPair());
     }
 
-    public static <K, V> Function1<Map<K, V>, Sequence<Map.Entry<K, V>>> entries(Class<K> keyType, Class<V> valueType) {
+    public static <K, V> Function<Map<K, V>, Sequence<Map.Entry<K, V>>> entries(Class<K> keyType, Class<V> valueType) {
         return entries();
     }
 
-    public static <K, V> Function1<Map<K, V>, Sequence<Map.Entry<K, V>>> entries() {
-        return new Function1<Map<K, V>, Sequence<Map.Entry<K, V>>>() {
+    public static <K, V> Function<Map<K, V>, Sequence<Map.Entry<K, V>>> entries() {
+        return new Function<Map<K, V>, Sequence<Map.Entry<K, V>>>() {
             @Override
             public Sequence<Map.Entry<K, V>> call(Map<K, V> map) throws Exception {
                 return entries(map);
@@ -226,27 +222,27 @@ public class Maps {
         return asMap();
     }
 
-    public static <K, V> Function1<Pair<K, V>, Map.Entry<K, V>> pairToEntry() {
-        return new Function1<Pair<K, V>, Map.Entry<K, V>>() {
+    public static <K, V> Function<Pair<K, V>, Map.Entry<K, V>> pairToEntry() {
+        return new Function<Pair<K, V>, Map.Entry<K, V>>() {
             public final Map.Entry<K, V> call(final Pair<K, V> pair) throws Exception {
                 return pair;
             }
         };
     }
 
-    public static <K, V> Function1<Pair<K, V>, Map.Entry<K, V>> pairToEntry(final Class<K> keyClass, final Class<V> valueClass) {
+    public static <K, V> Function<Pair<K, V>, Map.Entry<K, V>> pairToEntry(final Class<K> keyClass, final Class<V> valueClass) {
         return pairToEntry();
     }
 
-    public static <K, V> Function1<Map.Entry<K, V>, Pair<K, V>> entryToPair() {
-        return new Function1<Map.Entry<K, V>, Pair<K, V>>() {
+    public static <K, V> Function<Map.Entry<K, V>, Pair<K, V>> entryToPair() {
+        return new Function<Map.Entry<K, V>, Pair<K, V>>() {
             public final Pair<K, V> call(final Map.Entry<K, V> entry) throws Exception {
                 return pair(entry.getKey(), entry.getValue());
             }
         };
     }
 
-    public static <K, V> Function1<Map.Entry<K, V>, Pair<K, V>> entryToPair(final Class<K> keyClass, final Class<V> valueClass) {
+    public static <K, V> Function<Map.Entry<K, V>, Pair<K, V>> entryToPair(final Class<K> keyClass, final Class<V> valueClass) {
         return entryToPair();
     }
 
@@ -300,15 +296,15 @@ public class Maps {
             };
         }
 
-        public static <K, V> Function1<K, V> getFrom(final Map<K, V> map) {
+        public static <K, V> Function<K, V> getFrom(final Map<K, V> map) {
             return functions.<K,V>get().apply(map);
         }
 
-        public static <K, V> Function1<Map<K, V>, V> valueFor(final K key) {
+        public static <K, V> Function<Map<K, V>, V> valueFor(final K key) {
             return functions.<K,V>get().flip().apply(key);
         }
 
-        public static <K, V> Function1<Map<K, V>, V> valueFor(final K key, final Class<V> vClass) {
+        public static <K, V> Function<Map<K, V>, V> valueFor(final K key, final Class<V> vClass) {
             return valueFor(key);
         }
     }

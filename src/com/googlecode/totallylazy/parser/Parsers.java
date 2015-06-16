@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.parser;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Characters;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Parsers {
-    public static Function1<Iterable<?>, String> toString = new Function1<Iterable<?>, String>() {
+    public static Function<Iterable<?>, String> toString = new Function<Iterable<?>, String>() {
         @Override
         public String call(Iterable<?> iterable) throws Exception {
             return sequence(iterable).toString("");

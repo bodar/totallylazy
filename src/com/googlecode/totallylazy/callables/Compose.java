@@ -2,10 +2,10 @@ package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.CombinerFunction;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Functions;
 
-public class Compose<T> extends CombinerFunction<Function1<T, T>> {
+public class Compose<T> extends CombinerFunction<Function<T, T>> {
     private Compose() {}
 
     public static <T> Compose<T> compose() {
@@ -17,12 +17,12 @@ public class Compose<T> extends CombinerFunction<Function1<T, T>> {
     }
 
     @Override
-    public Function1<T, T> call(Function1<T, T> a, Function1<T, T> b) throws Exception {
+    public Function<T, T> call(Function<T, T> a, Function<T, T> b) throws Exception {
         return Callables.compose(a, b);
     }
 
     @Override
-    public Function1<T, T> identity() {
+    public Function<T, T> identity() {
         return Functions.identity();
     }
 

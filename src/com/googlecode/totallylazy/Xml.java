@@ -178,14 +178,14 @@ public class Xml {
         return Xml.textContents(Xml.sequence(nodes));
     }
 
-    public static final Function1<Node, String> textContent = new Function1<Node, String>() {
+    public static final Function<Node, String> textContent = new Function<Node, String>() {
         @Override
         public String call(Node node) throws Exception {
             return node.getTextContent();
         }
     };
 
-    public static Function1<Node, String> textContent() {
+    public static Function<Node, String> textContent() {
         return textContent;
     }
 
@@ -198,8 +198,8 @@ public class Xml {
         };
     }
 
-    public static Function1<Node, String> contents() {
-        return new Function1<Node, String>() {
+    public static Function<Node, String> contents() {
+        return new Function<Node, String>() {
             public String call(Node node) throws Exception {
                 return contents(node);
             }
@@ -319,8 +319,8 @@ public class Xml {
         return nodes.map(remove()).realise();
     }
 
-    private static Function1<Node, Node> remove() {
-        return new Function1<Node, Node>() {
+    private static Function<Node, Node> remove() {
+        return new Function<Node, Node>() {
             public Node call(Node node) throws Exception {
                 return node.getParentNode().removeChild(node);
             }
@@ -348,16 +348,16 @@ public class Xml {
                 escape(value);
     }
 
-    public static Function1<Object, String> escape() {
-        return new Function1<Object, String>() {
+    public static Function<Object, String> escape() {
+        return new Function<Object, String>() {
             public String call(Object value) throws Exception {
                 return escape(value);
             }
         };
     }
 
-    public static Function1<Character, String> toXmlEntity() {
-        return new Function1<Character, String>() {
+    public static Function<Character, String> toXmlEntity() {
+        return new Function<Character, String>() {
             public String call(Character character) throws Exception {
                 return String.format("&#%s;", Integer.toString(character, 10));
             }
@@ -375,7 +375,7 @@ public class Xml {
             };
         }
 
-        public static Function1<Element, Element> setAttribute(final String name, final String value) {
+        public static Function<Element, Element> setAttribute(final String name, final String value) {
             return new UnaryFunction<Element>() {
                 public Element call(Element element) throws Exception {
                     element.setAttribute(name, value);
@@ -393,7 +393,7 @@ public class Xml {
             };
         }
 
-        public static Function1<Element, String> attribute(final String attributeName) {
+        public static Function<Element, String> attribute(final String attributeName) {
             return new Mapper<Element, String>() {
                 public String call(Element element) throws Exception {
                     return element.getAttribute(attributeName);
@@ -410,7 +410,7 @@ public class Xml {
             };
         }
 
-        public static Function1<Node, String> selectContents(final String expression) {
+        public static Function<Node, String> selectContents(final String expression) {
             return new Mapper<Node, String>() {
                 @Override
                 public String call(Node node) throws Exception {
@@ -428,8 +428,8 @@ public class Xml {
             };
         }
 
-        public static Function1<String, Document> document() {
-            return new Function1<String, Document>() {
+        public static Function<String, Document> document() {
+            return new Function<String, Document>() {
                 @Override
                 public Document call(String value) throws Exception {
                     return Xml.document(value);
@@ -437,7 +437,7 @@ public class Xml {
             };
         }
 
-        public static Function1<Element, String> textContent() {
+        public static Function<Element, String> textContent() {
             return new Mapper<Element, String>() {
                 @Override
                 public String call(Element element) throws Exception {

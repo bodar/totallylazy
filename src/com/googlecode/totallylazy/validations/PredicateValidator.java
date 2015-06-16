@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 
 import static com.googlecode.totallylazy.Callables.returns1;
@@ -41,12 +41,12 @@ public class PredicateValidator<T> extends LogicalValidator<T> {
     }
 
     public static class functions {
-        public static <T> Function1<Predicate<? super T>, Validator<T>> predicateAsValidator(Class<T> type) {
+        public static <T> Function<Predicate<? super T>, Validator<T>> predicateAsValidator(Class<T> type) {
             return predicateAsValidator();
         }
 
-        public static <T> Function1<Predicate<? super T>, Validator<T>> predicateAsValidator() {
-            return new Function1<Predicate<? super T>, Validator<T>>() {
+        public static <T> Function<Predicate<? super T>, Validator<T>> predicateAsValidator() {
+            return new Function<Predicate<? super T>, Validator<T>>() {
                 @Override
                 public Validator<T> call(Predicate<? super T> predicate) throws Exception {
                     return validatePredicate(predicate);

@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.matchers;
 
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.hamcrest.Description;
@@ -26,8 +26,8 @@ public class Matchers {
         return sequence(values).map(Matchers.<T>isMatcher());
     }
 
-    public static Function1<SelfDescribing, String> description() {
-        return new Function1<SelfDescribing, String>() {
+    public static Function<SelfDescribing, String> description() {
+        return new Function<SelfDescribing, String>() {
             @Override
             public String call(SelfDescribing selfDescribing) throws Exception {
                 return asString(selfDescribing);
@@ -35,22 +35,22 @@ public class Matchers {
         };
     }
 
-    public static <T> Function1<T, String> describeMismatch(Class<T> type, final Matcher<? super T> matcher) {
+    public static <T> Function<T, String> describeMismatch(Class<T> type, final Matcher<? super T> matcher) {
         return describeMismatch(matcher);
     }
 
-    public static <T> Function1<T, String> describeMismatch(final Matcher<? super T> matcher) {
+    public static <T> Function<T, String> describeMismatch(final Matcher<? super T> matcher) {
         if (matcher instanceof DiagnosingMatcher)
             return diagnoseMismatch((DiagnosingMatcher) matcher);
         return returns1(StringDescription.asString(matcher));
     }
 
-    public static <T> Function1<T, String> diagnoseMismatch(Class<T> type, final DiagnosingMatcher matcher) {
+    public static <T> Function<T, String> diagnoseMismatch(Class<T> type, final DiagnosingMatcher matcher) {
         return diagnoseMismatch(matcher);
     }
 
-    public static <T> Function1<T, String> diagnoseMismatch(final DiagnosingMatcher matcher) {
-        return new Function1<T, String>() {
+    public static <T> Function<T, String> diagnoseMismatch(final DiagnosingMatcher matcher) {
+        return new Function<T, String>() {
             @Override
             public String call(T t) throws Exception {
                 StringDescription mismatchDescription = new StringDescription();

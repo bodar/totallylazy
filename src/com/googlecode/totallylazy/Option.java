@@ -97,8 +97,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
         return option(a);
     }
 
-    public static <A> Function1<A, Option<A>> option() {
-        return new Function1<A, Option<A>>() {
+    public static <A> Function<A, Option<A>> option() {
+        return new Function<A, Option<A>>() {
             @Override
             public Option<A> call(A a) throws Exception {
                 return option(a);
@@ -121,8 +121,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
     public boolean is(Predicate<? super A> predicate) { return exists(predicate);}
 
     public static class functions {
-        public static <T> Function1<Option<T>, T> getOrElse(final T t) {
-            return new Function1<Option<T>, T>() {
+        public static <T> Function<Option<T>, T> getOrElse(final T t) {
+            return new Function<Option<T>, T>() {
                 @Override
                 public T call(Option<T> ts) throws Exception {
                     return ts.getOrElse(t);
@@ -130,8 +130,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
             };
         }
 
-        public static <T> Function1<Option<T>, T> getOrElse(final Callable<? extends T> callable) {
-            return new Function1<Option<T>, T>() {
+        public static <T> Function<Option<T>, T> getOrElse(final Callable<? extends T> callable) {
+            return new Function<Option<T>, T>() {
                 @Override
                 public T call(Option<T> ts) throws Exception {
                     return ts.getOrElse(callable);
@@ -139,8 +139,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
             };
         }
 
-        public static <T> Function1<Option<T>, T> getOrNull() {
-            return new Function1<Option<T>, T>() {
+        public static <T> Function<Option<T>, T> getOrNull() {
+            return new Function<Option<T>, T>() {
                 @Override
                 public T call(Option<T> ts) throws Exception {
                     return ts.getOrNull();
@@ -148,8 +148,8 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
             };
         }
 
-        public static <T> Function1<Option<T>, T> get(Class<T> clazz) {
-            return new Function1<Option<T>, T>() {
+        public static <T> Function<Option<T>, T> get(Class<T> clazz) {
+            return new Function<Option<T>, T>() {
                 @Override
                 public T call(Option<T> ts) throws Exception {
                     return ts.get();

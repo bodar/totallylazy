@@ -26,8 +26,8 @@ public class Escaper {
         return value == null ? null : characters(value.toString()).map(escape()).toString("");
     }
 
-    private Function1<Character, String> escape() {
-        return new Function1<Character, String>() {
+    private Function<Character, String> escape() {
+        return new Function<Character, String>() {
             public String call(Character character) throws Exception {
                 return rules.apply(character);
             }

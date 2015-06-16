@@ -5,7 +5,6 @@ import com.googlecode.totallylazy.regex.Regex;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.regex.MatchResult;
 
 import static com.googlecode.totallylazy.Strings.isEmpty;
@@ -258,25 +257,25 @@ public class Uri implements Comparable<Uri> {
     }
 
     public static class functions {
-        public static Function1<String, Uri> uri = new Function1<String, Uri>() {
+        public static Function<String, Uri> uri = new Function<String, Uri>() {
             @Override
             public Uri call(String value) throws Exception {
                 return Uri.uri(value);
             }
         };
 
-        public static Function1<String, Uri> uri() {
+        public static Function<String, Uri> uri() {
             return uri;
         }
 
-        public static final Function1<Uri, String> path = new Function1<Uri, String>() {
+        public static final Function<Uri, String> path = new Function<Uri, String>() {
             @Override
             public String call(Uri uri) throws Exception {
                 return uri.path();
             }
         };
 
-        public static final Function1<Uri, String> host = new Function1<Uri, String>() {
+        public static final Function<Uri, String> host = new Function<Uri, String>() {
             @Override
             public String call(Uri uri) throws Exception {
                 return uri.host();
@@ -292,7 +291,7 @@ public class Uri implements Comparable<Uri> {
             };
         }
 
-        public static Function1<Uri, URL> URL = new Function1<Uri, URL>() {
+        public static Function<Uri, URL> URL = new Function<Uri, URL>() {
             @Override
             public URL call(Uri uri) throws Exception {
                 return uri.toURL();

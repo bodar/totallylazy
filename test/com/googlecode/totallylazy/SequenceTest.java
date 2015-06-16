@@ -30,7 +30,6 @@ import static com.googlecode.totallylazy.Callables.size;
 import static com.googlecode.totallylazy.Callables.toString;
 import static com.googlecode.totallylazy.Functions.and;
 import static com.googlecode.totallylazy.Functions.andPair;
-import static com.googlecode.totallylazy.Functions.constant;
 import static com.googlecode.totallylazy.Functions.or;
 import static com.googlecode.totallylazy.Functions.orPair;
 import static com.googlecode.totallylazy.Functions.xor;
@@ -140,7 +139,7 @@ public class SequenceTest {
     @Test
     public void supportsApplicativeUsage() throws Exception {
         assertThat(empty(Number.class).applicate(one(add(3))), Matchers.is(empty(Number.class)));
-        assertThat(numbers(9).applicate(Sequences.<Function1<Number, Number>>empty()), Matchers.is(empty(Number.class)));
+        assertThat(numbers(9).applicate(Sequences.<Function<Number, Number>>empty()), Matchers.is(empty(Number.class)));
         assertThat(numbers(9).applicate(one(add(3))), Matchers.is(numbers(12)));
         assertThat(numbers(9, 1).applicate(one(add(3))), Matchers.is(numbers(12, 4)));
         assertThat(numbers(9, 1).applicate(sequence(add(3), multiply(10))), Matchers.is(numbers(12, 4, 90, 10)));
