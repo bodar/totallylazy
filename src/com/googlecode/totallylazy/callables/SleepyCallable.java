@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Returns;
 
 import java.util.concurrent.Callable;
 
-public final class SleepyCallable<T> extends Returns<T> {
+public final class SleepyCallable<T> implements Returns<T> {
     private final Callable<? extends T> callable;
     private final int millis;
 

@@ -7,55 +7,55 @@ import com.googlecode.totallylazy.callables.TimeReport;
 
 import java.util.concurrent.Callable;
 
-public abstract class Returns<A> implements Callable<A>, Runnable, Functor<A>, Value<A> {
-    public A apply() {
+public interface Returns<A> extends Callable<A>, Runnable, Functor<A>, Value<A> {
+    default A apply() {
         return Functions.call(this);
     }
 
     @Override
-    public void run() {
+    default void run() {
         apply();
     }
 
     @Override
-    public A value() {
+    default A value() {
         return apply();
     }
 
-    public Returns<A> lazy() {
+    default Returns<A> lazy() {
         return LazyCallable.lazy(this);
     }
 
-    public Returns<A> sleep(int millis) {
+    default Returns<A> sleep(int millis) {
         return SleepyCallable.sleepy(this, millis);
     }
 
-    public Sequence<A> repeat() {
+    default Sequence<A> repeat() {
         return Sequences.repeat(this);
     }
 
-    public Returns<A> time(Callable1<? super Number, ?> report) {
+    default Returns<A> time(Callable1<? super Number, ?> report) {
         return TimeCallable.time(this, report);
     }
 
-    public Returns<A> time() {
+    default Returns<A> time() {
         return TimeCallable.time(this);
     }
 
-    public TimeReport time(int numberOfCalls) {
+    default TimeReport time(int numberOfCalls) {
         return TimeReport.time(numberOfCalls, this);
     }
 
     @Override
-    public <B> Returns<B> map(final Callable1<? super A, ? extends B> callable) {
+    default <B> Returns<B> map(final Callable1<? super A, ? extends B> callable) {
         return Callables.compose(this, callable);
     }
 
-    public <B> Returns<B> then(final Callable1<? super A, ? extends B> callable) {
+    default <B> Returns<B> then(final Callable1<? super A, ? extends B> callable) {
         return map(callable);
     }
 
-    public Returns<A> interruptable() {
+    default Returns<A> interruptable() {
         return Functions.interruptable(this);
     }
 }
