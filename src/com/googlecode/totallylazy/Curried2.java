@@ -4,27 +4,12 @@ package com.googlecode.totallylazy;
 public abstract class Curried2<A, B, C> implements Function1<A, Function1<B, C>>, Function2<A, B, C> {
     @Override
     public Function1<B, C> call(final A a) throws Exception {
-        return Functions.apply(this, a);
+        return b -> call(a,b);
     }
 
-    public C apply(final A a, final B b) {
-        return Functions.call(this, a, b);
-    }
-
-    public Function1<A, C> applySecond(final B b) {
-        return flip().apply(b);
-    }
-
-    public Function0<C> deferApply(final A a, final B b) {
-        return Callables.deferApply(this, a, b);
-    }
-
+    @Override
     public Curried2<B, A, C> flip() {
         return Callables.flip(this);
-    }
-
-    public Function1<Pair<A, B>, C> pair() {
-        return Callables.pair(this);
     }
 
     public <D, E> Curried3<A, B, D, E> then(final Function2<? super C, ? super D, ? extends E> callable) {
