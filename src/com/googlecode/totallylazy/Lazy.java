@@ -6,7 +6,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Closeables.safeClose;
 
-public abstract class Lazy<T> implements Returns<T>, Memory {
+public abstract class Lazy<T> implements Function0<T>, Memory {
     private final Object lock = new Object();
     private volatile Either<Exception, T> state;
 

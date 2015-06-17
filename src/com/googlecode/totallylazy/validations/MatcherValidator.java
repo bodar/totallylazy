@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function;
 import org.hamcrest.Matcher;
 
@@ -12,9 +12,9 @@ import static com.googlecode.totallylazy.validations.ValidationResult.constructo
 
 public class MatcherValidator<T> extends LogicalValidator<T> {
 	private final Matcher<? super T> matcher;
-	private final Callable1<? super T, String> message;
+	private final Function1<? super T, String> message;
 
-	private MatcherValidator(Matcher<? super T> matcher, Callable1<? super T, String> message) {
+	private MatcherValidator(Matcher<? super T> matcher, Function1<? super T, String> message) {
 		this.matcher = matcher;
 		this.message = message;
 	}

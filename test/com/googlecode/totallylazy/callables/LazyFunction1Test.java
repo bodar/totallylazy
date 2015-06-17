@@ -15,7 +15,7 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class LazyCallable1Test {
+public class LazyFunction1Test {
     @Test
     public void remembersException() throws Exception {
         final AtomicInteger count = new AtomicInteger();

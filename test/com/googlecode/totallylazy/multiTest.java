@@ -100,13 +100,13 @@ public class multiTest {
     @Test @Ignore
     public void isPrettyFast() throws Exception {
         final Instance instance = new Instance();
-        Returns<Object> multimethod = new Returns<Object>() {
+        Function0<Object> multimethod = new Function0<Object>() {
             @Override
             public Object call() throws Exception {
                 return instance.process((Object) "Foo");
             }
         };
-        Returns<Object> direct = new Returns<Object>() {
+        Function0<Object> direct = new Function0<Object>() {
             @Override
             public Object call() throws Exception {
                 return instance.process("Foo");

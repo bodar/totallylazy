@@ -17,7 +17,7 @@ public class Escaper {
         return withRule(is(appliesTo), returns1(result));
     }
 
-    public Escaper withRule(Predicate<? super Character> appliesTo, Callable1<? super Character, ? extends String> action) {
+    public Escaper withRule(Predicate<? super Character> appliesTo, Function1<? super Character, ? extends String> action) {
         rules.addFirst(appliesTo, action);
         return this;
     }

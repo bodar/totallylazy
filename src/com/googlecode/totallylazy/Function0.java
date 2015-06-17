@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.callables.TimeReport;
 
 import java.util.concurrent.Callable;
 
-public interface Returns<A> extends Callable<A>, Runnable, Functor<A>, Value<A> {
+public interface Function0<A> extends Callable<A>, Runnable, Functor<A>, Value<A> {
     default A apply() {
         return Functions.call(this);
     }
@@ -22,11 +22,11 @@ public interface Returns<A> extends Callable<A>, Runnable, Functor<A>, Value<A> 
         return apply();
     }
 
-    default Returns<A> lazy() {
+    default Function0<A> lazy() {
         return LazyCallable.lazy(this);
     }
 
-    default Returns<A> sleep(int millis) {
+    default Function0<A> sleep(int millis) {
         return SleepyCallable.sleepy(this, millis);
     }
 
@@ -34,11 +34,11 @@ public interface Returns<A> extends Callable<A>, Runnable, Functor<A>, Value<A> 
         return Sequences.repeat(this);
     }
 
-    default Returns<A> time(Callable1<? super Number, ?> report) {
+    default Function0<A> time(Function1<? super Number, ?> report) {
         return TimeCallable.time(this, report);
     }
 
-    default Returns<A> time() {
+    default Function0<A> time() {
         return TimeCallable.time(this);
     }
 
@@ -47,15 +47,15 @@ public interface Returns<A> extends Callable<A>, Runnable, Functor<A>, Value<A> 
     }
 
     @Override
-    default <B> Returns<B> map(final Callable1<? super A, ? extends B> callable) {
+    default <B> Function0<B> map(final Function1<? super A, ? extends B> callable) {
         return Callables.compose(this, callable);
     }
 
-    default <B> Returns<B> then(final Callable1<? super A, ? extends B> callable) {
+    default <B> Function0<B> then(final Function1<? super A, ? extends B> callable) {
         return map(callable);
     }
 
-    default Returns<A> interruptable() {
+    default Function0<A> interruptable() {
         return Functions.interruptable(this);
     }
 }

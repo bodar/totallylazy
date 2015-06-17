@@ -60,7 +60,7 @@ public class Dispatcher {
 
     public <T> Option<T> invokeOption(Object... args) {
         final List<Class<?>> argumentClasses = sequence(args).map(toClass()).toList();
-        return computeIfAbsent(cache, argumentClasses, new Returns<Option<Method>>() {
+        return computeIfAbsent(cache, argumentClasses, new Function0<Option<Method>>() {
             @Override
             public Option<Method> call() throws Exception {
                 return Methods.allMethods(aClass).
@@ -73,10 +73,10 @@ public class Dispatcher {
     }
 
     // Backported from Java 8
-    private <K,V> V computeIfAbsent(ConcurrentMap<K, V> cache, K key, Returns<V> returns) {
+    private <K,V> V computeIfAbsent(ConcurrentMap<K, V> cache, K key, Function0<V> function0) {
         V v, newValue;
         return ((v = cache.get(key)) == null &&
-                (newValue = returns.apply()) != null &&
+                (newValue = function0.apply()) != null &&
                 (v = cache.putIfAbsent(key, newValue)) == null) ? newValue : v;
 
     }
@@ -93,8 +93,8 @@ public class Dispatcher {
         return sequence(argumentClasses).zip(parameterTypes).map(distanceBetween().pair()).reduce(sum);
     }
 
-    private static Function2<Class<?>, Class<?>, Number> distanceBetween() {
-        return new Function2<Class<?>, Class<?>, Number>() {
+    private static Curried2<Class<?>, Class<?>, Number> distanceBetween() {
+        return new Curried2<Class<?>, Class<?>, Number>() {
             @Override
             public Number call(Class<?> argument, Class<?> parameter) throws Exception {
                 return distanceBetween(argument, parameter);

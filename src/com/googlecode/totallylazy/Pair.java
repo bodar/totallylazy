@@ -25,8 +25,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return new Pair<F, S>(first, second);
     }
 
-    public static <F, S> Function2<F, S, Pair<F, S>> pair() {
-        return new Function2<F, S, Pair<F, S>>() {
+    public static <F, S> Curried2<F, S, Pair<F, S>> pair() {
+        return new Curried2<F, S, Pair<F, S>>() {
             @Override
             public Pair<F, S> call(F f, S s) throws Exception {
                 return Pair.pair(f, s);
@@ -89,8 +89,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return values().hashCode();
     }
 
-    public static <A, B, C> Function2<Pair<A, B>, C, Pair<B, C>> leftShift2() {
-        return new Function2<Pair<A, B>, C, Pair<B, C>>() {
+    public static <A, B, C> Curried2<Pair<A, B>, C, Pair<B, C>> leftShift2() {
+        return new Curried2<Pair<A, B>, C, Pair<B, C>>() {
             @Override
             public Pair<B, C> call(Pair<A, B> pair, C c) throws Exception {
                 return leftShift(pair, c);
@@ -102,14 +102,14 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return Pair.pair(pair.second(), c);
     }
 
-    public static <A, B, C> Pair<B, C> reduceLeftShift(final Pair<? extends A, ? extends B> pair, final Callable2<? super A, ? super B, ? extends C> callable) {
+    public static <A, B, C> Pair<B, C> reduceLeftShift(final Pair<? extends A, ? extends B> pair, final Function2<? super A, ? super B, ? extends C> callable) {
         return Pair.leftShift(pair, call(callable, pair.first(), pair.second()));
     }
 
-    public static <A, B, C> Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>> reduceLeftShift() {
-        return new Function2<Pair<A, B>, Callable2<A, B, C>, Pair<B, C>>() {
+    public static <A, B, C> Curried2<Pair<A, B>, Function2<A, B, C>, Pair<B, C>> reduceLeftShift() {
+        return new Curried2<Pair<A, B>, Function2<A, B, C>, Pair<B, C>>() {
             @Override
-            public Pair<B, C> call(Pair<A, B> pair, Callable2<A, B, C> callable) throws Exception {
+            public Pair<B, C> call(Pair<A, B> pair, Function2<A, B, C> callable) throws Exception {
                 return reduceLeftShift(pair, callable);
             }
         };
@@ -126,21 +126,21 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         };
     }
 
-    public static <A, B, C> Function<Pair<A, B>, Pair<B, C>> reduceLeftShift(Callable2<A, B, C> callable) {
+    public static <A, B, C> Function<Pair<A, B>, Pair<B, C>> reduceLeftShift(Function2<A, B, C> callable) {
         return Pair.<A, B, C>reduceLeftShift().flip().apply(callable);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <NewF> Pair<NewF, S> map(final Callable1<? super F, ? extends NewF> callable) {
+    public <NewF> Pair<NewF, S> map(final Function1<? super F, ? extends NewF> callable) {
         return pair(first.map(callable), second);
     }
 
-    public <R> Pair<R, S> first(Callable1<? super F, ? extends R> map) {
+    public <R> Pair<R, S> first(Function1<? super F, ? extends R> map) {
         return pair(first.then(map), second);
     }
 
-    public <R> Pair<F,R> second(Callable1<? super S, ? extends R> map) {
+    public <R> Pair<F,R> second(Function1<? super S, ? extends R> map) {
         return pair(first, second.then(map));
     }
 

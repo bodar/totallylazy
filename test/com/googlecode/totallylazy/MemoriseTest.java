@@ -55,8 +55,8 @@ public class MemoriseTest {
         assertThat(counting.count(), is(1));
     }
 
-    private Returns<Integer> callHead(final Sequence<Integer> number) {
-        return new Returns<Integer>() {
+    private Function0<Integer> callHead(final Sequence<Integer> number) {
+        return new Function0<Integer>() {
             public Integer call() throws Exception {
                 return number.head();
             }

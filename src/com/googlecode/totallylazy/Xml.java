@@ -228,7 +228,7 @@ public class Xml {
     }
 
     public static String contents(Element element) throws Exception {
-        return sequence(element.getChildNodes()).map(new Callable1<Node, String>() {
+        return sequence(element.getChildNodes()).map(new Function1<Node, String>() {
             public String call(Node node) throws Exception {
                 if (node instanceof Element) {
                     return asString((Element) node);
@@ -365,7 +365,7 @@ public class Xml {
     }
 
     public static class functions {
-        public static UnaryFunction<Element> modifyTextContent(final Callable1<? super String, ? extends CharSequence> function) {
+        public static UnaryFunction<Element> modifyTextContent(final Function1<? super String, ? extends CharSequence> function) {
             return new UnaryFunction<Element>() {
                 @Override
                 public Element call(Element element) throws Exception {
@@ -401,8 +401,8 @@ public class Xml {
             };
         }
 
-        public static Function2<Node, String, String> selectContents() {
-            return new Function2<Node, String, String>() {
+        public static Curried2<Node, String, String> selectContents() {
+            return new Curried2<Node, String, String>() {
                 @Override
                 public String call(Node node, String expression) throws Exception {
                     return Xml.selectContents(node, expression);
@@ -419,8 +419,8 @@ public class Xml {
             };
         }
 
-        public static Function2<Node, String, Sequence<Node>> selectNodes() {
-            return new Function2<Node, String, Sequence<Node>>() {
+        public static Curried2<Node, String, Sequence<Node>> selectNodes() {
+            return new Curried2<Node, String, Sequence<Node>>() {
                 @Override
                 public Sequence<Node> call(final Node node, final String expression) throws Exception {
                     return Xml.selectNodes(node, expression);

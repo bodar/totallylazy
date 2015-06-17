@@ -495,7 +495,7 @@ public class SequenceTest {
         assertThat(converted, is("converted"));
     }
 
-    Callable1<Integer, Option<String>> someVeryExpensiveOperation = new Callable1<Integer, Option<String>>() {
+    Function1<Integer, Option<String>> someVeryExpensiveOperation = new Function1<Integer, Option<String>>() {
         public Option<String> call(Integer number) throws Exception {
             if (Numbers.equalTo(number, 1)) {
                 return none(); // the conversion didn't work
@@ -594,7 +594,7 @@ public class SequenceTest {
     @Test
     public void shouldNotIterateMultipleTimesWhenCallingToString() throws Exception {
         final AtomicInteger count = new AtomicInteger(0);
-        sequence("foo").map(new Callable1<String, String>() {
+        sequence("foo").map(new Function1<String, String>() {
             @Override
             public String call(String string) throws Exception {
                 count.incrementAndGet();
@@ -840,7 +840,7 @@ public class SequenceTest {
     @Test
     public void supportsInterruption() throws Exception {
         final int[] count = new int[]{0};
-        Sequence<Integer> interruptable = repeat(new Returns<Integer>() {
+        Sequence<Integer> interruptable = repeat(new Function0<Integer>() {
             @Override
             public Integer call() throws Exception {
                 if (++count[0] == 5) {

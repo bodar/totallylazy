@@ -55,7 +55,7 @@ public class Strings {
         return Streams.lines(reader).memorise();
     }
 
-    public static Returns<String> readLine(final BufferedReader reader) { return Streams.readLine(reader); }
+    public static Function0<String> readLine(final BufferedReader reader) { return Streams.readLine(reader); }
 
     public static Function<String, String> toLowerCase() {
         return new Function<String, String>() {
@@ -247,7 +247,7 @@ public class Strings {
 
     public static String toString(final InputStream stream) {
         if (stream == null) return EMPTY;
-        return using(stream, new Callable1<InputStream, String>() {
+        return using(stream, new Function1<InputStream, String>() {
             @Override
             public String call(InputStream inputStream) throws Exception {
                 return Strings.toString(inputStreamReader(inputStream));
@@ -256,7 +256,7 @@ public class Strings {
     }
 
     public static String toString(Reader reader) {
-        return using(reader, new Callable1<Reader, String>() {
+        return using(reader, new Function1<Reader, String>() {
             public String call(Reader reader) throws Exception {
                 StringBuilder builder = new StringBuilder();
                 char[] buffer = new char[512];
@@ -345,8 +345,8 @@ public class Strings {
     }
 
 
-    public static Callable1<String, String> trim() {
-        return new Callable1<String, String>() {
+    public static Function1<String, String> trim() {
+        return new Function1<String, String>() {
             @Override
             public String call(String value) throws Exception {
                 return value.trim();
@@ -378,7 +378,7 @@ public class Strings {
     public static Minimum.Function<String> minimum = Minimum.constructors.minimum((String) null);
 
     public static class functions {
-        public static Function3<String, String, String, String> replaceAll = new Function3<String, String, String, String>() {
+        public static Curried3<String, String, String, String> replaceAll = new Curried3<String, String, String, String>() {
             @Override
             public String call(String regex, String replacemenent, String source) throws Exception {
                 return Strings.replaceAll(regex, replacemenent).apply(source);

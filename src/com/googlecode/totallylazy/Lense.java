@@ -2,14 +2,14 @@ package com.googlecode.totallylazy;
 
 public class Lense<A, B> {
     private final Function<A, B> get;
-    private final Function2<B, A, A> set;
+    private final Curried2<B, A, A> set;
 
-    private Lense(Function<A, B> get, Function2<B, A, A> set) {
+    private Lense(Function<A, B> get, Curried2<B, A, A> set) {
         this.get = get;
         this.set = set;
     }
 
-    public static <A, B> Lense<A, B> lense(Function<A, B> get, Function2<B, A, A> set) {
+    public static <A, B> Lense<A, B> lense(Function<A, B> get, Curried2<B, A, A> set) {
         return new Lense<A, B>(get, set);
     }
 
@@ -29,8 +29,8 @@ public class Lense<A, B> {
         return lense(get.then(other.get), setter(other));
     }
 
-    private <C> Function2<C, A, A> setter(final Lense<B, C> other) {
-        return new Function2<C,A,A>() {
+    private <C> Curried2<C, A, A> setter(final Lense<B, C> other) {
+        return new Curried2<C,A,A>() {
             public A call(final C c, final A a) throws Exception {
                 return set(other.set(c, get(a)), a);
             }

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Returns;
+import com.googlecode.totallylazy.Function0;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class LazyCallableTest {
     @Test
     public void isThreadSafe() throws Exception {
         CountingCallable<Integer> callable = counting();
-        Returns<Integer> lazyCallable = callable.sleep(10).lazy();
+        Function0<Integer> lazyCallable = callable.sleep(10).lazy();
 
         Sequence<Integer> result = callConcurrently(lazyCallable, lazyCallable).realise();
 

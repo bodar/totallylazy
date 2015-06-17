@@ -12,11 +12,11 @@ import java.util.concurrent.TimeUnit;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class Callers {
-    public static <T> Returns<T> callConcurrently(Callable<? extends T> callable) {
+    public static <T> Function0<T> callConcurrently(Callable<? extends T> callable) {
         ExecutorService service = executorService();
         try {
             final Future<? extends T> future = service.submit(callable);
-            return new Returns<T>() {
+            return new Function0<T>() {
                 @Override
                 public T call() throws Exception {
                     return future.get();
@@ -105,23 +105,23 @@ public final class Callers {
         return Functions.call(callable);
     }
 
-    public static <A, B> B call(final Callable1<? super A, ? extends B> callable, final A a) {
+    public static <A, B> B call(final Function1<? super A, ? extends B> callable, final A a) {
         return Functions.call(callable, a);
     }
 
-    public static <A, B, C> C call(final Callable2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
+    public static <A, B, C> C call(final Function2<? super A, ? super B, ? extends C> callable, final A a, final B b) {
         return Functions.call(callable, a, b);
     }
 
-    public static <A, B, C, D> D call(final Callable3<? super A, ? super B, ? super C, ? extends D> callable, final A a, final B b, final C c) {
+    public static <A, B, C, D> D call(final Function3<? super A, ? super B, ? super C, ? extends D> callable, final A a, final B b, final C c) {
         return Functions.call(callable, a, b, c);
     }
 
-    public static <A, B, C, D, E> E call(final Callable4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A a, final B b, final C c, final D d) {
+    public static <A, B, C, D, E> E call(final Function4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A a, final B b, final C c, final D d) {
         return Functions.call(callable, a, b, c, d);
     }
 
-    public static <A, B, C, D, E, F> F call(final Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A a, final B b, final C c, final D d, final E e) {
+    public static <A, B, C, D, E, F> F call(final Function5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A a, final B b, final C c, final D d, final E e) {
         return Functions.call(callable, a, b, c, d, e);
     }
 }

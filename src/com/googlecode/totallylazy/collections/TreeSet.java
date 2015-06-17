@@ -1,15 +1,13 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Curried2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
@@ -56,7 +54,7 @@ public class TreeSet<T> extends AbstractCollection<T> implements PersistentSorte
     }
 
     @Override
-    public <NewT> PersistentSortedSet<NewT> map(Callable1<? super T, ? extends NewT> transformer) {
+    public <NewT> PersistentSortedSet<NewT> map(Function1<? super T, ? extends NewT> transformer) {
         throw new UnsupportedOperationException();
     }
 
@@ -163,8 +161,8 @@ public class TreeSet<T> extends AbstractCollection<T> implements PersistentSorte
     }
 
     @Override
-    public <S> S fold(S seed, final Callable2<? super S, ? super T, ? extends S> callable) {
-        return map.fold(seed, new Function2<S, Pair<?, T>, S>() {
+    public <S> S fold(S seed, final Function2<? super S, ? super T, ? extends S> callable) {
+        return map.fold(seed, new Curried2<S, Pair<?, T>, S>() {
             @Override
             public S call(S s, Pair<?, T> pair) throws Exception {
                 return callable.call(s, pair.second());

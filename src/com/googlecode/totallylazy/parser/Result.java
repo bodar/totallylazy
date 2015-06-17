@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Functor;
@@ -12,7 +12,7 @@ public interface Result<A> extends Value<A>, Functor<A> {
     Segment<Character> remainder();
 
     @Override
-    <B> Result<B> map(Callable1<? super A, ? extends B> callable);
+    <B> Result<B> map(Function1<? super A, ? extends B> callable);
 
     Option<A> option();
 

@@ -30,8 +30,8 @@ public class Triple<F, S, T> extends Pair<F, S> implements Third<T> {
         return super.values().append(third());
     }
 
-    public static <A, B, C, D>  Function2<Triple<A, B, C>, D, Triple<B, C, D>> leftShift3() {
-        return new Function2<Triple<A, B, C>, D, Triple<B, C, D>>() {
+    public static <A, B, C, D> Curried2<Triple<A, B, C>, D, Triple<B, C, D>> leftShift3() {
+        return new Curried2<Triple<A, B, C>, D, Triple<B, C, D>>() {
             @Override
             public Triple<B, C, D> call(Triple<A, B, C> triple, D d) throws Exception {
                 return leftShift(triple, d);

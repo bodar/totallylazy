@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Maps;
@@ -41,7 +41,7 @@ public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<P
     PersistentSortedMap<K, V> filterValues(Predicate<? super V> predicate);
 
     @Override
-    <NewV> PersistentSortedMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer);
+    <NewV> PersistentSortedMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer);
 
     @Override
     Pair<? extends PersistentSortedMap<K, V>, Pair<K, V>> removeFirst();

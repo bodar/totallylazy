@@ -8,16 +8,16 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Pair.pair;
 
-public abstract class Function<A, B> extends Eq implements Callable1<A, B>, Functor<B> {
+public abstract class Function<A, B> extends Eq implements Function1<A, B>, Functor<B> {
     public B apply(final A a) {
         return Functions.call(this, a);
     }
 
-    public Returns<B> deferApply(final A a) {
+    public Function0<B> deferApply(final A a) {
         return Callables.deferApply(this, a);
     }
 
-    public Returns<B> callConcurrently(final A a) {
+    public Function0<B> callConcurrently(final A a) {
         return Callers.callConcurrently(deferApply(a));
     }
 
@@ -46,11 +46,11 @@ public abstract class Function<A, B> extends Eq implements Callable1<A, B>, Func
     }
 
     @Override
-    public <C> Function<A, C> map(final Callable1<? super B, ? extends C> callable) {
+    public <C> Function<A, C> map(final Function1<? super B, ? extends C> callable) {
         return Callables.compose(this, callable);
     }
 
-    public <C> Function<A, C> then(final Callable1<? super B, ? extends C> callable) {
+    public <C> Function<A, C> then(final Function1<? super B, ? extends C> callable) {
         return map(callable);
     }
 
@@ -62,7 +62,7 @@ public abstract class Function<A, B> extends Eq implements Callable1<A, B>, Func
         return Functions.interruptable(this);
     }
 
-    public Function<A, Returns<B>> deferExecution() {
+    public Function<A, Function0<B>> deferExecution() {
         return Callables.deferReturn(this);
     }
 
@@ -78,7 +78,7 @@ public abstract class Function<A, B> extends Eq implements Callable1<A, B>, Func
         return TimeFunction.time1(this);
     }
 
-    public Function<A,B> time(Callable1<? super Number, ?> reporter) {
+    public Function<A,B> time(Function1<? super Number, ?> reporter) {
         return TimeFunction.time1(this, reporter);
     }
 

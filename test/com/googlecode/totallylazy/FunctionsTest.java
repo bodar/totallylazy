@@ -65,7 +65,7 @@ public class FunctionsTest {
         assertThat(multiply(10).capturing().apply(1), equalTo(Pair.<Number,Number>pair(1, 10)));
     }
 
-    private Function3<Number, Number, Number, Number> addThenMultiple() {
+    private Curried3<Number, Number, Number, Number> addThenMultiple() {
         return uncurry3(add().then(multiply()));
     }
 }

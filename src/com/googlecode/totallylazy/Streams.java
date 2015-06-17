@@ -95,8 +95,8 @@ public class Streams {
         return repeat(readLine(new BufferedReader(reader))).takeWhile(notNullValue(String.class));
     }
 
-    public static Returns<String> readLine(final BufferedReader reader) {
-        return new Returns<String>() {
+    public static Function0<String> readLine(final BufferedReader reader) {
+        return new Function0<String>() {
             public String call() throws Exception {
                 String result = reader.readLine();
                 if (result == null) {

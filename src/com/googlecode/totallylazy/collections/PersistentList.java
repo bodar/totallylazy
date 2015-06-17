@@ -1,11 +1,11 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
-import com.googlecode.totallylazy.Returns;
+import com.googlecode.totallylazy.Function0;
 import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Curried2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
@@ -63,7 +63,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     PersistentList<T> reverse();
 
     @Override
-    <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable);
+    <S> PersistentList<S> map(Function1<? super T, ? extends S> callable);
 
     @Override
     PersistentList<T> filter(final Predicate<? super T> predicate);
@@ -188,15 +188,15 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     }
 
     class functions {
-        public static <T> Function2<PersistentList<T>, T, PersistentList<T>> cons() {
+        public static <T> Curried2<PersistentList<T>, T, PersistentList<T>> cons() {
             return Segment.functions.cons();
         }
 
-        public static <T> Returns<PersistentList<T>> emptyPersistentList(Class<T> type) {
+        public static <T> Function0<PersistentList<T>> emptyPersistentList(Class<T> type) {
             return emptyPersistentList();
         }
 
-        public static <T> Returns<PersistentList<T>> emptyPersistentList() {
+        public static <T> Function0<PersistentList<T>> emptyPersistentList() {
             return returns(PersistentList.constructors.<T>empty());
         }
 
