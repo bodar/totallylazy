@@ -1,12 +1,11 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Function;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public final class CountingFunction<T,R> extends Function<T,R> {
+public final class CountingFunction<T,R> implements Function1<T,R> {
     private final Map<T, Integer> count = new HashMap<T, Integer>();
     private final Function1<? super T, ? extends R> callable;
 

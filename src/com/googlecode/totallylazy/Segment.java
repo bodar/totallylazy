@@ -127,26 +127,16 @@ public interface Segment<T> {
             };
         }
 
-        public static <T, Self extends Segment<T>> Function<Self, Self> cons(T t) {
+        public static <T, Self extends Segment<T>> Function1<Self, Self> cons(T t) {
             return functions.<T, Self>cons().flip().apply(t);
         }
 
-        public static Function<String, Segment<Character>> characters() {
-            return new Function<String, Segment<Character>>() {
-                @Override
-                public Segment<Character> call(String value) throws Exception {
-                    return constructors.characters(value);
-                }
-            };
+        public static Function1<String, Segment<Character>> characters() {
+            return constructors::characters;
         }
 
-        public static <T> Function<Segment<T>, Option<T>> headOption() {
-            return new Function<Segment<T>, Option<T>>() {
-                @Override
-                public Option<T> call(Segment<T> segment) throws Exception {
-                    return segment.headOption();
-                }
-            };
+        public static <T> Function1<Segment<T>, Option<T>> headOption() {
+            return Segment<T>::headOption;
         }
     }
 

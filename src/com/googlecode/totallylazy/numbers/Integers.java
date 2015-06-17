@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.comparators.Maximum;
 import com.googlecode.totallylazy.comparators.Minimum;
@@ -36,10 +36,10 @@ public class Integers {
     }
 
     public static class functions {
-        public static final Function<Integer, Integer> increment = add(1);
+        public static final Function1<Integer, Integer> increment = add(1);
 
-        public static Function<Integer, Integer> add(final int value) {
-            return new Function<Integer, Integer>() {
+        public static Function1<Integer, Integer> add(final int value) {
+            return new Function1<Integer, Integer>() {
                 @Override
                 public Integer call(Integer i) throws Exception {
                     return i + value;

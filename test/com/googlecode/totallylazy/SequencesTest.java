@@ -174,7 +174,7 @@ public class SequencesTest {
 
     @Test
     public void supportsUnfoldRight() throws Exception {
-        Sequence<Number> result = Sequences.unfoldRight(new Function<Number, Option<Pair<Number, Number>>>() {
+        Sequence<Number> result = Sequences.unfoldRight(new Function1<Number, Option<Pair<Number, Number>>>() {
             @Override
             public Option<Pair<Number, Number>> call(Number number) throws Exception {
                 if (number.equals(0)) return none();

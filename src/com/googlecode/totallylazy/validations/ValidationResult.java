@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.CombinerFunction;
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Curried2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
@@ -122,8 +122,8 @@ public class ValidationResult {
 
     public static class functions {
 
-        public static Function<ValidationResult, Sequence<String>> allMessages(){
-            return new Function<ValidationResult, Sequence<String>>() {
+        public static Function1<ValidationResult, Sequence<String>> allMessages(){
+            return new Function1<ValidationResult, Sequence<String>>() {
                 @Override
                 public Sequence<String> call(ValidationResult result) throws Exception {
                     return result.allMessages();
@@ -131,8 +131,8 @@ public class ValidationResult {
             };
         }
 
-        public static Function<ValidationResult, Sequence<String>> messages(final String key){
-            return new Function<ValidationResult, Sequence<String>>() {
+        public static Function1<ValidationResult, Sequence<String>> messages(final String key){
+            return new Function1<ValidationResult, Sequence<String>>() {
                 @Override
                 public Sequence<String> call(ValidationResult result) throws Exception {
                     return result.messages(key);
@@ -140,8 +140,8 @@ public class ValidationResult {
             };
         }
 
-        public static Function<ValidationResult, Sequence<String>> messages(final Object key){
-            return new Function<ValidationResult, Sequence<String>>() {
+        public static Function1<ValidationResult, Sequence<String>> messages(final Object key){
+            return new Function1<ValidationResult, Sequence<String>>() {
                 @Override
                 public Sequence<String> call(ValidationResult result) throws Exception {
                     return result.messages(key);
@@ -157,8 +157,8 @@ public class ValidationResult {
                 }
             };
         }
-        public static Function<ValidationResult, ValidationResult> assignToKey(final String key) {
-            return new Function<ValidationResult, ValidationResult>() {
+        public static Function1<ValidationResult, ValidationResult> assignToKey(final String key) {
+            return new Function1<ValidationResult, ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult validationResult) throws Exception {
                     return validationResult.assignToKey(key);

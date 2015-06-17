@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Callers;
-import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
@@ -28,13 +27,8 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
         return new WherePredicate<T, R>(callable, predicate);
     }
 
-    public static <T, R> Function<T, Predicate<T>> asWhere(final Function2<? super T, ? super T, ? extends R> callable, final Predicate<? super R> predicate) {
-        return new Function<T, Predicate<T>>() {
-            @Override
-            public Predicate<T> call(T t) throws Exception {
-                return where(Functions.function(callable).apply(t), predicate);
-            }
-        };
+    public static <T, R> Function1<T, Predicate<T>> asWhere(final Function2<? super T, ? super T, ? extends R> callable, final Predicate<? super R> predicate) {
+        return t -> where(Functions.function(callable).apply(t), predicate);
     }
 
     public boolean matches(T o) {

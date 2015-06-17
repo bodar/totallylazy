@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Either;
-import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Memory;
 
 import java.util.HashMap;
@@ -10,7 +9,7 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Closeables.safeClose;
 
-public final class LazyFunction<T, R> extends Function<T, R> implements Memory {
+public final class LazyFunction<T, R> implements Function1<T, R>, Memory {
     private final Function1<? super T, ? extends R> callable;
     private final Map<T, Either<Exception, R>> state = new HashMap<>();
     private final Object lock = new Object();

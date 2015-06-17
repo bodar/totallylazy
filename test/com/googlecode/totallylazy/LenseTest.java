@@ -65,7 +65,7 @@ public class LenseTest {
         }
 
         public static class functions {
-            public static final Function<Person, Number> age = new Function<Person, Number>() {
+            public static final Function1<Person, Number> age = new Function1<Person, Number>() {
                 public Number call(Person person) throws Exception {
                     return person.age;
                 }
@@ -75,7 +75,7 @@ public class LenseTest {
                     return new Person(person.name, newAge, person.address);
                 }
             };
-            public static final Function<Person, Address> address = new Function<Person, Address>() {
+            public static final Function1<Person, Address> address = new Function1<Person, Address>() {
                 public Address call(Person person) throws Exception {
                     return person.address;
                 }
@@ -106,7 +106,7 @@ public class LenseTest {
         }
 
         public static class functions {
-            public static final Function<Address, Postcode> postcode = new Function<Address, Postcode>() {
+            public static final Function1<Address, Postcode> postcode = new Function1<Address, Postcode>() {
                 public Postcode call(Address address) throws Exception {
                     return address.postcode;
                 }

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.time;
 
-import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Curried2;
 
 import java.util.Date;
@@ -22,7 +22,7 @@ public interface DateConverter {
             return format;
         }
 
-        public static Function<Date, String> format(DateConverter dateConverter)  {
+        public static Function1<Date, String> format(DateConverter dateConverter)  {
             return format.apply(dateConverter);
         }
 
@@ -37,7 +37,7 @@ public interface DateConverter {
             return parse;
         }
 
-        public static Function<String, Date> parse(DateConverter dateConverter)  {
+        public static Function1<String, Date> parse(DateConverter dateConverter)  {
             return parse.apply(dateConverter);
         }
     }
