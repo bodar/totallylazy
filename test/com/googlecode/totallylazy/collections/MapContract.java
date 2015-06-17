@@ -193,7 +193,7 @@ public abstract class MapContract {
     @Test
     @SuppressWarnings("unchecked")
     public void supportsFold() throws Exception {
-        assertThat(map(1, "2").fold(Lists.list(pair(0, "1")), Lists.<Pair<Integer, String>>add()), is(Lists.list(pair(0, "1"), pair(1, "2"))));
+        assertThat(map(1, "2").fold(Lists.list(pair(0, "1")), Lists.functions.<Pair<Integer, String>>add()), is(Lists.list(pair(0, "1"), pair(1, "2"))));
     }
 
     @Test

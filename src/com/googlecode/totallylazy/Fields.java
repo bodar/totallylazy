@@ -11,22 +11,22 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Fields {
-    public static Function1<Field, String> name = new Function1<Field, String>() {
+    public static Mapper<Field, String> name = new Mapper<Field, String>() {
         @Override
         public String call(Field field) throws Exception {
             return field.getName();
         }
     };
 
-    public static Function1<Field, Class<?>> type = new Function1<Field, Class<?>>() {
+    public static Mapper<Field, Class<?>> type = new Mapper<Field, Class<?>>() {
         @Override
         public Class<?> call(Field field) throws Exception {
             return field.getType();
         }
     };
 
-    public static <T> Function1<Field, T> value(final Object instance) {
-        return new Function1<Field, T>() {
+    public static <T> Mapper<Field, T> value(final Object instance) {
+        return new Mapper<Field, T>() {
             @Override
             public T call(Field field) throws Exception {
                 return get(field, instance);
@@ -34,8 +34,8 @@ public class Fields {
         };
     }
 
-    public static <T> Function1<Field, T> value(final Object instance, final Class<T> aClass) {
-        return new Function1<Field, T>() {
+    public static <T> Mapper<Field, T> value(final Object instance, final Class<T> aClass) {
+        return new Mapper<Field, T>() {
             @Override
             public T call(Field field) throws Exception {
                 return get(field, instance, aClass);
@@ -51,7 +51,7 @@ public class Fields {
         return aClass.cast(access(field).get(instance));
     }
 
-    public static Function1<Field, Integer> modifiers = new Function1<Field, Integer>() {
+    public static Mapper<Field, Integer> modifiers = new Mapper<Field, Integer>() {
         @Override
         public Integer call(Field field) throws Exception {
             return field.getModifiers();
@@ -67,8 +67,8 @@ public class Fields {
         return allClasses(aClass).flatMap(Fields.fields());
     }
 
-    public static Function1<Class<?>, Sequence<Field>> fields() {
-        return new Function1<Class<?>, Sequence<Field>>() {
+    public static Mapper<Class<?>, Sequence<Field>> fields() {
+        return new Mapper<Class<?>, Sequence<Field>>() {
             public Sequence<Field> call(Class<?> aClass) throws Exception {
                 return sequence(aClass.getDeclaredFields());
             }

@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Either;
+import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Segment;
 
 import java.util.NoSuchElementException;
 
@@ -22,8 +26,8 @@ public abstract class Success<A> implements Result<A> {
     }
 
     @Override
-    public <S> Result<S> map(Function1<? super A, ? extends S> callable) {
-        return success(callable.apply(value()), remainder());
+    public <S> Result<S> map(Callable1<? super A, ? extends S> callable) {
+        return success(Functions.call(callable, value()), remainder());
     }
 
     @Override

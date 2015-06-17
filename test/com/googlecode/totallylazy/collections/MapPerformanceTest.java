@@ -1,7 +1,11 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.*;
-import com.googlecode.totallylazy.callables.TimeFunction0;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Returns;
+import com.googlecode.totallylazy.Maps;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.callables.TimeCallable;
 import com.googlecode.totallylazy.callables.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,10 +42,10 @@ public class MapPerformanceTest {
         for (int i = 0; i < 10; i++) {
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, persistentGet(createPersistent(range))));
             System.out.println(TimeReport.time(NUMBER_OF_CALLS, persistentGet(createHash(range))));
-            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new HashMap<>()))));
-            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new java.util.TreeMap<>()))));
-            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new ConcurrentSkipListMap<>(), "CSLMap "))));
-            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new ConcurrentHashMap<>(), "CHMap "))));
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new HashMap<Integer, Integer>()))));
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new java.util.TreeMap<Integer, Integer>()))));
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap "))));
+            System.out.println(TimeReport.time(NUMBER_OF_CALLS, mutableGet(createMutable(range, new ConcurrentHashMap<Integer, Integer>(), "CHMap "))));
             System.out.println("");
         }
     }
@@ -55,9 +59,9 @@ public class MapPerformanceTest {
         TimeReport avlTreeReport = new TimeReport();
         TimeReport hashTreeReport = new TimeReport();
 
-        Map<Integer, Integer> hashMap = createMutable(range, new HashMap<>());
-        Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<>());
-        Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<>(), "CSLMap ");
+        Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
+        Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
+        Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
         PersistentMap<Integer, Integer> avlTree = createPersistent(range);
         PersistentMap<Integer, Integer> hashTreeMap = createHash(range);
 
@@ -91,9 +95,9 @@ public class MapPerformanceTest {
         TimeReport avlTreeReport = new TimeReport();
         TimeReport hashTreeReport = new TimeReport();
 
-        Map<Integer, Integer> hashMap = createMutable(range, new HashMap<>());
-        Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<>());
-        Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<>(), "CSLMap ");
+        Map<Integer, Integer> hashMap = createMutable(range, new HashMap<Integer, Integer>());
+        Map<Integer, Integer> treeMap = createMutable(range, new java.util.TreeMap<Integer, Integer>());
+        Map<Integer, Integer> cslMap = createMutable(range, new ConcurrentSkipListMap<Integer, Integer>(), "CSLMap ");
         PersistentMap<Integer, Integer> avlTree = createHash(range);
         PersistentMap<Integer, Integer> hashTreeMap = createHash(range);
 
@@ -120,7 +124,12 @@ public class MapPerformanceTest {
 
     @SuppressWarnings("unchecked")
     private Callable<Object> persistentGet(final PersistentMap<Integer, Integer> map) {
-        return () -> map.lookup(keys().head());
+        return new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return map.lookup(keys().head());
+            }
+        };
     }
 
     private Sequence<Integer> keys() {
@@ -129,7 +138,12 @@ public class MapPerformanceTest {
 
     @SuppressWarnings("unchecked")
     private Callable<Object> mutableGet(final Map<Integer, Integer> mutable) {
-        return () -> Maps.get(mutable, keys().head());
+        return new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return Maps.get(mutable, keys().head());
+            }
+        };
     }
 
     private Map<Integer, Integer> createMutable(final Sequence<Integer> range, final Map<Integer, Integer> emptyMap) throws Exception {
@@ -138,18 +152,26 @@ public class MapPerformanceTest {
 
     private Map<Integer, Integer> createMutable(Sequence<Integer> range, Map<Integer, Integer> emptyMap, String name) {
         System.out.print(name + ":\t");
-        return range.fold(emptyMap, (map, integer) -> {
-            map.put(integer, integer);
-            return map;
+        return range.fold(emptyMap, new Callable2<Map<Integer, Integer>, Integer, Map<Integer, Integer>>() {
+            @Override
+            public Map<Integer, Integer> call(Map<Integer, Integer> map, Integer integer) throws Exception {
+                map.put(integer, integer);
+                return map;
+            }
         });
     }
 
     private Callable<PersistentMap<Integer, Integer>> removePersistent(final PersistentMap<Integer, Integer> persistent) {
-        return () -> persistent.delete(keys().head());
+        return new Callable<PersistentMap<Integer, Integer>>() {
+            @Override
+            public PersistentMap<Integer, Integer> call() throws Exception {
+                return persistent.delete(keys().head());
+            }
+        };
     }
 
     public static TimeReport time(int numberOfCalls, Callable<?> callable, final TimeReport report) {
-        repeat(TimeFunction0.time(callable, report)).take(numberOfCalls).realise();
+        repeat(TimeCallable.time(callable, report)).take(numberOfCalls).realise();
         return report;
     }
 
@@ -164,30 +186,51 @@ public class MapPerformanceTest {
         return report;
     }
 
-    private Function1<Integer, Integer> remove(final Map<Integer, Integer> map) {
-        return map::remove;
-    }
-
-    private Function1<Integer, Integer> putValueBack(final Map<Integer, Integer> map) {
-        return key -> map.put(key, key);
-    }
-
-    private Function0<Integer> mutableRemove(final Map<Integer, Integer> map) {
-        return () -> map.remove(keys().head());
-    }
-
-    private Callable<PersistentMap<Integer, Integer>> persistentPut(final PersistentMap<Integer, Integer> avlTree) {
-        return () -> {
-            Integer head = keys().head();
-            return avlTree.insert(head, head);
+    private Callable1<Integer, Integer> remove(final Map<Integer, Integer> map) {
+        return new Callable1<Integer, Integer>() {
+            @Override
+            public Integer call(Integer integer) throws Exception {
+                return map.remove(integer);
+            }
         };
     }
 
-    private Function0<Integer> mutablePut(final Map<Integer, Integer> map) {
-        return () -> {
-            Integer head = SIZE + 1;
-            map.put(head, head);
-            return head;
+    private Callable1<Integer, Integer> putValueBack(final Map<Integer, Integer> map) {
+        return new Callable1<Integer, Integer>() {
+            @Override
+            public Integer call(Integer key) throws Exception {
+                return map.put(key, key);
+            }
+        };
+    }
+
+    private Returns<Integer> mutableRemove(final Map<Integer, Integer> map) {
+        return new Returns<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                return map.remove(keys().head());
+            }
+        };
+    }
+
+    private Callable<PersistentMap<Integer, Integer>> persistentPut(final PersistentMap<Integer, Integer> avlTree) {
+        return new Callable<PersistentMap<Integer, Integer>>() {
+            @Override
+            public PersistentMap<Integer, Integer> call() throws Exception {
+                Integer head = keys().head();
+                return avlTree.insert(head, head);
+            }
+        };
+    }
+
+    private Returns<Integer> mutablePut(final Map<Integer, Integer> map) {
+        return new Returns<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                Integer head = SIZE + 1;
+                map.put(head, head);
+                return head;
+            }
         };
     }
 

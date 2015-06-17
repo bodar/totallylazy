@@ -16,7 +16,7 @@ public class Characters {
     public static Charset UTF16 = Charset.forName("UTF-16");
     public static Charset ASCII = Charset.forName("ASCII");
 
-    public static final Monoid<CharSequence> join = JoinCharSequence.instance;
+    public static final CombinerFunction<CharSequence> join = JoinCharSequence.instance;
 
     public static Sequence<Character> characters(final CharSequence value) {
         return Sequences.characters(value);
@@ -102,7 +102,7 @@ public class Characters {
     public static LogicalPredicate<Character> hexDigit = between('A', 'F').or(between('a', 'F')).or(between('0', '9'));
 
     public static Sequence<Character> range(char start, char end) {
-        return Numbers.range((int) start, (int) end).map(new Function1<Number, Character>() {
+        return Numbers.range((int) start, (int) end).map(new Callable1<Number, Character>() {
             @Override
             public Character call(Number number) throws Exception {
                 return (char) number.intValue();

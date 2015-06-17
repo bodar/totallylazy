@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Monoid;
+import com.googlecode.totallylazy.CombinerFunction;
 
-public class Sum implements Monoid<Number> {
+public class Sum extends CombinerFunction<Number> {
     public Number call(Number a, Number b) {
         return Numbers.add(a, b);
     }

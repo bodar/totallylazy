@@ -43,7 +43,7 @@ public class ZipSource implements Sources {
 
     @Override
     public Sequence<Source> sources() {
-        return Zip.entries(in).map(new Function1<ZipEntry, Source>() {
+        return Zip.entries(in).map(new Function<ZipEntry, Source>() {
             @Override
             public Source call(ZipEntry zipEntry) throws Exception {
                 return new Source(zipEntry.getName(), new Date(zipEntry.getTime()), new IgnoreCloseInputStream(), zipEntry.isDirectory());

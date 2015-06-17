@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.time;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.comparators.Maximum;
 import com.googlecode.totallylazy.comparators.Minimum;
 
@@ -51,6 +51,15 @@ public class Dates {
         return simpleDateFormat;
     }
 
+    public static Function<Date, String> format(final DateFormat format) {
+        return new Function<Date, String>() {
+            @Override
+            public String call(Date value) throws Exception {
+                return format.format(value);
+            }
+        };
+    }
+
     public static DateFormat APACHE() {
         return format(APACHE);
     }
@@ -75,49 +84,63 @@ public class Dates {
         return date(value);
     }
 
-    public static Function1<Date, Integer> millisecond() {
+    public static Function<String, Date> parse(final DateFormat format) {
+        return new Function<String, Date>() {
+            @Override
+            public Date call(String value) throws Exception {
+                return format.parse(value);
+            }
+        };
+    }
+
+    public static Function<Date, Integer> millisecond() {
         return calendarField(Calendar.MILLISECOND);
     }
 
-    public static Function1<Date, Integer> second() {
+    public static Function<Date, Integer> second() {
         return calendarField(Calendar.SECOND);
     }
 
-    public static Function1<Date, Integer> minute() {
+    public static Function<Date, Integer> minute() {
         return calendarField(Calendar.MINUTE);
     }
 
-    public static Function1<Date, Integer> hourOfDay() {
+    public static Function<Date, Integer> hourOfDay() {
         return calendarField(Calendar.HOUR_OF_DAY);
     }
 
-    public static Function1<Date, Integer> dayOfWeek() {
+    public static Function<Date, Integer> dayOfWeek() {
         return calendarField(Calendar.DAY_OF_WEEK);
     }
 
-    public static Function1<Date, Integer> dayOfMonth() {
+    public static Function<Date, Integer> dayOfMonth() {
         return calendarField(Calendar.DAY_OF_MONTH);
     }
 
-    public static Function1<Date, Integer> weekOfMonth() {
+    public static Function<Date, Integer> weekOfMonth() {
         return calendarField(Calendar.WEEK_OF_MONTH);
     }
 
-    public static Function1<Date, Integer> month() {
+    public static Function<Date, Integer> month() {
         return calendarField(Calendar.MONTH);
     }
 
-    public static Function1<Date, Integer> dayOfYear() {
+    public static Function<Date, Integer> dayOfYear() {
         return calendarField(Calendar.DAY_OF_YEAR);
     }
 
-    public static Function1<Date, Integer> year() {
+    public static Function<Date, Integer> year() {
         return calendarField(Calendar.YEAR);
     }
 
 
-    public static Function1<Date, Integer> calendarField(final int field) {
-        return value -> calendar(value).get(field);
+    public static Function<Date, Integer> calendarField(final int field) {
+        return new Function<Date, Integer>() {
+            @Override
+            public Integer call(Date value) throws Exception {
+                return calendar(value).get(field);
+            }
+        };
     }
 
     public static Date date(String value) {
@@ -192,11 +215,11 @@ public class Dates {
     }
 
     public static Maximum.Function<Date> maximum() {
-        return Maximum.maximum(Dates.MIN_VALUE);
+        return Maximum.constructors.maximum(Dates.MIN_VALUE);
     }
 
     public static Minimum.Function<Date> minimum() {
-        return Minimum.minimum(Dates.MAX_VALUE);
+        return Minimum.constructors.minimum(Dates.MAX_VALUE);
     }
 
     public static Date date(Date date) {

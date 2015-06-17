@@ -1,6 +1,13 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.annotations.multimethod;
 
 import java.util.Iterator;
@@ -98,12 +105,12 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public <NewV> PersistentMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
+    public <NewV> PersistentMap<K, NewV> map(Callable1<? super V, ? extends NewV> transformer) {
         return hashTreeMap(toSequence().map(Callables.<K, V, NewV>second(transformer)));
     }
 
     @Override
-    public <S> S fold(S seed, Function2<? super S, ? super Pair<K, V>, ? extends S> callable) {
+    public <S> S fold(S seed, Callable2<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return toSequence().fold(seed, callable);
     }
 

@@ -17,12 +17,12 @@ public class Maps {
         return entries(map).map(Maps.<K, V>entryToPair());
     }
 
-    public static <K, V> Function1<Map<K, V>, Sequence<Map.Entry<K, V>>> entries(Class<K> keyType, Class<V> valueType) {
+    public static <K, V> Function<Map<K, V>, Sequence<Map.Entry<K, V>>> entries(Class<K> keyType, Class<V> valueType) {
         return entries();
     }
 
-    public static <K, V> Function1<Map<K, V>, Sequence<Map.Entry<K, V>>> entries() {
-        return new Function1<Map<K, V>, Sequence<Map.Entry<K, V>>>() {
+    public static <K, V> Function<Map<K, V>, Sequence<Map.Entry<K, V>>> entries() {
+        return new Function<Map<K, V>, Sequence<Map.Entry<K, V>>>() {
             @Override
             public Sequence<Map.Entry<K, V>> call(Map<K, V> map) throws Exception {
                 return entries(map);
@@ -108,11 +108,11 @@ public class Maps {
         return seed;
     }
 
-    public static <T, Key> Map<Key, T> map(final Iterator<? extends T> iterator, final Function1<? super T, ? extends Key> callable) {
+    public static <T, Key> Map<Key, T> map(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Key> callable) {
         return map(new LinkedHashMap<Key, T>(), iterator, callable);
     }
 
-    public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterator<? extends T> iterator, final Function1<? super T, ? extends Key> callable) {
+    public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Key> callable) {
         while (iterator.hasNext()) {
             final T next = iterator.next();
             final Key key = call(callable, next);
@@ -121,11 +121,11 @@ public class Maps {
         return seed;
     }
 
-    public static <T, Key> Map<Key, T> map(final Iterable<? extends T> iterable, final Function1<? super T, ? extends Key> callable) {
+    public static <T, Key> Map<Key, T> map(final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Key> callable) {
         return map(iterable.iterator(), callable);
     }
 
-    public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterable<? extends T> iterable, final Function1<? super T, ? extends Key> callable) {
+    public static <T, Key> Map<Key, T> map(final Map<Key, T> seed, final Iterable<? extends T> iterable, final Callable1<? super T, ? extends Key> callable) {
         return map(seed, iterable.iterator(), callable);
     }
 
@@ -169,11 +169,11 @@ public class Maps {
         return seed;
     }
 
-    public static <T, Key> Map<Key, List<T>> multiMap(final Iterator<? extends T> iterator, final Function1<? super T, ? extends Key> callable) {
+    public static <T, Key> Map<Key, List<T>> multiMap(final Iterator<? extends T> iterator, final Callable1<? super T, ? extends Key> callable) {
         return multiMap(new LinkedHashMap<Key, List<T>>(), iterator, callable);
     }
 
-    public static <V, K> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterator<? extends V> iterator, final Function1<? super V, ? extends K> callable) {
+    public static <V, K> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterator<? extends V> iterator, final Callable1<? super V, ? extends K> callable) {
         while (iterator.hasNext()) {
             final V value = iterator.next();
             final K key = call(callable, value);
@@ -185,11 +185,11 @@ public class Maps {
         return seed;
     }
 
-    public static <V, K> Map<K, List<V>> multiMap(final Iterable<? extends V> iterable, final Function1<? super V, ? extends K> callable) {
+    public static <V, K> Map<K, List<V>> multiMap(final Iterable<? extends V> iterable, final Callable1<? super V, ? extends K> callable) {
         return multiMap(iterable.iterator(), callable);
     }
 
-    public static <V, K> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterable<? extends V> iterable, final Function1<? super V, ? extends K> callable) {
+    public static <V, K> Map<K, List<V>> multiMap(final Map<K, List<V>> seed, final Iterable<? extends V> iterable, final Callable1<? super V, ? extends K> callable) {
         return multiMap(seed, iterable.iterator(), callable);
     }
 
@@ -222,27 +222,27 @@ public class Maps {
         return asMap();
     }
 
-    public static <K, V> Function1<Pair<K, V>, Map.Entry<K, V>> pairToEntry() {
-        return new Function1<Pair<K, V>, Map.Entry<K, V>>() {
+    public static <K, V> Function<Pair<K, V>, Map.Entry<K, V>> pairToEntry() {
+        return new Function<Pair<K, V>, Map.Entry<K, V>>() {
             public final Map.Entry<K, V> call(final Pair<K, V> pair) throws Exception {
                 return pair;
             }
         };
     }
 
-    public static <K, V> Function1<Pair<K, V>, Map.Entry<K, V>> pairToEntry(final Class<K> keyClass, final Class<V> valueClass) {
+    public static <K, V> Function<Pair<K, V>, Map.Entry<K, V>> pairToEntry(final Class<K> keyClass, final Class<V> valueClass) {
         return pairToEntry();
     }
 
-    public static <K, V> Function1<Map.Entry<K, V>, Pair<K, V>> entryToPair() {
-        return new Function1<Map.Entry<K, V>, Pair<K, V>>() {
+    public static <K, V> Function<Map.Entry<K, V>, Pair<K, V>> entryToPair() {
+        return new Function<Map.Entry<K, V>, Pair<K, V>>() {
             public final Pair<K, V> call(final Map.Entry<K, V> entry) throws Exception {
                 return pair(entry.getKey(), entry.getValue());
             }
         };
     }
 
-    public static <K, V> Function1<Map.Entry<K, V>, Pair<K, V>> entryToPair(final Class<K> keyClass, final Class<V> valueClass) {
+    public static <K, V> Function<Map.Entry<K, V>, Pair<K, V>> entryToPair(final Class<K> keyClass, final Class<V> valueClass) {
         return entryToPair();
     }
 
@@ -262,11 +262,11 @@ public class Maps {
         return map(pairs(map).filter(where(Callables.<V>second(), predicate)));
     }
 
-    public static <K, V, NewK> Map<NewK, V> mapKeys(Map<K, V> map, Function1<? super K, ? extends NewK> transformer) {
+    public static <K, V, NewK> Map<NewK, V> mapKeys(Map<K, V> map, Callable1<? super K, ? extends NewK> transformer) {
         return map(pairs(map).map(Callables.<K, V, NewK>first(transformer)));
     }
 
-    public static <K, V, NewV> Map<K, NewV> mapValues(Map<K, V> map, Function1<? super V, ? extends NewV> transformer) {
+    public static <K, V, NewV> Map<K, NewV> mapValues(Map<K, V> map, Callable1<? super V, ? extends NewV> transformer) {
         return map(pairs(map).map(Callables.<K, V, NewV>second(transformer)));
     }
 
@@ -296,15 +296,15 @@ public class Maps {
             };
         }
 
-        public static <K, V> Function1<K, V> getFrom(final Map<K, V> map) {
+        public static <K, V> Function<K, V> getFrom(final Map<K, V> map) {
             return functions.<K,V>get().apply(map);
         }
 
-        public static <K, V> Function1<Map<K, V>, V> valueFor(final K key) {
+        public static <K, V> Function<Map<K, V>, V> valueFor(final K key) {
             return functions.<K,V>get().flip().apply(key);
         }
 
-        public static <K, V> Function1<Map<K, V>, V> valueFor(final K key, final Class<V> vClass) {
+        public static <K, V> Function<Map<K, V>, V> valueFor(final K key, final Class<V> vClass) {
             return valueFor(key);
         }
     }

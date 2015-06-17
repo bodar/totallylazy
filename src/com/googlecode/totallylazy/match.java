@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public abstract class match<A, B> implements Function1<A, Option<B>> {
+public abstract class match<A, B> extends Mapper<A, Option<B>> {
     private final Extractor<? super A, ?> extractor;
     private final Dispatcher dispatcher;
 

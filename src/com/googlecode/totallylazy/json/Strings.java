@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.json;
 
+import com.googlecode.totallylazy.Mapper;
 
 import static com.googlecode.totallylazy.Sequences.characters;
 import static java.lang.Integer.parseInt;
@@ -11,7 +12,7 @@ public class Strings {
     }
 
     public static String escape(CharSequence value) {
-        return characters(value).map(Strings::escape).toString("");
+        return characters(value).map(functions.escape).toString("");
     }
 
     public static String escape(Character character) {
@@ -43,6 +44,20 @@ public class Strings {
             case 'u': return Character.toString((char) parseInt(escaped.subSequence(2, escaped.length()).toString(), 16));
             default: throw new UnsupportedOperationException();
         }
+    }
+
+    public static class functions {
+        public static Mapper<Character, String> escape = new Mapper<Character, String>() {
+            public String call(Character character) throws Exception {
+                return Strings.escape(character);
+            }
+        };
+
+        public static Mapper<String, String> unescape = new Mapper<String, String>() {
+            public String call(String escaped) throws Exception {
+                return Strings.unescape(escaped);
+            }
+        };
     }
 }
 

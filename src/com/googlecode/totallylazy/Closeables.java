@@ -8,8 +8,8 @@ import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Closeables {
-    public static <T extends Closeable, R> Function1<T, R> closeAfter(final Function1<? super T, R> callable) {
-        return new Function1<T, R>() {
+    public static <T extends Closeable, R> Function<T, R> closeAfter(final Callable1<? super T, R> callable) {
+        return new Function<T, R>() {
             @Override
             public R call(T t) throws Exception {
                 return using(t, callable);
@@ -112,7 +112,7 @@ public class Closeables {
         return t;
     }
 
-    public static <T extends Closeable, R> R using(T t, Function1<? super T, ? extends R> callable) {
+    public static <T extends Closeable, R> R using(T t, Callable1<? super T, ? extends R> callable) {
         try {
             return call(callable, t);
         } finally {
@@ -120,7 +120,7 @@ public class Closeables {
         }
     }
 
-    public static <A extends Closeable, B extends Closeable, R> R using(A a, B b, Function2<? super A, ? super B, ? extends R> callable) {
+    public static <A extends Closeable, B extends Closeable, R> R using(A a, B b, Callable2<? super A, ? super B, ? extends R> callable) {
         try {
             return call(callable, a, b);
         } finally {
@@ -132,7 +132,7 @@ public class Closeables {
         }
     }
 
-    public static <T, R> R using(T instanceWithCloseMethod, Function1<? super T, ? extends R> callable) {
+    public static <T, R> R using(T instanceWithCloseMethod, Callable1<? super T, ? extends R> callable) {
         try {
             return call(callable, instanceWithCloseMethod);
         } finally {
@@ -141,18 +141,38 @@ public class Closeables {
     }
 
     public static <T> Block<T> reflectiveClose() {
-        return Closeables::close;
+        return new Block<T>() {
+            @Override
+            protected void execute(T instanceWithCloseMethod) throws Exception {
+                close(instanceWithCloseMethod);
+            }
+        };
     }
 
     public static Block<Closeable> close() {
-        return Closeables::close;
+        return new Block<Closeable>() {
+            @Override
+            protected void execute(Closeable closeable) throws Exception {
+                close(closeable);
+            }
+        };
     }
 
     public static Block<Closeable> safeClose() {
-        return Closeables::safeClose;
+        return new Block<Closeable>() {
+            @Override
+            protected void execute(Closeable closeable) throws Exception {
+                safeClose(closeable);
+            }
+        };
     }
 
     public static <T> Block<T> reflectiveSafeClose() {
-        return Closeables::safeClose;
+        return new Block<T>() {
+            @Override
+            protected void execute(T closeable) throws Exception {
+                safeClose(closeable);
+            }
+        };
     }
 }

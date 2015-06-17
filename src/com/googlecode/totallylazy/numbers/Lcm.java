@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.Monoid;
+import com.googlecode.totallylazy.CombinerFunction;
 
-public class Lcm implements Monoid<Number> {
+public class Lcm extends CombinerFunction<Number> {
     @Override
     public Number call(Number x, Number y) throws Exception {
         return Numbers.lcm(x, y);

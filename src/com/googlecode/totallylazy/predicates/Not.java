@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
-
+import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.annotations.multimethod;
@@ -39,4 +39,14 @@ public class Not<T> extends LogicalPredicate<T> {
         return "not " + predicate().toString();
     }
 
+    public static class functions {
+        public static <T> Mapper<Not<T>, Predicate<T>> predicate() {
+            return new Mapper<Not<T>, Predicate<T>>() {
+                @Override
+                public Predicate<T> call(Not<T> not) throws Exception {
+                    return not.predicate();
+                }
+            };
+        }
+    }
 }

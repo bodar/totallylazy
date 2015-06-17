@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy.template;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.Uri;
+import com.googlecode.totallylazy.Xml;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -41,17 +45,17 @@ public class Templates implements Renderers {
         return this;
     }
 
-    public Templates add(String name, Function1<?, ? extends CharSequence> callable) {
+    public Templates add(String name, Callable1<?, ? extends CharSequence> callable) {
         return add(name, (instance, appendable) -> {
             try {
-                return appendable.append(Unchecked.<Function1<Object, CharSequence>>cast(callable).call(instance));
+                return appendable.append(Unchecked.<Callable1<Object, CharSequence>>cast(callable).call(instance));
             } catch (Exception e) {
                 throw new IOException(e);
             }
         });
     }
 
-    public <T> Templates add(Predicate<? super T> predicate, Function1<? super T, ? extends CharSequence> renderer) {
+    public <T> Templates add(Predicate<? super T> predicate, Callable1<? super T, ? extends CharSequence> renderer) {
         return add(predicate, (instance, appendable) -> {
             try {
                 return appendable.append(renderer.call(instance));

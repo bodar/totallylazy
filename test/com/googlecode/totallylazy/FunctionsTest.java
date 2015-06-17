@@ -33,6 +33,12 @@ public class FunctionsTest {
     }
 
     @Test
+    public void canComposeCurriedFunctions() throws Exception {
+        assertThat(add().then(multiply()).apply(2).apply(10).apply(3), is(36));
+        assertThat(add().then(multiply().then(add().then(multiply()))).apply(2).apply(10).apply(3).apply(2).apply(10), is(380));
+    }
+
+    @Test
     public void canComposeFunctions() throws Exception {
         assertThat(compose(add(10), multiply(3)).apply(2), is(36));
         assertThat(add(10).map(multiply(3)).apply(2), is(36));
@@ -48,8 +54,18 @@ public class FunctionsTest {
     }
 
     @Test
+    public void canPartiallyApplyAFunction3() throws Exception {
+        assertThat(addThenMultiple().apply(10).apply(2).apply(3), is(36));
+        assertThat(addThenMultiple().apply(10, 2).apply(3), is(36));
+        assertThat(addThenMultiple().apply(10, 2, 3), is(36));
+    }
+
+    @Test
     public void canCaptureArgument() throws Exception {
         assertThat(multiply(10).capturing().apply(1), equalTo(Pair.<Number,Number>pair(1, 10)));
     }
 
+    private Function3<Number, Number, Number, Number> addThenMultiple() {
+        return uncurry3(add().then(multiply()));
+    }
 }

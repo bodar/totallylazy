@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.callables.TimeFunction0.time;
+import static com.googlecode.totallylazy.callables.TimeCallable.time;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.lessThan;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.startsWith;

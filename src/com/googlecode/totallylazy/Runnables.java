@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
@@ -10,7 +11,12 @@ public class Runnables {
     public static final Void VOID = null;
 
     public static <T> Block<T> printLine(final PrintStream printStream, final String format) {
-        return t -> printStream.println(format(format, t));
+        return new Block<T>() {
+            @Override
+            protected void execute(T t) throws Exception {
+                printStream.println(format(format, t));
+            }
+        };
     }
 
     public static <T> Block<T> printLine(final String format) {
@@ -22,25 +28,45 @@ public class Runnables {
     }
 
     public static <T> Block<T> doNothing() {
-        return t -> {};
+        return new Block<T>() {
+            @Override
+            protected void execute(T t) throws Exception {}
+        };
     }
 
     public static <T extends Runnable> Block<T> run() {
-        return T::run;
+        return new Block<T>() {
+            @Override
+            protected void execute(T t) throws Exception {
+                t.run();
+            }
+        };
     }
 
     public static <T> UnaryFunction<T> run(final Block<? super T> callable) {
-        return t -> {
-            callable.call(t);
-            return t;
+        return new UnaryFunction<T>() {
+            public T call(T t) throws Exception {
+                callable.call(t);
+                return t;
+            }
         };
     }
 
     public static Block<OutputStream> write(final byte[] bytes) {
-        return outputStream -> outputStream.write(bytes);
+        return new Block<OutputStream>() {
+            @Override
+            protected void execute(OutputStream outputStream) throws Exception {
+                outputStream.write(bytes);
+            }
+        };
     }
 
     public static Block<Writer> write(final String value) {
-        return writer -> writer.write(value);
+        return new Block<Writer>() {
+            @Override
+            protected void execute(Writer writer) throws Exception {
+                writer.write(value);
+            }
+        };
     }
 }

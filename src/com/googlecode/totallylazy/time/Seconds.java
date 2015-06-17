@@ -20,19 +20,34 @@ public class Seconds {
     }
 
     public static class functions {
-        public static Function2<Date, Integer, Date> add = Seconds::add;
+        public static Function2<Date, Integer, Date> add = new Function2<Date, Integer, Date>() {
+            @Override
+            public Date call(Date date, Integer amount) throws Exception {
+                return Seconds.add(date, amount);
+            }
+        };
 
         public static Function2<Date, Integer, Date> add()  {
             return add;
         }
 
-        public static Function2<Date, Integer, Date> subtract = Seconds::subtract;
+        public static Function2<Date, Integer, Date> subtract = new Function2<Date, Integer, Date>() {
+            @Override
+            public Date call(Date date, Integer amount) throws Exception {
+                return Seconds.subtract(date, amount);
+            }
+        };
 
         public static Function2<Date, Integer, Date> subtract()  {
             return subtract;
         }
 
-        public static Function2<Date, Date, Long> between = Seconds::between;
+        public static Function2<Date, Date, Long> between = new Function2<Date, Date, Long>() {
+            @Override
+            public Long call(Date start, Date end) throws Exception {
+                return Seconds.between(start, end);
+            }
+        };
 
         public static Function2<Date, Date, Long> between()  {
             return between;

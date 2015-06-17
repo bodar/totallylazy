@@ -1,16 +1,16 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class UnfoldRightIterator<A, B> extends StatefulIterator<A> {
-    private final Function1<B, Option<Pair<A, B>>> callable;
+    private final Callable1<B, Option<Pair<A, B>>> callable;
     private B state;
 
-    public UnfoldRightIterator(final Function1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, final B state) {
+    public UnfoldRightIterator(final Callable1<? super B, ? extends Option<? extends Pair<? extends A, ? extends B>>> callable, final B state) {
         this.callable = cast(callable);
         this.state = state;
     }

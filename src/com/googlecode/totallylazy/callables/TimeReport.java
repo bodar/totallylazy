@@ -1,8 +1,11 @@
 package com.googlecode.totallylazy.callables;
 
 
+import com.googlecode.totallylazy.BinaryFunction;
 import com.googlecode.totallylazy.Block;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 
@@ -10,14 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Sequences.*;
-import static com.googlecode.totallylazy.numbers.Numbers.*;
+import static com.googlecode.totallylazy.Sequences.iterate;
+import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
+import static com.googlecode.totallylazy.numbers.Numbers.ascending;
+import static com.googlecode.totallylazy.numbers.Numbers.descending;
+import static com.googlecode.totallylazy.numbers.Numbers.multiply;
 
-public class TimeReport implements Block<Number> {
+public class TimeReport extends Block<Number> {
     private final List<Number> times = new ArrayList<Number>();
 
     @Override
-    public void execute(Number time) throws Exception {
+    protected void execute(Number time) throws Exception {
         this.times.add(time);
     }
 
@@ -66,25 +74,33 @@ public class TimeReport implements Block<Number> {
 
     public static TimeReport time(int numberOfCalls, Sequence<?> sequence) {
         TimeReport report = new TimeReport();
-        repeat(TimeFunction0.time(sequence, report)).take(numberOfCalls).realise();
+        repeat(TimeCallable.time(sequence, report)).take(numberOfCalls).realise();
         return report;
     }
 
     public static TimeReport time(int numberOfCalls, Callable<?> callable) {
         TimeReport report = new TimeReport();
-        repeat(TimeFunction0.time(callable, report)).take(numberOfCalls).realise();
+        repeat(TimeCallable.time(callable, report)).take(numberOfCalls).realise();
         return report;
     }
 
     public static void timeRatio(final Callable<?> function) {
-        iterate(multiply(2), 125).map(time(function)).reduce((TimeReport previous, TimeReport current) -> {
+        iterate(multiply(2), 125).map(time(function)).reduce(new BinaryFunction<TimeReport>() {
+            @Override
+            public TimeReport call(TimeReport previous, TimeReport current) throws Exception {
                 Number ratio = Numbers.divide(current.average(), previous.average());
                 System.out.println("Ratio:" + ratio + " " + current);
                 return current;
-            });
+            }
+        });
     }
 
-    private static Function1<Number, TimeReport> time(final Callable<?> function) {
-        return number -> time(number.intValue(), function);
+    private static Mapper<Number, TimeReport> time(final Callable<?> function) {
+        return new Mapper<Number, TimeReport>() {
+            @Override
+            public TimeReport call(Number number) throws Exception {
+                return TimeReport.time(number.intValue(), function);
+            }
+        };
     }
 }

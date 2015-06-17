@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Monoid;
+import com.googlecode.totallylazy.CombinerFunction;
 
-public class Or implements Monoid<Boolean> {
+public class Or extends CombinerFunction<Boolean> {
     @Override
     public Boolean call(Boolean a, Boolean b) throws Exception {
         return a || b;

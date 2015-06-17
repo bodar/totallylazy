@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Iterators;
+import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.multi;
 import com.googlecode.totallylazy.time.Dates;
@@ -8,6 +9,7 @@ import com.googlecode.totallylazy.time.Dates;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Appendables.append;
 
@@ -17,8 +19,11 @@ public class JsonWriter {
     private static multi multi;
     public static <A extends Appendable> A write(final Object o, final A appendable) {
         if(multi == null) multi = new multi(){};
-        return multi.<A>methodOption(o, appendable).getOrElse(() -> {
-            return write(o.toString(), appendable);
+        return multi.<A>methodOption(o, appendable).getOrElse(new Callable<A>() {
+            @Override
+            public A call() throws Exception {
+                return write(o.toString(), appendable);
+            }
         });
     }
 
@@ -69,9 +74,12 @@ public class JsonWriter {
     }
 
     private static <A extends Appendable> A iterate(final Iterator<?> iterator, final A appendable, String start, String separator, String end) {
-        return Iterators.appendTo(Iterators.map(iterator, o -> {
-            write(o, appendable);
-            return "";
+        return Iterators.appendTo(Iterators.map(iterator, new Mapper<Object, String>() {
+            @Override
+            public String call(Object o) throws Exception {
+                write(o, appendable);
+                return "";
+            }
         }), appendable, start, separator, end);
     }
 }

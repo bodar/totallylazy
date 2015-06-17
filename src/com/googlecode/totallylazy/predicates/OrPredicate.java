@@ -1,7 +1,11 @@
 package com.googlecode.totallylazy.predicates;
 
-
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.annotations.multimethod;
 
 import static com.googlecode.totallylazy.Predicates.instanceOf;
@@ -24,7 +28,7 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
         if (collapsed.isEmpty()) return Predicates.alwaysFalse();
         if (collapsed.size() == 1) return logicalPredicate(collapsed.head());
         if (collapsed.forAll(instanceOf(Not.class)))
-            return Predicates.not(Predicates.<T>and(sequence.<Not<T>>unsafeCast().map(Not<T>::predicate)));
+            return Predicates.not(Predicates.<T>and(sequence.<Not<T>>unsafeCast().map(Not.functions.<T>predicate())));
         return new OrPredicate<T>(sequence);
     }
 
@@ -54,7 +58,12 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
         return predicates.toString("(", " or ", ")");
     }
 
-    private static <T> Function1<Predicate<T>, Iterable<Predicate<T>>> asPredicates() {
-        return predicate -> predicate instanceof OrPredicate ? Unchecked.<OrPredicate<T>>cast(predicate).predicates() : one(predicate);
+    private static <T> Mapper<Predicate<T>, Iterable<Predicate<T>>> asPredicates() {
+        return new Mapper<Predicate<T>, Iterable<Predicate<T>>>() {
+            @Override
+            public Iterable<Predicate<T>> call(Predicate<T> predicate) throws Exception {
+                return predicate instanceof OrPredicate ? Unchecked.<OrPredicate<T>>cast(predicate).predicates() : one(predicate);
+            }
+        };
     }
 }

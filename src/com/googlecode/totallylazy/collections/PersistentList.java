@@ -1,6 +1,16 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Filterable;
+import com.googlecode.totallylazy.Foldable;
+import com.googlecode.totallylazy.Returns;
+import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Functor;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Segment;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.annotations.tailrec;
 
 import java.util.Collection;
@@ -53,7 +63,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     PersistentList<T> reverse();
 
     @Override
-    <S> PersistentList<S> map(Function1<? super T, ? extends S> callable);
+    <S> PersistentList<S> map(Callable1<? super T, ? extends S> callable);
 
     @Override
     PersistentList<T> filter(final Predicate<? super T> predicate);
@@ -182,20 +192,20 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
             return Segment.functions.cons();
         }
 
-        public static <T> Function0<PersistentList<T>> emptyPersistentList(Class<T> type) {
+        public static <T> Returns<PersistentList<T>> emptyPersistentList(Class<T> type) {
             return emptyPersistentList();
         }
 
-        public static <T> Function0<PersistentList<T>> emptyPersistentList() {
+        public static <T> Returns<PersistentList<T>> emptyPersistentList() {
             return returns(PersistentList.constructors.<T>empty());
         }
 
-        public static <T> Function1<PersistentList<T>, PersistentList<T>> cons(T t) {
+        public static <T> Function<PersistentList<T>, PersistentList<T>> cons(T t) {
             return Segment.functions.cons(t);
         }
 
-        public static <T> Function1<PersistentList<T>, PersistentList<T>> tail() {
-            return new Function1<PersistentList<T>, PersistentList<T>>() {
+        public static <T> Function<PersistentList<T>, PersistentList<T>> tail() {
+            return new Function<PersistentList<T>, PersistentList<T>>() {
                 @Override
                 public PersistentList<T> call(PersistentList<T> list) throws Exception {
                     return list.tail();
@@ -203,15 +213,15 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
             };
         }
 
-        public static <T> Function1<PersistentList<T>, PersistentList<T>> tail(Class<T> aClass) {
+        public static <T> Function<PersistentList<T>, PersistentList<T>> tail(Class<T> aClass) {
             return tail();
         }
 
-        public static <T> Function1<PersistentList<T>, Option<T>> headOption(Class<T> aClass) {
+        public static <T> Function<PersistentList<T>, Option<T>> headOption(Class<T> aClass) {
             return headOption();
         }
-        public static <T> Function1<PersistentList<T>, Option<T>> headOption() {
-            return new Function1<PersistentList<T>, Option<T>>() {
+        public static <T> Function<PersistentList<T>, Option<T>> headOption() {
+            return new Function<PersistentList<T>, Option<T>>() {
                 @Override
                 public Option<T> call(PersistentList<T> list) throws Exception {
                     return list.headOption();

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
@@ -47,7 +47,12 @@ public class MapAndValidateTest {
         };
     }
 
-    private Function1<String, Integer> parseInteger() {
-        return Integer::parseInt;
+    private Function<String, Integer> parseInteger() {
+        return new Function<String, Integer>() {
+            @Override
+            public Integer call(String s) throws Exception {
+                return Integer.parseInt(s);
+            }
+        };
     }
 }

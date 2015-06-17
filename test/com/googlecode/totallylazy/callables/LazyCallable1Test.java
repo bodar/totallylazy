@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.matchers.Matchers;
 import org.junit.Test;
@@ -8,14 +8,14 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.googlecode.totallylazy.Callers.callConcurrently;
-import static com.googlecode.totallylazy.callables.CountingOccurrence.counting;
+import static com.googlecode.totallylazy.callables.CountingFunction.counting;
 import static com.googlecode.totallylazy.callables.LazyFunction.lazy;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class LazyFunction1Test {
+public class LazyCallable1Test {
     @Test
     public void remembersException() throws Exception {
         final AtomicInteger count = new AtomicInteger();
@@ -39,8 +39,8 @@ public class LazyFunction1Test {
     }
     @Test
     public void isThreadSafe() throws Exception {
-        CountingOccurrence<Number, Number> counting = counting(increment);
-        Function1<Number, Number> lazyCallable1 = counting.sleep(10).lazy();
+        CountingFunction<Number, Number> counting = counting(increment);
+        Function<Number, Number> lazyCallable1 = counting.sleep(10).lazy();
 
         Sequence<Number> result = callConcurrently(
                 lazyCallable1.deferApply(3), lazyCallable1.deferApply(6),
@@ -54,8 +54,8 @@ public class LazyFunction1Test {
 
     @Test
     public void onlyCallsUnderlyingCallableOnce() throws Exception {
-        CountingOccurrence<Number, Number> counting = counting(increment);
-        Function1<Number, Number> lazyCallable = lazy(counting);
+        CountingFunction<Number, Number> counting = counting(increment);
+        Function<Number, Number> lazyCallable = lazy(counting);
 
         assertThat(lazyCallable.call(0), is(1));
         assertThat(lazyCallable.call(0), is(1));

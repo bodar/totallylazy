@@ -22,8 +22,8 @@ public class Group<K, V> extends Sequence<V> {
     }
 
     public static class functions {
-        public static <K, V> Function1<Group<K, V>, K> key() {
-            return new Function1<Group<K, V>, K>() {
+        public static <K, V> Function<Group<K, V>, K> key() {
+            return new Function<Group<K, V>, K>() {
                 @Override
                 public K call(Group<K, V> group) throws Exception {
                     return group.key();

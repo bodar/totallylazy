@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.time;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
 
 import java.util.Date;
@@ -10,24 +10,34 @@ public interface DateConverter {
 
     Date parse(String value);
 
-    class functions {
-        public static Function2<DateConverter, Date, String> format = DateConverter::format;
+    public static class functions {
+        public static Function2<DateConverter, Date, String> format = new Function2<DateConverter, Date, String>() {
+            @Override
+            public String call(DateConverter dateConverter, Date date) throws Exception {
+                return dateConverter.format(date);
+            }
+        };
 
         public static Function2<DateConverter, Date, String> format()  {
             return format;
         }
 
-        public static Function1<Date, String> format(DateConverter dateConverter)  {
+        public static Function<Date, String> format(DateConverter dateConverter)  {
             return format.apply(dateConverter);
         }
 
-        public static Function2<DateConverter, String, Date> parse = DateConverter::parse;
+        public static Function2<DateConverter, String, Date> parse = new Function2<DateConverter, String, Date>() {
+            @Override
+            public Date call(DateConverter dateConverter, String dateAsString) throws Exception {
+                return dateConverter.parse(dateAsString);
+            }
+        };
 
         public static Function2<DateConverter, String, Date> parse() {
             return parse;
         }
 
-        public static Function1<String, Date> parse(DateConverter dateConverter)  {
+        public static Function<String, Date> parse(DateConverter dateConverter)  {
             return parse.apply(dateConverter);
         }
     }

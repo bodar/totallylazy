@@ -1,7 +1,11 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.*;
-
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.annotations.tailrec;
 
 import static com.googlecode.totallylazy.Option.none;
@@ -57,8 +61,8 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
         return top().focus;
     }
 
-    public TreeZipper<K, V> modify(Function1<? super TreeMap<K, V>, ? extends TreeMap<K, V>> callable) {
-        TreeMap<K, V> result = callable.apply(focus);
+    public TreeZipper<K, V> modify(Callable1<? super TreeMap<K, V>, ? extends TreeMap<K, V>> callable) {
+        TreeMap<K, V> result = Functions.call(callable, focus);
         TreeZipper<K, V> newZipper = zipper(result, breadcrumbs);
         if (newZipper.focus.isEmpty()) return newZipper.up();
         return newZipper;
@@ -100,8 +104,12 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
 
     @Override
     public int index() {
-        return focus.indexOf(value()) + breadcrumbs.filter(where(direction, is(right))).
-                fold(0, (integer, breadcrumb) -> integer + breadcrumb.other.size() + 1);
+        return focus.indexOf(value()) + breadcrumbs.filter(where(direction, is(right))).fold(0, new Function2<Integer, Breadcrumb<K, V>, Integer>() {
+            @Override
+            public Integer call(Integer integer, Breadcrumb<K, V> breadcrumb) throws Exception {
+                return integer + breadcrumb.other.size() + 1;
+            }
+        });
     }
 
     @Override
@@ -204,7 +212,12 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
     }
 
     public static class functions extends TreeMap.functions {
-        public static Function1<Breadcrumb<?, ?>, Direction> direction = breadcrumb -> breadcrumb.direction;
+        public static Mapper<Breadcrumb<?, ?>, Direction> direction = new Mapper<Breadcrumb<?, ?>, Direction>() {
+            @Override
+            public Direction call(Breadcrumb<?, ?> breadcrumb) throws Exception {
+                return breadcrumb.direction;
+            }
+        };
     }
 
 }

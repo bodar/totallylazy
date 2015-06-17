@@ -35,7 +35,7 @@ public class UrlEncodedMessage {
     }
 
     public static String toString(Iterable<? extends Pair<String, String>> pairs) {
-        return sequence(pairs).map(new Function1<Pair<String, String>, String>() {
+        return sequence(pairs).map(new Mapper<Pair<String, String>, String>() {
             @Override
             public String call(Pair<String, String> pair) throws Exception {
                 if(pair.second() == null) return encode(pair.first());
@@ -63,8 +63,8 @@ public class UrlEncodedMessage {
     }
 
     public static class functions {
-        public static Function1<String, String> encode() {
-            return new Function1<String, String>() {
+        public static Function<String, String> encode() {
+            return new Function<String, String>() {
                 @Override
                 public String call(String value) throws Exception {
                     return UrlEncodedMessage.encode(value);
@@ -72,8 +72,8 @@ public class UrlEncodedMessage {
             };
         }
 
-        public static Function1<String, String> decode() {
-            return new Function1<String, String>() {
+        public static Function<String, String> decode() {
+            return new Function<String, String>() {
                 @Override
                 public String call(String value) throws Exception {
                     return UrlEncodedMessage.decode(value);

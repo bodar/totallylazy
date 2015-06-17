@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-public class LastCombiner<T> implements Monoid<T>,Function2<T,T,T> {
+public class LastCombiner<T> extends CombinerFunction<T> {
     private LastCombiner() {}
 
     public static <T> LastCombiner<T> last() {return new LastCombiner<T>();}

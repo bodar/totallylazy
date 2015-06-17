@@ -17,7 +17,7 @@ public class Escaper {
         return withRule(is(appliesTo), returns1(result));
     }
 
-    public Escaper withRule(Predicate<? super Character> appliesTo, Function1<? super Character, ? extends String> action) {
+    public Escaper withRule(Predicate<? super Character> appliesTo, Callable1<? super Character, ? extends String> action) {
         rules.addFirst(appliesTo, action);
         return this;
     }
@@ -26,8 +26,8 @@ public class Escaper {
         return value == null ? null : characters(value.toString()).map(escape()).toString("");
     }
 
-    private Function1<Character, String> escape() {
-        return new Function1<Character, String>() {
+    private Function<Character, String> escape() {
+        return new Function<Character, String>() {
             public String call(Character character) throws Exception {
                 return rules.apply(character);
             }

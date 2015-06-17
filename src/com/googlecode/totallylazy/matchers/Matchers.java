@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.matchers;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.hamcrest.Description;
@@ -25,38 +26,51 @@ public class Matchers {
         return sequence(values).map(Matchers.<T>isMatcher());
     }
 
-    public static Function1<SelfDescribing, String> description() {
-        return StringDescription::asString;
+    public static Function<SelfDescribing, String> description() {
+        return new Function<SelfDescribing, String>() {
+            @Override
+            public String call(SelfDescribing selfDescribing) throws Exception {
+                return asString(selfDescribing);
+            }
+        };
     }
 
-    public static <T> Function1<T, String> describeMismatch(Class<T> type, final Matcher<? super T> matcher) {
+    public static <T> Function<T, String> describeMismatch(Class<T> type, final Matcher<? super T> matcher) {
         return describeMismatch(matcher);
     }
 
-    public static <T> Function1<T, String> describeMismatch(final Matcher<? super T> matcher) {
+    public static <T> Function<T, String> describeMismatch(final Matcher<? super T> matcher) {
         if (matcher instanceof DiagnosingMatcher)
             return diagnoseMismatch((DiagnosingMatcher) matcher);
         return returns1(StringDescription.asString(matcher));
     }
 
-    public static <T> Function1<T, String> diagnoseMismatch(Class<T> type, final DiagnosingMatcher matcher) {
+    public static <T> Function<T, String> diagnoseMismatch(Class<T> type, final DiagnosingMatcher matcher) {
         return diagnoseMismatch(matcher);
     }
 
-    public static <T> Function1<T, String> diagnoseMismatch(final DiagnosingMatcher matcher) {
-        return t -> {
-            StringDescription mismatchDescription = new StringDescription();
-            matcher.describeMismatch(t, mismatchDescription);
-            return mismatchDescription.toString();
+    public static <T> Function<T, String> diagnoseMismatch(final DiagnosingMatcher matcher) {
+        return new Function<T, String>() {
+            @Override
+            public String call(T t) throws Exception {
+                StringDescription mismatchDescription = new StringDescription();
+                matcher.describeMismatch(t, mismatchDescription);
+                return mismatchDescription.toString();
+            }
         };
     }
 
-    public static <T> Function1<T, Matcher<T>> isMatcher(Class<T> clazz) {
+    public static <T> Callable1<T, Matcher<T>> isMatcher(Class<T> clazz) {
         return isMatcher();
     }
 
-    public static <T> Function1<T, Matcher<T>> isMatcher() {
-        return Matchers::is;
+    public static <T> Callable1<T, Matcher<T>> isMatcher() {
+        return new Callable1<T, Matcher<T>>() {
+            @Override
+            public Matcher<T> call(T t) throws Exception {
+                return is(t);
+            }
+        };
     }
 
     public static <T> LogicalPredicate<T> predicate(final Matcher<T> matcher) {
