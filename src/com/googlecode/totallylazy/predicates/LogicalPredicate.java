@@ -1,11 +1,8 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.*;
 
-public abstract class LogicalPredicate<T> implements Function1<T, Boolean>, Predicate<T> {
+public abstract class LogicalPredicate<T> extends Eq implements Function1<T, Boolean>, Predicate<T> {
     public static <T> LogicalPredicate<T> logicalPredicate(Predicate<? super T> predicate) {
         if(predicate instanceof LogicalPredicate){
             return Unchecked.cast(predicate);
