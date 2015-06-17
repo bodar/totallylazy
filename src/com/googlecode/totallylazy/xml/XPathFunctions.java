@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Curried2;
+import com.googlecode.totallylazy.CurriedFunction2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
@@ -93,7 +93,7 @@ public class XPathFunctions {
         };
     }
 
-    public static Curried2<Node, String, Text> createText = new Curried2<Node, String, Text>() {
+    public static CurriedFunction2<Node, String, Text> createText = new CurriedFunction2<Node, String, Text>() {
         @Override
         public Text call(Node node, String s) throws Exception {
             return createText(node, s);

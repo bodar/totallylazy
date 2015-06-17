@@ -1,8 +1,9 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Binary;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.BinaryFunction;
 import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
@@ -14,14 +15,11 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Closeables.using;
-import static com.googlecode.totallylazy.Functions.function;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Sequences.foldLeft;
 import static com.googlecode.totallylazy.Sequences.foldRight;
 import static com.googlecode.totallylazy.Sequences.join;
 import static com.googlecode.totallylazy.Strings.UTF8;
-import static com.googlecode.totallylazy.callables.Compose.compose;
 
 public abstract class Parser<A> implements Parse<A> {
     protected Failure<A> fail(Object expected, Object actual) {

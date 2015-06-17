@@ -401,8 +401,8 @@ public class Xml {
             };
         }
 
-        public static Curried2<Node, String, String> selectContents() {
-            return new Curried2<Node, String, String>() {
+        public static CurriedFunction2<Node, String, String> selectContents() {
+            return new CurriedFunction2<Node, String, String>() {
                 @Override
                 public String call(Node node, String expression) throws Exception {
                     return Xml.selectContents(node, expression);
@@ -419,8 +419,8 @@ public class Xml {
             };
         }
 
-        public static Curried2<Node, String, Sequence<Node>> selectNodes() {
-            return new Curried2<Node, String, Sequence<Node>>() {
+        public static CurriedFunction2<Node, String, Sequence<Node>> selectNodes() {
+            return new CurriedFunction2<Node, String, Sequence<Node>>() {
                 @Override
                 public Sequence<Node> call(final Node node, final String expression) throws Exception {
                     return Xml.selectNodes(node, expression);

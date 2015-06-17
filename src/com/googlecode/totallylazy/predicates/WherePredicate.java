@@ -28,7 +28,7 @@ public class WherePredicate<T, R> extends LogicalPredicate<T> {
     }
 
     public static <T, R> Function1<T, Predicate<T>> asWhere(final Function2<? super T, ? super T, ? extends R> callable, final Predicate<? super R> predicate) {
-        return t -> where(Functions.function(callable).apply(t), predicate);
+        return t -> where(Functions.apply(callable, t), predicate);
     }
 
     public boolean matches(T o) {

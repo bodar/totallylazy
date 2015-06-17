@@ -23,10 +23,10 @@ public class CallablesTest {
 
     @Test
     public void functionsAreInherantlyCurried() throws Exception {
-        Curried2<Number, Number, Number> add = add();
+        CurriedFunction2<Number, Number, Number> add = add();
         Function1<Number, Function1<Number, Number>> curried = add;
         assertThat(curried.call(1).call(2), is(3));
-        Curried2<Number, Number, Number> callableAdd = add;
+        CurriedFunction2<Number, Number, Number> callableAdd = add;
         assertThat(Callables.curry(callableAdd).call(1).call(2), is(3));
     }
 

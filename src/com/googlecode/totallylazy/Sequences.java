@@ -336,8 +336,8 @@ public class Sequences {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> Curried2<Sequence<T>, Function2<S, T, S>, S> reduce() {
-        return new Curried2<Sequence<T>, Function2<S, T, S>, S>() {
+    public static <T, S> CurriedFunction2<Sequence<T>, Function2<S, T, S>, S> reduce() {
+        return new CurriedFunction2<Sequence<T>, Function2<S, T, S>, S>() {
             @Override
             public S call(Sequence<T> sequence, Function2<S, T, S> callable) throws Exception {
                 return sequence.reduce(callable);
@@ -431,8 +431,8 @@ public class Sequences {
         return Iterators.number(iterable.iterator());
     }
 
-    public static <T> Curried2<Sequence<T>, Integer, Sequence<T>> take() {
-        return new Curried2<Sequence<T>, Integer, Sequence<T>>() {
+    public static <T> CurriedFunction2<Sequence<T>, Integer, Sequence<T>> take() {
+        return new CurriedFunction2<Sequence<T>, Integer, Sequence<T>>() {
             @Override
             public Sequence<T> call(Sequence<T> ts, Integer size) throws Exception {
                 return take(ts, size);
@@ -849,8 +849,8 @@ public class Sequences {
         return Functions.identity();
     }
 
-    public static <A, B> Curried2<Iterable<? extends A>, Function1<? super A, ? extends B>, Sequence<B>> map() {
-        return new Curried2<Iterable<? extends A>, Function1<? super A, ? extends B>, Sequence<B>>() {
+    public static <A, B> CurriedFunction2<Iterable<? extends A>, Function1<? super A, ? extends B>, Sequence<B>> map() {
+        return new CurriedFunction2<Iterable<? extends A>, Function1<? super A, ? extends B>, Sequence<B>>() {
             @Override
             public Sequence<B> call(Iterable<? extends A> as, Function1<? super A, ? extends B> callable) throws Exception {
                 return sequence(as).map(callable);

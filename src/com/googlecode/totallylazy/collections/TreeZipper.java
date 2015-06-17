@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Curried2;
+import com.googlecode.totallylazy.CurriedFunction2;
 import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Option;
@@ -104,7 +104,7 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
 
     @Override
     public int index() {
-        return focus.indexOf(value()) + breadcrumbs.filter(where(direction, is(right))).fold(0, new Curried2<Integer, Breadcrumb<K, V>, Integer>() {
+        return focus.indexOf(value()) + breadcrumbs.filter(where(direction, is(right))).fold(0, new CurriedFunction2<Integer, Breadcrumb<K, V>, Integer>() {
             @Override
             public Integer call(Integer integer, Breadcrumb<K, V> breadcrumb) throws Exception {
                 return integer + breadcrumb.other.size() + 1;

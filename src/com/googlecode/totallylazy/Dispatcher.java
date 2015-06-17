@@ -93,8 +93,8 @@ public class Dispatcher {
         return sequence(argumentClasses).zip(parameterTypes).map(distanceBetween().pair()).reduce(sum);
     }
 
-    private static Curried2<Class<?>, Class<?>, Number> distanceBetween() {
-        return new Curried2<Class<?>, Class<?>, Number>() {
+    private static CurriedFunction2<Class<?>, Class<?>, Number> distanceBetween() {
+        return new CurriedFunction2<Class<?>, Class<?>, Number>() {
             @Override
             public Number call(Class<?> argument, Class<?> parameter) throws Exception {
                 return distanceBetween(argument, parameter);

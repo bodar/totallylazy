@@ -378,7 +378,7 @@ public class Strings {
     public static Minimum.Function<String> minimum = Minimum.constructors.minimum((String) null);
 
     public static class functions {
-        public static Curried3<String, String, String, String> replaceAll = new Curried3<String, String, String, String>() {
+        public static CurriedFunction3<String, String, String, String> replaceAll = new CurriedFunction3<String, String, String, String>() {
             @Override
             public String call(String regex, String replacemenent, String source) throws Exception {
                 return Strings.replaceAll(regex, replacemenent).apply(source);

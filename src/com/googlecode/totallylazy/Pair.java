@@ -25,8 +25,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return new Pair<F, S>(first, second);
     }
 
-    public static <F, S> Curried2<F, S, Pair<F, S>> pair() {
-        return new Curried2<F, S, Pair<F, S>>() {
+    public static <F, S> CurriedFunction2<F, S, Pair<F, S>> pair() {
+        return new CurriedFunction2<F, S, Pair<F, S>>() {
             @Override
             public Pair<F, S> call(F f, S s) throws Exception {
                 return Pair.pair(f, s);
@@ -89,8 +89,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return values().hashCode();
     }
 
-    public static <A, B, C> Curried2<Pair<A, B>, C, Pair<B, C>> leftShift2() {
-        return new Curried2<Pair<A, B>, C, Pair<B, C>>() {
+    public static <A, B, C> CurriedFunction2<Pair<A, B>, C, Pair<B, C>> leftShift2() {
+        return new CurriedFunction2<Pair<A, B>, C, Pair<B, C>>() {
             @Override
             public Pair<B, C> call(Pair<A, B> pair, C c) throws Exception {
                 return leftShift(pair, c);
@@ -106,8 +106,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return Pair.leftShift(pair, call(callable, pair.first(), pair.second()));
     }
 
-    public static <A, B, C> Curried2<Pair<A, B>, Function2<A, B, C>, Pair<B, C>> reduceLeftShift() {
-        return new Curried2<Pair<A, B>, Function2<A, B, C>, Pair<B, C>>() {
+    public static <A, B, C> CurriedFunction2<Pair<A, B>, Function2<A, B, C>, Pair<B, C>> reduceLeftShift() {
+        return new CurriedFunction2<Pair<A, B>, Function2<A, B, C>, Pair<B, C>>() {
             @Override
             public Pair<B, C> call(Pair<A, B> pair, Function2<A, B, C> callable) throws Exception {
                 return reduceLeftShift(pair, callable);

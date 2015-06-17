@@ -523,8 +523,8 @@ public class Iterators {
     }
 
     public static class functions {
-        public static <T> Curried2<Iterable<? extends T>, Iterable<? extends T>, Iterable<T>> join() {
-            return new Curried2<Iterable<? extends T>, Iterable<? extends T>, Iterable<T>>() {
+        public static <T> CurriedFunction2<Iterable<? extends T>, Iterable<? extends T>, Iterable<T>> join() {
+            return new CurriedFunction2<Iterable<? extends T>, Iterable<? extends T>, Iterable<T>>() {
                 @Override
                 public Iterable<T> call(final Iterable<? extends T> a, final Iterable<? extends T> b) throws Exception {
                     return new Sequence<T>() {

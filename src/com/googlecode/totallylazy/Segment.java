@@ -109,8 +109,8 @@ public interface Segment<T> {
     }
 
     class functions {
-        public static <T, Self extends Segment<T>> Curried2<Self, T, Self> cons() {
-            return new Curried2<Self, T, Self>() {
+        public static <T, Self extends Segment<T>> CurriedFunction2<Self, T, Self> cons() {
+            return new CurriedFunction2<Self, T, Self>() {
                 @Override
                 public Self call(Self set, T t) throws Exception {
                     return cast(set.cons(t));

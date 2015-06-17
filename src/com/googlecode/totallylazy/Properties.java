@@ -62,8 +62,8 @@ public class Properties {
                 .fold(new java.util.Properties(), setProperty());
     }
 
-    public static Curried2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties> setProperty() {
-        return new Curried2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties>() {
+    public static CurriedFunction2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties> setProperty() {
+        return new CurriedFunction2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties>() {
             public java.util.Properties call(java.util.Properties properties, Map.Entry<Object, Object> property) throws Exception {
                 properties.put(property.getKey(), property.getValue());
                 return properties;
@@ -71,8 +71,8 @@ public class Properties {
         };
     }
 
-    public static Curried2<java.util.Properties, java.util.Properties, java.util.Properties> compose() {
-        return new Curried2<java.util.Properties, java.util.Properties, java.util.Properties>() {
+    public static CurriedFunction2<java.util.Properties, java.util.Properties, java.util.Properties> compose() {
+        return new CurriedFunction2<java.util.Properties, java.util.Properties, java.util.Properties>() {
             public java.util.Properties call(java.util.Properties soFar, java.util.Properties nextProperties) throws Exception {
                 return compose(soFar, nextProperties);
             }

@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy.comparators;
 
-import com.googlecode.totallylazy.Combiner;
+import com.googlecode.totallylazy.Monoid;
 import com.googlecode.totallylazy.CombinerFunction;
 
-public interface Maximum<T> extends Combiner<T> {
+public interface Maximum<T> extends Monoid<T> {
     class methods {
         public static <T extends Comparable<? super T>> T maximum(T a, T b) {
             return NullComparator.compare(a, b, NullComparator.Direction.Down) > 0 ? a : b;
