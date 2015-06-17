@@ -43,7 +43,7 @@ public interface Function1<A, B> extends Functor<B> {
          return either();
      }
 
-     default Mapper<A, B> orElse(B result) {
+     default Function1<A, B> orElse(B result) {
          return Exceptions.orElse(this, result);
      }
 

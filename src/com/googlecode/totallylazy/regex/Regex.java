@@ -1,21 +1,17 @@
 package com.googlecode.totallylazy.regex;
 
 import com.googlecode.totallylazy.Extractor;
-import com.googlecode.totallylazy.Mapper;
-import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.iterators.GroupIterator;
 
-import java.util.Iterator;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Regex extends Mapper<CharSequence, Matches> implements Predicate<CharSequence>, Extractor<CharSequence, String>{
+public class Regex implements Predicate<CharSequence>, Function1<CharSequence, Matches>, Extractor<CharSequence, String>{
     private final Pattern pattern;
 
     private Regex(Pattern pattern) {

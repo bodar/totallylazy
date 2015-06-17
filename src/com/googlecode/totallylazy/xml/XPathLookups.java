@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callers;
-import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Xml;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -23,8 +22,8 @@ public class XPathLookups {
         return Callers.call(lookups.get(name), text);
     }
 
-    private static Mapper<Node, Text> lookup(final Function1<String, String> data) {
-        return new Mapper<Node, Text>() {
+    private static Function1<Node, Text> lookup(final Function1<String, String> data) {
+        return new Function1<Node, Text>() {
             @Override
             public Text call(Node node) throws Exception {
                 return XPathFunctions.createText(node, data.call(node.getTextContent()));

@@ -93,8 +93,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
     }
 
     public static class functions {
-        public static <L> Mapper<Either<? extends L, ?>, L> left() {
-            return new Mapper<Either<? extends L, ?>, L>() {
+        public static <L> Function1<Either<? extends L, ?>, L> left() {
+            return new Function1<Either<? extends L, ?>, L>() {
                 @Override
                 public L call(Either<? extends L, ?> either) throws Exception {
                     return either.left();
@@ -102,8 +102,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
             };
         }
 
-        public static <R> Mapper<Either<?, ? extends R>, R> right() {
-            return new Mapper<Either<?, ? extends R>, R>() {
+        public static <R> Function1<Either<?, ? extends R>, R> right() {
+            return new Function1<Either<?, ? extends R>, R>() {
                 @Override
                 public R call(Either<?, ? extends R> either) throws Exception {
                     return either.right();
@@ -111,8 +111,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
             };
         }
 
-        public static <L> Mapper<Either<? extends L, ?>, Option<? extends L>> leftOption() {
-            return new Mapper<Either<? extends L, ?>, Option<? extends L>>() {
+        public static <L> Function1<Either<? extends L, ?>, Option<? extends L>> leftOption() {
+            return new Function1<Either<? extends L, ?>, Option<? extends L>>() {
                 @Override
                 public Option<? extends L> call(Either<? extends L, ?> either) throws Exception {
                     return either.leftOption();
@@ -120,8 +120,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
             };
         }
 
-        public static <R> Mapper<Either<?, ? extends R>, Option<? extends R>> rightOption() {
-            return new Mapper<Either<?, ? extends R>, Option<? extends R>>() {
+        public static <R> Function1<Either<?, ? extends R>, Option<? extends R>> rightOption() {
+            return new Function1<Either<?, ? extends R>, Option<? extends R>>() {
                 @Override
                 public Option<? extends R> call(Either<?, ? extends R> either) throws Exception {
                     return either.rightOption();
@@ -137,8 +137,8 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
             return value -> Either.right(value);
         }
 
-        public static <L, R> Mapper<Either<L, R>, Either<R, L>> flip() {
-            return new Mapper<Either<L, R>, Either<R, L>>() {
+        public static <L, R> Function1<Either<L, R>, Either<R, L>> flip() {
+            return new Function1<Either<L, R>, Either<R, L>>() {
                 @Override
                 public Either<R, L> call(Either<L, R> either) throws Exception {
                     return either.flip();

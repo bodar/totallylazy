@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
@@ -55,8 +55,8 @@ public class AndPredicate<T> extends LogicalPredicate<T> {
         return predicates.toString("(", " and ", ")");
     }
 
-    private static <T> Mapper<Predicate<T>, Iterable<Predicate<T>>> asPredicates() {
-        return new Mapper<Predicate<T>, Iterable<Predicate<T>>>() {
+    private static <T> Function1<Predicate<T>, Iterable<Predicate<T>>> asPredicates() {
+        return new Function1<Predicate<T>, Iterable<Predicate<T>>>() {
             @Override
             public Iterable<Predicate<T>> call(Predicate<T> predicate) throws Exception {
                 return predicate instanceof AndPredicate ? Unchecked.<AndPredicate<T>>cast(predicate).predicates() : one(predicate);

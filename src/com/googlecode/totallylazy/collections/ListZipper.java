@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
-import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.annotations.tailrec;
 
@@ -28,7 +27,7 @@ public class ListZipper<T> implements Zipper<T> {
 
     public Option<ListZipper<T>> nextOption() {
         if(isLast()) return none();
-        return focus.headOption().map(new Mapper<T, ListZipper<T>>() {
+        return focus.headOption().map(new Function1<T, ListZipper<T>>() {
             @Override
             public ListZipper<T> call(T t) throws Exception {
                 return zipper(focus.tail(), breadcrumbs.cons(t));
@@ -37,7 +36,7 @@ public class ListZipper<T> implements Zipper<T> {
     }
 
     public Option<ListZipper<T>> previousOption() {
-        return breadcrumbs.headOption().map(new Mapper<T, ListZipper<T>>() {
+        return breadcrumbs.headOption().map(new Function1<T, ListZipper<T>>() {
             @Override
             public ListZipper<T> call(T t) throws Exception {
                 return zipper(focus.cons(t), breadcrumbs.tail());

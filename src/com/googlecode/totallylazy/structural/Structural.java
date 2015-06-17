@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.structural;
 
-import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Methods;
 import com.googlecode.totallylazy.Option;
@@ -30,7 +30,7 @@ public class Structural {
     }
 
     public static <T> Option<T> castOption(final Class<T> structuralType, final Object instance) {
-        return extractMethods(instance, structuralType).map(new Mapper<Map<Method, Method>, T>() {
+        return extractMethods(instance, structuralType).map(new Function1<Map<Method, Method>, T>() {
             @Override
             public T call(final Map<Method, Method> methods) throws Exception {
                 return Unchecked.cast(newProxyInstance(structuralType.getClassLoader(), new Class[]{structuralType}, new InvocationHandler() {
@@ -46,7 +46,7 @@ public class Structural {
     private static <T> Option<Map<Method, Method>> extractMethods(final Object instance, Class<T> structuralType) {
         final Sequence<Method> requiredMethods = sequence(structuralType.getMethods());
         final Sequence<Method> instanceMethods = allMethods(instance.getClass());
-        return  sequenceO(requiredMethods.map(findMethod(instanceMethods))).map(new Mapper<Sequence<Method>, Map<Method, Method>>() {
+        return  sequenceO(requiredMethods.map(findMethod(instanceMethods))).map(new Function1<Sequence<Method>, Map<Method, Method>>() {
             @Override
             public Map<Method, Method> call(Sequence<Method> foundMethods) throws Exception {
                 return Maps.map(requiredMethods.zip(foundMethods));
@@ -54,8 +54,8 @@ public class Structural {
         });
     }
 
-    private static Mapper<Method, Option<Method>> findMethod(final Sequence<Method> instanceMethods) {
-        return new Mapper<Method, Option<Method>>() {
+    private static Function1<Method, Option<Method>> findMethod(final Sequence<Method> instanceMethods) {
+        return new Function1<Method, Option<Method>>() {
             @Override
             public Option<Method> call(Method requiredMethod) throws Exception {
                 return findMethod(requiredMethod, instanceMethods);

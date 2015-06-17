@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Atomic;
-import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -59,7 +59,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public V put(final K key, final V value) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
+        return atomic.modifyReturn(new Function1<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
             @Override
             public Pair<PersistentMap<K, V>, V> call(PersistentMap<K, V> map) throws Exception {
                 return AtomicMap.this.put(map, key, value);
@@ -84,7 +84,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public V remove(final Object key) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
+        return atomic.modifyReturn(new Function1<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
             @Override
             public Pair<PersistentMap<K, V>, V> call(PersistentMap<K, V> map) throws Exception {
                 return PersistentMap.methods.remove(map, key(key)).
@@ -120,7 +120,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public V putIfAbsent(final K key, final V value) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
+        return atomic.modifyReturn(new Function1<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
             @Override
             public Pair<PersistentMap<K, V>, V> call(PersistentMap<K, V> map) throws Exception {
                 if (!map.contains(key)) return put(map, key, value);
@@ -131,7 +131,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public boolean remove(final Object rawKey, final Object value) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, Boolean>>() {
+        return atomic.modifyReturn(new Function1<PersistentMap<K, V>, Pair<PersistentMap<K, V>, Boolean>>() {
             @Override
             public Pair<PersistentMap<K, V>, Boolean> call(PersistentMap<K, V> map) throws Exception {
                 K key = key(rawKey);
@@ -143,7 +143,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public boolean replace(final K rawKey, final V oldValue, final V newValue) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, Boolean>>() {
+        return atomic.modifyReturn(new Function1<PersistentMap<K, V>, Pair<PersistentMap<K, V>, Boolean>>() {
             @Override
             public Pair<PersistentMap<K, V>, Boolean> call(PersistentMap<K, V> map) throws Exception {
                 K key = key(rawKey);
@@ -155,7 +155,7 @@ public class AtomicMap<K, V> implements ConcurrentMap<K, V> {
 
     @Override
     public V replace(final K key, final V value) {
-        return atomic.modifyReturn(new Mapper<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
+        return atomic.modifyReturn(new Function1<PersistentMap<K, V>, Pair<PersistentMap<K, V>, V>>() {
             @Override
             public Pair<PersistentMap<K, V>, V> call(PersistentMap<K, V> map) throws Exception {
                 if (map.contains(key)) return AtomicMap.this.put(map, key, value);

@@ -210,11 +210,9 @@ public class Maps {
     }
 
     public static <K, V> CurriedFunction2<? super Map<K, V>, ? super Pair<K, V>, Map<K, V>> asMap() {
-        return new CurriedFunction2<Map<K, V>, Pair<K, V>, Map<K, V>>() {
-            public Map<K, V> call(Map<K, V> map, Pair<K, V> pair) throws Exception {
-                map.put(pair.first(), pair.second());
-                return map;
-            }
+        return (map, pair) -> {
+            map.put(pair.first(), pair.second());
+            return map;
         };
     }
 

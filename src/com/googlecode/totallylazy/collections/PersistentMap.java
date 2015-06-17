@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.Functor;
-import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -140,8 +139,8 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
     }
 
     class functions {
-        public static <K, V> Mapper<PersistentMap<K, V>, Option<V>> get(final K key) {
-            return new Mapper<PersistentMap<K, V>, Option<V>>() {
+        public static <K, V> Function1<PersistentMap<K, V>, Option<V>> get(final K key) {
+            return new Function1<PersistentMap<K, V>, Option<V>>() {
                 @Override
                 public Option<V> call(PersistentMap<K, V> map) throws Exception {
                     return map.lookup(key);
@@ -149,8 +148,8 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
             };
         }
 
-        public static <K, V> Mapper<PersistentMap<K, V>, PersistentMap<K, V>> remove(final K key) {
-            return new Mapper<PersistentMap<K, V>, PersistentMap<K, V>>() {
+        public static <K, V> Function1<PersistentMap<K, V>, PersistentMap<K, V>> remove(final K key) {
+            return new Function1<PersistentMap<K, V>, PersistentMap<K, V>>() {
                 @Override
                 public PersistentMap<K, V> call(PersistentMap<K, V> map) throws Exception {
                     return map.delete(key);
@@ -158,8 +157,8 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
             };
         }
 
-        public static <K, V> Mapper<PersistentMap<K, V>, Boolean> contains(final Object other) {
-            return new Mapper<PersistentMap<K, V>, Boolean>() {
+        public static <K, V> Function1<PersistentMap<K, V>, Boolean> contains(final Object other) {
+            return new Function1<PersistentMap<K, V>, Boolean>() {
                 @Override
                 public Boolean call(PersistentMap<K, V> map) throws Exception {
                     return map.contains(other);

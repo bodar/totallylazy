@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.regex;
 
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.GroupIterator;
 
@@ -48,8 +47,8 @@ public class Matches extends Sequence<MatchResult> {
     }
 
     public static class functions {
-        public static Mapper<Matches, String> replace(final Function1<? super MatchResult, ? extends CharSequence> constant) {
-            return new Mapper<Matches, String>() {
+        public static Function1<Matches, String> replace(final Function1<? super MatchResult, ? extends CharSequence> constant) {
+            return new Function1<Matches, String>() {
                 @Override
                 public String call(Matches matchResults) throws Exception {
                     return matchResults.replace(constant);
@@ -57,7 +56,7 @@ public class Matches extends Sequence<MatchResult> {
             };
         }
 
-        public static Mapper<MatchResult, Sequence<String>> groups = new Mapper<MatchResult, Sequence<String>>() {
+        public static Function1<MatchResult, Sequence<String>> groups = new Function1<MatchResult, Sequence<String>>() {
             @Override
             public Sequence<String> call(final MatchResult matchResult) throws Exception {
                 return new Sequence<String>() {

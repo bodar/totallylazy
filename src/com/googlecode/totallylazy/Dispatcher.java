@@ -75,8 +75,8 @@ public class Dispatcher {
                 (v = cache.putIfAbsent(key, newValue)) == null) ? newValue : v;
 
     }
-    private static Mapper<Method, Number> distanceFrom(final Iterable<Class<?>> argumentClasses) {
-        return new Mapper<Method, Number>() {
+    private static Function1<Method, Number> distanceFrom(final Iterable<Class<?>> argumentClasses) {
+        return new Function1<Method, Number>() {
             @Override
             public Number call(Method method) throws Exception {
                 return distanceFrom(argumentClasses, sequence(method.getParameterTypes()));

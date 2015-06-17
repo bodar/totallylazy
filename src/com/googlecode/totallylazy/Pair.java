@@ -230,8 +230,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
             };
         }
 
-        public static Mapper<Pair<?,?>, Sequence<Object>> values() {
-            return new Mapper<Pair<?,?>, Sequence<Object>>() {
+        public static Function1<Pair<?,?>, Sequence<Object>> values() {
+            return new Function1<Pair<?,?>, Sequence<Object>>() {
                 @Override
                 public Sequence<Object> call(Pair<?,?> pair) throws Exception {
                     return pair.values();
@@ -239,8 +239,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
             };
         }
 
-        public static Mapper<Pair<?,?>, String> toString(final String separator) {
-            return new Mapper<Pair<?,?>, String>() {
+        public static Function1<Pair<?,?>, String> toString(final String separator) {
+            return new Function1<Pair<?,?>, String>() {
                 @Override
                 public String call(Pair<?,?> pair) throws Exception {
                     return pair.toString(separator);
@@ -248,8 +248,8 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
             };
         }
 
-        public static Mapper<Pair<?,?>, String> toString(final String start, final String separator, final String end) {
-            return new Mapper<Pair<?,?>, String>() {
+        public static Function1<Pair<?,?>, String> toString(final String start, final String separator, final String end) {
+            return new Function1<Pair<?,?>, String>() {
                 @Override
                 public String call(Pair<?,?> pair) throws Exception {
                     return pair.toString(start, separator, end);

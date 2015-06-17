@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.CurriedFunction2;
 import com.googlecode.totallylazy.Functions;
-import com.googlecode.totallylazy.Mapper;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.annotations.tailrec;
@@ -212,7 +211,7 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
     }
 
     public static class functions extends TreeMap.functions {
-        public static Mapper<Breadcrumb<?, ?>, Direction> direction = new Mapper<Breadcrumb<?, ?>, Direction>() {
+        public static Function1<Breadcrumb<?, ?>, Direction> direction = new Function1<Breadcrumb<?, ?>, Direction>() {
             @Override
             public Direction call(Breadcrumb<?, ?> breadcrumb) throws Exception {
                 return breadcrumb.direction;

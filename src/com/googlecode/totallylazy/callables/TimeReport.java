@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.BinaryFunction;
 import com.googlecode.totallylazy.Block;
-import com.googlecode.totallylazy.Mapper;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 
@@ -93,8 +93,8 @@ public class TimeReport extends Block<Number> {
         });
     }
 
-    private static Mapper<Number, TimeReport> time(final Callable<?> function) {
-        return new Mapper<Number, TimeReport>() {
+    private static Function1<Number, TimeReport> time(final Callable<?> function) {
+        return new Function1<Number, TimeReport>() {
             @Override
             public TimeReport call(Number number) throws Exception {
                 return TimeReport.time(number.intValue(), function);
