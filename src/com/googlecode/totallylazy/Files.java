@@ -60,35 +60,19 @@ public class Files {
 
 
     public static Function1<File, String> name() {
-        return new Function1<File, String>() {
-            public String call(File file) throws Exception {
-                return file.getName();
-            }
-        };
+        return file -> file.getName();
     }
 
     public static Function1<File, Sequence<File>> files() {
-        return new Function1<File, Sequence<File>>() {
-            public Sequence<File> call(File file) throws Exception {
-                return files(file);
-            }
-        };
+        return file -> files(file);
     }
 
     public static Function1<File, String> path() {
-        return new Function1<File, String>() {
-            public String call(File file) throws Exception {
-                return file.getPath();
-            }
-        };
+        return file -> file.getPath();
     }
 
     public static Function1<File, File> parent() {
-        return new Function1<File, File>() {
-            public File call(File file) throws Exception {
-                return file.getParentFile();
-            }
-        };
+        return file -> file.getParentFile();
     }
 
     public static File temporaryDirectory() {
@@ -119,19 +103,11 @@ public class Files {
     }
 
     public static Function1<File, Boolean> deleteFile() {
-        return new Function1<File, Boolean>() {
-            public Boolean call(File file) throws Exception {
-                return file.delete();
-            }
-        };
+        return file -> file.delete();
     }
 
     public static Function1<File, Boolean> delete() {
-        return new Function1<File, Boolean>() {
-            public Boolean call(File file) throws Exception {
-                return delete(file);
-            }
-        };
+        return file -> delete(file);
     }
 
     public static File temporaryFile() {
@@ -193,11 +169,7 @@ public class Files {
     }
 
     public static Function1<File, Iterable<File>> recursiveFiles() {
-        return new Function1<File, Iterable<File>>() {
-            public Iterable<File> call(File file) throws Exception {
-                return file.isDirectory() ? recursiveFiles(file).append(file) : sequence(file);
-            }
-        };
+        return file -> file.isDirectory() ? recursiveFiles(file).append(file) : sequence(file);
     }
 
     public static Sequence<File> recursiveFilesDirectoriesFirst(final File directory) {
@@ -205,11 +177,7 @@ public class Files {
     }
 
     public static Function1<File, Iterable<File>> recursiveFilesDirectoriesFirst() {
-        return new Function1<File, Iterable<File>>() {
-            public Iterable<File> call(File file) throws Exception {
-                return file.isDirectory() ? recursiveFilesDirectoriesFirst(file).cons(file) : sequence(file);
-            }
-        };
+        return file -> file.isDirectory() ? recursiveFilesDirectoriesFirst(file).cons(file) : sequence(file);
     }
 
     public static File write(byte[] bytes, File file) {
@@ -236,12 +204,9 @@ public class Files {
     private static Set<File> delete = Sets.concurrentSet();
 
     static {
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (File directory : delete) {
-                    Files.delete(directory);
-                }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            for (File directory : delete) {
+                Files.delete(directory);
             }
         }));
     }
@@ -256,11 +221,7 @@ public class Files {
     }
 
     public static Function1<String, File> asFile() {
-        return new Function1<String, File>() {
-            public File call(String name) throws Exception {
-                return new File(name);
-            }
-        };
+        return name -> new File(name);
     }
 
     public static File directory(File parent, String name) {
@@ -284,12 +245,7 @@ public class Files {
     }
 
     public static Function1<File, Date> lastModified() {
-        return new Function1<File, Date>() {
-            @Override
-            public Date call(File file) throws Exception {
-                return date(file.lastModified());
-            }
-        };
+        return file -> date(file.lastModified());
     }
 
     public static File randomFile() {

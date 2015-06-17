@@ -10,13 +10,8 @@ public interface DateConverter {
 
     Date parse(String value);
 
-    public static class functions {
-        public static CurriedFunction2<DateConverter, Date, String> format = new CurriedFunction2<DateConverter, Date, String>() {
-            @Override
-            public String call(DateConverter dateConverter, Date date) throws Exception {
-                return dateConverter.format(date);
-            }
-        };
+    class functions {
+        public static CurriedFunction2<DateConverter, Date, String> format = DateConverter::format;
 
         public static CurriedFunction2<DateConverter, Date, String> format()  {
             return format;
@@ -26,12 +21,7 @@ public interface DateConverter {
             return format.apply(dateConverter);
         }
 
-        public static CurriedFunction2<DateConverter, String, Date> parse = new CurriedFunction2<DateConverter, String, Date>() {
-            @Override
-            public Date call(DateConverter dateConverter, String dateAsString) throws Exception {
-                return dateConverter.parse(dateAsString);
-            }
-        };
+        public static CurriedFunction2<DateConverter, String, Date> parse = DateConverter::parse;
 
         public static CurriedFunction2<DateConverter, String, Date> parse() {
             return parse;

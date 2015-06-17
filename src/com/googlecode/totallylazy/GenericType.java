@@ -5,12 +5,7 @@ public interface GenericType<T> {
 
     public static final class functions {
         public static <T extends GenericType<?>> Function1<T, Class<?>> forClass() {
-            return new Function1<T, Class<?>>() {
-                @Override
-                public Class<?> call(T genericType) throws Exception {
-                    return genericType.forClass();
-                }
-            };
+            return genericType -> genericType.forClass();
         }
     }
 }

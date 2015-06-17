@@ -44,15 +44,12 @@ public class CountLatch {
     }
 
     public static <A> Function0<A> monitor(final Callable<? extends A> callable, final CountLatch latch) {
-        return new Function0<A>() {
-            @Override
-            public A call() throws Exception {
-                latch.countUp();
-                try {
-                    return callable.call();
-                } finally {
-                    latch.countDown();
-                }
+        return () -> {
+            latch.countUp();
+            try {
+                return callable.call();
+            } finally {
+                latch.countDown();
             }
         };
     }
@@ -62,15 +59,12 @@ public class CountLatch {
     }
 
     public static <A, B> Function1<A, B> monitor(final CountLatch latch, final Function1<? super A, ? extends B> callable) {
-        return new Function1<A, B>() {
-            @Override
-            public B call(A a) throws Exception {
-                latch.countUp();
-                try {
-                    return callable.call(a);
-                } finally {
-                    latch.countDown();
-                }
+        return a -> {
+            latch.countUp();
+            try {
+                return callable.call(a);
+            } finally {
+                latch.countDown();
             }
         };
     }

@@ -20,34 +20,19 @@ public class Hours {
     }
 
     public static class functions {
-        public static CurriedFunction2<Date, Integer, Date> add = new CurriedFunction2<Date, Integer, Date>() {
-            @Override
-            public Date call(Date date, Integer amount) throws Exception {
-                return Hours.add(date, amount);
-            }
-        };
+        public static CurriedFunction2<Date, Integer, Date> add = (date, amount) -> Hours.add(date, amount);
 
         public static CurriedFunction2<Date, Integer, Date> add()  {
             return add;
         }
 
-        public static CurriedFunction2<Date, Integer, Date> subtract = new CurriedFunction2<Date, Integer, Date>() {
-            @Override
-            public Date call(Date date, Integer amount) throws Exception {
-                return Hours.subtract(date, amount);
-            }
-        };
+        public static CurriedFunction2<Date, Integer, Date> subtract = (date, amount) -> Hours.subtract(date, amount);
 
         public static CurriedFunction2<Date, Integer, Date> subtract()  {
             return subtract;
         }
 
-        public static CurriedFunction2<Date, Date, Long> between = new CurriedFunction2<Date, Date, Long>() {
-            @Override
-            public Long call(Date start, Date end) throws Exception {
-                return Hours.between(start, end);
-            }
-        };
+        public static CurriedFunction2<Date, Date, Long> between = (start, end) -> Hours.between(start, end);
 
         public static CurriedFunction2<Date, Date, Long> between()  {
             return between;

@@ -7,12 +7,7 @@ public interface Extractor<A, B> {
 
     class functions {
         public static <A> Extractor<A, A> self() {
-            return new Extractor<A, A>() {
-                @Override
-                public Iterable<A> extract(A a) {
-                    return sequence(a);
-                }
-            };
+            return a -> sequence(a);
         }
     }
 }

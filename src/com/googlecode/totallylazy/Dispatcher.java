@@ -60,16 +60,11 @@ public class Dispatcher {
 
     public <T> Option<T> invokeOption(Object... args) {
         final List<Class<?>> argumentClasses = sequence(args).map(toClass()).toList();
-        return computeIfAbsent(cache, argumentClasses, new Function0<Option<Method>>() {
-            @Override
-            public Option<Method> call() throws Exception {
-                return Methods.allMethods(aClass).
-                        filter(predicate).
-                        filter(where(parameterTypes(), matches(argumentClasses))).
-                        sort(by(distanceFrom(argumentClasses), ascending())).
-                        headOption();
-            }
-        }).map(Methods.<T>invokeOn(instance, args));
+        return computeIfAbsent(cache, argumentClasses, () -> Methods.allMethods(aClass).
+                filter(predicate).
+                filter(where(parameterTypes(), matches(argumentClasses))).
+                sort(by(distanceFrom(argumentClasses), ascending())).
+                headOption()).map(Methods.<T>invokeOn(instance, args));
     }
 
     // Backported from Java 8
@@ -94,12 +89,7 @@ public class Dispatcher {
     }
 
     private static CurriedFunction2<Class<?>, Class<?>, Number> distanceBetween() {
-        return new CurriedFunction2<Class<?>, Class<?>, Number>() {
-            @Override
-            public Number call(Class<?> argument, Class<?> parameter) throws Exception {
-                return distanceBetween(argument, parameter);
-            }
-        };
+        return Dispatcher::distanceBetween;
     }
 
     static Number distanceBetween(Class<?> argument, Class<?> parameterType) {

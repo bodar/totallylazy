@@ -183,12 +183,10 @@ public final class Callables {
         return toString;
     }
 
-    public static final CurriedFunction2<Integer, Object, Integer> hashCode = new CurriedFunction2<Integer, Object, Integer>() {
-        public Integer call(Integer hash, Object value) throws Exception {
-            if (value == null) return hash * 19;
-            int current = value.hashCode();
-            return (current == 0 ? 19 : current) * hash;
-        }
+    public static final CurriedFunction2<Integer, Object, Integer> hashCode = (hash, value) -> {
+        if (value == null) return hash * 19;
+        int current = value.hashCode();
+        return (current == 0 ? 19 : current) * hash;
     };
 
     public static CurriedFunction2<Integer, Object, Integer> asHashCode() {

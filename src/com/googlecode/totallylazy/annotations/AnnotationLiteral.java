@@ -101,10 +101,8 @@ public abstract class AnnotationLiteral<T extends Annotation> implements Annotat
     @Override
     public boolean equals(Object other)
     {
-        Method[] methods = (Method[]) AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                return annotationType.getDeclaredMethods();
-            }
+        Method[] methods = (Method[]) AccessController.doPrivileged((PrivilegedAction) () -> {
+            return annotationType.getDeclaredMethods();
         });
 
         if(other == this)
@@ -239,11 +237,8 @@ public abstract class AnnotationLiteral<T extends Annotation> implements Annotat
     @Override
     public int hashCode()
     {
-        Method[] methods = (Method[])AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run()
-            {
-                return annotationType.getDeclaredMethods();
-            }
+        Method[] methods = (Method[])AccessController.doPrivileged((PrivilegedAction) () -> {
+            return annotationType.getDeclaredMethods();
         });
 
         int hashCode = 0;
@@ -312,11 +307,8 @@ public abstract class AnnotationLiteral<T extends Annotation> implements Annotat
     @Override
     public String toString()
     {
-        Method[] methods = (Method[])AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run()
-            {
-                return annotationType.getDeclaredMethods();
-            }
+        Method[] methods = (Method[])AccessController.doPrivileged((PrivilegedAction) () -> {
+            return annotationType.getDeclaredMethods();
         });
         StringBuilder sb = new StringBuilder("@" + annotationType().getName() + "(");
         int lenght = methods.length;

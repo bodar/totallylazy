@@ -27,11 +27,7 @@ public class Escaper {
     }
 
     private Function1<Character, String> escape() {
-        return new Function1<Character, String>() {
-            public String call(Character character) throws Exception {
-                return rules.apply(character);
-            }
-        };
+        return character -> rules.apply(character);
     }
 
 }

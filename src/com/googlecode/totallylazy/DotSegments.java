@@ -13,24 +13,18 @@ public class DotSegments {
 
     public static String remove(String path) {
         final Deque<CharSequence> segments = new ArrayDeque<CharSequence>();
-        segment.findMatches(path).replace(new Function1<CharSequence, CharSequence>() {
-            @Override
-            public CharSequence call(CharSequence notMatched) throws Exception {
-                segments.add(notMatched);
-                return null;
+        segment.findMatches(path).replace(notMatched -> {
+            segments.add(notMatched);
+            return null;
+        }, match -> {
+            String segment1 = match.group(1);
+            if(segment1.equals(".")) return null;
+            else if(segment1.equals("..")) {
+                if(!segments.isEmpty()) segments.removeLast();
+            } else {
+                segments.add(match.group());
             }
-        }, new Function1<MatchResult, CharSequence>() {
-            @Override
-            public CharSequence call(MatchResult match) throws Exception {
-                String segment = match.group(1);
-                if(segment.equals(".")) return null;
-                else if(segment.equals("..")) {
-                    if(!segments.isEmpty()) segments.removeLast();
-                } else {
-                    segments.add(match.group());
-                }
-                return null;
-            }
+            return null;
         });
         return Sequences.toString(segments, "");
     }

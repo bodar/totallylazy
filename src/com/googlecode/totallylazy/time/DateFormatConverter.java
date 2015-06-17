@@ -17,12 +17,7 @@ public class DateFormatConverter implements DateConverter {
     }
 
     public static Function1<? super String, DateFormat> asDateFormat() {
-        return new Function1<String, DateFormat>() {
-            @Override
-            public DateFormat call(String value) throws Exception {
-                return Dates.format(value);
-            }
-        };
+        return Dates::format;
     }
 
     public Sequence<DateFormat> formats() {
@@ -54,10 +49,6 @@ public class DateFormatConverter implements DateConverter {
     }
 
     public static Function1<DateFormat, Date> parseToDate(final String value) {
-        return new Function1<DateFormat, Date>() {
-            public Date call(DateFormat dateFormat) throws Exception {
-                return dateFormat.parse(value);
-            }
-        };
+        return dateFormat -> dateFormat.parse(value);
     }
 }

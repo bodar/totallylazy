@@ -16,12 +16,7 @@ public final class Callers {
         ExecutorService service = executorService();
         try {
             final Future<? extends T> future = service.submit(callable);
-            return new Function0<T>() {
-                @Override
-                public T call() throws Exception {
-                    return future.get();
-                }
-            };
+            return () -> future.get();
         } finally {
             service.shutdown();
         }
@@ -69,36 +64,22 @@ public final class Callers {
     }
 
     public static <T> Function1<FutureTask<T>, Future<T>> executeWith(final Executor executor) {
-        return new Function1<FutureTask<T>, Future<T>>() {
-            public Future<T> call(FutureTask<T> task) throws Exception {
-                executor.execute(task);
-                return task;
-            }
+        return task -> {
+            executor.execute(task);
+            return task;
         };
     }
 
     public static <T> Function1<Callable<T>, FutureTask<T>> asFutureTask() {
-        return new Function1<Callable<T>, FutureTask<T>>() {
-            public FutureTask<T> call(Callable<T> callable) throws Exception {
-                return new FutureTask<T>(callable);
-            }
-        };
+        return callable -> new FutureTask<T>(callable);
     }
 
     public static <T> Function1<Future<T>, T> realiseFuture() {
-        return new Function1<Future<T>, T>() {
-            public final T call(final Future<T> future) throws Exception {
-                return future.get();
-            }
-        };
+        return future -> future.get();
     }
 
     public static <T> Function1<Future<T>, T> realiseFuture(final long timeout, final TimeUnit unit) {
-        return new Function1<Future<T>, T>() {
-            public final T call(final Future<T> future) throws Exception {
-                return future.get(timeout, unit);
-            }
-        };
+        return future -> future.get(timeout, unit);
     }
 
     public static <T> T call(final Callable<? extends T> callable) {

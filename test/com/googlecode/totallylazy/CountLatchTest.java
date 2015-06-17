@@ -24,12 +24,9 @@ public class CountLatchTest {
         for (final AtomicInteger atomicInteger : repeat(number).take(5)) {
             latch.countUp();
 
-            executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-                    atomicInteger.incrementAndGet();
-                    latch.countDown();
-                }
+            executorService.submit(() -> {
+                atomicInteger.incrementAndGet();
+                latch.countDown();
             });
         }
 

@@ -52,12 +52,7 @@ public class Dates {
     }
 
     public static Function1<Date, String> format(final DateFormat format) {
-        return new Function1<Date, String>() {
-            @Override
-            public String call(Date value) throws Exception {
-                return format.format(value);
-            }
-        };
+        return value -> format.format(value);
     }
 
     public static DateFormat APACHE() {
@@ -85,12 +80,7 @@ public class Dates {
     }
 
     public static Function1<String, Date> parse(final DateFormat format) {
-        return new Function1<String, Date>() {
-            @Override
-            public Date call(String value) throws Exception {
-                return format.parse(value);
-            }
-        };
+        return value -> format.parse(value);
     }
 
     public static Function1<Date, Integer> millisecond() {
@@ -135,12 +125,7 @@ public class Dates {
 
 
     public static Function1<Date, Integer> calendarField(final int field) {
-        return new Function1<Date, Integer>() {
-            @Override
-            public Integer call(Date value) throws Exception {
-                return calendar(value).get(field);
-            }
-        };
+        return value -> calendar(value).get(field);
     }
 
     public static Date date(String value) {

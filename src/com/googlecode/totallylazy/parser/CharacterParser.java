@@ -36,12 +36,7 @@ class CharacterParser extends Parser<Character> {
     }
 
     public static Function1<Character, Parser<Character>> characterParser() {
-        return new Function1<Character, Parser<Character>>() {
-            @Override
-            public Parser<Character> call(Character character) throws Exception {
-                return character(character);
-            }
-        };
+        return character -> character(character);
     }
 
     @Override

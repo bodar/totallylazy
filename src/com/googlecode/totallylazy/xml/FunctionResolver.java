@@ -36,17 +36,14 @@ public enum FunctionResolver implements XPathFunctionResolver {
 
     @Override
     public XPathFunction resolveFunction(final QName functionName, int arity) {
-        return new XPathFunction() {
-            @Override
-            public Object evaluate(List args) throws XPathFunctionException {
-                String name = functionName.getLocalPart();
-                Method method = sequence(methods).
-                        find(where(annotation(com.googlecode.totallylazy.xml.XPathFunction.class).then(value()), is(name))).get();
-                try {
-                    return Methods.invoke(method, null, args.toArray());
-                } catch (Exception e) {
-                    return Methods.invoke(method, null, args);
-                }
+        return args -> {
+            String name = functionName.getLocalPart();
+            Method method = sequence(methods).
+                    find(where(annotation(com.googlecode.totallylazy.xml.XPathFunction.class).then(value()), is(name))).get();
+            try {
+                return Methods.invoke(method, null, args.toArray());
+            } catch (Exception e) {
+                return Methods.invoke(method, null, args);
             }
         };
     }

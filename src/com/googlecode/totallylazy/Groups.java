@@ -6,11 +6,6 @@ public class Groups {
     }
 
     public static <K> Function1<Group<K, ?>, K> groupKey() {
-        return new Function1<Group<K, ?>, K>() {
-            @Override
-            public K call(Group<K, ?> group) throws Exception {
-                return group.key();
-            }
-        };
+        return group -> group.key();
     }
 }

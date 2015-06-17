@@ -32,19 +32,10 @@ public class Exceptions {
     }
 
     public static Function1<Throwable, Throwable> getCause() {
-        return new Function1<Throwable, Throwable>() {
-            public Throwable call(final Throwable throwable) throws Exception {
-                return throwable.getCause();
-            }
-        };
+        return throwable -> throwable.getCause();
     }
 
-    public static final Function1<Exception,String> message = new Function1<Exception, String>() {
-        @Override
-        public String call(Exception e) throws Exception {
-            return e.getMessage();
-        }
-    };
+    public static final Function1<Exception,String> message = e -> e.getMessage();
 
     public static Function1<Exception, String> message() {
         return message;
@@ -60,11 +51,7 @@ public class Exceptions {
     }
 
     private static <T> Function1<Class<? extends T>, Predicate<? super T>> asInstanceOf() {
-        return new Function1<Class<? extends T>, Predicate<? super T>>() {
-            public Predicate<? super T> call(Class<? extends T> aClass) throws Exception {
-                return instanceOf(aClass);
-            }
-        };
+        return aClass -> instanceOf(aClass);
     }
 
     public static <T, S> Function1<T, Option<S>> handleException(final Function1<? super T, ? extends S> callable, final Predicate<? super Exception> first) {
@@ -77,16 +64,14 @@ public class Exceptions {
     }
 
     public static <T, S> Function1<T, Option<S>> handleException(final Function1<? super T, ? extends S> callable, final Iterable<? extends Predicate<? super Exception>> predicates) {
-        return new Function1<T, Option<S>>() {
-            public Option<S> call(T t) throws Exception {
-                try {
-                    return Option.some(callable.call(t));
-                } catch (Exception e) {
-                    if (sequence(predicates).exists(matches(e))) {
-                        return none();
-                    }
-                    throw e;
+        return t -> {
+            try {
+                return Option.some(callable.call(t));
+            } catch (Exception e) {
+                if (sequence(predicates).exists(matches(e))) {
+                    return none();
                 }
+                throw e;
             }
         };
     }
@@ -98,22 +83,15 @@ public class Exceptions {
     }
 
     private static <T> Predicate<? super Predicate<? super T>> matches(final T instance) {
-        return new Predicate<Predicate<? super T>>() {
-            @Override
-            public boolean matches(Predicate<? super T> other) {
-                return other.matches(instance);
-            }
-        };
+        return other -> other.matches(instance);
     }
 
     public static <T, S> Function1<T, Either<S, Throwable>> captureException(final Function1<? super T, ? extends S> callable) {
-        return new Function1<T, Either<S, Throwable>>() {
-            public Either<S, Throwable> call(T input) throws Exception {
-                try {
-                    return left(callable.call(input));
-                } catch (Throwable e) {
-                    return right(e);
-                }
+        return input -> {
+            try {
+                return left(callable.call(input));
+            } catch (Throwable e) {
+                return right(e);
             }
         };
     }
@@ -128,17 +106,12 @@ public class Exceptions {
     }
 
     public static <A, B> Function1<A, Either<Exception, B>> either(final Function1<? super A, ? extends B> callable) {
-        return new Function1<A, Either<Exception, B>>() {
+        return a -> Either.either(new Callable<B>() {
             @Override
-            public Either<Exception, B> call(final A a) throws Exception {
-                return Either.either(new Callable<B>() {
-                    @Override
-                    public B call() throws Exception {
-                        return callable.call(a);
-                    }
-                });
+            public B call() throws Exception {
+                return callable.call(a);
             }
-        };
+        });
     }
 
     public static <A, B> Mapper<A, B> orElse(final Function1<? super A, ? extends B> callable, final B result) {
@@ -155,15 +128,6 @@ public class Exceptions {
     }
 
     public static <T, S> Function1<T, Option<S>> optional(final Function1<? super T, ? extends S> callable) {
-        return new Function1<T, Option<S>>() {
-            public Option<S> call(final T t) throws Exception {
-                return Option.option(new Callable<S>() {
-                    @Override
-                    public S call() throws Exception {
-                        return callable.call(t);
-                    }
-                });
-            }
-        };
+        return t -> Option.option(() -> callable.call(t));
     }
 }

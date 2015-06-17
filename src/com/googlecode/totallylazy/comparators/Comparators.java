@@ -14,11 +14,7 @@ import static com.googlecode.totallylazy.Unchecked.cast;
 
 public class Comparators {
     public static <T, R> Comparator<T> by(final Function1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
-        return new Comparator<T>() {
-            public int compare(T instance, T otherInstance) {
-                return comparator.compare(call(callable, instance), call(callable, otherInstance));
-            }
-        };
+        return (instance, otherInstance) -> comparator.compare(call(callable, instance), call(callable, otherInstance));
     }
 
     public static <T, R> Comparator<T> where(final Function1<? super T, ? extends R> callable, final Comparator<? super R> comparator) {
@@ -34,11 +30,7 @@ public class Comparators {
     }
 
     @SuppressWarnings("unchecked")
-    private static final Comparator<Comparable> ASCENDING = new Comparator<Comparable>() {
-        public int compare(Comparable a, Comparable b) {
-            return a.compareTo(b);
-        }
-    };
+    private static final Comparator<Comparable> ASCENDING = (a, b) -> a.compareTo(b);
 
     public static <T extends Comparable<? super T>> Comparator<T> ascending() {
         return cast(ASCENDING);
@@ -53,11 +45,7 @@ public class Comparators {
     }
 
     @SuppressWarnings("unchecked")
-    private static final Comparator<Comparable> DESCENDING = new Comparator<Comparable>() {
-        public int compare(Comparable a, Comparable b) {
-            return b.compareTo(a);
-        }
-    };
+    private static final Comparator<Comparable> DESCENDING = (a, b) -> b.compareTo(a);
 
     public static <T extends Comparable<? super T>> Comparator<T> descending() {
         return cast(DESCENDING);

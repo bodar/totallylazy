@@ -9,12 +9,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Closeables {
     public static <T extends Closeable, R> Function1<T, R> closeAfter(final Function1<? super T, R> callable) {
-        return new Function1<T, R>() {
-            @Override
-            public R call(T t) throws Exception {
-                return using(t, callable);
-            }
-        };
+        return t -> using(t, callable);
     }
 
     public static <T> T safeClose(final T t) {
