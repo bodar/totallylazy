@@ -1,6 +1,25 @@
 package com.googlecode.totallylazy;
 
-public interface Monoid<T> extends ReducerCombiner<T, T>, Associative<T> {
+public interface Monoid<T> extends Combiner<T, T>, Associative<T> {
+    @Override
+    default T combine(T a, T b) throws Exception {
+        return call(a, b);
+    }
+
+    static <T> Monoid<T> monoid(T identity, Binary<T> binary){
+        return new Monoid<T>() {
+            @Override
+            public T call(T t, T t2) throws Exception {
+                return binary.call(t, t2);
+            }
+
+            @Override
+            public T identity() {
+                return identity;
+            }
+        };
+    }
+
     class functions {
         public static <A, B> CombinerFunction<Pair<A, B>> pair(final Monoid<A> aMonoid, final Monoid<B> bMonoid) {
             return new CombinerFunction<Pair<A, B>>() {
