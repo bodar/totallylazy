@@ -1,14 +1,13 @@
 package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Binary;
-import com.googlecode.totallylazy.BinaryFunction;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.Unary;
+import com.googlecode.totallylazy.UnaryFunction;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -145,7 +144,7 @@ public abstract class Parser<A> implements Parse<A> {
                 foldRight(pair.first(), pair.second(), (p, a) -> p.second().call(p.first(), a)));
     }
 
-    public Parser<A> prefix(Parser<? extends Unary<A>> op){
+    public Parser<A> prefix(Parser<? extends UnaryFunction<A>> op){
         return op.many().then(this).map(pair ->
                 foldLeft(pair.first(), pair.second(), (a, p) -> p.call(a) ));
     }

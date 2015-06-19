@@ -1,4 +1,4 @@
 package com.googlecode.totallylazy;
 
-public abstract class UnaryFunction<T> implements Function1<T,T>, Unary<T> {
+public interface UnaryFunction<T> extends Function1<T, T> {
 }

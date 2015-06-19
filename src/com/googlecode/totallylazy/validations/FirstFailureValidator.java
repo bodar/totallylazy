@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
+import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.Predicates.not;
@@ -18,7 +19,7 @@ public class FirstFailureValidator<T> extends LogicalValidator<T> {
     @Override
     public ValidationResult validate(T instance) {
         return validators.map(validateAgainst(instance)).
-                find(not(succeeded())).
+                find(Predicates.not(succeeded())).
                 getOrElse(pass());
     }
 

@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.Monoid;
 import com.googlecode.totallylazy.Reducer;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
-import com.googlecode.totallylazy.Unary;
+import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.numbers.Integers;
 import org.junit.Test;
@@ -78,7 +78,7 @@ public class SelectionTest {
         return new Aggregate<>(keyword, reducer);
     }
 
-    interface Projection<T> extends Monoid<T>, Unary<T> {
+    interface Projection<T> extends Monoid<T>, UnaryFunction<T> {
         @Override
         default T call(T t) throws Exception {
             return call(identity(), t);

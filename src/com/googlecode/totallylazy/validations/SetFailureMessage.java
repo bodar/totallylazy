@@ -30,12 +30,9 @@ public class SetFailureMessage<T> extends LogicalValidator<T> {
     }
 
     private static <T> UnaryFunction<Pair<String, Sequence<String>>> overrideMessages(final T instance, final Function1<T, String> messageBuilder) {
-        return new UnaryFunction<Pair<String, Sequence<String>>>() {
-            @Override
-            public Pair<String, Sequence<String>> call(Pair<String, Sequence<String>> keyAndMessages) throws Exception {
-                String message = Callers.call(messageBuilder, instance);
-                return pair(keyAndMessages.first(), keyAndMessages.second().map(returns1(message)));
-            }
+        return keyAndMessages -> {
+            String message1 = Callers.call(messageBuilder, instance);
+            return pair(keyAndMessages.first(), keyAndMessages.second().map(returns1(message1)));
         };
     }
 
