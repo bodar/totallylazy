@@ -1,21 +1,14 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Bytes;
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
+import com.googlecode.totallylazy.reflection.Asm;
 import net.sf.cglib.proxy.InvocationHandler;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Fields.fields;
 import static com.googlecode.totallylazy.Fields.name;
@@ -72,53 +65,4 @@ public abstract class FieldOn<T, S> implements Function1<T, S>, InvocationHandle
         throw new UnsupportedOperationException("Please use CallOn for method invocation");
     }
 
-    private static class Asm {
-        public static ClassNode classNode(final Class<?> aClass) {
-            return classNode(Bytes.bytes(aClass));
-        }
-
-        public static ClassNode classNode(final byte[] bytes) {
-            ClassReader reader = new ClassReader(bytes);
-            ClassNode classNode = new ClassNode();
-            reader.accept(classNode, 0);
-            return classNode;
-        }
-
-        @SuppressWarnings("unchecked")
-        public static Sequence<AbstractInsnNode> instructions(MethodNode method) {
-            return instructions(method.instructions);
-        }
-
-        @SuppressWarnings("unchecked")
-        public static Sequence<AbstractInsnNode> instructions(final InsnList instructions) {
-            return new Sequence<AbstractInsnNode>() {
-                @Override
-                public Iterator<AbstractInsnNode> iterator() {
-                    return new InsnIterator(instructions);
-                }
-            };
-        }
-
-        public static class InsnIterator extends ReadOnlyIterator<AbstractInsnNode> {
-            private final InsnList list;
-            private int index = 0;
-
-            public InsnIterator(final InsnList list) {
-                this.list = list;
-            }
-
-            public final boolean hasNext() {
-                return index < list.size();
-            }
-
-            public final AbstractInsnNode next() {
-                if(hasNext()){
-                    return list.get(index++);
-                }
-                throw new NoSuchElementException();
-            }
-        }
-
-
-    }
 }
