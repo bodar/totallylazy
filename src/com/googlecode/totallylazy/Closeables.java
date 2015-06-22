@@ -136,38 +136,18 @@ public class Closeables {
     }
 
     public static <T> Block<T> reflectiveClose() {
-        return new Block<T>() {
-            @Override
-            protected void execute(T instanceWithCloseMethod) throws Exception {
-                close(instanceWithCloseMethod);
-            }
-        };
+        return Closeables::close;
     }
 
     public static Block<Closeable> close() {
-        return new Block<Closeable>() {
-            @Override
-            protected void execute(Closeable closeable) throws Exception {
-                close(closeable);
-            }
-        };
+        return Closeables::close;
     }
 
     public static Block<Closeable> safeClose() {
-        return new Block<Closeable>() {
-            @Override
-            protected void execute(Closeable closeable) throws Exception {
-                safeClose(closeable);
-            }
-        };
+        return Closeables::safeClose;
     }
 
     public static <T> Block<T> reflectiveSafeClose() {
-        return new Block<T>() {
-            @Override
-            protected void execute(T closeable) throws Exception {
-                safeClose(closeable);
-            }
-        };
+        return Closeables::safeClose;
     }
 }

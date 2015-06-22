@@ -97,12 +97,7 @@ public class Exceptions {
     }
 
     public static Block<PrintWriter> printStackTrace(final Throwable e) {
-        return new Block<PrintWriter>() {
-            @Override
-            protected void execute(PrintWriter writer) throws Exception {
-                e.printStackTrace(writer);
-            }
-        };
+        return e::printStackTrace;
     }
 
     public static <A, B> Function1<A, Either<Exception, B>> either(final Function1<? super A, ? extends B> callable) {

@@ -1,11 +1,16 @@
 package com.googlecode.totallylazy;
 
-public abstract class Block<T> implements Function1<T, Void> {
+public interface Block<T> extends Function1<T, Void> {
     @Override
-    public Void call(T t) throws Exception {
+    default Void call(T t) throws Exception {
         execute(t);
         return Runnables.VOID;
     }
 
-    protected abstract void execute(T t) throws Exception;
+    void execute(T t) throws Exception;
+
+    // Use with lambdas
+    static <T> Block<T> block(Block<? super T> block){
+        return block::call;
+    }
 }

@@ -212,12 +212,7 @@ public class Files {
     }
 
     public static Block<InputStream> write(final File output) {
-        return new Block<InputStream>() {
-            @Override
-            protected void execute(InputStream inputStream) throws Exception {
-                Streams.copyAndClose(inputStream, new FileOutputStream(output));
-            }
-        };
+        return inputStream -> Streams.copyAndClose(inputStream, new FileOutputStream(output));
     }
 
     public static Function1<String, File> asFile() {

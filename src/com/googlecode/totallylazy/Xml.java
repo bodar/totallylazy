@@ -185,12 +185,7 @@ public class Xml {
     }
 
     public static Block<Element> removeAttribute(final String name) {
-        return new Block<Element>() {
-            @Override
-            protected void execute(Element element) throws Exception {
-                element.removeAttribute(name);
-            }
-        };
+        return element -> element.removeAttribute(name);
     }
 
     public static Function1<Node, String> contents() {
