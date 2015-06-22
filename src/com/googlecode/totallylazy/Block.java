@@ -10,7 +10,7 @@ public interface Block<T> extends Function1<T, Void> {
     void execute(T t) throws Exception;
 
     // Use with lambdas
-    static <T> Block<T> block(Block<? super T> block){
-        return block::call;
+    static <T> Block<T> block(Block<T> block){
+        return block;
     }
 }
