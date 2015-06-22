@@ -511,12 +511,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         }
 
         public static <T> CurriedFunction2<Iterable<? extends T>, Iterable<? extends T>, Sequence<T>> join() {
-            return new CurriedFunction2<Iterable<? extends T>, Iterable<? extends T>, Sequence<T>>() {
-                @Override
-                public Sequence<T> call(Iterable<? extends T> a, Iterable<? extends T> b) throws Exception {
-                    return sequence(Iterators.functions.<T>join().call(a, b));
-                }
-            };
+            return (a, b) -> sequence(Iterators.functions.<T>join().call(a, b));
         }
     }
 }

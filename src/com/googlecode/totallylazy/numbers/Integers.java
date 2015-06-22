@@ -39,12 +39,7 @@ public class Integers {
         public static final Function1<Integer, Integer> increment = add(1);
 
         public static Function1<Integer, Integer> add(final int value) {
-            return new Function1<Integer, Integer>() {
-                @Override
-                public Integer call(Integer i) throws Exception {
-                    return i + value;
-                }
-            };
+            return i -> i + value;
         }
 
         public static LogicalPredicate<Integer> lessThanOrEqualTo(final int end) {

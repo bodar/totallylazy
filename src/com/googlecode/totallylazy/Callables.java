@@ -26,20 +26,14 @@ public final class Callables {
     }
 
     public static <T> UnaryFunction<T> nullGuard(final Function1<? super T, ? extends T> callable) {
-        return new UnaryFunction<T>() {
-            public T call(T o) throws Exception {
-                if (o == null) return null;
-                return callable.call(o);
-            }
+        return o -> {
+            if (o == null) return null;
+            return callable.call(o);
         };
     }
 
     public static <T> UnaryFunction<Sequence<T>> reduceAndShift(final Function2<? super T, ? super T, ? extends T> action) {
-        return new UnaryFunction<Sequence<T>>() {
-            public final Sequence<T> call(final Sequence<T> values) throws Exception {
-                return values.tail().append(values.reduceLeft(action));
-            }
-        };
+        return values -> values.tail().append(values.reduceLeft(action));
     }
 
     public static <T, S> Function1<T, S> cast(final Class<? extends S> aClass) {
@@ -85,11 +79,7 @@ public final class Callables {
 
 
     public static <T> UnaryFunction<Sequence<T>> realise() {
-        return new UnaryFunction<Sequence<T>>() {
-            public final Sequence<T> call(final Sequence<T> sequence) throws Exception {
-                return sequence.realise();
-            }
-        };
+        return Sequence<T>::realise;
     }
 
     public static <T> Function1<First<T>, T> first(Class<T> aClass) {
@@ -361,11 +351,6 @@ public final class Callables {
     }
 
     public static <T> UnaryFunction<T> when(final Predicate<? super T> predicate, final Function1<? super T, ? extends T> callable) {
-        return new UnaryFunction<T>() {
-            @Override
-            public T call(T value) throws Exception {
-                return predicate.matches(value) ? callable.call(value) : value;
-            }
-        };
+        return value -> predicate.matches(value) ? callable.call(value) : value;
     }
 }

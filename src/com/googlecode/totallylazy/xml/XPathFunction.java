@@ -9,12 +9,7 @@ public @interface XPathFunction {
 
     class functions {
         public static Function1<XPathFunction, String> value() {
-            return new Function1<XPathFunction, String>() {
-                @Override
-                public String call(XPathFunction annotation) throws Exception {
-                    return annotation.value();
-                }
-            };
+            return XPathFunction::value;
         }
     }
 }

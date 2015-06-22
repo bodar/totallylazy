@@ -33,22 +33,12 @@ public class ZipSource implements Sources {
     }
 
     private static UnaryFunction<Source> removeFolderFromName(final String folder) {
-        return new UnaryFunction<Source>() {
-            @Override
-            public Source call(Source source) throws Exception {
-                return new Source(source.name.replaceFirst("^" + folder, ""), source.modified, source.input, source.isDirectory);
-            }
-        };
+        return source -> new Source(source.name.replaceFirst("^" + folder, ""), source.modified, source.input, source.isDirectory);
     }
 
     @Override
     public Sequence<Source> sources() {
-        return Zip.entries(in).map(new Function1<ZipEntry, Source>() {
-            @Override
-            public Source call(ZipEntry zipEntry) throws Exception {
-                return new Source(zipEntry.getName(), new Date(zipEntry.getTime()), new IgnoreCloseInputStream(), zipEntry.isDirectory());
-            }
-        });
+        return Zip.entries(in).map(zipEntry -> new Source(zipEntry.getName(), new Date(zipEntry.getTime()), new IgnoreCloseInputStream(), zipEntry.isDirectory()));
     }
 
     @Override

@@ -336,12 +336,7 @@ public class Sequences {
     }
 
     public static <T, S> CurriedFunction2<Sequence<T>, Function2<S, T, S>, S> reduce() {
-        return new CurriedFunction2<Sequence<T>, Function2<S, T, S>, S>() {
-            @Override
-            public S call(Sequence<T> sequence, Function2<S, T, S> callable) throws Exception {
-                return sequence.reduce(callable);
-            }
-        };
+        return (sequence, callable) -> sequence.reduce(callable);
     }
 
     public static <T, S> Function1<Sequence<T>, S> reduce(final Function2<S, T, S> callable) {
@@ -536,12 +531,7 @@ public class Sequences {
     }
 
     public static <T> Function1<Iterable<? extends T>, Sequence<T>> cons(final T value) {
-        return new Function1<Iterable<? extends T>, Sequence<T>>() {
-            @Override
-            public Sequence<T> call(Iterable<? extends T> values) throws Exception {
-                return cons(value, sequence(values));
-            }
-        };
+        return values -> cons(value, sequence(values));
     }
 
     public static <T> Sequence<T> memorise(final Iterable<? extends T> iterable) {
@@ -698,11 +688,7 @@ public class Sequences {
     }
 
     public static <T> Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitAt(final Number index) {
-        return new Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
-            public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
-                return sequence.splitAt(index);
-            }
-        };
+        return sequence -> sequence.splitAt(index);
     }
 
     public static <T> Pair<Sequence<T>, Sequence<T>> splitWhen(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
@@ -710,11 +696,7 @@ public class Sequences {
     }
 
     public static <T> Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitWhen(final Predicate<? super T> predicate) {
-        return new Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
-            public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
-                return sequence.splitWhen(predicate);
-            }
-        };
+        return sequence -> sequence.splitWhen(predicate);
     }
 
     public static <T> Pair<Sequence<T>, Sequence<T>> splitOn(final Iterable<? extends T> iterable, final T instance) {
@@ -722,11 +704,7 @@ public class Sequences {
     }
 
     public static <T> Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>> splitOn(final T instance) {
-        return new Function1<Sequence<T>, Pair<Sequence<T>, Sequence<T>>>() {
-            public Pair<Sequence<T>, Sequence<T>> call(Sequence<T> sequence) throws Exception {
-                return sequence.splitOn(instance);
-            }
-        };
+        return sequence -> sequence.splitOn(instance);
     }
 
     public static <T> Pair<Sequence<T>, Sequence<T>> span(final Iterable<? extends T> iterable, final Predicate<? super T> predicate) {
@@ -747,11 +725,7 @@ public class Sequences {
     }
 
     public static <F, S> Function1<Pair<F, S>, Pair<F, S>> applyToSecond(final Function1<S, Pair<F, S>> callable) {
-        return new Function1<Pair<F, S>, Pair<F, S>>() {
-            public Pair<F, S> call(Pair<F, S> pair) throws Exception {
-                return callable.call(pair.second());
-            }
-        };
+        return pair -> callable.call(pair.second());
     }
 
     public static <T> Sequence<T> shuffle(final Iterable<? extends T> iterable) {
@@ -809,12 +783,7 @@ public class Sequences {
     }
 
     public static <A, B> Sequence<Pair<A, B>> cartesianProduct(final Iterable<? extends A> a, final Iterable<? extends B> b) {
-        return sequence(b).flatMap(new Function1<B, Sequence<Pair<A, B>>>() {
-            @Override
-            public Sequence<Pair<A, B>> call(final B b) throws Exception {
-                return sequence(a).map(Pair.<A, B>pair()).map(Callables.<B, Pair<A, B>>callWith(b));
-            }
-        });
+        return sequence(b).flatMap(b1 -> sequence(a).map(Pair.<A, B>pair()).map(Callables.<B, Pair<A, B>>callWith(b1)));
     }
 
     public static <T> Sequence<Sequence<T>> windowed(final Iterable<? extends T> sequence, final int size) {
@@ -844,12 +813,7 @@ public class Sequences {
     }
 
     public static <A, B> CurriedFunction2<Iterable<? extends A>, Function1<? super A, ? extends B>, Sequence<B>> map() {
-        return new CurriedFunction2<Iterable<? extends A>, Function1<? super A, ? extends B>, Sequence<B>>() {
-            @Override
-            public Sequence<B> call(Iterable<? extends A> as, Function1<? super A, ? extends B> callable) throws Exception {
-                return sequence(as).map(callable);
-            }
-        };
+        return (as, callable) -> sequence(as).map(callable);
     }
 
     public static <T> Option<Sequence<T>> flatOption(Iterable<? extends T> iterable) {
@@ -857,21 +821,11 @@ public class Sequences {
     }
 
     public static Function1<Iterable<?>, String> toString(final String seperator) {
-        return new Function1<Iterable<?>, String>() {
-            @Override
-            public String call(Iterable<?> objects) throws Exception {
-                return Sequences.toString(objects, seperator);
-            }
-        };
+        return objects -> toString(objects, seperator);
     }
 
     public static Function1<Iterable<?>, String> toString(final String start, final String seperator, final String end) {
-        return new Function1<Iterable<?>, String>() {
-            @Override
-            public String call(Iterable<?> objects) throws Exception {
-                return Sequences.toString(objects, start, seperator, end);
-            }
-        };
+        return objects -> toString(objects, start, seperator, end);
     }
 
     public static <T, C extends Segment<T>> C joinTo(Iterable<? extends T> iterable, C rest) {

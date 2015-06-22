@@ -123,30 +123,15 @@ public class ValidationResult {
     public static class functions {
 
         public static Function1<ValidationResult, Sequence<String>> allMessages(){
-            return new Function1<ValidationResult, Sequence<String>>() {
-                @Override
-                public Sequence<String> call(ValidationResult result) throws Exception {
-                    return result.allMessages();
-                }
-            };
+            return ValidationResult::allMessages;
         }
 
         public static Function1<ValidationResult, Sequence<String>> messages(final String key){
-            return new Function1<ValidationResult, Sequence<String>>() {
-                @Override
-                public Sequence<String> call(ValidationResult result) throws Exception {
-                    return result.messages(key);
-                }
-            };
+            return result -> result.messages(key);
         }
 
         public static Function1<ValidationResult, Sequence<String>> messages(final Object key){
-            return new Function1<ValidationResult, Sequence<String>>() {
-                @Override
-                public Sequence<String> call(ValidationResult result) throws Exception {
-                    return result.messages(key);
-                }
-            };
+            return result -> result.messages(key);
         }
 
         public static LogicalPredicate<ValidationResult> succeeded() {
@@ -158,48 +143,23 @@ public class ValidationResult {
             };
         }
         public static Function1<ValidationResult, ValidationResult> assignToKey(final String key) {
-            return new Function1<ValidationResult, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult) throws Exception {
-                    return validationResult.assignToKey(key);
-                }
-            };
+            return validationResult -> validationResult.assignToKey(key);
         }
 
         public static CurriedFunction2<ValidationResult, Iterable<String>, ValidationResult> addWithKey(final String key) {
-            return new CurriedFunction2<ValidationResult, Iterable<String>, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult, Iterable<String> messages) throws Exception {
-                    return validationResult.add(key, messages);
-                }
-            };
+            return (validationResult, messages1) -> validationResult.add(key, messages1);
         }
 
         public static CurriedFunction2<ValidationResult, Pair<String, String>, ValidationResult> addSingleMessage() {
-            return new CurriedFunction2<ValidationResult, Pair<String, String>, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult, Pair<String, String> keyAndMessage) throws Exception {
-                    return validationResult.add(keyAndMessage.first(), keyAndMessage.second());
-                }
-            };
+            return (validationResult, keyAndMessage) -> validationResult.add(keyAndMessage.first(), keyAndMessage.second());
         }
 
         public static CurriedFunction2<ValidationResult, String, ValidationResult> addSingleMessageWithKey(final String key) {
-            return new CurriedFunction2<ValidationResult, String, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult, String message) throws Exception {
-                    return validationResult.add(key, message);
-                }
-            };
+            return (validationResult, message) -> validationResult.add(key, message);
         }
 
         public static CurriedFunction2<ValidationResult, Pair<String, ? extends Iterable<String>>, ValidationResult> add() {
-            return new CurriedFunction2<ValidationResult, Pair<String, ? extends Iterable<String>>, ValidationResult>() {
-                @Override
-                public ValidationResult call(ValidationResult validationResult, Pair<String, ? extends Iterable<String>> keyAndMessages) throws Exception {
-                    return validationResult.add(keyAndMessages.first(), keyAndMessages.second());
-                }
-            };
+            return (validationResult, keyAndMessages) -> validationResult.add(keyAndMessages.first(), keyAndMessages.second());
         }
 
         public static CombinerFunction<ValidationResult> merge() {

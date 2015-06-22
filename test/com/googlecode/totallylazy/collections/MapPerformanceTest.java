@@ -124,12 +124,7 @@ public class MapPerformanceTest {
 
     @SuppressWarnings("unchecked")
     private Callable<Object> persistentGet(final PersistentMap<Integer, Integer> map) {
-        return new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                return map.lookup(keys().head());
-            }
-        };
+        return () -> map.lookup(keys().head());
     }
 
     private Sequence<Integer> keys() {
@@ -138,12 +133,7 @@ public class MapPerformanceTest {
 
     @SuppressWarnings("unchecked")
     private Callable<Object> mutableGet(final Map<Integer, Integer> mutable) {
-        return new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                return Maps.get(mutable, keys().head());
-            }
-        };
+        return () -> Maps.get(mutable, keys().head());
     }
 
     private Map<Integer, Integer> createMutable(final Sequence<Integer> range, final Map<Integer, Integer> emptyMap) throws Exception {
@@ -152,22 +142,14 @@ public class MapPerformanceTest {
 
     private Map<Integer, Integer> createMutable(Sequence<Integer> range, Map<Integer, Integer> emptyMap, String name) {
         System.out.print(name + ":\t");
-        return range.fold(emptyMap, new Function2<Map<Integer, Integer>, Integer, Map<Integer, Integer>>() {
-            @Override
-            public Map<Integer, Integer> call(Map<Integer, Integer> map, Integer integer) throws Exception {
-                map.put(integer, integer);
-                return map;
-            }
+        return range.fold(emptyMap, (map, integer) -> {
+            map.put(integer, integer);
+            return map;
         });
     }
 
     private Callable<PersistentMap<Integer, Integer>> removePersistent(final PersistentMap<Integer, Integer> persistent) {
-        return new Callable<PersistentMap<Integer, Integer>>() {
-            @Override
-            public PersistentMap<Integer, Integer> call() throws Exception {
-                return persistent.delete(keys().head());
-            }
-        };
+        return () -> persistent.delete(keys().head());
     }
 
     public static TimeReport time(int numberOfCalls, Callable<?> callable, final TimeReport report) {
@@ -187,50 +169,29 @@ public class MapPerformanceTest {
     }
 
     private Function1<Integer, Integer> remove(final Map<Integer, Integer> map) {
-        return new Function1<Integer, Integer>() {
-            @Override
-            public Integer call(Integer integer) throws Exception {
-                return map.remove(integer);
-            }
-        };
+        return map::remove;
     }
 
     private Function1<Integer, Integer> putValueBack(final Map<Integer, Integer> map) {
-        return new Function1<Integer, Integer>() {
-            @Override
-            public Integer call(Integer key) throws Exception {
-                return map.put(key, key);
-            }
-        };
+        return key -> map.put(key, key);
     }
 
     private Function0<Integer> mutableRemove(final Map<Integer, Integer> map) {
-        return new Function0<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                return map.remove(keys().head());
-            }
-        };
+        return () -> map.remove(keys().head());
     }
 
     private Callable<PersistentMap<Integer, Integer>> persistentPut(final PersistentMap<Integer, Integer> avlTree) {
-        return new Callable<PersistentMap<Integer, Integer>>() {
-            @Override
-            public PersistentMap<Integer, Integer> call() throws Exception {
-                Integer head = keys().head();
-                return avlTree.insert(head, head);
-            }
+        return () -> {
+            Integer head = keys().head();
+            return avlTree.insert(head, head);
         };
     }
 
     private Function0<Integer> mutablePut(final Map<Integer, Integer> map) {
-        return new Function0<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                Integer head = SIZE + 1;
-                map.put(head, head);
-                return head;
-            }
+        return () -> {
+            Integer head = SIZE + 1;
+            map.put(head, head);
+            return head;
         };
     }
 

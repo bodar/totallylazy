@@ -22,12 +22,7 @@ public class Maps {
     }
 
     public static <K, V> Function1<Map<K, V>, Sequence<Map.Entry<K, V>>> entries() {
-        return new Function1<Map<K, V>, Sequence<Map.Entry<K, V>>>() {
-            @Override
-            public Sequence<Map.Entry<K, V>> call(Map<K, V> map) throws Exception {
-                return entries(map);
-            }
-        };
+        return Maps::entries;
     }
 
     public static <K, V> Sequence<Map.Entry<K, V>> entries(final Map<K, V> map) {
@@ -194,14 +189,12 @@ public class Maps {
     }
 
     public static <K, V> CurriedFunction2<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap() {
-        return new CurriedFunction2<Map<K, List<V>>, Pair<? extends K, ? extends V>, Map<K, List<V>>>() {
-            public Map<K, List<V>> call(Map<K, List<V>> map, Pair<? extends K, ? extends V> pair) throws Exception {
-                if (!map.containsKey(pair.first())) {
-                    map.put(pair.first(), new ArrayList<V>());
-                }
-                map.get(pair.first()).add(pair.second());
-                return map;
+        return (map, pair) -> {
+            if (!map.containsKey(pair.first())) {
+                map.put(pair.first(), new ArrayList<V>());
             }
+            map.get(pair.first()).add(pair.second());
+            return map;
         };
     }
 
@@ -221,11 +214,7 @@ public class Maps {
     }
 
     public static <K, V> Function1<Pair<K, V>, Map.Entry<K, V>> pairToEntry() {
-        return new Function1<Pair<K, V>, Map.Entry<K, V>>() {
-            public final Map.Entry<K, V> call(final Pair<K, V> pair) throws Exception {
-                return pair;
-            }
-        };
+        return pair -> pair;
     }
 
     public static <K, V> Function1<Pair<K, V>, Map.Entry<K, V>> pairToEntry(final Class<K> keyClass, final Class<V> valueClass) {
@@ -233,11 +222,7 @@ public class Maps {
     }
 
     public static <K, V> Function1<Map.Entry<K, V>, Pair<K, V>> entryToPair() {
-        return new Function1<Map.Entry<K, V>, Pair<K, V>>() {
-            public final Pair<K, V> call(final Map.Entry<K, V> entry) throws Exception {
-                return pair(entry.getKey(), entry.getValue());
-            }
-        };
+        return entry -> pair(entry.getKey(), entry.getValue());
     }
 
     public static <K, V> Function1<Map.Entry<K, V>, Pair<K, V>> entryToPair(final Class<K> keyClass, final Class<V> valueClass) {
@@ -286,12 +271,7 @@ public class Maps {
 
     public static class functions {
         public static <K, V> CurriedFunction2<Map<K, V>, K, V> get() {
-            return new CurriedFunction2<Map<K, V>, K, V>() {
-                @Override
-                public V call(Map<K, V> map, K key) throws Exception {
-                    return map.get(key);
-                }
-            };
+            return Map::get;
         }
 
         public static <K, V> Function1<K, V> getFrom(final Map<K, V> map) {

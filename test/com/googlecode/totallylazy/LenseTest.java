@@ -65,26 +65,10 @@ public class LenseTest {
         }
 
         public static class functions {
-            public static final Function1<Person, Number> age = new Function1<Person, Number>() {
-                public Number call(Person person) throws Exception {
-                    return person.age;
-                }
-            };
-            public static final CurriedFunction2<Number, Person, Person> setAge = new CurriedFunction2<Number, Person, Person>() {
-                public Person call(Number newAge, Person person) throws Exception {
-                    return new Person(person.name, newAge, person.address);
-                }
-            };
-            public static final Function1<Person, Address> address = new Function1<Person, Address>() {
-                public Address call(Person person) throws Exception {
-                    return person.address;
-                }
-            };
-            public static final CurriedFunction2<Address, Person, Person> setAddress = new CurriedFunction2<Address, Person, Person>() {
-                public Person call(Address newAddress, Person person) throws Exception {
-                    return new Person(person.name, person.age, newAddress);
-                }
-            };
+            public static final Function1<Person, Number> age = person -> person.age;
+            public static final CurriedFunction2<Number, Person, Person> setAge = (newAge, person) -> new Person(person.name, newAge, person.address);
+            public static final Function1<Person, Address> address = person -> person.address;
+            public static final CurriedFunction2<Address, Person, Person> setAddress = (newAddress, person) -> new Person(person.name, person.age, newAddress);
         }
     }
 
@@ -106,16 +90,8 @@ public class LenseTest {
         }
 
         public static class functions {
-            public static final Function1<Address, Postcode> postcode = new Function1<Address, Postcode>() {
-                public Postcode call(Address address) throws Exception {
-                    return address.postcode;
-                }
-            };
-            public static final CurriedFunction2<Postcode, Address, Address> setPostcode = new CurriedFunction2<Postcode, Address, Address>() {
-                public Address call(Postcode newPostcode, Address address) throws Exception {
-                    return new Address(address.street, newPostcode);
-                }
-            };
+            public static final Function1<Address, Postcode> postcode = address -> address.postcode;
+            public static final CurriedFunction2<Postcode, Address, Address> setPostcode = (newPostcode, address) -> new Address(address.street, newPostcode);
         }
     }
 

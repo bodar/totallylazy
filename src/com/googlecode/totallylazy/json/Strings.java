@@ -47,17 +47,9 @@ public class Strings {
     }
 
     public static class functions {
-        public static Function1<Character, String> escape = new Function1<Character, String>() {
-            public String call(Character character) throws Exception {
-                return Strings.escape(character);
-            }
-        };
+        public static Function1<Character, String> escape = Strings::escape;
 
-        public static Function1<String, String> unescape = new Function1<String, String>() {
-            public String call(String escaped) throws Exception {
-                return Strings.unescape(escaped);
-            }
-        };
+        public static Function1<String, String> unescape = Strings::unescape;
     }
 }
 

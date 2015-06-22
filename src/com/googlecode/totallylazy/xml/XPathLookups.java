@@ -23,12 +23,7 @@ public class XPathLookups {
     }
 
     private static Function1<Node, Text> lookup(final Function1<String, String> data) {
-        return new Function1<Node, Text>() {
-            @Override
-            public Text call(Node node) throws Exception {
-                return XPathFunctions.createText(node, data.call(node.getTextContent()));
-            }
-        };
+        return node -> XPathFunctions.createText(node, data.call(node.getTextContent()));
     }
 
     public static void setLookup(String name, Function1<String, String> lookup){

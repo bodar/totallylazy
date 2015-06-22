@@ -41,12 +41,7 @@ public class Not<T> extends LogicalPredicate<T> {
 
     public static class functions {
         public static <T> Function1<Not<T>, Predicate<T>> predicate() {
-            return new Function1<Not<T>, Predicate<T>>() {
-                @Override
-                public Predicate<T> call(Not<T> not) throws Exception {
-                    return not.predicate();
-                }
-            };
+            return not -> not.predicate();
         }
     }
 }

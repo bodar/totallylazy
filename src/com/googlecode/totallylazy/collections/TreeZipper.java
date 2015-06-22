@@ -103,12 +103,9 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
 
     @Override
     public int index() {
-        return focus.indexOf(value()) + breadcrumbs.filter(where(direction, is(right))).fold(0, new CurriedFunction2<Integer, Breadcrumb<K, V>, Integer>() {
-            @Override
-            public Integer call(Integer integer, Breadcrumb<K, V> breadcrumb) throws Exception {
-                return integer + breadcrumb.other.size() + 1;
-            }
-        });
+        return focus.indexOf(value()) + breadcrumbs.
+                filter(where(direction, is(right))).
+                fold(0, (integer, breadcrumb) -> integer + breadcrumb.other.size() + 1);
     }
 
     @Override
@@ -211,12 +208,7 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
     }
 
     public static class functions extends TreeMap.functions {
-        public static Function1<Breadcrumb<?, ?>, Direction> direction = new Function1<Breadcrumb<?, ?>, Direction>() {
-            @Override
-            public Direction call(Breadcrumb<?, ?> breadcrumb) throws Exception {
-                return breadcrumb.direction;
-            }
-        };
+        public static Function1<Breadcrumb<?, ?>, Direction> direction = breadcrumb -> breadcrumb.direction;
     }
 
 }

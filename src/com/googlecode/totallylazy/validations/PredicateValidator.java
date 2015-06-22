@@ -45,12 +45,7 @@ public class PredicateValidator<T> extends LogicalValidator<T> {
         }
 
         public static <T> Function1<Predicate<? super T>, Validator<T>> predicateAsValidator() {
-            return new Function1<Predicate<? super T>, Validator<T>>() {
-                @Override
-                public Validator<T> call(Predicate<? super T> predicate) throws Exception {
-                    return validatePredicate(predicate);
-                }
-            };
+            return constructors::validatePredicate;
         }
     }
 }

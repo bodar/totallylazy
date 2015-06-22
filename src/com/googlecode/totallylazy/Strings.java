@@ -36,11 +36,7 @@ public class Strings {
     public static final CombinerFunction<String> join = JoinString.instance;
 
     public static Function1<String, Boolean> asBoolean() {
-        return new Function1<String, Boolean>() {
-            public Boolean call(String value) throws Exception {
-                return Boolean.parseBoolean(value);
-            }
-        };
+        return Boolean::parseBoolean;
     }
 
     public static Sequence<String> lines(File file) {
@@ -58,51 +54,27 @@ public class Strings {
     public static Function0<String> readLine(final BufferedReader reader) { return Streams.readLine(reader); }
 
     public static Function1<String, String> toLowerCase() {
-        return new Function1<String, String>() {
-            public String call(String value) throws Exception {
-                return value.toLowerCase();
-            }
-        };
+        return String::toLowerCase;
     }
 
     public static Function1<String, String> replace(final char oldChar, final char newChar) {
-        return new Function1<String, String>() {
-            public String call(String value) throws Exception {
-                return value.replace(oldChar, newChar);
-            }
-        };
+        return value -> value.replace(oldChar, newChar);
     }
 
     public static Function1<String, String> replace(final CharSequence target, final CharSequence replacement) {
-        return new Function1<String, String>() {
-            public String call(String value) throws Exception {
-                return value.replace(target, replacement);
-            }
-        };
+        return value -> value.replace(target, replacement);
     }
 
     public static Function1<String, String> replaceAll(final String regex, final String replacement) {
-        return new Function1<String, String>() {
-            public String call(String value) throws Exception {
-                return value.replaceAll(regex, replacement);
-            }
-        };
+        return value -> value.replaceAll(regex, replacement);
     }
 
     public static Function1<String, String> replaceFirst(final String regex, final String replacement) {
-        return new Function1<String, String>() {
-            public String call(String value) throws Exception {
-                return value.replaceFirst(regex, replacement);
-            }
-        };
+        return value -> value.replaceFirst(regex, replacement);
     }
 
     public static Function1<String, String> toUpperCase() {
-        return new Function1<String, String>() {
-            public String call(String value) throws Exception {
-                return value.toUpperCase();
-            }
-        };
+        return String::toUpperCase;
     }
 
     public static LogicalPredicate<String> startsWith(final String value) {
@@ -110,11 +82,7 @@ public class Strings {
     }
 
     public static Function1<String, Predicate<String>> startsWith() {
-        return new Function1<String, Predicate<String>>() {
-            public Predicate<String> call(String value) throws Exception {
-                return startsWith(value);
-            }
-        };
+        return Strings::startsWith;
     }
 
     public static LogicalPredicate<String> startsWith(String first, String... rest) {
@@ -126,11 +94,7 @@ public class Strings {
     }
 
     public static Function1<String, Predicate<String>> endsWith() {
-        return new Function1<String, Predicate<String>>() {
-            public Predicate<String> call(String value) throws Exception {
-                return endsWith(value);
-            }
-        };
+        return Strings::endsWith;
     }
 
     public static LogicalPredicate<String> endsWith(String first, String... rest) {
@@ -142,11 +106,7 @@ public class Strings {
     }
 
     public static Function1<String, Predicate<String>> equalIgnoringCase() {
-        return new Function1<String, Predicate<String>>() {
-            public Predicate<String> call(String expected) throws Exception {
-                return equalIgnoringCase(expected);
-            }
-        };
+        return Strings::equalIgnoringCase;
     }
 
     public static LogicalPredicate<String> equalIgnoringCase(final String expected) {
@@ -247,69 +207,41 @@ public class Strings {
 
     public static String toString(final InputStream stream) {
         if (stream == null) return EMPTY;
-        return using(stream, new Function1<InputStream, String>() {
-            @Override
-            public String call(InputStream inputStream) throws Exception {
-                return Strings.toString(inputStreamReader(inputStream));
-            }
-        });
+        return using(stream, inputStream -> toString(inputStreamReader(inputStream)));
     }
 
     public static String toString(Reader reader) {
-        return using(reader, new Function1<Reader, String>() {
-            public String call(Reader reader) throws Exception {
-                StringBuilder builder = new StringBuilder();
-                char[] buffer = new char[512];
-                int read = reader.read(buffer);
-                while (read > 0) {
-                    builder.append(buffer, 0, read);
-                    read = reader.read(buffer);
-                }
-                return builder.toString();
+        return using(reader, reader1 -> {
+            StringBuilder builder = new StringBuilder();
+            char[] buffer = new char[512];
+            int read = reader1.read(buffer);
+            while (read > 0) {
+                builder.append(buffer, 0, read);
+                read = reader1.read(buffer);
             }
+            return builder.toString();
         });
     }
 
     public static Function1<Object, String> format(final String format) {
-        return new Function1<Object, String>() {
-            public String call(Object value) throws Exception {
-                return String.format(format, value);
-            }
-        };
+        return value -> String.format(format, value);
     }
 
     public static Function1<CharSequence, Sequence<Character>> toCharacters() {
-        return new Function1<CharSequence, Sequence<Character>>() {
-            public Sequence<Character> call(CharSequence value) throws Exception {
-                return characters(value);
-            }
-        };
+        return Sequences::characters;
     }
 
     public static Function1<String, String> reverse() {
-        return new Function1<String, String>() {
-            public String call(String value) throws Exception {
-                return reverse(value);
-            }
-        };
+        return Strings::reverse;
     }
 
     public static Function1<String, Sequence<String>> split(final String regex) {
         if (regex == null) throw new IllegalArgumentException("regex cannot be null");
-        return new Function1<String, Sequence<String>>() {
-            @Override
-            public Sequence<String> call(String s) throws Exception {
-                return sequence(s.split(regex));
-            }
-        };
+        return s -> sequence(s.split(regex));
     }
 
     public static Function1<String, String> substring(final int beginIndex, final int endIndex) {
-        return new Function1<String, String>() {
-            public String call(String value) throws Exception {
-                return substring(value, beginIndex, endIndex);
-            }
-        };
+        return value -> substring(value, beginIndex, endIndex);
     }
 
     public static String reverse(String original) {
@@ -336,22 +268,12 @@ public class Strings {
     }
 
     public static Function1<String, Character> characterAt(final int index) {
-        return new Function1<String, Character>() {
-            @Override
-            public Character call(String s) throws Exception {
-                return s.charAt(index);
-            }
-        };
+        return s -> s.charAt(index);
     }
 
 
     public static Function1<String, String> trim() {
-        return new Function1<String, String>() {
-            @Override
-            public String call(String value) throws Exception {
-                return value.trim();
-            }
-        };
+        return String::trim;
     }
 
     public static LogicalPredicate<String> palindrome = new LogicalPredicate<String>() {
@@ -378,11 +300,7 @@ public class Strings {
     public static Minimum.Function<String> minimum = Minimum.constructors.minimum((String) null);
 
     public static class functions {
-        public static CurriedFunction3<String, String, String, String> replaceAll = new CurriedFunction3<String, String, String, String>() {
-            @Override
-            public String call(String regex, String replacemenent, String source) throws Exception {
-                return Strings.replaceAll(regex, replacemenent).apply(source);
-            }
-        };
+        public static CurriedFunction3<String, String, String, String> replaceAll =
+                (regex, replacemenent, source) -> Strings.replaceAll(regex, replacemenent).apply(source);
     }
 }

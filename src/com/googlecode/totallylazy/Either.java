@@ -94,56 +94,31 @@ public abstract class Either<L, R> implements Iterable<R>, Value<Object>, Functo
 
     public static class functions {
         public static <L> Function1<Either<? extends L, ?>, L> left() {
-            return new Function1<Either<? extends L, ?>, L>() {
-                @Override
-                public L call(Either<? extends L, ?> either) throws Exception {
-                    return either.left();
-                }
-            };
+            return either -> either.left();
         }
 
         public static <R> Function1<Either<?, ? extends R>, R> right() {
-            return new Function1<Either<?, ? extends R>, R>() {
-                @Override
-                public R call(Either<?, ? extends R> either) throws Exception {
-                    return either.right();
-                }
-            };
+            return either -> either.right();
         }
 
         public static <L> Function1<Either<? extends L, ?>, Option<? extends L>> leftOption() {
-            return new Function1<Either<? extends L, ?>, Option<? extends L>>() {
-                @Override
-                public Option<? extends L> call(Either<? extends L, ?> either) throws Exception {
-                    return either.leftOption();
-                }
-            };
+            return Either::leftOption;
         }
 
         public static <R> Function1<Either<?, ? extends R>, Option<? extends R>> rightOption() {
-            return new Function1<Either<?, ? extends R>, Option<? extends R>>() {
-                @Override
-                public Option<? extends R> call(Either<?, ? extends R> either) throws Exception {
-                    return either.rightOption();
-                }
-            };
+            return Either::rightOption;
         }
 
         public static <L, R> Function1<L, Either<L, R>> asLeft() {
-            return value -> Either.left(value);
+            return Either::left;
         }
 
         public static <L, R> Function1<R, Either<L, R>> asRight() {
-            return value -> Either.right(value);
+            return Either::right;
         }
 
         public static <L, R> Function1<Either<L, R>, Either<R, L>> flip() {
-            return new Function1<Either<L, R>, Either<R, L>>() {
-                @Override
-                public Either<R, L> call(Either<L, R> either) throws Exception {
-                    return either.flip();
-                }
-            };
+            return Either::flip;
         }
 
 

@@ -204,12 +204,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
         }
 
         public static <T> Function1<PersistentList<T>, PersistentList<T>> tail() {
-            return new Function1<PersistentList<T>, PersistentList<T>>() {
-                @Override
-                public PersistentList<T> call(PersistentList<T> list) throws Exception {
-                    return list.tail();
-                }
-            };
+            return PersistentList<T>::tail;
         }
 
         public static <T> Function1<PersistentList<T>, PersistentList<T>> tail(Class<T> aClass) {
@@ -220,12 +215,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
             return headOption();
         }
         public static <T> Function1<PersistentList<T>, Option<T>> headOption() {
-            return new Function1<PersistentList<T>, Option<T>>() {
-                @Override
-                public Option<T> call(PersistentList<T> list) throws Exception {
-                    return list.headOption();
-                }
-            };
+            return PersistentList<T>::headOption;
         }
     }
 

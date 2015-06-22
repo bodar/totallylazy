@@ -36,12 +36,7 @@ public interface Sources extends Closeable {
 
     class methods {
         public static int copyAndClose(Sources source, final Destination destination) {
-            return using(source, destination, new CurriedFunction2<Sources, Destination, Integer>() {
-                @Override
-                public Integer call(Sources source, Destination destination) throws Exception {
-                    return copy(source, destination);
-                }
-            });
+            return using(source, destination, methods::copy);
         }
 
         public static int copy(Sources sources, final Destination destination) {
@@ -55,12 +50,7 @@ public interface Sources extends Closeable {
     }
 
     class functions {
-        public static Function1<Source, String> name = new Function1<Source, String>() {
-            @Override
-            public String call(Source source) throws Exception {
-                return source.name;
-            }
-        };
+        public static Function1<Source, String> name = source -> source.name;
         public static LogicalPredicate<Source> directory = new LogicalPredicate<Source>() {
             @Override
             public boolean matches(Source source) {

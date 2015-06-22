@@ -32,8 +32,5 @@ public class KeywordTest {
         Keyword<String> name = foo.name;
         assertThat(name.name(), is("name"));
         assertThat(name.forClass(), is(String.class));
-
     }
 }
-
-

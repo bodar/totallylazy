@@ -43,11 +43,9 @@ public class Runnables {
     }
 
     public static <T> UnaryFunction<T> run(final Block<? super T> callable) {
-        return new UnaryFunction<T>() {
-            public T call(T t) throws Exception {
-                callable.call(t);
-                return t;
-            }
+        return t -> {
+            callable.call(t);
+            return t;
         };
     }
 

@@ -31,12 +31,7 @@ public class Triple<F, S, T> extends Pair<F, S> implements Third<T> {
     }
 
     public static <A, B, C, D> CurriedFunction2<Triple<A, B, C>, D, Triple<B, C, D>> leftShift3() {
-        return new CurriedFunction2<Triple<A, B, C>, D, Triple<B, C, D>>() {
-            @Override
-            public Triple<B, C, D> call(Triple<A, B, C> triple, D d) throws Exception {
-                return leftShift(triple, d);
-            }
-        };
+        return Triple::leftShift;
     }
 
     public static <A, B, C, D> Triple<B, C, D> leftShift(Triple<A, B, C> triple, D d) {

@@ -111,11 +111,8 @@ public class LinkedListTest {
     @Ignore
     public void supportsFilterIsPrettyFast() throws Exception {
         final PersistentList<Number> range = range(1, 1000).toPersistentList();
-        TimeReport report = TimeReport.time(100000, new Function0<PersistentList<Number>>() {
-            @Override
-            public PersistentList<Number> call() throws Exception {
-                return range.filter(Predicates.<Number>is(3));
-            }
+        TimeReport report = TimeReport.time(100000, () -> {
+            return range.filter(Predicates.<Number>is(3));
         });
         System.out.println(report);
     }
@@ -130,11 +127,8 @@ public class LinkedListTest {
     @Ignore
     public void removeIsPrettyFast() throws Exception {
         final PersistentList<Number> range = range(1, 1000).toPersistentList();
-        TimeReport report = TimeReport.time(1000000, new Function0<PersistentList<Number>>() {
-            @Override
-            public PersistentList<Number> call() throws Exception {
-                return range.delete(3);
-            }
+        TimeReport report = TimeReport.time(1000000, () -> {
+            return range.delete(3);
         });
         System.out.println(report);
     }

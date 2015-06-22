@@ -110,21 +110,11 @@ public interface Segment<T> {
 
     class functions {
         public static <T, Self extends Segment<T>> CurriedFunction2<Self, T, Self> cons() {
-            return new CurriedFunction2<Self, T, Self>() {
-                @Override
-                public Self call(Self set, T t) throws Exception {
-                    return cast(set.cons(t));
-                }
-            };
+            return (set, t) -> cast(set.cons(t));
         }
 
         public static <T, Self extends Segment<T>> UnaryFunction<Self> tail() {
-            return new UnaryFunction<Self>() {
-                @Override
-                public Self call(Self segment) throws Exception {
-                    return cast(segment.tail());
-                }
-            };
+            return segment -> cast(segment.tail());
         }
 
         public static <T, Self extends Segment<T>> Function1<Self, Self> cons(T t) {

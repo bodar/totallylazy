@@ -48,23 +48,13 @@ public class Matches extends Sequence<MatchResult> {
 
     public static class functions {
         public static Function1<Matches, String> replace(final Function1<? super MatchResult, ? extends CharSequence> constant) {
-            return new Function1<Matches, String>() {
-                @Override
-                public String call(Matches matchResults) throws Exception {
-                    return matchResults.replace(constant);
-                }
-            };
+            return matchResults -> matchResults.replace(constant);
         }
 
-        public static Function1<MatchResult, Sequence<String>> groups = new Function1<MatchResult, Sequence<String>>() {
+        public static Function1<MatchResult, Sequence<String>> groups = matchResult -> new Sequence<String>() {
             @Override
-            public Sequence<String> call(final MatchResult matchResult) throws Exception {
-                return new Sequence<String>() {
-                    @Override
-                    public Iterator<String> iterator() {
-                        return new GroupIterator(matchResult);
-                    }
-                };
+            public Iterator<String> iterator() {
+                return new GroupIterator(matchResult);
             }
         };
     }

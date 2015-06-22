@@ -59,11 +59,6 @@ public class OrPredicate<T> extends LogicalPredicate<T> {
     }
 
     private static <T> Function1<Predicate<T>, Iterable<Predicate<T>>> asPredicates() {
-        return new Function1<Predicate<T>, Iterable<Predicate<T>>>() {
-            @Override
-            public Iterable<Predicate<T>> call(Predicate<T> predicate) throws Exception {
-                return predicate instanceof OrPredicate ? Unchecked.<OrPredicate<T>>cast(predicate).predicates() : one(predicate);
-            }
-        };
+        return predicate -> predicate instanceof OrPredicate ? Unchecked.<OrPredicate<T>>cast(predicate).predicates() : one(predicate);
     }
 }

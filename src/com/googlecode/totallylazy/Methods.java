@@ -15,53 +15,27 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Methods {
     public static Function1<Method, String> methodName() {
-        return new Function1<Method, String>() {
-            @Override
-            public String call(Method method) throws Exception {
-                return method.getName();
-            }
-        };
+        return Method::getName;
     }
 
     public static Function1<Method,? extends Class<?>> returnType() {
-        return new Function1<Method, Class<?>>() {
-            @Override
-            public Class<?> call(Method method) throws Exception {
-                return method.getReturnType();
-            }
-        };
+        return Method::getReturnType;
     }
 
     public static Function1<Method, Class<?>[]> parameterTypes() {
-        return new Function1<Method, Class<?>[]>() {
-            public Class<?>[] call(Method method) throws Exception {
-                return method.getParameterTypes();
-            }
-        };
+        return Method::getParameterTypes;
     }
 
     public static <T extends Annotation> Function1<Method, T> annotation(final Class<T> annotationClass) {
-        return new Function1<Method, T>() {
-            public T call(Method method) throws Exception {
-                return method.getAnnotation(annotationClass);
-            }
-        };
+        return method -> method.getAnnotation(annotationClass);
     }
 
     public static Function1<Method, Type> genericReturnType() {
-        return new Function1<Method, Type>() {
-            public Type call(Method method) throws Exception {
-                return method.getGenericReturnType();
-            }
-        };
+        return Method::getGenericReturnType;
     }
 
     public static Function1<Method, Type[]> genericParameterTypes() {
-        return new Function1<Method, Type[]>() {
-            public Type[] call(Method method) throws Exception {
-                return method.getGenericParameterTypes();
-            }
-        };
+        return Method::getGenericParameterTypes;
     }
 
     public static LogicalPredicate<Method> modifier(final int modifier) {
@@ -73,11 +47,7 @@ public class Methods {
     }
 
     public static Function1<Class<?>, Method> method(final String name, final Class<?>... parameters) {
-        return new Function1<Class<?>, Method>() {
-            public Method call(Class<?> aClass) throws Exception {
-                return aClass.getMethod(name, parameters);
-            }
-        };
+        return aClass -> aClass.getMethod(name, parameters);
     }
 
     public static <T> Option<Method> method(T instance, final String name, final Class<?>... parameters) {
@@ -89,19 +59,11 @@ public class Methods {
     }
 
     public static Function1<Class<?>, Iterable<Method>> methods() {
-        return new Function1<Class<?>, Iterable<Method>>() {
-            public Iterable<Method> call(Class<?> aClass) throws Exception {
-                return sequence(aClass.getMethods());
-            }
-        };
+        return aClass -> sequence(aClass.getMethods());
     }
 
     public static Function1<Class<?>, Iterable<Method>> declaredMethods() {
-        return new Function1<Class<?>, Iterable<Method>>() {
-            public Iterable<Method> call(Class<?> aClass) throws Exception {
-                return sequence(aClass.getDeclaredMethods());
-            }
-        };
+        return aClass -> sequence(aClass.getDeclaredMethods());
     }
 
     public static Sequence<Method> allMethods(Class<?> aClass) {
@@ -112,18 +74,12 @@ public class Methods {
         try {
             method.setAccessible(true);
             return Unchecked.cast(method.invoke(instance, arguments));
-        } catch (IllegalAccessException e) {
-            throw LazyException.lazyException(e);
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             throw LazyException.lazyException(e);
         }
     }
 
     public static <R> Function1<Method, R> invokeOn(final Object instance, final Object... arguments) {
-        return new Function1<Method, R>() {
-            public R call(Method method) throws Exception {
-                return Unchecked.cast(invoke(method, instance, arguments));
-            }
-        };
+        return method -> Unchecked.cast(invoke(method, instance, arguments));
     }
 }

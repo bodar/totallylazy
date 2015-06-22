@@ -26,12 +26,7 @@ public class Matchers {
     }
 
     public static Function1<SelfDescribing, String> description() {
-        return new Function1<SelfDescribing, String>() {
-            @Override
-            public String call(SelfDescribing selfDescribing) throws Exception {
-                return asString(selfDescribing);
-            }
-        };
+        return selfDescribing -> asString(selfDescribing);
     }
 
     public static <T> Function1<T, String> describeMismatch(Class<T> type, final Matcher<? super T> matcher) {
@@ -49,13 +44,10 @@ public class Matchers {
     }
 
     public static <T> Function1<T, String> diagnoseMismatch(final DiagnosingMatcher matcher) {
-        return new Function1<T, String>() {
-            @Override
-            public String call(T t) throws Exception {
-                StringDescription mismatchDescription = new StringDescription();
-                matcher.describeMismatch(t, mismatchDescription);
-                return mismatchDescription.toString();
-            }
+        return t -> {
+            StringDescription mismatchDescription = new StringDescription();
+            matcher.describeMismatch(t, mismatchDescription);
+            return mismatchDescription.toString();
         };
     }
 
@@ -64,12 +56,7 @@ public class Matchers {
     }
 
     public static <T> Function1<T, Matcher<T>> isMatcher() {
-        return new Function1<T, Matcher<T>>() {
-            @Override
-            public Matcher<T> call(T t) throws Exception {
-                return is(t);
-            }
-        };
+        return Matchers::is;
     }
 
     public static <T> LogicalPredicate<T> predicate(final Matcher<T> matcher) {

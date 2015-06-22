@@ -10,7 +10,7 @@ public class Lense<A, B> {
     }
 
     public static <A, B> Lense<A, B> lense(Function1<A, B> get, CurriedFunction2<B, A, A> set) {
-        return new Lense<A, B>(get, set);
+        return new Lense<>(get, set);
     }
 
     public B get(A a) {
@@ -30,10 +30,6 @@ public class Lense<A, B> {
     }
 
     private <C> CurriedFunction2<C, A, A> setter(final Lense<B, C> other) {
-        return new CurriedFunction2<C,A,A>() {
-            public A call(final C c, final A a) throws Exception {
-                return set(other.set(c, get(a)), a);
-            }
-        };
+        return (c, a) -> set(other.set(c, get(a)), a);
     }
 }

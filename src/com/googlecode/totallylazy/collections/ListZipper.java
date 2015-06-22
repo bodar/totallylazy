@@ -27,21 +27,11 @@ public class ListZipper<T> implements Zipper<T> {
 
     public Option<ListZipper<T>> nextOption() {
         if(isLast()) return none();
-        return focus.headOption().map(new Function1<T, ListZipper<T>>() {
-            @Override
-            public ListZipper<T> call(T t) throws Exception {
-                return zipper(focus.tail(), breadcrumbs.cons(t));
-            }
-        });
+        return focus.headOption().map(t -> zipper(focus.tail(), breadcrumbs.cons(t)));
     }
 
     public Option<ListZipper<T>> previousOption() {
-        return breadcrumbs.headOption().map(new Function1<T, ListZipper<T>>() {
-            @Override
-            public ListZipper<T> call(T t) throws Exception {
-                return zipper(focus.cons(t), breadcrumbs.tail());
-            }
-        });
+        return breadcrumbs.headOption().map(t -> zipper(focus.cons(t), breadcrumbs.tail()));
     }
 
     @Override

@@ -37,12 +37,7 @@ public class XPathFunctions {
 
     @XPathFunction("or")
     public static Object or(List<Object> arguments) {
-        return sequence(arguments).find(not(nullValue()).and(new Predicate<Object>() {
-            @Override
-            public boolean matches(Object other) {
-                return !(other instanceof NodeList) || ((NodeList) other).getLength() != 0;
-            }
-        })).getOrNull();
+        return sequence(arguments).find(not(nullValue()).and(other -> !(other instanceof NodeList) || ((NodeList) other).getLength() != 0)).getOrNull();
     }
 
     @XPathFunction("tokenize")
@@ -58,47 +53,24 @@ public class XPathFunctions {
     @XPathFunction("time-in-millis")
     public static Long timeInMillis(NodeList dates) {
         Option<String> date = Xml.textContents(dates).headOption();
-        return date.map(new Function1<String, Long>() {
-            @Override
-            public Long call(String s) throws Exception {
-                return Dates.parse(s).getTime();
-            }
-        }).getOrNull();
+        return date.map(s -> Dates.parse(s).getTime()).getOrNull();
     }
 
     @XPathFunction("date-in-millis")
     public static Long dateInMillis(NodeList dates) {
         Option<String> date = Xml.textContents(dates).headOption();
-        return date.map(new Function1<String, Long>() {
-            @Override
-            public Long call(String s) throws Exception {
-                return Dates.stripTime(Dates.parse(s)).getTime();
-            }
-        }).getOrNull();
+        return date.map(s -> Dates.stripTime(Dates.parse(s)).getTime()).getOrNull();
     }
 
     private static Function1<Node, Sequence<Text>> split(final String pattern) {
-        return new Function1<Node, Sequence<Text>>() {
-            @Override
-            public Sequence<Text> call(final Node node) throws Exception {
-                return Regex.regex(pattern).split(node.getTextContent()).map(createText.apply(node));                    }
-        };
+        return node -> Regex.regex(pattern).split(node.getTextContent()).map(createText.apply(node));
     }
 
     private static Function1<Node, Text> replace(final String pattern, final String replace) {
-        return new Function1<Node, Text>() {
-            @Override
-            public Text call(final Node node) throws Exception {
-                return createText(node, node.getTextContent().replaceAll(pattern, replace));                   }
-        };
+        return node -> createText(node, node.getTextContent().replaceAll(pattern, replace));
     }
 
-    public static CurriedFunction2<Node, String, Text> createText = new CurriedFunction2<Node, String, Text>() {
-        @Override
-        public Text call(Node node, String s) throws Exception {
-            return createText(node, s);
-        }
-    };
+    public static CurriedFunction2<Node, String, Text> createText = XPathFunctions::createText;
 
     public static Text createText(Node nodeInDocument, String text) {return nodeInDocument.getOwnerDocument().createTextNode(text);}
 

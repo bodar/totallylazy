@@ -438,12 +438,7 @@ public class Iterators {
     }
 
     public static <T, Key> Sequence<Group<Key, T>> groupBy(final Iterator<? extends T> iterator, final Function1<? super T, ? extends Key> callable) {
-        return Maps.entries(Maps.multiMap(iterator, callable)).map(new Function1<Map.Entry<Key, List<T>>, Group<Key, T>>() {
-            @Override
-            public Group<Key, T> call(Map.Entry<Key, List<T>> entry) throws Exception {
-                return new Group<Key, T>(entry.getKey(), entry.getValue());
-            }
-        });
+        return Maps.entries(Maps.multiMap(iterator, callable)).map(entry -> new Group<Key, T>(entry.getKey(), entry.getValue()));
     }
 
     public static <T> Iterator<Sequence<T>> windowed(final Iterator<? extends T> iterator, final int size) {
@@ -459,11 +454,7 @@ public class Iterators {
     }
 
     public static <T> Function1<Iterator<T>, T> next() {
-        return new Function1<Iterator<T>, T>() {
-            public T call(Iterator<T> iterator) throws Exception {
-                return iterator.next();
-            }
-        };
+        return Iterator::next;
     }
 
     public static <T> Iterator<T> flatten(final Iterator<? extends Iterator<? extends T>> iterator) {
@@ -524,15 +515,10 @@ public class Iterators {
 
     public static class functions {
         public static <T> CurriedFunction2<Iterable<? extends T>, Iterable<? extends T>, Iterable<T>> join() {
-            return new CurriedFunction2<Iterable<? extends T>, Iterable<? extends T>, Iterable<T>>() {
+            return (a, b) -> new Sequence<T>() {
                 @Override
-                public Iterable<T> call(final Iterable<? extends T> a, final Iterable<? extends T> b) throws Exception {
-                    return new Sequence<T>() {
-                        @Override
-                        public Iterator<T> iterator() {
-                            return Iterators.join(a.iterator(), b.iterator());
-                        }
-                    };
+                public Iterator<T> iterator() {
+                    return Iterators.join(a.iterator(), b.iterator());
                 }
             };
         }

@@ -82,12 +82,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
     }
 
     private Function1<Pair<K, V>, Pair<K, V>> replace(final Pair<K, V> newValue) {
-        return new Function1<Pair<K, V>, Pair<K, V>>() {
-            @Override
-            public Pair<K, V> call(Pair<K, V> oldValue) throws Exception {
-                return oldValue.first().equals(newValue.first()) ? newValue : oldValue;
-            }
-        };
+        return oldValue -> oldValue.first().equals(newValue.first()) ? newValue : oldValue;
     }
 
     @Override

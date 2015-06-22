@@ -20,34 +20,19 @@ public class Minutes {
     }
 
     public static class functions {
-        public static CurriedFunction2<Date, Integer, Date> add = new CurriedFunction2<Date, Integer, Date>() {
-            @Override
-            public Date call(Date date, Integer amount) throws Exception {
-                return Minutes.add(date, amount);
-            }
-        };
+        public static CurriedFunction2<Date, Integer, Date> add = Minutes::add;
 
         public static CurriedFunction2<Date, Integer, Date> add()  {
             return add;
         }
 
-        public static CurriedFunction2<Date, Integer, Date> subtract = new CurriedFunction2<Date, Integer, Date>() {
-            @Override
-            public Date call(Date date, Integer amount) throws Exception {
-                return Minutes.subtract(date, amount);
-            }
-        };
+        public static CurriedFunction2<Date, Integer, Date> subtract = Minutes::subtract;
 
         public static CurriedFunction2<Date, Integer, Date> subtract()  {
             return subtract;
         }
 
-        public static CurriedFunction2<Date, Date, Long> between = new CurriedFunction2<Date, Date, Long>() {
-            @Override
-            public Long call(Date start, Date end) throws Exception {
-                return Minutes.between(start, end);
-            }
-        };
+        public static CurriedFunction2<Date, Date, Long> between = Minutes::between;
 
         public static CurriedFunction2<Date, Date, Long> between()  {
             return between;

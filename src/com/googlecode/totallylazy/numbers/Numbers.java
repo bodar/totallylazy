@@ -55,12 +55,7 @@ public class Numbers {
     public static final Number POSITIVE_INFINITY = Double.POSITIVE_INFINITY;
     public static final Number NEGATIVE_INFINITY = Double.NEGATIVE_INFINITY;
     public static final ArithmeticException DIVIDE_BY_ZERO = new ArithmeticException("Divide by zero");
-    public static Function1<Number, Integer> intValue = new Function1<Number, Integer>() {
-        @Override
-        public Integer call(Number number) throws Exception {
-            return number.intValue();
-        }
-    };
+    public static Function1<Number, Integer> intValue = Number::intValue;
 
     public static Sequence<Number> range(final Number start) {
         return iterate(increment, start);
@@ -89,12 +84,7 @@ public class Numbers {
         }
     }
 
-    public static Function1<Object, Number> valueOf = new Function1<Object, Number>() {
-        @Override
-        public Number call(Object value) throws Exception {
-            return Numbers.valueOf(value.toString()).get();
-        }
-    };
+    public static Function1<Object, Number> valueOf = value -> Numbers.valueOf(value.toString()).get();
 
     public static Sequence<Number> numbers(Number... numbers) {
         return Sequences.sequence(numbers);
@@ -123,19 +113,9 @@ public class Numbers {
         return Math.sqrt(number.doubleValue());
     }
 
-    public static UnaryFunction<Number> squareRoot = new UnaryFunction<Number>() {
-        @Override
-        public Number call(Number number) throws Exception {
-            return squareRoot(number);
-        }
-    };
+    public static UnaryFunction<Number> squareRoot = Numbers::squareRoot;
 
-    public static UnaryFunction<Number> squared = new UnaryFunction<Number>() {
-        @Override
-        public Number call(Number number) throws Exception {
-            return squared(number);
-        }
-    };
+    public static UnaryFunction<Number> squared = Numbers::squared;
 
     public static UnaryFunction<Number> squared() {
         return squared;
@@ -192,20 +172,10 @@ public class Numbers {
     }
 
     private static UnaryFunction<BigInteger> nextProbablePrime() {
-        return new UnaryFunction<BigInteger>() {
-            @Override
-            public BigInteger call(BigInteger bigInteger) throws Exception {
-                return bigInteger.nextProbablePrime();
-            }
-        };
+        return BigInteger::nextProbablePrime;
     }
 
-    public static UnaryFunction<Number> nextPrime = new UnaryFunction<Number>() {
-        @Override
-        public Number call(Number number) throws Exception {
-            return nextPrime(number);
-        }
-    };
+    public static UnaryFunction<Number> nextPrime = Numbers::nextPrime;
 
     public static UnaryFunction<Number> nextPrime() {
         return nextPrime;
@@ -261,11 +231,7 @@ public class Numbers {
         return operatorsFor(value).negate(value);
     }
 
-    public static UnaryFunction<Number> increment = new UnaryFunction<Number>() {
-        public Number call(Number number) throws Exception {
-            return Numbers.increment(number);
-        }
-    };
+    public static UnaryFunction<Number> increment = Numbers::increment;
 
     public static UnaryFunction<Number> increment() {
         return increment;
@@ -275,11 +241,7 @@ public class Numbers {
         return operatorsFor(value).increment(value);
     }
 
-    public static UnaryFunction<Number> decrement = new UnaryFunction<Number>() {
-        public Number call(Number number) throws Exception {
-            return Numbers.decrement(number);
-        }
-    };
+    public static UnaryFunction<Number> decrement = Numbers::decrement;
 
     public static UnaryFunction<Number> decrement() {
         return decrement;
@@ -366,27 +328,15 @@ public class Numbers {
     }
 
     public static Comparator<Number> ascending() {
-        return new Comparator<Number>() {
-            public int compare(Number x, Number y) {
-                return Numbers.compare(x, y);
-            }
-        };
+        return Numbers::compare;
     }
 
     public static Comparator<Number> descending() {
-        return new Comparator<Number>() {
-            public int compare(Number x, Number y) {
-                return Numbers.compare(y, x);
-            }
-        };
+        return (x, y) -> compare(y, x);
     }
 
     public static Function1<Iterable<Number>, Number> sumIterable() {
-        return new Function1<Iterable<Number>, Number>() {
-            public Number call(Iterable<Number> numbers) throws Exception {
-                return Sequences.reduceLeft(numbers, sum());
-            }
-        };
+        return numbers -> Sequences.reduceLeft(numbers, sum());
     }
 
     public static final CombinerFunction<Number> average = new Average();
@@ -526,20 +476,11 @@ public class Numbers {
     }
 
     public static UnaryFunction<Number> reduce() {
-        return new UnaryFunction<Number>() {
-            @Override
-            public Number call(Number number) throws Exception {
-                return reduce(number);
-            }
-        };
+        return Numbers::reduce;
     }
 
     public static Function1<Number, Character> toCharacter() {
-        return new Function1<Number, Character>() {
-            public Character call(Number number) throws Exception {
-                return (char) number.shortValue();
-            }
-        };
+        return number -> (char) number.shortValue();
     }
 
     public static String toLexicalString(Number value, final Number minValue, final Number maxValue) {

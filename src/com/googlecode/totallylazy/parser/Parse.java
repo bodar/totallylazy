@@ -12,12 +12,7 @@ public interface Parse<A> extends Functor<A> {
 
     class functions {
         public static <A> Function1<Segment<Character>, Result<A>> parse(final Parse<A> parser) {
-            return new Function1<Segment<Character>, Result<A>>() {
-                @Override
-                public Result<A> call(Segment<Character> characterSegment) throws Exception {
-                    return parser.parse(characterSegment);
-                }
-            };
+            return parser::parse;
         }
     }
 

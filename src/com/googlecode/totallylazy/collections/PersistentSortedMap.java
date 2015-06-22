@@ -136,12 +136,7 @@ public interface PersistentSortedMap<K, V> extends PersistentMap<K, V>, Sorted<P
 
     class functions{
         public static <K, V> Function1<PersistentSortedMap<K, V>, PersistentSortedMap<K, V>> remove(final K key) {
-            return new Function1<PersistentSortedMap<K, V>, PersistentSortedMap<K, V>>() {
-                @Override
-                public PersistentSortedMap<K, V> call(PersistentSortedMap<K, V> map) throws Exception {
-                    return map.delete(key);
-                }
-            };
+            return map -> map.delete(key);
         }
     }
 

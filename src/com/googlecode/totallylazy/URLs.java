@@ -33,11 +33,7 @@ public class URLs {
 
 
     public static Function1<File, URL> toURL() {
-        return new Function1<File, URL>() {
-            public URL call(File file) throws Exception {
-                return file.toURI().toURL();
-            }
-        };
+        return file -> file.toURI().toURL();
     }
 
     public static URL url(File file) {

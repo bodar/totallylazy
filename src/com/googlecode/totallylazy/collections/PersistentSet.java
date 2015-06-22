@@ -40,12 +40,7 @@ public interface PersistentSet<T> extends Set<T>, Iterable<T>, Segment<T>, Persi
 
     class functions extends Segment.functions {
         public static <T> Function1<PersistentSet<T>,Option<T>> get(final T value) {
-            return new Function1<PersistentSet<T>, Option<T>>() {
-                @Override
-                public Option<T> call(PersistentSet<T> set) throws Exception {
-                    return set.lookup(value);
-                }
-            };
+            return set -> set.lookup(value);
         }
     }
 }

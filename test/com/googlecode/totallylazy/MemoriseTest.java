@@ -56,11 +56,7 @@ public class MemoriseTest {
     }
 
     private Function0<Integer> callHead(final Sequence<Integer> number) {
-        return new Function0<Integer>() {
-            public Integer call() throws Exception {
-                return number.head();
-            }
-        };
+        return number::head;
     }
 
     @Test

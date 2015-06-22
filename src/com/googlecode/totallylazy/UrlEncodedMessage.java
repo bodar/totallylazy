@@ -35,12 +35,9 @@ public class UrlEncodedMessage {
     }
 
     public static String toString(Iterable<? extends Pair<String, String>> pairs) {
-        return sequence(pairs).map(new Function1<Pair<String, String>, String>() {
-            @Override
-            public String call(Pair<String, String> pair) throws Exception {
-                if(pair.second() == null) return encode(pair.first());
-                return encode(pair.first()) + "=" + encode(pair.second());
-            }
+        return sequence(pairs).map(pair -> {
+            if(pair.second() == null) return encode(pair.first());
+            return encode(pair.first()) + "=" + encode(pair.second());
         }).toString("&");
     }
 
@@ -64,21 +61,11 @@ public class UrlEncodedMessage {
 
     public static class functions {
         public static Function1<String, String> encode() {
-            return new Function1<String, String>() {
-                @Override
-                public String call(String value) throws Exception {
-                    return UrlEncodedMessage.encode(value);
-                }
-            };
+            return UrlEncodedMessage::encode;
         }
 
         public static Function1<String, String> decode() {
-            return new Function1<String, String>() {
-                @Override
-                public String call(String value) throws Exception {
-                    return UrlEncodedMessage.decode(value);
-                }
-            };
+            return UrlEncodedMessage::decode;
         }
     }
 }

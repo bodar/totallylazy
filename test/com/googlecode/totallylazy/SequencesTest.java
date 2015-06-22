@@ -155,11 +155,9 @@ public class SequencesTest {
 
     @Test
     public void supportsIteratingEvenWhenCallableReturnNull() throws Exception {
-        final Sequence<Integer> sequence = iterate(new Function1<Integer, Integer>() {
-            public Integer call(Integer integer) throws Exception {
-                assertThat("Should never see a null value", integer, is(Matchers.notNullValue()));
-                return null;
-            }
+        final Sequence<Integer> sequence = iterate(integer -> {
+            assertThat("Should never see a null value", integer, is(Matchers.notNullValue()));
+            return null;
         }, 1).takeWhile(Predicates.notNullValue());
         assertThat(sequence, hasExactly(1));
     }

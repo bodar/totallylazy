@@ -96,14 +96,12 @@ public class Streams {
     }
 
     public static Function0<String> readLine(final BufferedReader reader) {
-        return new Function0<String>() {
-            public String call() throws Exception {
-                String result = reader.readLine();
-                if (result == null) {
-                    reader.close();
-                }
-                return result;
+        return () -> {
+            String result = reader.readLine();
+            if (result == null) {
+                reader.close();
             }
+            return result;
         };
     }
 }

@@ -99,12 +99,7 @@ public class OptionTest {
         }
 
         static CurriedFunction2<String, Integer, Person> person() {
-            return new CurriedFunction2<String, Integer, Person>() {
-                @Override
-                public Person call(String name, Integer age) throws Exception {
-                    return person(name, age);
-                }
-            };
+            return Person::person;
         }
 
         static Person person(String name, int age) {

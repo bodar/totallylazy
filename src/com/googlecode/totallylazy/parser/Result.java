@@ -23,14 +23,9 @@ public interface Result<A> extends Value<A>, Functor<A> {
 
     String message();
 
-    public static class functions {
+    class functions {
         public static <A> Function1<Result<A>, Segment<Character>> remainder() {
-            return new Function1<Result<A>, Segment<Character>>() {
-                @Override
-                public Segment<Character> call(Result<A> result) throws Exception {
-                    return result.remainder();
-                }
-            };
+            return Result::remainder;
         }
     }
 }

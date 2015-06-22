@@ -140,30 +140,15 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
 
     class functions {
         public static <K, V> Function1<PersistentMap<K, V>, Option<V>> get(final K key) {
-            return new Function1<PersistentMap<K, V>, Option<V>>() {
-                @Override
-                public Option<V> call(PersistentMap<K, V> map) throws Exception {
-                    return map.lookup(key);
-                }
-            };
+            return map -> map.lookup(key);
         }
 
         public static <K, V> Function1<PersistentMap<K, V>, PersistentMap<K, V>> remove(final K key) {
-            return new Function1<PersistentMap<K, V>, PersistentMap<K, V>>() {
-                @Override
-                public PersistentMap<K, V> call(PersistentMap<K, V> map) throws Exception {
-                    return map.delete(key);
-                }
-            };
+            return map -> map.delete(key);
         }
 
         public static <K, V> Function1<PersistentMap<K, V>, Boolean> contains(final Object other) {
-            return new Function1<PersistentMap<K, V>, Boolean>() {
-                @Override
-                public Boolean call(PersistentMap<K, V> map) throws Exception {
-                    return map.contains(other);
-                }
-            };
+            return map -> map.contains(other);
         }
     }
 

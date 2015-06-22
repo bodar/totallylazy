@@ -495,16 +495,14 @@ public class SequenceTest {
         assertThat(converted, is("converted"));
     }
 
-    Function1<Integer, Option<String>> someVeryExpensiveOperation = new Function1<Integer, Option<String>>() {
-        public Option<String> call(Integer number) throws Exception {
-            if (Numbers.equalTo(number, 1)) {
-                return none(); // the conversion didn't work
-            }
-            if (Numbers.equalTo(number, 2)) {
-                return some("converted"); // the conversion worked so don't do any more
-            }
-            throw new AssertionError("should never get here");
+    Function1<Integer, Option<String>> someVeryExpensiveOperation = number -> {
+        if (Numbers.equalTo(number, 1)) {
+            return none(); // the conversion didn't work
         }
+        if (Numbers.equalTo(number, 2)) {
+            return some("converted"); // the conversion worked so don't do any more
+        }
+        throw new AssertionError("should never get here");
     };
 
     @Test
@@ -594,12 +592,9 @@ public class SequenceTest {
     @Test
     public void shouldNotIterateMultipleTimesWhenCallingToString() throws Exception {
         final AtomicInteger count = new AtomicInteger(0);
-        sequence("foo").map(new Function1<String, String>() {
-            @Override
-            public String call(String string) throws Exception {
-                count.incrementAndGet();
-                return string;
-            }
+        sequence("foo").map(string -> {
+            count.incrementAndGet();
+            return string;
         }).toString();
         assertThat(count.get(), is(1));
     }
@@ -840,14 +835,11 @@ public class SequenceTest {
     @Test
     public void supportsInterruption() throws Exception {
         final int[] count = new int[]{0};
-        Sequence<Integer> interruptable = repeat(new Function0<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                if (++count[0] == 5) {
-                    currentThread().interrupt();
-                }
-                return count[0];
+        Sequence<Integer> interruptable = repeat(() -> {
+            if (++count[0] == 5) {
+                currentThread().interrupt();
             }
+            return count[0];
         }).interruptable();
 
         try {

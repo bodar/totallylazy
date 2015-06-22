@@ -63,20 +63,14 @@ public class Properties {
     }
 
     public static CurriedFunction2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties> setProperty() {
-        return new CurriedFunction2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties>() {
-            public java.util.Properties call(java.util.Properties properties, Map.Entry<Object, Object> property) throws Exception {
-                properties.put(property.getKey(), property.getValue());
-                return properties;
-            }
+        return (properties, property) -> {
+            properties.put(property.getKey(), property.getValue());
+            return properties;
         };
     }
 
     public static CurriedFunction2<java.util.Properties, java.util.Properties, java.util.Properties> compose() {
-        return new CurriedFunction2<java.util.Properties, java.util.Properties, java.util.Properties>() {
-            public java.util.Properties call(java.util.Properties soFar, java.util.Properties nextProperties) throws Exception {
-                return compose(soFar, nextProperties);
-            }
-        };
+        return (soFar, nextProperties) -> compose(soFar, nextProperties);
     }
 
     public static String asString(java.util.Properties properties) {
@@ -90,11 +84,7 @@ public class Properties {
     }
 
     public static Function1<String, java.util.Properties> propertiesFromString() {
-        return new Function1<String, java.util.Properties>() {
-            public java.util.Properties call(String text) throws Exception {
-                return properties(text);
-            }
-        };
+        return Properties::properties;
     }
 
     public static String expectProperty(java.util.Properties properties, String name) {

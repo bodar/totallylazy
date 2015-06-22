@@ -371,11 +371,7 @@ public class Predicates {
     }
 
     public static Predicate<Pair> equalTo() {
-        return new Predicate<Pair>() {
-            public boolean matches(Pair pair) {
-                return pair.first().equals(pair.second());
-            }
-        };
+        return pair -> pair.first().equals(pair.second());
     }
 
     public static <T> LogicalPredicate<Iterable<T>> empty() {

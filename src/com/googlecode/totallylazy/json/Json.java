@@ -57,16 +57,8 @@ public class Json {
     }
 
     public static class functions {
-        public static Function1<String, Map<String, Object>> toMap = new Function1<String, Map<String, Object>>() {
-            public Map<String, Object> call(String json) throws Exception {
-                return Json.map(json);
-            }
-        };
+        public static Function1<String, Map<String, Object>> toMap = Json::map;
 
-        public static Function1<Object, String> toJson = new Function1<Object, String>() {
-            public String call(Object value) throws Exception {
-                return Json.json(value);
-            }
-        };
+        public static Function1<Object, String> toJson = Json::json;
     }
 }

@@ -106,23 +106,15 @@ public class Exceptions {
     }
 
     public static <A, B> Function1<A, Either<Exception, B>> either(final Function1<? super A, ? extends B> callable) {
-        return a -> Either.either(new Callable<B>() {
-            @Override
-            public B call() throws Exception {
-                return callable.call(a);
-            }
-        });
+        return a -> Either.either(() -> callable.call(a));
     }
 
     public static <A, B> Function1<A, B> orElse(final Function1<? super A, ? extends B> callable, final B result) {
-        return new Function1<A, B>() {
-            @Override
-            public B call(A a) throws Exception {
-                try {
-                    return callable.call(a);
-                } catch (Exception e) {
-                    return result;
-                }
+        return a -> {
+            try {
+                return callable.call(a);
+            } catch (Exception e) {
+                return result;
             }
         };
     }

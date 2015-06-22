@@ -12,12 +12,7 @@ public class Objects {
     }
 
     public static CurriedFunction2<Object, Object, Boolean> equalTo() {
-        return new CurriedFunction2<Object, Object, Boolean>() {
-            @Override
-            public Boolean call(Object a, Object b) throws Exception {
-                return a.equals(b);
-            }
-        };
+        return Object::equals;
     }
 
 }

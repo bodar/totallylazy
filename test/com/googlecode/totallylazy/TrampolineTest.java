@@ -12,22 +12,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class TrampolineTest {
     public Trampoline<Boolean> even(final int n) {
         if (n == 0) return done(true);
-        else return more(new Callable<Trampoline<Boolean>>() {
-            @Override
-            public Trampoline<Boolean> call() throws Exception {
-                return odd(n - 1);
-            }
-        });
+        else return more(() -> odd(n - 1));
     }
 
     public Trampoline<Boolean> odd(final int n) {
         if (n == 0) return done(false);
-        else return more(new Callable<Trampoline<Boolean>>() {
-            @Override
-            public Trampoline<Boolean> call() throws Exception {
-                return even(n - 1);
-            }
-        });
+        else return more(() -> even(n - 1));
     }
 
     @Test

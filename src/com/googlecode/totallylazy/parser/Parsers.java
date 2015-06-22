@@ -15,12 +15,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Parsers {
-    public static Function1<Iterable<?>, String> toString = new Function1<Iterable<?>, String>() {
-        @Override
-        public String call(Iterable<?> iterable) throws Exception {
-            return sequence(iterable).toString("");
-        }
-    };
+    public static Function1<Iterable<?>, String> toString = iterable -> sequence(iterable).toString("");
 
     public static <A> Parser<A> parser(final Parse<? extends A> parser) {
         return MappingParser.map(parser, Callables.<A>returnArgument());

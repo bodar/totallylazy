@@ -94,20 +94,10 @@ public class Key implements Value<String> {
 
     public static class functions {
         public static CurriedFunction2<Key, ? super String, String> encrypt() {
-            return new CurriedFunction2<Key, String, String>() {
-                @Override
-                public String call(Key key, String value) throws Exception {
-                    return key.encrypt(value);
-                }
-            };
+            return Key::encrypt;
         }
         public static CurriedFunction2<Key, ? super String, String> decrypt() {
-            return new CurriedFunction2<Key, String, String>() {
-                @Override
-                public String call(Key key, String value) throws Exception {
-                    return key.decrypt(value);
-                }
-            };
+            return Key::decrypt;
         }
     }
 }

@@ -98,12 +98,7 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
     }
 
     public static <A> Function1<A, Option<A>> option() {
-        return new Function1<A, Option<A>>() {
-            @Override
-            public Option<A> call(A a) throws Exception {
-                return option(a);
-            }
-        };
+        return Option::option;
     }
 
     public <T> Option<T> unsafeCast() {
@@ -122,39 +117,19 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
 
     public static class functions {
         public static <T> Function1<Option<T>, T> getOrElse(final T t) {
-            return new Function1<Option<T>, T>() {
-                @Override
-                public T call(Option<T> ts) throws Exception {
-                    return ts.getOrElse(t);
-                }
-            };
+            return ts -> ts.getOrElse(t);
         }
 
         public static <T> Function1<Option<T>, T> getOrElse(final Callable<? extends T> callable) {
-            return new Function1<Option<T>, T>() {
-                @Override
-                public T call(Option<T> ts) throws Exception {
-                    return ts.getOrElse(callable);
-                }
-            };
+            return ts -> ts.getOrElse(callable);
         }
 
         public static <T> Function1<Option<T>, T> getOrNull() {
-            return new Function1<Option<T>, T>() {
-                @Override
-                public T call(Option<T> ts) throws Exception {
-                    return ts.getOrNull();
-                }
-            };
+            return Option::getOrNull;
         }
 
         public static <T> Function1<Option<T>, T> get(Class<T> clazz) {
-            return new Function1<Option<T>, T>() {
-                @Override
-                public T call(Option<T> ts) throws Exception {
-                    return ts.get();
-                }
-            };
+            return Option::get;
         }
     }
 }

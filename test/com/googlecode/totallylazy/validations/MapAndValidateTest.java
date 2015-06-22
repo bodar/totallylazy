@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
@@ -33,26 +34,18 @@ public class MapAndValidateTest {
                 isEmpty(String.class));
     }
 
-    private LogicalPredicate<String> isInteger() {
-        return new LogicalPredicate<String>() {
-            @Override
-            public boolean matches(String value) {
-                try{
-                    Integer.parseInt(value);
-                    return true;
-                }catch (Throwable e){
-                    return false;
-                }
+    private Predicate<String> isInteger() {
+        return value -> {
+            try{
+                Integer.parseInt(value);
+                return true;
+            }catch (Throwable e){
+                return false;
             }
         };
     }
 
     private Function1<String, Integer> parseInteger() {
-        return new Function1<String, Integer>() {
-            @Override
-            public Integer call(String s) throws Exception {
-                return Integer.parseInt(s);
-            }
-        };
+        return Integer::parseInt;
     }
 }

@@ -14,15 +14,9 @@ public class ProxyTest {
     @Test
     @Ignore("Manual test")
     public void doesNotEatPermGen() {
-        for (User user : repeat(new Callable<User>() {
-            public User call() throws Exception {
-                createProxy(User.class, new InvocationHandler() {
-                    public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
-                        return null;
-                    }
-                });
-                return null;
-            }
+        for (User user : repeat((Callable<User>) () -> {
+            createProxy(User.class, (o, method, objects) -> null);
+            return null;
         })) {
         }
     }

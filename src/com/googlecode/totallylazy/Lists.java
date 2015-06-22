@@ -20,12 +20,7 @@ public class Lists {
     }
 
     public static <T> Function1<T, Integer> indexIn(final List<? extends T> values) {
-        return new Function1<T, Integer>() {
-            @Override
-            public Integer call(T t) throws Exception {
-                return values.indexOf(t);
-            }
-        };
+        return values::indexOf;
     }
 
     public static class functions {

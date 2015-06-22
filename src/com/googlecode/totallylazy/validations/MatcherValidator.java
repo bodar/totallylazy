@@ -37,12 +37,7 @@ public class MatcherValidator<T> extends LogicalValidator<T> {
         }
 
         public static <T> Function1<Matcher<? super T>, Validator<T>> matcherAsValidator(){
-            return new Function1<Matcher<? super T>, Validator<T>>() {
-                @Override
-                public Validator<T> call(Matcher<? super T> matcher) throws Exception {
-                    return validateMatcher(matcher);
-                }
-            };
+            return constructors::validateMatcher;
         }
     }
 }

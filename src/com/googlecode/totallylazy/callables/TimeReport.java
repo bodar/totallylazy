@@ -94,11 +94,6 @@ public class TimeReport extends Block<Number> {
     }
 
     private static Function1<Number, TimeReport> time(final Callable<?> function) {
-        return new Function1<Number, TimeReport>() {
-            @Override
-            public TimeReport call(Number number) throws Exception {
-                return TimeReport.time(number.intValue(), function);
-            }
-        };
+        return number -> time(number.intValue(), function);
     }
 }
