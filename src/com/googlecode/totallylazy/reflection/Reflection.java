@@ -1,10 +1,10 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.reflection;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.reflect.Field;
 
-import static com.googlecode.totallylazy.Fields.name;
+import static com.googlecode.totallylazy.reflection.Fields.name;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;

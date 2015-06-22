@@ -1,11 +1,12 @@
 package com.googlecode.totallylazy;
 
 
-import java.lang.reflect.Field;
+import com.googlecode.totallylazy.reflection.Fields;
+
 import java.util.AbstractMap;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Fields.nonSyntheticFields;
+import static com.googlecode.totallylazy.reflection.Fields.nonSyntheticFields;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sets.set;
 import static java.util.Collections.unmodifiableSet;

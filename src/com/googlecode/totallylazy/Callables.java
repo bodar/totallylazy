@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.comparators.Comparators;
+import com.googlecode.totallylazy.reflection.Methods;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -8,7 +9,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Methods.method;
+import static com.googlecode.totallylazy.reflection.Methods.method;
 import static com.googlecode.totallylazy.Option.identity;
 import static com.googlecode.totallylazy.Sequences.sequence;
 

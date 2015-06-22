@@ -10,8 +10,8 @@ import org.objectweb.asm.tree.MethodNode;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import static com.googlecode.totallylazy.Fields.fields;
-import static com.googlecode.totallylazy.Fields.name;
+import static com.googlecode.totallylazy.reflection.Fields.fields;
+import static com.googlecode.totallylazy.reflection.Fields.name;
 import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;

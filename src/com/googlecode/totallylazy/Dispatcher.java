@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.reflection.Methods;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import static com.googlecode.totallylazy.Callables.toClass;
-import static com.googlecode.totallylazy.Methods.methodName;
-import static com.googlecode.totallylazy.Methods.parameterTypes;
+import static com.googlecode.totallylazy.reflection.Methods.methodName;
+import static com.googlecode.totallylazy.reflection.Methods.parameterTypes;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.notNullValue;

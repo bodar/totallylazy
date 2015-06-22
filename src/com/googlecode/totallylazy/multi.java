@@ -1,17 +1,18 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
+import com.googlecode.totallylazy.reflection.Methods;
 
 import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Dispatcher.dispatcher;
-import static com.googlecode.totallylazy.Methods.methodName;
+import static com.googlecode.totallylazy.reflection.Methods.methodName;
 import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Reflection.enclosingInstance;
+import static com.googlecode.totallylazy.reflection.Reflection.enclosingInstance;
 import static java.lang.reflect.Modifier.isStatic;
 
 public abstract class multi {
