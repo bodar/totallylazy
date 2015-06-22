@@ -33,29 +33,34 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.equalTo(this, other, predicate);
     }
 
-
-    public void eachConcurrently(final Function1<? super T, ?> runnable) {
-        forEachConcurrently(runnable);
+    public Sequence<T> eachConcurrently(final Block<? super T> runnable) {
+        Sequences.eachConcurrently(this, runnable);
+        return this;
     }
 
-    public void forEachConcurrently(final Function1<? super T, ?> runnable) {
-        Sequences.forEachConcurrently(this, runnable);
+    public Sequence<T> eachConcurrently(final Block<? super T> runnable, Executor executor) {
+        Sequences.eachConcurrently(this, runnable, executor);
+        return this;
     }
 
-    public void eachConcurrently(final Function1<? super T, ?> runnable, Executor executor) {
-        forEachConcurrently(runnable, executor);
+    public Sequence<T> eachConcurrently(final Function1<? super T, ?> runnable) {
+        Sequences.eachConcurrently(this, runnable);
+        return this;
     }
 
-    public void forEachConcurrently(final Function1<? super T, ?> runnable, Executor executor) {
-        Sequences.forEachConcurrently(this, runnable, executor);
+    public Sequence<T> eachConcurrently(final Function1<? super T, ?> runnable, Executor executor) {
+        Sequences.eachConcurrently(this, runnable, executor);
+        return this;
     }
 
-    public void each(final Function1<? super T, ?> runnable) {
-        forEach(runnable);
+    public Sequence<T> each(final Block<? super T> runnable) {
+        Sequences.each(this, runnable);
+        return this;
     }
 
-    public void forEach(final Function1<? super T, ?> runnable) {
-        Sequences.forEach(this, runnable);
+    public Sequence<T> each(final Function1<? super T, ?> runnable) {
+        Sequences.each(this, runnable);
+        return this;
     }
 
     public Sequence<T> tap(final Function1<? super T, ?> callable) { return Sequences.tap(this, callable); }

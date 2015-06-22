@@ -44,6 +44,7 @@ import static com.googlecode.totallylazy.Predicates.lessThan;
 import static com.googlecode.totallylazy.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Quadruple.quadruple;
 import static com.googlecode.totallylazy.Quintuple.quintuple;
+import static com.googlecode.totallylazy.Runnables.printLine;
 import static com.googlecode.totallylazy.Sequences.applicate;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.cons;
@@ -636,8 +637,35 @@ public class SequenceTest {
         assertThat(numbers(1, 2, 3).scanLeft(0, sum()), is(numbers(0, 1, 3, 6)));
     }
 
+    static class EachSupport {
+        static void littleVoid(int value) {
+        }
+        static Void bigVoid(int value) {
+            return null;
+        }
+        static String ignoreResult(int value){
+            return null;
+        }
+    }
+
     @Test
-    public void supportsForEach() throws Exception {
+    public void eachWorksWithAllReturnTypes() throws Exception {
+        sequence(1,2,3).each(printLine(new StringPrintStream(), "%s"));
+        sequence(1,2,3).each(Functions.<Integer>identity());
+        sequence(1,2,3).each(EachSupport::littleVoid);
+        sequence(1,2,3).each(EachSupport::littleVoid);
+        sequence(1,2,3).each(EachSupport::bigVoid);
+        sequence(1,2,3).each(EachSupport::ignoreResult);
+        sequence(1,2,3).each((value) -> EachSupport.littleVoid(value));
+        sequence(1,2,3).each((value) -> EachSupport.bigVoid(value));
+        sequence(1,2,3).each((value) -> EachSupport.ignoreResult(value));
+        sequence(1,2,3).each(i -> {});
+        sequence(1,2,3).each(i -> null);
+        sequence(1,2,3).each(i -> "");
+    }
+
+    @Test
+    public void supportsEach() throws Exception {
         final int[] sum = {0};
         sequence(1, 2).each(value -> sum[0] += value);
         assertThat(sum[0], is(3));

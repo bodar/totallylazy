@@ -69,11 +69,11 @@ public class MemoriseTest {
     }
     
     @Test
-    public void memorisingForEach() throws InterruptedException {
+    public void memorisingEach() throws InterruptedException {
         CountingCallable<Integer> counting = counting();
         Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
-        sequence.forEach(doNothing(Integer.class));
-        sequence.forEach(doNothing(Integer.class));
+        sequence.each(doNothing(Integer.class));
+        sequence.each(doNothing(Integer.class));
 
         assertThat(counting.count(), is(1));
     }

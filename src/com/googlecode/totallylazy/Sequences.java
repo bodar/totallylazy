@@ -234,26 +234,14 @@ public class Sequences {
     }
 
     public static <T> void each(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable) {
-        forEach(iterable, runnable);
-    }
-
-    public static <T> void forEach(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable) {
-        Iterators.forEach(iterable.iterator(), runnable);
+        Iterators.each(iterable.iterator(), runnable);
     }
 
     public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable) {
-        forEachConcurrently(iterable, runnable);
-    }
-
-    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable) {
         mapConcurrently(iterable, runnable).realise();
     }
 
     public static <T> void eachConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable, Executor executor) {
-        forEachConcurrently(iterable, runnable, executor);
-    }
-
-    public static <T> void forEachConcurrently(final Iterable<? extends T> iterable, final Function1<? super T, ?> runnable, Executor executor) {
         mapConcurrently(iterable, runnable, executor).realise();
     }
 

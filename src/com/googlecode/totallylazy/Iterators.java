@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.concurrent.Callable;
@@ -71,10 +70,6 @@ public class Iterators {
     }
 
     public static <T> void each(final Iterator<? extends T> iterator, final Function1<? super T, ?> runnable) {
-        forEach(iterator, runnable);
-    }
-
-    public static <T> void forEach(final Iterator<? extends T> iterator, final Function1<? super T, ?> runnable) {
         while (iterator.hasNext()) {
             Callers.call(runnable, iterator.next());
         }
