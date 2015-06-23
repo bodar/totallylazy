@@ -3,9 +3,9 @@ package com.googlecode.totallylazy.proxy;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.reflection.Asm;
 import net.sf.cglib.proxy.InvocationHandler;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import jdk.internal.org.objectweb.asm.tree.ClassNode;
+import jdk.internal.org.objectweb.asm.tree.FieldInsnNode;
+import jdk.internal.org.objectweb.asm.tree.MethodNode;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

@@ -3,11 +3,11 @@ package com.googlecode.totallylazy.reflection;
 import com.googlecode.totallylazy.Lazy;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.LineNumberNode;
-import org.objectweb.asm.tree.MethodNode;
+import jdk.internal.org.objectweb.asm.Type;
+import jdk.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import jdk.internal.org.objectweb.asm.tree.ClassNode;
+import jdk.internal.org.objectweb.asm.tree.LineNumberNode;
+import jdk.internal.org.objectweb.asm.tree.MethodNode;
 
 import java.lang.reflect.Method;
 

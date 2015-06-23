@@ -19,4 +19,9 @@ public class ReflectionTest {
     private class MyInnerClass {
         final Object this$0 = "This might fool Reflection";
     }
+
+    @Test
+    public void supportsEnclosingMethod() throws Exception {
+
+    }
 }

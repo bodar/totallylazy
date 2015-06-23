@@ -4,13 +4,13 @@ import com.googlecode.totallylazy.Bytes;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.LocalVariableNode;
-import org.objectweb.asm.tree.MethodNode;
+import jdk.internal.org.objectweb.asm.ClassReader;
+import jdk.internal.org.objectweb.asm.tree.AbstractInsnNode;
+import jdk.internal.org.objectweb.asm.tree.ClassNode;
+import jdk.internal.org.objectweb.asm.tree.FieldNode;
+import jdk.internal.org.objectweb.asm.tree.InsnList;
+import jdk.internal.org.objectweb.asm.tree.LocalVariableNode;
+import jdk.internal.org.objectweb.asm.tree.MethodNode;
 
 import java.lang.ref.WeakReference;
 import java.util.Collections;
@@ -50,12 +50,10 @@ public class Asm {
     }
 
 
-    @SuppressWarnings("unchecked")
     public static Sequence<AbstractInsnNode> instructions(MethodNode method) {
         return instructions(method.instructions);
     }
 
-    @SuppressWarnings("unchecked")
     public static Sequence<AbstractInsnNode> instructions(final InsnList instructions) {
         return new Sequence<AbstractInsnNode>() {
             @Override
@@ -65,12 +63,10 @@ public class Asm {
         };
     }
 
-    @SuppressWarnings("unchecked")
     public static Sequence<LocalVariableNode> localVariables(MethodNode methodNode) {
         return sequence(methodNode.localVariables);
     }
 
-    @SuppressWarnings("unchecked")
     public static Sequence<FieldNode> fields(ClassNode classNode) {
         return sequence(classNode.fields);
     }
