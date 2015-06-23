@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import static com.googlecode.totallylazy.Block.block;
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.FileSource.fileSource;
 import static com.googlecode.totallylazy.LazyException.lazyException;
@@ -40,12 +41,8 @@ public interface Sources extends Closeable {
         }
 
         public static int copy(Sources sources, final Destination destination) {
-            return sources.sources().map(new Block<Source>() {
-                @Override
-                public void execute(Source source) throws Exception {
-                    Streams.copyAndClose(source.input, destination.destination(source.name, source.modified));
-                }
-            }).size();
+            return sources.sources().map(block(source ->
+                    Streams.copyAndClose(source.input, destination.destination(source.name, source.modified)))).size();
         }
     }
 
