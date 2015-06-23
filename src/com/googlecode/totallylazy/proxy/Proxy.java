@@ -22,10 +22,10 @@ public class Proxy {
     private final static Lazy<Constructor<?>> constructor = Lazy.lazy(() -> Object.class.getConstructor((Class[]) null));
 
     public static <T> T createProxy(Class<T> aCLass, InvocationHandler invocationHandler) {
-        return new Proxy().createInstance(aCLass, invocationHandler);
+        return createInstance(aCLass, invocationHandler);
     }
 
-    public <T> T createInstance(final Class<T> aClass, final Callback invocationHandler) {
+    public static <T> T createInstance(final Class<T> aClass, final Callback invocationHandler) {
         Callback[] callbacks = {invocationHandler, NoOp.INSTANCE};
         Function0<Object> instantiator = get(aClass, callbacks);
         Object instance = instantiator.apply();
@@ -34,16 +34,11 @@ public class Proxy {
         return aClass.cast(instance);
     }
 
-    private Function0<Object> get(final Class<?> aClass, final Callback[] callbacks) {
-        synchronized (cache) {
-            if (!cache.containsKey(aClass)) {
-                cache.put(aClass, createInstantiator(aClass, callbacks));
-            }
-            return cache.get(aClass);
-        }
+    private static Function0<Object> get(final Class<?> aClass, final Callback[] callbacks) {
+        return cache.computeIfAbsent(aClass, c -> createInstantiator(c, callbacks));
     }
 
-    private Function0<Object> createInstantiator(Class<?> aClass, Callback[] callbacks) {
+    private static Function0<Object> createInstantiator(Class<?> aClass, Callback[] callbacks) {
         IgnoreConstructorsEnhancer enhancer = new IgnoreConstructorsEnhancer();
         enhancer.setSuperclass(aClass);
         enhancer.setCallbackTypes(sequence(callbacks).map(toClass()).toArray(Class.class));
