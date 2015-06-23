@@ -1,12 +1,14 @@
 package com.googlecode.totallylazy.proxy;
 
+import com.googlecode.totallylazy.Function0;
+import com.googlecode.totallylazy.Lazy;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Factory;
 import net.sf.cglib.proxy.InvocationHandler;
 import net.sf.cglib.proxy.NoOp;
-import org.objenesis.ObjenesisStd;
-import org.objenesis.instantiator.ObjectInstantiator;
+import sun.reflect.ReflectionFactory;
 
+import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +17,9 @@ import static com.googlecode.totallylazy.Callables.toClass;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Proxy {
-    private final static Map<Class, ObjectInstantiator> cache = Collections.synchronizedMap(new HashMap<Class, ObjectInstantiator>());
-    private final static ObjenesisStd objenesis = new ObjenesisStd(false);
+    private final static Map<Class<?>, Function0<Object>> cache = Collections.synchronizedMap(new HashMap<>());
+    private final static ReflectionFactory reflectionFactory = ReflectionFactory.getReflectionFactory();
+    private final static Lazy<Constructor<?>> constructor = Lazy.lazy(() -> Object.class.getConstructor((Class[]) null));
 
     public static <T> T createProxy(Class<T> aCLass, InvocationHandler invocationHandler) {
         return new Proxy().createInstance(aCLass, invocationHandler);
@@ -24,14 +27,14 @@ public class Proxy {
 
     public <T> T createInstance(final Class<T> aClass, final Callback invocationHandler) {
         Callback[] callbacks = {invocationHandler, NoOp.INSTANCE};
-        ObjectInstantiator instantiator = get(aClass, callbacks);
-        Object instance = instantiator.newInstance();
+        Function0<Object> instantiator = get(aClass, callbacks);
+        Object instance = instantiator.apply();
         Factory factory = (Factory) instance;
         factory.setCallbacks(callbacks);
         return aClass.cast(instance);
     }
 
-    private ObjectInstantiator get(final Class<?> aClass, final Callback[] callbacks) {
+    private Function0<Object> get(final Class<?> aClass, final Callback[] callbacks) {
         synchronized (cache) {
             if (!cache.containsKey(aClass)) {
                 cache.put(aClass, createInstantiator(aClass, callbacks));
@@ -40,13 +43,13 @@ public class Proxy {
         }
     }
 
-    private ObjectInstantiator createInstantiator(Class<?> aClass, Callback[] callbacks) {
+    private Function0<Object> createInstantiator(Class<?> aClass, Callback[] callbacks) {
         IgnoreConstructorsEnhancer enhancer = new IgnoreConstructorsEnhancer();
         enhancer.setSuperclass(aClass);
         enhancer.setCallbackTypes(sequence(callbacks).map(toClass()).toArray(Class.class));
         enhancer.setCallbackFilter(new ToStringFilter());
         enhancer.setUseFactory(true);
         Class enhancedClass = enhancer.createClass();
-        return objenesis.getInstantiatorOf(enhancedClass);
+        return () -> reflectionFactory.newConstructorForSerialization(enhancedClass, constructor.value()).newInstance();
     }
 }
