@@ -5,12 +5,10 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import java.io.StringReader;
-
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Xml.document;
-import static com.googlecode.totallylazy.Xml.selectNodes;
+import static com.googlecode.totallylazy.xml.Xml.document;
+import static com.googlecode.totallylazy.xml.Xml.selectNodes;
 import static com.googlecode.totallylazy.xml.streaming.XPath.attribute;
 import static com.googlecode.totallylazy.xml.streaming.XPath.child;
 import static com.googlecode.totallylazy.xml.streaming.XPath.descendant;

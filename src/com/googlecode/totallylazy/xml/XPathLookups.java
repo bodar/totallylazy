@@ -2,7 +2,6 @@ package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Callers;
-import com.googlecode.totallylazy.Xml;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;

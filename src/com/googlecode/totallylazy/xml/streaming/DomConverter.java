@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Xml;
+import com.googlecode.totallylazy.xml.Xml;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 

@@ -1,13 +1,11 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.callables.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import com.googlecode.totallylazy.xml.Xml;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;

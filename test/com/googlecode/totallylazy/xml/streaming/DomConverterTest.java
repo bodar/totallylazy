@@ -1,11 +1,9 @@
 package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Xml;
+import com.googlecode.totallylazy.xml.Xml;
 import org.junit.Test;
 import org.w3c.dom.Node;
-
-import java.io.StringReader;
 
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static com.googlecode.totallylazy.xml.streaming.XPath.child;

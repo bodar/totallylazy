@@ -1,5 +1,18 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.xml;
 
+import com.googlecode.totallylazy.Block;
+import com.googlecode.totallylazy.CurriedFunction2;
+import com.googlecode.totallylazy.Escaper;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.LazyException;
+import com.googlecode.totallylazy.Maps;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Strings;
+import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.totallylazy.iterators.NodeIterator;
 import com.googlecode.totallylazy.iterators.PoppingIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
@@ -11,7 +24,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,7 +41,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
