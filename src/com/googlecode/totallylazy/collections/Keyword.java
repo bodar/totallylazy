@@ -32,7 +32,7 @@ interface Keyword<T> extends Function1<Map<String, Object>, T>, GenericType<T> {
     }
 
     static <T> Keyword<T> keyword() {
-        Declaration declaration = Declaration.declaration(1);
+        Declaration declaration = Declaration.declaration();
         ParameterizedType parameterizedType = (ParameterizedType) declaration.type();
 
         return Keyword.keyword(declaration.name(), Unchecked.<Class <T>>cast(parameterizedType.getActualTypeArguments()[0]));

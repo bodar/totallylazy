@@ -2,11 +2,14 @@ package com.googlecode.totallylazy.reflection;
 
 import org.junit.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
+import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.reflection.Reflection.enclosingInstance;
 import static com.googlecode.totallylazy.reflection.Fields.syntheticFields;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static java.lang.String.format;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ReflectionTest {
     @Test
@@ -22,6 +25,47 @@ public class ReflectionTest {
 
     @Test
     public void supportsEnclosingMethod() throws Exception {
+        Method actual = Reflection.enclosingMethod();
+        Method expected = new Enclosing() {}.method();
+        assertThat(actual, is(expected));
+    }
 
+    @Test
+    public void supportsEnclosingConstructor() throws Exception {
+        class Foo {
+            Foo() {
+                Constructor<?> actual = Reflection.enclosingConstructor();
+                Constructor<?> expected = new Enclosing() {}.constructor();
+                assertThat(actual, is(expected));
+            }
+        }
+
+        new Foo();
+    }
+
+    @Test
+    public void supportsCallingMethod() throws Exception {
+        class Bar {
+            Method instanceMethod() {
+                return Reflection.callingMethod();
+            }
+        }
+
+        Method actual = new Bar().instanceMethod();
+        Method expected = new Enclosing() {}.method();
+        assertThat(actual, is(expected));
+    }
+
+    static class Baz {
+        static Method staticMethod() {
+            return Reflection.callingMethod();
+        }
+    }
+
+    @Test
+    public void supportsStaticCallingMethod() throws Exception {
+        Method actual = Baz.staticMethod();
+        Method expected = new Enclosing() {}.method();
+        assertThat(actual, is(expected));
     }
 }

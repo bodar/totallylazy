@@ -9,6 +9,7 @@ import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import jdk.internal.org.objectweb.asm.tree.LineNumberNode;
 import jdk.internal.org.objectweb.asm.tree.MethodNode;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.Lazy.lazy;
@@ -23,6 +24,7 @@ public class StackFrame {
     private final Lazy<MethodNode> methodNode;
     private final Lazy<Sequence<AbstractInsnNode>> instructions;
     private final Lazy<Method> method;
+    private final Lazy<Constructor<?>> constructor;
 
     public StackFrame(StackTraceElement trace) {
         this.trace = trace;
@@ -40,6 +42,10 @@ public class StackFrame {
         method = lazy(() -> sequence(aClass.value().getDeclaredMethods()).
                 filter(m -> m.getName().equals(trace.getMethodName())).
                 filter(m -> sequence(Type.getArgumentTypes(m)).
+                        equals(sequence(Type.getArgumentTypes(methodNode.value().desc)))).
+                head());
+        constructor = lazy(() -> sequence(aClass.value().getDeclaredConstructors()).
+                filter(c -> sequence(Asm.getArgumentTypes(c)).
                         equals(sequence(Type.getArgumentTypes(methodNode.value().desc)))).
                 head());
     }
@@ -62,6 +68,10 @@ public class StackFrame {
 
     public Method method() {
         return method.value();
+    }
+
+    public Constructor<?> constructor() {
+        return constructor.value();
     }
 
     public Sequence<AbstractInsnNode> instructions() {

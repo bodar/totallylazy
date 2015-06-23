@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 import jdk.internal.org.objectweb.asm.ClassReader;
+import jdk.internal.org.objectweb.asm.Type;
 import jdk.internal.org.objectweb.asm.tree.AbstractInsnNode;
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import jdk.internal.org.objectweb.asm.tree.FieldNode;
@@ -13,6 +14,8 @@ import jdk.internal.org.objectweb.asm.tree.LocalVariableNode;
 import jdk.internal.org.objectweb.asm.tree.MethodNode;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -91,5 +94,14 @@ public class Asm {
         }
     }
 
+    public static Type[] getArgumentTypes(Constructor<?> constructor) {
+        Class[] var1 = constructor.getParameterTypes();
+        Type[] var2 = new Type[var1.length];
 
+        for(int var3 = var1.length - 1; var3 >= 0; --var3) {
+            var2[var3] = Type.getType(var1[var3]);
+        }
+
+        return var2;
+    }
 }

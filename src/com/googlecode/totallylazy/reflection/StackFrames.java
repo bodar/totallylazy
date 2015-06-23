@@ -6,6 +6,6 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class StackFrames {
     public static Sequence<StackFrame> stackFrames() {
-        return sequence(Thread.currentThread().getStackTrace()).tail().map(StackFrame::new);
+        return sequence(Thread.currentThread().getStackTrace()).drop(2).map(StackFrame::new);
     }
 }
