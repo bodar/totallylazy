@@ -68,4 +68,17 @@ public class ReflectionTest {
         Method expected = new Enclosing() {}.method();
         assertThat(actual, is(expected));
     }
+
+    @Test
+    public void supportsCallingClass() throws Exception {
+        class Bar {
+            Class<?> who() {
+                return Reflection.callingClass();
+            }
+        }
+
+        Class<?> actual = new Bar().who();
+        assertThat(actual, is(getClass()));
+    }
+
 }

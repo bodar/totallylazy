@@ -33,12 +33,20 @@ public class Reflection {
         }
     }
 
+    public static StackFrame enclosingFrame() {
+        return stackFrames().tail().head();
+    }
+
     public static Method enclosingMethod() {
         return stackFrames().tail().head().method();
     }
 
     public static Constructor<?> enclosingConstructor() {
         return stackFrames().tail().head().constructor();
+    }
+
+    public static StackFrame callingFrame() {
+        return stackFrames().drop(2).head();
     }
 
     public static Method callingMethod() {
@@ -48,4 +56,9 @@ public class Reflection {
     public static Constructor<?> callingConstructor() {
         return stackFrames().drop(2).head().constructor();
     }
+
+    public static Class<?> callingClass() {
+        return stackFrames().drop(2).head().aClass();
+    }
+
 }
