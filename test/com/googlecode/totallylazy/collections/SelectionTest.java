@@ -1,12 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Binary;
-import com.googlecode.totallylazy.Function3;
-import com.googlecode.totallylazy.Monoid;
-import com.googlecode.totallylazy.Reducer;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Strings;
-import com.googlecode.totallylazy.UnaryFunction;
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.numbers.Integers;
 import org.junit.Test;
 
@@ -17,6 +11,7 @@ import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.one;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.collections.PersistentMap.constructors.map;
 
 public class SelectionTest {
@@ -25,7 +20,8 @@ public class SelectionTest {
 
     PersistentMap<String, Object> dan = map(name.name(), "Dan", age.name(), 21);
     PersistentMap<String, Object> matt = map(name.name(), "Matt", age.name(), 22);
-    Sequence<PersistentMap<String, Object>> data = sequence(dan, matt);
+    PersistentMap<String, Object> bob = map(name.name(), "Bob", age.name(), 22);
+    Sequence<PersistentMap<String, Object>> data = sequence(dan, matt, bob);
 
 
     @Test
@@ -35,8 +31,8 @@ public class SelectionTest {
 
     @Test
     public void canSelect() throws Exception {
-        assertThat(data.map(name), is(sequence("Dan", "Matt")));
-        assertThat(data.map(select(name)), is(sequence(map("name", "Dan"), map("name", "Matt"))));
+        assertThat(data.map(name), is(sequence("Dan", "Matt", "Bob")));
+        assertThat(data.map(select(name)), is(sequence(map("name", "Dan"), map("name", "Matt"), map("name", "Bob"))));
     }
 
     @Test
@@ -44,25 +40,57 @@ public class SelectionTest {
         Aggregate<String, String> minimumName = Aggregate.aggregate(name, Strings.minimum);
         Aggregate<Integer, Integer> minimumAge = Aggregate.aggregate(age, Integers.minimum());
         assertThat(data.reduce(minimumAge), is(21));
-        assertThat(data.reduce(minimumName), is("Dan"));
-        assertThat(data.reduce(select(minimumName, minimumAge)), is(map("name", "Dan", "age", 21)));
+        assertThat(data.reduce(minimumName), is("Bob"));
+        assertThat(data.reduce(select(minimumName, minimumAge)), is(map("name", "Bob", "age", 21)));
     }
 
     @Test
     public void supportsConcatination() throws Exception {
         Keyword<String> concat = concat(name, age);
         assertThat(data.filter(where(name, is("Dan"))).map(concat), is(sequence("Dan21")));
-//        assertThat(data.filter(where(name, is("Dan"))).map(select(concat)), is(sequence(map(concat.name(), "Dan21"))));
+        assertThat(data.filter(where(name, is("Dan"))).map(select(concat)), is(one(map(concat.name(), "Dan21"))));
+    }
+
+    @Test
+    public void supportsGroupByAndConcatication() throws Exception {
+        Aggregate<String, String> join = Aggregate.aggregate(name, Strings.join);
+        assertThat(data.groupBy(age).map(group -> group.reduce(join)), is(sequence("Dan", "MattBob")));
+    }
+
+    @Test
+    public void supportsUppercase() throws Exception {
+        Keyword<String> upperCase = compose(name, String::toUpperCase);
+        assertThat(data.filter(where(name, is("Dan"))).map(upperCase), is(sequence("DAN")));
+        assertThat(data.filter(where(name, is("Dan"))).map(select(upperCase)), is(one(map(upperCase.name(), "DAN"))));
+    }
+
+    private <T, R> Keyword<R> compose(Keyword<T> keyword, Function1<T,R> function){
+        return new Keyword<R>() {
+            @Override
+            public String name() {
+                return function.toString() + "(" + keyword.name() + ")";
+            }
+
+            @Override
+            public Class<R> forClass() {
+                return null;
+            }
+
+            @Override
+            public R call(Map<String, Object> map) throws Exception {
+                return function.call(keyword.call(map));
+            }
+        };
     }
 
     private Keyword<String> concat(Keyword<?>... functions) {
         return new Keyword<String>() {
+            Sequence<Keyword<?>> keywords = sequence(functions);
+
             @Override
             public Class<String> forClass() {
                 return String.class;
             }
-
-            Sequence<Keyword<?>> keywords = sequence(functions);
 
             @Override
             public String name() {
@@ -76,32 +104,12 @@ public class SelectionTest {
         };
     }
 
-    private Projection<PersistentMap<String, Object>> select(Keyword<?>... selections) {
-        return select((selection, source, destination) -> {
-            Object value = selection.apply(source);
-            return destination.insert(selection.name(), value);
-        }, selections);
-    }
-
-    @SuppressWarnings("unchecked")
-    private Projection<PersistentMap<String, Object>> select(Aggregate<?, ?>... selections) {
-        return select((selection, source, destination) -> {
-            Aggregate raw = selection;
-            Object sourceValue = raw.keyword().apply(source);
-            sourceValue = sourceValue == null ? raw.identity() : sourceValue;
-            Object destinationValue = raw.apply(sourceValue, destination);
-            return destination.insert(raw.keyword().name(), destinationValue);
-        }, selections);
-    }
-
-    @SafeVarargs
-    private final <T> Projection<PersistentMap<String, Object>> select(Function3<? super T, PersistentMap<String, Object>, PersistentMap<String, Object>, PersistentMap<String, Object>> fun,
-                                                                 T... selections) {
+    private Projection<PersistentMap<String, Object>> select(Selection... selections) {
         return Projection.projection(map(), (seed, row) ->
-                sequence(selections).fold(seed, (accumulator, selection) -> fun.apply(selection, row, accumulator)));
+                sequence(selections).fold(seed, (accumulator, selection) -> selection.select(row, accumulator)));
     }
 
-     interface Projection<T> extends Monoid<T>, UnaryFunction<T> {
+    interface Projection<T> extends Monoid<T>, UnaryFunction<T> {
         @Override
         default T call(T t) throws Exception {
             return call(identity(), t);
@@ -121,7 +129,8 @@ public class SelectionTest {
             };
         }
     }
-    interface Aggregate<T, R> extends Reducer<PersistentMap<String,Object>, R> {
+
+    interface Aggregate<T, R> extends Reducer<PersistentMap<String,Object>, R>, Selection {
         Keyword<T> keyword();
 
         Reducer<T, R> reducer();
@@ -150,6 +159,12 @@ public class SelectionTest {
             return reducer().identity();
         }
 
-
+        @Override
+        default PersistentMap<String, Object> select(PersistentMap<String, Object> source, PersistentMap<String, Object> destination) {
+            T sourceValue = keyword().apply(source);
+            R value = sourceValue == null ? identity() : cast(sourceValue);
+            R reduced = apply(value, destination);
+            return destination.insert(keyword().name(), reduced);
+        }
     }
 }

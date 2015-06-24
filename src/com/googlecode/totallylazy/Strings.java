@@ -33,7 +33,7 @@ public class Strings {
     public static final String EMPTY = "";
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
-    public static final CombinerFunction<String> join = JoinString.instance;
+    public static final Monoid<String> join = JoinString.instance;
 
     public static Function1<String, Boolean> asBoolean() {
         return Boolean::parseBoolean;

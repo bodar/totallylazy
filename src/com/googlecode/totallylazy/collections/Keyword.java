@@ -8,13 +8,19 @@ import com.googlecode.totallylazy.reflection.Declaration;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
-interface Keyword<T> extends Function1<Map<String, Object>, T>, GenericType<T> {
+interface Keyword<T> extends Function1<Map<String, Object>, T>, GenericType<T>, Selection {
     String name();
 
     @Override
     default T call(Map<String, Object> map) throws Exception {
         Object value = map.get(name());
         return forClass().cast(value);
+    }
+
+    @Override
+    default PersistentMap<String, Object> select(PersistentMap<String, Object> source, PersistentMap<String, Object> destination) {
+        T value = apply(source);
+        return destination.insert(name(), value);
     }
 
     static <T> Keyword<T> keyword(String name, Class<T> aClass) {
