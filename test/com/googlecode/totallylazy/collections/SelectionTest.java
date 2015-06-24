@@ -46,14 +46,14 @@ public class SelectionTest {
 
     @Test
     public void supportsConcatination() throws Exception {
-        Keyword<String> concat = concat(name, age);
+        Keyword<String> concat = composite(Concat.Instance, name, age);
         assertThat(data.filter(where(name, is("Dan"))).map(concat), is(sequence("Dan21")));
         assertThat(data.filter(where(name, is("Dan"))).map(select(concat)), is(one(map(concat.name(), "Dan21"))));
     }
 
     @Test
     public void supportsGroupByAndConcatication() throws Exception {
-        Aggregate<String, String> join = Aggregate.aggregate(name, Strings.join);
+        Aggregate<String, String> join = Aggregate.aggregate(name, Concat.Instance);
         assertThat(data.groupBy(age).map(group -> group.reduce(join)), is(sequence("Dan", "MattBob")));
     }
 
@@ -83,23 +83,24 @@ public class SelectionTest {
         };
     }
 
-    private Keyword<String> concat(Keyword<?>... functions) {
-        return new Keyword<String>() {
-            Sequence<Keyword<?>> keywords = sequence(functions);
+    @SafeVarargs
+    public final <T, R> Keyword<R> composite(Reducer<? super T, R> reducer, Keyword<? extends T>... functions) {
+        return new Keyword<R>() {
+            Sequence<Keyword<? extends T>> keywords = sequence(functions);
 
             @Override
-            public Class<String> forClass() {
-                return String.class;
+            public Class<R> forClass() {
+                return null;
             }
 
             @Override
             public String name() {
-                return keywords.map(Keyword::name).toString("concat(", ",", ")");
+                return keywords.map(Keyword::name).toString(reducer.toString() + "(", ",", ")");
             }
 
             @Override
-            public String call(Map<String, Object> map) throws Exception {
-                return keywords.fold(new StringBuilder(), (b, k) -> b.append(k.apply(map))).toString();
+            public R call(Map<String, Object> map) throws Exception {
+                return keywords.fold(reducer.identity(), (a, k) -> reducer.call(a, k.apply(map)));
             }
         };
     }
@@ -130,20 +131,34 @@ public class SelectionTest {
         }
     }
 
+    enum Concat implements Reducer<Object, String>{
+        Instance;
+
+        @Override
+        public String call(String s, Object o) throws Exception {
+            return s + o;
+        }
+
+        @Override
+        public String identity() {
+            return "";
+        }
+    }
+
     interface Aggregate<T, R> extends Reducer<PersistentMap<String,Object>, R>, Selection {
-        Keyword<T> keyword();
+        Keyword<? extends T> keyword();
 
-        Reducer<T, R> reducer();
+        Reducer<? super T, R> reducer();
 
-        static <T, R> Aggregate<T, R> aggregate(Keyword<T> keyword, Reducer<T, R> reducer) {
+        static <T, R> Aggregate<T, R> aggregate(Keyword<? extends T> keyword, Reducer<? super T, R> reducer) {
             return new Aggregate<T, R>() {
                 @Override
-                public Keyword<T> keyword() {
+                public Keyword<? extends T> keyword() {
                     return keyword;
                 }
 
                 @Override
-                public Reducer<T, R> reducer() {
+                public Reducer<? super T, R> reducer() {
                     return reducer;
                 }
             };
