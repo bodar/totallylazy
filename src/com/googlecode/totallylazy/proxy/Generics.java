@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
 
 import java.lang.reflect.ParameterizedType;
@@ -23,8 +22,8 @@ public class Generics {
     }
 
     public static ParameterizedType parameterizedType(Class<?> aClass) {
-        return sequence(aClass.getGenericInterfaces()).cons(aClass.getGenericSuperclass()).safeCast(ParameterizedType.class).head();
+        Sequence<Type> interfaces = sequence(aClass.getGenericInterfaces());
+        if(!aClass.isEnum()) interfaces = interfaces.cons(aClass.getGenericSuperclass());
+        return interfaces.safeCast(ParameterizedType.class).head();
     }
-
-
 }
