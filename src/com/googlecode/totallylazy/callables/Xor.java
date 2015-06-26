@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.CurriedMonoid;
 
-public class Xor extends CombinerFunction<Boolean> {
+public class Xor implements CurriedMonoid<Boolean> {
     @Override
     public Boolean call(Boolean a, Boolean b) throws Exception {
         return a ^ b;

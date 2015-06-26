@@ -19,7 +19,7 @@ package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.CurriedBinaryFunction;
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.CurriedMonoid;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -339,21 +339,21 @@ public class Numbers {
         return numbers -> Sequences.reduceLeft(numbers, sum());
     }
 
-    public static final CombinerFunction<Number> average = new Average();
-    public static CombinerFunction<Number> average() {
+    public static final CurriedMonoid<Number> average = new Average();
+    public static CurriedMonoid<Number> average() {
         return average;
     }
 
-    public static final CombinerFunction<Number> sum = new Sum();
-    public static final CombinerFunction<Number> Σ = sum;
+    public static final CurriedMonoid<Number> sum = new Sum();
+    public static final CurriedMonoid<Number> Σ = sum;
 
-    public static CombinerFunction<Number> sum() {
+    public static CurriedMonoid<Number> sum() {
         return sum;
     }
 
-    public static final CombinerFunction<Number> add = sum;
+    public static final CurriedMonoid<Number> add = sum;
 
-    public static CombinerFunction<Number> add() {
+    public static CurriedMonoid<Number> add() {
         return add;
     }
 
@@ -365,11 +365,7 @@ public class Numbers {
         return operatorsFor(x, y).add(x, y);
     }
 
-    public static CurriedBinaryFunction<Number> subtract = new CurriedBinaryFunction<Number>() {
-        public Number call(Number a, Number b) {
-            return Numbers.subtract(a, b);
-        }
-    };
+    public static CurriedBinaryFunction<Number> subtract = Numbers::subtract;
 
     public static CurriedBinaryFunction<Number> subtract() {
         return subtract;
@@ -383,15 +379,15 @@ public class Numbers {
         return operatorsFor(x, y).add(x, operatorsFor(y).negate(y));
     }
 
-    public static CombinerFunction<Number> product = new Product();
+    public static CurriedMonoid<Number> product = new Product();
 
-    public static CombinerFunction<Number> product() {
+    public static CurriedMonoid<Number> product() {
         return product;
     }
 
-    public static CombinerFunction<Number> multiply = product;
+    public static CurriedMonoid<Number> multiply = product;
 
-    public static CombinerFunction<Number> multiply() {
+    public static CurriedMonoid<Number> multiply() {
         return multiply;
     }
 
@@ -412,11 +408,7 @@ public class Numbers {
         return divide.flip().apply(divisor);
     }
 
-    public static CurriedBinaryFunction<Number> divide = new CurriedBinaryFunction<Number>() {
-        public Number call(Number dividend, Number divisor) throws Exception {
-            return divide(dividend, divisor);
-        }
-    };
+    public static CurriedBinaryFunction<Number> divide = Numbers::divide;
 
     public static CurriedBinaryFunction<Number> divide() {
         return divide;
@@ -431,12 +423,7 @@ public class Numbers {
         return mod().apply(divisor);
     }
 
-    public static CurriedBinaryFunction<Number> remainder = new CurriedBinaryFunction<Number>() {
-        @Override
-        public Number call(Number dividend, Number divisor) throws Exception {
-            return remainder(dividend, divisor);
-        }
-    };
+    public static CurriedBinaryFunction<Number> remainder = Numbers::remainder;
 
     public static CurriedBinaryFunction<Number> remainder() {
         return remainder;

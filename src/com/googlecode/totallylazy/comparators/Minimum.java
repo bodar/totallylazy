@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.comparators;
 
 import com.googlecode.totallylazy.Monoid;
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.CurriedMonoid;
 
 public interface Minimum<T> extends Monoid<T> {
     class methods {
@@ -16,7 +16,7 @@ public interface Minimum<T> extends Monoid<T> {
         }
     }
 
-    class Function<T extends Comparable<? super T>>extends CombinerFunction<T> implements Minimum<T> {
+    class Function<T extends Comparable<? super T>> implements Minimum<T>,CurriedMonoid<T> {
         private final T identity;
 
         private Function(T identity) {this.identity = identity;}

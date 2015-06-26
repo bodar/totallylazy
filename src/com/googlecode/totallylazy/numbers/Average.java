@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.CurriedMonoid;
 
-public class Average extends CombinerFunction<Number> {
+public class Average implements CurriedMonoid<Number> {
     public Number call(Number average, Number value) {
         return weighted(average).combine(weighted(value));
     }

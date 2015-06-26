@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.CurriedMonoid;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.CurriedFunction2;
 import com.googlecode.totallylazy.Pair;
@@ -162,8 +162,8 @@ public class ValidationResult {
             return (validationResult, keyAndMessages) -> validationResult.add(keyAndMessages.first(), keyAndMessages.second());
         }
 
-        public static CombinerFunction<ValidationResult> merge() {
-            return new CombinerFunction<ValidationResult>() {
+        public static CurriedMonoid<ValidationResult> merge() {
+            return new CurriedMonoid<ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult seed, ValidationResult value) throws Exception {
                     return seed.merge(value);

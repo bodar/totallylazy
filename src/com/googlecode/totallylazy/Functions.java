@@ -186,9 +186,9 @@ public class Functions {
         return (a, b, c, d, e) -> function.call(Quintuple.quintuple(a, b, c, d, e));
     }
 
-    public static CombinerFunction<Boolean> and = new And();
-    public static CombinerFunction<Boolean> or = new Or();
-    public static CombinerFunction<Boolean> xor = new Xor();
+    public static CurriedMonoid<Boolean> and = new And();
+    public static CurriedMonoid<Boolean> or = new Or();
+    public static CurriedMonoid<Boolean> xor = new Xor();
 
     public static Function1<Pair<Boolean, Boolean>, Boolean> andPair() {
         return pair -> pair.first() && pair.second();

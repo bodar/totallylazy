@@ -16,7 +16,7 @@ public class Characters {
     public static Charset UTF16 = Charset.forName("UTF-16");
     public static Charset ASCII = Charset.forName("ASCII");
 
-    public static final CombinerFunction<CharSequence> join = JoinCharSequence.instance;
+    public static final CurriedMonoid<CharSequence> join = JoinCharSequence.instance;
 
     public static Sequence<Character> characters(final CharSequence value) {
         return Sequences.characters(value);

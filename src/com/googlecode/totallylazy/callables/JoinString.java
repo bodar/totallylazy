@@ -1,10 +1,10 @@
 package com.googlecode.totallylazy.callables;
 
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.CurriedMonoid;
 import com.googlecode.totallylazy.Strings;
 
-public class JoinString extends CombinerFunction<String> {
-    public static final CombinerFunction<String> instance = new JoinString();
+public class JoinString implements CurriedMonoid<String> {
+    public static final CurriedMonoid<String> instance = new JoinString();
     private JoinString() {}
 
     @Override

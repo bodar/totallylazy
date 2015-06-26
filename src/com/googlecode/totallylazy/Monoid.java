@@ -21,8 +21,8 @@ public interface Monoid<T> extends Combiner<T, T>, Associative<T> {
     }
 
     class functions {
-        public static <A, B> CombinerFunction<Pair<A, B>> pair(final Monoid<A> aMonoid, final Monoid<B> bMonoid) {
-            return new CombinerFunction<Pair<A, B>>() {
+        public static <A, B> CurriedMonoid<Pair<A, B>> pair(final Monoid<A> aMonoid, final Monoid<B> bMonoid) {
+            return new CurriedMonoid<Pair<A, B>>() {
                 @Override
                 public Pair<A, B> call(Pair<A, B> a, Pair<A, B> b) throws Exception {
                     return Pair.pair(aMonoid.call(a.first(), b.first()), bMonoid.call(a.second(), b.second()));

@@ -1,11 +1,11 @@
 package com.googlecode.totallylazy.callables;
 
 import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.CombinerFunction;
+import com.googlecode.totallylazy.CurriedMonoid;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Functions;
 
-public class Compose<T> extends CombinerFunction<Function1<T, T>> {
+public class Compose<T> implements CurriedMonoid<Function1<T,T>> {
     private Compose() {}
 
     public static <T> Compose<T> compose() {
