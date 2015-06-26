@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.matchers;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.hamcrest.Description;
@@ -10,7 +10,7 @@ import org.hamcrest.SelfDescribing;
 import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeMatcher;
 
-import static com.googlecode.totallylazy.Callables.returns1;
+import static com.googlecode.totallylazy.functions.Callables.returns1;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static org.hamcrest.StringDescription.asString;

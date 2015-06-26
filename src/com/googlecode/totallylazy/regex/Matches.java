@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.regex;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.GroupIterator;
 
@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-import static com.googlecode.totallylazy.Callables.returnArgument;
+import static com.googlecode.totallylazy.functions.Callables.returnArgument;
 import static com.googlecode.totallylazy.Callers.call;
 
 public class Matches extends Sequence<MatchResult> {

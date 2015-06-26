@@ -2,14 +2,13 @@ package com.googlecode.totallylazy.reflection;
 
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
-import jdk.internal.org.objectweb.asm.tree.AbstractInsnNode;
 import jdk.internal.org.objectweb.asm.tree.FieldInsnNode;
 import jdk.internal.org.objectweb.asm.tree.FieldNode;
 import jdk.internal.org.objectweb.asm.tree.LocalVariableNode;
 import jdk.internal.org.objectweb.asm.tree.MethodInsnNode;
 import jdk.internal.org.objectweb.asm.tree.VarInsnNode;
 
-import static com.googlecode.totallylazy.Functions.instanceOf;
+import static com.googlecode.totallylazy.functions.Functions.instanceOf;
 import static com.googlecode.totallylazy.Predicates.not;
 
 public class Declaration {

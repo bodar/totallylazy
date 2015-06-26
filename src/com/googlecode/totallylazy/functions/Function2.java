@@ -1,4 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
+
+import com.googlecode.totallylazy.Pair;
 
 public interface Function2<A, B, C> {
      C call(A a, B b) throws Exception;

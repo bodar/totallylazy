@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Function0;
+import com.googlecode.totallylazy.functions.Function0;
 import com.googlecode.totallylazy.Lazy;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Factory;
@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Callables.toClass;
+import static com.googlecode.totallylazy.functions.Callables.toClass;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Proxy {

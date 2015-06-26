@@ -1,10 +1,11 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Function1;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.asCallable1;
-import static com.googlecode.totallylazy.Callables.callThrows;
-import static com.googlecode.totallylazy.Callables.returnArgument;
+import static com.googlecode.totallylazy.functions.Callables.asCallable1;
+import static com.googlecode.totallylazy.functions.Callables.callThrows;
+import static com.googlecode.totallylazy.functions.Callables.returnArgument;
 import static com.googlecode.totallylazy.Exceptions.captureException;
 import static com.googlecode.totallylazy.Exceptions.handleException;
 import static com.googlecode.totallylazy.Left.left;

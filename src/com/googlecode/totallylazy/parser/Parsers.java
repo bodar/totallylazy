@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;

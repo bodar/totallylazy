@@ -1,12 +1,10 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Atomic;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Segment;
-import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.totallylazy.Unchecked;
 
 import java.util.Collection;

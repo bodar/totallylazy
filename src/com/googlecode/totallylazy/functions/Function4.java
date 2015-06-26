@@ -1,4 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
+
+import com.googlecode.totallylazy.Quadruple;
 
 public interface Function4<A, B, C, D, E> {
     E call(A a, B b, C c, D d) throws Exception;

@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.CurriedCombiner;
+import com.googlecode.totallylazy.functions.Function1;
+
 import java.util.ArrayList;
 import java.util.List;
 

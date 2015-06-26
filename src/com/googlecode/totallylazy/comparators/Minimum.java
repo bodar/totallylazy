@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.comparators;
 
-import com.googlecode.totallylazy.Monoid;
-import com.googlecode.totallylazy.CurriedMonoid;
+import com.googlecode.totallylazy.functions.Monoid;
+import com.googlecode.totallylazy.functions.CurriedMonoid;
 
 public interface Minimum<T> extends Monoid<T> {
     class methods {

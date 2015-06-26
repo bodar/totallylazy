@@ -4,8 +4,8 @@ import org.hamcrest.Description;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.returnArgument;
-import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.functions.Callables.returnArgument;
+import static com.googlecode.totallylazy.functions.Callables.returns;
 import static com.googlecode.totallylazy.matchers.LazyMatcher.matchesLazily;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;

@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.UnaryFunction;
+
 import java.io.IOException;
 
 public class MapSources implements Sources {

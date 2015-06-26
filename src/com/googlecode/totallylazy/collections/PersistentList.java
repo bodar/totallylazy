@@ -1,10 +1,10 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
-import com.googlecode.totallylazy.Function0;
-import com.googlecode.totallylazy.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Function0;
+import com.googlecode.totallylazy.functions.CurriedFunction2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.functions.Callables.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Iterable<T>, Segment<T>, Functor<T>, Indexed<T>, Foldable<T>, Filterable<T> {

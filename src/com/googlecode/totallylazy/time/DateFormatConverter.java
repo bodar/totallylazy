@@ -1,12 +1,12 @@
 package com.googlecode.totallylazy.time;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Sequence;
 
 import java.text.DateFormat;
 import java.util.Date;
 
-import static com.googlecode.totallylazy.Callables.callThrows;
+import static com.googlecode.totallylazy.functions.Callables.callThrows;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class DateFormatConverter implements DateConverter {

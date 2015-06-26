@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.annotations.tailrec;
-import com.googlecode.totallylazy.functions.JoinString;
+import com.googlecode.totallylazy.functions.*;
 import com.googlecode.totallylazy.comparators.Maximum;
 import com.googlecode.totallylazy.comparators.Minimum;
 import com.googlecode.totallylazy.predicates.ContainsPredicate;

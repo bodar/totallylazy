@@ -1,10 +1,15 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Callables;
+import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.functions.Function2;
+
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Callers.call;
-import static com.googlecode.totallylazy.Functions.returns;
+import static com.googlecode.totallylazy.functions.Functions.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.functions.LazyCallable.lazy;
 

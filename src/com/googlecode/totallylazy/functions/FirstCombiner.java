@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
 
 public class FirstCombiner<T> implements CurriedMonoid<T> {
     private FirstCombiner() {}

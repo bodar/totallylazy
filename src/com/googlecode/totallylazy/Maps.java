@@ -1,5 +1,9 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Callables;
+import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Function1;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;

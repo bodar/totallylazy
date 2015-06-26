@@ -1,12 +1,11 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.Function0;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.functions.Callables.returns;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.functions.CountingCallable.counting;
 import static com.googlecode.totallylazy.functions.LazyCallable.lazy;

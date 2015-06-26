@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.xml;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 
 @java.lang.annotation.Target(java.lang.annotation.ElementType.METHOD)
 @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)

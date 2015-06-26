@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 
 import static com.googlecode.totallylazy.Sequences.characters;
 import static java.lang.Integer.parseInt;

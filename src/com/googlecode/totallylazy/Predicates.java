@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Callables;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.predicates.AlwaysFalse;
 import com.googlecode.totallylazy.predicates.AlwaysTrue;
 import com.googlecode.totallylazy.predicates.AndPredicate;
@@ -22,7 +24,7 @@ import com.googlecode.totallylazy.predicates.WhileTrue;
 
 import java.util.Collection;
 
-import static com.googlecode.totallylazy.Functions.function;
+import static com.googlecode.totallylazy.functions.Functions.function;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;

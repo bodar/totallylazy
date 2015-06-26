@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.reflection.Fields;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Unchecked;
 
 import java.lang.reflect.Field;

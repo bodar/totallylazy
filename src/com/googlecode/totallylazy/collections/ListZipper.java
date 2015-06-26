@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.functions.Functions;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.annotations.tailrec;
 

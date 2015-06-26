@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
 
 public interface CurriedBinaryFunction<T> extends CurriedFunction2<T, T, T>, BinaryFunction<T> {
     @Override

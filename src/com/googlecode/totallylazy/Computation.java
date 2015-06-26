@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Callables;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.functions.Functions;
 import com.googlecode.totallylazy.functions.LazyFunction;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
@@ -7,8 +10,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callables.compose;
-import static com.googlecode.totallylazy.Functions.returns;
+import static com.googlecode.totallylazy.functions.Callables.compose;
+import static com.googlecode.totallylazy.functions.Functions.returns;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.functions.LazyFunction.lazy;

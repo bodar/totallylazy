@@ -1,13 +1,13 @@
 package com.googlecode.totallylazy.matchers;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.functions.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
 
 public final class LazyMatcher<A, E> extends TypeSafeMatcher<A> {

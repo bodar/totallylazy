@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.CurriedCombiner;
+import com.googlecode.totallylazy.functions.CurriedCombiner;
 
 import static com.googlecode.totallylazy.validations.PredicateValidator.constructors.validatePredicate;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;

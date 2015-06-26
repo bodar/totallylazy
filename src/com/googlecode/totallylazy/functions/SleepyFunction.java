@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.Function1;
-
 public final class SleepyFunction<T,R> implements Function1<T, R> {
     private final Function1<? super T, ? extends R> callable;
     private final int millis;

@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
 
 public interface CurriedMonoid<T> extends Monoid<T>, CurriedBinaryFunction<T> {
 }

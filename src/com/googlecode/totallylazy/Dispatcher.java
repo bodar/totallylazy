@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.reflection.Methods;
@@ -9,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static com.googlecode.totallylazy.Callables.toClass;
+import static com.googlecode.totallylazy.functions.Callables.toClass;
 import static com.googlecode.totallylazy.reflection.Methods.methodName;
 import static com.googlecode.totallylazy.reflection.Methods.parameterTypes;
 import static com.googlecode.totallylazy.Predicates.is;

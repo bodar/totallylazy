@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Block;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.io.File;
@@ -10,8 +12,8 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Callables.doThen;
-import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.functions.Callables.doThen;
+import static com.googlecode.totallylazy.functions.Callables.returns;
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;

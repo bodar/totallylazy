@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Function1;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Lense.lense;

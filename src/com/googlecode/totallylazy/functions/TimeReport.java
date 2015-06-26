@@ -1,9 +1,6 @@
 package com.googlecode.totallylazy.functions;
 
 
-import com.googlecode.totallylazy.CurriedBinaryFunction;
-import com.googlecode.totallylazy.Block;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 

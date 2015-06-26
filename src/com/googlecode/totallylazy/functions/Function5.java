@@ -1,4 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
+
+import com.googlecode.totallylazy.Quintuple;
 
 public interface Function5<A, B, C, D, E, F> {
     F call(A a, B b, C c, D d, E e) throws Exception;

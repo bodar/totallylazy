@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Function1;
+
 public class Lense<A, B> {
     private final Function1<A, B> get;
     private final CurriedFunction2<B, A, A> set;

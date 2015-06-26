@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.matchers.Matchers;
 import org.junit.Test;

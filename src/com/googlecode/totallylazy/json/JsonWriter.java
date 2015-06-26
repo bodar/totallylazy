@@ -1,7 +1,6 @@
 package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Iterators;
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.multi;
 import com.googlecode.totallylazy.time.Dates;
@@ -9,7 +8,6 @@ import com.googlecode.totallylazy.time.Dates;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Appendables.append;
 

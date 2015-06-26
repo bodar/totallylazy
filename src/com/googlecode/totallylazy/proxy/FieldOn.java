@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.reflection.Asm;
 import net.sf.cglib.proxy.InvocationHandler;
 import jdk.internal.org.objectweb.asm.tree.ClassNode;

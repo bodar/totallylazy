@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.Function1;
-
 import java.util.HashMap;
 import java.util.Map;
 

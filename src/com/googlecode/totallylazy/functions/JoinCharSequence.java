@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.CurriedMonoid;
 import com.googlecode.totallylazy.Strings;
 
 public class JoinCharSequence implements CurriedMonoid<CharSequence> {

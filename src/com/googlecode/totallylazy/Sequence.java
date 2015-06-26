@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.collections.AbstractCollection;
 import com.googlecode.totallylazy.collections.Indexed;
 import com.googlecode.totallylazy.collections.PersistentCollection;
 import com.googlecode.totallylazy.collections.PersistentList;
+import com.googlecode.totallylazy.functions.*;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -14,8 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
-import static com.googlecode.totallylazy.Callables.ascending;
-import static com.googlecode.totallylazy.Callables.returnArgument;
+import static com.googlecode.totallylazy.functions.Callables.ascending;
+import static com.googlecode.totallylazy.functions.Callables.returnArgument;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.not;

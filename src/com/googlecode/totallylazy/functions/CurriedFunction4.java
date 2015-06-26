@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
 
 public interface CurriedFunction4<A, B, C, D, E> extends CurriedFunction3<A, B, C, Function1<D, E>>, Function4<A, B, C, D, E> {
     @Override

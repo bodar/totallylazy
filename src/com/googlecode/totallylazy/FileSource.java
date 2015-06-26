@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.collections.CloseableList;
+import com.googlecode.totallylazy.functions.Function1;
 
 import java.io.File;
 import java.io.FileInputStream;

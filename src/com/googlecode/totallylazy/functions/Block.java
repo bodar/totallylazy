@@ -1,4 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
+
+import com.googlecode.totallylazy.Runnables;
 
 public interface Block<T> extends Function1<T, Void> {
     @Override

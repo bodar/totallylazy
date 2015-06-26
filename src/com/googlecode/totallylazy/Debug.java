@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Function1;
+
 import static java.lang.management.ManagementFactory.getRuntimeMXBean;
 
 public class Debug {

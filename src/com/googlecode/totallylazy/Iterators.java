@@ -1,6 +1,10 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.collections.PersistentList;
+import com.googlecode.totallylazy.functions.Callables;
+import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.iterators.FilterIterator;
 import com.googlecode.totallylazy.iterators.FlattenIterator;
 import com.googlecode.totallylazy.iterators.InitIterator;
@@ -27,10 +31,10 @@ import java.util.Queue;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Appendables.append;
-import static com.googlecode.totallylazy.Callables.nullGuard;
-import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.functions.Callables.nullGuard;
+import static com.googlecode.totallylazy.functions.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
-import static com.googlecode.totallylazy.Functions.function;
+import static com.googlecode.totallylazy.functions.Functions.function;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;

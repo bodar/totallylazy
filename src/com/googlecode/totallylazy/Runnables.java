@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Block;
+import com.googlecode.totallylazy.functions.UnaryFunction;
+
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;

@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.comparators.Comparators;
+import com.googlecode.totallylazy.functions.*;
 import com.googlecode.totallylazy.iterators.ArrayIterator;
 import com.googlecode.totallylazy.iterators.CharacterIterator;
 import com.googlecode.totallylazy.iterators.EmptyIterator;
@@ -23,8 +24,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
-import static com.googlecode.totallylazy.Callables.ascending;
-import static com.googlecode.totallylazy.Callables.deferReturn;
+import static com.googlecode.totallylazy.functions.Callables.ascending;
+import static com.googlecode.totallylazy.functions.Callables.deferReturn;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;

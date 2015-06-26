@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy;
 
 
+import com.googlecode.totallylazy.functions.Function1;
+
 public class Rule<A, B> implements Function1<A, B>, Predicate<A> {
     private final Predicate<? super A> predicate;
     private final Function1<? super A, ? extends B> callable;

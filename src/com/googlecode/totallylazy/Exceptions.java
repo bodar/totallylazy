@@ -1,7 +1,9 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Block;
+import com.googlecode.totallylazy.functions.Function1;
+
 import java.io.PrintWriter;
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Option.none;

@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Memory;
 

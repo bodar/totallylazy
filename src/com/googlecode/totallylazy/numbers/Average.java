@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.CurriedMonoid;
+import com.googlecode.totallylazy.functions.CurriedMonoid;
 
 public class Average implements CurriedMonoid<Number> {
     public Number call(Number average, Number value) {

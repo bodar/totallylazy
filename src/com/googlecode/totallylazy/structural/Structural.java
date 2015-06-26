@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.structural;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.reflection.Methods;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;

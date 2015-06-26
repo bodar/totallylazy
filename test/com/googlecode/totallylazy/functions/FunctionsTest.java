@@ -1,11 +1,17 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
 
+import com.googlecode.totallylazy.Either;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.functions.Callables;
+import com.googlecode.totallylazy.functions.CurriedFunction3;
 import com.googlecode.totallylazy.matchers.Matchers;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.compose;
-import static com.googlecode.totallylazy.Callables.uncurry3;
+import static com.googlecode.totallylazy.functions.Callables.compose;
+import static com.googlecode.totallylazy.functions.Callables.uncurry3;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
@@ -24,7 +30,7 @@ public class FunctionsTest {
 
     @Test
     public void supportsApplicativeUsageWithEither() throws Exception {
-        assertThat(add(3).$(Either.<String, Number>right(3)), CoreMatchers.is(Either.<String, Number>right(6)));
+        MatcherAssert.assertThat(add(3).$(Either.<String, Number>right(3)), CoreMatchers.is(Either.<String, Number>right(6)));
     }
 
     @Test

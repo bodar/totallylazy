@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.functions.UnaryFunction;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 import com.googlecode.totallylazy.segments.AbstractSegment;
 import com.googlecode.totallylazy.segments.CharacterSegment;

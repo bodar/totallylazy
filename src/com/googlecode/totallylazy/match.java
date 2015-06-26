@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Function1;
+
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public abstract class match<A, B> implements Function1<A, Option<B>> {

@@ -17,9 +17,9 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.CurriedBinaryFunction;
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.CurriedMonoid;
+import com.googlecode.totallylazy.functions.CurriedBinaryFunction;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.functions.CurriedMonoid;
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
@@ -28,7 +28,7 @@ import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.UnaryFunction;
+import com.googlecode.totallylazy.functions.UnaryFunction;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
@@ -38,7 +38,7 @@ import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import static com.googlecode.totallylazy.Callables.first;
+import static com.googlecode.totallylazy.functions.Callables.first;
 import static com.googlecode.totallylazy.Computation.computation;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;

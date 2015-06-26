@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.reflection;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;

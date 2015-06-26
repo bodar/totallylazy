@@ -2,28 +2,31 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
-import java.util.concurrent.Callable;
-
+import static com.googlecode.totallylazy.Assert.fail;
 import static com.googlecode.totallylazy.Trampoline.done;
 import static com.googlecode.totallylazy.Trampoline.more;
-import static com.googlecode.totallylazy.matchers.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.proxy.Call.method;
+import static com.googlecode.totallylazy.proxy.Call.on;
 
 public class TrampolineTest {
-    public Trampoline<Boolean> even(final int n) {
+    Trampoline<Boolean> even(int n) {
         if (n == 0) return done(true);
-        else return more(() -> odd(n - 1));
+        return more(() -> odd(n - 1));
     }
 
-    public Trampoline<Boolean> odd(final int n) {
+    Trampoline<Boolean> odd(int n) {
         if (n == 0) return done(false);
-        else return more(() -> even(n - 1));
+        return more(() -> even(n - 1));
     }
 
     @Test
-    public void doesntBlowStack() throws Exception {
-        assertThat(even(99999).trampoline(), is(false));
+    public void doesNotBlowStack() throws Exception {
+        try {
+            assertThat(even(99999).apply(), is(false));
+        } catch (StackOverflowError e) {
+            fail("Did you run the test with JCompilo?");
+        }
     }
-
-
 }

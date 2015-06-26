@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.CurriedFunction2;
+
 public class Objects {
     public static boolean equalTo(Object a, Object b) {
         if( a == null && b == null) {

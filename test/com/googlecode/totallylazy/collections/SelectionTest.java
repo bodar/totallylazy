@@ -1,12 +1,12 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.BinaryFunction;
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Monoid;
-import com.googlecode.totallylazy.Reducer;
+import com.googlecode.totallylazy.functions.BinaryFunction;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.functions.Monoid;
+import com.googlecode.totallylazy.functions.Reducer;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
-import com.googlecode.totallylazy.UnaryFunction;
+import com.googlecode.totallylazy.functions.UnaryFunction;
 import com.googlecode.totallylazy.numbers.Integers;
 import org.junit.Test;
 

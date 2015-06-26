@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.functions.Function1;
 
 public abstract class LogicalPredicate<T> extends Eq implements Function1<T, Boolean>, Predicate<T> {
     public static <T> LogicalPredicate<T> logicalPredicate(Predicate<? super T> predicate) {

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.CurriedMonoid;
+import com.googlecode.totallylazy.functions.CurriedMonoid;
 import com.googlecode.totallylazy.comparators.NullComparator;
 
 public class Minimum implements com.googlecode.totallylazy.comparators.Minimum<Number>,CurriedMonoid<Number> {

@@ -1,13 +1,13 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Callers;
-import com.googlecode.totallylazy.Functions;
+import com.googlecode.totallylazy.functions.Functions;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.UnaryFunction;
+import com.googlecode.totallylazy.functions.UnaryFunction;
 
-import static com.googlecode.totallylazy.Functions.returns1;
+import static com.googlecode.totallylazy.functions.Functions.returns1;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
 import static com.googlecode.totallylazy.validations.ValidationResult.functions.add;

@@ -1,9 +1,10 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.UnaryFunction;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import static com.googlecode.totallylazy.FilterSource.filterSource;

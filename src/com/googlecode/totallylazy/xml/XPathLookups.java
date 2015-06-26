@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.xml;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Callers;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

@@ -3,12 +3,11 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.annotations.multimethod;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
 
-import static com.googlecode.totallylazy.Callables.asHashCode;
+import static com.googlecode.totallylazy.functions.Callables.asHashCode;
 import static com.googlecode.totallylazy.Predicates.in;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;

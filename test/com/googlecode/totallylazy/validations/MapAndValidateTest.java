@@ -1,8 +1,7 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Predicates.greaterThan;

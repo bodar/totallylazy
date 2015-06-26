@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.BinaryPredicate;
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.functions.Function2;
 
 public abstract class LogicalBinaryPredicate<T> implements BinaryPredicate<T>, Function1<T, LogicalPredicate<T>>, Function2<T, T, Boolean> {
     public abstract LogicalBinaryPredicate<T> flip();

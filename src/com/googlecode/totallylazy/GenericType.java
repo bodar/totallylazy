@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Function1;
+
 public interface GenericType<T> {
     Class<T> forClass();
 

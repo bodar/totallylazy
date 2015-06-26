@@ -14,8 +14,8 @@ import java.io.StringReader;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
-import static com.googlecode.totallylazy.Functions.option;
-import static com.googlecode.totallylazy.Functions.or;
+import static com.googlecode.totallylazy.functions.Functions.option;
+import static com.googlecode.totallylazy.functions.Functions.or;
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.is;

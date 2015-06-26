@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 
 import static com.googlecode.totallylazy.Callers.call;
 

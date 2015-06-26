@@ -1,13 +1,13 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.BinaryFunction;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.BinaryFunction;
+import com.googlecode.totallylazy.functions.Callables;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.UnaryFunction;
+import com.googlecode.totallylazy.functions.UnaryFunction;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

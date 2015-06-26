@@ -1,5 +1,8 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Function2;
+
 import static com.googlecode.totallylazy.Triple.triple;
 
 public class Tuples {

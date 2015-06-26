@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.predicates;
 import com.googlecode.totallylazy.matchers.Matchers;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.toString;
+import static com.googlecode.totallylazy.functions.Callables.toString;
 import static com.googlecode.totallylazy.Predicates.always;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.never;

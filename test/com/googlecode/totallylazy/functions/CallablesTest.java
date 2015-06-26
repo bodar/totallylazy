@@ -1,10 +1,11 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
 
+import com.googlecode.totallylazy.functions.*;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.when;
-import static com.googlecode.totallylazy.Functions.constant;
+import static com.googlecode.totallylazy.functions.Callables.when;
+import static com.googlecode.totallylazy.functions.Functions.constant;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.add;

@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.CurriedMonoid;
+import com.googlecode.totallylazy.functions.CurriedMonoid;
 import com.googlecode.totallylazy.comparators.NullComparator;
 
 public class Maximum implements com.googlecode.totallylazy.comparators.Maximum<Number>, CurriedMonoid<Number> {

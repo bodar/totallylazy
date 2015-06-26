@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Callables;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
 

@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Functions.returns;
+import static com.googlecode.totallylazy.functions.Functions.returns;
 import static com.googlecode.totallylazy.functions.LazyCallable.lazy;
 
 public class Quadruple<F, S, T, Fo> extends Triple<F, S, T> implements Fourth<Fo> {

@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.CurriedMonoid;
-
 public class Or implements CurriedMonoid<Boolean> {
     @Override
     public Boolean call(Boolean a, Boolean b) throws Exception {

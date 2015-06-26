@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.numbers;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Callables.toString;
+import static com.googlecode.totallylazy.functions.Callables.toString;
 import static com.googlecode.totallylazy.Predicates.or;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.reduce;

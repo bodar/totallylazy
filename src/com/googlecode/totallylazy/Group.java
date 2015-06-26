@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Function1;
+
 import java.util.Iterator;
 
 import static com.googlecode.totallylazy.Unchecked.cast;

@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Predicate;
 
-import static com.googlecode.totallylazy.Callables.returns1;
+import static com.googlecode.totallylazy.functions.Callables.returns1;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.validations.PredicateValidator.constructors.validatePredicate;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.failure;

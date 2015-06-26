@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.reflection;
 
 import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.annotation.Annotation;

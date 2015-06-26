@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.Function0;
-
 import java.util.concurrent.Callable;
 
 public final class CountingCallable<T> implements Function0<T> {

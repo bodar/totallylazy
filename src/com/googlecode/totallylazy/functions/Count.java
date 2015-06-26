@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.CurriedCombiner;
 import com.googlecode.totallylazy.numbers.Numbers;
 
 import static com.googlecode.totallylazy.numbers.Numbers.increment;

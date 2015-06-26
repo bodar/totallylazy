@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.GenericType;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.reflection.Declaration;

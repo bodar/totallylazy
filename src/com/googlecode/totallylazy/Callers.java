@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.concurrent.NamedExecutors;
+import com.googlecode.totallylazy.functions.*;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;

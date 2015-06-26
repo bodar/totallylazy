@@ -1,15 +1,17 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
 
-import static com.googlecode.totallylazy.Callables.callThrows;
-import static com.googlecode.totallylazy.Callables.ignoreAndReturn;
-import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.totallylazy.Callables.toString;
-import static com.googlecode.totallylazy.Functions.constant;
+import static com.googlecode.totallylazy.functions.Callables.callThrows;
+import static com.googlecode.totallylazy.functions.Callables.ignoreAndReturn;
+import static com.googlecode.totallylazy.functions.Callables.returns;
+import static com.googlecode.totallylazy.functions.Callables.toString;
+import static com.googlecode.totallylazy.functions.Functions.constant;
 import static com.googlecode.totallylazy.Objects.equalTo;
 import static com.googlecode.totallylazy.Option.applicate;
 import static com.googlecode.totallylazy.Option.none;

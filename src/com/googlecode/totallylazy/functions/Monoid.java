@@ -1,4 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
+
+import com.googlecode.totallylazy.Pair;
 
 public interface Monoid<T> extends Combiner<T, T>, Associative<T> {
     @Override

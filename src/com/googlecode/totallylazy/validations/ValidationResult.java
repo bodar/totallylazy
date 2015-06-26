@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.CurriedMonoid;
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Callables;
+import com.googlecode.totallylazy.functions.CurriedMonoid;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.functions.CurriedFunction2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;

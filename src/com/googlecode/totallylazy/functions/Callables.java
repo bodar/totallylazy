@@ -1,5 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
 
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.reflection.Methods;
 

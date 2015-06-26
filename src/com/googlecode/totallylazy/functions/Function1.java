@@ -1,8 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.functions.LazyFunction;
-import com.googlecode.totallylazy.functions.SleepyFunction;
-import com.googlecode.totallylazy.functions.TimeFunction;
+import com.googlecode.totallylazy.*;
 
 import java.util.concurrent.Callable;
 

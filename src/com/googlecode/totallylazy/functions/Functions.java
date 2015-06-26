@@ -1,8 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.functions.And;
-import com.googlecode.totallylazy.functions.Or;
-import com.googlecode.totallylazy.functions.Xor;
+import com.googlecode.totallylazy.*;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -222,13 +220,13 @@ public class Functions {
 
     @SafeVarargs
     public static <A,B> Function1<A, Option<B>> or(Function1<? super A, ? extends Option<B>>... callables) {
-        return function(a -> sequence(callables).flatMap(fun -> fun.call(a)).headOption());
+        return function(a -> Sequences.sequence(callables).flatMap(fun -> fun.call(a)).headOption());
     }
 
     @SafeVarargs
     public static <A,B> Function1<A, List<B>> and(Function1<? super A, ? extends Option<B>>... callables) {
         return function(a -> {
-            List<B> result = sequence(callables).flatMap(fun -> fun.call(a)).toList();
+            List<B> result = Sequences.sequence(callables).flatMap(fun -> fun.call(a)).toList();
             if(result.size() != callables.length) return Lists.list();
             return result;
         });

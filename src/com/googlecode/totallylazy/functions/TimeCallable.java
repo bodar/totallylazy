@@ -1,9 +1,5 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.Block;
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Function0;
 import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
 

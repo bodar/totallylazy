@@ -1,4 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
+
+import com.googlecode.totallylazy.Triple;
 
 public interface Function3<A, B, C, D> {
     D call(A a, B b, C c) throws Exception;
