@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.functions.Functions;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.functions.UnaryFunction;
+import com.googlecode.totallylazy.functions.Unary;
 
 import static com.googlecode.totallylazy.functions.Functions.returns1;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -29,7 +29,7 @@ public class SetFailureMessage<T> extends LogicalValidator<T> {
                 fold(pass(), add());
     }
 
-    private static <T> UnaryFunction<Pair<String, Sequence<String>>> overrideMessages(final T instance, final Function1<T, String> messageBuilder) {
+    private static <T> Unary<Pair<String, Sequence<String>>> overrideMessages(final T instance, final Function1<T, String> messageBuilder) {
         return keyAndMessages -> {
             String message1 = Callers.call(messageBuilder, instance);
             return pair(keyAndMessages.first(), keyAndMessages.second().map(returns1(message1)));

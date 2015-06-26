@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
@@ -50,7 +50,7 @@ public class OptionTest {
 
     @Test
     public void supportsApplicativeEquality() throws Exception {
-        final Option<CurriedFunction2<Object, Object, Boolean>> some = some(equalTo());
+        final Option<Curried2<Object, Object, Boolean>> some = some(equalTo());
         final Option<Integer> some1 = some(3);
         final Option<Function1<Object, Boolean>> applicate = applicate(some, some1);
         assertThat(applicate(applicate, some(5)), is(some(false)));
@@ -100,7 +100,7 @@ public class OptionTest {
             this.age = age;
         }
 
-        static CurriedFunction2<String, Integer, Person> person() {
+        static Curried2<String, Integer, Person> person() {
             return Person::person;
         }
 

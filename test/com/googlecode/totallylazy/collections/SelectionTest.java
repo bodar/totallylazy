@@ -1,12 +1,12 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.functions.BinaryFunction;
+import com.googlecode.totallylazy.functions.Binary;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Monoid;
 import com.googlecode.totallylazy.functions.Reducer;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
-import com.googlecode.totallylazy.functions.UnaryFunction;
+import com.googlecode.totallylazy.functions.Unary;
 import com.googlecode.totallylazy.numbers.Integers;
 import org.junit.Test;
 
@@ -116,13 +116,13 @@ public class SelectionTest {
                 sequence(selections).fold(seed, (accumulator, selection) -> selection.select(row, accumulator)));
     }
 
-    interface Projection<T> extends Monoid<T>, UnaryFunction<T> {
+    interface Projection<T> extends Monoid<T>, Unary<T> {
         @Override
         default T call(T t) throws Exception {
             return call(identity(), t);
         }
 
-        static <T> Projection<T> projection(T identity, BinaryFunction<T> binary) {
+        static <T> Projection<T> projection(T identity, Binary<T> binary) {
             return new Projection<T>() {
                 @Override
                 public T call(T t, T t2) throws Exception {

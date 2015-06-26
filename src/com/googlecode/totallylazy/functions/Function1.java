@@ -22,11 +22,11 @@ public interface Function1<A, B> extends Functor<B> {
      }
 
      default Function1<A, B> lazy() {
-         return LazyFunction1.lazy(this);
+         return Lazy1.lazy(this);
      }
 
      default Function1<A, B> sleep(int millis) {
-         return SleepyFunction1.sleepy(this, millis);
+         return Sleepy1.sleepy(this, millis);
      }
 
      default Function1<A, Option<B>> optional() {
@@ -71,11 +71,11 @@ public interface Function1<A, B> extends Functor<B> {
      }
 
      default Function1<A, B> time() {
-         return TimeFunction1.time1(this);
+         return Time1.time1(this);
      }
 
      default Function1<A, B> time(Function1<? super Number, ?> reporter) {
-         return TimeFunction1.time1(this, reporter);
+         return Time1.time1(this, reporter);
      }
 
      default Option<B> $(Option<? extends A> applicative) {

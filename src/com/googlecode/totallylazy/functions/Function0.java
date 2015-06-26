@@ -24,7 +24,7 @@ public interface Function0<A> extends Callable<A>, Runnable, Functor<A>, Value<A
     }
 
     default Function0<A> sleep(int millis) {
-        return SleepyFunction0.sleepy(this, millis);
+        return Sleepy0.sleepy(this, millis);
     }
 
     default Sequence<A> repeat() {
@@ -32,11 +32,11 @@ public interface Function0<A> extends Callable<A>, Runnable, Functor<A>, Value<A
     }
 
     default Function0<A> time(Function1<? super Number, ?> report) {
-        return TimeFunction0.time(this, report);
+        return Time0.time(this, report);
     }
 
     default Function0<A> time() {
-        return TimeFunction0.time(this);
+        return Time0.time(this);
     }
 
     default TimeReport time(int numberOfCalls) {

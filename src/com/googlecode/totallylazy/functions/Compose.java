@@ -1,10 +1,13 @@
 package com.googlecode.totallylazy.functions;
 
+import com.googlecode.totallylazy.Unchecked;
+
 public class Compose<T> implements CurriedMonoid<Function1<T,T>> {
+    private static final Compose<?> instance = new Compose<>();
     private Compose() {}
 
     public static <T> Compose<T> compose() {
-        return new Compose<T>();
+        return Unchecked.cast(instance);
     }
 
     public static <T> Compose<T> compose(Class<T> aClass) {

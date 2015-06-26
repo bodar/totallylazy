@@ -11,11 +11,11 @@ import static com.googlecode.totallylazy.functions.Callables.compose;
 import static com.googlecode.totallylazy.functions.Functions.returns;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.functions.LazyFunction1.lazy;
+import static com.googlecode.totallylazy.functions.Lazy1.lazy;
 
 public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     private final Lazy<Option<T>> head;
-    private final LazyFunction1<T, Computation<T>> tail;
+    private final Lazy1<T, Computation<T>> tail;
 
     private Computation(Callable<Option<T>> head, Function1<T, Computation<T>> tail) {
         this.head = Lazy.lazy(head);

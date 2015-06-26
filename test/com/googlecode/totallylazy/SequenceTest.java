@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.Callables;
-import com.googlecode.totallylazy.functions.CountingFunction0;
+import com.googlecode.totallylazy.functions.CountCalls0;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.concurrent.NamedExecutors;
 import com.googlecode.totallylazy.functions.Function1;
@@ -64,7 +64,7 @@ import static com.googlecode.totallylazy.Strings.join;
 import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
 import static com.googlecode.totallylazy.functions.Count.count;
-import static com.googlecode.totallylazy.functions.CountingFunction0.counting;
+import static com.googlecode.totallylazy.functions.CountCalls0.counting;
 import static com.googlecode.totallylazy.comparators.Comparators.comparators;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
@@ -351,7 +351,7 @@ public class SequenceTest {
 
     @Test
     public void canRealiseASequence() throws Exception {
-        CountingFunction0<Integer> counting = counting();
+        CountCalls0<Integer> counting = counting();
         Sequence<Integer> lazy = sequence(counting).map(call(Integer.class));
         assertThat(counting.count(), is(0));
         assertThat(lazy, hasExactly(0)); // this will increment count by 1

@@ -1,18 +1,18 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
 
 public class Lense<A, B> {
     private final Function1<A, B> get;
-    private final CurriedFunction2<B, A, A> set;
+    private final Curried2<B, A, A> set;
 
-    private Lense(Function1<A, B> get, CurriedFunction2<B, A, A> set) {
+    private Lense(Function1<A, B> get, Curried2<B, A, A> set) {
         this.get = get;
         this.set = set;
     }
 
-    public static <A, B> Lense<A, B> lense(Function1<A, B> get, CurriedFunction2<B, A, A> set) {
+    public static <A, B> Lense<A, B> lense(Function1<A, B> get, Curried2<B, A, A> set) {
         return new Lense<>(get, set);
     }
 
@@ -32,7 +32,7 @@ public class Lense<A, B> {
         return lense(get.then(other.get), setter(other));
     }
 
-    private <C> CurriedFunction2<C, A, A> setter(final Lense<B, C> other) {
+    private <C> Curried2<C, A, A> setter(final Lense<B, C> other) {
         return (c, a) -> set(other.set(c, get(a)), a);
     }
 }

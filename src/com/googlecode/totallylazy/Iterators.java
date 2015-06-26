@@ -2,7 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.functions.Callables;
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.iterators.FilterIterator;
@@ -513,7 +513,7 @@ public class Iterators {
     }
 
     public static class functions {
-        public static <T> CurriedFunction2<Iterable<? extends T>, Iterable<? extends T>, Iterable<T>> join() {
+        public static <T> Curried2<Iterable<? extends T>, Iterable<? extends T>, Iterable<T>> join() {
             return (a, b) -> new Sequence<T>() {
                 @Override
                 public Iterator<T> iterator() {

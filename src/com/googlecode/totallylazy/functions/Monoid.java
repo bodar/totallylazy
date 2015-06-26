@@ -8,7 +8,7 @@ public interface Monoid<T> extends Combiner<T, T>, Associative<T> {
         return call(a, b);
     }
 
-    static <T> Monoid<T> monoid(T identity, BinaryFunction<T> binary){
+    static <T> Monoid<T> monoid(T identity, Binary<T> binary){
         return new Monoid<T>() {
             @Override
             public T call(T t, T t2) throws Exception {

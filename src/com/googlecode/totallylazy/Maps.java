@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.Callables;
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
 
 import java.util.ArrayList;
@@ -192,7 +192,7 @@ public class Maps {
         return multiMap(seed, iterable.iterator(), callable);
     }
 
-    public static <K, V> CurriedFunction2<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap() {
+    public static <K, V> Curried2<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap() {
         return (map, pair) -> {
             if (!map.containsKey(pair.first())) {
                 map.put(pair.first(), new ArrayList<V>());
@@ -202,18 +202,18 @@ public class Maps {
         };
     }
 
-    public static <K, V> CurriedFunction2<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap(Class<K> key, Class<V> value) {
+    public static <K, V> Curried2<? super Map<K, List<V>>, ? super Pair<? extends K, ? extends V>, Map<K, List<V>>> asMultiValuedMap(Class<K> key, Class<V> value) {
         return asMultiValuedMap();
     }
 
-    public static <K, V> CurriedFunction2<? super Map<K, V>, ? super Pair<K, V>, Map<K, V>> asMap() {
+    public static <K, V> Curried2<? super Map<K, V>, ? super Pair<K, V>, Map<K, V>> asMap() {
         return (map, pair) -> {
             map.put(pair.first(), pair.second());
             return map;
         };
     }
 
-    public static <K, V> CurriedFunction2<? super Map<K, V>, ? super Pair<K, V>, Map<K, V>> asMap(Class<K> key, Class<V> value) {
+    public static <K, V> Curried2<? super Map<K, V>, ? super Pair<K, V>, Map<K, V>> asMap(Class<K> key, Class<V> value) {
         return asMap();
     }
 
@@ -274,7 +274,7 @@ public class Maps {
     }
 
     public static class functions {
-        public static <K, V> CurriedFunction2<Map<K, V>, K, V> get() {
+        public static <K, V> Curried2<Map<K, V>, K, V> get() {
             return Map::get;
         }
 

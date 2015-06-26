@@ -4,13 +4,15 @@ import com.googlecode.totallylazy.numbers.Numbers;
 
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 
-public class Count implements CurriedCombiner<Object, Number> {
+public enum Count implements CurriedCombiner<Object, Number> {
+    instance;
+
     public Number call(Number a, Object b) throws Exception {
         return b != null ? increment(a) : a;
     }
 
     public static Count count() {
-        return new Count();
+        return instance;
     }
 
     @Override

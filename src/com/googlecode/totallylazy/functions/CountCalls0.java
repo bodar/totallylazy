@@ -2,12 +2,12 @@ package com.googlecode.totallylazy.functions;
 
 import java.util.concurrent.Callable;
 
-public final class CountingFunction0<T> implements Function0<T> {
+public final class CountCalls0<T> implements Function0<T> {
     private int count = 0;
     private final Callable<? extends T> callable;
 
     @SuppressWarnings("unchecked")
-    private CountingFunction0(Callable<? extends T> callable) {
+    private CountCalls0(Callable<? extends T> callable) {
         this.callable = callable == null ? new Callable() {
             public Object call() throws Exception {
                 return count;
@@ -25,11 +25,11 @@ public final class CountingFunction0<T> implements Function0<T> {
         return count;
     }
 
-    public static CountingFunction0<Integer> counting() {
-        return CountingFunction0.<Integer>counting(null);
+    public static CountCalls0<Integer> counting() {
+        return CountCalls0.<Integer>counting(null);
     }
 
-    public static <T> CountingFunction0<T> counting(Callable<? extends T> callable) {
-        return new CountingFunction0<T>(callable);
+    public static <T> CountCalls0<T> counting(Callable<? extends T> callable) {
+        return new CountCalls0<T>(callable);
     }
 }

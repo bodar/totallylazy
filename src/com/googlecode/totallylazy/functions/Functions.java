@@ -85,23 +85,23 @@ public class Functions {
         return b -> callable.call(value, b);
     }
 
-    public static <A, B, C, D> CurriedFunction2<B, C, D> apply(final Function3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
+    public static <A, B, C, D> Curried2<B, C, D> apply(final Function3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
         return (b, c) -> callable.call(value, b, c);
     }
 
-    public static <A, B, C, D, E> CurriedFunction3<B, C, D, E> apply(final Function4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A value) {
+    public static <A, B, C, D, E> Curried3<B, C, D, E> apply(final Function4<? super A, ? super B, ? super C, ? super D, ? extends E> callable, final A value) {
         return (b, c, d) -> callable.call(value, b, c, d);
     }
 
-    public static <A, B, C, D, E, F> CurriedFunction4<B, C, D, E, F> apply(final Function5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A value) {
+    public static <A, B, C, D, E, F> Curried4<B, C, D, E, F> apply(final Function5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends F> callable, final A value) {
         return (b, c, d, e) -> callable.call(value, b, c, d, e);
     }
 
-    public static <A> UnaryFunction<A> identity() {
+    public static <A> Unary<A> identity() {
         return self -> self;
     }
 
-    public static <A> UnaryFunction<A> identity(Class<A> aClass) {
+    public static <A> Unary<A> identity(Class<A> aClass) {
         return identity();
     }
 
@@ -117,23 +117,23 @@ public class Functions {
         return constant(result);
     }
 
-    public static <A, B, C> CurriedFunction2<A, B, C> returns2(final C result) {
+    public static <A, B, C> Curried2<A, B, C> returns2(final C result) {
         return (ignore, ignoreMeToo) -> result;
     }
 
-    public static <A, B, C> CurriedFunction2<A, B, C> uncurry2(final Function1<? super A, ? extends Function1<? super B, ? extends C>> callable) {
+    public static <A, B, C> Curried2<A, B, C> uncurry2(final Function1<? super A, ? extends Function1<? super B, ? extends C>> callable) {
         return (a, b) -> callable.call(a).call(b);
     }
 
-    public static <A, B, C, D> CurriedFunction3<A, B, C, D> uncurry3(final Function1<? super A, ? extends Function1<? super B, ? extends Function1<? super C, ? extends D>>> callable) {
+    public static <A, B, C, D> Curried3<A, B, C, D> uncurry3(final Function1<? super A, ? extends Function1<? super B, ? extends Function1<? super C, ? extends D>>> callable) {
         return (a, b, c) -> callable.call(a).call(b).call(c);
     }
 
-    public static <A, B, C, D, E> CurriedFunction4<A, B, C, D, E> uncurry4(final Function1<? super A, ? extends Function1<? super B, ? extends Function1<? super C, ? extends Function1<? super D, ? extends E>>>> callable) {
+    public static <A, B, C, D, E> Curried4<A, B, C, D, E> uncurry4(final Function1<? super A, ? extends Function1<? super B, ? extends Function1<? super C, ? extends Function1<? super D, ? extends E>>>> callable) {
         return (a, b, c, d) -> callable.call(a).call(b).call(c).call(d);
     }
 
-    public static <A, B, C, D, E, F> CurriedFunction5<A, B, C, D, E, F> uncurry5(final Function1<? super A, ? extends Function1<? super B, ? extends Function1<? super C, ? extends Function1<? super D, ? extends Function1<? super E, ? extends F>>>>> callable) {
+    public static <A, B, C, D, E, F> Curried5<A, B, C, D, E, F> uncurry5(final Function1<? super A, ? extends Function1<? super B, ? extends Function1<? super C, ? extends Function1<? super D, ? extends Function1<? super E, ? extends F>>>>> callable) {
         return (a, b, c, d, e) -> callable.call(a).call(b).call(c).call(d).call(e);
     }
 
@@ -156,7 +156,7 @@ public class Functions {
         return pair -> function.call(pair.first(), pair.second());
     }
 
-    public static <A, B, C> CurriedFunction2<A, B, C> unpair(final Function1<? super Pair<? extends A, ? extends B>, ? extends C> function) {
+    public static <A, B, C> Curried2<A, B, C> unpair(final Function1<? super Pair<? extends A, ? extends B>, ? extends C> function) {
         return (a, b) -> function.call(Pair.pair(a, b));
     }
 
@@ -164,7 +164,7 @@ public class Functions {
         return triple -> callable.call(triple.first(), triple.second(), triple.third());
     }
 
-    public static <A, B, C, D> CurriedFunction3<A, B, C, D> untriple(final Function1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> function) {
+    public static <A, B, C, D> Curried3<A, B, C, D> untriple(final Function1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> function) {
         return (a, b, c) -> function.call(Triple.triple(a, b, c));
     }
 
@@ -172,7 +172,7 @@ public class Functions {
         return quadruple -> callable.call(quadruple.first(), quadruple.second(), quadruple.third(), quadruple.fourth());
     }
 
-    public static <A, B, C, D, E> CurriedFunction4<A, B, C, D, E> unquadruple(final Function1<? super Quadruple<? extends A, ? extends B, ? extends C, ? extends D>, ? extends E> function) {
+    public static <A, B, C, D, E> Curried4<A, B, C, D, E> unquadruple(final Function1<? super Quadruple<? extends A, ? extends B, ? extends C, ? extends D>, ? extends E> function) {
         return (a, b, c, d) -> function.call(Quadruple.quadruple(a, b, c, d));
     }
 
@@ -180,13 +180,13 @@ public class Functions {
         return quintuple -> callable.call(quintuple.first(), quintuple.second(), quintuple.third(), quintuple.fourth(), quintuple.fifth());
     }
 
-    public static <A, B, C, D, E, F> CurriedFunction5<A, B, C, D, E, F> unquintuple(final Function1<? super Quintuple<? extends A, ? extends B, ? extends C, ? extends D, ? extends E>, ? extends F> function) {
+    public static <A, B, C, D, E, F> Curried5<A, B, C, D, E, F> unquintuple(final Function1<? super Quintuple<? extends A, ? extends B, ? extends C, ? extends D, ? extends E>, ? extends F> function) {
         return (a, b, c, d, e) -> function.call(Quintuple.quintuple(a, b, c, d, e));
     }
 
-    public static CurriedMonoid<Boolean> and = new And();
-    public static CurriedMonoid<Boolean> or = new Or();
-    public static CurriedMonoid<Boolean> xor = new Xor();
+    public static CurriedMonoid<Boolean> and = And.instance;
+    public static CurriedMonoid<Boolean> or = Or.instance;
+    public static CurriedMonoid<Boolean> xor = Xor.instance;
 
     public static Function1<Pair<Boolean, Boolean>, Boolean> andPair() {
         return pair -> pair.first() && pair.second();

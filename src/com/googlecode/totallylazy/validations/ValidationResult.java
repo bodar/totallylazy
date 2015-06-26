@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.validations;
 import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.functions.CurriedMonoid;
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
@@ -146,19 +146,19 @@ public class ValidationResult {
             return validationResult -> validationResult.assignToKey(key);
         }
 
-        public static CurriedFunction2<ValidationResult, Iterable<String>, ValidationResult> addWithKey(final String key) {
+        public static Curried2<ValidationResult, Iterable<String>, ValidationResult> addWithKey(final String key) {
             return (validationResult, messages1) -> validationResult.add(key, messages1);
         }
 
-        public static CurriedFunction2<ValidationResult, Pair<String, String>, ValidationResult> addSingleMessage() {
+        public static Curried2<ValidationResult, Pair<String, String>, ValidationResult> addSingleMessage() {
             return (validationResult, keyAndMessage) -> validationResult.add(keyAndMessage.first(), keyAndMessage.second());
         }
 
-        public static CurriedFunction2<ValidationResult, String, ValidationResult> addSingleMessageWithKey(final String key) {
+        public static Curried2<ValidationResult, String, ValidationResult> addSingleMessageWithKey(final String key) {
             return (validationResult, message) -> validationResult.add(key, message);
         }
 
-        public static CurriedFunction2<ValidationResult, Pair<String, ? extends Iterable<String>>, ValidationResult> add() {
+        public static Curried2<ValidationResult, Pair<String, ? extends Iterable<String>>, ValidationResult> add() {
             return (validationResult, keyAndMessages) -> validationResult.add(keyAndMessages.first(), keyAndMessages.second());
         }
 

@@ -26,7 +26,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return new Pair<F, S>(first, second);
     }
 
-    public static <F, S> CurriedFunction2<F, S, Pair<F, S>> pair() {
+    public static <F, S> Curried2<F, S, Pair<F, S>> pair() {
         return Pair::pair;
     }
 
@@ -85,7 +85,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return values().hashCode();
     }
 
-    public static <A, B, C> CurriedFunction2<Pair<A, B>, C, Pair<B, C>> leftShift2() {
+    public static <A, B, C> Curried2<Pair<A, B>, C, Pair<B, C>> leftShift2() {
         return Pair::leftShift;
     }
 
@@ -97,7 +97,7 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
         return Pair.leftShift(pair, call(callable, pair.first(), pair.second()));
     }
 
-    public static <A, B, C> CurriedFunction2<Pair<A, B>, Function2<A, B, C>, Pair<B, C>> reduceLeftShift() {
+    public static <A, B, C> Curried2<Pair<A, B>, Function2<A, B, C>, Pair<B, C>> reduceLeftShift() {
         return Pair::reduceLeftShift;
     }
 

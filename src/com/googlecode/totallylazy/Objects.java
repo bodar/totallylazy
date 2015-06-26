@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 
 public class Objects {
     public static boolean equalTo(Object a, Object b) {
@@ -13,7 +13,7 @@ public class Objects {
         return a.equals(b);
     }
 
-    public static CurriedFunction2<Object, Object, Boolean> equalTo() {
+    public static Curried2<Object, Object, Boolean> equalTo() {
         return Object::equals;
     }
 

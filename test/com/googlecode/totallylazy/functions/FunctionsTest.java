@@ -3,8 +3,6 @@ package com.googlecode.totallylazy.functions;
 import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.functions.Callables;
-import com.googlecode.totallylazy.functions.CurriedFunction3;
 import com.googlecode.totallylazy.matchers.Matchers;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
@@ -71,7 +69,7 @@ public class FunctionsTest {
         assertThat(multiply(10).capturing().apply(1), equalTo(Pair.<Number,Number>pair(1, 10)));
     }
 
-    private CurriedFunction3<Number, Number, Number, Number> addThenMultiple() {
+    private Curried3<Number, Number, Number, Number> addThenMultiple() {
         return uncurry3(add().then(multiply()));
     }
 }

@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Foldable;
 import com.googlecode.totallylazy.functions.Function0;
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
@@ -187,7 +187,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     }
 
     class functions {
-        public static <T> CurriedFunction2<PersistentList<T>, T, PersistentList<T>> cons() {
+        public static <T> Curried2<PersistentList<T>, T, PersistentList<T>> cons() {
             return Segment.functions.cons();
         }
 

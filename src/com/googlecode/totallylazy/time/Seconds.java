@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.time;
 
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 
 import java.util.Date;
 
@@ -20,21 +20,21 @@ public class Seconds {
     }
 
     public static class functions {
-        public static CurriedFunction2<Date, Integer, Date> add = Seconds::add;
+        public static Curried2<Date, Integer, Date> add = Seconds::add;
 
-        public static CurriedFunction2<Date, Integer, Date> add()  {
+        public static Curried2<Date, Integer, Date> add()  {
             return add;
         }
 
-        public static CurriedFunction2<Date, Integer, Date> subtract = Seconds::subtract;
+        public static Curried2<Date, Integer, Date> subtract = Seconds::subtract;
 
-        public static CurriedFunction2<Date, Integer, Date> subtract()  {
+        public static Curried2<Date, Integer, Date> subtract()  {
             return subtract;
         }
 
-        public static CurriedFunction2<Date, Date, Long> between = Seconds::between;
+        public static Curried2<Date, Date, Long> between = Seconds::between;
 
-        public static CurriedFunction2<Date, Date, Long> between()  {
+        public static Curried2<Date, Date, Long> between()  {
             return between;
         }
     }

@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.functions;
 
-public class Xor implements CurriedMonoid<Boolean> {
+public enum Xor implements CurriedMonoid<Boolean> {
+    instance;
+    
     @Override
     public Boolean call(Boolean a, Boolean b) throws Exception {
         return a ^ b;

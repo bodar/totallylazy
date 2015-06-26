@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Strings;
@@ -68,7 +68,7 @@ public class XPathFunctions {
         return node -> createText(node, node.getTextContent().replaceAll(pattern, replace));
     }
 
-    public static CurriedFunction2<Node, String, Text> createText = XPathFunctions::createText;
+    public static Curried2<Node, String, Text> createText = XPathFunctions::createText;
 
     public static Text createText(Node nodeInDocument, String text) {return nodeInDocument.getOwnerDocument().createTextNode(text);}
 

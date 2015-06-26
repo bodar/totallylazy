@@ -324,7 +324,7 @@ public class Sequences {
         return Iterators.foldRight(iterable.iterator(), seed, callable);
     }
 
-    public static <T, S> CurriedFunction2<Sequence<T>, Function2<S, T, S>, S> reduce() {
+    public static <T, S> Curried2<Sequence<T>, Function2<S, T, S>, S> reduce() {
         return (sequence, callable) -> sequence.reduce(callable);
     }
 
@@ -414,11 +414,11 @@ public class Sequences {
         return Iterators.number(iterable.iterator());
     }
 
-    public static <T> CurriedFunction2<Sequence<T>, Integer, Sequence<T>> take() {
+    public static <T> Curried2<Sequence<T>, Integer, Sequence<T>> take() {
         return Sequences::take;
     }
 
-    public static <T> UnaryFunction<Sequence<T>> take(int count) {
+    public static <T> Unary<Sequence<T>> take(int count) {
         return Sequences.<T>take().flip().apply(count)::call;
     }
 
@@ -793,15 +793,15 @@ public class Sequences {
         };
     }
 
-    public static <T> UnaryFunction<Iterable<T>> identity(Class<T> aClass) {
+    public static <T> Unary<Iterable<T>> identity(Class<T> aClass) {
         return identity();
     }
 
-    public static <T> UnaryFunction<Iterable<T>> identity() {
+    public static <T> Unary<Iterable<T>> identity() {
         return Functions.identity();
     }
 
-    public static <A, B> CurriedFunction2<Iterable<? extends A>, Function1<? super A, ? extends B>, Sequence<B>> map() {
+    public static <A, B> Curried2<Iterable<? extends A>, Function1<? super A, ? extends B>, Sequence<B>> map() {
         return (as, callable) -> sequence(as).map(callable);
     }
 

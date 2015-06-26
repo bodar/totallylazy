@@ -508,15 +508,15 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
     }
 
     public static class functions {
-        public static <T> UnaryFunction<Sequence<T>> tail() {
+        public static <T> Unary<Sequence<T>> tail() {
             return Segment.functions.<T, Sequence<T>>tail();
         }
 
-        public static <T> UnaryFunction<Sequence<T>> tail(Class<T> aClass) {
+        public static <T> Unary<Sequence<T>> tail(Class<T> aClass) {
             return tail();
         }
 
-        public static <T> CurriedFunction2<Iterable<? extends T>, Iterable<? extends T>, Sequence<T>> join() {
+        public static <T> Curried2<Iterable<? extends T>, Iterable<? extends T>, Sequence<T>> join() {
             return (a, b) -> sequence(Iterators.functions.<T>join().call(a, b));
         }
     }

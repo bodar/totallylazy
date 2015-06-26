@@ -33,7 +33,7 @@ public class Strings {
     public static final String EMPTY = "";
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
-    public static final Monoid<String> join = JoinString.instance;
+    public static final Monoid<String> join = ConcatString.instance;
 
     public static Function1<String, Boolean> asBoolean() {
         return Boolean::parseBoolean;
@@ -300,7 +300,7 @@ public class Strings {
     public static Minimum.Function<String> minimum = Minimum.constructors.minimum((String) null);
 
     public static class functions {
-        public static CurriedFunction3<String, String, String, String> replaceAll =
+        public static Curried3<String, String, String, String> replaceAll =
                 (regex, replacemenent, source) -> Strings.replaceAll(regex, replacemenent).apply(source);
     }
 }

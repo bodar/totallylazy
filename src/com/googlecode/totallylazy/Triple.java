@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Lazy;
 
 import java.util.concurrent.Callable;
@@ -32,7 +32,7 @@ public class Triple<F, S, T> extends Pair<F, S> implements Third<T> {
         return super.values().append(third());
     }
 
-    public static <A, B, C, D> CurriedFunction2<Triple<A, B, C>, D, Triple<B, C, D>> leftShift3() {
+    public static <A, B, C, D> Curried2<Triple<A, B, C>, D, Triple<B, C, D>> leftShift3() {
         return Triple::leftShift;
     }
 

@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.security;
 
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Value;
 
@@ -93,10 +93,10 @@ public class Key implements Value<String> {
     }
 
     public static class functions {
-        public static CurriedFunction2<Key, ? super String, String> encrypt() {
+        public static Curried2<Key, ? super String, String> encrypt() {
             return Key::encrypt;
         }
-        public static CurriedFunction2<Key, ? super String, String> decrypt() {
+        public static Curried2<Key, ? super String, String> decrypt() {
             return Key::decrypt;
         }
     }

@@ -17,7 +17,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.functions.CurriedBinaryFunction;
+import com.googlecode.totallylazy.functions.CurriedBinary;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.CurriedMonoid;
 import com.googlecode.totallylazy.Computation;
@@ -28,7 +28,7 @@ import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.functions.UnaryFunction;
+import com.googlecode.totallylazy.functions.Unary;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.RemainderIs;
@@ -113,11 +113,11 @@ public class Numbers {
         return Math.sqrt(number.doubleValue());
     }
 
-    public static UnaryFunction<Number> squareRoot = Numbers::squareRoot;
+    public static Unary<Number> squareRoot = Numbers::squareRoot;
 
-    public static UnaryFunction<Number> squared = Numbers::squared;
+    public static Unary<Number> squared = Numbers::squared;
 
-    public static UnaryFunction<Number> squared() {
+    public static Unary<Number> squared() {
         return squared;
     }
 
@@ -171,13 +171,13 @@ public class Numbers {
         return iterate(nextProbablePrime(), BigInteger.valueOf(2)).map(reduce());
     }
 
-    private static UnaryFunction<BigInteger> nextProbablePrime() {
+    private static Unary<BigInteger> nextProbablePrime() {
         return BigInteger::nextProbablePrime;
     }
 
-    public static UnaryFunction<Number> nextPrime = Numbers::nextPrime;
+    public static Unary<Number> nextPrime = Numbers::nextPrime;
 
-    public static UnaryFunction<Number> nextPrime() {
+    public static Unary<Number> nextPrime() {
         return nextPrime;
     }
 
@@ -231,9 +231,9 @@ public class Numbers {
         return operatorsFor(value).negate(value);
     }
 
-    public static UnaryFunction<Number> increment = Numbers::increment;
+    public static Unary<Number> increment = Numbers::increment;
 
-    public static UnaryFunction<Number> increment() {
+    public static Unary<Number> increment() {
         return increment;
     }
 
@@ -241,9 +241,9 @@ public class Numbers {
         return operatorsFor(value).increment(value);
     }
 
-    public static UnaryFunction<Number> decrement = Numbers::decrement;
+    public static Unary<Number> decrement = Numbers::decrement;
 
-    public static UnaryFunction<Number> decrement() {
+    public static Unary<Number> decrement() {
         return decrement;
     }
 
@@ -357,7 +357,7 @@ public class Numbers {
         return add;
     }
 
-    public static UnaryFunction<Number> add(final Number amount) {
+    public static Unary<Number> add(final Number amount) {
         return add.apply(amount);
     }
 
@@ -365,13 +365,13 @@ public class Numbers {
         return operatorsFor(x, y).add(x, y);
     }
 
-    public static CurriedBinaryFunction<Number> subtract = Numbers::subtract;
+    public static CurriedBinary<Number> subtract = Numbers::subtract;
 
-    public static CurriedBinaryFunction<Number> subtract() {
+    public static CurriedBinary<Number> subtract() {
         return subtract;
     }
 
-    public static UnaryFunction<Number> subtract(final Number amount) {
+    public static Unary<Number> subtract(final Number amount) {
         return subtract.flip().apply(amount);
     }
 
@@ -391,7 +391,7 @@ public class Numbers {
         return multiply;
     }
 
-    public static UnaryFunction<Number> multiply(final Number multiplicand) {
+    public static Unary<Number> multiply(final Number multiplicand) {
         return multiply.apply(multiplicand);
     }
 
@@ -404,13 +404,13 @@ public class Numbers {
         return operatorsFor(x, y).divide(x, y);
     }
 
-    public static UnaryFunction<Number> divide(final Number divisor) {
+    public static Unary<Number> divide(final Number divisor) {
         return divide.flip().apply(divisor);
     }
 
-    public static CurriedBinaryFunction<Number> divide = Numbers::divide;
+    public static CurriedBinary<Number> divide = Numbers::divide;
 
-    public static CurriedBinaryFunction<Number> divide() {
+    public static CurriedBinary<Number> divide() {
         return divide;
     }
 
@@ -419,23 +419,23 @@ public class Numbers {
         return reduce(operatorsFor(x, y).quotient(x, y));
     }
 
-    public static UnaryFunction<Number> mod(final Number divisor) {
+    public static Unary<Number> mod(final Number divisor) {
         return mod().apply(divisor);
     }
 
-    public static CurriedBinaryFunction<Number> remainder = Numbers::remainder;
+    public static CurriedBinary<Number> remainder = Numbers::remainder;
 
-    public static CurriedBinaryFunction<Number> remainder() {
+    public static CurriedBinary<Number> remainder() {
         return remainder;
     }
 
-    public static CurriedBinaryFunction<Number> mod = remainder.flip();
+    public static CurriedBinary<Number> mod = remainder.flip();
 
-    public static CurriedBinaryFunction<Number> mod() {
+    public static CurriedBinary<Number> mod() {
         return mod;
     }
 
-    public static UnaryFunction<Number> remainder(final Number dividend) {
+    public static Unary<Number> remainder(final Number dividend) {
         return remainder().apply(dividend);
     }
 
@@ -462,7 +462,7 @@ public class Numbers {
         return value;
     }
 
-    public static UnaryFunction<Number> reduce() {
+    public static Unary<Number> reduce() {
         return Numbers::reduce;
     }
 

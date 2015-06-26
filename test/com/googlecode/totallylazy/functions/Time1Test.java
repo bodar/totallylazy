@@ -2,17 +2,17 @@ package com.googlecode.totallylazy.functions;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.functions.CountingFunction0.counting;
+import static com.googlecode.totallylazy.functions.CountCalls0.counting;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.greaterThanOrEqualTo;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.lessThan;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class TimeFunction10Test {
+public class Time1Test {
     @Test
     public void canTimeACall() throws Exception {
         TimeReport report = new TimeReport();
-        CountingFunction0.counting().sleep(10).lazy().
+        CountCalls0.counting().sleep(10).lazy().
                 time(report).
                 repeat().take(100).realise();
         System.out.println(report);

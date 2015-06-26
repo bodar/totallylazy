@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.functions.Callables.returns;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
-import static com.googlecode.totallylazy.functions.CountingFunction0.counting;
+import static com.googlecode.totallylazy.functions.CountCalls0.counting;
 import static com.googlecode.totallylazy.functions.TimeReport.time;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -22,7 +22,7 @@ public class LazyCallableTest {
 
     @Test
     public void isThreadSafe() throws Exception {
-        CountingFunction0<Integer> callable = CountingFunction0.counting();
+        CountCalls0<Integer> callable = CountCalls0.counting();
         Function0<Integer> lazyCallable = callable.sleep(10).lazy();
 
         Sequence<Integer> result = callConcurrently(lazyCallable, lazyCallable).realise();
@@ -34,7 +34,7 @@ public class LazyCallableTest {
 
     @Test
     public void onlyCallsUnderlyingCallableOnce() throws Exception {
-        CountingFunction0<Integer> callable = CountingFunction0.counting();
+        CountCalls0<Integer> callable = CountCalls0.counting();
         Callable<Integer> lazyCallable = callable.lazy();
 
         assertThat(lazyCallable.call(), is(0));

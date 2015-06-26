@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
 import org.junit.Test;
 
@@ -68,9 +68,9 @@ public class LenseTest {
 
         public static class functions {
             public static final Function1<Person, Number> age = person -> person.age;
-            public static final CurriedFunction2<Number, Person, Person> setAge = (newAge, person) -> new Person(person.name, newAge, person.address);
+            public static final Curried2<Number, Person, Person> setAge = (newAge, person) -> new Person(person.name, newAge, person.address);
             public static final Function1<Person, Address> address = person -> person.address;
-            public static final CurriedFunction2<Address, Person, Person> setAddress = (newAddress, person) -> new Person(person.name, person.age, newAddress);
+            public static final Curried2<Address, Person, Person> setAddress = (newAddress, person) -> new Person(person.name, person.age, newAddress);
         }
     }
 
@@ -93,7 +93,7 @@ public class LenseTest {
 
         public static class functions {
             public static final Function1<Address, Postcode> postcode = address -> address.postcode;
-            public static final CurriedFunction2<Postcode, Address, Address> setPostcode = (newPostcode, address) -> new Address(address.street, newPostcode);
+            public static final Curried2<Postcode, Address, Address> setPostcode = (newPostcode, address) -> new Address(address.street, newPostcode);
         }
     }
 

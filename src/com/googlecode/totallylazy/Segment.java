@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.functions.UnaryFunction;
+import com.googlecode.totallylazy.functions.Unary;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 import com.googlecode.totallylazy.segments.AbstractSegment;
 import com.googlecode.totallylazy.segments.CharacterSegment;
@@ -112,11 +112,11 @@ public interface Segment<T> {
     }
 
     class functions {
-        public static <T, Self extends Segment<T>> CurriedFunction2<Self, T, Self> cons() {
+        public static <T, Self extends Segment<T>> Curried2<Self, T, Self> cons() {
             return (set, t) -> cast(set.cons(t));
         }
 
-        public static <T, Self extends Segment<T>> UnaryFunction<Self> tail() {
+        public static <T, Self extends Segment<T>> Unary<Self> tail() {
             return segment -> cast(segment.tail());
         }
 

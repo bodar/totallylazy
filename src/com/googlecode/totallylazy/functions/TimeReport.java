@@ -69,18 +69,18 @@ public class TimeReport implements Block<Number> {
 
     public static TimeReport time(int numberOfCalls, Sequence<?> sequence) {
         TimeReport report = new TimeReport();
-        repeat(TimeFunction0.time(sequence, report)).take(numberOfCalls).realise();
+        repeat(Time0.time(sequence, report)).take(numberOfCalls).realise();
         return report;
     }
 
     public static TimeReport time(int numberOfCalls, Callable<?> callable) {
         TimeReport report = new TimeReport();
-        repeat(TimeFunction0.time(callable, report)).take(numberOfCalls).realise();
+        repeat(Time0.time(callable, report)).take(numberOfCalls).realise();
         return report;
     }
 
     public static void timeRatio(final Callable<?> function) {
-        iterate(multiply(2), 125).map(time(function)).reduce(new CurriedBinaryFunction<TimeReport>() {
+        iterate(multiply(2), 125).map(time(function)).reduce(new CurriedBinary<TimeReport>() {
             @Override
             public TimeReport call(TimeReport previous, TimeReport current) throws Exception {
                 Number ratio = Numbers.divide(current.average(), previous.average());

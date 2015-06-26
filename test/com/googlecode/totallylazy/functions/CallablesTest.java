@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.functions.*;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
@@ -24,10 +23,10 @@ public class CallablesTest {
 
     @Test
     public void functionsAreInherantlyCurried() throws Exception {
-        CurriedFunction2<Number, Number, Number> add = add();
+        Curried2<Number, Number, Number> add = add();
         Function1<Number, Function1<Number, Number>> curried = add;
         assertThat(curried.call(1).call(2), is(3));
-        CurriedFunction2<Number, Number, Number> callableAdd = add;
+        Curried2<Number, Number, Number> callableAdd = add;
         assertThat(Callables.curry(callableAdd).call(1).call(2), is(3));
     }
 

@@ -1,13 +1,13 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.functions.BinaryFunction;
+import com.googlecode.totallylazy.functions.Binary;
 import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.functions.UnaryFunction;
+import com.googlecode.totallylazy.functions.Unary;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -134,17 +134,17 @@ public abstract class Parser<A> implements Parse<A> {
         return followedBy(parser.peek());
     }
 
-    public Parser<A> infixLeft(Parser<? extends BinaryFunction<A>> op){
+    public Parser<A> infixLeft(Parser<? extends Binary<A>> op){
         return then(op.then(this).many()).map(pair ->
                 foldLeft(pair.second(), pair.first(), (a, p) -> p.first().call(a, p.second())));
     }
 
-    public Parser<A> infixRight(Parser<? extends BinaryFunction<A>> op){
+    public Parser<A> infixRight(Parser<? extends Binary<A>> op){
         return then(op).many().then(this).map(pair ->
                 foldRight(pair.first(), pair.second(), (p, a) -> p.second().call(p.first(), a)));
     }
 
-    public Parser<A> prefix(Parser<? extends UnaryFunction<A>> op){
+    public Parser<A> prefix(Parser<? extends Unary<A>> op){
         return op.many().then(this).map(pair ->
                 foldLeft(pair.first(), pair.second(), (a, p) -> p.call(a) ));
     }

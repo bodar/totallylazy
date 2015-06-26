@@ -8,17 +8,17 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Closeables.safeClose;
 
-public final class LazyFunction1<T, R> implements Function1<T, R>, Memory {
+public final class Lazy1<T, R> implements Function1<T, R>, Memory {
     private final Function1<? super T, ? extends R> callable;
     private final Map<T, Either<Exception, R>> state = new HashMap<>();
     private final Object lock = new Object();
 
-    private LazyFunction1(Function1<? super T, ? extends R> callable) {
+    private Lazy1(Function1<? super T, ? extends R> callable) {
         this.callable = callable;
     }
 
-    public static <T, R> LazyFunction1<T, R> lazy(Function1<? super T, ? extends R> callable) {
-        return new LazyFunction1<>(callable);
+    public static <T, R> Lazy1<T, R> lazy(Function1<? super T, ? extends R> callable) {
+        return new Lazy1<>(callable);
     }
 
     public final R call(T instance) throws Exception{

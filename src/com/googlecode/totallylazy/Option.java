@@ -3,7 +3,7 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.functions.Functions;
-import com.googlecode.totallylazy.functions.UnaryFunction;
+import com.googlecode.totallylazy.functions.Unary;
 
 import java.util.concurrent.Callable;
 
@@ -37,11 +37,11 @@ public abstract class Option<A> implements Iterable<A>, Value<A>, Functor<A>, Ap
         return None.none(aClass);
     }
 
-    public static <T> UnaryFunction<Option<T>> identity(Class<T> aClass) {
+    public static <T> Unary<Option<T>> identity(Class<T> aClass) {
         return identity();
     }
 
-    public static <T> UnaryFunction<Option<T>> identity() {
+    public static <T> Unary<Option<T>> identity() {
         return Functions.identity();
     }
 

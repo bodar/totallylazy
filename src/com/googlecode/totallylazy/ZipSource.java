@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.UnaryFunction;
+import com.googlecode.totallylazy.functions.Unary;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +33,7 @@ public class ZipSource implements Sources {
                         filterSource(where(name, startsWith(folder)), zipSource(inputStream))));
     }
 
-    private static UnaryFunction<Source> removeFolderFromName(final String folder) {
+    private static Unary<Source> removeFolderFromName(final String folder) {
         return source -> new Source(source.name.replaceFirst("^" + folder, ""), source.modified, source.input, source.isDirectory);
     }
 

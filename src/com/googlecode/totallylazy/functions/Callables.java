@@ -27,14 +27,14 @@ public final class Callables {
         return t -> callable.call();
     }
 
-    public static <T> UnaryFunction<T> nullGuard(final Function1<? super T, ? extends T> callable) {
+    public static <T> Unary<T> nullGuard(final Function1<? super T, ? extends T> callable) {
         return o -> {
             if (o == null) return null;
             return callable.call(o);
         };
     }
 
-    public static <T> UnaryFunction<Sequence<T>> reduceAndShift(final Function2<? super T, ? super T, ? extends T> action) {
+    public static <T> Unary<Sequence<T>> reduceAndShift(final Function2<? super T, ? super T, ? extends T> action) {
         return values -> values.tail().append(values.reduceLeft(action));
     }
 
@@ -80,7 +80,7 @@ public final class Callables {
     }
 
 
-    public static <T> UnaryFunction<Sequence<T>> realise() {
+    public static <T> Unary<Sequence<T>> realise() {
         return Sequence<T>::realise;
     }
 
@@ -175,13 +175,13 @@ public final class Callables {
         return toString;
     }
 
-    public static final CurriedFunction2<Integer, Object, Integer> hashCode = (hash, value) -> {
+    public static final Curried2<Integer, Object, Integer> hashCode = (hash, value) -> {
         if (value == null) return hash * 19;
         int current = value.hashCode();
         return (current == 0 ? 19 : current) * hash;
     };
 
-    public static CurriedFunction2<Integer, Object, Integer> asHashCode() {
+    public static Curried2<Integer, Object, Integer> asHashCode() {
         return hashCode;
     }
 
@@ -206,15 +206,15 @@ public final class Callables {
         return Functions.returns1(result);
     }
 
-    public static <A, B, C> CurriedFunction2<A, B, C> returns2(C result) {
+    public static <A, B, C> Curried2<A, B, C> returns2(C result) {
         return Functions.returns2(result);
     }
 
-    public static <T> UnaryFunction<T> returnArgument() {
+    public static <T> Unary<T> returnArgument() {
         return Functions.identity();
     }
 
-    public static <T> UnaryFunction<T> returnArgument(final Class<T> aClass) {
+    public static <T> Unary<T> returnArgument(final Class<T> aClass) {
         return returnArgument();
     }
 
@@ -260,23 +260,23 @@ public final class Callables {
         return Functions.apply(callable, value);
     }
 
-    public static <A, B, C, D> CurriedFunction2<B, C, D> apply(final Function3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
+    public static <A, B, C, D> Curried2<B, C, D> apply(final Function3<? super A, ? super B, ? super C, ? extends D> callable, final A value) {
         return Functions.apply(callable, value);
     }
 
     public static <A, B, C> Function1<A, Function1<B, C>> curry(final Function2<? super A, ? super B, ? extends C> callable) {
-        return (CurriedFunction2<A,B,C>) callable::call;
+        return (Curried2<A,B,C>) callable::call;
     }
 
     public static <A, B, C, D> Function1<A, Function1<B, Function1<C, D>>> curry(final Function3<? super A, ? super B, ? super C, ? extends D> callable) {
-        return (CurriedFunction3<A,B,C,D>) callable::call;
+        return (Curried3<A,B,C,D>) callable::call;
     }
 
-    public static <A, B, C> CurriedFunction2<A, B, C> uncurry2(final Function1<? super A, ? extends Function1<? super B, ? extends C>> callable) {
+    public static <A, B, C> Curried2<A, B, C> uncurry2(final Function1<? super A, ? extends Function1<? super B, ? extends C>> callable) {
         return Functions.uncurry2(callable);
     }
 
-    public static <A, B, C, D> CurriedFunction3<A, B, C, D> uncurry3(final Function1<? super A, ? extends Function1<? super B, ? extends Function1<? super C, ? extends D>>> callable) {
+    public static <A, B, C, D> Curried3<A, B, C, D> uncurry3(final Function1<? super A, ? extends Function1<? super B, ? extends Function1<? super C, ? extends D>>> callable) {
         return Functions.uncurry3(callable);
     }
 
@@ -296,7 +296,7 @@ public final class Callables {
         return either -> either.right();
     }
 
-    public static <A, B, C> CurriedFunction2<B, A, C> flip(final Function2<? super A, ? super B, ? extends C> callable) {
+    public static <A, B, C> Curried2<B, A, C> flip(final Function2<? super A, ? super B, ? extends C> callable) {
         return (s, t) -> callable.call(t, s);
     }
 
@@ -328,7 +328,7 @@ public final class Callables {
         return Functions.pair(function);
     }
 
-    public static <A, B, C> CurriedFunction2<A, B, C> unpair(final Function1<? super Pair<? extends A, ? extends B>, ? extends C> function) {
+    public static <A, B, C> Curried2<A, B, C> unpair(final Function1<? super Pair<? extends A, ? extends B>, ? extends C> function) {
         return Functions.unpair(function);
     }
 
@@ -336,7 +336,7 @@ public final class Callables {
         return Functions.triple(callable);
     }
 
-    public static <A, B, C, D> CurriedFunction3<A, B, C, D> untriple(final Function1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> callable) {
+    public static <A, B, C, D> Curried3<A, B, C, D> untriple(final Function1<? super Triple<? extends A, ? extends B, ? extends C>, ? extends D> callable) {
         return Functions.untriple(callable);
     }
 
@@ -348,11 +348,11 @@ public final class Callables {
         return Either.functions.asRight();
     }
 
-    public static <T> UnaryFunction<T> replace(final Predicate<? super T> predicate, final Function1<? super T, ? extends T> callable) {
+    public static <T> Unary<T> replace(final Predicate<? super T> predicate, final Function1<? super T, ? extends T> callable) {
         return when(predicate, callable);
     }
 
-    public static <T> UnaryFunction<T> when(final Predicate<? super T> predicate, final Function1<? super T, ? extends T> callable) {
+    public static <T> Unary<T> when(final Predicate<? super T> predicate, final Function1<? super T, ? extends T> callable) {
         return value -> predicate.matches(value) ? callable.call(value) : value;
     }
 }

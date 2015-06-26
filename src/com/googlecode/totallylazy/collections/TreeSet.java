@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.functions.Callables;
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
@@ -162,7 +162,7 @@ public class TreeSet<T> extends AbstractCollection<T> implements PersistentSorte
 
     @Override
     public <S> S fold(S seed, final Function2<? super S, ? super T, ? extends S> callable) {
-        return map.fold(seed, new CurriedFunction2<S, Pair<?, T>, S>() {
+        return map.fold(seed, new Curried2<S, Pair<?, T>, S>() {
             @Override
             public S call(S s, Pair<?, T> pair) throws Exception {
                 return callable.call(s, pair.second());

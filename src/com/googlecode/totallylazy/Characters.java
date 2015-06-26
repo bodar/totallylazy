@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.CurriedMonoid;
-import com.googlecode.totallylazy.functions.JoinCharSequence;
+import com.googlecode.totallylazy.functions.ConcatCharSequence;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
@@ -17,7 +17,7 @@ public class Characters {
     public static Charset UTF16 = Charset.forName("UTF-16");
     public static Charset ASCII = Charset.forName("ASCII");
 
-    public static final CurriedMonoid<CharSequence> join = JoinCharSequence.instance;
+    public static final CurriedMonoid<CharSequence> join = ConcatCharSequence.instance;
 
     public static Sequence<Character> characters(final CharSequence value) {
         return Sequences.characters(value);

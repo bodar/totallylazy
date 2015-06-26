@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.Block;
-import com.googlecode.totallylazy.functions.UnaryFunction;
+import com.googlecode.totallylazy.functions.Unary;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -32,7 +32,7 @@ public class Runnables {
         return T::run;
     }
 
-    public static <T> UnaryFunction<T> run(final Block<? super T> callable) {
+    public static <T> Unary<T> run(final Block<? super T> callable) {
         return t -> {
             callable.call(t);
             return t;

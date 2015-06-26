@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.functions;
 
 import com.googlecode.totallylazy.Strings;
 
-public enum JoinCharSequence implements CurriedMonoid<CharSequence> {
+public enum ConcatCharSequence implements CurriedMonoid<CharSequence> {
     instance;
 
     @Override

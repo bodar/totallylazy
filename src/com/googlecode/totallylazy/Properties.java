@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
 
 import java.io.ByteArrayInputStream;
@@ -65,14 +65,14 @@ public class Properties {
                 .fold(new java.util.Properties(), setProperty());
     }
 
-    public static CurriedFunction2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties> setProperty() {
+    public static Curried2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties> setProperty() {
         return (properties, property) -> {
             properties.put(property.getKey(), property.getValue());
             return properties;
         };
     }
 
-    public static CurriedFunction2<java.util.Properties, java.util.Properties, java.util.Properties> compose() {
+    public static Curried2<java.util.Properties, java.util.Properties, java.util.Properties> compose() {
         return (soFar, nextProperties) -> compose(soFar, nextProperties);
     }
 

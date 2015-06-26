@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.xml;
 
 import com.googlecode.totallylazy.functions.Block;
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.Escaper;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.LazyException;
@@ -12,7 +12,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Strings;
-import com.googlecode.totallylazy.functions.UnaryFunction;
+import com.googlecode.totallylazy.functions.Unary;
 import com.googlecode.totallylazy.iterators.NodeIterator;
 import com.googlecode.totallylazy.iterators.PoppingIterator;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
@@ -344,7 +344,7 @@ public class Xml {
     }
 
     public static class functions {
-        public static UnaryFunction<Element> modifyTextContent(final Function1<? super String, ? extends CharSequence> function) {
+        public static Unary<Element> modifyTextContent(final Function1<? super String, ? extends CharSequence> function) {
             return element -> {
                 element.setTextContent(function.call(element.getTextContent()).toString());
                 return element;
@@ -371,7 +371,7 @@ public class Xml {
             return element -> element.getAttribute(attributeName);
         }
 
-        public static CurriedFunction2<Node, String, String> selectContents() {
+        public static Curried2<Node, String, String> selectContents() {
             return Xml::selectContents;
         }
 
@@ -379,7 +379,7 @@ public class Xml {
             return node -> Xml.selectContents(node, expression);
         }
 
-        public static CurriedFunction2<Node, String, Sequence<Node>> selectNodes() {
+        public static Curried2<Node, String, Sequence<Node>> selectNodes() {
             return (node, expression) -> Xml.selectNodes(node, expression);
         }
 

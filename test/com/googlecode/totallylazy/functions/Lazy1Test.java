@@ -12,12 +12,12 @@ import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class LazyFunction11Test {
+public class Lazy1Test {
     @Test
     public void remembersException() throws Exception {
         final AtomicInteger count = new AtomicInteger();
 
-        LazyFunction1<String, String> lazy = LazyFunction1.lazy(s -> {
+        Lazy1<String, String> lazy = Lazy1.lazy(s -> {
             int i = count.incrementAndGet();
             throw new RuntimeException(format("Called %d times.", i));
         });
@@ -36,7 +36,7 @@ public class LazyFunction11Test {
     }
     @Test
     public void isThreadSafe() throws Exception {
-        CountingFunction1<Number, Number> counting = CountingFunction1.counting(increment);
+        CountCalls1<Number, Number> counting = CountCalls1.counting(increment);
         Function1<Number, Number> lazyCallable1 = counting.sleep(10).lazy();
 
         Sequence<Number> result = callConcurrently(
@@ -51,8 +51,8 @@ public class LazyFunction11Test {
 
     @Test
     public void onlyCallsUnderlyingCallableOnce() throws Exception {
-        CountingFunction1<Number, Number> counting = CountingFunction1.counting(increment);
-        Function1<Number, Number> lazyCallable = LazyFunction1.lazy(counting);
+        CountCalls1<Number, Number> counting = CountCalls1.counting(increment);
+        Function1<Number, Number> lazyCallable = Lazy1.lazy(counting);
 
         assertThat(lazyCallable.call(0), is(1));
         assertThat(lazyCallable.call(0), is(1));

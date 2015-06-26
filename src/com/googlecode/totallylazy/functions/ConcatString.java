@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.functions;
 
 import com.googlecode.totallylazy.Strings;
 
-public enum JoinString implements CurriedMonoid<String> {
+public enum ConcatString implements CurriedMonoid<String> {
     instance;
 
     @Override

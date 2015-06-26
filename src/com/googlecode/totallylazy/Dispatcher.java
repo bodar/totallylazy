@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.CurriedFunction2;
+import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.numbers.Numbers;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
@@ -78,7 +78,7 @@ public class Dispatcher {
         return sequence(argumentClasses).zip(parameterTypes).map(distanceBetween().pair()).reduce(sum);
     }
 
-    private static CurriedFunction2<Class<?>, Class<?>, Number> distanceBetween() {
+    private static Curried2<Class<?>, Class<?>, Number> distanceBetween() {
         return Dispatcher::distanceBetween;
     }
 
