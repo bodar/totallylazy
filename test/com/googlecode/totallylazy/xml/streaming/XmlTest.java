@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.xml.streaming;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.xml.Xml;
-import com.googlecode.totallylazy.callables.TimeReport;
+import com.googlecode.totallylazy.functions.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;

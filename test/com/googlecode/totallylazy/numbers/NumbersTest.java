@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.numbers;
 
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.callables.TimeReport;
+import com.googlecode.totallylazy.functions.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.callables.TimeCallable.time;
+import static com.googlecode.totallylazy.functions.TimeCallable.time;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.lessThan;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.startsWith;

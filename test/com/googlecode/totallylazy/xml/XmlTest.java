@@ -1,8 +1,7 @@
 package com.googlecode.totallylazy.xml;
 
-import com.googlecode.totallylazy.callables.TimeReport;
+import com.googlecode.totallylazy.functions.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
-import com.googlecode.totallylazy.xml.Xml;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;

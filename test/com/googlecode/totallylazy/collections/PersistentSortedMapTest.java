@@ -5,11 +5,9 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.callables.TimeReport;
+import com.googlecode.totallylazy.functions.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;

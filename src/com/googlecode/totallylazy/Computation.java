@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.LazyFunction;
+import com.googlecode.totallylazy.functions.LazyFunction;
 import com.googlecode.totallylazy.iterators.SegmentIterator;
 
 import java.util.Iterator;
@@ -11,7 +11,7 @@ import static com.googlecode.totallylazy.Callables.compose;
 import static com.googlecode.totallylazy.Functions.returns;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.callables.LazyFunction.lazy;
+import static com.googlecode.totallylazy.functions.LazyFunction.lazy;
 
 public class Computation<T> extends Sequence<T> implements Segment<T>, Memory {
     private final Lazy<Option<T>> head;

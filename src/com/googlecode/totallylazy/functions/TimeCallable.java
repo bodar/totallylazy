@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.callables;
+package com.googlecode.totallylazy.functions;
 
 import com.googlecode.totallylazy.Block;
 import com.googlecode.totallylazy.Function1;

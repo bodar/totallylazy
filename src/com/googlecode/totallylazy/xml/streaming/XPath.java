@@ -11,7 +11,7 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.callables.Compose.compose;
+import static com.googlecode.totallylazy.functions.Compose.compose;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;
 
 public class XPath {

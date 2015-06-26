@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.callables;
+package com.googlecode.totallylazy.functions;
 
 import org.junit.Test;
 

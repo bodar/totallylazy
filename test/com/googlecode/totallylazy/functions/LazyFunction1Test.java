@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.callables;
+package com.googlecode.totallylazy.functions;
 
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Sequence;
@@ -8,8 +8,6 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.googlecode.totallylazy.Callers.callConcurrently;
-import static com.googlecode.totallylazy.callables.CountingFunction.counting;
-import static com.googlecode.totallylazy.callables.LazyFunction.lazy;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.numbers.Numbers.increment;
 import static java.lang.String.format;
@@ -39,7 +37,7 @@ public class LazyFunction1Test {
     }
     @Test
     public void isThreadSafe() throws Exception {
-        CountingFunction<Number, Number> counting = counting(increment);
+        CountingFunction<Number, Number> counting = CountingFunction.counting(increment);
         Function1<Number, Number> lazyCallable1 = counting.sleep(10).lazy();
 
         Sequence<Number> result = callConcurrently(
@@ -54,8 +52,8 @@ public class LazyFunction1Test {
 
     @Test
     public void onlyCallsUnderlyingCallableOnce() throws Exception {
-        CountingFunction<Number, Number> counting = counting(increment);
-        Function1<Number, Number> lazyCallable = lazy(counting);
+        CountingFunction<Number, Number> counting = CountingFunction.counting(increment);
+        Function1<Number, Number> lazyCallable = LazyFunction.lazy(counting);
 
         assertThat(lazyCallable.call(0), is(1));
         assertThat(lazyCallable.call(0), is(1));

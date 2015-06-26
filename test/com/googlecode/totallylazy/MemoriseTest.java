@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.functions.CountingCallable;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ import static com.googlecode.totallylazy.Runnables.doNothing;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.functions.CountingCallable.counting;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;

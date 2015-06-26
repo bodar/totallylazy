@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.And;
-import com.googlecode.totallylazy.callables.Or;
-import com.googlecode.totallylazy.callables.Xor;
+import com.googlecode.totallylazy.functions.And;
+import com.googlecode.totallylazy.functions.Or;
+import com.googlecode.totallylazy.functions.Xor;
 
 import java.util.List;
 import java.util.concurrent.Callable;

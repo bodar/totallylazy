@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.CountingCallable;
+import com.googlecode.totallylazy.functions.CountingCallable;
 import com.googlecode.totallylazy.comparators.Comparators;
 import com.googlecode.totallylazy.concurrent.NamedExecutors;
 import com.googlecode.totallylazy.matchers.Matchers;
@@ -60,8 +60,8 @@ import static com.googlecode.totallylazy.Sequences.zip;
 import static com.googlecode.totallylazy.Strings.join;
 import static com.googlecode.totallylazy.Strings.toCharacters;
 import static com.googlecode.totallylazy.Triple.triple;
-import static com.googlecode.totallylazy.callables.Count.count;
-import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.functions.Count.count;
+import static com.googlecode.totallylazy.functions.CountingCallable.counting;
 import static com.googlecode.totallylazy.comparators.Comparators.comparators;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;

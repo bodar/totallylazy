@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.LazyCallable;
+import com.googlecode.totallylazy.functions.LazyCallable;
 
 import java.util.concurrent.Callable;
 

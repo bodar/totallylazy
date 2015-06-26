@@ -1,8 +1,8 @@
-package com.googlecode.totallylazy.callables;
+package com.googlecode.totallylazy.functions;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.callables.CountingCallable.counting;
+import static com.googlecode.totallylazy.functions.CountingCallable.counting;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.greaterThanOrEqualTo;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.lessThan;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,7 +12,7 @@ public class TimeCallableTest {
     @Test
     public void canTimeACall() throws Exception {
         TimeReport report = new TimeReport();
-        counting().sleep(10).lazy().
+        CountingCallable.counting().sleep(10).lazy().
                 time(report).
                 repeat().take(100).realise();
         System.out.println(report);

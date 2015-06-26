@@ -1,8 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Function0;
 import com.googlecode.totallylazy.Predicates;
-import com.googlecode.totallylazy.callables.TimeReport;
+import com.googlecode.totallylazy.functions.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -14,7 +13,7 @@ import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.callables.Count.count;
+import static com.googlecode.totallylazy.functions.Count.count;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.empty;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentSortedSet.constructors.sortedSet;

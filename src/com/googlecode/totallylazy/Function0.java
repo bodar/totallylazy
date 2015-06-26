@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.callables.LazyCallable;
-import com.googlecode.totallylazy.callables.SleepyCallable;
-import com.googlecode.totallylazy.callables.TimeCallable;
-import com.googlecode.totallylazy.callables.TimeReport;
+import com.googlecode.totallylazy.functions.LazyCallable;
+import com.googlecode.totallylazy.functions.SleepyCallable;
+import com.googlecode.totallylazy.functions.TimeCallable;
+import com.googlecode.totallylazy.functions.TimeReport;
 
 import java.util.concurrent.Callable;
 

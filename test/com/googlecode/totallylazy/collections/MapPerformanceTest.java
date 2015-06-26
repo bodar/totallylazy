@@ -1,12 +1,11 @@
 package com.googlecode.totallylazy.collections;
 
 import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Function2;
 import com.googlecode.totallylazy.Function0;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.callables.TimeCallable;
-import com.googlecode.totallylazy.callables.TimeReport;
+import com.googlecode.totallylazy.functions.TimeCallable;
+import com.googlecode.totallylazy.functions.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
 

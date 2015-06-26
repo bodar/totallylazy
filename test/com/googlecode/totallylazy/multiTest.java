@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static com.googlecode.totallylazy.Dispatcher.distanceBetween;
 import static com.googlecode.totallylazy.Predicates.any;
-import static com.googlecode.totallylazy.callables.TimeReport.time;
+import static com.googlecode.totallylazy.functions.TimeReport.time;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
