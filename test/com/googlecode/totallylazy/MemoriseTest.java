@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.CountingCallable;
+import com.googlecode.totallylazy.functions.CountingFunction0;
 import com.googlecode.totallylazy.functions.Function0;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import static com.googlecode.totallylazy.Runnables.doNothing;
 import static com.googlecode.totallylazy.Sequences.memorise;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.functions.CountingCallable.counting;
+import static com.googlecode.totallylazy.functions.CountingFunction0.counting;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -26,7 +26,7 @@ public class MemoriseTest {
 
     @Test
     public void canForget() throws Exception {
-        CountingCallable<Integer> counting = counting();
+        CountingFunction0<Integer> counting = counting();
         Sequence<Integer> memory = repeat(counting).memorise();
         assertThat(memory.head(), is(0));
         assertThat(counting.count(), is(1));
@@ -46,7 +46,7 @@ public class MemoriseTest {
 
     @Test
     public void memoriseIsThreadSafe() throws Exception {
-        CountingCallable<Integer> counting = counting();
+        CountingFunction0<Integer> counting = counting();
         final Sequence<Integer> number = repeat(counting.sleep(10)).memorise();
 
         Sequence<Integer> result = callConcurrently(callHead(number).sleep(10), callHead(number).sleep(10));
@@ -62,7 +62,7 @@ public class MemoriseTest {
 
     @Test
     public void supportsMemorise() throws Exception {
-        CountingCallable<Integer> counting = counting();
+        CountingFunction0<Integer> counting = counting();
         Sequence<Integer> sequence = repeat(counting).memorise();
         assertThat(sequence.head(), is(0));
         assertThat(sequence.head(), is(0));
@@ -71,7 +71,7 @@ public class MemoriseTest {
     
     @Test
     public void memorisingEach() throws InterruptedException {
-        CountingCallable<Integer> counting = counting();
+        CountingFunction0<Integer> counting = counting();
         Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
         sequence.each(doNothing(Integer.class));
         sequence.each(doNothing(Integer.class));
@@ -81,7 +81,7 @@ public class MemoriseTest {
 
     @Test
     public void memorisingSize() throws InterruptedException {
-        CountingCallable<Integer> counting = counting();
+        CountingFunction0<Integer> counting = counting();
         Sequence<Integer> sequence = sequence(counting).map(call(Integer.class)).memorise();
         assertThat(sequence.size(), NumberMatcher.is(1));
         assertThat(counting.count(), is(1));

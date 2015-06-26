@@ -1,9 +1,10 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Lazy;
+
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.functions.Functions.returns;
-import static com.googlecode.totallylazy.functions.LazyCallable.lazy;
 
 public class Quadruple<F, S, T, Fo> extends Triple<F, S, T> implements Fourth<Fo> {
     private final Value<? extends Fo> fourth;
@@ -18,7 +19,7 @@ public class Quadruple<F, S, T, Fo> extends Triple<F, S, T> implements Fourth<Fo
 
     protected Quadruple(final Callable<? extends F> first, final Callable<? extends S> second, final Callable<? extends T> third, final Callable<? extends Fo> fourth) {
         super(first, second, third);
-        this.fourth = lazy(fourth);
+        this.fourth = Lazy.lazy(fourth);
     }
 
     public final Fo fourth() {

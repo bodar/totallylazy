@@ -2,9 +2,8 @@ package com.googlecode.totallylazy.functions;
 
 import com.googlecode.totallylazy.Strings;
 
-public class JoinCharSequence implements CurriedMonoid<CharSequence> {
-    public static final CurriedMonoid<CharSequence> instance = new JoinCharSequence();
-    private JoinCharSequence() {}
+public enum JoinCharSequence implements CurriedMonoid<CharSequence> {
+    instance;
 
     @Override
     public CharSequence call(CharSequence a, CharSequence b) throws Exception {

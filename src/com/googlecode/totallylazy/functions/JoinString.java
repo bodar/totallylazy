@@ -2,9 +2,8 @@ package com.googlecode.totallylazy.functions;
 
 import com.googlecode.totallylazy.Strings;
 
-public class JoinString implements CurriedMonoid<String> {
-    public static final CurriedMonoid<String> instance = new JoinString();
-    private JoinString() {}
+public enum JoinString implements CurriedMonoid<String> {
+    instance;
 
     @Override
     public String call(String a, String b) throws Exception {

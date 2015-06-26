@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.parser;
 
-import com.googlecode.totallylazy.Lazy;
+import com.googlecode.totallylazy.functions.Lazy;
 import com.googlecode.totallylazy.Segment;
 
 import java.util.concurrent.Callable;

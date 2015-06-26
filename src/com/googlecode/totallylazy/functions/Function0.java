@@ -1,9 +1,6 @@
 package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.Functor;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.Value;
+import com.googlecode.totallylazy.*;
 
 import java.util.concurrent.Callable;
 
@@ -23,11 +20,11 @@ public interface Function0<A> extends Callable<A>, Runnable, Functor<A>, Value<A
     }
 
     default Function0<A> lazy() {
-        return LazyCallable.lazy(this);
+        return Lazy.lazy(this);
     }
 
     default Function0<A> sleep(int millis) {
-        return SleepyCallable.sleepy(this, millis);
+        return SleepyFunction0.sleepy(this, millis);
     }
 
     default Sequence<A> repeat() {
@@ -35,11 +32,11 @@ public interface Function0<A> extends Callable<A>, Runnable, Functor<A>, Value<A
     }
 
     default Function0<A> time(Function1<? super Number, ?> report) {
-        return TimeCallable.time(this, report);
+        return TimeFunction0.time(this, report);
     }
 
     default Function0<A> time() {
-        return TimeCallable.time(this);
+        return TimeFunction0.time(this);
     }
 
     default TimeReport time(int numberOfCalls) {

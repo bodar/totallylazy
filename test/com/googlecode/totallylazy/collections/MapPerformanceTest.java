@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Function0;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.functions.TimeCallable;
+import com.googlecode.totallylazy.functions.TimeFunction0;
 import com.googlecode.totallylazy.functions.TimeReport;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -152,7 +152,7 @@ public class MapPerformanceTest {
     }
 
     public static TimeReport time(int numberOfCalls, Callable<?> callable, final TimeReport report) {
-        repeat(TimeCallable.time(callable, report)).take(numberOfCalls).realise();
+        repeat(TimeFunction0.time(callable, report)).take(numberOfCalls).realise();
         return report;
     }
 

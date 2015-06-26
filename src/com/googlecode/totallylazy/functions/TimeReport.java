@@ -69,13 +69,13 @@ public class TimeReport implements Block<Number> {
 
     public static TimeReport time(int numberOfCalls, Sequence<?> sequence) {
         TimeReport report = new TimeReport();
-        repeat(TimeCallable.time(sequence, report)).take(numberOfCalls).realise();
+        repeat(TimeFunction0.time(sequence, report)).take(numberOfCalls).realise();
         return report;
     }
 
     public static TimeReport time(int numberOfCalls, Callable<?> callable) {
         TimeReport report = new TimeReport();
-        repeat(TimeCallable.time(callable, report)).take(numberOfCalls).realise();
+        repeat(TimeFunction0.time(callable, report)).take(numberOfCalls).realise();
         return report;
     }
 

@@ -1,9 +1,6 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.functions.Callables;
-import com.googlecode.totallylazy.functions.CurriedFunction2;
-import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.functions.Function2;
+import com.googlecode.totallylazy.functions.*;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -11,15 +8,14 @@ import java.util.concurrent.Callable;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.functions.Functions.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.functions.LazyCallable.lazy;
 
 public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Map.Entry<F,S> {
     private final Lazy<F> first;
     private final Lazy<S> second;
 
     protected Pair(final Callable<? extends F> first, final Callable<? extends S> second) {
-        this.first = lazy(first);
-        this.second = lazy(second);
+        this.first = Lazy.lazy(first);
+        this.second = Lazy.lazy(second);
     }
 
     public static <F, S> Pair<F, S> pair(final F first, final S second) {

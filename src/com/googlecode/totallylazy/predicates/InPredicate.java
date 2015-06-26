@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Lazy;
+import com.googlecode.totallylazy.functions.Lazy;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.annotations.multimethod;

@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.functions.Lazy;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;

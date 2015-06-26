@@ -1,7 +1,7 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.functions;
 
-import com.googlecode.totallylazy.functions.Function0;
-import com.googlecode.totallylazy.functions.LazyCallable;
+import com.googlecode.totallylazy.Either;
+import com.googlecode.totallylazy.Memory;
 
 import java.util.concurrent.Callable;
 
@@ -14,7 +14,12 @@ public abstract class Lazy<T> implements Function0<T>, Memory {
     protected abstract T get() throws Exception;
 
     public static <T> Lazy<T> lazy(Callable<? extends T> callable) {
-        return LazyCallable.lazy(callable);
+        return new Lazy<T>() {
+            @Override
+            protected T get() throws Exception {
+                return callable.call();
+            }
+        };
     }
 
     // Thread-safe double check idiom (Effective Java 2nd edition p.283)

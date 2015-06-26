@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.functions.Function0;
-import com.googlecode.totallylazy.Lazy;
+import com.googlecode.totallylazy.functions.Lazy;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Factory;
 import net.sf.cglib.proxy.InvocationHandler;
