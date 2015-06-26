@@ -17,7 +17,7 @@ This code is a a heavily modified version of Numbers from Rich Hickeys clojure c
 
 package com.googlecode.totallylazy.numbers;
 
-import com.googlecode.totallylazy.BinaryFunction;
+import com.googlecode.totallylazy.CurriedBinaryFunction;
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.CombinerFunction;
 import com.googlecode.totallylazy.Computation;
@@ -365,13 +365,13 @@ public class Numbers {
         return operatorsFor(x, y).add(x, y);
     }
 
-    public static BinaryFunction<Number> subtract = new BinaryFunction<Number>() {
+    public static CurriedBinaryFunction<Number> subtract = new CurriedBinaryFunction<Number>() {
         public Number call(Number a, Number b) {
             return Numbers.subtract(a, b);
         }
     };
 
-    public static BinaryFunction<Number> subtract() {
+    public static CurriedBinaryFunction<Number> subtract() {
         return subtract;
     }
 
@@ -412,13 +412,13 @@ public class Numbers {
         return divide.flip().apply(divisor);
     }
 
-    public static BinaryFunction<Number> divide = new BinaryFunction<Number>() {
+    public static CurriedBinaryFunction<Number> divide = new CurriedBinaryFunction<Number>() {
         public Number call(Number dividend, Number divisor) throws Exception {
             return divide(dividend, divisor);
         }
     };
 
-    public static BinaryFunction<Number> divide() {
+    public static CurriedBinaryFunction<Number> divide() {
         return divide;
     }
 
@@ -431,20 +431,20 @@ public class Numbers {
         return mod().apply(divisor);
     }
 
-    public static BinaryFunction<Number> remainder = new BinaryFunction<Number>() {
+    public static CurriedBinaryFunction<Number> remainder = new CurriedBinaryFunction<Number>() {
         @Override
         public Number call(Number dividend, Number divisor) throws Exception {
             return remainder(dividend, divisor);
         }
     };
 
-    public static BinaryFunction<Number> remainder() {
+    public static CurriedBinaryFunction<Number> remainder() {
         return remainder;
     }
 
-    public static BinaryFunction<Number> mod = remainder.flip();
+    public static CurriedBinaryFunction<Number> mod = remainder.flip();
 
-    public static BinaryFunction<Number> mod() {
+    public static CurriedBinaryFunction<Number> mod() {
         return mod;
     }
 

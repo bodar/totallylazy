@@ -1,15 +1,7 @@
 package com.googlecode.totallylazy;
 
-import static com.googlecode.totallylazy.Binary.binary;
-
-public abstract class BinaryFunction<T> implements CurriedFunction2<T, T, T>, Binary<T> {
-    @Override
-    public UnaryFunction<T> apply(T t) {
-        return CurriedFunction2.super.apply(t)::call;
-    }
-
-    @Override
-    public BinaryFunction<T> flip() {
-        return binary(CurriedFunction2.super.flip());
+public interface BinaryFunction<T> extends Function2<T, T, T> {
+    static <T> BinaryFunction<T> binary(final Function2<T, T, T> callable) {
+        return callable::call;
     }
 }

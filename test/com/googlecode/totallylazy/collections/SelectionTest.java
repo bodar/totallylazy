@@ -1,6 +1,12 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.BinaryFunction;
+import com.googlecode.totallylazy.Function1;
+import com.googlecode.totallylazy.Monoid;
+import com.googlecode.totallylazy.Reducer;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Strings;
+import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.totallylazy.numbers.Integers;
 import org.junit.Test;
 
@@ -64,7 +70,7 @@ public class SelectionTest {
         assertThat(data.filter(where(name, is("Dan"))).map(select(upperCase)), is(one(map(upperCase.name(), "DAN"))));
     }
 
-    private <T, R> Keyword<R> compose(Keyword<T> keyword, Function1<T,R> function){
+    private <T, R> Keyword<R> compose(Keyword<T> keyword, Function1<T, R> function) {
         return new Keyword<R>() {
             @Override
             public String name() {
@@ -116,7 +122,7 @@ public class SelectionTest {
             return call(identity(), t);
         }
 
-        static <T> Projection<T> projection(T identity, Binary<T> binary){
+        static <T> Projection<T> projection(T identity, BinaryFunction<T> binary) {
             return new Projection<T>() {
                 @Override
                 public T call(T t, T t2) throws Exception {
@@ -131,7 +137,7 @@ public class SelectionTest {
         }
     }
 
-    enum Concat implements Reducer<Object, String>{
+    enum Concat implements Reducer<Object, String> {
         Instance;
 
         @Override
@@ -145,7 +151,7 @@ public class SelectionTest {
         }
     }
 
-    interface Aggregate<T, R> extends Reducer<PersistentMap<String,Object>, R>, Selection {
+    interface Aggregate<T, R> extends Reducer<PersistentMap<String, Object>, R>, Selection {
         Keyword<? extends T> keyword();
 
         Reducer<? super T, R> reducer();
