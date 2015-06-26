@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.ReducerCombinerFunction;
+import com.googlecode.totallylazy.CurriedCombiner;
 
 import static com.googlecode.totallylazy.validations.PredicateValidator.constructors.validatePredicate;
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
@@ -15,8 +15,8 @@ public interface Validator<T> extends Predicate<T> {
             return validator -> validator.validate(value);
         }
 
-        public static <T> ReducerCombinerFunction<T, ValidationResult> validateWith(final Validator<? super T> validator) {
-            return new ReducerCombinerFunction<T, ValidationResult>() {
+        public static <T> CurriedCombiner<T, ValidationResult> validateWith(final Validator<? super T> validator) {
+            return new CurriedCombiner<T, ValidationResult>() {
                 @Override
                 public ValidationResult call(ValidationResult validationResult, T instance) throws Exception {
                     return validationResult.merge(validator.validate(instance));
