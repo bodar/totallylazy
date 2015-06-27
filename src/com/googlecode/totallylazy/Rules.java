@@ -2,6 +2,8 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.predicates.Predicate;
+import com.googlecode.totallylazy.predicates.Predicates;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

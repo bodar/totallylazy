@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

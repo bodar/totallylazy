@@ -1,10 +1,10 @@
 package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Predicates.greaterThan;
+import static com.googlecode.totallylazy.predicates.Predicates.greaterThan;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.isEmpty;
 import static com.googlecode.totallylazy.validations.Validators.validateThat;

@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.reflection;
 
 import com.googlecode.totallylazy.functions.Lazy;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import jdk.internal.org.objectweb.asm.Type;
 import jdk.internal.org.objectweb.asm.tree.AbstractInsnNode;
@@ -13,8 +13,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.functions.Lazy.lazy;
-import static com.googlecode.totallylazy.Predicates.instanceOf;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class StackFrame {

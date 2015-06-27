@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 
 import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.predicates.Predicate;
 
 public class Rule<A, B> implements Function1<A, B>, Predicate<A> {
     private final Predicate<? super A> predicate;

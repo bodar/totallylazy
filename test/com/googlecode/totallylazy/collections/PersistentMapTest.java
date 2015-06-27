@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.predicates.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.functions.TimeReport;
 import org.junit.Ignore;

@@ -12,9 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.googlecode.totallylazy.reflection.Methods.annotation;
 import static com.googlecode.totallylazy.reflection.Methods.modifier;
-import static com.googlecode.totallylazy.Predicates.and;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.predicates.Predicates.and;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.predicates.WherePredicate.where;
 import static com.googlecode.totallylazy.xml.XPathFunction.functions.value;

@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.validations;
 
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
 import static com.googlecode.totallylazy.Sequences.sequence;

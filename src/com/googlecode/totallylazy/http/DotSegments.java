@@ -1,5 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.http;
 
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.regex.Regex;
 
 import java.util.ArrayDeque;
@@ -17,12 +18,15 @@ public class DotSegments {
             segments.add(notMatched);
             return null;
         }, match -> {
-            String segment1 = match.group(1);
-            if(segment1.equals(".")) return null;
-            else if(segment1.equals("..")) {
-                if(!segments.isEmpty()) segments.removeLast();
-            } else {
-                segments.add(match.group());
+            switch (match.group(1)) {
+                case ".":
+                    return null;
+                case "..":
+                    if (!segments.isEmpty()) segments.removeLast();
+                    break;
+                default:
+                    segments.add(match.group());
+                    break;
             }
             return null;
         });

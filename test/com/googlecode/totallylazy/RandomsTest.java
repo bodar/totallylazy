@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.Predicates;
 import com.googlecode.totallylazy.time.Dates;
 import com.googlecode.totallylazy.time.Days;
 import org.junit.Test;
@@ -7,11 +8,11 @@ import org.junit.Test;
 import java.util.Date;
 
 import static com.googlecode.totallylazy.functions.Functions.identity;
-import static com.googlecode.totallylazy.Predicates.between;
-import static com.googlecode.totallylazy.Predicates.equalTo;
-import static com.googlecode.totallylazy.Predicates.in;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.or;
+import static com.googlecode.totallylazy.predicates.Predicates.between;
+import static com.googlecode.totallylazy.predicates.Predicates.equalTo;
+import static com.googlecode.totallylazy.predicates.Predicates.in;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.or;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.Matchers.matcher;
 import static org.junit.Assert.assertThat;

@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.predicates.Predicates;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 

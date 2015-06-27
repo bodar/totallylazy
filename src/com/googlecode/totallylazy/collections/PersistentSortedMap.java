@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.comparators.Comparators;
 
 import java.util.Comparator;

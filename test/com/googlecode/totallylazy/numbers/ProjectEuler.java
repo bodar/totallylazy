@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.functions.Callables.toString;
-import static com.googlecode.totallylazy.Predicates.or;
+import static com.googlecode.totallylazy.predicates.Predicates.or;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.reduce;
 import static com.googlecode.totallylazy.Sequences.sequence;

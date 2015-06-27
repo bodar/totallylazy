@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy;
 
-import static com.googlecode.totallylazy.Predicates.not;
+import com.googlecode.totallylazy.predicates.Predicate;
+
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 
 public interface Filterable<T> {
     Filterable<T> filter(final Predicate<? super T> predicate);

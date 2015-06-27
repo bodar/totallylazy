@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.functions;
 
 import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.predicates.Predicate;
 
 import java.util.List;
 import java.util.concurrent.Callable;

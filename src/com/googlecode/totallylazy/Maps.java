@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.predicates.Predicate;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,7 +14,7 @@ import java.util.Set;
 
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.predicates.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Maps {

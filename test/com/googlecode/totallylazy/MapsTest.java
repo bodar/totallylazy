@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.Predicates;
 import org.junit.Test;
 
 import java.util.AbstractMap;

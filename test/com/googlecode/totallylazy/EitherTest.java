@@ -9,8 +9,8 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Either.applicate;
 import static com.googlecode.totallylazy.Left.left;
-import static com.googlecode.totallylazy.Predicates.isLeft;
-import static com.googlecode.totallylazy.Predicates.isRight;
+import static com.googlecode.totallylazy.predicates.Predicates.isLeft;
+import static com.googlecode.totallylazy.predicates.Predicates.isRight;
 import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;

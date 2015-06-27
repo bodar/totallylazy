@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.matchers;
 
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import org.hamcrest.Description;
 import org.hamcrest.DiagnosingMatcher;

@@ -8,8 +8,8 @@ import com.googlecode.totallylazy.annotations.tailrec;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.collections.TreeZipper.Breadcrumb.breadcrumb;
 import static com.googlecode.totallylazy.collections.TreeZipper.Direction.left;

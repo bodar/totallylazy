@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.predicates.Predicate;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.RejectedExecutionException;
@@ -9,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.googlecode.totallylazy.functions.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.functions.Functions.function;
-import static com.googlecode.totallylazy.Predicates.always;
+import static com.googlecode.totallylazy.predicates.Predicates.always;
 
 public interface Atomic<T> extends Value<T> {
     Atomic<T> modify(Function1<? super T, ? extends T> callable);

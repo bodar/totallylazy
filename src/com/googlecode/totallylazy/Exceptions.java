@@ -2,13 +2,14 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.Block;
 import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.predicates.Predicate;
 
 import java.io.PrintWriter;
 
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Predicates.instanceOf;
-import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
+import static com.googlecode.totallylazy.predicates.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Sequences.iterate;
 import static com.googlecode.totallylazy.Sequences.sequence;

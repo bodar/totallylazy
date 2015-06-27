@@ -5,8 +5,8 @@ import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.functions.Functions;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.predicates.Predicate;
+import com.googlecode.totallylazy.predicates.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Unchecked;
 

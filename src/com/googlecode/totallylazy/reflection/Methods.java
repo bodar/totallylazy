@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Classes.allClasses;
 import static com.googlecode.totallylazy.Exceptions.handleException;
-import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Methods {

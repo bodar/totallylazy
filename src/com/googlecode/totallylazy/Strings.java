@@ -5,10 +5,7 @@ import com.googlecode.totallylazy.annotations.tailrec;
 import com.googlecode.totallylazy.functions.*;
 import com.googlecode.totallylazy.comparators.Maximum;
 import com.googlecode.totallylazy.comparators.Minimum;
-import com.googlecode.totallylazy.predicates.ContainsPredicate;
-import com.googlecode.totallylazy.predicates.EndsWithPredicate;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
-import com.googlecode.totallylazy.predicates.StartsWithPredicate;
+import com.googlecode.totallylazy.predicates.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,14 +17,14 @@ import java.nio.charset.Charset;
 
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.LazyException.lazyException;
-import static com.googlecode.totallylazy.Predicates.notNullValue;
-import static com.googlecode.totallylazy.Predicates.or;
+import static com.googlecode.totallylazy.predicates.Predicates.notNullValue;
+import static com.googlecode.totallylazy.predicates.Predicates.or;
 import static com.googlecode.totallylazy.Sequences.characters;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.inputStreamReader;
 import static com.googlecode.totallylazy.Strings.toString;
-import static com.googlecode.totallylazy.Uri.uri;
+import static com.googlecode.totallylazy.http.Uri.uri;
 
 public class Strings {
     public static final String EMPTY = "";

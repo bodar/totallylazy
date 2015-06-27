@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.Lists;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.predicates.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.equalTo;
+import static com.googlecode.totallylazy.predicates.Predicates.equalTo;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;

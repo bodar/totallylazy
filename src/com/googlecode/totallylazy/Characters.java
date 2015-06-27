@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.forwardOnly;
 
 public class Characters {

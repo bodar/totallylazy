@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.functions;
 
 import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.comparators.Comparators;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.reflection.Methods;
 
 import java.lang.reflect.Array;

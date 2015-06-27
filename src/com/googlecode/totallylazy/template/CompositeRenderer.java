@@ -1,14 +1,14 @@
 package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.collections.PersistentList;
 
 import java.io.IOException;
 
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.always;
+import static com.googlecode.totallylazy.predicates.Predicates.always;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 

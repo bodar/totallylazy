@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.iterators.SegmentIterator;

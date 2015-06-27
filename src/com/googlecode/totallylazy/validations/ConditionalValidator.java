@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.validations;
 
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 
 import static com.googlecode.totallylazy.validations.ValidationResult.constructors.pass;
 

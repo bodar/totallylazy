@@ -1,13 +1,13 @@
 package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Uri;
+import com.googlecode.totallylazy.http.Uri;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.Uri.packageUri;
+import static com.googlecode.totallylazy.http.Uri.packageUri;
 
 public class UrlRenderers implements Renderers {
     private final Uri baseUrl;

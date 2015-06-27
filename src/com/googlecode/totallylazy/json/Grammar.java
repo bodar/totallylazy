@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.json;
 import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.parser.Parse;
 import com.googlecode.totallylazy.parser.Parser;
@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Characters.among;
 import static com.googlecode.totallylazy.Characters.hexDigit;
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.cons;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.parser.Parsers.characters;

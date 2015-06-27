@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.http.Uri;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.io.Closeable;

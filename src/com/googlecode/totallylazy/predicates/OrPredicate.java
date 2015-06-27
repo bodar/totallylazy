@@ -1,14 +1,12 @@
 package com.googlecode.totallylazy.predicates;
 
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.annotations.multimethod;
 
-import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.one;
 
 public class OrPredicate<T> extends LogicalPredicate<T> {

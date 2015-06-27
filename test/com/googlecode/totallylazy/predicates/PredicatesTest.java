@@ -1,18 +1,15 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.predicates;
 
+import com.googlecode.totallylazy.SequenceTest;
+import com.googlecode.totallylazy.Sequences;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Predicates.assignableTo;
-import static com.googlecode.totallylazy.Predicates.classAssignableTo;
-import static com.googlecode.totallylazy.Predicates.in;
-import static com.googlecode.totallylazy.Predicates.setEqualityWith;
-import static com.googlecode.totallylazy.Predicates.subsetOf;
-import static com.googlecode.totallylazy.Predicates.supersetOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
+import static com.googlecode.totallylazy.predicates.Predicates.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;

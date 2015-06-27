@@ -2,14 +2,14 @@ package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.predicates.Predicate;
+import com.googlecode.totallylazy.predicates.Predicates;
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.functions.Compose.compose;
 import static com.googlecode.totallylazy.predicates.LogicalPredicate.logicalPredicate;

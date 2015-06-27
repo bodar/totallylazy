@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.collections;
 
+import com.googlecode.totallylazy.predicates.Predicate;
+
 import java.util.Collection;
 
 public abstract class ReadOnlyCollection<T> implements Collection<T> {
@@ -27,7 +29,7 @@ public abstract class ReadOnlyCollection<T> implements Collection<T> {
         throw new IllegalMutationException();
     }
 
-    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#filter(com.googlecode.totallylazy.Predicate)} */
+    /** @deprecated Mutation not supported. Replaced by {@link PersistentCollection#filter(Predicate)} */
     @Override @Deprecated
     public boolean retainAll(Collection<?> c) {
         throw new IllegalMutationException();

@@ -3,8 +3,8 @@ package com.googlecode.totallylazy.collections;
 import java.util.List;
 import java.util.ListIterator;
 
-import static com.googlecode.totallylazy.Predicates.in;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.in;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 
 @SuppressWarnings("deprecation")
 public abstract class AbstractList<T> extends ReadOnlyList<T> implements PersistentList<T> {

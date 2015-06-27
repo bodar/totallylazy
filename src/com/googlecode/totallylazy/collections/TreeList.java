@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Segment;
 
 import java.util.Iterator;
@@ -15,8 +15,8 @@ import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Predicates.in;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.in;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.numbers.Numbers.intValue;

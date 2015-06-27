@@ -2,24 +2,17 @@ package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.template.ast.Anonymous;
 import com.googlecode.totallylazy.template.ast.Attribute;
-import com.googlecode.totallylazy.template.ast.Expression;
 import com.googlecode.totallylazy.template.ast.Grammar;
 import com.googlecode.totallylazy.template.ast.FunctionCall;
-import com.googlecode.totallylazy.template.ast.ImplicitArguments;
-import com.googlecode.totallylazy.template.ast.Indirection;
 import com.googlecode.totallylazy.template.ast.Mapping;
-import com.googlecode.totallylazy.template.ast.Name;
-import com.googlecode.totallylazy.template.ast.NamedArguments;
 import com.googlecode.totallylazy.template.ast.Text;
 import org.junit.Test;
-
-import java.util.List;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Maps.map;
-import static com.googlecode.totallylazy.Predicates.instanceOf;
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.template.ast.Attribute.attribute;
 import static com.googlecode.totallylazy.template.ast.FunctionCall.functionCall;
 import static com.googlecode.totallylazy.template.ast.ImplicitArguments.implicitArguments;

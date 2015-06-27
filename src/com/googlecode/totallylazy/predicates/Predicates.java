@@ -1,26 +1,8 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.predicates;
 
+import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.predicates.AlwaysFalse;
-import com.googlecode.totallylazy.predicates.AlwaysTrue;
-import com.googlecode.totallylazy.predicates.AndPredicate;
-import com.googlecode.totallylazy.predicates.BetweenPredicate;
-import com.googlecode.totallylazy.predicates.CountTo;
-import com.googlecode.totallylazy.predicates.EqualsPredicate;
-import com.googlecode.totallylazy.predicates.GreaterThanOrEqualToPredicate;
-import com.googlecode.totallylazy.predicates.GreaterThanPredicate;
-import com.googlecode.totallylazy.predicates.InPredicate;
-import com.googlecode.totallylazy.predicates.InstanceOf;
-import com.googlecode.totallylazy.predicates.LessThanOrEqualToPredicate;
-import com.googlecode.totallylazy.predicates.LessThanPredicate;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
-import com.googlecode.totallylazy.predicates.Not;
-import com.googlecode.totallylazy.predicates.NullPredicate;
-import com.googlecode.totallylazy.predicates.OnlyOnce;
-import com.googlecode.totallylazy.predicates.OrPredicate;
-import com.googlecode.totallylazy.predicates.WherePredicate;
-import com.googlecode.totallylazy.predicates.WhileTrue;
 
 import java.util.Collection;
 
@@ -206,7 +188,7 @@ public class Predicates {
 
     @SafeVarargs
     public static <T> LogicalPredicate<T> and(final Predicate<? super T>... predicates) {
-        return and(sequence(predicates));
+        return and(Sequences.sequence(predicates));
     }
 
     public static <T> LogicalPredicate<T> and(final Iterable<? extends Predicate<? super T>> predicates) {
@@ -239,7 +221,7 @@ public class Predicates {
 
     @SafeVarargs
     public static <T> LogicalPredicate<T> or(final Predicate<? super T>... predicates) {
-        return or(sequence(predicates));
+        return or(Sequences.sequence(predicates));
     }
 
     public static <T> LogicalPredicate<T> or(final Iterable<? extends Predicate<? super T>> predicates) {

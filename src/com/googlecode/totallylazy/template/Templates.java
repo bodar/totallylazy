@@ -1,16 +1,16 @@
 package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.Uri;
+import com.googlecode.totallylazy.http.Uri;
 import com.googlecode.totallylazy.xml.Xml;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.googlecode.totallylazy.Predicates.always;
+import static com.googlecode.totallylazy.predicates.Predicates.always;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.template.CompositeRenderer.compositeRenderer;
 

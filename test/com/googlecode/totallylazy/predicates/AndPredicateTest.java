@@ -1,15 +1,14 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.matchers.Matchers;
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Predicates.alwaysFalse;
-import static com.googlecode.totallylazy.Predicates.alwaysTrue;
-import static com.googlecode.totallylazy.Predicates.and;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.or;
+import static com.googlecode.totallylazy.predicates.Predicates.alwaysFalse;
+import static com.googlecode.totallylazy.predicates.Predicates.alwaysTrue;
+import static com.googlecode.totallylazy.predicates.Predicates.and;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.or;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AndPredicateTest {

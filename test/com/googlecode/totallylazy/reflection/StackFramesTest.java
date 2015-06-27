@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.reflection;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 
 public class StackFramesTest {
     @Test

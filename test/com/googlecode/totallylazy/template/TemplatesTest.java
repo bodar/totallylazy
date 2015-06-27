@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Maps.map;
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.functions.TimeReport.time;
 import static com.googlecode.totallylazy.template.Templates.defaultTemplates;
 import static com.googlecode.totallylazy.template.Templates.templates;

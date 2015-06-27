@@ -1,11 +1,12 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.predicates.Predicate;
 
 import static com.googlecode.totallylazy.functions.Callables.toString;
 import static com.googlecode.totallylazy.functions.Functions.returns1;
-import static com.googlecode.totallylazy.Predicates.always;
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.always;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.characters;
 
 public class Escaper {

@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.io.File;
@@ -13,8 +12,8 @@ import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Sources.constructors.sources;
 import static com.googlecode.totallylazy.Sources.functions.directory;
 import static com.googlecode.totallylazy.Sources.functions.name;
-import static com.googlecode.totallylazy.Uri.packageUri;
-import static com.googlecode.totallylazy.Uri.uri;
+import static com.googlecode.totallylazy.http.Uri.packageUri;
+import static com.googlecode.totallylazy.http.Uri.uri;
 import static com.googlecode.totallylazy.Zip.zip;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.predicates.Not.not;

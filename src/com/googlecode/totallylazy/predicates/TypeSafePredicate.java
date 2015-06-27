@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.proxy.Generics;
 
 public abstract class TypeSafePredicate<T> implements Predicate<T> {

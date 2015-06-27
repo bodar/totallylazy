@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.Predicate;
+
 import java.io.IOException;
 
 public class FilterSource implements Sources {

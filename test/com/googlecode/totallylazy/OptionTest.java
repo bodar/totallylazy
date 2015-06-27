@@ -3,6 +3,7 @@ package com.googlecode.totallylazy;
 import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import com.googlecode.totallylazy.predicates.Predicates;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;

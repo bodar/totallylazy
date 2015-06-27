@@ -3,8 +3,8 @@ package com.googlecode.totallylazy.collections;
 import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.predicates.Predicate;
+import com.googlecode.totallylazy.predicates.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 
 @SuppressWarnings("deprecation")
 public abstract class AbstractMap<K, V> extends ReadOnlyMap<K,V> implements PersistentMap<K, V> {

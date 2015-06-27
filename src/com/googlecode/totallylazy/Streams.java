@@ -16,7 +16,7 @@ import java.io.Reader;
 import static com.googlecode.totallylazy.functions.Block.block;
 import static com.googlecode.totallylazy.Closeables.using;
 import static com.googlecode.totallylazy.LazyException.lazyException;
-import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.predicates.Predicates.notNullValue;
 import static com.googlecode.totallylazy.Sequences.repeat;
 
 public class Streams {

@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicate;
-
 public class DelegatingPredicate<T> extends LogicalPredicate<T> {
     private final Predicate<? super T> predicate;
 

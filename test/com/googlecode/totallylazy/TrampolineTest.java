@@ -5,10 +5,8 @@ import org.junit.Test;
 import static com.googlecode.totallylazy.Assert.fail;
 import static com.googlecode.totallylazy.Trampoline.done;
 import static com.googlecode.totallylazy.Trampoline.more;
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.Assert.assertThat;
-import static com.googlecode.totallylazy.proxy.Call.method;
-import static com.googlecode.totallylazy.proxy.Call.on;
 
 public class TrampolineTest {
     Trampoline<Boolean> even(int n) {

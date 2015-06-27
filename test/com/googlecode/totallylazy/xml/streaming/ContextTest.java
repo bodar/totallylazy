@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.xml.Xml.document;
 import static com.googlecode.totallylazy.xml.Xml.selectNodes;
 import static com.googlecode.totallylazy.xml.streaming.XPath.attribute;

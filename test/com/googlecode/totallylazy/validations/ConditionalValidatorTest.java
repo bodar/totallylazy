@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.validations;
 
 import org.junit.Test;
 
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.validations.Validators.validateThat;
 import static org.junit.Assert.assertTrue;
 

@@ -4,8 +4,6 @@ import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.functions.Functions;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Unchecked;
 
 import static com.googlecode.totallylazy.Unchecked.cast;

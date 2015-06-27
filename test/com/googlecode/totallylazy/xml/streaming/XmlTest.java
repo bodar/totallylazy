@@ -18,7 +18,7 @@ import static com.googlecode.totallylazy.functions.Functions.option;
 import static com.googlecode.totallylazy.functions.Functions.or;
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.xml.streaming.XPath.attribute;
 import static com.googlecode.totallylazy.xml.streaming.XPath.child;

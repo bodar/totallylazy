@@ -6,8 +6,8 @@ import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.First;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.predicates.Predicate;
+import com.googlecode.totallylazy.predicates.Predicates;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequences;
 
@@ -15,8 +15,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.reverse;
 

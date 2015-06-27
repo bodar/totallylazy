@@ -1,8 +1,10 @@
 package com.googlecode.totallylazy;
 
 
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.sameInstance;
+import com.googlecode.totallylazy.predicates.Predicate;
+
+import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.sameInstance;
 
 public interface Assert {
     static <T> void assertThat(T actual, Predicate<? super T> predicate) {

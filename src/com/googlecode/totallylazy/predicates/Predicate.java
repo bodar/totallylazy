@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.predicates;
 
 public interface Predicate<T> {
     boolean matches(T other);

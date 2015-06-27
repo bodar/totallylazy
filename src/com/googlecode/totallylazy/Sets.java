@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.googlecode.totallylazy.functions.Callables.size;
-import static com.googlecode.totallylazy.Predicates.contains;
+import static com.googlecode.totallylazy.predicates.Predicates.contains;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.util.Arrays.asList;
 import static java.util.Collections.newSetFromMap;

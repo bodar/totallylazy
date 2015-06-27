@@ -7,7 +7,7 @@ import com.googlecode.totallylazy.annotations.multimethod;
 
 import java.util.Set;
 
-import static com.googlecode.totallylazy.Predicates.never;
+import static com.googlecode.totallylazy.predicates.Predicates.never;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 

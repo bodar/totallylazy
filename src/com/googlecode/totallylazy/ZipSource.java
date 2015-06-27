@@ -9,9 +9,9 @@ import java.util.zip.ZipInputStream;
 
 import static com.googlecode.totallylazy.FilterSource.filterSource;
 import static com.googlecode.totallylazy.MapSources.mapSource;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.where;
 import static com.googlecode.totallylazy.Sources.functions.name;
 import static com.googlecode.totallylazy.Strings.startsWith;
 

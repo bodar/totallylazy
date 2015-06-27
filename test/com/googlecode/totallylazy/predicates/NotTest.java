@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.predicates;
 
-import com.googlecode.totallylazy.Predicates;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.matchers.Matchers.is;

@@ -2,14 +2,13 @@ package com.googlecode.totallylazy.xml.streaming;
 
 import com.googlecode.totallylazy.Computation;
 import com.googlecode.totallylazy.LazyException;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 import org.w3c.dom.Node;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLResolver;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import java.io.Reader;

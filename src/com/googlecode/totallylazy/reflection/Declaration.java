@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.reflection;
 
-import com.googlecode.totallylazy.Predicates;
+import com.googlecode.totallylazy.predicates.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import jdk.internal.org.objectweb.asm.tree.FieldInsnNode;
 import jdk.internal.org.objectweb.asm.tree.FieldNode;
@@ -9,7 +9,7 @@ import jdk.internal.org.objectweb.asm.tree.MethodInsnNode;
 import jdk.internal.org.objectweb.asm.tree.VarInsnNode;
 
 import static com.googlecode.totallylazy.functions.Functions.instanceOf;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 
 public class Declaration {
     private final String name;

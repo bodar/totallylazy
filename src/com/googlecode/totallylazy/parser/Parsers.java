@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Triple;
 
 import java.io.PrintStream;

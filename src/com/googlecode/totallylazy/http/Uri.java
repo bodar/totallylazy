@@ -1,5 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.http;
 
+import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.regex.Regex;
 

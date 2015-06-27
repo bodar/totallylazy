@@ -22,7 +22,7 @@ import static com.googlecode.totallylazy.Strings.reverse;
 import static com.googlecode.totallylazy.Strings.substring;
 import static com.googlecode.totallylazy.Strings.toLowerCase;
 import static com.googlecode.totallylazy.Strings.toUpperCase;
-import static com.googlecode.totallylazy.Uri.uri;
+import static com.googlecode.totallylazy.http.Uri.uri;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

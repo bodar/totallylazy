@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.collections.Indexed;
 import com.googlecode.totallylazy.collections.PersistentCollection;
 import com.googlecode.totallylazy.collections.PersistentList;
 import com.googlecode.totallylazy.functions.*;
+import com.googlecode.totallylazy.predicates.Predicate;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -17,9 +18,9 @@ import java.util.concurrent.Executor;
 
 import static com.googlecode.totallylazy.functions.Callables.ascending;
 import static com.googlecode.totallylazy.functions.Callables.returnArgument;
-import static com.googlecode.totallylazy.Predicates.in;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.in;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 

@@ -1,10 +1,10 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.http;
 
 import org.junit.Test;
 
 import java.net.URI;
 
-import static com.googlecode.totallylazy.Uri.uri;
+import static com.googlecode.totallylazy.http.Uri.uri;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;

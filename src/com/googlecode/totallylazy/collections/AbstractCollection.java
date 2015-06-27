@@ -8,8 +8,8 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 
 import static com.googlecode.totallylazy.functions.Callables.asHashCode;
-import static com.googlecode.totallylazy.Predicates.in;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.in;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public abstract class AbstractCollection<T> extends ReadOnlyCollection<T> implements PersistentCollection<T> {

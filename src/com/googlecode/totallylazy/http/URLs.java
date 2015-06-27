@@ -1,5 +1,7 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.http;
 
+import com.googlecode.totallylazy.Classes;
+import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.functions.Function1;
 
 import java.io.File;

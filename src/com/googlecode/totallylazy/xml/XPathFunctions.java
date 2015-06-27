@@ -13,8 +13,8 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
-import static com.googlecode.totallylazy.Predicates.not;
-import static com.googlecode.totallylazy.Predicates.nullValue;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
+import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class XPathFunctions {

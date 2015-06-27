@@ -1,6 +1,6 @@
 package com.googlecode.totallylazy.iterators;
 
-import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.predicates.Predicate;
 
 import java.util.Iterator;
 

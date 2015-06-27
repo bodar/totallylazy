@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy;
 
+import com.googlecode.totallylazy.predicates.Predicates;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
@@ -23,8 +24,8 @@ import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.Files.workingDirectory;
 import static com.googlecode.totallylazy.Files.write;
 import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Predicates.equalTo;
-import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.predicates.Predicates.equalTo;
+import static com.googlecode.totallylazy.predicates.Predicates.where;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
