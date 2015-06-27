@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Randoms;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.http.Uri;
+import com.googlecode.totallylazy.io.Uri;
 import com.googlecode.totallylazy.time.Dates;
 import org.junit.Test;
 

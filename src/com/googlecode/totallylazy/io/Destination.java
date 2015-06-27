@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.io;
 
 import java.io.Closeable;
 import java.io.IOException;

@@ -1,5 +1,7 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.io;
 
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.functions.Unary;
 
 import java.io.IOException;
@@ -7,12 +9,10 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.zip.ZipInputStream;
 
-import static com.googlecode.totallylazy.FilterSource.filterSource;
-import static com.googlecode.totallylazy.MapSources.mapSource;
+import static com.googlecode.totallylazy.io.FilterSource.filterSource;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.predicates.Predicates.where;
-import static com.googlecode.totallylazy.Sources.functions.name;
 import static com.googlecode.totallylazy.Strings.startsWith;
 
 public class ZipSource implements Sources {
@@ -28,9 +28,9 @@ public class ZipSource implements Sources {
 
     public static Sources zipSource(InputStream inputStream, String rawFolder) {
         String folder = rawFolder.replaceFirst("/", "");
-        return filterSource(where(name, is(not(""))),
-                mapSource(removeFolderFromName(folder),
-                        filterSource(where(name, startsWith(folder)), zipSource(inputStream))));
+        return filterSource(where(functions.name, is(not(""))),
+                MapSources.mapSource(removeFolderFromName(folder),
+                        filterSource(where(functions.name, startsWith(folder)), zipSource(inputStream))));
     }
 
     private static Unary<Source> removeFolderFromName(final String folder) {

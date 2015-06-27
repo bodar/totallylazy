@@ -1,11 +1,10 @@
-package com.googlecode.totallylazy.http;
+package com.googlecode.totallylazy.io;
 
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.regex.Regex;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.regex.MatchResult;
 
 import static com.googlecode.totallylazy.regex.Regex.regex;
 

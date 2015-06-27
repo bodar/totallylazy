@@ -1,5 +1,7 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.io;
 
+import com.googlecode.totallylazy.Files;
+import com.googlecode.totallylazy.io.Zip;
 import org.junit.Test;
 
 import java.io.File;

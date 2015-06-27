@@ -3,7 +3,7 @@ package com.googlecode.totallylazy.template;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.http.Uri;
+import com.googlecode.totallylazy.io.Uri;
 import com.googlecode.totallylazy.xml.Xml;
 
 import java.io.IOException;

@@ -1,8 +1,10 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.io;
 
+import com.googlecode.totallylazy.Eq;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Streams;
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.http.Uri;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.io.Closeable;
@@ -12,9 +14,9 @@ import java.util.Date;
 
 import static com.googlecode.totallylazy.functions.Block.block;
 import static com.googlecode.totallylazy.Closeables.using;
-import static com.googlecode.totallylazy.FileSource.fileSource;
+import static com.googlecode.totallylazy.io.FileSource.fileSource;
 import static com.googlecode.totallylazy.LazyException.lazyException;
-import static com.googlecode.totallylazy.ZipSource.zipSource;
+import static com.googlecode.totallylazy.io.ZipSource.zipSource;
 
 public interface Sources extends Closeable {
     Sequence<Source> sources();

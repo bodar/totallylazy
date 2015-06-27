@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.io;
 
 import org.junit.Test;
 
@@ -9,12 +9,12 @@ import java.util.List;
 import static com.googlecode.totallylazy.Files.emptyVMDirectory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.temporaryFile;
-import static com.googlecode.totallylazy.Sources.constructors.sources;
-import static com.googlecode.totallylazy.Sources.functions.directory;
-import static com.googlecode.totallylazy.Sources.functions.name;
-import static com.googlecode.totallylazy.http.Uri.packageUri;
-import static com.googlecode.totallylazy.http.Uri.uri;
-import static com.googlecode.totallylazy.Zip.zip;
+import static com.googlecode.totallylazy.io.Sources.constructors.sources;
+import static com.googlecode.totallylazy.io.Sources.functions.directory;
+import static com.googlecode.totallylazy.io.Sources.functions.name;
+import static com.googlecode.totallylazy.io.Uri.packageUri;
+import static com.googlecode.totallylazy.io.Uri.uri;
+import static com.googlecode.totallylazy.io.Zip.zip;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.is;
 import static com.googlecode.totallylazy.predicates.Not.not;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.io;
 
 import com.googlecode.totallylazy.collections.CloseableList;
 

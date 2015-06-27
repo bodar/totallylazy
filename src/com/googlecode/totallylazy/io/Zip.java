@@ -1,5 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.io;
 
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.iterators.ZipEntryIterator;
 
 import java.io.File;
@@ -12,11 +13,10 @@ import java.util.Iterator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static com.googlecode.totallylazy.FileDestination.fileDestination;
-import static com.googlecode.totallylazy.FileSource.fileSource;
-import static com.googlecode.totallylazy.Sources.methods.copyAndClose;
-import static com.googlecode.totallylazy.ZipDestination.zipDestination;
-import static com.googlecode.totallylazy.ZipSource.zipSource;
+import static com.googlecode.totallylazy.io.FileDestination.fileDestination;
+import static com.googlecode.totallylazy.io.FileSource.fileSource;
+import static com.googlecode.totallylazy.io.ZipDestination.zipDestination;
+import static com.googlecode.totallylazy.io.ZipSource.zipSource;
 
 public class Zip {
     public static Number zip(final File folder, File zipFile) throws IOException {
@@ -24,7 +24,7 @@ public class Zip {
     }
 
     public static Number zip(final File folder, OutputStream outputStream) throws IOException {
-        return copyAndClose(fileSource(folder), zipDestination(outputStream));
+        return Sources.methods.copyAndClose(fileSource(folder), zipDestination(outputStream));
     }
 
     public static Number unzip(final File zipFile, final File folder) throws IOException {
@@ -32,7 +32,7 @@ public class Zip {
     }
 
     public static Number unzip(InputStream in, final File folder) {
-        return copyAndClose(zipSource(in), fileDestination(folder));
+        return Sources.methods.copyAndClose(zipSource(in), fileDestination(folder));
     }
 
     public static Sequence<ZipEntry> entries(final ZipInputStream input) {

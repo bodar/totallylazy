@@ -24,7 +24,7 @@ import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Streams.inputStreamReader;
 import static com.googlecode.totallylazy.Strings.toString;
-import static com.googlecode.totallylazy.http.Uri.uri;
+import static com.googlecode.totallylazy.io.Uri.uri;
 
 public class Strings {
     public static final String EMPTY = "";

@@ -1,5 +1,6 @@
-package com.googlecode.totallylazy;
+package com.googlecode.totallylazy.io;
 
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.predicates.Predicate;
 
 import java.io.IOException;

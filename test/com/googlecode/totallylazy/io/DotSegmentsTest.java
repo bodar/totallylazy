@@ -1,6 +1,5 @@
-package com.googlecode.totallylazy.http;
+package com.googlecode.totallylazy.io;
 
-import com.googlecode.totallylazy.http.DotSegments;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

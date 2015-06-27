@@ -1,4 +1,4 @@
-package com.googlecode.totallylazy.http;
+package com.googlecode.totallylazy.io;
 
 import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.functions.Function1;
