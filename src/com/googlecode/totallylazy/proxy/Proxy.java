@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.functions.Callables.toClass;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -45,6 +46,11 @@ public class Proxy {
         enhancer.setCallbackFilter(new ToStringFilter());
         enhancer.setUseFactory(true);
         Class enhancedClass = enhancer.createClass();
-        return () -> reflectionFactory.newConstructorForSerialization(enhancedClass, constructor.value()).newInstance();
+        return () -> create(enhancedClass);
+    }
+
+    public static <T> T create(Class enhancedClass) throws ReflectiveOperationException {
+        Constructor<?> constructor = reflectionFactory.newConstructorForSerialization(enhancedClass, Proxy.constructor.value());
+        return cast(constructor.newInstance());
     }
 }

@@ -42,4 +42,19 @@ public class Classes {
         return Bytes.bytes(aClass);
     }
 
+    public static String classNameForSource(String sourceFilename) {
+        return sourceFilename.replace(".java", "").replace('/', '.');
+    }
+
+    public static String classNameForByteCode(String sourceFilename) {
+        return sourceFilename.replace(".class", "").replace('/', '.');
+    }
+
+    public static String classNameForByteCode(Class<?> aClass) {
+        return aClass.getName().replace('.', '/');
+    }
+
+    public static String classFilename(String className) {
+        return className.replace('.', '/') + ".class";
+    }
 }

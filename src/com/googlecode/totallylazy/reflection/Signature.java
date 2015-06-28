@@ -13,10 +13,17 @@ public class Signature {
     }
 
     public static java.lang.reflect.Type parse(String signature, Class<?> scope) {
-        GenericsFactory factory = CoreReflectionFactory.make(scope, ClassScope.make(scope));
-        Reifier reifier = Reifier.make(factory);
+        Reifier reifier = reifier(scope);
         TypeSignature typeSignature = SignatureParser.make().parseTypeSig(signature);
         typeSignature.accept(reifier);
         return reifier.getResult();
+    }
+
+    public static Reifier reifier(Class<?> scope) {
+        return Reifier.make(genericsFactory(scope));
+    }
+
+    public static GenericsFactory genericsFactory(Class<?> scope) {
+        return CoreReflectionFactory.make(scope, ClassScope.make(scope));
     }
 }

@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.reflection;
 import com.googlecode.totallylazy.*;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import sun.reflect.generics.repository.MethodRepository;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -16,6 +17,17 @@ import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Methods {
+    public static Method method(Class<?> aClass, String name, String descriptior){
+        MethodRepository repository = MethodRepository.make(descriptior, Signature.genericsFactory(aClass));
+        Sequence<Type> parameterTypes = sequence(repository.getParameterTypes());
+        Type returnType = repository.getReturnType();
+            return sequence(aClass.getMethods()).
+                    filter(m -> m.getName().equals(name)).
+                    filter(m -> m.getReturnType().equals(returnType)).
+                    filter(m -> sequence(m.getParameterTypes()).equals(parameterTypes)).
+                    head();
+    }
+
     public static Function1<Method, String> methodName() {
         return Method::getName;
     }
