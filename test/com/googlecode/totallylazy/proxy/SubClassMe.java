@@ -1,8 +1,7 @@
 package com.googlecode.totallylazy.proxy;
 
 public class SubClassMe {
-
-    public int add(int a, int b) throws Throwable{
-        return a + b;
+    public byte add(byte a, byte b) throws Throwable{
+        return (byte) (a + b);
     }
 }
