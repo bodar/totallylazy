@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
+import static java.lang.String.format;
 import static java.lang.reflect.Modifier.isFinal;
 import static java.lang.reflect.Modifier.isStatic;
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
@@ -111,14 +112,14 @@ public class ProxyBuilder {
     private static void handleArguments(MethodVisitor mv, Method method) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         for (int i = 0, local = 0 ; i < parameterTypes.length; i++) {
+            Class<?> parameterType = parameterTypes[i];
             local++;
             mv.visitInsn(DUP);
-            mv.visitInsn(index(i));
-            Class<?> parameterType = parameterTypes[i];
+            mv.visitLdcInsn(i);
             mv.visitVarInsn(Asm.load(parameterType), local);
             if(parameterType.isPrimitive() && !parameterType.equals(void.class)) {
                 String internalName = Type.getInternalName(Reflection.box(parameterType));
-                mv.visitMethodInsn(INVOKESTATIC, internalName, "valueOf", "(" + Type.getDescriptor(parameterType) + ")L" + internalName + ";", false);
+                mv.visitMethodInsn(INVOKESTATIC, internalName, "valueOf", format("(%s)L%s;", Type.getDescriptor(parameterType), internalName), false);
             }
             if(parameterType.equals(double.class) || parameterType.equals(long.class)) local++;
             mv.visitInsn(AASTORE);
@@ -132,21 +133,10 @@ public class ProxyBuilder {
         } else if(returnType.isPrimitive()){
             String internalName = Type.getInternalName(Reflection.box(returnType));
             mv.visitTypeInsn(CHECKCAST, internalName);
-            mv.visitMethodInsn(INVOKEVIRTUAL, internalName, returnType.getSimpleName() + "Value", "()" + Type.getDescriptor(returnType), false);
+            mv.visitMethodInsn(INVOKEVIRTUAL, internalName, format("%sValue", returnType.getSimpleName()), format("()%s", Type.getDescriptor(returnType)), false);
         } else {
             mv.visitTypeInsn(CHECKCAST, Type.getInternalName(returnType));
         }
         mv.visitInsn(Asm.returns(returnType));
     }
-
-    private static int index(int i) {
-        if(i == 0) return ICONST_0;
-        if(i == 1) return ICONST_1;
-        if(i == 2) return ICONST_2;
-        if (i == 3) return ICONST_3;
-        if(i == 4) return ICONST_4;
-        if(i == 5) return ICONST_5;
-        throw new UnsupportedOperationException("TODO");
-    }
-
 }
