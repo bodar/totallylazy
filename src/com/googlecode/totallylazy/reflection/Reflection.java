@@ -1,6 +1,8 @@
 package com.googlecode.totallylazy.reflection;
 
+import com.googlecode.totallylazy.functions.Lazy;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import sun.reflect.ReflectionFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -8,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.reflection.Fields.name;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.where;
@@ -16,6 +19,9 @@ import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.reflection.StackFrames.stackFrames;
 
 public class Reflection {
+    private final static ReflectionFactory reflectionFactory = ReflectionFactory.getReflectionFactory();
+    private final static Lazy<Constructor<?>> constructor = Lazy.lazy(() -> Object.class.getConstructor((Class[]) null));
+
     public static LogicalPredicate<Integer> synthetic = new LogicalPredicate<Integer>() {
         @Override
         public boolean matches(Integer mod) {
@@ -94,4 +100,8 @@ public class Reflection {
         return aClass;
     }
 
+    public static <T> T create(Class aClass) throws ReflectiveOperationException {
+        Constructor<?> constructor = reflectionFactory.newConstructorForSerialization(aClass, Reflection.constructor.value());
+        return cast(constructor.newInstance());
+    }
 }

@@ -35,7 +35,7 @@ public class ProxyBuilder {
                 return new DefinableClassLoader().defineClass(name, bytes);
             });
 
-            T instance = Proxy.create(definedClass);
+            T instance = Reflection.create(definedClass);
             Field field = definedClass.getDeclaredField(HANDLER);
             field.setAccessible(true);
             field.set(instance, handler);
