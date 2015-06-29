@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.proxy;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Randoms;
 import com.googlecode.totallylazy.reflection.Asm;
+import com.googlecode.totallylazy.reflection.Reflection;
 import jdk.internal.org.objectweb.asm.ClassWriter;
 import jdk.internal.org.objectweb.asm.FieldVisitor;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
@@ -142,30 +143,10 @@ public class ProxyBuilder {
         Class<?> returnType = method.getReturnType();
         if(returnType.equals(void.class)) {
             mv.visitInsn(POP);
-        } else if(returnType.equals(boolean.class)){
-            mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z", false);
-        } else if(returnType.equals(float.class)){
-            mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F", false);
-        } else if(returnType.equals(double.class)){
-            mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D", false);
-        } else if(returnType.equals(byte.class)){
-            mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B", false);
-        } else if(returnType.equals(short.class)){
-            mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S", false);
-        } else if(returnType.equals(char.class)){
-            mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C", false);
-        } else if(returnType.equals(int.class)){
-            mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I", false);
-        } else if(returnType.equals(long.class)){
-            mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
+        } else if(returnType.isPrimitive()){
+            String internalName = Type.getInternalName(Reflection.box(returnType));
+            mv.visitTypeInsn(CHECKCAST, internalName);
+            mv.visitMethodInsn(INVOKEVIRTUAL, internalName, returnType.getSimpleName() + "Value", "()" + Type.getDescriptor(returnType), false);
         } else {
             mv.visitTypeInsn(CHECKCAST, Type.getInternalName(returnType));
         }
