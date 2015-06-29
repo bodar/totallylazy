@@ -1,22 +1,20 @@
 package com.googlecode.totallylazy.structural;
 
-import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.reflection.Methods;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Unchecked;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.totallylazy.functions.Function1;
+import com.googlecode.totallylazy.predicates.Predicate;
+import com.googlecode.totallylazy.proxy.Proxy;
+import com.googlecode.totallylazy.reflection.Methods;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Maps.map;
-import static com.googlecode.totallylazy.reflection.Methods.allMethods;
 import static com.googlecode.totallylazy.Monad.methods.sequenceO;
-import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static java.lang.reflect.Proxy.newProxyInstance;
+import static com.googlecode.totallylazy.reflection.Methods.allMethods;
 
 public class Structural {
     public static boolean instanceOf(final Class<?> structuralType, final Object instance) {
@@ -29,8 +27,8 @@ public class Structural {
 
     public static <T> Option<T> castOption(final Class<T> structuralType, final Object instance) {
         return extractMethods(instance, structuralType).
-                map(methods -> Unchecked.cast(newProxyInstance(structuralType.getClassLoader(), new Class[]{structuralType},
-                (o, method, objects) -> Methods.invoke(methods.get(method), instance, objects))));
+                map(methods -> Proxy.proxy(structuralType,
+                        (o, method, objects) -> Methods.invoke(methods.get(method), instance, objects)));
     }
 
     private static <T> Option<Map<Method, Method>> extractMethods(final Object instance, Class<T> structuralType) {
@@ -47,16 +45,11 @@ public class Structural {
         return instanceMethods.find(structuralMatch(requiredMethod));
     }
 
-    private static LogicalPredicate<Method> structuralMatch(final Method required) {
+    private static Predicate<Method> structuralMatch(final Method required) {
         final Sequence<Type> requiredParameters = sequence(required.getGenericParameterTypes());
         final Sequence<Type> requiredReturnType = sequence(required.getGenericReturnType());
-        return new LogicalPredicate<Method>() {
-            @Override
-            public boolean matches(Method objects) {
-                return objects.getName().equals(required.getName()) &&
-                        sequence(objects.getGenericParameterTypes()).equals(requiredParameters) &&
-                        sequence(objects.getGenericReturnType()).equals(requiredReturnType);
-            }
-        };
+        return objects -> objects.getName().equals(required.getName()) &&
+                sequence(objects.getGenericParameterTypes()).equals(requiredParameters) &&
+                sequence(objects.getGenericReturnType()).equals(requiredReturnType);
     }
 }

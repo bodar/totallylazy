@@ -11,9 +11,19 @@ import static com.googlecode.totallylazy.Assert.assertTrue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
-import static com.googlecode.totallylazy.proxy.ProxyBuilder.proxy;
+import static com.googlecode.totallylazy.proxy.Proxy.proxy;
 
 public class ProxyTest {
+
+    interface Interface {
+        String name();
+    }
+
+    @Test
+    public void canCreateProxyForInterface() throws Exception {
+        Interface instance = proxy(Interface.class, (proxy, method, args) -> "Hello");
+        assertThat(instance.name(), is("Hello"));
+    }
 
     public static abstract class CorrectMethod {
         public abstract Method theRightMethod();

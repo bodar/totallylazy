@@ -2,12 +2,12 @@ package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.reflection.Asm;
-import net.sf.cglib.proxy.InvocationHandler;
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import jdk.internal.org.objectweb.asm.tree.FieldInsnNode;
 import jdk.internal.org.objectweb.asm.tree.MethodNode;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 import static com.googlecode.totallylazy.reflection.Fields.fields;
@@ -16,7 +16,7 @@ import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.where;
 import static com.googlecode.totallylazy.proxy.Generics.getGenericSuperclassType;
-import static com.googlecode.totallylazy.proxy.Proxy.createProxy;
+import static com.googlecode.totallylazy.proxy.Proxy.proxy;
 import static java.lang.Class.forName;
 
 public abstract class FieldOn<T, S> implements Function1<T, S>, InvocationHandler {
@@ -26,14 +26,14 @@ public abstract class FieldOn<T, S> implements Function1<T, S>, InvocationHandle
 
     public FieldOn() {
         Class<T> aClass = getGenericSuperclassType(this.getClass(), 0);
-        instance = createProxy(aClass, this);
+        instance = proxy(aClass, this);
         invocation = new FieldInvocation<T, S>(readFieldFromByteCode());
     }
 
     private Field readFieldFromByteCode() {
         try {
             ClassNode classNode = Asm.classNode(getClass());
-            MethodNode constructor = (MethodNode) classNode.methods.get(0);
+            MethodNode constructor = classNode.methods.get(0);
             FieldInsnNode fieldInsnNode = Asm.instructions(constructor).safeCast(FieldInsnNode.class).last();
             Class<?> aClass = forName(fieldInsnNode.owner.replace('/', '.'));
             return fields(aClass).

@@ -17,7 +17,8 @@ import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Methods {
-    public static Method method(Class<?> aClass, String name, String descriptior){
+    public static Method method(String internalName, String name, String descriptior) throws ClassNotFoundException {
+        Class<?> aClass = Class.forName(internalName.replace('/', '.'));
         MethodRepository repository = MethodRepository.make(descriptior, Signature.genericsFactory(aClass));
         Sequence<Type> parameterTypes = sequence(repository.getParameterTypes());
         Type returnType = repository.getReturnType();

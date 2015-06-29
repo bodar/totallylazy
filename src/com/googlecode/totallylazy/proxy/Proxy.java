@@ -16,22 +16,25 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static java.lang.String.format;
 import static java.lang.reflect.Modifier.isFinal;
 import static java.lang.reflect.Modifier.isStatic;
+import static java.lang.reflect.Proxy.newProxyInstance;
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
 
 public class Proxy {
     public static final String HANDLER = "handler";
     private static ConcurrentMap<Class<?>, Class<?>> cache = new ConcurrentHashMap<>();
 
-    public static <T> T createProxy(Class<T> aClass, InvocationHandler handler) {
-        return proxy(aClass, handler);
-    }
-
     public static <T> T proxy(Class<T> aClass, InvocationHandler handler) {
         try {
+            if(aClass.isInterface()) {
+                Object instance = newProxyInstance(aClass.getClassLoader(), new Class[]{aClass}, handler);
+                return cast(instance);
+            }
+
             Class<?> definedClass = cache.computeIfAbsent(aClass, k -> {
                 String name = k.getName() + Randoms.integers().head();
                 String jvmName = name.replace('.', '/');
@@ -49,17 +52,11 @@ public class Proxy {
         }
     }
 
-    private static class DefinableClassLoader extends ClassLoader {
-        public Class<?> defineClass(String name, byte[] b){
-            return defineClass(name, b, 0, b.length);
-        }
-    }
-
     public static byte[] bytes(String name, Class<?> superClass) {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 
         String superName = Type.getInternalName(superClass);
-        cw.visit(52, ACC_PUBLIC + ACC_SUPER, name, null, superName, null);
+        cw.visit(V1_8, ACC_PUBLIC + ACC_SUPER, name, null, superName, null);
 
         handlerField(cw);
 

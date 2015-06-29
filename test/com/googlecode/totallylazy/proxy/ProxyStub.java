@@ -14,7 +14,7 @@ public class ProxyStub extends SubClassMe {
 
     @Override
     public void add(byte[] a, byte[] b) throws Throwable {
-        Method add = Methods.method(getClass(), "add", "Ldsahd");
+        Method add = Methods.method("superClass", "add", "Ldsahd");
         handler.invoke(this, add, new Object[]{a, b});
     }
 }
