@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentMap;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.numbers.Numbers.sum;
 import static java.lang.String.format;
 import static java.lang.reflect.Modifier.isFinal;
 import static java.lang.reflect.Modifier.isStatic;
