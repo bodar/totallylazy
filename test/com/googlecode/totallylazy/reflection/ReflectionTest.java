@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.reflection;
 
+import com.googlecode.totallylazy.Characters;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
@@ -12,6 +13,32 @@ import static com.googlecode.totallylazy.reflection.Fields.syntheticFields;
 import static java.lang.String.format;
 
 public class ReflectionTest {
+    @Test
+    public void canBoxPrimitiveClasses() throws Exception {
+        assertThat(Reflection.box(void.class), is(Void.class));
+        assertThat(Reflection.box(char.class), is(Character.class));
+        assertThat(Reflection.box(boolean.class), is(Boolean.class));
+        assertThat(Reflection.box(byte.class), is(Byte.class));
+        assertThat(Reflection.box(short.class), is(Short.class));
+        assertThat(Reflection.box(int.class), is(Integer.class));
+        assertThat(Reflection.box(long.class), is(Long.class));
+        assertThat(Reflection.box(float.class), is(Float.class));
+        assertThat(Reflection.box(double.class), is(Double.class));
+    }
+
+    @Test
+    public void canUnBoxPrimitiveClasses() throws Exception {
+        assertThat(Reflection.unbox(Void.class), is(void.class));
+        assertThat(Reflection.unbox(Character.class), is(char.class));
+        assertThat(Reflection.unbox(Boolean.class), is(boolean.class));
+        assertThat(Reflection.unbox(Byte.class), is(byte.class));
+        assertThat(Reflection.unbox(Short.class), is(short.class));
+        assertThat(Reflection.unbox(Integer.class), is(int.class));
+        assertThat(Reflection.unbox(Long.class), is(long.class));
+        assertThat(Reflection.unbox(Float.class), is(float.class));
+        assertThat(Reflection.unbox(Double.class), is(double.class));
+    }
+
     @Test
     public void testEnclosingInstance() throws Exception {
         Object myInnerClass = new MyInnerClass();

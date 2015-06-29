@@ -13,8 +13,8 @@ public class ProxyStub extends SubClassMe {
     }
 
     @Override
-    public byte[] add(byte[] a, byte[] b) throws Throwable {
+    public void add(byte[] a, byte[] b) throws Throwable {
         Method add = Methods.method(getClass(), "add", "Ldsahd");
-        return (byte[]) handler.invoke(this, add, new Object[]{a, b});
+        handler.invoke(this, add, new Object[]{a, b});
     }
 }

@@ -2,8 +2,14 @@ package com.googlecode.totallylazy.proxy;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.Assert.assertTrue;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
 import static com.googlecode.totallylazy.proxy.ProxyBuilder.proxy;
 
 public class ProxyBuilderTest {
@@ -87,5 +93,43 @@ public class ProxyBuilderTest {
         CharArguments instance = proxy(CharArguments.class, (proxy, method, args) -> (char)12);
         assertThat(instance.add((char)1, (char)2), is((char)12));
     }
-    
+
+    public static abstract class ByteArrayArguments {
+        public abstract byte[] add(byte[] a, byte[] b);
+    }
+
+    @Test
+    public void supportsPrimativeArrays() throws Throwable {
+        ByteArrayArguments instance = proxy(ByteArrayArguments.class, (proxy, method, args) -> new byte[]{12});
+        assertTrue(Arrays.equals(instance.add(new byte[]{1}, new byte[]{2}), new byte[]{12}));
+    }
+
+    public static abstract class BigByteArguments {
+        public abstract Byte add(Byte a, Byte b);
+    }
+
+    @Test
+    public void supportsBoxedPrimatives() throws Throwable {
+        BigByteArguments instance = proxy(BigByteArguments.class, (proxy, method, args) -> (byte)12);
+        assertThat(instance.add((byte) 1, (byte) 2), is((byte) 12));
+    }
+
+    public static abstract class VoidArguments {
+        public abstract void add(Void a, Void b);
+        public abstract Void add(Void a);
+    }
+
+    @Test
+    public void supportsVoid() throws Throwable {
+        AtomicInteger count = new AtomicInteger();
+        VoidArguments instance = proxy(VoidArguments.class, (proxy, method, args) -> {
+            count.incrementAndGet();
+            return null;
+        });
+        instance.add(null, null);
+        assertThat(instance.add(null), is(nullValue()));
+        assertThat(count.intValue(), is(2));
+    }
+
+
 }

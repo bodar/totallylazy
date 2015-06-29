@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.proxy;
 
-import com.googlecode.totallylazy.Classes;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Randoms;
+import com.googlecode.totallylazy.reflection.Asm;
 import jdk.internal.org.objectweb.asm.ClassWriter;
 import jdk.internal.org.objectweb.asm.FieldVisitor;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
@@ -52,7 +52,7 @@ public class ProxyBuilder {
     public static byte[] bytes(String name, Class<?> superClass) {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 
-        String superName = Classes.classNameForByteCode(superClass);
+        String superName = Type.getInternalName(superClass);
         cw.visit(52, ACC_PUBLIC + ACC_SUPER, name, null, superName, null);
 
         handlerField(cw);
@@ -73,7 +73,7 @@ public class ProxyBuilder {
     }
 
     private static void method(ClassWriter cw, String name, Method method) {
-        String[] exceptions = sequence(method.getExceptionTypes()).map(Classes::classNameForByteCode).toArray(String.class);
+        String[] exceptions = sequence(method.getExceptionTypes()).map(Type::getInternalName).toArray(String.class);
         String methodName = method.getName();
         String methodDescriptor = Type.getMethodDescriptor(method);
         int size = sequence(Type.getArgumentTypes(methodDescriptor)).map(Type::getSize).reduce(sum).intValue() + 1;
@@ -114,32 +114,25 @@ public class ProxyBuilder {
             mv.visitInsn(DUP);
             mv.visitInsn(index(i));
             Class<?> parameterType = parameterTypes[i];
+            mv.visitVarInsn(Asm.load(parameterType), local);
             if(parameterType.equals(boolean.class)) {
-                mv.visitVarInsn(ILOAD, local);
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;", false);
             } else if(parameterType.equals(float.class)) {
-                mv.visitVarInsn(FLOAD, local);
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;", false);
             } else if(parameterType.equals(double.class)){
-                mv.visitVarInsn(DLOAD, local++);
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", false);
+                local++;
             } else if(parameterType.equals(byte.class)) {
-                mv.visitVarInsn(ILOAD, local);
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;", false);
             } else if(parameterType.equals(short.class)) {
-                mv.visitVarInsn(ILOAD, local);
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf", "(S)Ljava/lang/Short;", false);
             } else if(parameterType.equals(char.class)) {
-                mv.visitVarInsn(ILOAD, local);
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf", "(C)Ljava/lang/Character;", false);
             } else if(parameterType.equals(int.class)) {
-                mv.visitVarInsn(ILOAD, local);
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
             } else if(parameterType.equals(long.class)){
-                mv.visitVarInsn(LLOAD, local++);
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf", "(J)Ljava/lang/Long;", false);
-            } else {
-                mv.visitVarInsn(ALOAD, local);
+                local++;
             }
             mv.visitInsn(AASTORE);
         }
@@ -147,45 +140,36 @@ public class ProxyBuilder {
 
     private static void handleReturnType(MethodVisitor mv, Method method) {
         Class<?> returnType = method.getReturnType();
-        if(returnType.equals(Void.class)) {
+        if(returnType.equals(void.class)) {
             mv.visitInsn(POP);
-            mv.visitInsn(RETURN);
         } else if(returnType.equals(boolean.class)){
             mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z", false);
-            mv.visitInsn(IRETURN);
         } else if(returnType.equals(float.class)){
             mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F", false);
-            mv.visitInsn(FRETURN);
         } else if(returnType.equals(double.class)){
             mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D", false);
-            mv.visitInsn(DRETURN);
         } else if(returnType.equals(byte.class)){
             mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B", false);
-            mv.visitInsn(IRETURN);
         } else if(returnType.equals(short.class)){
             mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S", false);
-            mv.visitInsn(IRETURN);
         } else if(returnType.equals(char.class)){
             mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C", false);
-            mv.visitInsn(IRETURN);
         } else if(returnType.equals(int.class)){
             mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I", false);
-            mv.visitInsn(IRETURN);
         } else if(returnType.equals(long.class)){
             mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
-            mv.visitInsn(LRETURN);
         } else {
-            mv.visitTypeInsn(CHECKCAST, Classes.classNameForByteCode(returnType));
-            mv.visitInsn(ARETURN);
+            mv.visitTypeInsn(CHECKCAST, Type.getInternalName(returnType));
         }
+        mv.visitInsn(Asm.returns(returnType));
     }
 
     private static int index(int i) {

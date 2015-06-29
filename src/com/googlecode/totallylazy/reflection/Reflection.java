@@ -5,6 +5,8 @@ import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.googlecode.totallylazy.reflection.Fields.name;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
@@ -59,6 +61,37 @@ public class Reflection {
 
     public static Class<?> callingClass() {
         return stackFrames().drop(2).head().aClass();
+    }
+
+    private static Map<Class<?>, Class<?>> primitiveToBoxed = new HashMap<>();
+    private static Map<Class<?>, Class<?>> boxedToPrimative = new HashMap<>();
+    private static void map(Class<?> primitive, Class<?> boxed){
+        if(!primitive.isPrimitive()) throw new IllegalArgumentException("Class must be primitive but was " + primitive);
+        primitiveToBoxed.put(primitive, boxed);
+        boxedToPrimative.put(boxed, primitive);
+    }
+
+    static {
+        map(void.class, Void.class);
+        map(char.class, Character.class);
+        map(boolean.class, Boolean.class);
+        map(byte.class, Byte.class);
+        map(short.class, Short.class);
+        map(int.class, Integer.class);
+        map(long.class, Long.class);
+        map(float.class, Float.class);
+        map(double.class, Double.class);
+    }
+
+    public static Class<?> box(Class<?> primitive){
+        if(!primitive.isPrimitive()) throw new IllegalArgumentException("Class must be primitive but was " + primitive);
+        return primitiveToBoxed.get(primitive);
+    }
+
+    public static Class<?> unbox(Class<?> boxed){
+        Class<?> aClass = boxedToPrimative.get(boxed);
+        if(aClass == null) throw new IllegalArgumentException("Class must be boxed type but was " + boxed);
+        return aClass;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import jdk.internal.org.objectweb.asm.Type;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Sequences.empty;
@@ -48,10 +49,6 @@ public class Classes {
 
     public static String classNameForByteCode(String sourceFilename) {
         return sourceFilename.replace(".class", "").replace('/', '.');
-    }
-
-    public static String classNameForByteCode(Class<?> aClass) {
-        return aClass.getName().replace('.', '/');
     }
 
     public static String classFilename(String className) {

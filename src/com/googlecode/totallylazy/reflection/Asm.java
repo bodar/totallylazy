@@ -5,6 +5,7 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 import jdk.internal.org.objectweb.asm.ClassReader;
+import jdk.internal.org.objectweb.asm.Opcodes;
 import jdk.internal.org.objectweb.asm.Type;
 import jdk.internal.org.objectweb.asm.tree.AbstractInsnNode;
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
@@ -104,4 +105,17 @@ public class Asm {
 
         return var2;
     }
+
+    public static int store(Class<?> aClass) {
+        return Type.getType(aClass).getOpcode(Opcodes.ISTORE);
+    }
+
+    public static int load(Class<?> aClass) {
+        return Type.getType(aClass).getOpcode(Opcodes.ILOAD);
+    }
+
+    public static int returns(Class<?> aClass) {
+        return Type.getType(aClass).getOpcode(Opcodes.IRETURN);
+    }
+
 }
