@@ -2,12 +2,10 @@ package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Randoms;
-import com.googlecode.totallylazy.functions.Function0;
 import com.googlecode.totallylazy.functions.Lazy;
 import com.googlecode.totallylazy.reflection.Asm;
 import com.googlecode.totallylazy.reflection.Reflection;
 import jdk.internal.org.objectweb.asm.ClassWriter;
-import jdk.internal.org.objectweb.asm.FieldVisitor;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 
@@ -82,36 +80,42 @@ public class Proxy {
         String[] exceptions = sequence(method.getExceptionTypes()).map(Type::getInternalName).toArray(String.class);
         String methodName = method.getName();
         String methodDescriptor = Type.getMethodDescriptor(method);
-        int size = sequence(Type.getArgumentTypes(methodDescriptor)).map(Type::getSize).reduce(sum).intValue() + 1;
 
         MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, methodName, methodDescriptor, null, exceptions);
         mv.visitCode();
-        lookupMethod(superClass, methodName, methodDescriptor, size, mv);
 
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitFieldInsn(GETFIELD, name, HANDLER, "Ljava/lang/reflect/InvocationHandler;");
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitVarInsn(ALOAD, size);
-
-        handleArguments(mv, method);
-
-        mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/reflect/InvocationHandler", "invoke", "(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)Ljava/lang/Object;", true);
-
-        handleReturnType(mv, method);
+        loadHandler(mv, name);
+        loadThis(mv);
+        loadMethod(mv, superClass, methodName, methodDescriptor);
+        loadArguments(mv, method);
+        invokeHandler(mv);
+        returnResult(mv, method);
 
         mv.visitMaxs(0, 0);
         mv.visitEnd();
     }
 
-    private static void lookupMethod(String superClass, String methodName, String methodDescriptor, int size, MethodVisitor mv) {
+    private static void invokeHandler(MethodVisitor mv) {
+        mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/reflect/InvocationHandler", "invoke", "(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)Ljava/lang/Object;", true);
+    }
+
+    private static void loadThis(MethodVisitor mv) {
+        mv.visitVarInsn(ALOAD, 0);
+    }
+
+    private static void loadHandler(MethodVisitor mv, String name) {
+        loadThis(mv);
+        mv.visitFieldInsn(GETFIELD, name, HANDLER, "Ljava/lang/reflect/InvocationHandler;");
+    }
+
+    private static void loadMethod(MethodVisitor mv, String superClass, String methodName, String methodDescriptor) {
         mv.visitLdcInsn(superClass);
         mv.visitLdcInsn(methodName);
         mv.visitLdcInsn(methodDescriptor);
         mv.visitMethodInsn(INVOKESTATIC, "com/googlecode/totallylazy/reflection/Methods", "method", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Method;", false);
-        mv.visitVarInsn(ASTORE, size);
     }
 
-    private static void handleArguments(MethodVisitor mv, Method method) {
+    private static void loadArguments(MethodVisitor mv, Method method) {
         int arguments = method.getParameterCount();
         mv.visitLdcInsn(arguments);
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
@@ -132,7 +136,7 @@ public class Proxy {
         }
     }
 
-    private static void handleReturnType(MethodVisitor mv, Method method) {
+    private static void returnResult(MethodVisitor mv, Method method) {
         Class<?> returnType = method.getReturnType();
         if(returnType.equals(void.class)) {
             mv.visitInsn(POP);
