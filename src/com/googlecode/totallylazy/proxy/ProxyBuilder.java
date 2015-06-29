@@ -116,25 +116,11 @@ public class ProxyBuilder {
             mv.visitInsn(index(i));
             Class<?> parameterType = parameterTypes[i];
             mv.visitVarInsn(Asm.load(parameterType), local);
-            if(parameterType.equals(boolean.class)) {
-                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;", false);
-            } else if(parameterType.equals(float.class)) {
-                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;", false);
-            } else if(parameterType.equals(double.class)){
-                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", false);
-                local++;
-            } else if(parameterType.equals(byte.class)) {
-                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;", false);
-            } else if(parameterType.equals(short.class)) {
-                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf", "(S)Ljava/lang/Short;", false);
-            } else if(parameterType.equals(char.class)) {
-                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf", "(C)Ljava/lang/Character;", false);
-            } else if(parameterType.equals(int.class)) {
-                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
-            } else if(parameterType.equals(long.class)){
-                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf", "(J)Ljava/lang/Long;", false);
-                local++;
+            if(parameterType.isPrimitive() && !parameterType.equals(void.class)) {
+                String internalName = Type.getInternalName(Reflection.box(parameterType));
+                mv.visitMethodInsn(INVOKESTATIC, internalName, "valueOf", "(" + Type.getDescriptor(parameterType) + ")L" + internalName + ";", false);
             }
+            if(parameterType.equals(double.class) || parameterType.equals(long.class)) local++;
             mv.visitInsn(AASTORE);
         }
     }
