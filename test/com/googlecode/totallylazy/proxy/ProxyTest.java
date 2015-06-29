@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.proxy;
 
 import org.junit.Test;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;

@@ -75,8 +75,7 @@ public class Proxy {
     }
 
     private static void handlerField(ClassWriter cw) {
-        FieldVisitor fv = cw.visitField(ACC_PRIVATE + ACC_FINAL, HANDLER, "Ljava/lang/reflect/InvocationHandler;", null, null);
-        fv.visitEnd();
+        cw.visitField(ACC_PROTECTED, HANDLER, "Ljava/lang/reflect/InvocationHandler;", null, null).visitEnd();
     }
 
     private static void method(ClassWriter cw, String name, Method method, String superClass) {
@@ -87,20 +86,12 @@ public class Proxy {
 
         MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, methodName, methodDescriptor, null, exceptions);
         mv.visitCode();
-        mv.visitLdcInsn(superClass);
-        mv.visitLdcInsn(methodName);
-        mv.visitLdcInsn(methodDescriptor);
-        mv.visitMethodInsn(INVOKESTATIC, "com/googlecode/totallylazy/reflection/Methods", "method", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Method;", false);
-        mv.visitVarInsn(ASTORE, size);
+        lookupMethod(superClass, methodName, methodDescriptor, size, mv);
 
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, name, HANDLER, "Ljava/lang/reflect/InvocationHandler;");
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(ALOAD, size);
-
-        int arguments = method.getParameterCount();
-        mv.visitLdcInsn(arguments);
-        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 
         handleArguments(mv, method);
 
@@ -112,7 +103,19 @@ public class Proxy {
         mv.visitEnd();
     }
 
+    private static void lookupMethod(String superClass, String methodName, String methodDescriptor, int size, MethodVisitor mv) {
+        mv.visitLdcInsn(superClass);
+        mv.visitLdcInsn(methodName);
+        mv.visitLdcInsn(methodDescriptor);
+        mv.visitMethodInsn(INVOKESTATIC, "com/googlecode/totallylazy/reflection/Methods", "method", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Method;", false);
+        mv.visitVarInsn(ASTORE, size);
+    }
+
     private static void handleArguments(MethodVisitor mv, Method method) {
+        int arguments = method.getParameterCount();
+        mv.visitLdcInsn(arguments);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+
         Class<?>[] parameterTypes = method.getParameterTypes();
         for (int i = 0, local = 0 ; i < parameterTypes.length; i++) {
             Class<?> parameterType = parameterTypes[i];
