@@ -2,6 +2,8 @@ package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Randoms;
+import com.googlecode.totallylazy.functions.Function0;
+import com.googlecode.totallylazy.functions.Lazy;
 import com.googlecode.totallylazy.reflection.Asm;
 import com.googlecode.totallylazy.reflection.Reflection;
 import jdk.internal.org.objectweb.asm.ClassWriter;
@@ -12,6 +14,7 @@ import jdk.internal.org.objectweb.asm.Type;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -138,5 +141,10 @@ public class Proxy {
             mv.visitTypeInsn(CHECKCAST, Type.getInternalName(returnType));
         }
         mv.visitInsn(Asm.returns(returnType));
+    }
+
+    public static <T> T lazy(Class<T> aClass, Callable<T> callable) {
+        Lazy<T> lazy = Lazy.lazy(callable);
+        return proxy(aClass, (proxy, method, arguments) -> method.invoke(lazy.value(), arguments));
     }
 }

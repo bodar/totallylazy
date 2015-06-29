@@ -14,6 +14,19 @@ import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
 import static com.googlecode.totallylazy.proxy.Proxy.proxy;
 
 public class ProxyTest {
+    @Test
+    public void canCreateALazyProxy() throws Exception {
+        AtomicInteger called = new AtomicInteger();
+        User user = Proxy.lazy(User.class, () -> {
+            called.incrementAndGet();
+            return new User("dan", "bod");
+        });
+        assertThat(called.get(), is(0));
+        assertThat(user.firstName(), is("dan"));
+        assertThat(called.get(), is(1));
+        assertThat(user.lastName(), is("bod"));
+        assertThat(called.get(), is(1));
+    }
 
     interface Interface {
         String name();
