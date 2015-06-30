@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -38,7 +39,7 @@ public class Proxy {
             }
 
             Class<?> definedClass = cache.computeIfAbsent(aClass, k -> {
-                String name = generatePackageName(k) + ".Proxy" + Randoms.integers().head();
+                String name = generatePackageName(k) + ".Proxy" + UUID.randomUUID();
                 String jvmName = name.replace('.', '/');
                 byte[] bytes = bytes(jvmName, k);
                 return defineClass(k, name, bytes);
