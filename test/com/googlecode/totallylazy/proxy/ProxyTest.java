@@ -12,13 +12,29 @@ import static com.googlecode.totallylazy.Assert.assertTrue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
+import static com.googlecode.totallylazy.proxy.Proxy.lazy;
 import static com.googlecode.totallylazy.proxy.Proxy.proxy;
 
 public class ProxyTest {
+    abstract class NonPublic {
+        public abstract int add(int a, int b);
+    }
+
+    @Test
+    public void canCreateProxyForNonPublicClass() throws Exception {
+        NonPublic instance = proxy(NonPublic.class, (proxy, method, args) -> 12);
+        assertThat(instance.add(1, 2), is(12));
+    }
+
+    @Test
+    public void supportsProxyClassForRestrictedPackage() throws Exception {
+        proxy(Exception.class, (proxy, method, args) -> null );
+    }
+
     @Test
     public void canCreateALazyProxy() throws Exception {
         AtomicInteger called = new AtomicInteger();
-        User user = Proxy.lazy(User.class, () -> {
+        User user = lazy(User.class, () -> {
             called.incrementAndGet();
             return new User("dan", "bod");
         });

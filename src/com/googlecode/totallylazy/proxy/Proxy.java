@@ -12,6 +12,7 @@ import jdk.internal.org.objectweb.asm.Type;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -20,6 +21,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static java.lang.String.format;
 import static java.lang.reflect.Modifier.isFinal;
+import static java.lang.reflect.Modifier.isPublic;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.lang.reflect.Proxy.newProxyInstance;
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
@@ -30,16 +32,16 @@ public class Proxy {
 
     public static <T> T proxy(Class<T> aClass, InvocationHandler handler) {
         try {
-            if(aClass.isInterface()) {
+            if (aClass.isInterface()) {
                 Object instance = newProxyInstance(aClass.getClassLoader(), new Class[]{aClass}, handler);
                 return cast(instance);
             }
 
             Class<?> definedClass = cache.computeIfAbsent(aClass, k -> {
-                String name = k.getName() + Randoms.integers().head();
+                String name = generatePackageName(k) + ".Proxy" + Randoms.integers().head();
                 String jvmName = name.replace('.', '/');
                 byte[] bytes = bytes(jvmName, k);
-                return new DefinableClassLoader().defineClass(name, bytes);
+                return defineClass(k, name, bytes);
             });
 
             T instance = Reflection.create(definedClass);
@@ -50,6 +52,18 @@ public class Proxy {
         } catch (Exception e) {
             throw LazyException.lazyException(e);
         }
+    }
+
+    private static Class<?> defineClass(Class<?> aClass, String name, byte[] bytes) {
+        return Reflection.defineClass(isPublic(aClass.getModifiers()) ? Proxy.class.getClassLoader() : aClass.getClassLoader(), name, bytes);
+    }
+
+    private static String generatePackageName(Class<?> aClass) {
+        return isPublic(aClass.getModifiers()) ? packageName(Proxy.class) : packageName(aClass);
+    }
+
+    private static String packageName(Class<?> aClass){
+        return sequence(aClass.getName().split("\\.")).init().toString(".");
     }
 
     public static byte[] bytes(String name, Class<?> superClass) {
@@ -120,26 +134,26 @@ public class Proxy {
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 
         Class<?>[] parameterTypes = method.getParameterTypes();
-        for (int i = 0, local = 0 ; i < parameterTypes.length; i++) {
+        for (int i = 0, local = 0; i < parameterTypes.length; i++) {
             Class<?> parameterType = parameterTypes[i];
             local++;
             mv.visitInsn(DUP);
             mv.visitLdcInsn(i);
             mv.visitVarInsn(Asm.load(parameterType), local);
-            if(parameterType.isPrimitive() && !parameterType.equals(void.class)) {
+            if (parameterType.isPrimitive() && !parameterType.equals(void.class)) {
                 String internalName = Type.getInternalName(Reflection.box(parameterType));
                 mv.visitMethodInsn(INVOKESTATIC, internalName, "valueOf", format("(%s)L%s;", Type.getDescriptor(parameterType), internalName), false);
             }
-            if(parameterType.equals(double.class) || parameterType.equals(long.class)) local++;
+            if (parameterType.equals(double.class) || parameterType.equals(long.class)) local++;
             mv.visitInsn(AASTORE);
         }
     }
 
     private static void returnResult(MethodVisitor mv, Method method) {
         Class<?> returnType = method.getReturnType();
-        if(returnType.equals(void.class)) {
+        if (returnType.equals(void.class)) {
             mv.visitInsn(POP);
-        } else if(returnType.isPrimitive()){
+        } else if (returnType.isPrimitive()) {
             String internalName = Type.getInternalName(Reflection.box(returnType));
             mv.visitTypeInsn(CHECKCAST, internalName);
             mv.visitMethodInsn(INVOKEVIRTUAL, internalName, format("%sValue", returnType.getSimpleName()), format("()%s", Type.getDescriptor(returnType)), false);

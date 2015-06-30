@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
+import static com.googlecode.totallylazy.functions.Lazy.lazy;
 import static com.googlecode.totallylazy.reflection.Fields.name;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.where;
@@ -20,7 +21,7 @@ import static com.googlecode.totallylazy.reflection.StackFrames.stackFrames;
 
 public class Reflection {
     private final static ReflectionFactory reflectionFactory = ReflectionFactory.getReflectionFactory();
-    private final static Lazy<Constructor<?>> constructor = Lazy.lazy(() -> Object.class.getConstructor((Class[]) null));
+    private final static Lazy<Constructor<?>> constructor = lazy(() -> Object.class.getConstructor((Class[]) null));
 
     public static LogicalPredicate<Integer> synthetic = new LogicalPredicate<Integer>() {
         @Override
@@ -103,5 +104,15 @@ public class Reflection {
     public static <T> T create(Class aClass) throws ReflectiveOperationException {
         Constructor<?> constructor = reflectionFactory.newConstructorForSerialization(aClass, Reflection.constructor.value());
         return cast(constructor.newInstance());
+    }
+
+    public static Class<?> defineClass(ClassLoader classLoader, String name, byte[] bytes) {
+        return Methods.allMethods(classLoader.getClass()).
+                filter(m -> m.getName().equals("defineClass")).
+                find(m -> sequence(m.getParameterTypes()).equals(sequence(String.class, byte[].class, int.class, int.class))).
+                map(m -> {
+                    m.setAccessible(true);
+                    return (Class<?>) m.invoke(classLoader, name, bytes, 0, bytes.length);
+                }).get();
     }
 }
