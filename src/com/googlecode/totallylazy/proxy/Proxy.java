@@ -4,7 +4,9 @@ import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Randoms;
 import com.googlecode.totallylazy.functions.Lazy;
 import com.googlecode.totallylazy.reflection.Asm;
+import com.googlecode.totallylazy.reflection.Declaration;
 import com.googlecode.totallylazy.reflection.Reflection;
+import com.googlecode.totallylazy.reflection.Types;
 import jdk.internal.org.objectweb.asm.ClassWriter;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
@@ -162,6 +164,11 @@ public class Proxy {
             mv.visitTypeInsn(CHECKCAST, Type.getInternalName(returnType));
         }
         mv.visitInsn(Asm.returns(returnType));
+    }
+
+    public static <T> T lazy(Callable<T> callable) {
+        Declaration declaration = Declaration.declaration();
+        return lazy(Types.classOf(declaration.type()), callable);
     }
 
     public static <T> T lazy(Class<T> aClass, Callable<T> callable) {

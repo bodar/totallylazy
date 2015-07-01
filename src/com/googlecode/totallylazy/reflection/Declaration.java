@@ -38,11 +38,11 @@ public class Declaration {
                         insn.name.equals(callee.methodNode().name)))).
                 collect(instanceOf(VarInsnNode.class, node -> {
                             LocalVariableNode variable = Asm.localVariables(caller.methodNode()).filter(v -> v.index == node.var).head();
-                            return new Declaration(variable.name, Signature.parse(variable.signature, callee.aClass()));
+                            return new Declaration(variable.name, Signature.parse(variable.signature == null ? variable.desc : variable.signature, callee.aClass()));
                         }),
                         instanceOf(FieldInsnNode.class, node -> {
                             FieldNode field = Asm.fields(caller.classNode()).filter(f -> f.name.equals(node.name)).head();
-                            return new Declaration(field.name, Signature.parse(field.signature, callee.aClass()));
+                            return new Declaration(field.name, Signature.parse(field.signature == null ? field.desc : field.signature, callee.aClass()));
                         })).
                 head();
     }

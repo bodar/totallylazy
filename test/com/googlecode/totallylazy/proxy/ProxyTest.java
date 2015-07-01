@@ -43,6 +43,12 @@ public class ProxyTest {
     }
 
     @Test
+    public void canCreateALazyProxyWithReflectoMagic() throws Exception {
+        User user = lazy(() -> new User("dan", "bod"));
+        assertThat(user.firstName(), is("dan"));
+    }
+
+    @Test
     public void canCreateALazyProxy() throws Exception {
         AtomicInteger called = new AtomicInteger();
         User user = lazy(User.class, () -> {
