@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.proxy;
 
-public class SubClassMe {
-    public void add(byte[] a, byte[] b) throws Throwable{
-    }
+public abstract class SubClassMe {
+    abstract public int add(int a, int... b) throws Throwable;
 }

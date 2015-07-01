@@ -95,7 +95,7 @@ public class Proxy {
         String methodName = method.getName();
         String methodDescriptor = Type.getMethodDescriptor(method);
 
-        MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, methodName, methodDescriptor, null, exceptions);
+        MethodVisitor mv = cw.visitMethod(ACC_PUBLIC + (method.isVarArgs() ? ACC_VARARGS : 0), methodName, methodDescriptor, null, exceptions);
         mv.visitCode();
 
         loadHandler(mv, name);

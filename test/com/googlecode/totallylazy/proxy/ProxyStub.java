@@ -9,7 +9,7 @@ public class ProxyStub extends SubClassMe {
     protected InvocationHandler handler;
 
     @Override
-    public void add(byte[] a, byte[] b) throws Throwable {
-        handler.invoke(this, Methods.method("superClass", "add", "Ldsahd"), new Object[]{a, b});
+    public int add(int a, int... b) throws Throwable {
+        return (int) handler.invoke(this, Methods.method("superClass", "add", "Ldsahd"), new Object[]{a, b});
     }
 }

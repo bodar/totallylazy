@@ -16,6 +16,17 @@ import static com.googlecode.totallylazy.proxy.Proxy.lazy;
 import static com.googlecode.totallylazy.proxy.Proxy.proxy;
 
 public class ProxyTest {
+    abstract class VarArgs {
+        public abstract int add(int a, int... b);
+    }
+
+    @Test
+    public void marksVarArgsMethodsCorrectly() throws Exception {
+        VarArgs instance = proxy(VarArgs.class, (proxy, method, args) -> 12);
+        Method method = instance.getClass().getMethod("add", int.class, int[].class);
+        assertThat(method.isVarArgs(), is(true));
+    }
+
     abstract class NonPublic {
         public abstract int add(int a, int b);
     }
