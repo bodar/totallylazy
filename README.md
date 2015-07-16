@@ -13,7 +13,6 @@ A functional library for Java that has the following features
  * Uses and extends Callable interface for maximum interop (i.e Can use with Clojure, [Hazelcast](http://www.hazelcast.com/))
  * Optionally supports using [Hamcrest](http://code.google.com/p/hamcrest/) matchers as predicates
  * Supports chaining of all methods (Recommended) or the use of static imports for all methods.
- * Optionally supports creating Callables via dynamic proxies (requires [cglib-2.2](http://cglib.sourceforge.net/) and [objenesis-1.2](http://code.google.com/p/objenesis/))
  * Contains PersistentSet, PersistentMap, PersistentSortedMap, PersistentList
  * Support Functors and Applicative Functors
  * Supports runtime multi-method dispatch and pattern matching
