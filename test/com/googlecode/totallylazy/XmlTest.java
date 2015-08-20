@@ -100,4 +100,12 @@ public class XmlTest {
         boolean value = Xml.matches(document, "count(//child) = 1");
         assertThat(value, is(true));
     }
+
+    @Test
+    public void supportsUTF16() throws Exception {
+        Document document = Xml.document("<?xml version=\"1.0\" encoding=\"UTF-16\" standalone=\"no\"?>\n"+
+                "<root><child><name>bob</name></child></root>");
+        Number value = Xml.selectNumber(document, "count(//child)");
+        assertThat(value, NumberMatcher.is(1));
+    }
 }

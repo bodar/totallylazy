@@ -30,12 +30,14 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static com.googlecode.totallylazy.Strings.UTF8;
 import static com.googlecode.totallylazy.Strings.bytes;
 import static com.googlecode.totallylazy.Strings.string;
 import static com.googlecode.totallylazy.xml.FunctionResolver.resolver;
@@ -278,7 +280,7 @@ public class Xml {
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             documentBuilder.setEntityResolver(ignoreEntities());
             documentBuilder.setErrorHandler(null);
-            return documentBuilder.parse(new ByteArrayInputStream(bytes(xml)));
+            return documentBuilder.parse(new InputSource(new InputStreamReader(new ByteArrayInputStream(bytes(xml)), UTF8)));
         } catch (Exception e) {
             throw LazyException.lazyException(e);
         }
