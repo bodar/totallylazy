@@ -333,6 +333,10 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.find(this, predicate);
     }
 
+    public Option<Integer> findIndexOf(final Predicate<? super T> predicate) {
+        return zipWithIndex().find(pair -> predicate.matches(pair.second())).map(pair -> pair.first().intValue());
+    }
+
     public <S> Option<S> tryPick(final Function1<? super T, ? extends Option<? extends S>> callable) {
         return Sequences.tryPick(this, callable);
     }
@@ -394,6 +398,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
     public <S, Th, Fo, Fi> Sequence<Quintuple<T, S, Th, Fo, Fi>> zip(final Iterable<? extends S> second, final Iterable<? extends Th> third, final Iterable<? extends Fo> fourth, final Iterable<? extends Fi> fifth) {
         return Sequences.zip(this, second, third, fourth, fifth);
     }
+
 
     public Sequence<Pair<Number, T>> zipWithIndex() {
         return Sequences.zipWithIndex(this);

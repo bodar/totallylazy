@@ -518,6 +518,12 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsFindIndexOf() throws Exception {
+        assertThat(sequence(1, 3, 5).findIndexOf(even()), is((Option<Integer>) none(Integer.class)));
+        assertThat(sequence(1, 3, 6).findIndexOf(even()), is((Option<Integer>) some(2)));
+    }
+
+    @Test
     public void supportsFindingTheFirstSome() throws Exception {
         assertThat(sequence(none(Integer.class), some(2), some(3)).flatMap(identity(Integer.class)).headOption(), is((Option<Integer>) some(2)));
     }
