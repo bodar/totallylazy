@@ -41,6 +41,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
@@ -266,16 +267,20 @@ public class Xml {
     }
 
     public static Document document(byte[] bytes) {
-        return document(string(bytes));
+        return document(new InputSource(new ByteArrayInputStream(bytes)));
     }
 
     public static Document document(String xml) {
+        return document(new InputSource(new StringReader(xml)));
+    }
+
+    public static Document document(InputSource inputSource) {
         try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             documentBuilder.setEntityResolver(ignoreEntities());
             documentBuilder.setErrorHandler(null);
-            return documentBuilder.parse(new ByteArrayInputStream(bytes(xml)));
+            return documentBuilder.parse(inputSource);
         } catch (Exception e) {
             throw LazyException.lazyException(e);
         }
@@ -286,7 +291,7 @@ public class Xml {
     }
 
     public static Source source(final Document document) {
-        return new DOMSource(document){
+        return new DOMSource(document) {
             @Override
             public String toString() {
                 try {
