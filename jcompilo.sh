@@ -4,7 +4,7 @@ set -e
 JAVA_VERSION=${JAVA_VERSION-8}
 JAVA_OPTS="-server -XX:+TieredCompilation -Djava.net.useSystemProxies=true ${JAVA_OPTS}"
 BUILD_NUMBER=${BUILD_NUMBER-dev.build}
-version=2.32
+version=2.33
 artifact=jcompilo
 group=com/googlecode/${artifact}
 repo=repo.bodar.com
