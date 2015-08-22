@@ -19,7 +19,6 @@ A functional library for Java that has the following features
 
 Tail call optimisation is available in conjunction with [JCompilo](https://code.google.com/p/jcompilo/)
 
-
 Now also available in [Objective-C](https://github.com/stuartervine/OCTotallyLazy/) 
 
 
