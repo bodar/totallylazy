@@ -8,6 +8,8 @@ import java.util.Date;
 
 import static com.googlecode.totallylazy.time.Dates.date;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.is;
 
 public class DatesTest {
@@ -74,5 +76,11 @@ public class DatesTest {
         assertThat(Dates.dayOfYear().apply(date(2013,12,31,0,0,0,0)), is(365));
         assertThat(Dates.year().apply(date(2013,1,1,0,0,0,0)), is(2013));
         assertThat(Dates.calendarField(Calendar.MONTH).apply(date(2013,1,1,0,0,0,0)), is(Calendar.JANUARY));
+    }
+
+    @Test
+    public void whenCreatingRFC822DateFromDateSetTimezoneToGMT() throws Exception {
+        String result = Dates.RFC822().format(new Date(1200000000000L));
+        assertThat(result, endsWith(" GMT"));
     }
 }
