@@ -30,6 +30,7 @@ public class Dates {
     public static final String APACHE = "dd/MMM/yyyy:HH:mm:ss Z";
 
     public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
+    public static final TimeZone GMT = TimeZone.getTimeZone("GMT");
     public static final Date MIN_VALUE = date(Long.MIN_VALUE);
     public static final Date MAX_VALUE = date(Long.MAX_VALUE);
     @Deprecated
@@ -45,8 +46,12 @@ public class Dates {
     }
 
     public static SimpleDateFormat format(final String pattern) {
+        return formatWithDefaultZone(pattern, UTC);
+    }
+
+    private static SimpleDateFormat formatWithDefaultZone(String pattern, TimeZone defaultTimeZone) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
-        simpleDateFormat.setTimeZone(UTC);
+        simpleDateFormat.setTimeZone(defaultTimeZone);
         simpleDateFormat.setLenient(false);
         return simpleDateFormat;
     }
@@ -69,7 +74,7 @@ public class Dates {
     }
 
     public static DateFormat RFC822() {
-        return format(RFC822);
+        return formatWithDefaultZone(RFC822, GMT);
     }
 
     public static DateFormat RFC3339withMilliseconds() {
