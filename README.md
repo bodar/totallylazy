@@ -101,6 +101,11 @@ and then
 </dependencies>
 ```
 
+License
+=======
+
+[Apache 2](http://www.apache.org/licenses/LICENSE-2.0)
+
 Sponsors
 ========
 
