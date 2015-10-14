@@ -1,7 +1,6 @@
 totallylazy
 ===========
 
-
 Another functional library for Java
 
 Friendly support is available at our [Google Group](https://groups.google.com/forum/?fromgroups#!forum/totallylazy) or post a question on StackOverflow with [tag totallylazy](http://stackoverflow.com/questions/tagged/totallylazy)
