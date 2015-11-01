@@ -138,6 +138,11 @@ public class Functions {
         return (a, b, c, d, e) -> callable.call(a).call(b).call(c).call(d).call(e);
     }
 
+    @SafeVarargs
+    public static <T> T modify(T seed, Unary<T>... builders) {
+        return sequence(builders).reduce(Compose.<T>compose()).apply(seed);
+    }
+
     static abstract class IdentityFunction<A,B> implements Function1<A,B>, Identity<B> {}
 
     public static <A, B, C> Function1<Pair<A, B>, C> pair(final Function2<? super A, ? super B, ? extends C> function) {

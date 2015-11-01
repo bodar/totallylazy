@@ -169,7 +169,7 @@ public class Uri implements Comparable<Uri> {
     }
 
     public Uri query(String value) {
-        return new Uri(scheme, authority, path, value, fragment);
+        return new Uri(scheme, authority, path, Strings.isBlank(value) ? null : value, fragment);
     }
 
     public Uri dropQuery() {
