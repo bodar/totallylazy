@@ -44,15 +44,15 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return toString("[", ",", "]");
     }
 
-    public final String toString(String separator) {
+    public String toString(String separator) {
         return toString("", separator, "");
     }
 
-    public final String toString(String start, String separator, String end) {
+    public String toString(String start, String separator, String end) {
         return values().toString(start, separator, end);
     }
 
@@ -76,12 +76,12 @@ public class Pair<F, S> implements First<F>, Second<S>, Value<F>, Functor<F>, Ma
     }
 
     @Override
-    public final boolean equals(final Object o) {
+    public boolean equals(final Object o) {
         return o instanceof Pair && values().equals(((Pair) o).values());
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return values().hashCode();
     }
 
