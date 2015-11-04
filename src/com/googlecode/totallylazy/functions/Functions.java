@@ -140,7 +140,12 @@ public class Functions {
 
     @SafeVarargs
     public static <T> T modify(T seed, Unary<T>... builders) {
-        return sequence(builders).reduce(Compose.<T>compose()).apply(seed);
+        return compose(builders).apply(seed);
+    }
+
+    @SafeVarargs
+    public static <T> Unary<T> compose(Unary<T>... builders) {
+        return sequence(builders).reduce(Compose.<T>compose())::call;
     }
 
     static abstract class IdentityFunction<A,B> implements Function1<A,B>, Identity<B> {}
