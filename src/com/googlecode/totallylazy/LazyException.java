@@ -32,7 +32,7 @@ public class LazyException extends RuntimeException {
 
     public static  <E extends Exception> E unwrap(RuntimeException e, Class<E> exception) throws E{
         final Throwable theCause = e.getCause();
-        if(theCause.getClass().equals(exception)){
+        if(exception.isInstance(theCause)){
             return exception.cast(theCause);
         }
         throw e;
