@@ -11,6 +11,7 @@ import com.googlecode.totallylazy.iterators.PeekingIterator;
 import com.googlecode.totallylazy.iterators.RangerIterator;
 import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
 import com.googlecode.totallylazy.iterators.RepeatIterator;
+import com.googlecode.totallylazy.iterators.TakeIterator;
 import com.googlecode.totallylazy.iterators.TakeWhileIterator;
 import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
 import com.googlecode.totallylazy.iterators.WindowedIterator;
@@ -279,7 +280,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> take(final Iterator<? extends T> iterator, final int count) {
-        return takeWhile(iterator, Predicates.countTo(count));
+        return new TakeIterator<T>(iterator, count);
     }
 
     public static <T> Iterator<T> takeWhile(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {
