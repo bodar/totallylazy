@@ -5,20 +5,7 @@ import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Function2;
-import com.googlecode.totallylazy.iterators.FilterIterator;
-import com.googlecode.totallylazy.iterators.FlattenIterator;
-import com.googlecode.totallylazy.iterators.InitIterator;
-import com.googlecode.totallylazy.iterators.IterateIterator;
-import com.googlecode.totallylazy.iterators.MapIterator;
-import com.googlecode.totallylazy.iterators.PartitionIterator;
-import com.googlecode.totallylazy.iterators.PeekingIterator;
-import com.googlecode.totallylazy.iterators.RangerIterator;
-import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
-import com.googlecode.totallylazy.iterators.RepeatIterator;
-import com.googlecode.totallylazy.iterators.StatefulIterator;
-import com.googlecode.totallylazy.iterators.TakeWhileIterator;
-import com.googlecode.totallylazy.iterators.UnfoldRightIterator;
-import com.googlecode.totallylazy.iterators.WindowedIterator;
+import com.googlecode.totallylazy.iterators.*;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.predicates.Predicates;
@@ -287,7 +274,7 @@ public class Iterators {
     }
 
     public static <T> Iterator<T> take(final Iterator<? extends T> iterator, final int count) {
-        return takeWhile(iterator, Predicates.countTo(count));
+        return new TakeIterator<>(iterator, count);
     }
 
     public static <T> Iterator<T> takeWhile(final Iterator<? extends T> iterator, final Predicate<? super T> predicate) {

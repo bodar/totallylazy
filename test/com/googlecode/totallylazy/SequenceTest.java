@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.googlecode.totallylazy.Arrays.list;
+import static com.googlecode.totallylazy.Strings.isBlank;
 import static com.googlecode.totallylazy.functions.Callables.ascending;
 import static com.googlecode.totallylazy.functions.Callables.call;
 import static com.googlecode.totallylazy.functions.Callables.callThrows;
@@ -784,7 +785,7 @@ public class SequenceTest {
     @Test
     public void supportsFlatten() throws Exception {
         assertThat(flatten(sequence("Hello").map(toCharacters())), hasExactly('H', 'e', 'l', 'l', 'o'));
-        assertThat(flatten(sequence(some(1), none(), some(3))), hasExactly(1,3));
+        assertThat(flatten(sequence(some(1), none(), some(3))), hasExactly(1, 3));
     }
 
     @Test
@@ -793,6 +794,13 @@ public class SequenceTest {
         assertThat(sequence, hasExactly(1, 2));
         assertThat(sequence(1).take(2).size(), NumberMatcher.is(1));
         assertThat(sequence().take(2).size(), NumberMatcher.is(0));
+    }
+
+    @Test
+    public void supportsTakeDoesNotConsumeMoreThanItNeeds() throws Exception {
+        final Sequence<Object> sequence = repeat(() -> {throw new IllegalStateException();}).take(0);
+        assertThat(sequence.isEmpty(), is(true));
+        assertThat(sequence.size(), is(0));
     }
 
     @Test
