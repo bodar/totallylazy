@@ -77,4 +77,9 @@ public class StackFrame {
     public Sequence<AbstractInsnNode> instructions() {
         return instructions.value();
     }
+
+    @Override
+    public String toString() {
+        return trace().toString();
+    }
 }

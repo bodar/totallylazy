@@ -226,7 +226,7 @@ public class Functions {
     }
 
     public static <A, B extends A, C> Function1<A, Option<C>> instanceOf(Class<B> subCLass, Function1<? super B, ? extends C> callable) {
-        return function(a -> subCLass.isInstance(a) ? Option.some(callable.call(subCLass.cast(a))) : Option.none());
+        return function(a -> subCLass.isInstance(a) ? Option.option(callable.deferApply(subCLass.cast(a))) : Option.none());
     }
 
     @SafeVarargs
