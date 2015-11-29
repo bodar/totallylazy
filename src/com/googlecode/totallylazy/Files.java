@@ -111,7 +111,7 @@ public class Files {
     }
 
     public static Function1<File, Boolean> delete() {
-        return file -> delete(file);
+        return Files::delete;
     }
 
     public static File temporaryFile() {

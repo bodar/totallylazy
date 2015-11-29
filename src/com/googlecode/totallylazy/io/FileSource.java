@@ -24,7 +24,7 @@ public class FileSource implements Sources {
     private FileSource(final Sequence<Pair<String, File>> sources) {
         closeables = closeableList(InputStream.class);
         this.sources = sources.map(pair ->
-                new Source(pair.first(), new Date(pair.second().lastModified()), inputStream(pair.second()), pair.second().isDirectory()));
+                Source.source(pair.first(), () -> new Date(pair.second().lastModified()), () -> inputStream(pair.second()), pair.second().isDirectory()));
     }
 
     private InputStream inputStream(File file) throws FileNotFoundException {

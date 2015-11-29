@@ -10,10 +10,7 @@ import java.util.Date;
 import java.util.zip.ZipInputStream;
 
 import static com.googlecode.totallylazy.io.FilterSource.filterSource;
-import static com.googlecode.totallylazy.predicates.Predicates.is;
-import static com.googlecode.totallylazy.predicates.Predicates.not;
-import static com.googlecode.totallylazy.predicates.Predicates.where;
-import static com.googlecode.totallylazy.Strings.startsWith;
+import static com.googlecode.totallylazy.predicates.Predicates.*;
 
 public class ZipSource implements Sources {
     final ZipInputStream in;
@@ -28,18 +25,18 @@ public class ZipSource implements Sources {
 
     public static Sources zipSource(InputStream inputStream, String rawFolder) {
         String folder = rawFolder.replaceFirst("/", "");
-        return filterSource(where(functions.name, is(not(""))),
+        return filterSource(where(Source::name, is(not(""))),
                 MapSources.mapSource(removeFolderFromName(folder),
-                        filterSource(where(functions.name, startsWith(folder)), zipSource(inputStream))));
+                        filterSource(source -> source.name().startsWith(folder), zipSource(inputStream))));
     }
 
     private static Unary<Source> removeFolderFromName(final String folder) {
-        return source -> new Source(source.name.replaceFirst("^" + folder, ""), source.modified, source.input, source.isDirectory);
+        return source -> Source.source(source.name().replaceFirst("^" + folder, ""), source::modified, source::input, source.isDirectory());
     }
 
     @Override
     public Sequence<Source> sources() {
-        return Zip.entries(in).map(zipEntry -> new Source(zipEntry.getName(), new Date(zipEntry.getTime()), new IgnoreCloseInputStream(), zipEntry.isDirectory()));
+        return Zip.entries(in).map(zipEntry -> Source.source(zipEntry.getName(), () -> new Date(zipEntry.getTime()), IgnoreCloseInputStream::new, zipEntry.isDirectory()));
     }
 
     @Override

@@ -10,8 +10,6 @@ import static com.googlecode.totallylazy.Files.emptyVMDirectory;
 import static com.googlecode.totallylazy.Files.file;
 import static com.googlecode.totallylazy.Files.temporaryFile;
 import static com.googlecode.totallylazy.io.Sources.constructors.sources;
-import static com.googlecode.totallylazy.io.Sources.functions.directory;
-import static com.googlecode.totallylazy.io.Sources.functions.name;
 import static com.googlecode.totallylazy.io.Uri.packageUri;
 import static com.googlecode.totallylazy.io.Uri.uri;
 import static com.googlecode.totallylazy.io.Zip.zip;
@@ -53,7 +51,7 @@ public class SourcesTest {
         zip(files(), zipFile);
 
         Sources sources = sources(uri(String.format("jar:file:%s!/folder/", zipFile)));
-        List<String> names = sources.sources().map(Sources.functions.name).toList();
+        List<String> names = sources.sources().map(Source::name).toList();
         assertThat(names, containsInAnyOrder("b.txt", "c.txt"));
         sources.close();
     }
@@ -64,7 +62,7 @@ public class SourcesTest {
         zip(files(), zipFile);
 
         Sources sources = sources(uri(String.format("jar:file:%s!/", zipFile)));
-        List<String> names = sources.sources().filter(not(directory)).map(name).toList();
+        List<String> names = sources.sources().filter(not(Source::isDirectory)).map(Source::name).toList();
         assertThat(names, containsInAnyOrder("a.txt", "folder/b.txt", "folder/c.txt"));
         sources.close();
     }

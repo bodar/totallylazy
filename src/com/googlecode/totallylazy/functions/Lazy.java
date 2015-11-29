@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Memory;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Closeables.safeClose;
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public abstract class Lazy<T> implements Function0<T>, Memory {
     private final Object lock = new Object();
@@ -14,6 +15,7 @@ public abstract class Lazy<T> implements Function0<T>, Memory {
     protected abstract T get() throws Exception;
 
     public static <T> Lazy<T> lazy(Callable<? extends T> callable) {
+        if(callable instanceof Lazy) return cast(callable);
         return new Lazy<T>() {
             @Override
             protected T get() throws Exception {
