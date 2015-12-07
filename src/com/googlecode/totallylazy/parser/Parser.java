@@ -110,6 +110,10 @@ public abstract class Parser<A> implements Parse<A> {
         return SequenceParser.sequence(this);
     }
 
+    public Parser<A> pretty(String pretty) {
+        return Parsers.pretty(pretty, this);
+    }
+
     public Parser<List<A>> many1() {
         return many(1);
     }
