@@ -82,11 +82,19 @@ public class Parsers {
         return PredicatesParser.string(predicates);
     }
 
+    /**
+     * Use Parser.pretty() or Parsers.pretty() instead
+     */
+    @Deprecated
     public static Parser<String> pattern(String value, String pretty) {
-        return PatternParser.pattern(value, pretty);
+        return pattern(value).pretty(pretty);
     }
     public static Parser<String> pattern(String value) {
-        return PatternParser.pattern(value, "");
+        return PatternParser.pattern(value);
+    }
+
+    public static <A> Parser<A> pretty(String pretty, Parse<A> parse) {
+        return PrettyParser.pretty(parse, pretty);
     }
 
     public static <A> Parser<A> pretty(String pretty, Parse<A> parse) {
