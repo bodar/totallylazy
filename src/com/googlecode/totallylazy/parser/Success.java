@@ -26,6 +26,11 @@ public abstract class Success<A> implements Result<A> {
     }
 
     @Override
+    public Object actual() {
+        return value();
+    }
+
+    @Override
     public <S> Result<S> map(Function1<? super A, ? extends S> callable) {
         return success(Functions.call(callable, value()), remainder());
     }
