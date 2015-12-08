@@ -14,24 +14,22 @@ import static com.googlecode.totallylazy.parser.Success.success;
 
 class PatternParser extends Parser<String> {
     private final Pattern pattern;
-    private final String pretty;
 
-    private PatternParser(Pattern pattern, String pretty) {
+    private PatternParser(Pattern pattern) {
         this.pattern = pattern;
-        this.pretty = pretty;
     }
 
-    static PatternParser pattern(Pattern pattern, String pretty) {
-        return new PatternParser(pattern, pretty);
+    static PatternParser pattern(Pattern pattern) {
+        return new PatternParser(pattern);
     }
 
-    static PatternParser pattern(String pattern, String pretty) {
-        return pattern(Pattern.compile(pattern), pretty);
+    static PatternParser pattern(String pattern) {
+        return pattern(Pattern.compile(pattern));
     }
 
     @Override
     public String toString() {
-        return Strings.isEmpty(pretty) ? pattern.toString() : pretty;
+        return pattern.toString();
     }
 
     @Override

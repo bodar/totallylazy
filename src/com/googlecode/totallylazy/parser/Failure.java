@@ -12,6 +12,11 @@ public abstract class Failure<A> implements Result<A>{
     public static <A> Failure<A> failure(final Object expected, final Object actual) {
         return new Failure<A>() {
             @Override
+            public Object actual() {
+                return actual;
+            }
+
+            @Override
             public String message() {
                 return String.format("%s expected, %s encountered.", expected, actual);
             }

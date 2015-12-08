@@ -8,6 +8,7 @@ import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
+import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
 import static com.googlecode.totallylazy.parser.Parsers.isChar;
 import static com.googlecode.totallylazy.parser.Parsers.pattern;
@@ -81,5 +82,16 @@ public class ParsersTest {
         Result<List<Character>> result = character('A').separatedBy(character(',')).parse("A,A,ABC");
         assertThat(result.value(), is(list('A', 'A', 'A')));
         assertThat(result.remainder().head(), is('B'));
+    }
+
+    @Test
+    public void supportsPretty() throws Exception {
+        Parser<Character> pretty = character('A').pretty("some pretty thing");
+
+        Result<Character> success = pretty.parse("A");
+        assertThat(success.value(), is('A'));
+
+        Result<Character> failure = pretty.parse("BBB");
+        assertThat(failure.message(), startsWith("some pretty thing"));
     }
 }
