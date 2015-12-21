@@ -8,7 +8,7 @@ import com.googlecode.totallylazy.reflection.Declaration;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
-interface Keyword<T> extends Function1<Map<String, Object>, T>, GenericType<T>, Selection {
+public interface Keyword<T> extends Function1<Map<String, Object>, T>, GenericType<T>, Selection {
     String name();
 
     @Override
