@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class PatternParserTest {
     @Test
     public void supportsPrettyFailureMessage() throws Exception {
-        Result<String> result = pattern("\\d{4}/\\d{1,2}/\\d{1,2}", "dddd/MM/yy").parse("ABC");
+        Result<String> result = pattern("\\d{4}/\\d{1,2}/\\d{1,2}").pretty("dddd/MM/yy").parse("ABC");
         assertThat(result.message(), is("dddd/MM/yy expected, A encountered."));
     }
 
@@ -58,7 +58,7 @@ public class PatternParserTest {
 
     @Test
     public void doesnNotBlowIfPatternDoesNotCompletelyMatch() throws Exception {
-        Parser<String> pattern = pattern("\\d{4}/\\d{1,2}/\\d{1,2}", "yyyyMMdd");
+        Parser<String> pattern = pattern("\\d{4}/\\d{1,2}/\\d{1,2}").pretty("yyyyMMdd");
         Result<String> result = pattern.parse("13");
         assertThat(result.failure(), is(true));
         assertThat(result.message(), is("yyyyMMdd expected, 13 encountered."));
