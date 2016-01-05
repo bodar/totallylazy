@@ -10,8 +10,8 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Option.some;
 
-public abstract class Success<A> implements Result<A> {
-    public static <A> Success<A> success(final A value, final Segment<Character> remainder) {
+public interface Success<A> extends Result<A> {
+    static <A> Success<A> success(final A value, final Segment<Character> remainder) {
         return new Success<A>() {
             @Override
             public Segment<Character> remainder() {
@@ -22,46 +22,47 @@ public abstract class Success<A> implements Result<A> {
             public A value() {
                 return value;
             }
+
+            @Override
+            public String toString() {
+                return "Success(" + value() + ")";
+            }
         };
     }
 
     @Override
-    public Object actual() {
+    default Object actual() {
         return value();
     }
 
     @Override
-    public <S> Result<S> map(Function1<? super A, ? extends S> callable) {
+    default <S> Result<S> map(Function1<? super A, ? extends S> callable) {
         return success(Functions.call(callable, value()), remainder());
     }
 
     @Override
-    public Option<A> option() {
+    default Option<A> option() {
         return some(value());
     }
 
     @Override
-    public Either<String, A> either() {
+    default Either<String, A> either() {
         return Either.right(value());
     }
 
     @Override
-    public boolean success() {
+    default boolean success() {
         return true;
     }
 
     @Override
-    public boolean failure() {
+    default boolean failure() {
         return false;
     }
 
     @Override
-    public String message() {
+    default String message() {
         throw new NoSuchElementException();
     }
 
-    @Override
-    public String toString() {
-        return "Success(" + value() + ")";
-    }
 }

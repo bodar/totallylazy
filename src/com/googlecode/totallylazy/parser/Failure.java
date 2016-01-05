@@ -8,8 +8,8 @@ import com.googlecode.totallylazy.Segment;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public abstract class Failure<A> implements Result<A>{
-    public static <A> Failure<A> failure(final Object expected, final Object actual) {
+public interface Failure<A> extends Result<A>{
+    static <A> Failure<A> failure(final Object expected, final Object actual) {
         return new Failure<A>() {
             @Override
             public Object actual() {
@@ -20,54 +20,54 @@ public abstract class Failure<A> implements Result<A>{
             public String message() {
                 return String.format("%s expected, %s encountered.", expected, actual);
             }
+
+            @Override
+            public String toString() {
+                return "Failure(\"" + message() + "\")";
+            }
         };
     }
 
-    public static <A> Failure<A> failure(final Object expected, final Exception actual) {
+    static <A> Failure<A> failure(final Object expected, final Exception actual) {
         return failure(expected, actual.getMessage());
     }
 
     @Override
-    public <B> Failure<B> map(Function1<? super A, ? extends B> callable) {
+    default <B> Failure<B> map(Function1<? super A, ? extends B> callable) {
         return cast(this);
     }
 
     @Override
-    public Option<A> option() {
+    default Option<A> option() {
         return none();
     }
 
     @Override
-    public Either<String, A> either() {
+    default Either<String, A> either() {
         return Either.left(message());
     }
 
     @Override
-    public boolean success() {
+    default boolean success() {
         return false;
     }
 
     @Override
-    public boolean failure() {
+    default boolean failure() {
         return true;
     }
 
     @Override
-    public Segment<Character> remainder() {
-        throw fail();
+    default Segment<Character> remainder() {
+        throw exception();
     }
 
     @Override
-    public A value() {
-        throw fail();
+    default A value() {
+        throw exception();
     }
 
-    private RuntimeException fail() {
+    default RuntimeException exception() {
         return new RuntimeException(message());
-    }
-
-    @Override
-    public String toString() {
-        return "Failure(\"" + message() + "\")";
     }
 }
