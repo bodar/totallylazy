@@ -14,71 +14,71 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class Parsers {
-    public static Function1<Iterable<?>, String> toString = iterable -> sequence(iterable).toString("");
+public interface Parsers {
+    Function1<Iterable<?>, String> toString = iterable -> sequence(iterable).toString("");
 
-    public static <A> Parser<A> parser(final Parser<? extends A> parser) {
+    static <A> Parser<A> parser(final Parser<? extends A> parser) {
         return MappingParser.map(parser, Callables.<A>returnArgument());
     }
 
     // Use in Java 7+, for Java 6 use Parsers.reference
-    public static <T> Parser<T> lazy(Callable<? extends Parser<T>> value) {
+    static <T> Parser<T> lazy(Callable<? extends Parser<T>> value) {
         return LazyParser.lazy(value);
     }
 
     // Use in Java 6, for Java 7+ use Parsers.lazy
-    public static <T> ReferenceParser<T> reference(){
+    static <T> ReferenceParser<T> reference(){
         return ReferenceParser.reference();
     }
 
-    public static Parser<Character> character(Predicate<Character> value) {
+    static Parser<Character> character(Predicate<Character> value) {
         return CharacterParser.character(value);
     }
 
-    public static Parser<Character> character(char value) {
+    static Parser<Character> character(char value) {
         return CharacterParser.character(value);
     }
 
-    public static Parser<CharSequence> characters(Predicate<Character> value) { return CharactersParser.characters(value); }
+    static Parser<CharSequence> characters(Predicate<Character> value) { return CharactersParser.characters(value); }
 
-    public static Parser<Character> isChar(Predicate<Character> value) {
+    static Parser<Character> isChar(Predicate<Character> value) {
         return CharacterParser.character(value);
     }
 
-    public static Parser<Character> isChar(char value) {
+    static Parser<Character> isChar(char value) {
         return CharacterParser.character(value);
     }
 
-    public static Parser<Character> wsChar(char value) {
+    static Parser<Character> wsChar(char value) {
         return ws(isChar(value));
     }
 
-    public static <A> Parser<A> ws(Parser<A> parser) {
+    static <A> Parser<A> ws(Parser<A> parser) {
         return parser.surroundedBy(isChar(Characters.whitespace).many());
     }
 
-    public static Parser<Character> notChar(char value) {
+    static Parser<Character> notChar(char value) {
         return CharacterParser.notChar(value);
     }
 
-    public static Parser<Character> among(String value) {
+    static Parser<Character> among(String value) {
         return CharacterParser.character(Characters.among(value));
     }
 
-    public static Parser<Character> notAmong(String value) {
+    static Parser<Character> notAmong(String value) {
         return CharacterParser.character(Characters.notAmong(value));
     }
 
-    public static Parser<String> string(String value) {
+    static Parser<String> string(String value) {
         return StringParser.string(value);
     }
 
-    public static Parser<String> string(Iterable<? extends Predicate<? super Character>> value) {
+    static Parser<String> string(Iterable<? extends Predicate<? super Character>> value) {
         return PredicatesParser.string(value);
     }
 
     @SafeVarargs
-    public static Parser<String> string(Predicate<? super Character>... predicates) {
+    static Parser<String> string(Predicate<? super Character>... predicates) {
         return PredicatesParser.string(predicates);
     }
 
@@ -86,80 +86,80 @@ public class Parsers {
      * Use Parser.pretty() or Parsers.pretty() instead
      */
     @Deprecated
-    public static Parser<String> pattern(String value, String pretty) {
+    static Parser<String> pattern(String value, String pretty) {
         return pattern(value).pretty(pretty);
     }
-    public static Parser<String> pattern(String value) {
+    static Parser<String> pattern(String value) {
         return PatternParser.pattern(value);
     }
 
-    public static <A> Parser<A> pretty(String pretty, Parser<A> parse) {
+    static <A> Parser<A> pretty(String pretty, Parser<A> parse) {
         return PrettyParser.pretty(parse, pretty);
     }
 
-    public static <A, B> Parser<B> map(Parser<? extends A> source, Function1<? super A, ? extends B> callable) {
+    static <A, B> Parser<B> map(Parser<? extends A> source, Function1<? super A, ? extends B> callable) {
         return MappingParser.map(source, callable);
     }
 
-    public static <A> Parser<Option<A>> optional(Parser<? extends A> parserA) {
+    static <A> Parser<Option<A>> optional(Parser<? extends A> parserA) {
         return OptionalParser.optional(parserA);
     }
 
-    public static <A> Parser<A> or(Iterable<? extends Parser<? extends A>> parsers) {
+    static <A> Parser<A> or(Iterable<? extends Parser<? extends A>> parsers) {
         return OrParser.or(parsers);
     }
 
     @SafeVarargs
-    public static <A> Parser<A> or(Parser<? extends A>... parsers) {
+    static <A> Parser<A> or(Parser<? extends A>... parsers) {
         return or(sequence(parsers));
     }
 
-    public static <A> Parser<A> returns(A a) {
+    static <A> Parser<A> returns(A a) {
         return new ReturnsParser<>(a);
     }
 
-    public static <T> Parser<T> constant(T value) {
+    static <T> Parser<T> constant(T value) {
         return returns(value);
     }
 
-    public static <A> Parser<List<A>> many(Parser<? extends A> parser) {
+    static <A> Parser<List<A>> many(Parser<? extends A> parser) {
         return ManyParser.many(parser);
     }
 
-    public static <A> Parser<List<A>> list(final Iterable<? extends Parser<? extends A>> parsers) {
+    static <A> Parser<List<A>> list(final Iterable<? extends Parser<? extends A>> parsers) {
         return ListParser.list(parsers);
     }
 
     @SafeVarargs
-    public static <A> Parser<List<A>> list(final Parser<? extends A>... parsers) {
+    static <A> Parser<List<A>> list(final Parser<? extends A>... parsers) {
         return list(sequence(parsers));
     }
 
-    public static <A, B> Parser<Pair<A, B>> pair(final Parser<? extends A> parserA, final Parser<? extends B> parserB) {
+    static <A, B> Parser<Pair<A, B>> pair(final Parser<? extends A> parserA, final Parser<? extends B> parserB) {
         return PairParser.pair(parserA, parserB);
     }
 
-    public static <A, B, C> Parser<Triple<A, B, C>> triple(final Parser<? extends A> parserA, final Parser<? extends B> parserB, final Parser<? extends C> parserC) {
+    static <A, B, C> Parser<Triple<A, B, C>> triple(final Parser<? extends A> parserA, final Parser<? extends B> parserB, final Parser<? extends C> parserC) {
         return TripleParser.triple(parserA, parserB, parserC);
     }
 
-    public static <A, B> Parser<Pair<A, B>> tuple(final Parser<? extends A> parserA, final Parser<? extends B> parserB) {
+    static <A, B> Parser<Pair<A, B>> tuple(final Parser<? extends A> parserA, final Parser<? extends B> parserB) {
         return PairParser.pair(parserA, parserB);
     }
 
-    public static <A, B, C> Parser<Triple<A, B, C>> tuple(final Parser<? extends A> parserA, final Parser<? extends B> parserB, final Parser<? extends C> parserC) {
+    static <A, B, C> Parser<Triple<A, B, C>> tuple(final Parser<? extends A> parserA, final Parser<? extends B> parserB, final Parser<? extends C> parserC) {
         return TripleParser.triple(parserA, parserB, parserC);
     }
 
-    public static <A> Parser<A> between(Parser<?> before, Parser<A> parserB, Parser<?> after) {
+    static <A> Parser<A> between(Parser<?> before, Parser<A> parserB, Parser<?> after) {
         return TripleParser.triple(before, parserB, after).map(Callables.<A>second());
     }
 
-    public static <T> Parser<T> debug(String name, Parser<T> parser) {
+    static <T> Parser<T> debug(String name, Parser<T> parser) {
         return debug(System.out, name, parser);
     }
 
-    public static <T> Parser<T> debug(PrintStream printStream, String name, Parser<T> parser) {
+    static <T> Parser<T> debug(PrintStream printStream, String name, Parser<T> parser) {
         return new DebugParser<>(parser, name, printStream);
     }
 }
