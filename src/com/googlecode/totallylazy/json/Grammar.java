@@ -25,36 +25,36 @@ import static com.googlecode.totallylazy.parser.Parsers.ws;
 import static com.googlecode.totallylazy.parser.Parsers.wsChar;
 
 @SuppressWarnings("unchecked")
-public class Grammar {
-    public static final Parser<Void> NULL = string("null").ignore();
+public interface Grammar {
+    Parser<Void> NULL = string("null").ignore();
 
-    public static final Parser<Boolean> BOOLEAN = string("true").or(string("false")).map(Boolean::valueOf);
+    Parser<Boolean> BOOLEAN = string("true").or(string("false")).map(Boolean::valueOf);
 
-    public static final Parser<String> ESCAPED_CHARACTER = isChar('\\').next(
+    Parser<String> ESCAPED_CHARACTER = isChar('\\').next(
             string(Characters.among("\"\\/bfnrt")).or(string(cons(is('u'), repeat(hexDigit).take(4)))).
                     map(Strings.functions.unescape));
 
-    public static final Predicate<Character> UNICODE_CHARACTER = Characters.notAmong("\"\\");
+    Predicate<Character> UNICODE_CHARACTER = Characters.notAmong("\"\\");
 
-    public static final Parser<String> STRING = characters(UNICODE_CHARACTER).
+    Parser<String> STRING = characters(UNICODE_CHARACTER).
             or(ESCAPED_CHARACTER).many().map(Parsers.toString).between(isChar('"'), isChar('"'));
 
-    public static final Parser<Number> NUMBER = Parsers.characters(Characters.digit.or(among(".eE-+"))).map(chars -> new BigDecimal(chars.toString()));
+    Parser<Number> NUMBER = Parsers.characters(Characters.digit.or(among(".eE-+"))).map(chars -> new BigDecimal(chars.toString()));
 
-    public static final Parser<Object> VALUE = Parsers.lazy(new Callable<Parse<Object>>() {
+    Parser<Object> VALUE = Parsers.lazy(new Callable<Parse<Object>>() {
         @Override
         public Parse<Object> call() throws Exception {return ws(Parsers.or(OBJECT, ARRAY, STRING, NUMBER, BOOLEAN, NULL));}
     });
 
-    public static final Parser<Pair<String, Object>> PAIR = Parsers.tuple(STRING, wsChar(':'), VALUE).map(triple -> Pair.pair(triple.first(), triple.third()));
+    Parser<Pair<String, Object>> PAIR = Parsers.tuple(STRING, wsChar(':'), VALUE).map(triple -> Pair.pair(triple.first(), triple.third()));
 
-    private static final Parser<?> SEPARATOR = wsChar(',');
+    Parser<?> SEPARATOR = wsChar(',');
 
-    public static final Parser<List<Object>> ARRAY = VALUE.sepBy(SEPARATOR).between(wsChar('['), wsChar(']'));
+    Parser<List<Object>> ARRAY = VALUE.sepBy(SEPARATOR).between(wsChar('['), wsChar(']'));
 
-    public static final Parser<java.util.Map<String, Object>> OBJECT = Parsers.between(wsChar('{'), PAIR.sepBy(SEPARATOR), wsChar('}')).map(Maps::map);
+    Parser<java.util.Map<String, Object>> OBJECT = Parsers.between(wsChar('{'), PAIR.sepBy(SEPARATOR), wsChar('}')).map(Maps::map);
 
-    public static final Parser<Sequence<Pair<String, Object>>> PAIRS = wsChar('{').next(PAIR.sequence());
+    Parser<Sequence<Pair<String, Object>>> PAIRS = wsChar('{').next(PAIR.sequence());
 
-    public static final Parser<Sequence<Object>> SEQUENCE = wsChar('[').next(VALUE.seqBy(SEPARATOR));
+    Parser<Sequence<Object>> SEQUENCE = wsChar('[').next(VALUE.seqBy(SEPARATOR));
 }
