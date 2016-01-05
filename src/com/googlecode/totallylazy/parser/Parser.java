@@ -61,21 +61,21 @@ public interface Parser<A> extends Functor<A> {
     }
 
     default Parser<List<A>> sepBy1(Parser<?> parser) {
-        return sep(parser).many(1);
+        return followedByOption(parser).many(1);
     }
 
     default Parser<List<A>> separatedBy(Parser<?> parser) {
-        return sep(parser).many();
+        return followedByOption(parser).many();
     }
 
-    default Parser<A> sep(Parser<?> parser) {return then(OptionalParser.optional(parser)).map(Callables.<A>first());}
+    default Parser<A> followedByOption(Parser<?> parser) {return followedBy(OptionalParser.optional(parser));}
 
     default Parser<Sequence<A>> seqBy(Parser<?> parser) {
         return sequencedBy(parser);
     }
 
     default Parser<Sequence<A>> sequencedBy(Parser<?> parser) {
-        return sep(parser).sequence();
+        return followedByOption(parser).sequence();
     }
 
     default Parser<A> or(Parser<? extends A> parser) {
