@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Segment;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ReferenceParser<T> implements Parser<T> {
+class ReferenceParser<T> implements Parser<T> {
     private final AtomicReference<Parser<T>> value = new AtomicReference<Parser<T>>();
 
     private ReferenceParser() {}
