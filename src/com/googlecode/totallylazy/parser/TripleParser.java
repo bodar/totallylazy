@@ -5,18 +5,18 @@ import com.googlecode.totallylazy.Triple;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-class TripleParser<A, B, C> extends Parser<Triple<A, B, C>> {
-    private final Parse<? extends A> parserA;
-    private final Parse<? extends B> parserB;
-    private final Parse<? extends C> parserC;
+class TripleParser<A, B, C> implements Parser<Triple<A, B, C>> {
+    private final Parser<? extends A> parserA;
+    private final Parser<? extends B> parserB;
+    private final Parser<? extends C> parserC;
 
-    private TripleParser(Parse<? extends A> parserA, Parse<? extends B> parserB, Parse<? extends C> parserC) {
+    private TripleParser(Parser<? extends A> parserA, Parser<? extends B> parserB, Parser<? extends C> parserC) {
         this.parserA = parserA;
         this.parserB = parserB;
         this.parserC = parserC;
     }
 
-    static <A, B, C> TripleParser<A, B, C> triple(final Parse<? extends A> parserA, final Parse<? extends B> parserB, final Parse<? extends C> parserC) {
+    static <A, B, C> TripleParser<A, B, C> triple(final Parser<? extends A> parserA, final Parser<? extends B> parserB, final Parser<? extends C> parserC) {
         return new TripleParser<A, B, C>(parserA, parserB, parserC);
     }
 

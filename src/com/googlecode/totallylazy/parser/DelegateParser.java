@@ -2,7 +2,7 @@ package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Segment;
 
-public abstract class DelegateParser<A> extends Parser<A> {
+abstract class DelegateParser<A> implements Parser<A> {
     protected final Parser<A> delegate;
 
     protected DelegateParser(Parser<A> delegate) {

@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.parser.Success.success;
 
-public class CharactersParser extends Parser<CharSequence> {
+class CharactersParser implements Parser<CharSequence> {
     private final Predicate<Character> predicate;
 
     private CharactersParser(Predicate<Character> predicate) {

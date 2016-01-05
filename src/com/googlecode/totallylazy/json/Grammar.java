@@ -5,7 +5,6 @@ import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.parser.Parse;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
 
@@ -41,9 +40,9 @@ public interface Grammar {
 
     Parser<Number> NUMBER = Parsers.characters(Characters.digit.or(among(".eE-+"))).map(chars -> new BigDecimal(chars.toString()));
 
-    Parser<Object> VALUE = Parsers.lazy(new Callable<Parse<Object>>() {
+    Parser<Object> VALUE = Parsers.lazy(new Callable<Parser<Object>>() {
         @Override
-        public Parse<Object> call() throws Exception {return ws(Parsers.or(OBJECT, ARRAY, STRING, NUMBER, BOOLEAN, NULL));}
+        public Parser<Object> call() throws Exception {return ws(Parsers.or(OBJECT, ARRAY, STRING, NUMBER, BOOLEAN, NULL));}
     });
 
     Parser<Pair<String, Object>> PAIR = Parsers.tuple(STRING, wsChar(':'), VALUE).map(triple -> Pair.pair(triple.first(), triple.third()));

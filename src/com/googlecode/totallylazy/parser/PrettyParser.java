@@ -2,16 +2,16 @@ package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Segment;
 
-class PrettyParser<A> extends Parser<A> {
-    private final Parse<A> parse;
+class PrettyParser<A> implements Parser<A> {
+    private final Parser<A> parse;
     private final String pretty;
 
-    private PrettyParser(Parse<A> parse, String pretty) {
+    private PrettyParser(Parser<A> parse, String pretty) {
         this.parse = parse;
         this.pretty = pretty;
     }
 
-    static <A> PrettyParser<A> pretty(Parse<A> parse, String pretty) {return new PrettyParser<A>(parse, pretty);}
+    static <A> PrettyParser<A> pretty(Parser<A> parse, String pretty) {return new PrettyParser<A>(parse, pretty);}
 
     @Override
     public String toString() {

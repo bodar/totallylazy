@@ -19,7 +19,7 @@ public class OrParserTest {
 
     @Test
     public void supportsChaining() throws Exception {
-        Parse<String> parser = string("foo").or(string("bar"));
+        Parser<String> parser = string("foo").or(string("bar"));
         Result<String> result1 = parser.parse(characters("bart"));
         assertThat(result1.value(), is("bar"));
         assertThat(result1.remainder(), is(characters("t")));

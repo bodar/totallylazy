@@ -8,7 +8,7 @@ import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-class CharacterParser extends Parser<Character> {
+class CharacterParser implements Parser<Character> {
     private final Predicate<Character> predicate;
 
     private CharacterParser(Predicate<Character> predicate) {

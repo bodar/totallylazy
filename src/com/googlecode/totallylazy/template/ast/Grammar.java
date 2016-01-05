@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.template.ast;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.predicates.Predicate;
-import com.googlecode.totallylazy.parser.Parse;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
 
@@ -40,23 +39,23 @@ public interface Grammar {
         return Parsers.characters(not(predicate)).map(Text::text);
     }
 
-    Parser<Expression> VALUE = Parsers.lazy(new Callable<Parse<Expression>>() {
+    Parser<Expression> VALUE = Parsers.lazy(new Callable<Parser<Expression>>() {
         @Override
-        public Parse<Expression> call() throws Exception {
+        public Parser<Expression> call() throws Exception {
             return ws(or(LITERAL, FUNCTION_CALL, ATTRIBUTE));
         }
     });
 
-    Parser<Expression> EXPRESSION = Parsers.lazy(new Callable<Parse<Expression>>() {
+    Parser<Expression> EXPRESSION = Parsers.lazy(new Callable<Parser<Expression>>() {
         @Override
-        public Parse<Expression> call() throws Exception {
+        public Parser<Expression> call() throws Exception {
             return Parsers.<Expression>or(FUNCTION_CALL, MAPPING, ATTRIBUTE).surroundedBy(isChar(DELIMETER));
         }
     });
 
-    Parser<Expression> NAMES = Parsers.lazy(new Callable<Parse<Expression>>() {
+    Parser<Expression> NAMES = Parsers.lazy(new Callable<Parser<Expression>>() {
         @Override
-        public Parse<Expression> call() throws Exception {
+        public Parser<Expression> call() throws Exception {
             return or(NAME, INDIRECTION);
         }
     });

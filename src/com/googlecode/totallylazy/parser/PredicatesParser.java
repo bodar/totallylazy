@@ -8,7 +8,7 @@ import com.googlecode.totallylazy.Sequences;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-class PredicatesParser extends Parser<String> {
+class PredicatesParser implements Parser<String> {
     private final Sequence<? extends Predicate<? super Character>> predicates;
 
     private PredicatesParser(Sequence<? extends Predicate<? super Character>> predicates) {

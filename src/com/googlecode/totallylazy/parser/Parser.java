@@ -1,5 +1,7 @@
 package com.googlecode.totallylazy.parser;
 
+import com.googlecode.totallylazy.Functor;
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.functions.Binary;
 import com.googlecode.totallylazy.functions.Callables;
 import com.googlecode.totallylazy.functions.Function1;
@@ -20,135 +22,137 @@ import static com.googlecode.totallylazy.Sequences.foldRight;
 import static com.googlecode.totallylazy.Sequences.join;
 import static com.googlecode.totallylazy.Strings.UTF8;
 
-public abstract class Parser<A> implements Parse<A> {
-    protected Failure<A> fail(Object expected, Object actual) {
+public interface Parser<A> extends Functor<A> {
+    Result<A> parse(Segment<Character> characters);
+
+    default Failure<A> fail(Object expected, Object actual) {
         return Failure.failure(expected, actual);
     }
 
-    public abstract String toString();
+    @Override String toString();
 
     @Override
-    public <B> Parser<B> map(Function1<? super A, ? extends B> callable) {
+    default <B> Parser<B> map(Function1<? super A, ? extends B> callable) {
         return MappingParser.map(this, callable);
     }
 
-    public <B> Parser<Pair<A, B>> then(Parse<? extends B> parser) {
+    default <B> Parser<Pair<A, B>> then(Parser<? extends B> parser) {
         return PairParser.pair(this, parser);
     }
 
-    public <B> Parser<B> next(Parse<? extends B> parser) {
+    default <B> Parser<B> next(Parser<? extends B> parser) {
         return then(parser).map(Callables.<B>second());
     }
 
-    public Parser<A> followedBy(Parse<?> parser) {
+    default Parser<A> followedBy(Parser<?> parser) {
         return then(parser).map(Callables.<A>first());
     }
 
-    public Parser<A> between(Parse<?> before, Parse<?> after) {
+    default Parser<A> between(Parser<?> before, Parser<?> after) {
         return Parsers.between(before, this, after);
     }
 
-    public Parser<A> surroundedBy(Parse<?> parser) {
+    default Parser<A> surroundedBy(Parser<?> parser) {
         return between(parser, parser);
     }
 
-    public Parser<List<A>> sepBy(Parse<?> parser) {
+    default Parser<List<A>> sepBy(Parser<?> parser) {
         return separatedBy(parser);
     }
 
-    public Parser<List<A>> sepBy1(Parse<?> parser) {
+    default Parser<List<A>> sepBy1(Parser<?> parser) {
         return sep(parser).many(1);
     }
 
-    public Parser<List<A>> separatedBy(Parse<?> parser) {
+    default Parser<List<A>> separatedBy(Parser<?> parser) {
         return sep(parser).many();
     }
 
-    private Parser<A> sep(Parse<?> parser) {return then(OptionalParser.optional(parser)).map(Callables.<A>first());}
+    default Parser<A> sep(Parser<?> parser) {return then(OptionalParser.optional(parser)).map(Callables.<A>first());}
 
-    public Parser<Sequence<A>> seqBy(Parse<?> parser) {
+    default Parser<Sequence<A>> seqBy(Parser<?> parser) {
         return sequencedBy(parser);
     }
 
-    public Parser<Sequence<A>> sequencedBy(Parse<?> parser) {
+    default Parser<Sequence<A>> sequencedBy(Parser<?> parser) {
         return sep(parser).sequence();
     }
 
-    public Parser<A> or(Parse<? extends A> parser) {
+    default Parser<A> or(Parser<? extends A> parser) {
         return Parsers.or(this, parser);
     }
 
-    public Parser<Option<A>> optional() {
+    default Parser<Option<A>> optional() {
         return OptionalParser.optional(this);
     }
 
-    public Result<A> parse(CharSequence value) {
+    default Result<A> parse(CharSequence value) {
         return parse(characters(value));
     }
 
-    public Result<A> parse(Reader value) {
+    default Result<A> parse(Reader value) {
         return parse(characters(value));
     }
 
-    public Result<A> parse(InputStream value) {
+    default Result<A> parse(InputStream value) {
         return parse(characters(new InputStreamReader(value, UTF8)));
     }
 
-    public Parser<Void> ignore() {
+    default Parser<Void> ignore() {
         return map(value -> null);
     }
 
-    public Parser<List<A>> times(int number) {
+    default Parser<List<A>> times(int number) {
         return Parsers.list(Sequences.repeat(this).take(number));
     }
 
-    public Parser<List<A>> many() {
+    default Parser<List<A>> many() {
         return ManyParser.many(this);
     }
 
-    public Parser<Sequence<A>> sequence() {
+    default Parser<Sequence<A>> sequence() {
         return SequenceParser.sequence(this);
     }
 
-    public Parser<A> pretty(String pretty) {
+    default Parser<A> pretty(String pretty) {
         return Parsers.pretty(pretty, this);
     }
 
-    public Parser<List<A>> many1() {
+    default Parser<List<A>> many1() {
         return many(1);
     }
 
-    public Parser<List<A>> many(int min) {
+    default Parser<List<A>> many(int min) {
         return times(min).then(many()).map(p -> join(p.first(), p.second()).toList());
     }
 
-    public Parser<A> debug(String name) {
+    default Parser<A> debug(String name) {
         return Parsers.debug(name, this);
     }
 
-    public <R> Parser<R> returns(R value) {
+    default <R> Parser<R> returns(R value) {
         return next(Parsers.returns(value));
     }
 
-    public Parser<A> peek() {
+    default Parser<A> peek() {
         return new PeekParser<>(this);
     }
 
-    public Parser<A> peek(Parser<A> parser) {
+    default Parser<A> peek(Parser<A> parser) {
         return followedBy(parser.peek());
     }
 
-    public Parser<A> infixLeft(Parser<? extends Binary<A>> op){
+    default Parser<A> infixLeft(Parser<? extends Binary<A>> op){
         return then(op.then(this).many()).map(pair ->
                 foldLeft(pair.second(), pair.first(), (a, p) -> p.first().call(a, p.second())));
     }
 
-    public Parser<A> infixRight(Parser<? extends Binary<A>> op){
+    default Parser<A> infixRight(Parser<? extends Binary<A>> op){
         return then(op).many().then(this).map(pair ->
                 foldRight(pair.first(), pair.second(), (p, a) -> p.second().call(p.first(), a)));
     }
 
-    public Parser<A> prefix(Parser<? extends Unary<A>> op){
+    default Parser<A> prefix(Parser<? extends Unary<A>> op){
         return op.many().then(this).map(pair ->
                 foldLeft(pair.first(), pair.second(), (a, p) -> p.call(a) ));
     }

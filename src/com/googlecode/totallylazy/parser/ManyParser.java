@@ -7,14 +7,14 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.parser.Success.success;
 
-class ManyParser<A> extends Parser<List<A>> {
-    private final Parse<? extends A> parser;
+class ManyParser<A> implements Parser<List<A>> {
+    private final Parser<? extends A> parser;
 
-    private ManyParser(Parse<? extends A> parser) {
+    private ManyParser(Parser<? extends A> parser) {
         this.parser = parser;
     }
 
-    static <A> ManyParser<A> many(Parse<? extends A> parser) {
+    static <A> ManyParser<A> many(Parser<? extends A> parser) {
         return new ManyParser<A>(parser);
     }
 

@@ -6,15 +6,15 @@ import com.googlecode.totallylazy.Sequences;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-class OrParser<A> extends Parser<A> {
-    private final Sequence<Parse<A>> parsers;
+class OrParser<A> implements Parser<A> {
+    private final Sequence<Parser<A>> parsers;
 
-    private OrParser(Sequence<Parse<A>> parsers) {
+    private OrParser(Sequence<Parser<A>> parsers) {
         this.parsers = parsers;
     }
 
-    static <A> OrParser<A> or(Iterable<? extends Parse<? extends A>> parsers) {
-        return new OrParser<A>(Sequences.sequence(parsers).<Parse<A>>unsafeCast());
+    static <A> OrParser<A> or(Iterable<? extends Parser<? extends A>> parsers) {
+        return new OrParser<A>(Sequences.sequence(parsers).<Parser<A>>unsafeCast());
     }
 
     @Override
@@ -25,7 +25,7 @@ class OrParser<A> extends Parser<A> {
     @Override
     public Result<A> parse(Segment<Character> characters) {
         Result<A> result = null;
-        for (Parse<A> parser : parsers) {
+        for (Parser<A> parser : parsers) {
             result = parser.parse(characters);
             if (result.success()) return result;
         }

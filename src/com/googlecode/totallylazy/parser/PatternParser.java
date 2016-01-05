@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import static com.googlecode.totallylazy.parser.CharacterSequence.charSequence;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-class PatternParser extends Parser<String> {
+class PatternParser implements Parser<String> {
     private final Pattern pattern;
 
     private PatternParser(Pattern pattern) {

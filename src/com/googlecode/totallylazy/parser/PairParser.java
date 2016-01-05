@@ -6,16 +6,16 @@ import com.googlecode.totallylazy.Segment;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.parser.Success.success;
 
-class PairParser<A, B> extends Parser<Pair<A, B>> {
-    private final Parse<? extends A> parserA;
-    private final Parse<? extends B> parserB;
+class PairParser<A, B> implements Parser<Pair<A, B>> {
+    private final Parser<? extends A> parserA;
+    private final Parser<? extends B> parserB;
 
-    private PairParser(Parse<? extends A> parserA, Parse<? extends B> parserB) {
+    private PairParser(Parser<? extends A> parserA, Parser<? extends B> parserB) {
         this.parserA = parserA;
         this.parserB = parserB;
     }
 
-    static <A, B> PairParser<A, B> pair(final Parse<? extends A> parserA, final Parse<? extends B> parserB) {
+    static <A, B> PairParser<A, B> pair(final Parser<? extends A> parserA, final Parser<? extends B> parserB) {
         return new PairParser<A, B>(parserA, parserB);
     }
 

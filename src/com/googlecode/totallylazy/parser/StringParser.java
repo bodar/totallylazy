@@ -4,7 +4,7 @@ import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.parser.Success.success;
 
-class StringParser extends Parser<String> {
+class StringParser implements Parser<String> {
     private final String expected;
 
     private StringParser(String expected) {
