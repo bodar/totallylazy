@@ -3,6 +3,8 @@ package com.googlecode.totallylazy;
 import static java.lang.management.ManagementFactory.getRuntimeMXBean;
 
 public class Debug {
+    private static final String TRACE_PROPERTY = "com.googlecode.totallylazy.trace";
+
     public static boolean inDebug() {
         return debugging();
     }
@@ -11,7 +13,11 @@ public class Debug {
         return getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
     }
 
-    public static void trace(Exception e) {if (debugging()) e.printStackTrace();}
+    public static void trace(Throwable throwable) {
+        if (debugging() && traceEnabled()) {
+            throwable.printStackTrace();
+        }
+    }
 
     public static class functions {
         public static <A,B> Mapper<A,B> trace(final Callable1<? super A,? extends B> callable) {
@@ -27,5 +33,10 @@ public class Debug {
                 }
             };
         }
+    }
+
+    private static boolean traceEnabled() {
+        String traceProperty = System.getProperty(TRACE_PROPERTY);
+        return traceProperty == null || Boolean.parseBoolean(traceProperty);
     }
 }
