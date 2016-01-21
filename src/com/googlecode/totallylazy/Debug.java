@@ -13,9 +13,9 @@ public class Debug {
         return getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
     }
 
-    public static void trace(Exception e) {
+    public static void trace(Throwable throwable) {
         if (debugging() && traceEnabled()) {
-            e.printStackTrace();
+            throwable.printStackTrace();
         }
     }
 
