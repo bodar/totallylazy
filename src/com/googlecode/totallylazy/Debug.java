@@ -2,9 +2,12 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.Function1;
 
+import static com.googlecode.totallylazy.Option.option;
 import static java.lang.management.ManagementFactory.getRuntimeMXBean;
 
 public class Debug {
+    private static final String TRACE_PROPERTY = "com.googlecode.totallylazy.trace";
+
     public static boolean inDebug() {
         return debugging();
     }
@@ -13,7 +16,11 @@ public class Debug {
         return getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
     }
 
-    public static void trace(Exception e) {if (debugging()) e.printStackTrace();}
+    public static void trace(Throwable throwable) {
+        if (debugging() && traceEnabled()) {
+            throwable.printStackTrace();
+        }
+    }
 
     public static class functions {
         public static <A,B> Function1<A,B> trace(final Function1<? super A,? extends B> callable) {
@@ -29,5 +36,11 @@ public class Debug {
                 }
             };
         }
+    }
+
+    private static boolean traceEnabled() {
+        return option(System.getProperty(TRACE_PROPERTY))
+                .map(Boolean::parseBoolean)
+                .getOrElse(true);
     }
 }
