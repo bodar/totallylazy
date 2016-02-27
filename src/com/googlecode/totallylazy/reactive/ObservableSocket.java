@@ -11,14 +11,14 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.googlecode.totallylazy.reactive.Observable.EMPTY_CLOSEABLE;
+import static com.googlecode.totallylazy.reactive.Next.next;
 
 public interface ObservableSocket {
     static Observable<AsynchronousSocketChannel> bind(SocketAddress socketAddress) throws IOException {
         AsynchronousServerSocketChannel server = AsynchronousServerSocketChannel.open().bind(socketAddress);
         System.out.println("socketAddress = " + server.getLocalAddress());
         return observer -> {
-            server.accept(server, completionHandler(observer, handler -> result -> attachment -> observer.next(result)));
+            server.accept(server, completionHandler(observer, handler -> result -> attachment -> observer.step(next(result))));
             return server::close;
         };
     }
@@ -29,12 +29,12 @@ public interface ObservableSocket {
             ByteBuffer buffer = ByteBuffer.allocate(4096);
             channel.read(buffer, channel, completionHandler(observer, handler -> result -> attachment -> {
                 if (result == -1) {
-                    observer.complete();
+                    observer.step(Complete.complete());
                     return;
                 }
                 System.out.println("read = " + result);
                 if(result > 0) {
-                    observer.next(buffer);
+                    observer.step(next(buffer));
                 }
                 if(!close.get()) attachment.read(buffer, attachment, handler);
             }));
@@ -51,7 +51,7 @@ public interface ObservableSocket {
 
             @Override
             public void failed(Throwable exc, B attachment) {
-                observer.error(exc);
+                observer.step(Error.error(exc));
             }
         };
     }

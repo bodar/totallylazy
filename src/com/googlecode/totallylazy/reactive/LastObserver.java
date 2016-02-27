@@ -2,6 +2,8 @@ package com.googlecode.totallylazy.reactive;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.googlecode.totallylazy.reactive.Next.next;
+
 public class LastObserver<T> implements Observer<T> {
     private final AtomicReference<T> reference = new AtomicReference<>();
     private final Observer<T> observer;
@@ -11,19 +13,15 @@ public class LastObserver<T> implements Observer<T> {
     }
 
     @Override
-    public void next(T value) {
-        reference.set(value);
-    }
-
-    @Override
-    public void error(Throwable error) {
-        observer.error(error);
-    }
-
-    @Override
-    public void complete() {
-        T t = reference.get();
-        if( t != null) observer.next(t);
-        observer.complete();
+    public void step(State<T> state) {
+        if(state instanceof Next) {
+            reference.set(state.value());
+            return;
+        }
+        if(state instanceof Complete) {
+            T t = reference.get();
+            if( t != null) observer.step(next(t));
+        }
+        observer.step(state);
     }
 }

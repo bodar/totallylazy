@@ -76,7 +76,7 @@ public class ObservableTest {
     public void supportsGroupBy() throws Exception {
         assertObserved(observable(1, 2, 3, 4, 5, 6, 7, 8, 9).
                         groupBy(i -> i % 2).
-                        flatMap(g -> g.toList()),
+                        flatMap(Observable::toList),
                 list(2,4,6,8), list(1,3,5,7,9));
     }
 

@@ -16,8 +16,8 @@ public class Group<K,T> implements Observable<T>, Key<K> {
         this.key = key;
     }
 
-    void observe(T t) {
-        for (Observer<T> observer : observers) observer.next(t);
+    void observe(State<T> t) {
+        for (Observer<T> observer : observers) observer.step(t);
     }
 
     @Override

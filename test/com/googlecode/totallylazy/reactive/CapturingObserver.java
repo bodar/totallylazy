@@ -14,21 +14,6 @@ public class CapturingObserver<T> implements Observer<T> {
     private final AtomicBoolean completed = new AtomicBoolean(false);
     private final AtomicReference<Throwable> error = new AtomicReference<>();
 
-    @Override
-    public void next(T value) {
-        items.add(value);
-    }
-
-    @Override
-    public void error(Throwable throwable) {
-        error.set(throwable);
-    }
-
-    @Override
-    public void complete() {
-        completed.set(true);
-    }
-
     public Sequence<T> items() {
         return sequence(items);
     }
@@ -39,5 +24,19 @@ public class CapturingObserver<T> implements Observer<T> {
 
     public Throwable error() {
         return error.get();
+    }
+
+    @Override
+    public void step(State<T> state) {
+        if (state instanceof Next) items.add(state.value());
+        if (state instanceof Error) {
+            try {
+                state.value();
+            } catch (Exception e) {
+                error.set(e);
+            }
+        }
+        ;
+        if (state instanceof Complete) completed.set(true);
     }
 }

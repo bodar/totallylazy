@@ -1,28 +1,63 @@
 package com.googlecode.totallylazy.reactive;
 
-import com.googlecode.totallylazy.Block;
+import com.googlecode.totallylazy.Function;
+import com.googlecode.totallylazy.Functor;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Value;
+
+import java.util.NoSuchElementException;
+
+import static com.googlecode.totallylazy.Unchecked.cast;
 
 public interface Observer<T> {
-    void next(T value);
+    void step(State<T> state);
+}
 
-    default T nextR(T value) {
-        next(value);
-        return value;
+interface State<A> extends Value<A>, Functor<A> {
+    default boolean matches(Predicate<? super A> predicate) {
+        return false;
     }
 
-    void error(Throwable throwable);
-
-    void complete();
-
-    public static <T> Observer<T> observer(Block<? super T> next, Block<? super Throwable> error, Runnable complete) {
-        return new BaseObserver<T>(next, error, complete);
+    @Override
+    default <S> State<S> map(Function<? super A, ? extends S> callable) {
+        return cast(this);
     }
 
-    public static <T> Observer<T> observer(Block<? super T> block, Observer<?> observer) {
-        return observer(block, observer::error, observer::complete);
+    @Override
+    default A value() {
+        throw new NoSuchElementException();
     }
+}
 
-    public static <T> Observer<T> observer(Observer<T> observer) {
-        return observer(observer::next, observer);
+interface Next<A> extends State<A> {
+    static <A> Next<A> next(A a) {
+        return new Next<A>() {
+            @Override
+            public A value() {return a;}
+
+            @Override
+            public boolean matches(Predicate<? super A> predicate) {
+                return predicate.matches(value());
+            }
+
+            @Override
+            public <S> State<S> map(Function<? super A, ? extends S> callable) {
+                return Next.next(callable.apply(value()));
+            }
+        };
+    }
+}
+
+interface Error<A> extends State<A> {
+    Throwable throwable();
+
+    static <A> Error<A> error(Throwable throwable) {
+        return () -> throwable;
+    }
+}
+
+interface Complete<A> extends State<A> {
+    static <A> Complete<A> complete() {
+        return new Complete<A>() { };
     }
 }
