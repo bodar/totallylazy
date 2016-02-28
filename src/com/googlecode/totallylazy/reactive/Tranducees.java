@@ -6,6 +6,7 @@ import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Reducer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -21,20 +22,24 @@ public interface Tranducees {
         return observer -> state -> observer.step(state.map(mapper));
     }
 
+    default <A> Transducee<A, A> flatMap(Function<? super A, ? extends Transducee<A, A>> mapper) {
+        return flatten(map(mapper));
+    }
+
+    static <A> Transducee<A, A> flatten(Transducee<A, Transducee<A, A>> transducee) {
+        return observer -> outerState -> transducee.apply(innerState -> {
+            if(innerState instanceof Next) {
+                innerState.value().apply(observer).step(outerState);
+                return;
+            }
+            observer.step(cast(innerState));
+        });
+    }
+
     static <A> Transducee<A, A> filter(Predicate<? super A> predicate) {
         return observer -> state -> {
             if (state instanceof Next && !state.matches(predicate)) return;
             observer.step(state);
-        };
-    }
-
-    static <A, B> Transducee<A, B> flatMap(Function<? super A, ? extends Observable<B>> mapper) {
-        return observer -> state -> {
-            if (state instanceof Next) {
-                state.map(mapper).value().subscribe(observer);
-                return;
-            }
-            observer.step(cast(state));
         };
     }
 
@@ -67,6 +72,19 @@ public interface Tranducees {
                 T t = reference.get();
                 if (t != null) observer.step(next(t));
             }
+            observer.step(state);
+        };
+    }
+
+    static <A> Transducee<A, A> take(int limit) {
+        AtomicInteger count = new AtomicInteger();
+        return observer -> state -> {
+            int position = count.getAndIncrement();
+            if (position == limit) {
+                observer.step(Complete.complete());
+                return;
+            }
+            if (position > limit) return;
             observer.step(state);
         };
     }

@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.reactive;
 
-import com.googlecode.totallylazy.Block;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
@@ -12,12 +11,12 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Predicates.whileFalse;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.reactive.Next.next;
 
 public interface Observable<T> extends Filterable<T>, Functor<T> {
@@ -34,7 +33,9 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
 
     static <T> Observable<T> observable(Iterable<? extends T> values) {
         return observer -> {
-            for (T value : values) observer.step(next(value));
+            for (T value : values) {
+                observer.step(next(value));
+            }
             observer.step(Complete.complete());
             return EMPTY_CLOSEABLE;
         };
@@ -51,7 +52,17 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     default <R> Observable<R> flatMap(Function<? super T, ? extends Observable<R>> mapper) {
-        return transduce(Tranducees.flatMap(mapper));
+        return flatten(map(mapper));
+    }
+
+    static <R> Observable<R> flatten(Observable<Observable<R>> nested) {
+        return observer -> nested.subscribe(state -> {
+            if(state instanceof Next) {
+                state.value().subscribe(observer);
+                return;
+            }
+            observer.step(cast(state));
+        });
     }
 
     default <S> Observable<S> scan(S seed, Function2<? super S, ? super T, ? extends S> reducer) {
@@ -74,8 +85,8 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
         return transduce(Tranducees.reduce(reducer));
     }
 
-    default Observable<T> take(int count) {
-        return takeWhile(countTo(count));
+    default Observable<T> take(int limit) {
+        return transduce(Tranducees.take(limit));
     }
 
     default Observable<T> takeWhile(Predicate<? super T> predicate) {

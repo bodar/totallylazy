@@ -1,14 +1,5 @@
 package com.googlecode.totallylazy.reactive;
 
-import com.googlecode.totallylazy.Function;
-import com.googlecode.totallylazy.Functor;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.Value;
-
-import java.util.NoSuchElementException;
-
-import static com.googlecode.totallylazy.Unchecked.cast;
-
 public interface Observer<T> {
     void step(State<T> state);
 }
