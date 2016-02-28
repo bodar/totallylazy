@@ -3,7 +3,7 @@ package com.googlecode.totallylazy;
 public interface Reducible<A> {
     <S> S reduce(S seed, Function2<? super S, ? super A, ? extends S> callable);
 
-    default <S> S reduce(Reducer<? super A, S> callable) {
+    default <S> S reduce(Reducer<S, ? super A> callable) {
         return reduce(callable.identityElement(), callable);
     }
 

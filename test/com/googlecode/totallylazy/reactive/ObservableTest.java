@@ -9,7 +9,11 @@ import static com.googlecode.totallylazy.Predicates.nullValue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.average;
+import static com.googlecode.totallylazy.numbers.Numbers.even;
 import static com.googlecode.totallylazy.reactive.Observable.observable;
+import static com.googlecode.totallylazy.reactive.Tranducees.compose;
+import static com.googlecode.totallylazy.reactive.Tranducees.filter;
+import static com.googlecode.totallylazy.reactive.Tranducees.map;
 
 public class ObservableTest {
     @Test
@@ -88,6 +92,12 @@ public class ObservableTest {
     @Test
     public void supportsToSequence() throws Exception {
         assertObserved(observable(1, 2, 3, 4).toSequence(), sequence(1, 2, 3, 4));
+    }
+
+    @Test
+    public void supportsTransducers() throws Exception {
+        Transducee<Integer, Integer> transducee = compose(filter(even), map(x -> x * 2));
+        assertObserved(observable(1, 2, 3, 4).transduce(transducee), 4, 8);
     }
 
 

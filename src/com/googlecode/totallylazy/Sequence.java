@@ -1,9 +1,16 @@
 package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.collections.AbstractCollection;
+import com.googlecode.totallylazy.iterators.StatefulIterator;
+import com.googlecode.totallylazy.reactive.Next;
+import com.googlecode.totallylazy.reactive.Tranducees;
+import com.googlecode.totallylazy.reactive.Transducee;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -75,7 +82,8 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
 
     @Override
     public <S> Sequence<S> map(Function<? super T, ? extends S> callable) {
-        return Sequences.map(this, callable);
+        return transduce(Tranducees.map(callable));
+//        return Sequences.map(this, callable);
     }
 
     @Override
@@ -85,7 +93,8 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
 
     @Override
     public Sequence<T> filter(Predicate<? super T> predicate) {
-        return Sequences.filter(this, predicate);
+        return transduce(Tranducees.filter(predicate));
+//        return Sequences.filter(this, predicate);
     }
 
     @Override
@@ -332,5 +341,31 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
     @Override
     public Sequence<Sequence<T>> grouped(int size) {
         return Sequences.grouped(this, size);
+    }
+
+    public <R> Sequence<R> transduce(Transducee<T, R> transducee) {
+        return new Sequence<R>() {
+            @Override
+            public Iterator<R> iterator() {
+                Iterator<T> iterator = Sequence.this.iterator();
+                return new StatefulIterator<R>() {
+                    @Override
+                    protected R getNext() throws Exception {
+                        AtomicBoolean set = new AtomicBoolean();
+                        AtomicReference<R> reference = new AtomicReference<>();
+                        while (!set.get()) {
+                            if (!iterator.hasNext()) return finished();
+                            T t = iterator.next();
+                            transducee.apply(state -> {
+                                reference.set(state.value());
+                                set.set(true);
+                            }).step(Next.next(t));
+                            if (set.get()) return reference.get();
+                        }
+                        throw new UnsupportedOperationException();
+                    }
+                };
+            }
+        };
     }
 }

@@ -39,6 +39,6 @@ class GroupObserver<T, K> implements Observer<T> {
     }
 
     private Sequence<Observer<T>> observers() {
-        return sequence(groups.values()).flatMap(Group<K, T>::observers);
+        return sequence(groups.values()).flatMap(Group::observers);
     }
 }
