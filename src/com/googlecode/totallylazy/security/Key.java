@@ -34,16 +34,32 @@ public class Key implements Value<String> {
     }
 
     public String encrypt(String value) {
+        return Base64.encode(gzipAndEncrypt(value));
+    }
+
+    public String encryptUrlSafe(String value) {
+        return Base64.encodeUrlSafe(gzipAndEncrypt(value));
+    }
+
+    private byte[] gzipAndEncrypt(String value) {
         try {
-            return Base64.encode(encrypt(gzip(bytes(value))));
+            return encrypt(gzip(bytes(value)));
         } catch (Exception e) {
             throw LazyException.lazyException(e);
         }
     }
 
     public String decrypt(String value) {
+        return decryptAndUnzip(Base64.decode(value));
+    }
+
+    public String decryptUrlSafe(String value) {
+        return decryptAndUnzip(Base64.decodeUrlSafe(value));
+    }
+
+    private String decryptAndUnzip(byte[] decode) {
         try {
-            return string(ungzip(decrypt(Base64.decode(value))));
+            return string(ungzip(decrypt(decode)));
         } catch (Exception e) {
             throw LazyException.lazyException(e);
         }
