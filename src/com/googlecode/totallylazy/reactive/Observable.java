@@ -10,6 +10,7 @@ import com.googlecode.totallylazy.Reducer;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Functions.identity;
@@ -31,9 +32,14 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     static <T> Observable<T> observable(Iterable<? extends T> values) {
+        return observable(values.iterator());
+    }
+
+    static <T> Observable<T> observable(Iterator<? extends T> iterator) {
         return observer -> {
             if (observer.start().equals(Stop)) return EMPTY_CLOSEABLE;
-            for (T value : values) {
+            while (iterator.hasNext()) {
+                T value = iterator.next();
                 if (observer.next(value).equals(Stop)) break;
             }
             observer.finish();
@@ -100,7 +106,11 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     default <R> Observable<R> transduce(Transducer<T, R> transducer) {
-        return observer -> Observable.this.subscribe(transducer.apply(observer));
+        return transduce(this, transducer);
+    }
+
+    static <T, R> Observable<R> transduce(Observable<T> observable, Transducer<T, R> transducer) {
+        return observer -> observable.subscribe(transducer.apply(observer));
     }
 
     default Observable<List<T>> toList() {

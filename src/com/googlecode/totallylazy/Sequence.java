@@ -352,19 +352,34 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
                 return new StatefulIterator<R>() {
                     @Override
                     protected R getNext() throws Exception {
-                        AtomicBoolean set = new AtomicBoolean();
                         AtomicReference<R> reference = new AtomicReference<>();
-                        while (!set.get()) {
-                            if (!iterator.hasNext()) return finished();
+                        while (iterator.hasNext()) {
                             T t = iterator.next();
-                            transducer.apply(Observer.observer(null, item -> {
-                                reference.set(item);
-                                set.set(true);
-                                return State.Continue;
-                            })).next(t);
-                            if (set.get()) return reference.get();
+
+                            if (transducer.apply(new Observer<R>() {
+                                @Override
+                                public State start() {
+                                    return null;
+                                }
+
+                                @Override
+                                public State next(R item) {
+                                    reference.set(item);
+                                    return State.Stop;
+                                }
+
+                                @Override
+                                public void error(Throwable throwable) {
+
+                                }
+
+                                @Override
+                                public void finish() {
+
+                                }
+                            }).next(t).equals(State.Stop)) return reference.get();
                         }
-                        throw new UnsupportedOperationException();
+                        return finished();
                     }
                 };
             }

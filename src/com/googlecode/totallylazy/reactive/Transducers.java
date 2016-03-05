@@ -52,23 +52,7 @@ public interface Transducers {
     }
 
     static <A> Transducer<A, A> take(int limit) {
-        AtomicInteger count = new AtomicInteger();
-        return observer -> Observer.observer(observer, () -> {
-            observer.start();
-            if (limit == 0) {
-                observer.finish();
-                return Stop;
-            } else return Continue;
-        }, item -> {
-            int position = count.incrementAndGet();
-            if (position == limit) {
-                observer.next(item);
-                observer.finish();
-                return Stop;
-            }
-            if (position > limit) return Stop;
-            return observer.next(item);
-        });
+        return TakeTransducer.takeTransducer(limit);
     }
 
     static <A> Transducer<A, A> takeWhile(Predicate<? super A> predicate) {
