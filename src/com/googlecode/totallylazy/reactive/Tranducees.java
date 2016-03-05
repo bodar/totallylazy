@@ -23,6 +23,18 @@ public interface Tranducees {
                 item -> observer.next(mapper.apply(item)));
     }
 
+    static <A, B> Transducee<A, B> flatMap(Function<? super A, ? extends Observable<B>> mapper) {
+        AtomicBoolean complete = new AtomicBoolean(false);
+        return observer -> Observer.observer(observer, a -> {
+            mapper.apply(a).subscribe(Observer.observer(observer, b -> {
+                        State state = observer.next(b);
+                        if(state.equals(Stop)) complete.set(true);
+                        return state;
+                    }));
+                    return complete.get() ? Stop : Continue;
+                });
+    }
+
     static <A> Transducee<A, A> filter(Predicate<? super A> predicate) {
         return observer -> Observer.observer(observer, item -> {
             if (!predicate.matches(item)) return Continue;
@@ -69,8 +81,7 @@ public interface Tranducees {
             if (limit == 0) {
                 observer.finish();
                 return Stop;
-            }
-            else return Continue;
+            } else return Continue;
         }, item -> {
             int position = count.incrementAndGet();
             if (position == limit) {

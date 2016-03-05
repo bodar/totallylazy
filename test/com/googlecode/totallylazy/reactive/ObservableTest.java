@@ -13,6 +13,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
+import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.reactive.Observable.observable;
 import static com.googlecode.totallylazy.reactive.Tranducees.compose;
 import static com.googlecode.totallylazy.reactive.Tranducees.filter;
@@ -40,6 +41,11 @@ public class ObservableTest {
     }
 
     @Test
+    public void flatMappingTerminatesEarly() throws Exception {
+        assertObserved(observable(range(1)).flatMap((Number i) -> observable(i, i.intValue() * 2)).take(6), 1, 2, 2, 4, 3, 6);
+    }
+
+    @Test
     public void supportsScan() throws Exception {
         assertObserved(observable(0, 2, 4).scan(average).map(Number::intValue), 0, 1, 2);
     }
@@ -57,12 +63,14 @@ public class ObservableTest {
 
     @Test
     public void supportsTake() throws Exception {
-        assertObserved(observable(1, 2, 3, 4, 5, 6).take(3),
-                1, 2, 3);
+        assertObserved(observable(1, 2, 3, 4, 5, 6).take(0));
+        assertObserved(observable(1, 2, 3, 4, 5, 6).take(1), 1);
+        assertObserved(observable(1, 2, 3, 4, 5, 6).take(3), 1, 2, 3);
+        assertObserved(observable(1, 2, 3, 4, 5, 6).take(6), 1, 2, 3, 4, 5, 6);
     }
 
     @Test
-    public void supportsTakeTerminatesEarly() throws Exception {
+    public void takeTerminatesEarly() throws Exception {
         assertObserved(observable(repeat(() -> {
             throw new NoSuchElementException();
         })).take(0));
@@ -91,7 +99,7 @@ public class ObservableTest {
         assertObserved(observable(1, 2, 3, 4, 5, 6, 7, 8, 9).
                         groupBy(i -> i % 2).
                         flatMap(Observable::toList),
-                list(2,4,6,8), list(1,3,5,7,9));
+                list(2, 4, 6, 8), list(1, 3, 5, 7, 9));
     }
 
     @Test
@@ -109,7 +117,6 @@ public class ObservableTest {
         Transducee<Integer, Integer> transducee = compose(filter(even), map(x -> x * 2));
         assertObserved(observable(1, 2, 3, 4).transduce(transducee), 4, 8);
     }
-
 
     @SafeVarargs
     private final <T> void assertObserved(Observable<T> observable, T... values) {

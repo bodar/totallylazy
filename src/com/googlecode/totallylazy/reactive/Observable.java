@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.reactive;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
+import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Lists;
 import com.googlecode.totallylazy.Predicate;
@@ -12,6 +13,7 @@ import com.googlecode.totallylazy.Sequences;
 
 import java.util.List;
 
+import static com.googlecode.totallylazy.Functions.identity;
 import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Predicates.whileFalse;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -52,14 +54,11 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     default <R> Observable<R> flatMap(Function<? super T, ? extends Observable<R>> mapper) {
-        return flatten(map(mapper));
+        return transduce(Tranducees.flatMap(mapper));
     }
 
     static <R> Observable<R> flatten(Observable<Observable<R>> nested) {
-        return observer -> nested.subscribe(Observer.observer(observer, item -> {
-            item.subscribe(observer);
-            return State.Continue;
-        }));
+        return nested.flatMap(identity());
     }
 
     default <S> Observable<S> scan(S seed, Function2<? super S, ? super T, ? extends S> reducer) {
