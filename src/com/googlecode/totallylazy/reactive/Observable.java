@@ -3,7 +3,6 @@ package com.googlecode.totallylazy.reactive;
 import com.googlecode.totallylazy.Filterable;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Function2;
-import com.googlecode.totallylazy.Functions;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Lists;
 import com.googlecode.totallylazy.Predicate;
@@ -14,7 +13,6 @@ import com.googlecode.totallylazy.Sequences;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Functions.identity;
-import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Predicates.whileFalse;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.reactive.State.Stop;
@@ -45,16 +43,16 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
 
     @Override
     default Observable<T> filter(Predicate<? super T> predicate) {
-        return transduce(Tranducees.filter(predicate));
+        return transduce(Transducers.filter(predicate));
     }
 
     @Override
     default <R> Observable<R> map(Function<? super T, ? extends R> mapper) {
-        return transduce(Tranducees.map(mapper));
+        return transduce(Transducers.map(mapper));
     }
 
     default <R> Observable<R> flatMap(Function<? super T, ? extends Observable<R>> mapper) {
-        return transduce(Tranducees.flatMap(mapper));
+        return transduce(Transducers.flatMap(mapper));
     }
 
     static <R> Observable<R> flatten(Observable<Observable<R>> nested) {
@@ -62,35 +60,35 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     default <S> Observable<S> scan(S seed, Function2<? super S, ? super T, ? extends S> reducer) {
-        return transduce(Tranducees.scan(seed, reducer));
+        return transduce(Transducers.scan(seed, reducer));
     }
 
     default <S> Observable<S> scan(Reducer<S, ? super T> reducer) {
-        return transduce(Tranducees.scan(reducer));
+        return transduce(Transducers.scan(reducer));
     }
 
     default Observable<T> last() {
-        return transduce(Tranducees.last());
+        return transduce(Transducers.last());
     }
 
     default <S> Observable<S> reduce(S seed, Function2<? super S, ? super T, ? extends S> reducer) {
-        return transduce(Tranducees.reduce(seed, reducer));
+        return transduce(Transducers.reduce(seed, reducer));
     }
 
     default <S> Observable<S> reduce(Reducer<S, ? super T> reducer) {
-        return transduce(Tranducees.reduce(reducer));
+        return transduce(Transducers.reduce(reducer));
     }
 
     default Observable<T> take(int limit) {
-        return transduce(Tranducees.take(limit));
+        return transduce(Transducers.take(limit));
     }
 
     default Observable<T> takeWhile(Predicate<? super T> predicate) {
-        return transduce(Tranducees.takeWhile(predicate));
+        return transduce(Transducers.takeWhile(predicate));
     }
 
     default Observable<T> drop(int count) {
-        return dropWhile(countTo(count));
+        return transduce(Transducers.drop(count));
     }
 
     default Observable<T> dropWhile(Predicate<? super T> predicate) {
@@ -98,11 +96,11 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     default <K> Observable<Group<K, T>> groupBy(Function<? super T, ? extends K> keyExtractor) {
-        return observer -> Observable.this.subscribe(new GroupObserver<>(keyExtractor, observer));
+        return transduce(Transducers.groupBy(keyExtractor));
     }
 
-    default <R> Observable<R> transduce(Transducee<T, R> transducee) {
-        return observer -> Observable.this.subscribe(transducee.apply(observer));
+    default <R> Observable<R> transduce(Transducer<T, R> transducer) {
+        return observer -> Observable.this.subscribe(transducer.apply(observer));
     }
 
     default Observable<List<T>> toList() {

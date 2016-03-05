@@ -4,8 +4,8 @@ import com.googlecode.totallylazy.collections.AbstractCollection;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
 import com.googlecode.totallylazy.reactive.Observer;
 import com.googlecode.totallylazy.reactive.State;
-import com.googlecode.totallylazy.reactive.Tranducees;
-import com.googlecode.totallylazy.reactive.Transducee;
+import com.googlecode.totallylazy.reactive.Transducers;
+import com.googlecode.totallylazy.reactive.Transducer;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -83,7 +83,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
 
     @Override
     public <S> Sequence<S> map(Function<? super T, ? extends S> callable) {
-        return transduce(Tranducees.map(callable));
+        return transduce(Transducers.map(callable));
 //        return Sequences.map(this, callable);
     }
 
@@ -94,7 +94,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
 
     @Override
     public Sequence<T> filter(Predicate<? super T> predicate) {
-        return transduce(Tranducees.filter(predicate));
+        return transduce(Transducers.filter(predicate));
 //        return Sequences.filter(this, predicate);
     }
 
@@ -344,7 +344,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
         return Sequences.grouped(this, size);
     }
 
-    public <R> Sequence<R> transduce(Transducee<T, R> transducee) {
+    public <R> Sequence<R> transduce(Transducer<T, R> transducer) {
         return new Sequence<R>() {
             @Override
             public Iterator<R> iterator() {
@@ -357,7 +357,7 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
                         while (!set.get()) {
                             if (!iterator.hasNext()) return finished();
                             T t = iterator.next();
-                            transducee.apply(Observer.observer(null, item -> {
+                            transducer.apply(Observer.observer(null, item -> {
                                 reference.set(item);
                                 set.set(true);
                                 return State.Continue;

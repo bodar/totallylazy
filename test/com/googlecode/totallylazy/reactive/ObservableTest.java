@@ -15,9 +15,9 @@ import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.numbers.Numbers.even;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
 import static com.googlecode.totallylazy.reactive.Observable.observable;
-import static com.googlecode.totallylazy.reactive.Tranducees.compose;
-import static com.googlecode.totallylazy.reactive.Tranducees.filter;
-import static com.googlecode.totallylazy.reactive.Tranducees.map;
+import static com.googlecode.totallylazy.reactive.Transducers.compose;
+import static com.googlecode.totallylazy.reactive.Transducers.filter;
+import static com.googlecode.totallylazy.reactive.Transducers.map;
 
 public class ObservableTest {
     @Test
@@ -114,8 +114,8 @@ public class ObservableTest {
 
     @Test
     public void supportsTransducers() throws Exception {
-        Transducee<Integer, Integer> transducee = compose(filter(even), map(x -> x * 2));
-        assertObserved(observable(1, 2, 3, 4).transduce(transducee), 4, 8);
+        assertObserved(observable(1, 2, 3, 4).
+                transduce(compose(filter(even), map(x -> x * 2))), 4, 8);
     }
 
     @SafeVarargs

@@ -1,10 +1,7 @@
 package com.googlecode.totallylazy;
 
-import com.googlecode.totallylazy.reactive.Transducee;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 public interface Reducible<A> {
     <S> S reduce(S seed, Function2<? super S, ? super A, ? extends S> callable);
