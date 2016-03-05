@@ -3,8 +3,6 @@ package com.googlecode.totallylazy.reactive;
 import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Returns;
 
-import java.util.concurrent.Callable;
-
 public interface Observer<T> {
     State start();
 
@@ -14,7 +12,19 @@ public interface Observer<T> {
 
     void finish();
 
+    static <T> Observer<T> observer(Observer<?> delegate, Function<T, State> function) {
+        return observer(delegate, delegate::start, function);
+    }
+
     static <T> Observer<T> observer(Observer<?> delegate, Returns<State> start, Function<T, State> function) {
+        return observer(delegate, start, function, delegate::finish);
+    }
+
+    static <T> Observer<T> observer(Observer<?> delegate, Function<T, State> function, Runnable finished) {
+        return observer(delegate, delegate::start, function, finished);
+    }
+
+    static <T> Observer<T> observer(Observer<?> delegate, Returns<State> start, Function<T, State> function, Runnable finished) {
         return new Delegate<T>() {
             @Override
             public Observer<?> delegate() {
@@ -30,34 +40,6 @@ public interface Observer<T> {
             public State next(T item) {
                 return function.apply(item);
             }
-        };
-    }
-
-    static <T> Observer<T> observer(Observer<?> delegate, Function<T, State> function) {
-        return new Delegate<T>() {
-            @Override
-            public Observer<?> delegate() {
-                return delegate;
-            }
-
-            @Override
-            public State next(T item) {
-                return function.apply(item);
-            }
-        };
-    }
-
-    static <T> Observer<T> observer(Observer<?> delegate, Function<T, State> function, Runnable finished) {
-        return new Delegate<T>() {
-            @Override
-            public Observer<?> delegate() {
-                return delegate;
-            }
-
-            @Override
-            public State next(T item) {
-                return function.apply(item);
-            }
 
             @Override
             public void finish() {
@@ -65,7 +47,6 @@ public interface Observer<T> {
             }
         };
     }
-
 
     interface Delegate<T> extends Observer<T> {
         Observer<?> delegate();
