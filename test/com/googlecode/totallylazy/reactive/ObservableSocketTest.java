@@ -42,6 +42,6 @@ public class ObservableSocketTest {
         Thread.sleep(1000);
         assertThat(observer.items().first(), Strings.startsWith("GET /"));
         assertThat(observer.error(), nullValue());
-        assertThat(observer.completed(), is(false));
+        assertThat(observer.finished(), is(false));
     }
 }

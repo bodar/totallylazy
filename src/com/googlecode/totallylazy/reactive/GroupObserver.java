@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.reactive.Next.next;
 
 class GroupObserver<T, K> implements Observer<T> {
     private final Map<K, Group<K, T>> groups = new ConcurrentHashMap<>();
@@ -20,22 +19,31 @@ class GroupObserver<T, K> implements Observer<T> {
     }
 
     @Override
-    public void step(State<T> state) {
-        if(state instanceof Next) {
-            groups.computeIfAbsent(keyExtractor.apply(state.value()), k -> {
-                Group<K, T> group = new Group<>(k);
-                observer.step(next(group));
-                return group;
-            }).observe(state);
-        }
-        if(state instanceof Error){
-            observers().each(o -> o.step(state));
-            observer.step(Error.error(((Error) state).throwable()));
-        }
-        if(state instanceof Complete){
-            observers().each(o -> o.step(state));
-            observer.step(Complete.complete());
-        }
+    public State start() {
+        observers().each(Observer::start);
+        return observer.start();
+    }
+
+    @Override
+    public State next(T item) {
+        groups.computeIfAbsent(keyExtractor.apply(item), k -> {
+            Group<K, T> group = new Group<>(k);
+            observer.next(group);
+            return group;
+        }).observe(item);
+        return State.Continue;
+    }
+
+    @Override
+    public void error(Throwable throwable) {
+        observers().each(o -> o.error(throwable));
+        observer.error(throwable);
+    }
+
+    @Override
+    public void finish() {
+        observers().each(Observer::finish);
+        observer.finish();
     }
 
     private Sequence<Observer<T>> observers() {

@@ -2,10 +2,13 @@ package com.googlecode.totallylazy.reactive;
 
 import org.junit.Test;
 
+import java.util.NoSuchElementException;
+
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.nullValue;
+import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterablePredicates.hasExactly;
 import static com.googlecode.totallylazy.numbers.Numbers.average;
@@ -59,6 +62,13 @@ public class ObservableTest {
     }
 
     @Test
+    public void supportsTakeTerminatesEarly() throws Exception {
+        assertObserved(observable(repeat(() -> {
+            throw new NoSuchElementException();
+        })).take(0));
+    }
+
+    @Test
     public void supportsTakeWhile() throws Exception {
         assertObserved(observable(1, 2, 3, 4, 5, 6).takeWhile(i -> i < 4),
                 1, 2, 3);
@@ -107,6 +117,7 @@ public class ObservableTest {
         observable.subscribe(observer);
         assertThat(observer.items(), hasExactly(values));
         assertThat(observer.error(), nullValue());
-        assertThat(observer.completed(), is(true));
+        assertThat(observer.started(), is(true));
+        assertThat(observer.finished(), is(true));
     }
 }

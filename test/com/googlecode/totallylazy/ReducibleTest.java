@@ -2,6 +2,7 @@ package com.googlecode.totallylazy;
 
 import org.junit.Test;
 
+import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Predicates.is;
@@ -23,4 +24,22 @@ public class ReducibleTest {
                 filter(ReducibleTest::even).
                 reduce(lcm), is(4));
     }
+
+    @Test
+    public void supportsTake() throws Exception {
+        assertThat(sequence(1, 2, 3, 4).
+                reducible().
+                take(2).
+                reduce(Lists.functions.add()), is(list(1,2)));
+    }
+
+    @Test
+    public void supportsTakeWhile() throws Exception {
+        assertThat(sequence(1, 2, 3, 4).
+                reducible().
+                takeWhile(x -> x < 3).
+                reduce(Lists.functions.add()), is(list(1,2)));
+    }
+
+
 }

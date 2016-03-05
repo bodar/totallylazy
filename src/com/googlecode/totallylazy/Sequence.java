@@ -2,7 +2,8 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.collections.AbstractCollection;
 import com.googlecode.totallylazy.iterators.StatefulIterator;
-import com.googlecode.totallylazy.reactive.Next;
+import com.googlecode.totallylazy.reactive.Observer;
+import com.googlecode.totallylazy.reactive.State;
 import com.googlecode.totallylazy.reactive.Tranducees;
 import com.googlecode.totallylazy.reactive.Transducee;
 
@@ -356,10 +357,11 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Seq<T
                         while (!set.get()) {
                             if (!iterator.hasNext()) return finished();
                             T t = iterator.next();
-                            transducee.apply(state -> {
-                                reference.set(state.value());
+                            transducee.apply(Observer.observer(null, item -> {
+                                reference.set(item);
                                 set.set(true);
-                            }).step(Next.next(t));
+                                return State.Continue;
+                            })).next(t);
                             if (set.get()) return reference.get();
                         }
                         throw new UnsupportedOperationException();

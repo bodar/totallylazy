@@ -12,16 +12,15 @@ import com.googlecode.totallylazy.Sequences;
 
 import java.util.List;
 
-import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Predicates.countTo;
 import static com.googlecode.totallylazy.Predicates.whileFalse;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Unchecked.cast;
-import static com.googlecode.totallylazy.reactive.Next.next;
+import static com.googlecode.totallylazy.reactive.State.Stop;
 
 public interface Observable<T> extends Filterable<T>, Functor<T> {
 
-    AutoCloseable EMPTY_CLOSEABLE = () -> { };
+    AutoCloseable EMPTY_CLOSEABLE = () -> {
+    };
 
     AutoCloseable subscribe(Observer<T> observer);
 
@@ -33,10 +32,11 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
 
     static <T> Observable<T> observable(Iterable<? extends T> values) {
         return observer -> {
+            if (observer.start().equals(Stop)) return EMPTY_CLOSEABLE;
             for (T value : values) {
-                observer.step(next(value));
+                if (observer.next(value).equals(Stop)) break;
             }
-            observer.step(Complete.complete());
+            observer.finish();
             return EMPTY_CLOSEABLE;
         };
     }
@@ -56,13 +56,10 @@ public interface Observable<T> extends Filterable<T>, Functor<T> {
     }
 
     static <R> Observable<R> flatten(Observable<Observable<R>> nested) {
-        return observer -> nested.subscribe(state -> {
-            if(state instanceof Next) {
-                state.value().subscribe(observer);
-                return;
-            }
-            observer.step(cast(state));
-        });
+        return observer -> nested.subscribe(Observer.observer(observer, item -> {
+            item.subscribe(observer);
+            return State.Continue;
+        }));
     }
 
     default <S> Observable<S> scan(S seed, Function2<? super S, ? super T, ? extends S> reducer) {
