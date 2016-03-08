@@ -1,17 +1,22 @@
 package com.googlecode.totallylazy.transducers;
 
+import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.numbers.Numbers.average;
 import static com.googlecode.totallylazy.numbers.Numbers.range;
+import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
+import static com.googlecode.totallylazy.predicates.Predicates.sameInstance;
 import static com.googlecode.totallylazy.transducers.Sender.sender;
 import static com.googlecode.totallylazy.transducers.Sender.transduce;
 import static com.googlecode.totallylazy.transducers.Transducers.filter;
@@ -93,9 +98,11 @@ public class SenderTest {
 
     @Test
     public void supportsGroupBy() throws Exception {
-        assertReceived(sender(1, 2, 3, 4, 5, 6, 7, 8, 9).
-                        groupBy(i -> i % 2).
-                        flatMap(Sender::toList),
+        Sender<List<Integer>> sender = sender(1, 2, 3, 4, 5, 6, 7, 8, 9).
+                groupBy(i -> i % 2).
+                flatMap(Sender::toList);
+
+        assertReceived(sender,
                 list(2, 4, 6, 8), list(1, 3, 5, 7, 9));
     }
 
@@ -111,7 +118,7 @@ public class SenderTest {
 
     @Test
     public void supportsTransducers() throws Exception {
-        assertReceived(transduce(sender(1, 2, 3, 4), filter((Integer x) -> x % 2 == 0).map(x -> x * 2)), 4, 8);
+        assertReceived(sender(1, 2, 3, 4).transduce(filter((Integer x) -> x % 2 == 0).map(x -> x * 2)), 4, 8);
     }
 
     @SafeVarargs
@@ -122,5 +129,22 @@ public class SenderTest {
         assertThat(observer.error(), nullValue());
         assertThat(observer.started(), is(true));
         assertThat(observer.finished(), is(true));
+    }
+
+    @Test
+    public void canDecomposeTransducers() throws Exception {
+        Sender<Integer> original = sender(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        Sender<List<Integer>> composed = original.
+                groupBy(i -> i % 2).
+                flatMap(Sender::toList).
+                last();
+
+        CompositeSender<Integer,List<Integer>> compositeSender = cast(composed);
+        assertThat(compositeSender.sender(), sameInstance(original));
+        List<Transducer<?, ?>> transducers = compositeSender.transducers();
+        assertThat(transducers.size(), is(3));
+        assertThat(transducers.get(0), instanceOf(GroupByTransducer.class));
+        assertThat(transducers.get(1), instanceOf(FlatMapTransducer.class));
+        assertThat(transducers.get(2), instanceOf(LastTransducer.class));
     }
 }

@@ -1,8 +1,6 @@
 package com.googlecode.totallylazy.transducers;
 
-import com.googlecode.totallylazy.Lists;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.functions.Reducer;
@@ -16,103 +14,105 @@ import static com.googlecode.totallylazy.functions.Functions.identity;
 import static com.googlecode.totallylazy.predicates.Predicates.whileFalse;
 import static com.googlecode.totallylazy.transducers.State.Stop;
 
-public interface Sender<T> {
+public interface Sender<A> {
 
-    AutoCloseable EMPTY_CLOSEABLE = () -> { };
+    AutoCloseable EMPTY_CLOSEABLE = () -> {
+    };
 
-    AutoCloseable send(Receiver<T> receiver);
+    AutoCloseable send(Receiver<A> receiver);
 
 
     @SafeVarargs
-    static <T> Sender<T> sender(T... values) {
+    static <A> Sender<A> sender(A... values) {
         return sender(sequence(values));
     }
 
-    static <T> Sender<T> sender(Iterable<? extends T> values) {
+    static <A> Sender<A> sender(Iterable<? extends A> values) {
         return sender(values.iterator());
     }
 
-    static <T> Sender<T> sender(Iterator<? extends T> iterator) {
-        return observer -> {
-            if (observer.start().equals(Stop)) return EMPTY_CLOSEABLE;
+    static <A> Sender<A> sender(Iterator<? extends A> iterator) {
+        return receiver -> {
+            if (receiver.start().equals(Stop)) return EMPTY_CLOSEABLE;
             while (iterator.hasNext()) {
-                T value = iterator.next();
-                if (observer.next(value).equals(Stop)) break;
+                A value = iterator.next();
+                if (receiver.next(value).equals(Stop)) break;
             }
-            observer.finish();
+            receiver.finish();
             return EMPTY_CLOSEABLE;
         };
     }
 
-    default Sender<T> filter(Predicate<? super T> predicate) {
+    default Sender<A> filter(Predicate<? super A> predicate) {
         return transduce(Transducers.filter(predicate));
     }
 
-    default <R> Sender<R> map(Function1<? super T, ? extends R> mapper) {
+    default <B> Sender<B> map(Function1<? super A, ? extends B> mapper) {
         return transduce(Transducers.map(mapper));
     }
 
-    default <R> Sender<R> flatMap(Function1<? super T, ? extends Sender<R>> mapper) {
+    default <B> Sender<B> flatMap(Function1<? super A, ? extends Sender<B>> mapper) {
         return transduce(Transducers.flatMap(mapper));
     }
 
-    static <R> Sender<R> flatten(Sender<Sender<R>> nested) {
+    static <B> Sender<B> flatten(Sender<Sender<B>> nested) {
         return nested.flatMap(identity());
     }
 
-    default <S> Sender<S> scan(S seed, Function2<? super S, ? super T, ? extends S> reducer) {
+    default <B> Sender<B> scan(B seed, Function2<? super B, ? super A, ? extends B> reducer) {
         return transduce(Transducers.scan(seed, reducer));
     }
 
-    default <S> Sender<S> scan(Reducer<? super T, S> reducer) {
+    default <B> Sender<B> scan(Reducer<? super A, B> reducer) {
         return transduce(Transducers.scan(reducer));
     }
 
-    default Sender<T> last() {
+    default Sender<A> last() {
         return transduce(Transducers.last());
     }
 
-    default <S> Sender<S> reduce(S seed, Function2<? super S, ? super T, ? extends S> reducer) {
+    default <B> Sender<B> reduce(B seed, Function2<? super B, ? super A, ? extends B> reducer) {
         return transduce(Transducers.reduce(seed, reducer));
     }
 
-    default <S> Sender<S> reduce(Reducer<? super T, S> reducer) {
+    default <B> Sender<B> reduce(Reducer<? super A, B> reducer) {
         return transduce(Transducers.reduce(reducer));
     }
 
-    default Sender<T> take(int limit) {
+    default Sender<A> take(int limit) {
         return transduce(Transducers.take(limit));
     }
 
-    default Sender<T> takeWhile(Predicate<? super T> predicate) {
+    default Sender<A> takeWhile(Predicate<? super A> predicate) {
         return transduce(Transducers.takeWhile(predicate));
     }
 
-    default Sender<T> drop(int count) {
+    default Sender<A> drop(int count) {
         return transduce(Transducers.drop(count));
     }
 
-    default Sender<T> dropWhile(Predicate<? super T> predicate) {
+    default Sender<A> dropWhile(Predicate<? super A> predicate) {
         return filter(whileFalse(predicate));
     }
 
-    default <K> Sender<Group<K, T>> groupBy(Function1<? super T, ? extends K> keyExtractor) {
+    default <B> Sender<Group<B, A>> groupBy(Function1<? super A, ? extends B> keyExtractor) {
         return transduce(Transducers.groupBy(keyExtractor));
     }
 
-    default <R> Sender<R> transduce(Transducer<T, R> transducer) {
+    default <B> Sender<B> transduce(Transducer<A, B> transducer) {
         return transduce(this, transducer);
     }
 
-    static <T, R> Sender<R> transduce(Sender<T> sender, Transducer<T, R> transducer) {
-        return observer -> sender.send(transducer.apply(observer));
+    static <A, B> Sender<B> transduce(Sender<A> sender, Transducer<A, B> transducer) {
+        return CompositeSender.compositeSender(sender, transducer);
     }
 
-    default Sender<List<T>> toList() {
+    default Sender<List<A>> toList() {
         return transduce(Transducers.toList());
     }
 
-    default Sender<Sequence<T>> toSequence() {
+    default Sender<Sequence<A>> toSequence() {
         return transduce(Transducers.toSequence());
     }
+
 }

@@ -10,7 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public interface GroupByTransducer<T, K> extends Transducer<T, Group<K, T>> {
     Function1<? super T, ? extends K> keyExtractor();
 
-    static <T, K> GroupByTransducer<T, K> groupByTransducer(Function1<? super T, ? extends K> keyExtractor) {return () -> keyExtractor;}
+    static <T, K> GroupByTransducer<T, K> groupByTransducer(Function1<? super T, ? extends K> keyExtractor) {return new GroupByTransducer<T, K>() {
+        @Override
+        public Function1<? super T, ? extends K> keyExtractor() {return keyExtractor;}
+    };}
 
     @Override
     default Receiver<T> apply(Receiver<Group<K, T>> receiver) {

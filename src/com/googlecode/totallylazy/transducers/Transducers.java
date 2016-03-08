@@ -16,8 +16,8 @@ import static com.googlecode.totallylazy.transducers.State.Continue;
 import static com.googlecode.totallylazy.transducers.State.Stop;
 
 public interface Transducers {
-    static <A> Transducer<A, A> identity() { return observer -> observer; }
-    static <A> Transducer<A, A> identity(Class<A> aClass) { return observer -> observer; }
+    static <A> Transducer<A, A> identity() { return receiver -> receiver; }
+    static <A> Transducer<A, A> identity(Class<A> aClass) { return identity(); }
 
     static <A, B, C> Transducer<A, C> compose(Transducer<A, B> a, Transducer<B, C> b) {
         return CompositeTransducer.compositeTransducer(a, b);
