@@ -109,10 +109,10 @@ public interface Sender<T> {
     }
 
     default Sender<List<T>> toList() {
-        return reduce(Lists.functions.add());
+        return transduce(Transducers.toList());
     }
 
     default Sender<Sequence<T>> toSequence() {
-        return toList().map(Sequences::<T>sequence);
+        return transduce(Transducers.toSequence());
     }
 }

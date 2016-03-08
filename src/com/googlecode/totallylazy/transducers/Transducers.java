@@ -1,10 +1,14 @@
 package com.googlecode.totallylazy.transducers;
 
+import com.googlecode.totallylazy.Lists;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.functions.Reducer;
 import com.googlecode.totallylazy.predicates.Predicate;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -85,4 +89,11 @@ public interface Transducers {
         return GroupByTransducer.groupByTransducer(keyExtractor);
     }
 
+    static <T> Transducer<T, List<T>> toList() {
+        return reduce(Lists.functions.add());
+    }
+
+    static <T> Transducer<T, Sequence<T>> toSequence() {
+        return compose(toList(), map(Sequences::<T>sequence));
+    }
 }
