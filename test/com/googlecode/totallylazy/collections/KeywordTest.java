@@ -11,10 +11,10 @@ public class KeywordTest {
     @Test
     public void canDoReflectoMagicToDetermineNameAndClassOfLocalVariables() throws Exception {
         Keyword<Date> dob = Keyword.keyword();
-        assertThat(dob.name(), is("dob"));
+        assertThat(dob.key(), is("dob"));
         assertThat(dob.forClass(), is(Date.class));
         Keyword<String> name = Keyword.keyword();
-        assertThat(name.name(), is("name"));
+        assertThat(name.key(), is("name"));
         assertThat(name.forClass(), is(String.class));
     }
 
@@ -27,10 +27,10 @@ public class KeywordTest {
 
         Foo foo = new Foo();
         Keyword<Date> dob = foo.dob;
-        assertThat(dob.name(), is("dob"));
+        assertThat(dob.key(), is("dob"));
         assertThat(dob.forClass(), is(Date.class));
         Keyword<String> name = foo.name;
-        assertThat(name.name(), is("name"));
+        assertThat(name.key(), is("name"));
         assertThat(name.forClass(), is(String.class));
     }
 }

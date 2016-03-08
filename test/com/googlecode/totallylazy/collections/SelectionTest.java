@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.util.Map;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.collections.SelectionTest.Concat.concat;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.one;
@@ -24,9 +25,9 @@ public class SelectionTest {
     Keyword<String> name = Keyword.keyword();
     Keyword<Integer> age = Keyword.keyword();
 
-    PersistentMap<String, Object> dan = map(name.name(), "Dan", age.name(), 21);
-    PersistentMap<String, Object> matt = map(name.name(), "Matt", age.name(), 22);
-    PersistentMap<String, Object> bob = map(name.name(), "Bob", age.name(), 22);
+    PersistentMap<String, Object> dan = map(name.key(), "Dan", age.key(), 21);
+    PersistentMap<String, Object> matt = map(name.key(), "Matt", age.key(), 22);
+    PersistentMap<String, Object> bob = map(name.key(), "Bob", age.key(), 22);
     Sequence<PersistentMap<String, Object>> data = sequence(dan, matt, bob);
 
 
@@ -52,14 +53,14 @@ public class SelectionTest {
 
     @Test
     public void supportsConcatination() throws Exception {
-        Keyword<String> concat = composite(Concat.Instance, name, age);
-        assertThat(data.filter(where(name, is("Dan"))).map(concat), is(sequence("Dan21")));
-        assertThat(data.filter(where(name, is("Dan"))).map(select(concat)), is(one(map(concat.name(), "Dan21"))));
+        Keyword<String> composite = composite(concat, name, age);
+        assertThat(data.filter(where(name, is("Dan"))).map(composite), is(sequence("Dan21")));
+        assertThat(data.filter(where(name, is("Dan"))).map(select(composite)), is(one(map(composite.key(), "Dan21"))));
     }
 
     @Test
     public void supportsGroupByAndConcatication() throws Exception {
-        Aggregate<String, String> join = Aggregate.aggregate(name, Concat.Instance);
+        Aggregate<String, String> join = Aggregate.aggregate(name, concat);
         assertThat(data.groupBy(age).map(group -> group.reduce(join)), is(sequence("Dan", "MattBob")));
     }
 
@@ -67,14 +68,14 @@ public class SelectionTest {
     public void supportsUppercase() throws Exception {
         Keyword<String> upperCase = compose(name, String::toUpperCase);
         assertThat(data.filter(where(name, is("Dan"))).map(upperCase), is(sequence("DAN")));
-        assertThat(data.filter(where(name, is("Dan"))).map(select(upperCase)), is(one(map(upperCase.name(), "DAN"))));
+        assertThat(data.filter(where(name, is("Dan"))).map(select(upperCase)), is(one(map(upperCase.key(), "DAN"))));
     }
 
     private <T, R> Keyword<R> compose(Keyword<T> keyword, Function1<T, R> function) {
         return new Keyword<R>() {
             @Override
-            public String name() {
-                return function.toString() + "(" + keyword.name() + ")";
+            public String key() {
+                return function.toString() + "(" + keyword.key() + ")";
             }
 
             @Override
@@ -100,8 +101,8 @@ public class SelectionTest {
             }
 
             @Override
-            public String name() {
-                return keywords.map(Keyword::name).toString(reducer.toString() + "(", ",", ")");
+            public String key() {
+                return keywords.map(Keyword::key).toString(reducer.toString() + "(", ",", ")");
             }
 
             @Override
@@ -138,7 +139,7 @@ public class SelectionTest {
     }
 
     enum Concat implements Reducer<Object, String> {
-        Instance;
+        concat;
 
         @Override
         public String call(String s, Object o) throws Exception {
@@ -185,7 +186,7 @@ public class SelectionTest {
             T sourceValue = keyword().apply(source);
             R value = sourceValue == null ? identity() : cast(sourceValue);
             R reduced = apply(value, destination);
-            return destination.insert(keyword().name(), reduced);
+            return destination.insert(keyword().key(), reduced);
         }
     }
 }
