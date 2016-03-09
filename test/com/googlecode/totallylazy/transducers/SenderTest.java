@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.transducers;
 
+import com.googlecode.totallylazy.predicates.Predicate;
 import org.junit.Test;
 
 import java.util.List;
@@ -53,6 +54,11 @@ public class SenderTest {
     @Test
     public void supportsLast() throws Exception {
         assertReceived(sender(0, 2, 4).last(), 4);
+    }
+
+    @Test
+    public void lastThrowsErrorWhenNoElement() throws Exception {
+        assertErrors(sender().last(), instanceOf(NoSuchElementException.class));
     }
 
     @Test
@@ -125,6 +131,15 @@ public class SenderTest {
         sender.send(receiver);
         assertThat(receiver.items(), is(sequence(values)));
         assertThat(receiver.error(), nullValue());
+        assertThat(receiver.started(), is(true));
+        assertThat(receiver.finished(), is(true));
+    }
+
+    private final <T> void assertErrors(Sender<T> sender, Predicate<? super Throwable> throwable) {
+        CapturingReceiver<T> receiver = new CapturingReceiver<>();
+        sender.send(receiver);
+        assertThat(receiver.items().isEmpty(), is(true));
+        assertThat(receiver.error(), throwable);
         assertThat(receiver.started(), is(true));
         assertThat(receiver.finished(), is(true));
     }

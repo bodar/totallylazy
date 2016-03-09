@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.transducers;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.googlecode.totallylazy.transducers.State.Continue;
@@ -14,8 +15,10 @@ public interface LastTransducer<T> extends Transducer<T, T> {
             T t = reference.get();
             if (t != null) {
                 receiver.next(t);
-                receiver.finish();
+            } else {
+                receiver.error(new NoSuchElementException());
             }
+            receiver.finish();
         });
     }
 }
