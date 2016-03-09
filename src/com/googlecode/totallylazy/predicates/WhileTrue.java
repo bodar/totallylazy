@@ -2,17 +2,13 @@ package com.googlecode.totallylazy.predicates;
 
 public class WhileTrue<T> extends LogicalPredicate<T> {
     private final Predicate<? super T> predicate;
-    private boolean continueMatching = true;
+    private volatile boolean continueMatching = true;
 
     public WhileTrue(Predicate<? super T> predicate) {
         this.predicate = predicate;
     }
 
     public boolean matches(T other) {
-        if(continueMatching) {
-            continueMatching = predicate.matches(other);
-            return continueMatching;
-        }
-        return false;
+        return continueMatching && (continueMatching = predicate.matches(other));
     }
 }

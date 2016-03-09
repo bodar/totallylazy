@@ -7,14 +7,14 @@ import static com.googlecode.totallylazy.transducers.State.Continue;
 public interface LastTransducer<T> extends Transducer<T, T> {
     static <T> LastTransducer<T> lastTransducer() {
         AtomicReference<T> reference = new AtomicReference<>();
-        return observer -> Receiver.receiver(observer, item -> {
+        return receiver -> Receiver.receiver(receiver, item -> {
             reference.set(item);
             return Continue;
         }, () -> {
             T t = reference.get();
             if (t != null) {
-                observer.next(t);
-                observer.finish();
+                receiver.next(t);
+                receiver.finish();
             }
         });
     }

@@ -9,14 +9,9 @@ import com.googlecode.totallylazy.functions.Reducer;
 import com.googlecode.totallylazy.predicates.Predicate;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.googlecode.totallylazy.transducers.State.Continue;
-import static com.googlecode.totallylazy.transducers.State.Stop;
 
 public interface Transducers {
-    static <A> Transducer<A, A> identity() { return receiver -> receiver; }
+    static <A> Transducer<A, A> identity() { return new IdentityTransducer<>(); }
     static <A> Transducer<A, A> identity(Class<A> aClass) { return identity(); }
 
     static <A, B, C> Transducer<A, C> compose(Transducer<A, B> a, Transducer<B, C> b) {
@@ -60,30 +55,16 @@ public interface Transducers {
     }
 
     static <A> Transducer<A, A> takeWhile(Predicate<? super A> predicate) {
-        AtomicBoolean complete = new AtomicBoolean(false);
-        return observer -> Receiver.receiver(observer, item -> {
-            if (complete.get()) return Stop;
-            if (predicate.matches(item)) return observer.next(item);
-            else {
-                complete.set(true);
-                observer.finish();
-                return Stop;
-            }
-        });
+        return TakeWhileTransducer.takeWhileTransducer(predicate);
     }
 
     static <A> Transducer<A, A> drop(int limit) {
-        AtomicInteger count = new AtomicInteger();
-        if (limit == 0) return Transducers.identity();
-        return observer -> Receiver.receiver(observer, item -> {
-            int position = count.getAndIncrement();
-            if (position < limit) {
-                return Continue;
-            }
-            return observer.next(item);
-        });
+        return DropTransducer.dropTransducer(limit);
     }
 
+    static <A> Transducer<A, A> dropWhile(Predicate<? super A> predicate) {
+        return DropWhileTransducer.dropWhileTransducer(predicate);
+    }
 
     static <T, K> Transducer<T,Group<K, T>> groupBy(Function1<? super T, ? extends K> keyExtractor) {
         return GroupByTransducer.groupByTransducer(keyExtractor);
@@ -96,4 +77,5 @@ public interface Transducers {
     static <T> Transducer<T, Sequence<T>> toSequence() {
         return compose(toList(), map(Sequences::<T>sequence));
     }
+
 }

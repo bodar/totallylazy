@@ -19,7 +19,7 @@ public interface GroupByTransducer<T, K> extends Transducer<T, Group<K, T>> {
 
             @Override
             public State start() {
-                observers().each(Receiver::start);
+                receivers().each(Receiver::start);
                 return receiver.start();
             }
 
@@ -35,17 +35,17 @@ public interface GroupByTransducer<T, K> extends Transducer<T, Group<K, T>> {
 
             @Override
             public void error(Throwable throwable) {
-                observers().each(o -> o.error(throwable));
+                receivers().each(o -> o.error(throwable));
                 receiver.error(throwable);
             }
 
             @Override
             public void finish() {
-                observers().each(Receiver::finish);
+                receivers().each(Receiver::finish);
                 receiver.finish();
             }
 
-            private Sequence<Receiver<T>> observers() {
+            private Sequence<Receiver<T>> receivers() {
                 return Sequences.sequence(groups.values());
             }
         };

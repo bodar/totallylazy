@@ -92,7 +92,7 @@ public interface Sender<A> {
     }
 
     default Sender<A> dropWhile(Predicate<? super A> predicate) {
-        return filter(whileFalse(predicate));
+        return transduce(Transducers.dropWhile(predicate));
     }
 
     default <B> Sender<Group<B, A>> groupBy(Function1<? super A, ? extends B> keyExtractor) {

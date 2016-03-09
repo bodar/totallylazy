@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.transducers;
 
-import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import java.util.List;
@@ -18,12 +17,11 @@ import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
 import static com.googlecode.totallylazy.predicates.Predicates.sameInstance;
 import static com.googlecode.totallylazy.transducers.Sender.sender;
-import static com.googlecode.totallylazy.transducers.Sender.transduce;
 import static com.googlecode.totallylazy.transducers.Transducers.filter;
 
 public class SenderTest {
     @Test
-    public void canObserverItems() throws Exception {
+    public void canReceiveItems() throws Exception {
         assertReceived(sender(1, 2, 3), 1, 2, 3);
     }
 
@@ -123,12 +121,12 @@ public class SenderTest {
 
     @SafeVarargs
     private final <T> void assertReceived(Sender<T> sender, T... values) {
-        CapturingReceiver<T> observer = new CapturingReceiver<>();
-        sender.send(observer);
-        assertThat(observer.items(), is(sequence(values)));
-        assertThat(observer.error(), nullValue());
-        assertThat(observer.started(), is(true));
-        assertThat(observer.finished(), is(true));
+        CapturingReceiver<T> receiver = new CapturingReceiver<>();
+        sender.send(receiver);
+        assertThat(receiver.items(), is(sequence(values)));
+        assertThat(receiver.error(), nullValue());
+        assertThat(receiver.started(), is(true));
+        assertThat(receiver.finished(), is(true));
     }
 
     @Test
