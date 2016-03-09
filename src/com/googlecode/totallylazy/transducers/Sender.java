@@ -11,8 +11,6 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.functions.Functions.identity;
-import static com.googlecode.totallylazy.predicates.Predicates.whileFalse;
-import static com.googlecode.totallylazy.transducers.State.Stop;
 
 public interface Sender<A> {
 
@@ -32,15 +30,7 @@ public interface Sender<A> {
     }
 
     static <A> Sender<A> sender(Iterator<? extends A> iterator) {
-        return receiver -> {
-            if (receiver.start().equals(Stop)) return EMPTY_CLOSEABLE;
-            while (iterator.hasNext()) {
-                A value = iterator.next();
-                if (receiver.next(value).equals(Stop)) break;
-            }
-            receiver.finish();
-            return EMPTY_CLOSEABLE;
-        };
+        return new IteratorSender<>(iterator);
     }
 
     default Sender<A> filter(Predicate<? super A> predicate) {
