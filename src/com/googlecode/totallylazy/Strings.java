@@ -48,6 +48,10 @@ public class Strings {
         return Streams.lines(reader).memorise();
     }
 
+    public static Sequence<String> lines(String lines) {
+        return Streams.lines(lines).memorise();
+    }
+
     public static Function0<String> readLine(final BufferedReader reader) { return Streams.readLine(reader); }
 
     public static Function1<String, String> toLowerCase() {

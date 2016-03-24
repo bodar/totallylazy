@@ -2,16 +2,7 @@ package com.googlecode.totallylazy;
 
 import com.googlecode.totallylazy.functions.Function0;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.Reader;
+import java.io.*;
 
 import static com.googlecode.totallylazy.functions.Block.block;
 import static com.googlecode.totallylazy.Closeables.using;
@@ -88,6 +79,10 @@ public class Streams {
 
     public static Sequence<String> lines(Reader reader) {
         return repeat(readLine(new BufferedReader(reader))).takeWhile(notNullValue(String.class));
+    }
+
+    public static Sequence<String> lines(String lines) {
+        return lines(new StringReader(lines));
     }
 
     public static Function0<String> readLine(final BufferedReader reader) {
