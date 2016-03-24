@@ -82,10 +82,6 @@ public interface Parsers {
         return PredicatesParser.string(predicates);
     }
 
-    /**
-     * Use Parser.pretty() or Parsers.pretty() instead
-     */
-    @Deprecated
     static Parser<String> pattern(String value, String pretty) {
         return pattern(value).pretty(pretty);
     }
