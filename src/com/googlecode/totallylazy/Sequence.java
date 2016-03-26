@@ -282,7 +282,6 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.delete(this, t);
     }
 
-    @Override
     public Sequence<T> deleteAll(final Iterable<? extends T> iterable) {
         return Sequences.deleteAll(this, iterable);
     }

@@ -1,14 +1,14 @@
 package com.googlecode.totallylazy.collections;
 
-import com.googlecode.totallylazy.Filterable;
-import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.predicates.Predicate;
+import com.googlecode.totallylazy.transducers.Sender;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-public interface PersistentCollection<T> extends PersistentContainer<T>, Collection<T>, Segment<T>, Filterable<T> {
+public interface PersistentCollection<T> extends PersistentContainer<T>, Collection<T>, Segment<T> {
     @Override
     boolean isEmpty();
 
@@ -22,11 +22,6 @@ public interface PersistentCollection<T> extends PersistentContainer<T>, Collect
     PersistentCollection<T> tail() throws NoSuchElementException;
 
     PersistentCollection<T> delete(T t);
-
-    PersistentCollection<T> deleteAll(Iterable<? extends T> items);
-
-    @Override
-    PersistentCollection<T> filter(Predicate<? super T> predicate);
 
     Sequence<T> toSequence();
 

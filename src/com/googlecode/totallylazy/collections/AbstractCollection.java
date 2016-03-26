@@ -39,11 +39,6 @@ public abstract class AbstractCollection<T> extends ReadOnlyCollection<T> implem
     }
 
     @Override
-    public PersistentCollection<T> deleteAll(Iterable<? extends T> items) {
-        return filter(not(in(items)));
-    }
-
-    @Override
     public String toString() {
         return appendTo(new StringBuilder(), "(", ",", ")").toString();
     }
