@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.transducers;
 
 import com.googlecode.totallylazy.Lists;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.functions.Function1;
@@ -51,11 +52,19 @@ public interface Transducers {
     }
 
     static <T> Transducer<T, T> first() {
-        return FirstTransducer.firstTransducer();
+        return compose(firstOption(), map(Option::get));
+    }
+
+    static <T> Transducer<T, Option<T>> firstOption() {
+        return FirstOptionTransducer.firstOptionTransducer();
     }
 
     static <T> Transducer<T, T> last() {
-        return LastTransducer.lastTransducer();
+        return compose(lastOption(), map(Option::get));
+    }
+
+    static <T> Transducer<T, Option<T>> lastOption() {
+        return LastOptionTransducer.lastOptionTransducer();
     }
 
     static <A> Transducer<A, A> take(int limit) {

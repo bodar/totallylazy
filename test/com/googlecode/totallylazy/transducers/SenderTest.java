@@ -62,6 +62,11 @@ public class SenderTest {
     }
 
     @Test
+    public void firstThrowsErrorWhenNoElement() throws Exception {
+        assertErrors(sender().first(), instanceOf(NoSuchElementException.class));
+    }
+
+    @Test
     public void supportsLast() throws Exception {
         assertReceived(sender(0, 2, 4).last(), 4);
     }
@@ -165,9 +170,10 @@ public class SenderTest {
         CompositeSender<Integer,List<Integer>> compositeSender = cast(composed);
         assertThat(compositeSender.sender(), sameInstance(original));
         List<Transducer<?, ?>> transducers = compositeSender.transducers();
-        assertThat(transducers.size(), is(3));
+        assertThat(transducers.size(), is(4));
         assertThat(transducers.get(0), instanceOf(GroupByTransducer.class));
         assertThat(transducers.get(1), instanceOf(FlatMapTransducer.class));
-        assertThat(transducers.get(2), instanceOf(LastTransducer.class));
+        assertThat(transducers.get(2), instanceOf(LastOptionTransducer.class));
+        assertThat(transducers.get(3), instanceOf(MapTransducer.class));
     }
 }

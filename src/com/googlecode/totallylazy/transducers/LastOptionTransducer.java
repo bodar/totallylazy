@@ -1,23 +1,20 @@
 package com.googlecode.totallylazy.transducers;
 
+import com.googlecode.totallylazy.Option;
+
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.googlecode.totallylazy.transducers.State.Continue;
 
-public interface LastTransducer<T> extends Transducer<T, T> {
-    static <T> LastTransducer<T> lastTransducer() {
+public interface LastOptionTransducer<T> extends Transducer<T, Option<T>> {
+    static <T> LastOptionTransducer<T> lastOptionTransducer() {
         AtomicReference<T> reference = new AtomicReference<>();
         return receiver -> Receiver.receiver(receiver, item -> {
             reference.set(item);
             return Continue;
         }, () -> {
-            T t = reference.get();
-            if (t != null) {
-                receiver.next(t);
-            } else {
-                receiver.error(new NoSuchElementException());
-            }
+            receiver.next(Option.option(reference.get()));
             receiver.finish();
         });
     }

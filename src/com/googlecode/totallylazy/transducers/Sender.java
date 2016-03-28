@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.transducers;
 
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Function2;
@@ -65,8 +66,16 @@ public interface Sender<A> {
         return transduce(Transducers.first());
     }
 
+    default Sender<Option<A>> firstOption() {
+        return transduce(Transducers.firstOption());
+    }
+
     default Sender<A> last() {
         return transduce(Transducers.last());
+    }
+
+    default Sender<Option<A>> lastOption() {
+        return transduce(Transducers.lastOption());
     }
 
     default <B> Sender<B> reduce(B seed, Function2<? super B, ? super A, ? extends B> reducer) {
