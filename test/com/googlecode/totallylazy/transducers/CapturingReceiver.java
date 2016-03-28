@@ -44,8 +44,9 @@ public class CapturingReceiver<T> implements Receiver<T> {
     }
 
     @Override
-    public void error(Throwable throwable) {
+    public State error(Throwable throwable) {
         error.set(throwable);
+        return State.Stop;
     }
 
     @Override

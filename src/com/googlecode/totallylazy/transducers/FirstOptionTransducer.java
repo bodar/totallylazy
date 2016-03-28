@@ -12,10 +12,13 @@ public interface FirstOptionTransducer<T> extends Transducer<T, Option<T>> {
         return receiver -> Receiver.receiver(receiver, item -> {
             receiver.next(Option.some(item));
             receiver.finish();
+            complete.set(true);
             return Stop;
         }, () -> {
-            if(!complete.get()) receiver.next(Option.none());
-            receiver.finish();
+            if(!complete.get()) {
+                receiver.next(Option.none());
+                receiver.finish();
+            }
         });
     }
 }

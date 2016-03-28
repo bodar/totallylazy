@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.transducers;
 
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.predicates.Predicate;
 import org.junit.Test;
 
@@ -67,6 +68,12 @@ public class SenderTest {
     }
 
     @Test
+    public void supportsFirstOption() throws Exception {
+        assertReceived(sender(0, 2, 4).firstOption(), Option.some(0));
+        assertReceived(sender().firstOption(), Option.none());
+    }
+
+    @Test
     public void supportsLast() throws Exception {
         assertReceived(sender(0, 2, 4).last(), 4);
     }
@@ -74,6 +81,12 @@ public class SenderTest {
     @Test
     public void lastThrowsErrorWhenNoElement() throws Exception {
         assertErrors(sender().last(), instanceOf(NoSuchElementException.class));
+    }
+
+    @Test
+    public void supportsLastOption() throws Exception {
+        assertReceived(sender(0, 2, 4).lastOption(), Option.some(4));
+        assertReceived(sender().lastOption(), Option.none());
     }
 
     @Test

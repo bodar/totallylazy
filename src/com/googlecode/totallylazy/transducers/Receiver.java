@@ -9,7 +9,7 @@ public interface Receiver<T> {
 
     State next(T item);
 
-    void error(Throwable throwable);
+    State error(Throwable throwable);
 
     void finish();
 
@@ -58,8 +58,8 @@ public interface Receiver<T> {
         }
 
         @Override
-        default void error(Throwable throwable) {
-            delegate().error(throwable);
+        default State error(Throwable throwable) {
+            return delegate().error(throwable);
         }
 
         @Override

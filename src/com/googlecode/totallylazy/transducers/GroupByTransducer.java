@@ -34,9 +34,9 @@ public interface GroupByTransducer<T, K> extends Transducer<T, Group<K, T>> {
             }
 
             @Override
-            public void error(Throwable throwable) {
+            public State error(Throwable throwable) {
                 receivers().each(o -> o.error(throwable));
-                receiver.error(throwable);
+                return receiver.error(throwable);
             }
 
             @Override

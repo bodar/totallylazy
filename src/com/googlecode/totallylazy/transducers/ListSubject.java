@@ -32,10 +32,11 @@ public class ListSubject<T> implements Subject<T> {
     }
 
     @Override
-    public void error(Throwable throwable) {
+    public State error(Throwable throwable) {
         for (Receiver<T> receiver : receivers) {
-            receiver.error(throwable);
+            if (receiver.error(throwable).equals(Stop)) receivers.remove(receiver);
         }
+        return receivers.isEmpty() ? Stop : Continue;
     }
 
     @Override
