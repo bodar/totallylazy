@@ -25,8 +25,6 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
 
     Option<V> lookup(K key);
 
-    Option<V> find(Predicate<? super K> predicate);
-
     PersistentMap<K, V> insert(K key, V value);
 
     PersistentMap<K, V> delete(K key);

@@ -122,12 +122,6 @@ public abstract class MapContract {
     }
 
     @Test
-    public void supportsFindingAValueAsAnOption() throws Exception {
-        assertThat(map("Dan", 2).find(contains("a")), is(some(2)));
-        assertThat(map("Dan", 2).find(contains("b")), is(none(Integer.class)));
-    }
-
-    @Test
     public void canIterate() throws Exception {
         final Iterator<Pair<Integer, Integer>> iterator = map(0, 0, 1, 1, 2, 2).iterator();
         assertThat(iterator.hasNext(), is(true));

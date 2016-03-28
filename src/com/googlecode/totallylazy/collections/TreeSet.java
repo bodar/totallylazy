@@ -44,11 +44,6 @@ public class TreeSet<T> extends AbstractCollection<T> implements PersistentSorte
     }
 
     @Override
-    public Option<T> find(Predicate<? super T> predicate) {
-        return map.find(predicate);
-    }
-
-    @Override
     public PersistentSortedSet<T> delete(T value) {
         return treeSet(map.delete(value));
     }

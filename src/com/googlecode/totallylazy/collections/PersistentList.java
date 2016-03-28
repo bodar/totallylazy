@@ -22,8 +22,6 @@ import static com.googlecode.totallylazy.functions.Callables.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Iterable<T>, Segment<T>, Indexed<T>, Foldable<T> {
-    Option<T> find(Predicate<? super T> predicate);
-
     @Override
     PersistentList<T> empty();
 

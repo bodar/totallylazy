@@ -63,11 +63,6 @@ public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, R
     }
 
     @Override
-    public Option<T> find(Predicate<? super T> predicate) {
-        return toSequence().find(predicate);
-    }
-
-    @Override
     public TreeList<T> empty() {
         return treeList();
     }

@@ -59,11 +59,6 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> ext
     }
 
     @Override
-    public None<V> find(Predicate<? super K> predicate) {
-        return None.none();
-    }
-
-    @Override
     public <S> S fold(S seed, Function2<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return seed;
     }

@@ -49,11 +49,6 @@ public abstract class AbstractMap<K, V> extends ReadOnlyMap<K,V> implements Pers
     }
 
     @Override
-    public Option<V> find(Predicate<? super K> predicate) {
-        return toSequence().find(p -> predicate.matches(p.getKey())).map(Pair::getValue);
-    }
-
-    @Override
     public <C extends Segment<Pair<K, V>>> C joinTo(C rest) {
         return toSequence().joinTo(rest);
     }

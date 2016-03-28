@@ -113,14 +113,6 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
-    public Option<V> find(Predicate<? super K> predicate) {
-        if (predicate.matches(key)) return some(value);
-        Option<V> left = this.left.find(predicate);
-        if (left.isEmpty()) return right.find(predicate);
-        return left;
-    }
-
-    @Override
     public <S> S fold(S seed, Function2<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return right.fold(left.fold(Functions.call(callable, seed, pair()), callable), callable);
     }

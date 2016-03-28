@@ -65,7 +65,7 @@ public class Context implements Node {
     }
 
     private Option<Context> pop(String name) {
-        return path.tails().
+        return path.tails().toSequence().
                 find(path -> path.headOption().is(XPath.name(name))).
                 flatMap(newPath -> new Context(remainder.tail(), newPath.tail()).next());
     }

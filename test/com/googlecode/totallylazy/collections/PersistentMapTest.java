@@ -117,10 +117,4 @@ public class PersistentMapTest {
         assertThat(map.lookup(2), is(some("Ray")));
         assertThat(map.lookup(4), is(none(String.class)));
     }
-
-    @Test
-    public void supportsFindingAValueAsAnOption() throws Exception {
-        assertThat(map("Dan", 2).find(contains("a")), is(some(2)));
-        assertThat(map("Dan", 2).find(contains("b")), is(none(Integer.class)));
-    }
 }

@@ -85,11 +85,6 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
         }
 
         @Override
-        public Option<T> find(Predicate<? super T> predicate) {
-            return Option.none();
-        }
-
-        @Override
         public boolean contains(Object other) {
             return false;
         }
@@ -172,11 +167,6 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
         @Override
         public int size() {
             return size;
-        }
-
-        @Override
-        public Option<T> find(Predicate<? super T> predicate) {
-            return toSequence().find(predicate);
         }
 
         protected boolean useRecursion() {

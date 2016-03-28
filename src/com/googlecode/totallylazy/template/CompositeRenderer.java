@@ -29,7 +29,7 @@ public class CompositeRenderer implements Renderer<Object>{
 
     @Override
     public Appendable render(Object value, Appendable appendable) throws IOException {
-        return pairs.find(p -> p.first().matches(value)).
+        return pairs.toSequence().find(p -> p.first().matches(value)).
                 get().second().render(value, appendable);
     }
 

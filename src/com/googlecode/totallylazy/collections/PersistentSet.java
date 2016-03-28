@@ -14,8 +14,6 @@ import java.util.Set;
 public interface PersistentSet<T> extends Set<T>, Iterable<T>, Segment<T>, PersistentCollection<T>, Foldable<T> {
     Option<T> lookup(T value);
 
-    Option<T> find(Predicate<? super T> predicate);
-
     @Override
     PersistentSet<T> empty();
 

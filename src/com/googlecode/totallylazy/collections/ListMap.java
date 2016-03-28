@@ -112,12 +112,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public Option<V> lookup(K key) {
-        return find(is(key));
-    }
-
-    @Override
-    public Option<V> find(Predicate<? super K> predicate) {
-        return list.find(key(predicate)).map(Callables.<V>second());
+        return list.toSequence().find(key(key)).map(Pair::getValue);
     }
 
     @Override
