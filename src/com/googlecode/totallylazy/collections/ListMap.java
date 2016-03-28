@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
@@ -78,7 +79,12 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public PersistentMap<K, V> cons(Pair<K, V> head) {
-        return contains(head.first()) ? listMap(list.toSequence().map(replace(head))) : listMap(list.cons(head));
+        return contains(head.first()) ? listMap(map(list, replace(head))) : listMap(list.cons(head));
+    }
+
+    private static <A,B> PersistentList<B> map(PersistentList<A> list, Function1<A, B> mapper) {
+        if(list.isEmpty()) return cast(list);
+        return map(list.tail(), mapper).cons(mapper.apply(list.head()));
     }
 
     private Function1<Pair<K, V>, Pair<K, V>> replace(final Pair<K, V> newValue) {

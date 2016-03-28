@@ -90,7 +90,7 @@ public abstract class MapContract {
     @Test
     public void putReplacesValuesWithSameKey() throws Exception {
         PersistentMap<Integer, String> map = map(1, "Dan").insert(3, "Stu").insert(1, "Ray");
-        assertThat(map, containsInAnyOrder(pair(1, "Ray"), pair(3, "Stu")));
+        assertThat(map, hasExactly(pair(1, "Ray"), pair(3, "Stu")));
     }
 
     @Test
