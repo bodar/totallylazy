@@ -30,6 +30,10 @@ public interface Transducers {
         return FilterTransducer.filterTransducer(predicate);
     }
 
+    static <A> Transducer<A, A> find(Predicate<? super A> predicate) {
+        return compose(filter(predicate), first());
+    }
+
     static <A, B> Transducer<A, B> scan(B seed, Function2<? super B, ? super A, ? extends B> reducer) {
         return ScanTransducer.scanTransducer(seed, reducer);
     }
@@ -44,6 +48,10 @@ public interface Transducers {
 
     static <A, B> Transducer<A, B> reduce(Reducer<? super A, B> reducer) {
         return compose(scan(reducer), last());
+    }
+
+    static <T> Transducer<T, T> first() {
+        return FirstTransducer.firstTransducer();
     }
 
     static <T> Transducer<T, T> last() {

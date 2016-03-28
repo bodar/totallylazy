@@ -28,7 +28,12 @@ public class SenderTest {
 
     @Test
     public void supportsFiltering() throws Exception {
-        assertReceived(sender(1, 2, 3).filter(i -> i % 2 == 0), 2);
+        assertReceived(sender(1, 2, 3, 4).filter(i -> i % 2 == 0), 2, 4);
+    }
+
+    @Test
+    public void supportsFind() throws Exception {
+        assertReceived(sender(1, 2, 3, 4).find(i -> i % 2 == 0), 2);
     }
 
     @Test
@@ -49,6 +54,11 @@ public class SenderTest {
     @Test
     public void supportsScan() throws Exception {
         assertReceived(sender(0, 2, 4).scan(average).map(Number::intValue), 0, 1, 2);
+    }
+
+    @Test
+    public void supportsFirst() throws Exception {
+        assertReceived(sender(0, 2, 4).first(), 0);
     }
 
     @Test

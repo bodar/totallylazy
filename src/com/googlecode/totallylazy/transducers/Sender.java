@@ -37,6 +37,10 @@ public interface Sender<A> {
         return transduce(Transducers.filter(predicate));
     }
 
+    default Sender<A> find(Predicate<? super A> predicate) {
+        return transduce(Transducers.find(predicate));
+    }
+
     default <B> Sender<B> map(Function1<? super A, ? extends B> mapper) {
         return transduce(Transducers.map(mapper));
     }
@@ -55,6 +59,10 @@ public interface Sender<A> {
 
     default <B> Sender<B> scan(Reducer<? super A, B> reducer) {
         return transduce(Transducers.scan(reducer));
+    }
+
+    default Sender<A> first() {
+        return transduce(Transducers.first());
     }
 
     default Sender<A> last() {
