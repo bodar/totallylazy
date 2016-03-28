@@ -78,7 +78,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public PersistentMap<K, V> cons(Pair<K, V> head) {
-        return contains(head.first()) ? listMap(list.map(replace(head))) : listMap(list.cons(head));
+        return contains(head.first()) ? listMap(list.toSequence().map(replace(head))) : listMap(list.cons(head));
     }
 
     private Function1<Pair<K, V>, Pair<K, V>> replace(final Pair<K, V> newValue) {
@@ -127,17 +127,7 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public PersistentMap<K, V> delete(K key) {
-        return filterKeys(is(not(key)));
-    }
-
-    @Override
-    public PersistentMap<K, V> filter(Predicate<? super Pair<K, V>> predicate) {
-        return listMap(list.filter(predicate));
-    }
-
-    @Override
-    public <NewV> PersistentMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
-        return listMap(list.map(Callables.<K, V, NewV>second(transformer)));
+        return listMap(toSequence().reject(p -> p.getKey().equals(key)));
     }
 
     @Override
@@ -190,6 +180,6 @@ public class ListMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public <S> S fold(S seed, Function2<? super S, ? super Pair<K, V>, ? extends S> callable) {
-        return list.fold(seed, callable);
+        return list.toSequence().fold(seed, callable);
     }
 }

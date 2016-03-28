@@ -102,7 +102,7 @@ public class TreeZipper<K, V> implements Zipper<Pair<K, V>> {
 
     @Override
     public int index() {
-        return focus.indexOf(value()) + breadcrumbs.
+        return focus.indexOf(value()) + breadcrumbs.toSequence().
                 filter(where(direction, is(right))).
                 fold(0, (integer, breadcrumb) -> integer + breadcrumb.other.size() + 1);
     }

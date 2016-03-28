@@ -85,23 +85,8 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
         }
 
         @Override
-        public <S> PersistentList<S> map(Function1<? super T, ? extends S> callable) {
-            return cast(this);
-        }
-
-        @Override
         public Option<T> find(Predicate<? super T> predicate) {
             return Option.none();
-        }
-
-        @Override
-        public PersistentList<T> filter(Predicate<? super T> predicate) {
-            return this;
-        }
-
-        @Override
-        public <S> S fold(S seed, Function2<? super S, ? super T, ? extends S> callable) {
-            return seed;
         }
 
         @Override
@@ -190,27 +175,8 @@ public abstract class LinkedList<T> extends AbstractList<T> implements Persisten
         }
 
         @Override
-        public <S> PersistentList<S> map(Function1<? super T, ? extends S> callable) {
-            return node(call(callable, head), tail().map(callable));
-        }
-
-        @Override
         public Option<T> find(Predicate<? super T> predicate) {
             return toSequence().find(predicate);
-        }
-
-        @Override
-        public PersistentList<T> filter(Predicate<? super T> predicate) {
-            if(useRecursion()) {
-                if(predicate.matches(head)) return cons(head, tail().filter(predicate));
-                return tail().filter(predicate);
-            }
-            return PersistentList.constructors.list(toSequence().filter(predicate));
-        }
-
-        @Override
-        public <S> S fold(S seed, Function2<? super S, ? super T, ? extends S> callable) {
-            return toSequence().fold(seed, callable);
         }
 
         protected boolean useRecursion() {

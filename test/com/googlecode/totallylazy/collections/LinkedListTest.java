@@ -96,27 +96,6 @@ public class LinkedListTest {
     }
 
     @Test
-    public void supportsRemoveAll() throws Exception {
-        assertThat(list(1, 2, 3, 4, 5, 6).deleteAll(sequence(3, 4)), hasExactly(1, 2, 5, 6));
-    }
-
-    @Test
-    public void supportsFilter() throws Exception {
-        assertThat(list(1, 2, 3, 1, 2, 3).filter(Predicates.is(3).not()), hasExactly(1, 2, 1, 2));
-        assertThat(list(1, 2, 3, 1, 2, 3).filter(Predicates.is(3)), hasExactly(3, 3));
-    }
-
-    @Test
-    @Ignore
-    public void supportsFilterIsPrettyFast() throws Exception {
-        final PersistentList<Number> range = range(1, 1000).toPersistentList();
-        TimeReport report = TimeReport.time(100000, () -> {
-            return range.filter(Predicates.<Number>is(3));
-        });
-        System.out.println(report);
-    }
-
-    @Test
     public void supportsRemove() throws Exception {
         assertThat(list(1, 2, 3, 4, 5, 6).delete(3), hasExactly(1, 2, 4, 5, 6));
         assertThat(list(1, 2, 3, 4, 5, 6).delete(6), hasExactly(1, 2, 3, 4, 5));

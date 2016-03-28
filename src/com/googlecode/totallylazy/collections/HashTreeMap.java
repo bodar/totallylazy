@@ -90,26 +90,6 @@ public class HashTreeMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public PersistentMap<K, V> filter(Predicate<? super Pair<K, V>> predicate) {
-        return hashTreeMap(toSequence().filter(predicate));
-    }
-
-    @Override
-    public PersistentMap<K, V> filterKeys(Predicate<? super K> predicate) {
-        return filter(Predicates.<K>first(predicate));
-    }
-
-    @Override
-    public PersistentMap<K, V> filterValues(Predicate<? super V> predicate) {
-        return filter(Predicates.<V>second(predicate));
-    }
-
-    @Override
-    public <NewV> PersistentMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
-        return hashTreeMap(toSequence().map(Callables.<K, V, NewV>second(transformer)));
-    }
-
-    @Override
     public <S> S fold(S seed, Function2<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return toSequence().fold(seed, callable);
     }

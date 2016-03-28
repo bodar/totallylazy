@@ -45,18 +45,6 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
     TreeMap<K, V> delete(K key);
 
     @Override
-    TreeMap<K, V> filter(Predicate<? super Pair<K, V>> predicate);
-
-    @Override
-    TreeMap<K, V> filterKeys(Predicate<? super K> predicate);
-
-    @Override
-    TreeMap<K, V> filterValues(Predicate<? super V> predicate);
-
-    @Override
-    <NewV> TreeMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer);
-
-    @Override
     Pair<? extends TreeMap<K, V>, Pair<K, V>> removeFirst();
 
     @Override
@@ -65,10 +53,6 @@ public interface TreeMap<K, V> extends PersistentSortedMap<K, V> {
     TreeFactory factory();
 
     class methods {
-        public static <K, V, NewV> TreeMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer, final TreeFactory factory, final TreeMap<K, V> treeMap) {
-            return factory.create(treeMap.comparator(), treeMap.key(), call(transformer, treeMap.value()), treeMap.left().map(transformer), treeMap.right().map(transformer));
-        }
-
         public static <K, V> TreeMap<K, V> treeMap(final TreeFactory factory, final Comparator<K> comparator, final List<Pair<K, V>> sortedList) {
             if(sortedList.size() == 0) return factory.create(comparator);
             int middle = sortedList.size() / 2;

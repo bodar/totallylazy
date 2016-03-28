@@ -63,11 +63,6 @@ public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, R
     }
 
     @Override
-    public <S> TreeList<S> map(Function1<? super T, ? extends S> callable) {
-        return treeList(toSequence().map(callable));
-    }
-
-    @Override
     public Option<T> find(Predicate<? super T> predicate) {
         return toSequence().find(predicate);
     }
@@ -115,21 +110,6 @@ public class TreeList<T> extends AbstractList<T> implements PersistentList<T>, R
     @Override
     public TreeList<T> delete(T value) {
         return treeList(toSequence().delete(value));
-    }
-
-    @Override
-    public TreeList<T> filter(Predicate<? super T> predicate) {
-        return treeList(toSequence().filter(predicate));
-    }
-
-    @Override
-    public <S> S fold(S seed, final Function2<? super S, ? super T, ? extends S> callable) {
-        return map.fold(seed, new Curried2<S, Pair<?, T>, S>() {
-            @Override
-            public S call(S s, Pair<?, T> pair) throws Exception {
-                return callable.call(s, pair.second());
-            }
-        });
     }
 
     @Override

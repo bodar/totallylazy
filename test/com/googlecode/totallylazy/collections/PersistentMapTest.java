@@ -123,21 +123,4 @@ public class PersistentMapTest {
         assertThat(map("Dan", 2).find(contains("a")), is(some(2)));
         assertThat(map("Dan", 2).find(contains("b")), is(none(Integer.class)));
     }
-
-    @Test
-    public void supportsFilteringByKey() throws Exception {
-        assertThat(map("Dan", 2).filterKeys(contains("a")), is(map("Dan", 2)));
-        assertThat(map("Dan", 2).filterKeys(contains("b")), is(emptyMap(String.class, Integer.class)));
-    }
-
-    @Test
-    public void supportsFilteringByValue() throws Exception {
-        assertThat(map("Dan", 2).filterValues(Predicates.is(2)), is(map("Dan", 2)));
-        assertThat(map("Dan", 2).filterValues(Predicates.is(3)), is(emptyMap(String.class, Integer.class)));
-    }
-
-    @Test
-    public void supportsMappingValues() throws Exception {
-        assertThat(map("Dan", 2).map(add(2)), is(map("Dan", (Number) 4)));
-    }
 }

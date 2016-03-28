@@ -128,23 +128,6 @@ public abstract class MapContract {
     }
 
     @Test
-    public void supportsFilteringByKey() throws Exception {
-        assertThat(map("Dan", 2).filterKeys(contains("a")), is(map("Dan", 2)));
-        assertThat(map("Dan", 2).filterKeys(contains("b")), is(empty(String.class, Integer.class)));
-    }
-
-    @Test
-    public void supportsFilteringByValue() throws Exception {
-        assertThat(map("Dan", 2).filterValues(Predicates.is(2)), is(map("Dan", 2)));
-        assertThat(map("Dan", 2).filterValues(Predicates.is(3)), is(empty(String.class, Integer.class)));
-    }
-
-    @Test
-    public void supportsMappingValues() throws Exception {
-        assertThat(map("Dan", 2).map(add(2)), is(map("Dan", (Number) 4)));
-    }
-
-    @Test
     public void canIterate() throws Exception {
         final Iterator<Pair<Integer, Integer>> iterator = map(0, 0, 1, 1, 2, 2).iterator();
         assertThat(iterator.hasNext(), is(true));

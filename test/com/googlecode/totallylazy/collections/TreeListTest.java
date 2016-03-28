@@ -62,10 +62,4 @@ public class TreeListTest {
         assertThat(treeList("Dan", "Matt").headOption(), is(Option.some("Dan")));
         assertThat(empty(String.class).headOption(), is(Option.none(String.class)));
     }
-
-
-    @Test
-    public void supportsRemoveAll() throws Exception {
-        assertThat(treeList(1, 2, 3, 4, 5, 6).deleteAll(sequence(3, 4)), hasExactly(1, 2, 5, 6));
-    }
 }

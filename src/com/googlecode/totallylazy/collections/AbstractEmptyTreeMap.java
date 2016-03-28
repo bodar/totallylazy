@@ -64,28 +64,8 @@ public abstract class AbstractEmptyTreeMap<K, V, Self extends TreeMap<K, V>> ext
     }
 
     @Override
-    public Self filter(Predicate<? super Pair<K, V>> predicate) {
-        return cast(this);
-    }
-
-    @Override
-    public Self filterKeys(Predicate<? super K> predicate) {
-        return cast(this);
-    }
-
-    @Override
-    public Self filterValues(Predicate<? super V> predicate) {
-        return cast(this);
-    }
-
-    @Override
     public <S> S fold(S seed, Function2<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return seed;
-    }
-
-    @Override
-    public <NewV> TreeMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
-        return cast(this);
     }
 
     @Override

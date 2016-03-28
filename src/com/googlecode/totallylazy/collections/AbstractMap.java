@@ -50,17 +50,7 @@ public abstract class AbstractMap<K, V> extends ReadOnlyMap<K,V> implements Pers
 
     @Override
     public Option<V> find(Predicate<? super K> predicate) {
-        return filterKeys(predicate).values().headOption();
-    }
-
-    @Override
-    public PersistentMap<K, V> filterKeys(Predicate<? super K> predicate) {
-        return filter(Predicates.<K>first(predicate));
-    }
-
-    @Override
-    public PersistentMap<K, V> filterValues(Predicate<? super V> predicate) {
-        return filter(Predicates.<V>second(predicate));
+        return toSequence().find(p -> predicate.matches(p.getKey())).map(Pair::getValue);
     }
 
     @Override

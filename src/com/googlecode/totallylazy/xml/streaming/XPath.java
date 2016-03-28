@@ -36,7 +36,7 @@ public class XPath {
     }
 
     private static Option<PersistentList<Node>> descendant(Predicate<? super Node> predicate, PersistentList<Node> steps) {
-        return steps.tails().
+        return steps.tails().toSequence().
                 filter(tail -> predicate.matches(tail.head())).
                 lastOption().
                 map(PersistentList::tail);

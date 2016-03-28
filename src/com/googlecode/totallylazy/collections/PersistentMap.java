@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentMap;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Segment<Pair<K, V>>, PersistentContainer<K>, Functor<V>, Foldable<Pair<K, V>>, Filterable<Pair<K, V>> {
+public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Segment<Pair<K, V>>, PersistentContainer<K>, Foldable<Pair<K, V>> {
     @Override
     boolean isEmpty();
 
@@ -32,13 +32,6 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
     PersistentMap<K, V> delete(K key);
 
     @Override
-    PersistentMap<K, V> filter(Predicate<? super Pair<K, V>> predicate);
-
-    PersistentMap<K, V> filterKeys(Predicate<? super K> predicate);
-
-    PersistentMap<K, V> filterValues(Predicate<? super V> predicate);
-
-    @Override
     PersistentMap<K, V> empty();
 
     @Override
@@ -46,9 +39,6 @@ public interface PersistentMap<K, V> extends Map<K, V>, Iterable<Pair<K, V>>, Se
 
     @Override
     PersistentMap<K, V> tail() throws NoSuchElementException;
-
-    @Override
-    <NewV> PersistentMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer);
 
     PersistentList<Pair<K, V>> toPersistentList();
 

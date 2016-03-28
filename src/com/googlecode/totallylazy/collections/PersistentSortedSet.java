@@ -22,12 +22,6 @@ public interface PersistentSortedSet<T> extends PersistentSet<T>, Sorted<T>, Ind
     PersistentSortedSet<T> delete(T value);
 
     @Override
-    PersistentSortedSet<T> filter(Predicate<? super T> predicate);
-
-    @Override
-    <NewT> PersistentSortedSet<NewT> map(Function1<? super T, ? extends NewT> transformer);
-
-    @Override
     Pair<PersistentSortedSet<T>, T> removeFirst() throws NoSuchElementException;
 
     @Override

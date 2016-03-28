@@ -11,7 +11,7 @@ import com.googlecode.totallylazy.Sequence;
 
 import java.util.Set;
 
-public interface PersistentSet<T> extends Set<T>, Iterable<T>, Segment<T>, PersistentCollection<T>, Functor<T>, Foldable<T>, Filterable<T> {
+public interface PersistentSet<T> extends Set<T>, Iterable<T>, Segment<T>, PersistentCollection<T>, Foldable<T> {
     Option<T> lookup(T value);
 
     Option<T> find(Predicate<? super T> predicate);
@@ -24,11 +24,6 @@ public interface PersistentSet<T> extends Set<T>, Iterable<T>, Segment<T>, Persi
 
     @Override
     PersistentSet<T> delete(T value);
-
-    @Override
-    PersistentSet<T> filter(Predicate<? super T> predicate);
-
-    <NewT> PersistentSet<NewT> map(Function1<? super T, ? extends NewT> transformer);
 
     PersistentList<T> toPersistentList();
 

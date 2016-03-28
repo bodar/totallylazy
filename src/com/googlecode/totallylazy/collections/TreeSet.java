@@ -35,7 +35,7 @@ public class TreeSet<T> extends AbstractCollection<T> implements PersistentSorte
 
     @Override
     public PersistentList<T> toPersistentList() {
-        return map.toPersistentList().map(Callables.<T>first());
+        return map.toSequence().map(Callables.<T>first()).toPersistentList();
     }
 
     @Override
@@ -46,16 +46,6 @@ public class TreeSet<T> extends AbstractCollection<T> implements PersistentSorte
     @Override
     public Option<T> find(Predicate<? super T> predicate) {
         return map.find(predicate);
-    }
-
-    @Override
-    public PersistentSortedSet<T> filter(Predicate<? super T> predicate) {
-        return treeSet(map.filterKeys(predicate));
-    }
-
-    @Override
-    public <NewT> PersistentSortedSet<NewT> map(Function1<? super T, ? extends NewT> transformer) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

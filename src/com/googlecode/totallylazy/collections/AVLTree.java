@@ -32,18 +32,6 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
     AVLTree<K, V> delete(K key);
 
     @Override
-    AVLTree<K, V> filter(Predicate<? super Pair<K, V>> predicate);
-
-    @Override
-    AVLTree<K, V> filterKeys(Predicate<? super K> predicate);
-
-    @Override
-    AVLTree<K, V> filterValues(Predicate<? super V> predicate);
-
-    @Override
-    <NewV> AVLTree<K, NewV> map(Function1<? super V, ? extends NewV> transformer);
-
-    @Override
     Pair<AVLTree<K, V>, Pair<K, V>> removeFirst();
 
     @Override
@@ -154,11 +142,6 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         public int balance() {
             return 0;
         }
-
-        @Override
-        public <NewV> AVLTree<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
-            return cast(this);
-        }
     }
 
     final class Node<K, V> extends AbstractTreeMap<K, V, AVLTree<K, V>> implements AVLTree<K, V> {
@@ -179,11 +162,6 @@ public interface AVLTree<K, V> extends TreeMap<K, V> {
         @Override
         public int balance() {
             return balance;
-        }
-
-        @Override
-        public <NewV> AVLTree<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
-            return cast(TreeMap.methods.map(transformer, factory, this));
         }
     }
 }

@@ -121,30 +121,8 @@ public abstract class AbstractTreeMap<K, V, Self extends TreeMap<K, V>> extends 
     }
 
     @Override
-    public Self filter(Predicate<? super Pair<K, V>> predicate) {
-        if (predicate.matches(pair()))
-            return create(comparator, key, value, left.filter(predicate), right.filter(predicate));
-        return left.filter(predicate).joinTo(self(right.filter(predicate)));
-    }
-
-    @Override
-    public Self filterKeys(final Predicate<? super K> predicate) {
-        return filter(Predicates.<K>first(predicate));
-    }
-
-    @Override
-    public Self filterValues(final Predicate<? super V> predicate) {
-        return filter(Predicates.<V>second(predicate));
-    }
-
-    @Override
     public <S> S fold(S seed, Function2<? super S, ? super Pair<K, V>, ? extends S> callable) {
         return right.fold(left.fold(Functions.call(callable, seed, pair()), callable), callable);
-    }
-
-    @Override
-    public <NewV> TreeMap<K, NewV> map(Function1<? super V, ? extends NewV> transformer) {
-        return TreeMap.methods.map(transformer, factory, this);
     }
 
     @Override

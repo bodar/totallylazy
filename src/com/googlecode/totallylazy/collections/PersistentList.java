@@ -7,6 +7,7 @@ import com.googlecode.totallylazy.functions.Function0;
 import com.googlecode.totallylazy.functions.Curried2;
 import com.googlecode.totallylazy.Functor;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.Sequence;
@@ -20,7 +21,7 @@ import java.util.NoSuchElementException;
 import static com.googlecode.totallylazy.functions.Callables.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Iterable<T>, Segment<T>, Functor<T>, Indexed<T>, Foldable<T>, Filterable<T> {
+public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Iterable<T>, Segment<T>, Indexed<T>, Foldable<T> {
     Option<T> find(Predicate<? super T> predicate);
 
     @Override
@@ -35,6 +36,11 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     default PersistentList<PersistentList<T>> tails() {
         if(isEmpty()) return constructors.empty();
         return constructors.cons(this, tail().tails());
+    }
+
+    @Override
+    default <S> S fold(final S seed, final Function2<? super S, ? super T, ? extends S> callable) {
+        return toSequence().fold(seed, callable);
     }
 
     @tailrec
@@ -57,15 +63,7 @@ public interface PersistentList<T> extends List<T>, PersistentCollection<T>, Ite
     @Override
     PersistentList<T> delete(T value);
 
-    PersistentList<T> deleteAll(Iterable<? extends T> values);
-
     PersistentList<T> reverse();
-
-    @Override
-    <S> PersistentList<S> map(Function1<? super T, ? extends S> callable);
-
-    @Override
-    PersistentList<T> filter(final Predicate<? super T> predicate);
 
     List<T> toMutableList();
 

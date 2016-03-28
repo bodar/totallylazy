@@ -168,21 +168,4 @@ public class PersistentSortedMapTest {
         assertThat(sortedMap("Dan", 2).find(contains("a")), is(some(2)));
         assertThat(sortedMap("Dan", 2).find(contains("b")), is(none(Integer.class)));
     }
-
-    @Test
-    public void supportsFilteringByKey() throws Exception {
-        assertThat(sortedMap("Dan", 2).filterKeys(contains("a")), is(sortedMap("Dan", 2)));
-        assertThat(sortedMap("Dan", 2).filterKeys(contains("b")), is(emptySortedMap(String.class, Integer.class)));
-    }
-
-    @Test
-    public void supportsFilteringByValue() throws Exception {
-        assertThat(sortedMap("Dan", 2).filterValues(Predicates.is(2)), is(sortedMap("Dan", 2)));
-        assertThat(sortedMap("Dan", 2).filterValues(Predicates.is(3)), is(emptySortedMap(String.class, Integer.class)));
-    }
-
-    @Test
-    public void supportsMappingValues() throws Exception {
-        assertThat(sortedMap("Dan", 2).map(add(2)), is(sortedMap("Dan", (Number) 4)));
-    }
 }
