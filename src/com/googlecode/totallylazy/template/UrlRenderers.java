@@ -1,51 +1,25 @@
 package com.googlecode.totallylazy.template;
 
-import com.googlecode.totallylazy.LazyException;
+import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.io.Uri;
 
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
+import java.io.InputStream;
+import java.util.Map;
 
-import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.io.Uri.packageUri;
 
-public class UrlRenderers implements Renderers {
-    private final Uri baseUrl;
-    private final String extension;
-    private final ConcurrentHashMap<String, Template> cache = new ConcurrentHashMap<>();
-    private final Renderers parent;
+public class UrlRenderers {
 
-    UrlRenderers(Uri baseUrl, Renderers parent, String extension) {
-        this.baseUrl = baseUrl;
-        this.parent = parent;
-        this.extension = extension;
-    }
-
-    static Renderers renderers(Class<?> baseUrl){
+    public static Function2<String, Renderers, Renderer<Map<String, Object>>> renderers(Class<?> baseUrl) {
         return renderers(packageUri(baseUrl));
     }
 
-    static Renderers renderers(Uri baseUrl){
-        return renderers(baseUrl, Empty.Instance, "st");
-    }
 
-    static Renderers renderers(Uri baseUrl, Renderers parent, final String extension){
-        return new UrlRenderers(baseUrl, parent, extension);
-    }
-
-    @Override
-    public Renderer<Object> get(String name) {
-        return cast(cache.computeIfAbsent(name, (n) -> {
-            try {
-                return Template.template(baseUrl.mergePath(name + "." + extension).toURL().openStream(), this);
-            } catch (IOException e) {
-                throw LazyException.lazyException(e);
+    public static Function2<String, Renderers, Renderer<Map<String, Object>>> renderers(Uri baseUrl) {
+        return (name, renderers) -> {
+            try (InputStream inputStream = baseUrl.mergePath(name).toURL().openStream()) {
+                return Template.template(inputStream, renderers);
             }
-        }));
-    }
-
-    @Override
-    public Appendable render(Object instance, Appendable appendable) throws IOException {
-        return parent.render(instance, appendable);
+        };
     }
 }

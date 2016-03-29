@@ -23,7 +23,7 @@ public class TemplateTest {
     public void canCallSubTemplates() throws Exception {
         Templates templates = Templates.templates().
             add("subTemplateA", ignore -> "...").
-            add("subTemplateB", (Map<String, Object> context) -> "Your last name is " + context.get("name"));
+            add("subTemplateB", context -> "Your last name is " + ((Map<?, ?>)context).get("name"));
         Template template = template("Hello $first$ $subTemplateA()$ $subTemplateB(name=last)$", templates);
         String result = template.render(map(
                 "first", "Dan",

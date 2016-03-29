@@ -1,15 +1,27 @@
 package com.googlecode.totallylazy.template;
 
+import com.googlecode.totallylazy.Strings;
 import org.junit.Test;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Maps.map;
+import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.functions.TimeReport.time;
 import static com.googlecode.totallylazy.template.Templates.defaultTemplates;
 import static com.googlecode.totallylazy.template.Templates.templates;
 
 public class TemplatesTest {
+    @Test
+    public void registeredRenderersAreCorrectlyCalled() throws Exception {
+        Templates templates = templates(getClass());
+        templates.add(instanceOf(String.class), s -> Strings.string(s.hashCode()));
+        String value = "Dan";
+        assertThat(templates.get("hello").render(map("name", value)), is("Hello " + value.hashCode()));
+        assertThat(templates.get("parent").render(map("name", value)), is("Say Hello " + value.hashCode()));
+    }
+
+
     @Test
     public void defaultTemplatesSupportsEncoding() throws Exception {
         Templates templates = defaultTemplates();
