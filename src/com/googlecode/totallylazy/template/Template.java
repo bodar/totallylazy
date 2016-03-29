@@ -3,6 +3,7 @@ package com.googlecode.totallylazy.template;
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.parser.Parser;
+import com.googlecode.totallylazy.template.Renderers.Empty;
 import com.googlecode.totallylazy.template.ast.Anonymous;
 import com.googlecode.totallylazy.template.ast.Arguments;
 import com.googlecode.totallylazy.template.ast.Attribute;
@@ -39,24 +40,32 @@ public class Template implements Renderer<Map<String, Object>> {
     }
 
     public static Template template(String template) {
-        return template(template, Renderers.Empty.Instance);
+        return template(template, Empty.Instance);
     }
     public static Template template(String template, Renderers parent) {
-        return template(template, parent, Grammar.TEMPLATE());
+        return template(template, parent, Grammar.parser());
     }
 
-    private static Template template(String template, Renderers parent, Parser<List<Expression>> parser) {
+    public static Template template(String template, Parser<List<Expression>> parser) {
+        return new Template(parser.parse(template).value(), Empty.Instance);
+    }
+
+    public static Template template(String template, Renderers parent, Parser<List<Expression>> parser) {
         return new Template(parser.parse(template).value(), parent);
     }
 
     public static Template template(InputStream template) {
-        return template(template, Renderers.Empty.Instance);
+        return template(template, Empty.Instance);
     }
     public static Template template(InputStream template, Renderers parent) {
-        return template(template, parent, Grammar.TEMPLATE());
+        return template(template, parent, Grammar.parser());
     }
 
-    private static Template template(InputStream template, Renderers parent, Parser<List<Expression>> parser) {
+    public static Template template(InputStream template, Parser<List<Expression>> parser) {
+        return new Template(parser.parse(template).value(), Empty.Instance);
+    }
+
+    public static Template template(InputStream template, Renderers parent, Parser<List<Expression>> parser) {
         return new Template(parser.parse(template).value(), parent);
     }
 

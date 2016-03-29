@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.template;
 
+import com.googlecode.totallylazy.template.ast.Grammar;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -12,6 +13,13 @@ import static com.googlecode.totallylazy.template.Template.template;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TemplateTest {
+    @Test
+    public void canParseATemplateWithDifferentDelimiters() throws Exception {
+        Template template = template("Hello ~first~ ~last~", Grammar.parser('~'));
+        String result = template.render(map("first", "Dan", "last", "Bodart"));
+        assertThat(result, Matchers.is("Hello Dan Bodart"));
+    }
+
     @Test
     public void canParseATemplate() throws Exception {
         Template template = template("Hello $first$ $last$");

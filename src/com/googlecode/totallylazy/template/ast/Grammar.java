@@ -2,19 +2,38 @@ package com.googlecode.totallylazy.template.ast;
 
 import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
-import com.googlecode.totallylazy.predicates.Predicate;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Characters.alphaNumeric;
-import static com.googlecode.totallylazy.parser.Parsers.*;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.not;
+import static com.googlecode.totallylazy.parser.Parsers.between;
+import static com.googlecode.totallylazy.parser.Parsers.isChar;
+import static com.googlecode.totallylazy.parser.Parsers.or;
+import static com.googlecode.totallylazy.parser.Parsers.ws;
+import static com.googlecode.totallylazy.parser.Parsers.wsChar;
 
-public interface Grammar {
+public class Grammar {
+    static Grammar Default = new Grammar();
+
+    public static Parser<List<Expression>> parser() {
+        return Default.TEMPLATE;
+    }
+
+    public static Parser<List<Expression>> parser(char delimiter) {
+        return new Grammar() {
+            @Override char DELIMITER() { return delimiter; }
+        }.TEMPLATE;
+    }
+
+    char DELIMITER() { return '$'; }
+
     Parser<Void> SEPARATOR = wsChar(',').ignore();
     Parser<Void> SINGLE_QUOTE = isChar('\'').ignore();
     Parser<Void> DOUBLE_QUOTE = isChar('"').ignore();
@@ -22,11 +41,7 @@ public interface Grammar {
     Parser<String> IDENTIFIER = Parsers.characters(alphaNumeric).map(Object::toString);
 
     Parser<Name> NAME = IDENTIFIER.map(Name::name);
-
-    static Parser<Text> TEXT(char delimiter) {
-        return textExcept(is(delimiter).or(is('}')));
-    }
-
+    Parser<Text> TEXT = textExcept(is(DELIMITER()).or(is('}')));
     Parser<Text> SINGLE_QUOTED = between(SINGLE_QUOTE, textExcept('\''), SINGLE_QUOTE);
     Parser<Text> DOUBLE_QUOTED = between(DOUBLE_QUOTE, textExcept('"'), DOUBLE_QUOTE);
     Parser<Text> LITERAL = SINGLE_QUOTED.or(DOUBLE_QUOTED);
@@ -39,64 +54,51 @@ public interface Grammar {
         return Parsers.characters(not(predicate)).map(Text::text);
     }
 
-    static Parser<Expression> VALUE(char delimiter) {
-        return Parsers.lazy(() -> ws(or(LITERAL, FUNCTION_CALL(delimiter), ATTRIBUTE(delimiter))));
-    }
+    Parser<Expression> VALUE = Parsers.lazy(new Callable<Parser<Expression>>() {
+        @Override
+        public Parser<Expression> call() throws Exception {
+            return ws(or(LITERAL, FUNCTION_CALL, ATTRIBUTE));
+        }
+    });
 
-    static Parser<Expression> EXPRESSION(char delimiter) {
-        return Parsers.lazy(() -> Parsers.<Expression>or(FUNCTION_CALL(delimiter), MAPPING(delimiter), ATTRIBUTE(delimiter)).surroundedBy(isChar(delimiter)));
-    }
+    Parser<Expression> EXPRESSION = Parsers.lazy(new Callable<Parser<Expression>>() {
+        @Override
+        public Parser<Expression> call() throws Exception {
+            return Parsers.<Expression>or(FUNCTION_CALL, MAPPING, ATTRIBUTE).surroundedBy(isChar(DELIMITER()));
+        }
+    });
 
-    static Parser<Expression> NAMES(char delimiter) {
-        return Parsers.lazy(() -> or(NAME, INDIRECTION(delimiter)));
-    }
+    Parser<Expression> NAMES = Parsers.lazy(new Callable<Parser<Expression>>() {
+        @Override
+        public Parser<Expression> call() throws Exception {
+            return or(NAME, INDIRECTION);
+        }
+    });
 
-    static Parser<Attribute> ATTRIBUTE(char delimiter) {
-        return NAMES(delimiter).sepBy1(isChar('.')).map(Attribute::attribute);
-    }
+    Parser<Attribute> ATTRIBUTE = NAMES.sepBy1(isChar('.')).map(Attribute::attribute);
 
-    static Parser<Pair<String, Expression>> NAMED_ARGUMENT(char delimiter) {
-        return IDENTIFIER.followedBy(isChar('=')).then(VALUE(delimiter));
-    }
+    Parser<Pair<String, Expression>> NAMED_ARGUMENT = IDENTIFIER.followedBy(isChar('=')).then(VALUE);
 
-    static Parser<NamedArguments> NAMED_ARGUMENTS(char delimiter) {
-        return NAMED_ARGUMENT(delimiter).sepBy1(SEPARATOR).map(Maps::map).map(NamedArguments::namedArguments);
-    }
+    Parser<NamedArguments> NAMED_ARGUMENTS = NAMED_ARGUMENT.sepBy1(SEPARATOR).map(Maps::map).map(NamedArguments::namedArguments);
 
-    static Parser<ImplicitArguments> IMPLICIT_ARGUMENTS(char delimiter) {
-        return VALUE(delimiter).sepBy(SEPARATOR).map(ImplicitArguments::implicitArguments);
-    }
+    Parser<ImplicitArguments> IMPLICIT_ARGUMENTS = VALUE.sepBy(SEPARATOR).map(ImplicitArguments::implicitArguments);
 
 
-    static Parser<FunctionCall> FUNCTION_CALL(char delimiter) {
-        return NAMES(delimiter).then(between(isChar('('), or(NAMED_ARGUMENTS(delimiter), IMPLICIT_ARGUMENTS(delimiter)), isChar(')'))).
-                map(pair -> FunctionCall.functionCall(pair.first(), pair.second()));
-    }
+    Parser<FunctionCall> FUNCTION_CALL =
+            NAMES.then(between(isChar('('), or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS), isChar(')'))).
+                    map(pair -> FunctionCall.functionCall(pair.first(), pair.second()));
 
-    static Parser<List<Expression>> TEMPLATE() {
-        return TEMPLATE('$');
-    }
-
-    static Parser<List<Expression>> TEMPLATE(char delimiter) {
-        return or(EXPRESSION(delimiter), TEXT(delimiter)).many1();
-    }
+    Parser<List<Expression>> TEMPLATE = or(EXPRESSION, TEXT).many1();
 
     Parser<List<String>> PARAMETERS_NAMES = IDENTIFIER.sepBy1(SEPARATOR);
+    Parser<Anonymous> ANONYMOUS_TEMPLATE = between(wsChar('{'),
+            PARAMETERS_NAMES.followedBy(wsChar('|')).optional().map(o -> o.getOrElse(list())).
+                    then(TEMPLATE), wsChar('}')).
+            map(pair -> Anonymous.anonymous(pair.first(), pair.second()));
 
-    static Parser<Anonymous> ANONYMOUS_TEMPLATE(char delimiter) {
-        return between(wsChar('{'),
-                PARAMETERS_NAMES.followedBy(wsChar('|')).optional().map(o -> o.getOrElse(list())).
-                        then(TEMPLATE(delimiter)), wsChar('}')).
-                map(pair -> Anonymous.anonymous(pair.first(), pair.second()));
-    }
+    Parser<Mapping> MAPPING = ATTRIBUTE.followedBy(isChar(':')).then(ANONYMOUS_TEMPLATE).
+            map(pair -> Mapping.mapping(pair.first(), pair.second()));
 
-    static Parser<Mapping> MAPPING(char delimiter) {
-        return ATTRIBUTE(delimiter).followedBy(isChar(':')).then(ANONYMOUS_TEMPLATE(delimiter)).
-                map(pair -> Mapping.mapping(pair.first(), pair.second()));
-    }
-
-    static Parser<Indirection> INDIRECTION(char delimiter) {
-        return Parsers.<Expression>or(ATTRIBUTE(delimiter), ANONYMOUS_TEMPLATE(delimiter), LITERAL).between(isChar('('), isChar(')')).
-                map(Indirection::indirection);
-    }
+    Parser<Indirection> INDIRECTION = Parsers.<Expression>or(ATTRIBUTE, ANONYMOUS_TEMPLATE, LITERAL).between(isChar('('), isChar(')')).
+            map(Indirection::indirection);
 }
