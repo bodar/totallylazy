@@ -12,7 +12,7 @@ import static com.googlecode.totallylazy.template.Templates.templates;
 public class TemplatesTest {
     @Test
     public void registeredRenderersAreCorrectlyCalled() throws Exception {
-        Templates templates = templates(getClass());
+        Templates templates = templates(getClass()).extension("st");
         templates.add(instanceOf(String.class), s -> Strings.string(s.hashCode()));
         String value = "Dan";
         assertThat(templates.get("hello").render(map("name", value)), is("Hello " + value.hashCode()));
@@ -30,7 +30,7 @@ public class TemplatesTest {
 
     @Test
     public void canLoadFromClassPath() throws Exception {
-        Templates templates = templates(getClass());
+        Templates templates = templates(getClass()).extension("st");
         String result = templates.get("hello").render(map("name", "Dan"));
         assertThat(result, is("Hello Dan"));
     }
@@ -45,7 +45,7 @@ public class TemplatesTest {
 
     @Test
     public void canUseTemplatesFromClassPathAndDefaultTemplates() throws Exception {
-        Templates templates = templates(getClass()).addDefault();
+        Templates templates = templates(getClass()).addDefault().extension("st");
         Template template = Template.template("Say $hello()$", templates);
         String result = template.render(map("name", "Dan"));
         assertThat(result, is("Say Hello Dan"));

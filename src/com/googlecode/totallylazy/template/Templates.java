@@ -62,11 +62,11 @@ public class Templates implements Renderers {
         return this;
     }
 
-    public Templates add(String name, Function1<Object, ? extends CharSequence> renderer) {
+    public Templates add(String name, Function1<? super Object, ? extends CharSequence> renderer) {
         return add(name, (o, a) -> a.append(renderer.apply(o)));
     }
 
-    public Templates add(String name, Renderer<Object> renderer) {
+    public Templates add(String name, Renderer<? super Object> renderer) {
         renderers.put(name, renderer);
         return this;
     }
@@ -79,5 +79,9 @@ public class Templates implements Renderers {
     @Override
     public Renderer<Object> get(String name) {
         return renderers.computeIfAbsent(name, n -> cast(missing.apply(n, this)));
+    }
+
+    public Templates extension(String value) {
+        return new Templates((s, r) -> missing.apply(s + "." + value, r));
     }
 }
