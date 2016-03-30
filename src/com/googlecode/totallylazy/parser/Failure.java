@@ -38,6 +38,11 @@ public interface Failure<A> extends Result<A>{
     }
 
     @Override
+    default <B> Result<B> flatMap(Function1<? super A, ? extends Result<B>> callable) {
+        return cast(this);
+    }
+
+    @Override
     default Option<A> option() {
         return none();
     }

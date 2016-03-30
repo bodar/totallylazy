@@ -41,6 +41,13 @@ public interface Success<A> extends Result<A> {
     }
 
     @Override
+    default <B> Result<B> flatMap(Function1<? super A, ? extends Result<B>> callable) {
+        final Result<B> result = Functions.call(callable, value());
+        if(result.success()) return success(result.value(), remainder());
+        return result;
+    }
+
+    @Override
     default Option<A> option() {
         return some(value());
     }

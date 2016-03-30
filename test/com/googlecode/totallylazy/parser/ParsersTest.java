@@ -5,17 +5,37 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.Characters.among;
 import static com.googlecode.totallylazy.Lists.list;
-import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.Segment.constructors.characters;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.parser.CharacterParser.character;
+import static com.googlecode.totallylazy.parser.Parsers.characters;
 import static com.googlecode.totallylazy.parser.Parsers.isChar;
 import static com.googlecode.totallylazy.parser.Parsers.pattern;
 import static com.googlecode.totallylazy.parser.Parsers.string;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static java.lang.String.format;
 
 public class ParsersTest {
+    @Test
+    public void supportsFlatMap() throws Exception {
+        final Parser<CharSequence> parser = characters(not('}')).flatMap(c -> characters(among("abc")).parse(c));
+        final Result<CharSequence> result = parser.parse("ab}");
+        assertThat(result.value().toString(), is("ab"));
+        assertThat(result.remainder().toString(), is("}"));
+    }
+
+    @Test
+    public void whitespaceCharIsOptionalAround() throws Exception {
+        assertThat(Parsers.wsChar('}').parse(" }").value(), is('}'));
+        assertThat(Parsers.wsChar('}').parse("} ").value(), is('}'));
+        assertThat(Parsers.wsChar('}').parse("}").value(), is('}'));
+        assertThat(Parsers.wsChar('}').parse(" } ").value(), is('}'));
+        assertThat(Parsers.wsChar('}').parse("      }     ").value(), is('}'));
+    }
+
     @Test
     public void supportsPrefix() throws Exception {
         Parser<String> parser = pattern("[0-9]").prefix(isChar('+').map(ignore -> a -> format("positive(%s)", a)));

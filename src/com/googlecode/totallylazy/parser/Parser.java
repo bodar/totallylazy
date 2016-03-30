@@ -36,6 +36,10 @@ public interface Parser<A> extends Functor<A> {
         return MappingParser.map(this, callable);
     }
 
+    default <B> Parser<B> flatMap(Function1<? super A, ? extends Result<B>> callable) {
+        return FlatMappingParser.flatMap(this, callable);
+    }
+
     default <B> Parser<Pair<A, B>> then(Parser<? extends B> parser) {
         return PairParser.pair(this, parser);
     }
