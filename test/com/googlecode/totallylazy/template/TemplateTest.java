@@ -18,7 +18,7 @@ public class TemplateTest {
         Templates templates = Templates.templates().
                 add("a.txt", ignore -> "...").
                 add("b.txt", context -> "Your last name is " + ((Map<?, ?>)context).get("name"));
-        Template template = template("Hello $first$ $a.txt()$ $b.txt(name=last)$", templates);
+        Template template = template("Hello $first$ $('a.txt')()$ $('b.txt')(name=last)$", templates);
         String result = template.render(map(
                 "first", "Dan",
                 "last", "Bodart"));
