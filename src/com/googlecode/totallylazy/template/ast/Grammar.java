@@ -11,6 +11,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Arrays.list;
 import static com.googlecode.totallylazy.Characters.alphaNumeric;
+import static com.googlecode.totallylazy.predicates.Predicates.in;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.parser.Parsers.between;
@@ -23,13 +24,13 @@ public class Grammar {
     static Grammar Default = new Grammar();
 
     public static Parser<List<Expression>> parser() {
-        return Default.TEMPLATE;
+        return Default.TEMPLATE();
     }
 
     public static Parser<List<Expression>> parser(char delimiter) {
         return new Grammar() {
             @Override char DELIMITER() { return delimiter; }
-        }.TEMPLATE;
+        }.TEMPLATE();
     }
 
     char DELIMITER() { return '$'; }
@@ -41,7 +42,8 @@ public class Grammar {
     Parser<String> IDENTIFIER = Parsers.characters(alphaNumeric).map(Object::toString);
 
     Parser<Name> NAME = IDENTIFIER.map(Name::name);
-    Parser<Text> TEXT = textExcept(is(DELIMITER()).or(is('}')));
+    Parser<Text> TEXT() { return TEXT(is(DELIMITER()));}
+    Parser<Text> TEXT(Predicate<Character> predicate) { return textExcept(predicate);}
     Parser<Text> SINGLE_QUOTED = between(SINGLE_QUOTE, textExcept('\''), SINGLE_QUOTE);
     Parser<Text> DOUBLE_QUOTED = between(DOUBLE_QUOTE, textExcept('"'), DOUBLE_QUOTE);
     Parser<Text> LITERAL = SINGLE_QUOTED.or(DOUBLE_QUOTED);
@@ -88,12 +90,13 @@ public class Grammar {
             NAMES.then(between(isChar('('), or(NAMED_ARGUMENTS, IMPLICIT_ARGUMENTS), isChar(')'))).
                     map(pair -> FunctionCall.functionCall(pair.first(), pair.second()));
 
-    Parser<List<Expression>> TEMPLATE = or(EXPRESSION, TEXT).many1();
+    Parser<List<Expression>> TEMPLATE() { return TEMPLATE(is(DELIMITER())); }
+    Parser<List<Expression>> TEMPLATE(Predicate<Character> predicate) { return or(EXPRESSION, TEXT(predicate)).many1(); }
 
     Parser<List<String>> PARAMETERS_NAMES = IDENTIFIER.sepBy1(SEPARATOR);
     Parser<Anonymous> ANONYMOUS_TEMPLATE = between(wsChar('{'),
             PARAMETERS_NAMES.followedBy(wsChar('|')).optional().map(o -> o.getOrElse(list())).
-                    then(TEMPLATE), wsChar('}')).
+                    then(TEMPLATE(in(DELIMITER(), '}'))), wsChar('}')).
             map(pair -> Anonymous.anonymous(pair.first(), pair.second()));
 
     Parser<Mapping> MAPPING = ATTRIBUTE.followedBy(isChar(':')).then(ANONYMOUS_TEMPLATE).

@@ -26,6 +26,13 @@ public class TemplateTest {
     }
 
     @Test
+    public void ignoresCurlyBracesOutsideOfAnonymousTemplate() throws Exception {
+        Template template = template("function() { return '$foo$'; }");
+        String result = template.render(map("foo", "bar"));
+        assertThat(result, Matchers.is("function() { return 'bar'; }"));
+    }
+
+    @Test
     public void canParseATemplateWithDifferentDelimiters() throws Exception {
         Template template = template("Hello ~first~ ~last~", Grammar.parser('~'));
         String result = template.render(map("first", "Dan", "last", "Bodart"));

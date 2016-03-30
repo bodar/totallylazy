@@ -31,7 +31,7 @@ public class GrammarTest {
 
     @Test
     public void canParseText() throws Exception {
-        Text text = Default.TEXT.parse("Some other text").value();
+        Text text = Default.TEXT().parse("Some other text").value();
         assertThat(text, is(text("Some other text")));
     }
 
