@@ -26,18 +26,28 @@ public class Templates implements Renderers {
         this.missing = missing;
     }
 
-    public static Templates templates() {return templates(Renderers.Empty.Instance);}
-    public static Templates templates(Class<?> aClass) {return templates(UrlRenderers.renderers(aClass));}
-    public static Templates templates(Uri uri) {return templates(UrlRenderers.renderers(uri));}
-    public static Templates templates(Renderers parent) {return templates( (name, Renderers) -> parent.get(name));}
-    public static Templates templates(Function2<? super String, ? super Renderers, ? extends Renderer<?>> missing) { return new Templates(missing); }
-    public static Templates defaultTemplates() { return defaultTemplates(Renderers.Empty.Instance);}
-    public static Templates defaultTemplates(Class<?> aClass) {return defaultTemplates(UrlRenderers.renderers(aClass));}
-    public static Templates defaultTemplates(Uri uri) {return defaultTemplates(UrlRenderers.renderers(uri));}
-    public static Templates defaultTemplates(Renderers parent) { return defaultTemplates((name, Renderers) -> parent.get(name)); }
-    public static Templates defaultTemplates(Function2<? super String, ? super Renderers, ? extends Renderer<?>> missing) {
-        return templates(missing).
-                add("raw", Default.Instance).
+    public static Templates templates() {
+        return templates(Renderers.Empty.Instance);
+    }
+
+    public static Templates templates(Class<?> aClass) {
+        return templates(UrlRenderers.renderers(aClass));
+    }
+
+    public static Templates templates(Uri uri) {
+        return templates(UrlRenderers.renderers(uri));
+    }
+
+    public static Templates templates(Renderers parent) {
+        return templates((name, Renderers) -> parent.get(name));
+    }
+
+    public static Templates templates(Function2<? super String, ? super Renderers, ? extends Renderer<?>> missing) {
+        return new Templates(missing);
+    }
+
+    public Templates addDefault() {
+        return add("raw", Default.Instance).
                 add("html", Xml.escape()).
                 add("xml", Xml.escape()).
                 add("url", s -> URLEncoder.encode(string(s), "UTF-8"));

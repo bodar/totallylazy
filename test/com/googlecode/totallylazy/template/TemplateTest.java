@@ -14,6 +14,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TemplateTest {
     @Test
+    public void subTemplatesCanHaveDotsInTheirNames() throws Exception {
+        Templates templates = Templates.templates().
+                add("a.txt", ignore -> "...").
+                add("b.txt", context -> "Your last name is " + ((Map<?, ?>)context).get("name"));
+        Template template = template("Hello $first$ $a.txt()$ $b.txt(name=last)$", templates);
+        String result = template.render(map(
+                "first", "Dan",
+                "last", "Bodart"));
+        assertThat(result, Matchers.is("Hello Dan ... Your last name is Bodart"));
+    }
+
+    @Test
     public void canParseATemplateWithDifferentDelimiters() throws Exception {
         Template template = template("Hello ~first~ ~last~", Grammar.parser('~'));
         String result = template.render(map("first", "Dan", "last", "Bodart"));

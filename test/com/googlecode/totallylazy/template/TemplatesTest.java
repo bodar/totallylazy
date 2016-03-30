@@ -7,8 +7,6 @@ import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
-import static com.googlecode.totallylazy.functions.TimeReport.time;
-import static com.googlecode.totallylazy.template.Templates.defaultTemplates;
 import static com.googlecode.totallylazy.template.Templates.templates;
 
 public class TemplatesTest {
@@ -24,7 +22,7 @@ public class TemplatesTest {
 
     @Test
     public void defaultTemplatesSupportsEncoding() throws Exception {
-        Templates templates = defaultTemplates();
+        Templates templates = templates().addDefault();
         Template template = Template.template("Hello $html(first)$", templates);
         String result = template.render(map("first", "<Dan>"));
         assertThat(result, is("Hello &lt;Dan&gt;"));
@@ -39,7 +37,7 @@ public class TemplatesTest {
 
     @Test
     public void supportsIndirection() throws Exception {
-        Templates templates = defaultTemplates();
+        Templates templates = templates().addDefault();
         Template template = Template.template("Hello $(encoding)(first)$", templates);
         String result = template.render(map("first", "<Dan>", "encoding", "html"));
         assertThat(result, is("Hello &lt;Dan&gt;"));
@@ -47,7 +45,7 @@ public class TemplatesTest {
 
     @Test
     public void canUseTemplatesFromClassPathAndDefaultTemplates() throws Exception {
-        Templates templates = defaultTemplates(getClass());
+        Templates templates = templates(getClass()).addDefault();
         Template template = Template.template("Say $hello()$", templates);
         String result = template.render(map("name", "Dan"));
         assertThat(result, is("Say Hello Dan"));
