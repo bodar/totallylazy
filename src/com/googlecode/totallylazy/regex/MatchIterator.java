@@ -14,9 +14,6 @@ public class MatchIterator extends StatefulIterator<MatchResult> {
     }
 
     public MatchResult getNext() {
-            if (matcher.find()) {
-                return matcher.toMatchResult();
-            }
-        return finished();
+        return matcher.find() ? matcher.toMatchResult() : finished();
     }
 }

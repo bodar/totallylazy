@@ -1,11 +1,13 @@
 package com.googlecode.totallylazy.regex;
 
 import com.googlecode.totallylazy.Extractor;
+import com.googlecode.totallylazy.Iterators;
 import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.predicates.Predicate;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 
+import java.util.Iterator;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
@@ -35,7 +37,7 @@ public class Regex implements Predicate<CharSequence>, Function1<CharSequence, M
     }
 
     public Sequence<String> split(CharSequence value) {
-        return sequence(pattern.split(value));
+        return Sequences.sequence(pattern.split(value));
     }
 
     @Override
@@ -60,5 +62,14 @@ public class Regex implements Predicate<CharSequence>, Function1<CharSequence, M
     @Override
     public Matches call(CharSequence charSequence) throws Exception {
         return findMatches(charSequence);
+    }
+
+    public Sequence<Result> sequence(CharSequence text) {
+        return new Sequence<Result>() {
+            @Override
+            public Iterator<Result> iterator() {
+                return Iterators.flatten(new ResultIterator(pattern.matcher(text), text));
+            }
+        };
     }
 }

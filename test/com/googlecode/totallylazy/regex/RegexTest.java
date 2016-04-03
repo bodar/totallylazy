@@ -9,6 +9,8 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.regex.Matches.functions.replace;
 import static com.googlecode.totallylazy.regex.Regex.regex;
+import static com.googlecode.totallylazy.regex.Result.matched;
+import static com.googlecode.totallylazy.regex.Result.unmatched;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -30,5 +32,11 @@ public class RegexTest {
         Regex regex = regex("\\d+");
         Sequence<String> matches = sequence("111", "11 11", "AAA").map(regex.then(replace(constant("N"))));
         assertThat(matches, is(sequence("N", "N N", "AAA")));
+    }
+
+    @Test
+    public void supportsGettingASequenceOfMatchedAndUnmatchedResults() throws Exception {
+        Sequence<Result> result = regex("\\d+").sequence("Tel:123 Dan");
+        assertThat(result, is(sequence(unmatched("Tel:"), matched("123"), unmatched(" Dan"))));
     }
 }
