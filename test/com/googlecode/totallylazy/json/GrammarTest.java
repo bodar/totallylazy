@@ -1,14 +1,20 @@
 package com.googlecode.totallylazy.json;
 
+import com.googlecode.totallylazy.Maps;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.functions.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Lists.list;
+import static com.googlecode.totallylazy.Maps.map;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -76,8 +82,11 @@ public class GrammarTest {
         assertThat((Number) listOfTwo.get(1), NumberMatcher.is(123));
         List<Object> empty = Grammar.ARRAY.parse("[]").value();
         assertThat(empty.isEmpty(), is(true));
+        List<Object> nested = Grammar.ARRAY.parse("[[\"cats\", \"dogs\"],[true, false],{\"foo\": true, \"bar\": false }]").value();
+        assertThat(Unchecked.<List<String>>cast(nested.get(0)), is(list("cats", "dogs")));
+        assertThat(Unchecked.<List<Boolean>>cast(nested.get(1)), is(list(true, false)));
+        assertThat(Unchecked.<Map<String, Boolean>>cast(nested.get(2)), is(map("foo", true, "bar", false)));
     }
-
 
     @Test
     public void canParseObjectLiteral() throws Exception {
