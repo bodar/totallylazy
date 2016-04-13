@@ -16,6 +16,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -794,6 +795,19 @@ public class SequenceTest {
         assertThat(sequence, hasExactly(1, 2));
         assertThat(sequence(1).take(2).size(), NumberMatcher.is(1));
         assertThat(sequence().take(2).size(), NumberMatcher.is(0));
+    }
+
+    @Test
+    public void takeIteratorDoesNotAllowCallingNext() throws Exception {
+        final Iterator<Integer> sequence = sequence(1, 2, 3).take(1).iterator();
+        assertThat(sequence.next(), NumberMatcher.is(1));
+
+        try{
+            assertThat(sequence.next(), not(NumberMatcher.is(2)));
+            fail("Expected exception");
+        } catch(NoSuchElementException e){
+            // As expected
+        }
     }
 
     @Test
