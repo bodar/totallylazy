@@ -3,6 +3,7 @@ out
 build/artifacts
 .idea/workspace.xml
 .idea/misc.xml
+.idea/emacs.xml
 .idea/shelf/*
 .ant-targets-build.xml
 *.orig
