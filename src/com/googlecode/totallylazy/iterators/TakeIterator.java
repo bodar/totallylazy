@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.iterators;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class TakeIterator<T> extends ReadOnlyIterator<T> {
     private final Iterator<? extends T> iterator;
@@ -18,7 +19,10 @@ public class TakeIterator<T> extends ReadOnlyIterator<T> {
 
     @Override
     public T next() {
-        count--;
-        return iterator.next();
+        if(hasNext()) {
+            count--;
+            return iterator.next();
+        }
+        throw new NoSuchElementException();
     }
 }
