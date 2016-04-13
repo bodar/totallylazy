@@ -1,15 +1,25 @@
 package com.googlecode.totallylazy.xml;
 
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.functions.TimeReport;
 import com.googlecode.totallylazy.matchers.NumberMatcher;
+import org.hamcrest.CoreMatchers;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Sequences.repeat;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.fail;
 
 public class XmlTest {
     @Test
@@ -101,5 +111,18 @@ public class XmlTest {
                 "<root><child><name>bob</name></child></root>");
         Number value = Xml.selectNumber(document, "count(//child)");
         assertThat(value, NumberMatcher.is(1));
+    }
+
+    @Test
+    public void nextOnNodeIteratorWorks() {
+        Document document = Xml.document("<?xml version=\"1.0\" encoding=\"UTF-16\" standalone=\"no\"?>\n"+
+                "<root></root>");
+        Iterator<Node> value = Xml.selectNodes(document, "zerolength").iterator();
+        try {
+            assertThat(value.next(), not(nullValue()));
+            fail("Expected exception");
+        }catch (NoSuchElementException e){
+            // Expected
+        }
     }
 }
