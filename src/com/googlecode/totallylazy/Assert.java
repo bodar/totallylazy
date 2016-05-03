@@ -17,10 +17,6 @@ public interface Assert {
         }
     }
 
-    static void assertThat(String reason, boolean assertion) {
-        if (!assertion) throw new AssertionError(reason);
-    }
-
     static public <T> void assertEquals(T expected, T actual) {
         assertThat(actual, is(expected));
     }
@@ -30,7 +26,7 @@ public interface Assert {
     }
 
     static void assertTrue(String reason, boolean assertion) {
-        assertThat(reason, assertion);
+        if (!assertion) throw new AssertionError(reason);
     }
 
     static void assertFalse(boolean assertion) {
@@ -38,7 +34,7 @@ public interface Assert {
     }
 
     static void assertFalse(String reason, boolean assertion) {
-        assertThat(reason, !assertion);
+        if (assertion) throw new AssertionError(reason);
     }
 
     static public <T> void assertSame(T expected, T actual) {

@@ -1,6 +1,5 @@
 package com.googlecode.totallylazy.reflection;
 
-import com.googlecode.totallylazy.Characters;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
