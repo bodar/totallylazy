@@ -13,6 +13,12 @@ public class Lists {
         return new ArrayList<>();
     }
 
+    public static <T> List<T> one(T instance) {
+        List<T> list = list();
+        list.add(instance);
+        return list;
+    }
+
     @SafeVarargs
     public static <T> List<T> list(T... values) {
         return list(sequence(values));
