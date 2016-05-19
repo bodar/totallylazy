@@ -61,6 +61,11 @@ public class ProxyTest {
         assertThat(called.get(), is(1));
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void canNotCreateProxyForFinalClass() throws Exception {
+        Proxy.proxy(Integer.class, null);
+    }
+
     interface Interface {
         String name();
     }

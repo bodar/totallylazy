@@ -22,19 +22,19 @@ public interface Assert {
     }
 
     static void assertTrue(boolean assertion) {
-        assertTrue("", assertion);
+        assertThat(assertion, is(true));
     }
 
     static void assertTrue(String reason, boolean assertion) {
-        if (!assertion) throw new AssertionError(reason);
+        assertThat(reason, assertion, is(true));
     }
 
     static void assertFalse(boolean assertion) {
-        assertFalse("", assertion);
+        assertThat(assertion, is(false));
     }
 
     static void assertFalse(String reason, boolean assertion) {
-        if (assertion) throw new AssertionError(reason);
+        assertThat(reason, assertion, is(false));
     }
 
     static public <T> void assertSame(T expected, T actual) {

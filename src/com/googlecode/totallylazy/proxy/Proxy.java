@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.proxy;
 
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Randoms;
+import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.functions.Lazy;
 import com.googlecode.totallylazy.reflection.Asm;
 import com.googlecode.totallylazy.reflection.Declaration;
@@ -20,6 +21,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static java.lang.String.format;
@@ -34,6 +36,8 @@ public class Proxy {
     private static ConcurrentMap<Class<?>, Class<?>> cache = new ConcurrentHashMap<>();
 
     public static <T> T proxy(Class<T> aClass, InvocationHandler handler) {
+        if(isFinal(aClass.getModifiers())) throw new UnsupportedOperationException("Can not create a Proxy instance of final class: " + aClass);
+
         try {
             if (aClass.isInterface()) {
                 Object instance = newProxyInstance(aClass.getClassLoader(), new Class[]{aClass}, handler);
@@ -166,12 +170,13 @@ public class Proxy {
         mv.visitInsn(Asm.returns(returnType));
     }
 
-    public static <T> T lazy(Callable<T> callable) {
+    public static <T> T lazy(Callable<? extends T> callable) {
         Declaration declaration = Declaration.declaration();
         return lazy(Types.classOf(declaration.type()), callable);
     }
 
-    public static <T> T lazy(Class<T> aClass, Callable<T> callable) {
+    public static <T> T lazy(Class<? extends T> aClass, Callable<? extends T> callable) {
+        if(aClass.equals(void.class) || aClass.equals(Void.class)) return null;
         Lazy<T> lazy = Lazy.lazy(callable);
         return proxy(aClass, (proxy, method, arguments) -> method.invoke(lazy.value(), arguments));
     }
