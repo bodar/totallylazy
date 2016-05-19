@@ -1,9 +1,13 @@
 package com.googlecode.totallylazy.proxy;
 
+import com.googlecode.totallylazy.concurrent.NamedExecutors;
+import com.googlecode.totallylazy.concurrent.NamedThreadFactory;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
@@ -64,6 +68,26 @@ public class ProxyTest {
     @Test(expected = UnsupportedOperationException.class)
     public void canNotCreateProxyForFinalClass() throws Exception {
         Proxy.proxy(Integer.class, null);
+    }
+
+    @Test
+    public void canCreateAnAsyncProxy() throws Exception {
+        ExecutorService executors = NamedExecutors.newCachedThreadPool(getClass());
+        CountDownLatch latch = new CountDownLatch(1);
+        Sync async = Proxy.async(Sync.class, () -> {
+            latch.await();
+            return () -> "done";
+        }, executors);
+
+        Interface proxy = async.get(); // Would normally block
+        latch.countDown();
+        assertThat(proxy.name(), is("done"));
+
+        executors.shutdown();
+    }
+
+    interface Sync{
+        Interface get() throws Exception;
     }
 
     interface Interface {

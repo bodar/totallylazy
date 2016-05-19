@@ -20,6 +20,8 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -179,5 +181,16 @@ public class Proxy {
         if(aClass.equals(void.class) || aClass.equals(Void.class)) return null;
         Lazy<T> lazy = Lazy.lazy(callable);
         return proxy(aClass, (proxy, method, arguments) -> method.invoke(lazy.value(), arguments));
+    }
+
+    public static <T> T async(T instance, ExecutorService executor) {
+        return async(cast(instance.getClass()), instance, executor);
+    }
+
+    public static <T, I extends T> T async(Class<T> aClass, I instance, ExecutorService executor) {
+        return Proxy.proxy(aClass, (proxy, method, args) -> {
+            Future<?> future = executor.submit(() -> method.invoke(instance, args));
+            return Proxy.lazy(method.getReturnType(), future::get);
+        });
     }
 }
