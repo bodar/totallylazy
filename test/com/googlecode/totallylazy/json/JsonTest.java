@@ -14,6 +14,7 @@ import java.util.Map;
 import static com.googlecode.totallylazy.Lists.list;
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Strings.string;
 import static com.googlecode.totallylazy.time.Dates.date;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
@@ -131,6 +132,12 @@ public class JsonTest {
 
         Map<String, Object> parsedWithUnicode = Json.map("{\"text\":\"first line\\n second line \\u03BB\"}");
         assertThat((String) parsedWithUnicode.get("text"), is("first line\n second line λ"));
+    }
+
+    @Test
+    public void handlesLowercaseHexCodes() throws Exception {
+        Map<String, Object> lowerCaseUnicode = Json.map("{ \"text\": \"\\u00e7\" }");
+        assertThat((String) lowerCaseUnicode.get("text"), is("ç"));
     }
 
     @Test
