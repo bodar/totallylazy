@@ -100,7 +100,7 @@ public class Characters {
     }
 
     public static LogicalPredicate<Character> alphaNumeric = between('A', 'Z').or(between('a', 'z')).or(between('0', '9'));
-    public static LogicalPredicate<Character> hexDigit = between('A', 'F').or(between('a', 'F')).or(between('0', '9'));
+    public static LogicalPredicate<Character> hexDigit = between('A', 'F').or(between('a', 'f')).or(between('0', '9'));
 
     public static Sequence<Character> range(char start, char end) {
         return Numbers.range((int) start, (int) end).map(number -> (char) number.intValue());
