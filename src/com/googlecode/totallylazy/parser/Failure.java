@@ -2,13 +2,14 @@ package com.googlecode.totallylazy.parser;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Either;
+import com.googlecode.totallylazy.Function1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Segment;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Unchecked.cast;
 
-public abstract class Failure<A> implements Result<A>{
+public abstract class Failure<A> implements Result<A> {
     public static <A> Failure<A> failure(final Object expected, final Object actual) {
         return new Failure<A>() {
             @Override
@@ -24,6 +25,11 @@ public abstract class Failure<A> implements Result<A>{
 
     @Override
     public <B> Failure<B> map(Callable1<? super A, ? extends B> callable) {
+        return cast(this);
+    }
+
+    @Override
+    public <B> Result<B> flatMap(Function1<? super A, ? extends Result<B>> callable) {
         return cast(this);
     }
 

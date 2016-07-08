@@ -29,6 +29,10 @@ public abstract class Parser<A> implements Parse<A> {
         return MappingParser.map(this, callable);
     }
 
+    public <B> Parser<B> flatMap(Function1<? super A, ? extends Result<B>> callable) {
+        return FlatMappingParser.flatMap(this, callable);
+    }
+
     public <B> Parser<Pair<A, B>> then(Parse<? extends B> parser) {
         return PairParser.pair(this, parser);
     }
@@ -60,6 +64,13 @@ public abstract class Parser<A> implements Parse<A> {
     public Parser<Sequence<A>> seqBy(Parse<?> parser) {
         return sequencedBy(parser);
     }
+
+    public Parser<List<A>> sepBy1(Parser<?> parser) {
+        return followedByOption(parser).many(1);
+    }
+
+    public Parser<A> followedByOption(Parser<?> parser) {return followedBy(OptionalParser.optional(parser));}
+
 
     public Parser<Sequence<A>> sequencedBy(Parse<?> parser) {
         return then(OptionalParser.optional(parser)).map(Callables.<A>first()).sequence();

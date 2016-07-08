@@ -14,6 +14,8 @@ public interface Result<A> extends Value<A>, Functor<A> {
     @Override
     <B> Result<B> map(Callable1<? super A, ? extends B> callable);
 
+    <B> Result<B> flatMap(Function1<? super A, ? extends Result<B>> callable);
+
     Option<A> option();
 
     Either<String, A> either();

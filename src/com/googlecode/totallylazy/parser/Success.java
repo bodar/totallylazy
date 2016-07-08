@@ -32,6 +32,13 @@ public abstract class Success<A> implements Result<A> {
     }
 
     @Override
+    public <B> Result<B> flatMap(Function1<? super A, ? extends Result<B>> callable) {
+        final Result<B> result = Functions.call(callable, value());
+        if(result.success()) return success(result.value(), remainder());
+        return result;
+    }
+
+    @Override
     public Option<A> option() {
         return some(value());
     }
