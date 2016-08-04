@@ -495,6 +495,10 @@ public abstract class Sequence<T> extends AbstractCollection<T> implements Itera
         return Sequences.windowed(this, size);
     }
 
+    public Sequence<Sequence<T>> windowed(int step, int size) {
+        return Sequences.windowed(this, step, size);
+    }
+
     public Sequence<T> intersperse(T separator) {
         return Sequences.intersperse(this, separator);
     }
