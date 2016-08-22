@@ -917,6 +917,16 @@ public class SequenceTest {
     }
 
     @Test
+    public void supportsWindowedWithStep() throws Exception {
+        assertThat(range(1).windowed(2, 3), startsWith(sequence(numbers(1, 2, 3), numbers(3, 4, 5), numbers(5, 6, 7))));
+    }
+
+    @Test
+    public void supportsWindowedWithStepAndImplicitSkip() throws Exception {
+        assertThat(range(1).windowed(4, 3), startsWith(sequence(numbers(1, 2, 3), numbers(5, 6, 7), numbers(9, 10, 11))));
+    }
+
+    @Test
     public void supportsIntersperse() {
         assertThat(sequence("a", "b", "c").intersperse("x"), hasExactly("a", "x", "b", "x", "c"));
         assertThat(sequence("a").intersperse("x"), hasExactly("a"));

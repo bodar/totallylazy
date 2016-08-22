@@ -433,6 +433,10 @@ public class Iterators {
         return new WindowedIterator<T>(iterator, size);
     }
 
+    public static <T> Iterator<Sequence<T>> windowed(final Iterator<? extends T> iterator, final int step, final int size) {
+        return new WindowedIterator<T>(iterator, step, size);
+    }
+
     public static <T> LogicalPredicate<Iterator<T>> hasNext() {
         return new LogicalPredicate<Iterator<T>>() {
             public boolean matches(Iterator<T> iterator) {

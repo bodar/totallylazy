@@ -786,6 +786,15 @@ public class Sequences {
         };
     }
 
+    public static <T> Sequence<Sequence<T>> windowed(final Iterable<? extends T> sequence, final int step, final int size) {
+        return new Sequence<Sequence<T>>() {
+            @Override
+            public Iterator<Sequence<T>> iterator() {
+                return Iterators.<T>windowed(sequence.iterator(), step, size);
+            }
+        };
+    }
+
     public static <T> Sequence<T> intersperse(final Iterable<? extends T> iterable, final T separator) {
         return new Sequence<T>() {
             @Override
