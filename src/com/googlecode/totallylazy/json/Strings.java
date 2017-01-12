@@ -41,7 +41,7 @@ public class Strings {
             case 'r': return "\r";
             case 't': return "\t";
             case 'f': return "\f";
-            case 'u': return Character.toString((char) parseInt(escaped.subSequence(2, escaped.length()).toString(), 16));
+            case 'u': return Character.toString((char) parseInt(escaped.subSequence(1, escaped.length()).toString(), 16));
             default: throw new UnsupportedOperationException();
         }
     }
