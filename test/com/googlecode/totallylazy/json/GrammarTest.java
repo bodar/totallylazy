@@ -43,8 +43,17 @@ public class GrammarTest {
         assertThat(Grammar.ESCAPED_CHARACTER.parse("\\n").value(), is("\n"));
         assertThat(Grammar.ESCAPED_CHARACTER.parse("\\r").value(), is("\r"));
         assertThat(Grammar.ESCAPED_CHARACTER.parse("\\t").value(), is("\t"));
-        assertThat(Grammar.ESCAPED_CHARACTER.parse("\\u03BB").value(), is("λ"));
         assertThat(Grammar.ESCAPED_CHARACTER.parse("falure").failure(), is(true));
+    }
+
+    @Test
+    public void handlesUnicodeCharacters() throws Exception {
+        assertThat(Grammar.ESCAPED_CHARACTER.parse("\\u03BB").value(), is("λ"));
+        assertThat(Grammar.ESCAPED_CHARACTER.parse("\\u5c71").value(), is("山"));
+        assertThat(Grammar.ESCAPED_CHARACTER.parse("\\u7530").value(), is("田"));
+        assertThat(Grammar.ESCAPED_CHARACTER.parse("\\u3000").value(), is("　"));
+        assertThat(Grammar.ESCAPED_CHARACTER.parse("\\u7ae0").value(), is("章"));
+        assertThat(Grammar.ESCAPED_CHARACTER.parse("\\u96c4").value(), is("雄"));
     }
 
     @Test
