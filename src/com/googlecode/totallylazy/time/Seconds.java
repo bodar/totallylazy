@@ -19,6 +19,10 @@ public class Seconds {
         return (end.getTime() - start.getTime()) / 1000L;
     }
 
+    public static long sinceEpoch(Date time) {
+        return time.getTime() / 1000;
+    }
+
     public static class functions {
         public static Curried2<Date, Integer, Date> add = Seconds::add;
 
