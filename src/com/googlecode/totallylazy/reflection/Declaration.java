@@ -37,6 +37,10 @@ public class Declaration {
         return type;
     }
 
+    public <T> Class<? extends T> forClass() {
+        return Types.classOf(type);
+    }
+
     public static Declaration declaration() {
         return declaration(StackFrames.stackFrames().tail()).get();
     }

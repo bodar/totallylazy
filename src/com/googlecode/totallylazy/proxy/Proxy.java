@@ -174,7 +174,7 @@ public class Proxy {
 
     public static <T> T lazy(Callable<? extends T> callable) {
         Declaration declaration = Declaration.declaration();
-        return lazy(Types.classOf(declaration.type()), callable);
+        return lazy(declaration.<T>forClass(), callable);
     }
 
     public static <T> T lazy(Class<? extends T> aClass, Callable<? extends T> callable) {
