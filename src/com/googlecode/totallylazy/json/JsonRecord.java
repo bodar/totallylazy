@@ -8,6 +8,7 @@ import com.googlecode.totallylazy.reflection.Types;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
@@ -94,12 +95,12 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
     }
 
     private Object coerce(Type actualType, Object value) {
-        if(actualType instanceof ParameterizedType){
+        if (actualType instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) actualType;
-            if(List.class.isAssignableFrom(Types.classOf(parameterizedType))) {
+            if (List.class.isAssignableFrom(Types.classOf(parameterizedType))) {
                 Type valueType = parameterizedType.getActualTypeArguments()[0];
                 Class<Object> valueCLass = Types.classOf(valueType);
-                if(JsonRecord.class.isAssignableFrom(valueCLass)) {
+                if (JsonRecord.class.isAssignableFrom(valueCLass)) {
                     return sequence((List<?>) value).map(v -> coerce(valueType, v)).toList();
                 }
             }
@@ -109,6 +110,14 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
     }
 
     private Object coerce(Class<?> actualType, Object value) {
+        if (int.class.isAssignableFrom(actualType) || Integer.class.isAssignableFrom(actualType)) {
+            BigDecimal number = (BigDecimal) value;
+            return number == null ? null : number.intValue();
+        }
+        if (long.class.isAssignableFrom(actualType) || Long.class.isAssignableFrom(actualType)) {
+            BigDecimal number = (BigDecimal) value;
+            return number == null ? null : number.longValue();
+        }
         if (JsonRecord.class.isAssignableFrom(actualType) && value instanceof Map) {
             return JsonRecord.create(cast(actualType), cast(value));
         }
