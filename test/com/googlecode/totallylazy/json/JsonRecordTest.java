@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.collections.Keyword;
+import javafx.geometry.Pos;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -117,7 +118,7 @@ public class JsonRecordTest {
     }
 
     @Test
-    public void canCoerceIntegersTypes() throws Exception {
+    public void canCoerceIntegerTypes() throws Exception {
         assertThat(parse(IntUser.class, "{\"age\":1}").age, is(1));
         assertThat(parse(IntegerUser.class, "{\"age\":1}").age, is(1));
         assertThat(parse(IntegerUser.class, "{\"age\":null}").age, nullValue());
@@ -132,9 +133,23 @@ public class JsonRecordTest {
     }
 
     @Test
-    public void canCoerceLongssTypes() throws Exception {
+    public void canCoerceLongsTypes() throws Exception {
         assertThat(parse(longUser.class, "{\"age\":1}").age, is(1L));
         assertThat(parse(LongUser.class, "{\"age\":1}").age, is(1L));
         assertThat(parse(LongUser.class, "{\"age\":null}").age, nullValue());
+    }
+
+    static enum Position{
+        Long,
+        Short,
+    }
+
+    static class Trade extends JsonRecord {
+        Position position;
+    }
+
+    @Test
+    public void supportsEnums() throws Exception {
+        assertThat(parse(Trade.class, "{\"position\":\"Long\"}").position, is(Position.Long));
     }
 }

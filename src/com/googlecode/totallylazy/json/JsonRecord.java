@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.reflection.Fields;
 import com.googlecode.totallylazy.reflection.Types;
 
@@ -117,6 +118,9 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
         if (long.class.isAssignableFrom(actualType) || Long.class.isAssignableFrom(actualType)) {
             BigDecimal number = (BigDecimal) value;
             return number == null ? null : number.longValue();
+        }
+        if(actualType.isEnum()){
+            return Enum.valueOf(actualType.asSubclass(Enum.class), value.toString());
         }
         if (JsonRecord.class.isAssignableFrom(actualType) && value instanceof Map) {
             return JsonRecord.create(cast(actualType), cast(value));
