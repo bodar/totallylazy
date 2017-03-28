@@ -23,9 +23,9 @@ public class JsonRecordTest {
 
     @Test
     public void canCreateARecordFromAMap() throws Exception {
-        User user = create(User.class, map("name", "Dan", "age", 1));
+        User user = create(User.class, map("name", "Dan", "age", new BigDecimal(1)));
         assertThat(user.name, is("Dan"));
-        assertThat(user.age, is(1));
+        assertThat(user.age, is(new BigDecimal(1)));
     }
 
     @Test
