@@ -139,9 +139,8 @@ public class JsonRecordTest {
         assertThat(parse(LongUser.class, "{\"age\":null}").age, nullValue());
     }
 
-    static enum Position{
+    enum Position{
         Long,
-        Short,
     }
 
     static class Trade extends JsonRecord {
@@ -151,5 +150,23 @@ public class JsonRecordTest {
     @Test
     public void supportsEnums() throws Exception {
         assertThat(parse(Trade.class, "{\"position\":\"Long\"}").position, is(Position.Long));
+    }
+
+    enum CustomPosition{
+        Short;
+
+        static CustomPosition customPosition(String value){
+            if(value.equalsIgnoreCase("short")) return CustomPosition.Short;
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    static class CustomTrade extends JsonRecord {
+        CustomPosition position;
+    }
+
+    @Test
+    public void supportsCustomEnumsFactoryMethods() throws Exception {
+        assertThat(parse(CustomTrade.class, "{\"position\":\"short\"}").position, is(CustomPosition.Short));
     }
 }

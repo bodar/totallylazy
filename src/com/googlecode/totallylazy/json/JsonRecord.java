@@ -1,8 +1,8 @@
 package com.googlecode.totallylazy.json;
 
+import com.googlecode.totallylazy.Enums;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Unchecked;
 import com.googlecode.totallylazy.reflection.Fields;
 import com.googlecode.totallylazy.reflection.Types;
 
@@ -23,9 +23,12 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Sets.union;
 import static com.googlecode.totallylazy.Unchecked.cast;
+import static com.googlecode.totallylazy.predicates.Predicates.and;
+import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.where;
 import static com.googlecode.totallylazy.reflection.Fields.modifiers;
 import static com.googlecode.totallylazy.reflection.Reflection.synthetic;
+import static com.googlecode.totallylazy.reflection.Types.matches;
 import static java.util.Collections.unmodifiableSet;
 
 public abstract class JsonRecord extends AbstractMap<String, Object> {
@@ -119,8 +122,8 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
             BigDecimal number = (BigDecimal) value;
             return number == null ? null : number.longValue();
         }
-        if(actualType.isEnum()){
-            return Enum.valueOf(actualType.asSubclass(Enum.class), value.toString());
+        if (actualType.isEnum()) {
+            return Enums.valueOf(actualType.asSubclass(Enum.class), value.toString());
         }
         if (JsonRecord.class.isAssignableFrom(actualType) && value instanceof Map) {
             return JsonRecord.create(cast(actualType), cast(value));
