@@ -1,7 +1,7 @@
 package com.googlecode.totallylazy.json;
 
+import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.collections.Keyword;
-import javafx.geometry.Pos;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -168,5 +168,20 @@ public class JsonRecordTest {
     @Test
     public void supportsCustomEnumsFactoryMethods() throws Exception {
         assertThat(parse(CustomTrade.class, "{\"position\":\"short\"}").position, is(CustomPosition.Short));
+    }
+
+    interface Breed extends Value<String> {
+        static Breed breed(String value){
+            return () -> value;
+        }
+    }
+
+    static class Cat extends JsonRecord {
+        Breed breed;
+    }
+
+    @Test
+    public void supportsSimpleTypes() throws Exception {
+        assertThat(parse(Cat.class, "{\"breed\":\"Tabby\"}").breed.value(), is("Tabby"));
     }
 }

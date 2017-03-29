@@ -24,11 +24,4 @@ public class Enums {
         return name();
     }
 
-    public static <T extends Enum<T>> T valueOf(Class<T> actualType, String value) {
-        return actualType.cast(allMethods(actualType).
-                filter(and(modifier(STATIC),
-                        where(returnType(), matches(actualType)),
-                        where(m -> sequence(m.getParameterTypes()), is(sequence(String.class))))).
-                pick(optional(invokeOn(null, value))));
-    }
 }

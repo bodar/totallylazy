@@ -10,14 +10,22 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.googlecode.totallylazy.Exceptions.optional;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.functions.Lazy.lazy;
+import static com.googlecode.totallylazy.predicates.Predicates.and;
 import static com.googlecode.totallylazy.reflection.Fields.name;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.startsWith;
+import static com.googlecode.totallylazy.reflection.Methods.allMethods;
+import static com.googlecode.totallylazy.reflection.Methods.invokeOn;
+import static com.googlecode.totallylazy.reflection.Methods.modifier;
+import static com.googlecode.totallylazy.reflection.Methods.returnType;
 import static com.googlecode.totallylazy.reflection.StackFrames.stackFrames;
+import static com.googlecode.totallylazy.reflection.Types.matches;
+import static java.lang.reflect.Modifier.STATIC;
 
 public class Reflection {
     private final static ReflectionFactory reflectionFactory = ReflectionFactory.getReflectionFactory();
@@ -114,5 +122,13 @@ public class Reflection {
                     m.setAccessible(true);
                     return (Class<?>) m.invoke(classLoader, name, bytes, 0, bytes.length);
                 }).get();
+    }
+
+    public static <T> T valueOf(Class<T> actualType, Object value) {
+        return actualType.cast(allMethods(actualType).
+                filter(and(modifier(STATIC),
+                        where(returnType(), matches(actualType)),
+                        where(m -> sequence(m.getParameterTypes()), is(sequence(value.getClass()))))).
+                pick(optional(invokeOn(null, value))));
     }
 }

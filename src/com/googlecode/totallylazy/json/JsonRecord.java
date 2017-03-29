@@ -1,9 +1,9 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Enums;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.reflection.Fields;
+import com.googlecode.totallylazy.reflection.Reflection;
 import com.googlecode.totallylazy.reflection.Types;
 
 import java.lang.reflect.Field;
@@ -98,9 +98,9 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
         }
     }
 
-    private Object coerce(Type actualType, Object value) {
-        if (actualType instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) actualType;
+    private Object coerce(Type targetType, Object value) {
+        if (targetType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) targetType;
             if (List.class.isAssignableFrom(Types.classOf(parameterizedType))) {
                 Type valueType = parameterizedType.getActualTypeArguments()[0];
                 Class<Object> valueCLass = Types.classOf(valueType);
@@ -110,25 +110,25 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
             }
         }
 
-        return coerce(Types.classOf(actualType), value);
+        return coerce(Types.classOf(targetType), value);
     }
 
-    private Object coerce(Class<?> actualType, Object value) {
-        if (int.class.isAssignableFrom(actualType) || Integer.class.isAssignableFrom(actualType)) {
-            BigDecimal number = (BigDecimal) value;
+    private Object coerce(Class<?> targetType, Object parsedValue) {
+        if (int.class.isAssignableFrom(targetType) || Integer.class.isAssignableFrom(targetType)) {
+            BigDecimal number = (BigDecimal) parsedValue;
             return number == null ? null : number.intValue();
         }
-        if (long.class.isAssignableFrom(actualType) || Long.class.isAssignableFrom(actualType)) {
-            BigDecimal number = (BigDecimal) value;
+        if (long.class.isAssignableFrom(targetType) || Long.class.isAssignableFrom(targetType)) {
+            BigDecimal number = (BigDecimal) parsedValue;
             return number == null ? null : number.longValue();
         }
-        if (actualType.isEnum()) {
-            return Enums.valueOf(actualType.asSubclass(Enum.class), value.toString());
+        if (JsonRecord.class.isAssignableFrom(targetType) && parsedValue instanceof Map) {
+            return JsonRecord.create(cast(targetType), cast(parsedValue));
         }
-        if (JsonRecord.class.isAssignableFrom(actualType) && value instanceof Map) {
-            return JsonRecord.create(cast(actualType), cast(value));
+        if (parsedValue != null && !parsedValue.getClass().isAssignableFrom(targetType)) {
+            return Reflection.valueOf(targetType, parsedValue.toString());
         }
-        return value;
+        return parsedValue;
     }
 
     @Override
