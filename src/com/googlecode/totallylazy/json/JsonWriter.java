@@ -1,6 +1,7 @@
 package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Iterators;
+import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.annotations.multimethod;
 import com.googlecode.totallylazy.multi;
 import com.googlecode.totallylazy.time.Dates;
@@ -20,6 +21,11 @@ public class JsonWriter {
         return multi.<A>methodOption(o, appendable).getOrElse(() -> {
             return write(o.toString(), appendable);
         });
+    }
+
+    @multimethod
+    public static <A extends Appendable> A write(final Value<?> value, final A appendable) {
+        return write(value.value(), appendable);
     }
 
     @multimethod

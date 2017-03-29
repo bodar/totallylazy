@@ -2,6 +2,7 @@ package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Randoms;
 import com.googlecode.totallylazy.Unchecked;
+import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.io.Uri;
 import com.googlecode.totallylazy.time.Dates;
 import org.junit.Test;
@@ -78,6 +79,15 @@ public class JsonTest {
         String json = Json.json(map("uri", Uri.uri("http://code.google.com/p/funclate/")));
 
         assertThat(json, is("{\"uri\":\"http://code.google.com/p/funclate/\"}"));
+    }
+
+    @Test
+    public void handlesValueTypes() throws Exception {
+        Value<Integer> inty = () -> 1;
+
+        String json = Json.json(map("inty", inty));
+
+        assertThat(json, is("{\"inty\":1}"));
     }
 
     @Test
