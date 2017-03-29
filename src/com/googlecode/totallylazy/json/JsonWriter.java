@@ -25,6 +25,7 @@ public class JsonWriter {
 
     @multimethod
     public static <A extends Appendable> A write(final Value<?> value, final A appendable) {
+        if(value instanceof Map.Entry) return write((Map.Entry) value, appendable);
         return write(value.value(), appendable);
     }
 
