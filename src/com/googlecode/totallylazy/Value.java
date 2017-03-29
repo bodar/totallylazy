@@ -22,7 +22,7 @@ public interface Value<T> {
 
         @Override
         public String toString() {
-            return getClass().getSimpleName() + "(" + value.toString() + ")";
+            return value.toString();
         }
 
         @multimethod
