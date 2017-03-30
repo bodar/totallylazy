@@ -106,9 +106,7 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
             if (List.class.isAssignableFrom(Types.classOf(parameterizedType))) {
                 Type valueType = parameterizedType.getActualTypeArguments()[0];
                 Class<Object> valueCLass = Types.classOf(valueType);
-                if (JsonRecord.class.isAssignableFrom(valueCLass)) {
-                    return sequence((List<?>) value).map(v -> coerce(valueType, v)).toList();
-                }
+                return sequence((List<?>) value).map(v -> coerce(valueType, v)).toList();
             }
         }
 

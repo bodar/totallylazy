@@ -214,4 +214,15 @@ public class JsonRecordTest {
         Date date = date(2001, 1, 1);
         assertThat(parse(Account.class, "{\"created_at\":\"" + Dates.RFC3339withMilliseconds().format(date) + "\"}").created_at, is(date));
     }
+
+    static class Ledger extends JsonRecord {
+        public List<Date> times;
+    }
+
+    @Test
+    public void supportsListsOfCoerceables() throws Exception {
+        Date date = date(2001, 1, 1);
+        assertThat(parse(Ledger.class, "{\"times\":[\"" + Dates.RFC3339withMilliseconds().format(date) + "\"]}").times.get(0), is(date));
+
+    }
 }
