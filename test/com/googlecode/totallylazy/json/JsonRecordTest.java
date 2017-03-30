@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.json;
 
+import com.googlecode.totallylazy.Assert;
 import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.collections.Keyword;
 import com.googlecode.totallylazy.time.Dates;
@@ -8,10 +9,11 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
+import static com.googlecode.totallylazy.Assert.fail;
 import static com.googlecode.totallylazy.Maps.map;
-import static com.googlecode.totallylazy.Randoms.dates;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.json.Json.json;
 import static com.googlecode.totallylazy.json.JsonRecord.create;
@@ -193,6 +195,34 @@ public class JsonRecordTest {
     @Test
     public void supportsSimpleTypes() throws Exception {
         assertThat(parse(Cat.class, "{\"breed\":\"Tabby\"}").breed.value(), is("Tabby"));
+    }
+
+    @Test
+    public void throwsUsefulErrorsWhenUnableToCoerceIntoType() throws Exception {
+        try {
+            parse(Cat.class, "{\"breed\":1}");
+            fail("Expected exception");
+        }
+        catch (NoSuchElementException e) {
+            Assert.assertThat(e.getMessage(), (s) -> s.matches(".*Breed.*BigDecimal"));
+        }
+    }
+
+    interface Count extends Value<Integer> {
+        static Count count(Number value) {
+            return value::intValue;
+        }
+    }
+
+    static class Crowd extends JsonRecord {
+        Count count;
+    }
+
+    @Test
+    public void supportsConstructorMethodsThatTakeSuperclasses() throws Exception {
+        // 1 is a BigDecimal, but Count only has constructor method for Number
+        String someJson = "{\"count\":1}";
+        assertThat(parse(Crowd.class, someJson).count.value(), is(1));
     }
 
     static class Outer {

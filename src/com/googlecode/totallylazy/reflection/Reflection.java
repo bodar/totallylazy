@@ -1,5 +1,6 @@
 package com.googlecode.totallylazy.reflection;
 
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.functions.Lazy;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import sun.reflect.ReflectionFactory;
@@ -9,6 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static com.googlecode.totallylazy.Exceptions.optional;
 import static com.googlecode.totallylazy.Unchecked.cast;
@@ -25,6 +27,7 @@ import static com.googlecode.totallylazy.reflection.Methods.modifier;
 import static com.googlecode.totallylazy.reflection.Methods.returnType;
 import static com.googlecode.totallylazy.reflection.StackFrames.stackFrames;
 import static com.googlecode.totallylazy.reflection.Types.matches;
+import static java.lang.String.format;
 import static java.lang.reflect.Modifier.STATIC;
 
 public class Reflection {
@@ -135,12 +138,28 @@ public class Reflection {
                 }).get();
     }
 
+    /*
+    Finds a static method on actualType that takes a parameter of the same type as value and returns
+    an instance of actualType.
+
+    Calls that static method with value and returns the result.
+     */
     public static <T> T valueOf(Class<T> actualType, Object value) {
-        return actualType.cast(allMethods(actualType).
-                filter(and(modifier(STATIC),
+        Sequence<Method> candidates = allMethods(actualType)
+                .filter(and(modifier(STATIC),
+                        where(m -> m.getParameterTypes().length, is(1)))).
+                filter(and(
                         where(returnType(), matches(actualType)),
-                        where(m -> sequence(m.getParameterTypes()), is(sequence(value.getClass()))))).
-                pick(optional(invokeOn(null, value))));
+                        where(m -> m.getParameterTypes()[0], (t)->t.isAssignableFrom(value.getClass()))));
+
+        if (candidates.isEmpty()) {
+            throw new NoSuchElementException(format(
+                    "Cannot create %s from '%s' (%s). You need to add a static constructor method to %s that accepts a %s",
+                    actualType.getCanonicalName(), value, value.getClass().getCanonicalName(),
+                    actualType.getSimpleName(), value.getClass().getSimpleName()));
+        }
+
+        return actualType.cast(candidates.pick(optional(invokeOn(null, value))));
     }
 
 }
