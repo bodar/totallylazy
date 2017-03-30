@@ -129,7 +129,7 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
             return Dates.parse((String) parsedValue);
         }
         if (parsedValue != null && !parsedValue.getClass().isAssignableFrom(targetType)) {
-            return Reflection.valueOf(targetType, parsedValue.toString());
+            return Reflection.valueOf(targetType, parsedValue);
         }
         return parsedValue;
     }
