@@ -2,19 +2,23 @@ package com.googlecode.totallylazy.json;
 
 import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.collections.Keyword;
+import com.googlecode.totallylazy.time.Dates;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Maps.map;
+import static com.googlecode.totallylazy.Randoms.dates;
 import static com.googlecode.totallylazy.collections.PersistentList.constructors.list;
 import static com.googlecode.totallylazy.json.Json.json;
 import static com.googlecode.totallylazy.json.JsonRecord.create;
 import static com.googlecode.totallylazy.json.JsonRecord.parse;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
+import static com.googlecode.totallylazy.time.Dates.date;
 
 public class JsonRecordTest {
     static class User extends JsonRecord {
@@ -38,9 +42,12 @@ public class JsonRecordTest {
 
     @Test
     public void canConvertToJsonAndBack() throws Exception {
-        User user = new User() {{ name = "Dan"; age = new BigDecimal(1); }};
+        User user = new User() {{
+            name = "Dan";
+            age = new BigDecimal(1);
+        }};
         String json = user.toString();
-        assertThat(json, is( "{\"name\":\"Dan\",\"age\":1}"));
+        assertThat(json, is("{\"name\":\"Dan\",\"age\":1}"));
         User parsed = parse(User.class, json);
         assertThat(parsed.name, is(user.name));
         assertThat(parsed.age, is(user.age));
@@ -48,7 +55,10 @@ public class JsonRecordTest {
 
     @Test
     public void jsonRecordsAreMaps() throws Exception {
-        User user = new User() {{ name = "Dan"; age = new BigDecimal(1); }};
+        User user = new User() {{
+            name = "Dan";
+            age = new BigDecimal(1);
+        }};
         Keyword<String> name = Keyword.keyword();
         assertThat(name.call(user), is("Dan"));
     }
@@ -67,7 +77,7 @@ public class JsonRecordTest {
         }};
 
         String json = doc.toString();
-        assertThat(json, is( "{\"user\":{\"name\":\"Dan\",\"age\":1}}"));
+        assertThat(json, is("{\"user\":{\"name\":\"Dan\",\"age\":1}}"));
 
         UserDocument parsed = parse(UserDocument.class, json);
         assertThat(parsed.user, is(doc.user));
@@ -87,7 +97,7 @@ public class JsonRecordTest {
         }};
 
         String json = doc.toString();
-        assertThat(json, is( "{\"users\":[{\"name\":\"Dan\",\"age\":1}]}"));
+        assertThat(json, is("{\"users\":[{\"name\":\"Dan\",\"age\":1}]}"));
 
         Users parsed = parse(Users.class, json);
         assertThat(parsed.users.size(), is(doc.users.size()));
@@ -102,7 +112,7 @@ public class JsonRecordTest {
         assertThat(user.age, is(new BigDecimal(1)));
         assertThat(user.get("tel"), is("12345678890"));
         String json = user.toString();
-        assertThat(json, is( "{\"name\":\"Dan\",\"age\":1,\"tel\":\"12345678890\"}"));
+        assertThat(json, is("{\"name\":\"Dan\",\"age\":1,\"tel\":\"12345678890\"}"));
         User parsed = parse(User.class, json);
         assertThat(parsed.name, is(user.name));
         assertThat(parsed.age, is(user.age));
@@ -139,7 +149,7 @@ public class JsonRecordTest {
         assertThat(parse(LongUser.class, "{\"age\":null}").age, nullValue());
     }
 
-    enum Position{
+    enum Position {
         Long,
     }
 
@@ -152,11 +162,11 @@ public class JsonRecordTest {
         assertThat(parse(Trade.class, "{\"position\":\"Long\"}").position, is(Position.Long));
     }
 
-    enum CustomPosition{
+    enum CustomPosition {
         Short;
 
-        static CustomPosition customPosition(String value){
-            if(value.equalsIgnoreCase("short")) return CustomPosition.Short;
+        static CustomPosition customPosition(String value) {
+            if (value.equalsIgnoreCase("short")) return CustomPosition.Short;
             throw new UnsupportedOperationException();
         }
     }
@@ -171,7 +181,7 @@ public class JsonRecordTest {
     }
 
     interface Breed extends Value<String> {
-        static Breed breed(String value){
+        static Breed breed(String value) {
             return () -> value;
         }
     }
@@ -186,12 +196,22 @@ public class JsonRecordTest {
     }
 
     static class Outer {
-        private static class Inner extends JsonRecord{
+        private static class Inner extends JsonRecord {
         }
     }
 
     @Test
     public void canCreatePrivateJsonRecord() throws Exception {
         JsonRecord.create(Outer.Inner.class, map());
+    }
+
+    static class Account extends JsonRecord {
+        public Date created_at;
+    }
+
+    @Test
+    public void supportsDates() throws Exception {
+        Date date = date(2001, 1, 1);
+        assertThat(parse(Account.class, "{\"created_at\":\"" + Dates.RFC3339withMilliseconds().format(date) + "\"}").created_at, is(date));
     }
 }
