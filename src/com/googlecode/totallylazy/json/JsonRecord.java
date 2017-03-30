@@ -40,7 +40,7 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
 
     public static <T extends JsonRecord> T create(Class<T> recordType, Map<String, Object> data) {
         try {
-            T instance = recordType.newInstance();
+            T instance = Reflection.newInstance(recordType);
             for (Entry<String, Object> entry : data.entrySet()) {
                 instance.put(entry.getKey(), entry.getValue());
             }

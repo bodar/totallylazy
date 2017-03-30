@@ -184,4 +184,14 @@ public class JsonRecordTest {
     public void supportsSimpleTypes() throws Exception {
         assertThat(parse(Cat.class, "{\"breed\":\"Tabby\"}").breed.value(), is("Tabby"));
     }
+
+    static class Outer {
+        private static class Inner extends JsonRecord{
+        }
+    }
+
+    @Test
+    public void canCreatePrivateJsonRecord() throws Exception {
+        JsonRecord.create(Outer.Inner.class, map());
+    }
 }

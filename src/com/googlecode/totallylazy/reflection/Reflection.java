@@ -80,8 +80,10 @@ public class Reflection {
 
     private static Map<Class<?>, Class<?>> primitiveToBoxed = new HashMap<>();
     private static Map<Class<?>, Class<?>> boxedToPrimative = new HashMap<>();
-    private static void map(Class<?> primitive, Class<?> boxed){
-        if(!primitive.isPrimitive()) throw new IllegalArgumentException("Class must be primitive but was " + primitive);
+
+    private static void map(Class<?> primitive, Class<?> boxed) {
+        if (!primitive.isPrimitive())
+            throw new IllegalArgumentException("Class must be primitive but was " + primitive);
         primitiveToBoxed.put(primitive, boxed);
         boxedToPrimative.put(boxed, primitive);
     }
@@ -98,17 +100,26 @@ public class Reflection {
         map(double.class, Double.class);
     }
 
-    public static Class<?> box(Class<?> primitive){
-        if(!primitive.isPrimitive()) throw new IllegalArgumentException("Class must be primitive but was " + primitive);
+    public static Class<?> box(Class<?> primitive) {
+        if (!primitive.isPrimitive())
+            throw new IllegalArgumentException("Class must be primitive but was " + primitive);
         return primitiveToBoxed.get(primitive);
     }
 
-    public static Class<?> unbox(Class<?> boxed){
+    public static Class<?> unbox(Class<?> boxed) {
         Class<?> aClass = boxedToPrimative.get(boxed);
-        if(aClass == null) throw new IllegalArgumentException("Class must be boxed type but was " + boxed);
+        if (aClass == null) throw new IllegalArgumentException("Class must be boxed type but was " + boxed);
         return aClass;
     }
 
+    /* Creates object by calling any constructor (private or otherwise) */
+    public static <T> T newInstance(Class<T> recordType, Object... args) throws Exception {
+        Constructor<T> constructor = recordType.getDeclaredConstructor(sequence(args).map(Object::getClass).toArray(Class.class));
+        constructor.setAccessible(true);
+        return constructor.newInstance(args);
+    }
+
+    /* Evil creates object without calling constructors or field initialises */
     public static <T> T create(Class aClass) throws ReflectiveOperationException {
         Constructor<?> constructor = reflectionFactory.newConstructorForSerialization(aClass, Reflection.constructor.value());
         return cast(constructor.newInstance());
@@ -131,4 +142,5 @@ public class Reflection {
                         where(m -> sequence(m.getParameterTypes()), is(sequence(value.getClass()))))).
                 pick(optional(invokeOn(null, value))));
     }
+
 }
