@@ -1,7 +1,5 @@
 package com.googlecode.totallylazy.json;
 
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.collections.PersistentSortedMap;
 import com.googlecode.totallylazy.reflection.Reflection;
 import com.googlecode.totallylazy.reflection.Types;
 import com.googlecode.totallylazy.time.Dates;
@@ -41,7 +39,7 @@ interface Coercer {
         if (JsonRecord.class.isAssignableFrom(targetType) && parsedValue instanceof Map) {
             return JsonRecord.create(cast(targetType), cast(parsedValue));
         }
-        if (PersistentJsonRecord.class.isAssignableFrom(targetType) && parsedValue instanceof Map) {
+        if (targetType.isInterface() && parsedValue instanceof Map) {
             return PersistentJsonRecord.create(cast(targetType), cast(parsedValue));
         }
         if (Date.class.isAssignableFrom(targetType) && parsedValue instanceof String) {

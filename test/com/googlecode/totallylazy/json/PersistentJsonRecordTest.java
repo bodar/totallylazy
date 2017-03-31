@@ -14,14 +14,17 @@ import static com.googlecode.totallylazy.Assert.fail;
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.json.Json.json;
 import static com.googlecode.totallylazy.json.PersistentJsonRecord.create;
+import static com.googlecode.totallylazy.json.PersistentJsonRecord.map;
+import static com.googlecode.totallylazy.json.PersistentJsonRecord.modify;
 import static com.googlecode.totallylazy.json.PersistentJsonRecord.parse;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
 import static com.googlecode.totallylazy.time.Dates.date;
 
 public class PersistentJsonRecordTest {
-    interface User extends PersistentJsonRecord {
+    interface User {
         String name();
+        int age();
     }
 
     @Test
@@ -45,20 +48,24 @@ public class PersistentJsonRecordTest {
     }
 
     @Test
-    public void jsonRecordsAreMaps() throws Exception {
-        PersistentMap<String, Object> user = create(User.class, map("name", "Dan"));
-        assertThat(user.get("name"), is("Dan"));
+    public void canBeConvertedToAMap() throws Exception {
+        User user = new User() {
+            public String name() { return "Dan"; }
+            public int age() { return 12; }
+        };
+        PersistentMap<String, Object> map = map(user);
+        assertThat(map.get("name"), is("Dan"));
     }
 
     @Test
     public void canPersistNewValues() throws Exception {
         User dan = create(User.class, map("name", "Dan"));
-        User matt = dan.modify(User::name, "Matt");
+        User matt = modify(dan, User::name, "Matt");
         assertThat(dan.name(), is("Dan"));
         assertThat(matt.name(), is("Matt"));
     }
 
-    interface UserDocument extends PersistentJsonRecord {
+    interface UserDocument {
         User user();
     }
 
@@ -68,7 +75,7 @@ public class PersistentJsonRecordTest {
         assertThat(parsed.user().name(), is("Dan"));
     }
 
-    interface Users extends PersistentJsonRecord {
+    interface Users {
         List<User> users();
     }
 
@@ -83,19 +90,19 @@ public class PersistentJsonRecordTest {
     public void preservesUnknownAttributes() throws Exception {
         User user = create(User.class, map("name", "Dan","tel", "12345678890"));
         assertThat(user.name(), is("Dan"));
-        assertThat(user.get("tel"), is("12345678890"));
+        assertThat(map(user).get("tel"), is("12345678890"));
         String json = user.toString();
         assertThat(json, is("{\"name\":\"Dan\",\"tel\":\"12345678890\"}"));
         User parsed = parse(User.class, json);
         assertThat(parsed.name(), is(user.name()));
-        assertThat(parsed.get("tel"), is("12345678890"));
+        assertThat(map(parsed).get("tel"), is("12345678890"));
     }
 
-    interface IntUser extends PersistentJsonRecord {
+    interface IntUser {
         int age();
     }
 
-    interface IntegerUser extends PersistentJsonRecord {
+    interface IntegerUser {
         Integer age();
     }
 
@@ -106,11 +113,11 @@ public class PersistentJsonRecordTest {
         assertThat(parse(IntegerUser.class, "{\"age\":null}").age(), nullValue());
     }
 
-    interface longUser extends PersistentJsonRecord {
+    interface longUser {
         long age();
     }
 
-    interface LongUser extends PersistentJsonRecord {
+    interface LongUser {
         Long age();
     }
 
@@ -125,7 +132,7 @@ public class PersistentJsonRecordTest {
         Long,
     }
 
-    interface Trade extends PersistentJsonRecord {
+    interface Trade {
         Position position();
     }
 
@@ -143,7 +150,7 @@ public class PersistentJsonRecordTest {
         }
     }
 
-    interface CustomTrade extends PersistentJsonRecord {
+    interface CustomTrade {
         CustomPosition position();
     }
 
@@ -158,7 +165,7 @@ public class PersistentJsonRecordTest {
         }
     }
 
-    interface Cat extends PersistentJsonRecord {
+    interface Cat {
         Breed breed();
     }
 
@@ -184,7 +191,7 @@ public class PersistentJsonRecordTest {
         }
     }
 
-    interface Crowd extends PersistentJsonRecord {
+    interface Crowd {
         Count count();
     }
 
@@ -195,7 +202,7 @@ public class PersistentJsonRecordTest {
         assertThat(parse(Crowd.class, someJson).count().value(), is(1));
     }
 
-    interface Account extends PersistentJsonRecord {
+    interface Account {
         Date created_at();
     }
 
@@ -205,7 +212,7 @@ public class PersistentJsonRecordTest {
         assertThat(parse(Account.class, "{\"created_at\":\"" + Dates.RFC3339withMilliseconds().format(date) + "\"}").created_at(), is(date));
     }
 
-    interface Ledger extends PersistentJsonRecord {
+    interface Ledger {
         List<Date> times();
     }
 

@@ -193,4 +193,12 @@ public class Proxy {
             return Proxy.lazy(method.getReturnType(), future::get);
         });
     }
+
+    public static boolean isProxy(Object instance) {
+        return isProxy(instance.getClass());
+    }
+
+    public static boolean isProxy(Class<?> aClass) {
+        return java.lang.reflect.Proxy.class.isAssignableFrom(aClass) || Proxy.class.isAssignableFrom(aClass);
+    }
 }
