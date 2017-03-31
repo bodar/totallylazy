@@ -90,7 +90,7 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
             Option<Field> field = field(key);
             if (field.isDefined()) {
                 Field actual = field.get();
-                actual.set(this, coerce(actual.getGenericType(), value));
+                actual.set(this, Coercer.coerce(actual.getGenericType(), value));
                 return Fields.get(actual, this);
             } else {
                 return _otherFields.put(key, value);
@@ -100,42 +100,10 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
         }
     }
 
-    private Object coerce(Type targetType, Object value) {
-        if (targetType instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) targetType;
-            if (List.class.isAssignableFrom(Types.classOf(parameterizedType))) {
-                Type valueType = parameterizedType.getActualTypeArguments()[0];
-                Class<Object> valueCLass = Types.classOf(valueType);
-                return sequence((List<?>) value).map(v -> coerce(valueType, v)).toList();
-            }
-        }
-
-        return coerce(Types.classOf(targetType), value);
-    }
-
-    private Object coerce(Class<?> targetType, Object parsedValue) {
-        if (int.class.isAssignableFrom(targetType) || Integer.class.isAssignableFrom(targetType)) {
-            BigDecimal number = (BigDecimal) parsedValue;
-            return number == null ? null : number.intValue();
-        }
-        if (long.class.isAssignableFrom(targetType) || Long.class.isAssignableFrom(targetType)) {
-            BigDecimal number = (BigDecimal) parsedValue;
-            return number == null ? null : number.longValue();
-        }
-        if (JsonRecord.class.isAssignableFrom(targetType) && parsedValue instanceof Map) {
-            return JsonRecord.create(cast(targetType), cast(parsedValue));
-        }
-        if (Date.class.isAssignableFrom(targetType) && parsedValue instanceof String) {
-            return Dates.parse((String) parsedValue);
-        }
-        if (parsedValue != null && !parsedValue.getClass().isAssignableFrom(targetType)) {
-            return Reflection.valueOf(targetType, parsedValue);
-        }
-        return parsedValue;
-    }
 
     @Override
     public String toString() {
         return Json.json(this);
     }
 }
+

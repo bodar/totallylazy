@@ -115,14 +115,18 @@ public class Reflection {
         return aClass;
     }
 
-    /* Creates object by calling any constructor (private or otherwise) */
+    /**
+     * Creates object by calling any constructor (private or otherwise)
+     **/
     public static <T> T newInstance(Class<T> recordType, Object... args) throws Exception {
         Constructor<T> constructor = recordType.getDeclaredConstructor(sequence(args).map(Object::getClass).toArray(Class.class));
         constructor.setAccessible(true);
         return constructor.newInstance(args);
     }
 
-    /* Evil creates object without calling constructors or field initialises */
+    /**
+     * Evil creates object without calling constructors or field initialises
+     **/
     public static <T> T create(Class aClass) throws ReflectiveOperationException {
         Constructor<?> constructor = reflectionFactory.newConstructorForSerialization(aClass, Reflection.constructor.value());
         return cast(constructor.newInstance());
@@ -138,19 +142,19 @@ public class Reflection {
                 }).get();
     }
 
-    /*
-    Finds a static method on actualType that takes a parameter of the same type as value and returns
-    an instance of actualType.
-
-    Calls that static method with value and returns the result.
-     */
+    /**
+     * Finds a static method on actualType that takes a parameter of the same type as value and return
+     * an instance of actualType.
+     * <p>
+     * Calls that static method with value and returns the result.
+     **/
     public static <T> T valueOf(Class<T> actualType, Object value) {
         Sequence<Method> candidates = allMethods(actualType)
                 .filter(and(modifier(STATIC),
                         where(m -> m.getParameterTypes().length, is(1)))).
-                filter(and(
-                        where(returnType(), matches(actualType)),
-                        where(m -> m.getParameterTypes()[0], (t)->t.isAssignableFrom(value.getClass()))));
+                        filter(and(
+                                where(returnType(), matches(actualType)),
+                                where(m -> m.getParameterTypes()[0], (t) -> t.isAssignableFrom(value.getClass()))));
 
         if (candidates.isEmpty()) {
             throw new NoSuchElementException(format(
