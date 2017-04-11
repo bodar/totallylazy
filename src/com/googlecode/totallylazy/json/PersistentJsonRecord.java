@@ -5,11 +5,9 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.collections.PersistentMap;
 import com.googlecode.totallylazy.collections.PersistentSortedMap;
 import com.googlecode.totallylazy.functions.Function1;
-import com.googlecode.totallylazy.proxy.Proxy;
 import com.googlecode.totallylazy.reflection.Fields;
 import com.googlecode.totallylazy.reflection.Methods;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Map;

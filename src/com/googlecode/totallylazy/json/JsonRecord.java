@@ -21,6 +21,7 @@ import java.util.Set;
 import static com.googlecode.totallylazy.Classes.allClasses;
 import static com.googlecode.totallylazy.LazyException.lazyException;
 import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Sequences.reject;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Sets.set;
 import static com.googlecode.totallylazy.Sets.union;
@@ -54,7 +55,7 @@ public abstract class JsonRecord extends AbstractMap<String, Object> {
 
     @Override
     public Set<Entry<String, Object>> entrySet() {
-        return unmodifiableSet(union(fieldSet(), _otherFields.entrySet()));
+        return unmodifiableSet(reject(union(fieldSet(), _otherFields.entrySet()), entry -> entry.getValue() == null).toSet());
     }
 
     private Set<Entry<String, Object>> fieldSet() {

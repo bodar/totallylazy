@@ -22,6 +22,14 @@ import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
 import static com.googlecode.totallylazy.time.Dates.date;
 
 public class PersistentJsonRecordTest {
+    @Test
+    public void doesNotSerialiseNullValues() throws Exception {
+        assertThat(json(map(new User() {
+            public String name() { return null; }
+            public int age() { return 0; }
+        })), is("{\"age\":0}"));
+    }
+
     interface User {
         String name();
         int age();

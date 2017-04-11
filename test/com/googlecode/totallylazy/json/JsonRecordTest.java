@@ -23,6 +23,11 @@ import static com.googlecode.totallylazy.predicates.Predicates.nullValue;
 import static com.googlecode.totallylazy.time.Dates.date;
 
 public class JsonRecordTest {
+    @Test
+    public void doesNotSerialiseNullValues() throws Exception {
+        assertThat(new User().toString(), is("{}"));
+    }
+
     static class User extends JsonRecord {
         String name;
         BigDecimal age;
