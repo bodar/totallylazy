@@ -25,3 +25,9 @@ jobs:
           key: v2-dependencies-{{ checksum "build/build.dependencies" }}
 
       - run: ./jcompilo.sh
+      
+      - store_test_results:
+          path: ~/repo/build/artifacts/reports/
+          
+      - store_artifacts:
+          path: ~/repo/build/artifacts/ 
