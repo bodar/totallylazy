@@ -21,7 +21,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/lib
+            - ~/repo/lib
           key: v1-dependencies-{{ checksum "build/build.dependencies" }}
 
       - run: ./jcompilo.sh
