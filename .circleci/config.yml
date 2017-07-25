@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+    working_directory: ~/repo
+
+    environment:
+      TERM: dumb
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build/build.dependencies" }}
+          - v1-dependencies-
+
+      - run: ./jcompilo.sh update
+
+      - save_cache:
+          paths:
+            - ~/lib
+          key: v1-dependencies-{{ checksum "build/build.dependencies" }}
+
+      - run: ./jcompilo.sh
