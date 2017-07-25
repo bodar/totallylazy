@@ -17,14 +17,18 @@ jobs:
           - v2-dependencies-{{ checksum "build/build.dependencies" }}
           - v2-dependencies-
 
-      - run: ./jcompilo.sh update || true
+      - run: 
+          name: Update Libraries
+          command: ./jcompilo.sh update || true
 
       - save_cache:
           paths:
             - ~/repo/lib
           key: v2-dependencies-{{ checksum "build/build.dependencies" }}
 
-      - run: ./jcompilo.sh
+      - run: 
+          name: Compile, Test and Package
+          command: ./jcompilo.sh
       
       - store_test_results:
           path: ~/repo/build/artifacts/reports/
