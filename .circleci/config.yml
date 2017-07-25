@@ -17,7 +17,7 @@ jobs:
           - v1-dependencies-{{ checksum "build/build.dependencies" }}
           - v1-dependencies-
 
-      - run: ./jcompilo.sh update && true
+      - run: ./jcompilo.sh update || true
 
       - save_cache:
           paths:
