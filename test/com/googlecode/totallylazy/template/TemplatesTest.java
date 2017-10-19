@@ -61,11 +61,20 @@ public class TemplatesTest {
     @Test
     public void doesNotThrowWhenASubTemplateIsNotFoundButReturnsEmptyStringAndLogs() throws Exception {
         StringBuilder builder = new StringBuilder();
-        Templates templates = templates(getClass()).logger(builder).extension("st").add("works", ignore -> "Other templates still work");
-        String result = templates.get("error").render(map());
+        Templates templates = templates(getClass()).add("works", ignore -> "Other templates still work").logger(builder);
+        String result = templates.get("error.st").render(map());
         assertThat(result, is("Other templates still work\nSub template returned ''"));
         String log = builder.toString();
-        assertThat(log, startsWith("Unable to load template 'foo.st' because: "));
+        assertThat(log, startsWith("Unable to load template 'foo' because: "));
         assertThat(log, not(contains("Unable to load template 'works' because: ")));
+    }
+
+    @Test
+    public void orderOfChainedMethodsDoNotMatter() throws Exception {
+        Templates templates1 = templates(getClass()).add("works", ignore -> "Other templates still work").logger(new StringBuilder());
+        assertThat(templates1.get("error.st").render(map()), is("Other templates still work\nSub template returned ''"));
+
+        Templates templates2 = templates(getClass()).logger(new StringBuilder()).add("works", ignore -> "Other templates still work");
+        assertThat(templates2.get("error.st").render(map()), is("Other templates still work\nSub template returned ''"));
     }
 }

@@ -19,11 +19,13 @@ import static java.lang.String.format;
 
 public class Templates implements Renderers {
     private final Function2<? super String, ? super Renderers, ? extends Renderer<?>> missing;
-    private final ConcurrentMap<String, Renderer<Object>> renderers = new ConcurrentHashMap<>();
-    private volatile CompositeRenderer implicits = CompositeRenderer.compositeRenderer();
+    private final ConcurrentMap<String, Renderer<Object>> renderers;
+    private volatile CompositeRenderer implicits;
 
-    private Templates(Function2<? super String, ? super Renderers, ? extends Renderer<?>> missing) {
+    public Templates(Function2<? super String, ? super Renderers, ? extends Renderer<?>> missing, ConcurrentMap<String, Renderer<Object>> renderers, CompositeRenderer implicits) {
         this.missing = missing;
+        this.renderers = renderers;
+        this.implicits = implicits;
     }
 
     public static Templates templates() {
@@ -43,7 +45,7 @@ public class Templates implements Renderers {
     }
 
     public static Templates templates(Function2<? super String, ? super Renderers, ? extends Renderer<?>> missing) {
-        return new Templates(missing);
+        return new Templates(missing, new ConcurrentHashMap<>(), CompositeRenderer.compositeRenderer());
     }
 
     public Templates addDefault() {
@@ -82,7 +84,7 @@ public class Templates implements Renderers {
     }
 
     public Templates extension(String value) {
-        return new Templates((s, r) -> missing.apply(s + "." + value, r));
+        return new Templates((s, r) -> missing.apply(s + "." + value, r), renderers, implicits);
     }
 
     public Templates logger(Appendable logger) {
@@ -93,6 +95,6 @@ public class Templates implements Renderers {
                 logger.append(format("Unable to load template '%s' because: %s%n", s, e.getMessage()));
                 return (instance, appendable) -> appendable;
             }
-        });
+        }, renderers, implicits);
     }
 }
