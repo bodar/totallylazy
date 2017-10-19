@@ -3,8 +3,12 @@ package com.googlecode.totallylazy.template;
 import com.googlecode.totallylazy.Strings;
 import org.junit.Test;
 
+import java.io.PrintWriter;
+
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Maps.map;
+import static com.googlecode.totallylazy.Strings.startsWith;
+import static com.googlecode.totallylazy.predicates.Predicates.contains;
 import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
 import static com.googlecode.totallylazy.template.Templates.templates;
@@ -49,5 +53,14 @@ public class TemplatesTest {
         Template template = Template.template("Say $hello()$", templates);
         String result = template.render(map("name", "Dan"));
         assertThat(result, is("Say Hello Dan"));
+    }
+
+    @Test
+    public void doesNotThrowWhenASubTemplateIsNotFoundButReturnsEmptyStringAndLogs() throws Exception {
+        StringBuilder log = new StringBuilder();
+        Templates templates = templates(getClass()).logger(log).extension("st");
+        String result = templates.get("error").render(map());
+        assertThat(result, is("Sub template returned ''"));
+        assertThat(log.toString(), startsWith("Unable to load template 'foo.st' because: "));
     }
 }

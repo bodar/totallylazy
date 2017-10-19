@@ -4,7 +4,6 @@ import com.googlecode.totallylazy.functions.Function1;
 import com.googlecode.totallylazy.functions.Function2;
 import com.googlecode.totallylazy.io.Uri;
 import com.googlecode.totallylazy.predicates.Predicate;
-import com.googlecode.totallylazy.predicates.Predicates;
 import com.googlecode.totallylazy.xml.Xml;
 
 import java.io.IOException;
@@ -16,6 +15,7 @@ import static com.googlecode.totallylazy.Strings.string;
 import static com.googlecode.totallylazy.Unchecked.cast;
 import static com.googlecode.totallylazy.predicates.Predicates.always;
 import static com.googlecode.totallylazy.template.CompositeRenderer.compositeRenderer;
+import static java.lang.String.format;
 
 public class Templates implements Renderers {
     private final Function2<? super String, ? super Renderers, ? extends Renderer<?>> missing;
@@ -83,5 +83,16 @@ public class Templates implements Renderers {
 
     public Templates extension(String value) {
         return new Templates((s, r) -> missing.apply(s + "." + value, r));
+    }
+
+    public Templates logger(Appendable logger) {
+        return new Templates((s, r) -> {
+            try {
+                return missing.apply(s, r);
+            } catch (Exception e) {
+                logger.append(format("Unable to load template '%s' because: %s", s, e.getMessage()));
+                return (instance, appendable) -> appendable;
+            }
+        });
     }
 }
