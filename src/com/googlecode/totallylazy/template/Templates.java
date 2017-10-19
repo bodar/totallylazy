@@ -90,7 +90,7 @@ public class Templates implements Renderers {
             try {
                 return missing.apply(s, r);
             } catch (Exception e) {
-                logger.append(format("Unable to load template '%s' because: %s", s, e.getMessage()));
+                logger.append(format("Unable to load template '%s' because: %s%n", s, e.getMessage()));
                 return (instance, appendable) -> appendable;
             }
         });

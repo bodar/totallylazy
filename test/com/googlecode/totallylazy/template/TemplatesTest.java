@@ -1,16 +1,19 @@
 package com.googlecode.totallylazy.template;
 
 import com.googlecode.totallylazy.Strings;
+import com.googlecode.totallylazy.predicates.Predicates;
 import org.junit.Test;
 
 import java.io.PrintWriter;
 
 import static com.googlecode.totallylazy.Assert.assertThat;
 import static com.googlecode.totallylazy.Maps.map;
+import static com.googlecode.totallylazy.Strings.contains;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.predicates.Predicates.contains;
 import static com.googlecode.totallylazy.predicates.Predicates.instanceOf;
 import static com.googlecode.totallylazy.predicates.Predicates.is;
+import static com.googlecode.totallylazy.predicates.Predicates.not;
 import static com.googlecode.totallylazy.template.Templates.templates;
 
 public class TemplatesTest {
@@ -57,10 +60,12 @@ public class TemplatesTest {
 
     @Test
     public void doesNotThrowWhenASubTemplateIsNotFoundButReturnsEmptyStringAndLogs() throws Exception {
-        StringBuilder log = new StringBuilder();
-        Templates templates = templates(getClass()).logger(log).extension("st");
+        StringBuilder builder = new StringBuilder();
+        Templates templates = templates(getClass()).logger(builder).extension("st").add("works", ignore -> "Other templates still work");
         String result = templates.get("error").render(map());
-        assertThat(result, is("Sub template returned ''"));
-        assertThat(log.toString(), startsWith("Unable to load template 'foo.st' because: "));
+        assertThat(result, is("Other templates still work\nSub template returned ''"));
+        String log = builder.toString();
+        assertThat(log, startsWith("Unable to load template 'foo.st' because: "));
+        assertThat(log, not(contains("Unable to load template 'works' because: ")));
     }
 }
