@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+print_usage_and_exit() {
+    echo "Usage: $0 <build-version> <bintray api username> <bintray api key>" >&2
+    exit 1
+}
+
+main() {
+    local ARTEFACT_NAME="totallylazy"
+    local ORGANISATION_NAME="bodar"
+    local REPOSITORY_NAME="maven"
+
+    local BUILD_VERSION=${1:-}
+    local API_USERNAME=${2:-}
+    local API_KEY=${3:-}
+    [[ -z "$BUILD_VERSION" || -z "$API_USERNAME" || -z "$API_KEY" ]] && print_usage_and_exit
+
+    local BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+    local ARTEFACTS_DIR="$BASE_DIR/build/artifacts"
+
+    if [[ ! -d "$ARTEFACTS_DIR" ]]; then
+        echo "Artefacts directory does not exist, please run the build: $ARTEFACTS_DIR" >&2
+        exit 2
+    fi
+
+    local POM_ARTEFACT="$ARTEFACTS_DIR/$ARTEFACT_NAME-$BUILD_VERSION.pom"
+    if [[ ! -f "$POM_ARTEFACT" ]]; then
+        echo "Cannot find POM artefact of expected form '$POM_ARTEFACT'" >&2
+        exit 3
+    fi
+
+    local GROUP_PATH=$(cat "$POM_ARTEFACT" | grep groupId | cut -f2 -d'>' | cut -f1 -d'<' | sed 's%\.%/%g')
+
+    for ARTEFACT_FILE in $ARTEFACTS_DIR/{*.jar,*.pom}; do
+        local FILE_NAME=$(basename -- "$ARTEFACT_FILE")
+        echo "Publishing $FILE_NAME... "
+        curl -T "$ARTEFACT_FILE" "-u$API_USERNAME:$API_KEY" "https://api.bintray.com/content/$ORGANISATION_NAME/$REPOSITORY_NAME/$ARTEFACT_NAME/$BUILD_VERSION/$GROUP_PATH/$ARTEFACT_NAME/$BUILD_VERSION/$FILE_NAME;publish=1"
+        echo ""
+    done    
+}
+
+main "$@"
