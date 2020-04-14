@@ -19,6 +19,8 @@ jobs:
       run: echo "::set-env name=RELEASE_VERSION::${GITHUB_REF##*/}"
     - name: Build with JCompilo
       run: ./jcompilo.sh
+      env:
+        BUILD_NUMBER: "$RELEASE_VERSION"
     - name: Publish to Bintray
       run: bin/publish "$RELEASE_VERSION" "$BINTRAY_USERNAME" "$BINTRAY_PASSWORD"
       env:
