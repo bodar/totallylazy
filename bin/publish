@@ -4,19 +4,18 @@ set -euo pipefail
 IFS=$'\n\t'
 
 print_usage_and_exit() {
-    echo "Usage: $0 <build-version> <bintray api username> <bintray api key>" >&2
+    echo "Usage: $0 <build-version> <api-token>" >&2
     exit 1
 }
 
 main() {
     local ARTEFACT_NAME="totallylazy"
     local ORGANISATION_NAME="bodar"
-    local REPOSITORY_NAME="maven"
+    local REPOSITORY_NAME="totallylazy"
 
     local BUILD_VERSION=${1:-}
-    local API_USERNAME=${2:-}
-    local API_KEY=${3:-}
-    [[ -z "$BUILD_VERSION" || -z "$API_USERNAME" || -z "$API_KEY" ]] && print_usage_and_exit
+    local API_TOKEN=${2:-}
+    [[ -z "$BUILD_VERSION" || -z "$API_TOKEN" ]] && print_usage_and_exit
 
     local BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
     local ARTEFACTS_DIR="$BASE_DIR/build/artifacts"
@@ -37,7 +36,10 @@ main() {
     for ARTEFACT_FILE in $ARTEFACTS_DIR/{*.jar,*.pom}; do
         local FILE_NAME=$(basename -- "$ARTEFACT_FILE")
         echo "Publishing $FILE_NAME... "
-        curl -T "$ARTEFACT_FILE" "-u$API_USERNAME:$API_KEY" "https://api.bintray.com/content/$ORGANISATION_NAME/$REPOSITORY_NAME/$ARTEFACT_NAME/$BUILD_VERSION/$GROUP_PATH/$ARTEFACT_NAME/$BUILD_VERSION/$FILE_NAME;publish=1"
+        curl -X PUT -v \
+                -H "Authorization: token $API_TOKEN" \
+                --upload-file "$ARTEFACT_FILE" \
+                "https://maven.pkg.github.com/$ORGANISATION_NAME/$REPOSITORY_NAME/$GROUP_PATH/$ARTEFACT_NAME/$BUILD_VERSION/$FILE_NAME"
         echo ""
     done    
 }
